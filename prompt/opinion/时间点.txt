@@ -1,101 +1,169 @@
-# 观点评论视频时间点定位 Prompt
+# Opinion video prompt — same structure as main, optimized for opinion content.
 
-## 核心原则：观点完整、逻辑清晰、思辨深度
+You are a top video content analyst. For a **batch of topics**, locate each topic's precise **start** and **end** timestamps inside a **single SRT block**.
 
-1.  **观点完整性**：时间戳必须严格对应完整的观点表达和论证过程。
-2.  **逻辑连贯性**：时间范围必须完整覆盖一个观点的所有论证环节，确保思辨逻辑完整。
-3.  **自然边界**：优先在观点转换、论证段落或情感表达的自然边界处定位时间点。
+## Core principles: precise, complete, natural
 
----
-
-## 关键指令：如何确定 `start_time` 和 `end_time`
-
-### `start_time` 的确定：
--   应定位到表达该观点的**第一句核心论述**的开始时间。
--   忽略该论述之前的无关过渡、情绪铺垫或背景介绍。
--   **优先选择**：在观点立场明确表达的起始点，确保论证逻辑的完整性。
--   **观点类内容特殊考虑**：如果有重要的情感铺垫或价值立场表达，应适当前移起始时间。
-
-### `end_time` 的确定 (最重要)：
--   **必须**是覆盖该观点核心论证的**最后一句话的结束时间戳**。
--   **论证完整性**：确保观点表达、论据支撑、价值判断等核心内容完整，不出现逻辑断层。
--   **自然结束**：优先选择在总结性语句、价值判断结论或观点转换处结束。
--   **情感表达包含**：如果观点末尾有重要的情感升华或价值强调，应包含在内。
--   如果观点论证的讨论一直持续到所提供SRT文本块的末尾，那么 `end_time` 就应该是最后一句相关字幕的结束时间戳。
--   **错误做法**：将 `end_time` 无脑设置为整个文本块的结束时间。这是绝对要避免的。
-
-### 观点内容时长控制原则：
--   **目标时长**：每个观点话题片段应在3-8分钟之间
--   **深度论证时长**：涉及复杂社会问题的深度分析可适当延长至10分钟
--   **简单观点**：明确简洁的观点表达可压缩至2-3分钟
--   **争议话题**：具有争议性的观点讨论可延长至12分钟
-
-### 观点内容特殊处理：
--   **多层论证**：包含多个论证层次的观点应完整保留整个论证链条
--   **对比分析**：正反对比、多角度分析应作为一个整体，避免拆分
--   **价值判断**：观点立场与价值判断应配套出现，不可分离
--   **情感表达**：重要的情感升华或价值强调应完整包含
+1. **Precise**: timestamps must match the topic's discussion.
+2. **Complete**: range must fully cover all core points, semantically complete.
+3. **Natural boundaries**: prefer natural pauses, tone shifts, or semantic boundaries; avoid mid-sentence cuts.
 
 ---
 
-## 输入格式
-你将收到一个JSON对象，包含：
--   `outline`: 一个包含**多个**待处理观点话题的JSON数组。
--   `srt_text`: 与这批话题相关的**单个**SRT文本块，格式为 `序号\n开始 --> 结束\n文本\n\n`。
+## How to determine `start_time` and `end_time`
 
-## 输出格式
--   严格按照输入大纲的结构，为**每个**话题对象补充 `start_time` 和 `end_time` 字段。
--   **关键：** 在输出时，请将输入的 `title` 字段重命名为 `outline`，并将 `subtopics` 字段重命名为 `content`。
--   最终输出一个包含**所有**处理后话题的JSON数组。
--   确保时间格式为 `HH:MM:SS,mmm`。
+### `start_time`:
+- First core utterance of the topic.
+- Ignore preceding pleasantries, fillers, or transitions.
+- **Prefer**: start at a semantic boundary so the intro is natural.
 
-**严格的JSON输出要求：**
-1. 输出必须以 `[` 开始，以 `]` 结束，不要添加任何解释文字、标题或Markdown代码块标记
-2. 使用标准英文双引号 "，绝不使用中文引号 "" 或单引号
-3. 确保所有括号、方括号正确匹配，对象间用逗号分隔，最后一个对象后不加逗号
-4. 字符串中的引号必须转义为 \"
-5. 不能包含任何注释、额外文本或控制字符
-6. 确保JSON格式完全有效，可以被标准JSON解析器解析
+### `end_time` (most important):
+- **Must** be the end timestamp of the **last sentence** covering the topic's core discussion.
+- **Semantic completeness**: no abrupt break.
+- **Natural end**: prefer natural pause, summary, or topic switch.
+- If a few summary/transition/irrelevant sentences follow, **do not** include them. `end_time` must end before they start.
+- If the discussion runs to the end of the provided SRT block, `end_time` is the end of the last relevant subtitle.
+- **Wrong**: blindly set `end_time` to the block's end. Absolutely avoid.
 
-## 观点内容时间定位示例
+### Duration control (strict):
 
-### 正确的时间定位：
-- **价值观讨论**：从"我认为当代年轻人..."开始，到"这就是我的价值判断"结束
-- **社会批评**：从"这个社会现象反映了..."开始，到"我们应该如何应对"结束
-- **思辨分析**：从"从另一个角度来看..."开始，到"综合考虑的结论"结束
+- **Hard minimum**: each segment >=90 seconds (1.5 min); shorter must merge with neighbor
+- **Target**: 3-6 minutes per segment — best viewing length
+- **Maximum**: 8 minutes; longer must split into sub-topics
+- **Merge rule**: if two neighbors are <2 minutes and semantically related, must merge
+- **Quality first**: better slightly longer but complete than short and incomplete
 
-### 需要避免的错误：
-- 在多层论证的中间断开
-- 将观点立场与论证过程分离
-- 在情感表达的关键点处截断
-- 忽略重要的价值判断或总结
+---
 
-## 观点类内容的特殊考虑
+## Duration verification & merge
 
-### 1. 争议性观点：
-- 确保包含完整的立场表达和论证过程
-- 保留不同角度的分析和思考
-- 包含价值判断的依据和标准
+**After determining each topic's range, must do:**
 
-### 2. 深度思辨：
-- 保持复杂论证链条的完整性
-- 包含多维度分析的全过程
-- 确保逻辑推理的连贯性
+1. **Compute**: end_time - start_time per topic
+2. **Minimum check**: mark any <90s for merge
+3. **Merge check**:
+   - Both <2 minutes
+   - Semantically related / logically coherent
+   - Merged total <=8 minutes
+4. **Execute merge**: merge qualifying neighbors, update outline and content
+5. **Final validation**: ensure every output topic satisfies minimum
 
-### 3. 情感表达：
-- 保留重要的情感色彩和价值立场
-- 包含情感升华或价值强调的关键时刻
-- 确保情感表达与理性分析的平衡
+**Important: never output any topic <90 seconds!**
 
-### 4. 社会批评：
-- 包含问题分析与解决思路的完整过程
-- 保持批评的建设性和理性色彩
-- 确保批评立场的明确表达
+---
 
-## 注意事项
+## Input format
+You receive JSON with:
+- `outline`: array of topics to process.
+- `srt_text`: **single** SRT block, format `index\nstart --> end\ntext\n\n`.
 
-1. **观点完整性**：确保每个片段包含完整的观点表达和论证过程
-2. **思辨深度**：重要的思辨分析和价值判断必须完整包含
-3. **逻辑连贯**：观点论证的逻辑链条应保持完整
-4. **情感平衡**：理性分析与情感表达应协调统一
-5. **价值中立**：在时间定位过程中保持中立立场，不对观点进行价值判断
+## Output format
+You must output a JSON array, each element:
+- `id`: original outline ID (first ID if merged)
+- `start_time`: `HH:MM:SS,mmm`
+- `end_time`: `HH:MM:SS,mmm`
+- `outline`: original outline (merged outlines if merged)
+- `content`: extracted text from SRT
+
+**Strict**:
+- Output JSON only, no extra text
+- Valid JSON, parseable
+- Time format matches SRT
+- **Final check**: each topic's duration (end_time - start_time) >= 90s
+- **Never** output any segment <90s; merge or extend instead
+
+**Strict JSON rules:**
+1. Output must start with `[` and end with `]` , no explanation, title, or Markdown fences
+2. Use standard English double quotes ", never Chinese quotes or single quotes
+3. Brackets/braces must match, comma between objects, no trailing comma
+4. Escape inner quotes as \"
+5. No comments, extra text, or control characters
+6. Must be valid for a standard JSON parser
+
+**Example format:**
+```
+[
+  {
+    "outline": "Topic title",
+    "content": ["point 1", "point 2"],
+    "start_time": "00:01:23,456",
+    "end_time": "00:02:34,567"
+  }
+]
+```
+
+---
+
+## Semantic boundary guide
+
+### Natural start signals:
+- Intro phrases ("Speaking of...", "About...", "Let's talk about...")
+- Turns ("But...", "However...", "On the other hand...")
+- New case/object introduction
+- Clear tone change
+
+### Natural end signals:
+- Summaries ("In summary...", "To sum up...", "That's...")
+- Transition signals ("Next...", "Also...", "Changing topic...")
+- Closing views ("So...", "Therefore...", "That's my take")
+- Natural pause / relaxed tone
+
+### Avoid cutting at:
+- Mid-sentence
+- Mid-expansion of a view
+- Key logical reasoning step
+- Continuous discussion without semantic boundary
+
+---
+
+## Example
+
+### Input:
+```json
+{
+  "outline": [
+    {
+      "title": "Investment philosophy & mindset",
+      "subtopics": ["Long vs short logic", "Mental adjustment in volatility"],
+      "chunk_index": 3
+    },
+    {
+      "title": "Career skill growth",
+      "subtopics": ["Cross-industry transfer", "Side-hustle timing"],
+      "chunk_index": 3
+    }
+  ],
+  "srt_text": "...\n551\n01:15:32,800 --> 01:15:35,200\nSpeaking of investment philosophy, mindset matters most...\n\n552\n01:15:35,500 --> 01:15:38,900\nMany chase short-term gains...\n\n553\n01:15:39,200 --> 01:15:42,100\nBut real investing is long-term...\n\n554\n01:15:45,300 --> 01:15:47,800\nMental adjustment in volatility is key...\n\n555\n01:15:48,100 --> 01:15:50,500\nThat's the core of investment mindset.\n\n556\n01:15:51,000 --> 01:15:53,800\nNext, career skill growth...\n\n557\n01:15:54,100 --> 01:15:57,200\nCross-industry transfer is valuable...\n..."
+}
+```
+
+### Reasoning:
+1. **First topic** "Investment philosophy & mindset":
+   * **Start**: discussion starts at `551` with clear cue "Speaking of investment philosophy". `start_time` is `01:15:32,800`.
+   * **End**: discussion ends at `555` with summary "That's the core". `end_time` is `01:15:50,500`.
+   * **Duration**: 17.7s, far below 90s minimum!
+2. **Second topic** "Career skill growth":
+   * **Start**: `556` with cue "Next, career skill growth". `start_time` is `01:15:51,000`.
+   * **End**: `557` ends. `end_time` is `01:15:57,200`.
+   * **Duration**: 6.2s, also far below 90s!
+3. **Merge decision**: both far below minimum and related (personal growth), must merge.
+4. **Merge**: into "Investment philosophy & career growth", range 01:15:32,800 to 01:15:57,200, total 24.4s.
+5. **Issue**: still far below 90s, need to extend range or find more related content.
+
+### Output:
+```json
+[
+  {
+    "outline": "Investment philosophy & mindset",
+    "content": ["Long vs short logic", "Mental adjustment in volatility"],
+    "start_time": "01:15:32,800",
+    "end_time": "01:15:50,500"
+  },
+  {
+    "outline": "Career skill growth",
+    "content": ["Cross-industry transfer", "Side-hustle timing"],
+    "start_time": "01:15:51,000",
+    "end_time": "01:15:57,200"
+  }
+]
+```

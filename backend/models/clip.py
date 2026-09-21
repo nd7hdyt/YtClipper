@@ -1,6 +1,6 @@
 """
-切片模型
-定义视频切片的基本信息和状态
+clipEN
+ENvideoclipENstatus
 """
 
 import enum
@@ -10,119 +10,119 @@ from sqlalchemy.orm import relationship
 from .base import BaseModel
 
 class ClipStatus(str, enum.Enum):
-    """切片状态枚举"""
-    PENDING = "pending"           # 待处理
-    PROCESSING = "processing"     # 处理中
-    COMPLETED = "completed"       # 已完成
-    FAILED = "failed"            # 失败
+    """clipstatusEN"""
+    PENDING = "pending"           # ENprocessing
+    PROCESSING = "processing"     # processing
+    COMPLETED = "completed"       # completed
+    FAILED = "failed"            # failed
 
 class Clip(BaseModel):
-    """切片模型"""
+    """clipEN"""
     
     __tablename__ = "clips"
     
-    # 基本信息
+    # EN
     title = Column(
         String(255), 
         nullable=False, 
-        comment="切片标题"
+        comment="cliptitle"
     )
     description = Column(
         Text, 
         nullable=True, 
-        comment="切片描述"
+        comment="clipdescription"
     )
     
-    # 状态信息
+    # statusEN
     status = Column(
         Enum(ClipStatus), 
         default=ClipStatus.PENDING,
         nullable=False,
-        comment="切片状态"
+        comment="clipstatus"
     )
     
-    # 时间信息
+    # timeEN
     start_time = Column(
         Integer, 
         nullable=False, 
-        comment="开始时间（秒）"
+        comment="starttime（EN）"
     )
     end_time = Column(
         Integer, 
         nullable=False, 
-        comment="结束时间（秒）"
+        comment="endtime（EN）"
     )
     duration = Column(
         Integer, 
         nullable=False, 
-        comment="切片时长（秒）"
+        comment="clipduration（EN）"
     )
     
-    # 评分信息
+    # scoringEN
     score = Column(
         Float, 
         nullable=True, 
-        comment="切片评分"
+        comment="clipscoring"
     )
     recommendation_reason = Column(
         Text, 
         nullable=True, 
-        comment="推荐理由"
+        comment="EN"
     )
     
-    # 文件信息
+    # fileEN
     video_path = Column(
         String(500), 
         nullable=True, 
-        comment="切片视频文件路径"
+        comment="clipvideofilepath"
     )
     thumbnail_path = Column(
         String(500), 
         nullable=True, 
-        comment="缩略图文件路径"
+        comment="ENfilepath"
     )
     
-    # 处理信息
+    # processingEN
     processing_step = Column(
         Integer, 
         nullable=True, 
-        comment="处理步骤（1-6）"
+        comment="processingEN（1-6）"
     )
     
-    # 标签和元数据
+    # tagsEN
     tags = Column(
         JSON, 
         nullable=True, 
-        comment="切片标签"
+        comment="cliptags"
     )
     clip_metadata = Column(
         JSON, 
         nullable=True, 
-        comment="切片元数据（精简版，完整数据存储在文件系统）"
+        comment="clipEN（EN，ENfilesystem）"
     )
     
-    # 添加计算属性
+    # EN
     @property
     def metadata_file_path(self) -> Optional[str]:
-        """获取完整元数据文件路径"""
+        """fetchENfilepath"""
         if self.clip_metadata and 'metadata_file' in self.clip_metadata:
             return self.clip_metadata['metadata_file']
         return None
     
     @property
     def has_full_content(self) -> bool:
-        """是否有完整内容文件"""
+        """ENfile"""
         return self.metadata_file_path is not None
     
-    # 外键关联
+    # EN
     project_id = Column(
         String(36), 
         ForeignKey("projects.id", ondelete="CASCADE"),
         nullable=False,
-        comment="所属项目ID"
+        comment="ENprojectID"
     )
     
-    # 关联关系
+    # EN
     project = relationship(
         "Project", 
         back_populates="clips"
@@ -138,21 +138,21 @@ class Clip(BaseModel):
     
     @property
     def is_processing(self):
-        """是否正在处理"""
+        """ENcurrentlyprocessing"""
         return self.status == ClipStatus.PROCESSING
     
     @property
     def is_completed(self):
-        """是否已完成"""
+        """ENcompleted"""
         return self.status == ClipStatus.COMPLETED
     
     @property
     def has_error(self):
-        """是否有错误"""
+        """ENerror"""
         return self.status == ClipStatus.FAILED
     
     def get_time_range(self) -> str:
-        """获取时间范围字符串"""
+        """fetchtimeEN"""
         try:
             start_time = int(self.start_time) if self.start_time else 0
             end_time = int(self.end_time) if self.end_time else 0
@@ -163,6 +163,6 @@ class Clip(BaseModel):
             return "00:00 - 00:00"
     
     def calculate_duration(self):
-        """计算切片时长"""
+        """ENclipduration"""
         self.duration = self.end_time - self.start_time
         return self.duration

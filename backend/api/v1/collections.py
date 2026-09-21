@@ -1,5 +1,5 @@
 """
-合集API路由
+collectionAPIEN
 """
 
 import logging
@@ -30,9 +30,9 @@ async def create_collection(
     try:
         collection = collection_service.create_collection(collection_data)
 
-        # 创建成功后，尝试自动生成缩略图（基于首个可用切片抽帧）
+        # createsucceededEN，ENgenerateEN（ENclipEN）
         try:
-            # 获取clip_ids
+            # fetchclip_ids
             clip_ids = []
             if hasattr(collection_data, 'clip_ids') and getattr(collection_data, 'clip_ids', None):
                 clip_ids = list(getattr(collection_data, 'clip_ids'))
@@ -40,7 +40,7 @@ async def create_collection(
                 metadata = getattr(collection, 'collection_metadata', {}) or {}
                 clip_ids = metadata.get('clip_ids', [])
 
-            # 仅当没有现成缩略图且存在切片时尝试生成
+            # ENwhenENclipENgenerate
             if (not getattr(collection, 'thumbnail_path', None)) and clip_ids:
                 from ...models.clip import Clip
                 from ...utils.video_processor import VideoProcessor
@@ -49,7 +49,7 @@ async def create_collection(
 
                 db = collection_service.db
 
-                # 查找首个可用切片的视频路径
+                # ENclipENvideopath
                 video_path = None
                 project_dir = get_project_directory(str(getattr(collection, 'project_id', '')))
                 clips_dir = project_dir / "output" / "clips"
@@ -62,7 +62,7 @@ async def create_collection(
                             video_path = candidate
                             break
 
-                    # 备用：按文件名模式在clips目录查找
+                    # EN：ENfileENclipsdirectoryEN
                     patterns = [
                         f"{cid}_*.mp4",
                         f"clip_{cid}.mp4",
@@ -77,7 +77,7 @@ async def create_collection(
                         break
 
                 if video_path and Path(video_path).exists():
-                    # 生成缩略图输出路径
+                    # generateENpath
                     collections_dir = project_dir / "output" / "collections"
                     collections_dir.mkdir(parents=True, exist_ok=True)
 
@@ -85,15 +85,15 @@ async def create_collection(
                     thumbnail_filename = f"{getattr(collection, 'id', '')}_{safe_name}_thumbnail.jpg"
                     thumbnail_path = collections_dir / thumbnail_filename
 
-                    # 抽取缩略图（偏移2秒）
+                    # EN（EN2EN）
                     time_offset = 2
                     success = VideoProcessor.extract_thumbnail(Path(video_path), thumbnail_path, time_offset=time_offset)
                     if success and thumbnail_path.exists():
                         collection.thumbnail_path = str(thumbnail_path)
                         db.commit()
         except Exception as gen_thumb_err:
-            # 生成缩略图失败不影响创建流程
-            logger.warning(f"创建合集后自动生成缩略图失败: {gen_thumb_err}")
+            # generateENfailedENcreateEN
+            logger.warning(f"createcollectionENgenerateENfailed: {gen_thumb_err}")
         # Convert to response schema
         status_obj = getattr(collection, 'status', None)
         status_value = status_obj.value if hasattr(status_obj, 'value') else 'created'
@@ -143,10 +143,10 @@ async def get_collections(
 @router.get("/{collection_id}", response_model=CollectionResponse)
 async def get_collection(
     collection_id: str,
-    include_content: bool = Query(False, description="是否包含完整内容"),
+    include_content: bool = Query(False, description="EN"),
     collection_service: CollectionService = Depends(get_collection_service)
 ):
-    """Get a collection by ID (优化存储模式)."""
+    """Get a collection by ID (EN)."""
     try:
         collection = collection_service.get(collection_id)
         if not collection:
@@ -156,20 +156,20 @@ async def get_collection(
         status_obj = getattr(collection, 'status', None)
         status_value = status_obj.value if hasattr(status_obj, 'value') else 'created'
         
-        # 获取clip_ids
+        # fetchclip_ids
         clip_ids = []
         metadata = getattr(collection, 'collection_metadata', {}) or {}
         if metadata and 'clip_ids' in metadata:
             clip_ids = metadata['clip_ids']
         
-        # 如果需要完整内容，从文件系统获取
+        # ifneedEN，ENfilesystemfetch
         full_content = None
         if include_content:
             from ...repositories.collection_repository import CollectionRepository
             collection_repo = CollectionRepository(collection_service.db)
             full_content = collection_repo.get_collection_content(collection_id)
         
-        # 构建响应数据
+        # ENresponseEN
         response_data = {
             "id": str(getattr(collection, 'id', '')),
             "project_id": str(getattr(collection, 'project_id', '')),
@@ -187,7 +187,7 @@ async def get_collection(
             "clip_ids": clip_ids
         }
         
-        # 如果需要完整内容，添加到响应中
+        # ifneedEN，ENresponseEN
         if include_content and full_content:
             response_data["full_content"] = full_content
         
@@ -214,7 +214,7 @@ async def update_collection(
         status_obj = getattr(collection, 'status', None)
         status_value = status_obj.value if hasattr(status_obj, 'value') else 'created'
         
-        # 获取clip_ids
+        # fetchclip_ids
         clip_ids = []
         metadata = getattr(collection, 'collection_metadata', {}) or {}
         if metadata and 'clip_ids' in metadata:
@@ -267,16 +267,16 @@ async def reorder_collection_clips(
 ):
     """Reorder clips in a collection."""
     try:
-        # 获取合集
+        # fetchcollection
         collection = collection_service.get(collection_id)
         if not collection:
             raise HTTPException(status_code=404, detail="Collection not found")
         
-        # 更新collection_metadata中的clip_ids
+        # updatecollection_metadataENclip_ids
         metadata = getattr(collection, 'collection_metadata', {}) or {}
         metadata['clip_ids'] = clip_ids
         
-        # 直接更新数据库中的collection_metadata字段
+        # ENupdatedatabaseENcollection_metadataEN
         from sqlalchemy import update
         from ...models.collection import Collection
         
@@ -286,7 +286,7 @@ async def reorder_collection_clips(
         collection_service.db.execute(stmt)
         collection_service.db.commit()
         
-        # 重新获取更新后的合集
+        # ENfetchupdateENcollection
         updated_collection = collection_service.get(collection_id)
         if not updated_collection:
             raise HTTPException(status_code=404, detail="Collection not found")
@@ -324,20 +324,20 @@ async def generate_collection_title(
     try:
         collection = collection_service.get(collection_id)
         if not collection:
-            raise HTTPException(status_code=404, detail="合集不存在")
+            raise HTTPException(status_code=404, detail="collectiondoes not exist")
 
-        # 获取合集元数据
+        # fetchcollectionEN
         collection_metadata = getattr(collection, 'collection_metadata', {}) or {}
         
         if not collection_metadata:
-            raise HTTPException(status_code=404, detail="合集元数据不存在")
+            raise HTTPException(status_code=404, detail="collectionENdoes not exist")
 
-        # 获取合集中的切片信息
+        # fetchcollectionENclipEN
         clip_ids = collection_metadata.get('clip_ids', [])
         if not clip_ids:
-            raise HTTPException(status_code=404, detail="合集中没有切片")
+            raise HTTPException(status_code=404, detail="collectionENclip")
 
-        # 获取切片详细信息
+        # fetchclipEN
         from ...repositories.clip_repository import ClipRepository
         clip_repo = ClipRepository(collection_service.db)
         
@@ -354,9 +354,9 @@ async def generate_collection_title(
                 })
 
         if not clips_data:
-            raise HTTPException(status_code=404, detail="无法获取切片内容")
+            raise HTTPException(status_code=404, detail="cannotfetchclipEN")
 
-        # 构建LLM输入
+        # ENLLMEN
         llm_input = {
             "collection_id": collection_id,
             "collection_title": collection.name,
@@ -367,7 +367,7 @@ async def generate_collection_title(
             "key_themes": collection_metadata.get('key_themes', [])
         }
 
-        # 调用LLM生成标题
+        # callLLMgeneratetitle
         from ...utils.llm_client import LLMClient
         from ...core.shared_config import PROMPT_FILES
 
@@ -379,12 +379,12 @@ async def generate_collection_title(
         raw_response = llm_client.call_with_retry(title_prompt, llm_input)
 
         if not raw_response:
-            raise HTTPException(status_code=500, detail="LLM调用失败")
+            raise HTTPException(status_code=500, detail="LLMcallfailed")
 
         title_result = llm_client.parse_json_response(raw_response)
 
         if not isinstance(title_result, dict) or 'generated_title' not in title_result:
-            raise HTTPException(status_code=500, detail="LLM返回格式错误")
+            raise HTTPException(status_code=500, detail="LLMreturnENerror")
 
         generated_title = title_result['generated_title']
 
@@ -397,8 +397,8 @@ async def generate_collection_title(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"生成合集标题失败: {e}")
-        raise HTTPException(status_code=500, detail=f"生成合集标题失败: {str(e)}")
+        logger.error(f"generatecollectiontitlefailed: {e}")
+        raise HTTPException(status_code=500, detail=f"generatecollectiontitlefailed: {str(e)}")
 
 
 @router.put("/{collection_id}/title", response_model=dict)
@@ -411,13 +411,13 @@ async def update_collection_title(
     try:
         new_title = title_data.get('title')
         if not new_title:
-            raise HTTPException(status_code=400, detail="标题不能为空")
+            raise HTTPException(status_code=400, detail="titleEN")
 
         collection = collection_service.get(collection_id)
         if not collection:
-            raise HTTPException(status_code=404, detail="合集不存在")
+            raise HTTPException(status_code=404, detail="collectiondoes not exist")
 
-        # 更新合集标题
+        # updatecollectiontitle
         collection.name = new_title
         collection_service.db.commit()
 
@@ -430,5 +430,5 @@ async def update_collection_title(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"更新合集标题失败: {e}")
-        raise HTTPException(status_code=500, detail=f"更新合集标题失败: {str(e)}")
+        logger.error(f"updatecollectiontitlefailed: {e}")
+        raise HTTPException(status_code=500, detail=f"updatecollectiontitlefailed: {str(e)}")

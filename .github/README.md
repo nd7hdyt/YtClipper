@@ -1,6 +1,6 @@
-# AutoClip - 视频高光切片自动化工具
+# AutoClip - EN
 
-支持YouTube/B站视频下载、自动切片、智能合集生成
+SupportYouTube/BEN、Auto Clipping、Smart CollectionsEN
 
 [![Python](https://img.shields.io/badge/Python-3.8+-green?style=flat&logo=python)](https://python.org)
 [![React](https://img.shields.io/badge/React-18+-blue?style=flat&logo=react)](https://reactjs.org)
@@ -9,152 +9,152 @@
 [![Celery](https://img.shields.io/badge/Celery-Latest-green?style=flat&logo=celery)](https://celeryproject.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
-[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
-[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
-[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/zhouxiaoka/autoclip/issues)
+[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
+[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
+[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/nd7hdyt/YtClipper/issues)
 
-**语言**: [English](README-EN.md) | [中文](README.md)  
+**Language**: [English](README-EN.md) | [Chinese](README.md)  
 
 </div>
 
-## 🎯 项目简介
+## 🎯 Project Overview
 
-AutoClip是一个基于AI的智能视频切片处理系统，能够自动从YouTube、B站等平台下载视频，通过AI分析提取精彩片段，并智能生成合集。系统采用现代化的前后端分离架构，提供直观的Web界面和强大的后端处理能力。
+AutoClipENBased onAIENIntelligent Video ClippingProcessing System，ENYouTube、BENPlatform DownloadEN，ENAIEN，EN。ENAdoptsENFrontend-Backend SeparationEN，ProvidesIntuitiveENWebInterfaceENPowerfulENProcessing Capability。
 
-### ✨ 核心特性
+### ✨ Core Features
 
-- 🎬 **多平台支持**: YouTube、B站视频一键下载，支持本地文件上传
-- 🤖 **AI智能分析**: 基于通义千问大语言模型的视频内容理解
-- ✂️ **自动切片**: 智能识别精彩片段并自动切割，支持多种视频分类
-- 📚 **智能合集**: AI推荐和手动创建视频合集，支持拖拽排序
-- 🚀 **实时处理**: 异步任务队列，实时进度反馈，WebSocket通信
-- 🎨 **现代界面**: React + TypeScript + Ant Design，响应式设计
-- 📱 **移动端支持**【开发中】: 响应式设计，正在完善移动端体验
-- 🔐 **账号管理**【开发中】: 支持B站多账号管理，自动健康检查
-- 📊 **数据统计**: 完整的项目管理和数据统计功能
-- 🛠️ **易于部署**: 一键启动脚本，Docker支持，详细文档
-- 📤 **B站上传**【开发中】: 自动上传切片视频到B站
-- ✏️ **字幕编辑**【开发中】: 可视化字幕编辑和同步功能
+- 🎬 **Multi-Platform Support**: YouTube、BENOne-Click Download，SupportLocal File Upload
+- 🤖 **AIIntelligent Analysis**: Based onENLanguageEN
+- ✂️ **Auto Clipping**: EN，SupportEN
+- 📚 **Smart Collections**: AIEN，SupportEN
+- 🚀 **Real-time Processing**: ENTask Queue，ENProgress Feedback，WebSocketCommunication
+- 🎨 **Modern UI**: React + TypeScript + Ant Design，Responsive Design
+- 📱 **Mobile Support**【In Development】: Responsive Design，In ProgressEN
+- 🔐 **Account Management**【In Development】: SupportBENMulti-Account Management，ENHealth Check
+- 📊 **Analytics**: ENProject ManagementENAnalyticsEN
+- 🛠️ **Easy Deployment**: One-Click Start Script，DockerSupport，Detailed Docs
+- 📤 **BENUpload**【In Development】: Auto UploadENBEN
+- ✏️ **Subtitle Editing**【In Development】: VisualSubtitle EditingENSync
 
-## 🏗️ 系统架构
+## 🏗️ System Architecture
 
 ```mermaid
 graph TB
-    A[用户界面] --> B[FastAPI后端]
-    B --> C[Celery任务队列]
-    B --> D[Redis缓存]
-    B --> E[SQLite数据库]
-    C --> F[AI处理引擎]
-    F --> G[视频处理]
-    F --> H[字幕分析]
-    F --> I[内容理解]
-    B --> J[文件存储]
+    A[ENInterface] --> B[FastAPIEN]
+    B --> C[CeleryTask Queue]
+    B --> D[RedisEN]
+    B --> E[SQLiteEN]
+    C --> F[AIEN]
+    F --> G[EN]
+    F --> H[EN]
+    F --> I[EN]
+    B --> J[EN]
     K[YouTube API] --> B
-    L[B站API] --> B
+    L[BENAPI] --> B
 ```
 
-### 技术栈
+### Tech Stack
 
-#### 后端技术
+#### Backend
 
-- **FastAPI**: 现代化Python Web框架，自动API文档生成
-- **Celery**: 分布式任务队列，支持异步处理
-- **Redis**: 消息代理和缓存，任务状态管理
-- **SQLite**: 轻量级数据库，支持升级到PostgreSQL
-- **yt-dlp**: YouTube视频下载，支持多种格式
-- **通义千问**: AI内容分析，支持多种模型
-- **WebSocket**: 实时通信，进度推送
-- **Pydantic**: 数据验证和序列化
+- **FastAPI**: ENPython WebEN，ENAPIEN
+- **Celery**: ENTask Queue，SupportEN
+- **Redis**: EN，EN
+- **SQLite**: EN，SupportENPostgreSQL
+- **yt-dlp**: YouTubeEN，SupportEN
+- **EN**: AIEN，SupportEN
+- **WebSocket**: ENCommunication，EN
+- **Pydantic**: EN
 
-#### 前端技术
+#### Frontend
 
-- **React 18**: 用户界面框架，Hooks和函数组件
-- **TypeScript**: 类型安全，更好的开发体验
-- **Ant Design**: 企业级UI组件库
-- **Vite**: 快速构建工具，热重载
-- **Zustand**: 轻量级状态管理
-- **React Router**: 路由管理
-- **Axios**: HTTP客户端
-- **React Player**: 视频播放器
+- **React 18**: ENInterfaceEN，HooksEN
+- **TypeScript**: EN，EN
+- **Ant Design**: ENUIEN
+- **Vite**: EN，EN
+- **Zustand**: EN
+- **React Router**: EN
+- **Axios**: HTTPEN
+- **React Player**: EN
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 环境要求
+### Requirements
 
-#### Docker部署（推荐）
+#### DockerEN（EN）
 
 - **Docker**: 20.10+
 - **Docker Compose**: 2.0+
-- **内存**: 最少 4GB，推荐 8GB+
-- **存储**: 最少 10GB 可用空间
+- **EN**: EN 4GB，EN 8GB+
+- **EN**: EN 10GB EN
 
-#### 本地部署
+#### EN
 
-- **操作系统**: macOS / Linux / Windows (WSL)
-- **Python**: 3.8+ (推荐 3.9+)
-- **Node.js**: 16+ (推荐 18+)
-- **Redis**: 6.0+ (推荐 7.0+)
-- **FFmpeg**: 视频处理依赖
-- **内存**: 最少 4GB，推荐 8GB+
-- **存储**: 最少 10GB 可用空间
+- **EN**: macOS / Linux / Windows (WSL)
+- **Python**: 3.8+ (EN 3.9+)
+- **Node.js**: 16+ (EN 18+)
+- **Redis**: 6.0+ (EN 7.0+)
+- **FFmpeg**: EN
+- **EN**: EN 4GB，EN 8GB+
+- **EN**: EN 10GB EN
 
-### 一键启动
+### One-Click Start
 
-#### 方式一：Docker部署（推荐）
+#### EN：DockerEN（EN）
 
 ```bash
-# 克隆项目
-git clone https://github.com/zhouxiaoka/autoclip.git
+# EN
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# Docker一键启动
+# DockerOne-Click Start
 ./docker-start.sh
 
-# 开发环境启动
+# EN
 ./docker-start.sh dev
 
-# 停止服务
+# EN
 ./docker-stop.sh
 
-# 检查服务状态
+# EN
 ./docker-status.sh
 ```
 
-#### 方式二：本地部署
+#### EN：EN
 
 ```bash
-# 克隆项目
-git clone https://github.com/zhouxiaoka/autoclip.git
+# EN
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# 一键启动（推荐，包含完整检查和监控）
+# One-Click Start（EN，EN）
 ./start_autoclip.sh
 
-# 快速启动（开发环境，跳过详细检查）
+# EN（EN，EN）
 ./quick_start.sh
 
-# 检查系统状态
+# EN
 ./status_autoclip.sh
 
-# 停止系统
+# EN
 ./stop_autoclip.sh
 ```
 
-### 手动安装
+### Manual Installation
 
 ```bash
-# 1. 创建虚拟环境
+# 1. EN
 python3 -m venv venv
 source venv/bin/activate  # Linux/macOS
-# 或 venv\Scripts\activate  # Windows
+# EN venv\Scripts\activate  # Windows
 
-# 2. 安装Python依赖
+# 2. ENPythonEN
 pip install -r requirements.txt
 
-# 3. 安装前端依赖
+# 3. EN
 cd frontend && npm install && cd ..
 
-# 4. 安装Redis
+# 4. ENRedis
 # macOS
 brew install redis
 brew services start redis
@@ -168,7 +168,7 @@ sudo systemctl start redis-server
 sudo yum install redis
 sudo systemctl start redis
 
-# 5. 安装FFmpeg
+# 5. ENFFmpeg
 # macOS
 brew install ffmpeg
 
@@ -178,417 +178,417 @@ sudo apt install ffmpeg
 # CentOS/RHEL
 sudo yum install ffmpeg
 
-# 6. 配置环境变量
+# 6. EN
 cp env.example .env
-# 编辑 .env 文件，填入API密钥等配置
+# EN .env EN，ENAPIEN
 ```
 
-## 🎬 功能演示
+## 🎬 Feature Demo
 
-### 主要功能展示
+### EN
 
-1. **视频下载与处理**
-   - 支持YouTube、B站视频链接解析
-   - 自动下载视频和字幕文件
-   - 支持本地文件上传
+1. **EN**
+   - SupportYouTube、BEN
+   - EN
+   - SupportLocal File Upload
 
-2. **AI智能分析**
-   - 自动提取视频大纲
-   - 智能识别话题时间点
-   - 对片段进行精彩度评分
+2. **AIIntelligent Analysis**
+   - EN
+   - EN
+   - EN
 
-3. **视频切片与合集**
-   - 自动生成精彩片段
-   - 智能推荐合集组合
-   - 支持手动编辑和排序
+3. **EN**
+   - EN
+   - EN
+   - SupportEN
 
-4. **实时进度监控**
-   - WebSocket实时进度推送
-   - 详细的任务状态显示
-   - 错误处理和重试机制
+4. **EN**
+   - WebSocketEN
+   - EN
+   - EN
 
-5. **B站上传功能**【开发中】
-   - 自动上传切片视频到B站
-   - 支持多账号管理
-   - 批量上传和队列管理
+5. **BENUploadEN**【In Development】
+   - Auto UploadENBEN
+   - SupportMulti-Account Management
+   - ENUploadEN
 
-6. **字幕编辑功能**【开发中】
-   - 可视化字幕编辑器
-   - 字幕同步和调整
-   - 多语言字幕支持
+6. **Subtitle EditingEN**【In Development】
+   - VisualSubtitle EditingEN
+   - EN
+   - ENLanguageENSupport
 
-## 📖 使用指南
+## 📖 Usage Guide
 
-### 1. 视频下载
+### 1. EN
 
-#### YouTube视频
+#### YouTubeEN
 
-1. 在首页点击"新建项目"
-2. 选择"YouTube链接"
-3. 粘贴视频URL
-4. 选择浏览器Cookie（可选）
-5. 点击"开始下载"
+1. EN"EN"
+2. EN"YouTubeEN"
+3. ENURL
+4. ENCookie（EN）
+5. EN"EN"
 
-#### B站视频
+#### BEN
 
-1. 在首页点击"新建项目"
-2. 选择"B站链接"
-3. 粘贴视频URL
-4. 选择登录账号
-5. 点击"开始下载"
+1. EN"EN"
+2. EN"BEN"
+3. ENURL
+4. ENAccount
+5. EN"EN"
 
-#### 本地文件
+#### EN
 
-1. 在首页点击"新建项目"
-2. 选择"文件上传"
-3. 拖拽或选择视频文件
-4. 上传字幕文件（可选）
-5. 点击"开始处理"
+1. EN"EN"
+2. EN"ENUpload"
+3. EN
+4. UploadEN（EN）
+5. EN"EN"
 
-### 2. 智能处理
+### 2. EN
 
-系统会自动执行以下步骤：
+EN：
 
-1. **素材准备**: 下载视频和字幕文件
-2. **内容分析**: AI提取视频大纲和关键信息
-3. **时间线提取**: 识别话题时间区间
-4. **精彩评分**: 对每个片段进行AI评分
-5. **标题生成**: 为精彩片段生成吸引人标题
-6. **合集推荐**: AI推荐视频合集
-7. **视频生成**: 生成切片视频和合集视频
+1. **EN**: EN
+2. **EN**: AIEN
+3. **EN**: EN
+4. **EN**: ENAIEN
+5. **EN**: EN
+6. **EN**: AIEN
+7. **EN**: EN
 
-### 3. 结果管理
+### 3. EN
 
-- **查看切片**: 在项目详情页查看所有生成的视频片段
-- **编辑信息**: 修改片段标题、描述等信息
-- **创建合集**: 手动创建或使用AI推荐的合集
-- **下载导出**: 下载单个片段或完整合集
-- **B站上传**【开发中】: 一键上传切片视频到B站
-- **字幕编辑**【开发中】: 可视化编辑和同步字幕文件
+- **EN**: EN
+- **EN**: EN、EN
+- **EN**: ENAIEN
+- **EN**: EN
+- **BENUpload**【In Development】: ENUploadENBEN
+- **Subtitle Editing**【In Development】: VisualEN
 
-## 🔧 配置说明
+## 🔧 Configuration
 
-### 环境变量配置
+### EN
 
-创建 `.env` 文件：
+EN `.env` EN：
 
 ```bash
-# 数据库配置
+# EN
 DATABASE_URL=sqlite:///./data/autoclip.db
 
-# Redis配置
+# RedisEN
 REDIS_URL=redis://localhost:6379/0
 
-# AI API配置
+# AI APIEN
 API_DASHSCOPE_API_KEY=your_dashscope_api_key
 API_MODEL_NAME=qwen-plus
 
-# 日志配置
+# EN
 LOG_LEVEL=INFO
 ENVIRONMENT=development
 DEBUG=true
 
-# 文件存储
+# EN
 UPLOAD_DIR=./data/uploads
 PROJECT_DIR=./data/projects
 ```
 
-### B站账号配置【开发中】
+### BENAccountEN【In Development】
 
-1. 在设置页面点击"B站账号管理"
-2. 选择登录方式：
-   - **Cookie导入**（推荐）：从浏览器导出Cookie
-   - **账号密码**：直接输入账号密码
-   - **二维码登录**：扫描二维码登录
-3. 添加成功后系统会自动管理账号健康状态
+1. EN"BENAccount Management"
+2. EN：
+   - **CookieEN**（EN）：ENCookie
+   - **AccountEN**：ENAccountEN
+   - **EN**：EN
+3. ENAccountEN
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```text
 autoclip/
-├── backend/                 # 后端代码
-│   ├── api/                # API路由
-│   │   ├── v1/            # API v1版本
-│   │   │   ├── youtube.py # YouTube下载API
-│   │   │   ├── bilibili.py # B站下载API
-│   │   │   ├── projects.py # 项目管理API
-│   │   │   ├── clips.py   # 视频片段API
-│   │   │   ├── collections.py # 合集管理API
-│   │   │   └── settings.py # 系统设置API
-│   │   └── upload_queue.py # 上传队列管理
-│   ├── core/              # 核心配置
-│   │   ├── database.py    # 数据库配置
-│   │   ├── celery_app.py  # Celery配置
-│   │   ├── config.py      # 系统配置
-│   │   └── llm_manager.py # AI模型管理
-│   ├── models/            # 数据模型
-│   │   ├── project.py     # 项目模型
-│   │   ├── clip.py        # 片段模型
-│   │   ├── collection.py  # 合集模型
-│   │   └── bilibili.py    # B站账号模型
-│   ├── services/          # 业务逻辑
-│   │   ├── video_service.py # 视频处理服务
-│   │   ├── ai_service.py  # AI分析服务
-│   │   └── upload_service.py # 上传服务
-│   ├── tasks/             # Celery任务
-│   │   ├── processing.py  # 处理任务
-│   │   ├── upload.py      # 上传任务
-│   │   └── maintenance.py # 维护任务
-│   ├── pipeline/          # 处理流水线
-│   │   ├── step1_outline.py # 大纲提取
-│   │   ├── step2_timeline.py # 时间线分析
-│   │   ├── step3_scoring.py # 精彩度评分
-│   │   └── step6_video.py # 视频生成
-│   └── utils/             # 工具函数
-├── frontend/              # 前端代码
+├── backend/                 # EN
+│   ├── api/                # APIEN
+│   │   ├── v1/            # API v1EN
+│   │   │   ├── youtube.py # YouTubeENAPI
+│   │   │   ├── bilibili.py # BENAPI
+│   │   │   ├── projects.py # Project ManagementAPI
+│   │   │   ├── clips.py   # ENAPI
+│   │   │   ├── collections.py # ENAPI
+│   │   │   └── settings.py # ENAPI
+│   │   └── upload_queue.py # UploadEN
+│   ├── core/              # EN
+│   │   ├── database.py    # EN
+│   │   ├── celery_app.py  # CeleryEN
+│   │   ├── config.py      # EN
+│   │   └── llm_manager.py # AIEN
+│   ├── models/            # EN
+│   │   ├── project.py     # EN
+│   │   ├── clip.py        # EN
+│   │   ├── collection.py  # EN
+│   │   └── bilibili.py    # BENAccountEN
+│   ├── services/          # EN
+│   │   ├── video_service.py # EN
+│   │   ├── ai_service.py  # AIEN
+│   │   └── upload_service.py # UploadEN
+│   ├── tasks/             # CeleryEN
+│   │   ├── processing.py  # EN
+│   │   ├── upload.py      # UploadEN
+│   │   └── maintenance.py # EN
+│   ├── pipeline/          # EN
+│   │   ├── step1_outline.py # EN
+│   │   ├── step2_timeline.py # EN
+│   │   ├── step3_scoring.py # EN
+│   │   └── step6_video.py # EN
+│   └── utils/             # EN
+├── frontend/              # EN
 │   ├── src/
-│   │   ├── components/    # React组件
-│   │   │   ├── UploadModal.tsx # 上传模态框
-│   │   │   ├── ClipCard.tsx # 片段卡片
-│   │   │   ├── CollectionCard.tsx # 合集卡片
-│   │   │   └── BilibiliManager.tsx # B站管理
-│   │   ├── pages/         # 页面组件
-│   │   │   ├── HomePage.tsx # 首页
-│   │   │   ├── ProjectDetailPage.tsx # 项目详情
-│   │   │   └── SettingsPage.tsx # 设置页面
-│   │   ├── services/      # API服务
-│   │   │   └── api.ts     # API客户端
-│   │   └── stores/        # 状态管理
+│   │   ├── components/    # ReactEN
+│   │   │   ├── UploadModal.tsx # UploadEN
+│   │   │   ├── ClipCard.tsx # EN
+│   │   │   ├── CollectionCard.tsx # EN
+│   │   │   └── BilibiliManager.tsx # BEN
+│   │   ├── pages/         # EN
+│   │   │   ├── HomePage.tsx # EN
+│   │   │   ├── ProjectDetailPage.tsx # EN
+│   │   │   └── SettingsPage.tsx # EN
+│   │   ├── services/      # APIEN
+│   │   │   └── api.ts     # APIEN
+│   │   └── stores/        # EN
 │   └── package.json
-├── data/                  # 数据存储
-│   ├── projects/          # 项目数据
-│   ├── uploads/           # 上传文件
-│   ├── temp/              # 临时文件
-│   ├── output/            # 输出文件
-│   └── autoclip.db        # 数据库文件
-├── scripts/               # 工具脚本
-│   ├── start_autoclip.sh  # 启动脚本
-│   ├── stop_autoclip.sh   # 停止脚本
-│   └── status_autoclip.sh # 状态检查
-├── docs/                  # 文档
-│   ├── README.md          # 文档中心
-│   ├── i18n.md           # 国际化配置
-│   └── *.md              # 其他文档
-├── logs/                  # 日志文件
-├── Dockerfile             # Docker镜像构建文件
-├── Dockerfile.dev         # 开发环境Docker文件
-├── docker-compose.yml     # 生产环境Docker编排
-├── docker-compose.dev.yml # 开发环境Docker编排
-├── docker-start.sh        # Docker启动脚本
-├── docker-stop.sh         # Docker停止脚本
-├── docker-status.sh       # Docker状态检查脚本
-├── .dockerignore          # Docker忽略文件
-├── DOCKER.md              # Docker部署文档
-└── *.sh                   # 启动脚本
+├── data/                  # EN
+│   ├── projects/          # EN
+│   ├── uploads/           # UploadEN
+│   ├── temp/              # EN
+│   ├── output/            # EN
+│   └── autoclip.db        # EN
+├── scripts/               # EN
+│   ├── start_autoclip.sh  # EN
+│   ├── stop_autoclip.sh   # EN
+│   └── status_autoclip.sh # EN
+├── docs/                  # EN
+│   ├── README.md          # EN
+│   ├── i18n.md           # EN
+│   └── *.md              # EN
+├── logs/                  # EN
+├── Dockerfile             # DockerEN
+├── Dockerfile.dev         # ENDockerEN
+├── docker-compose.yml     # ENDockerEN
+├── docker-compose.dev.yml # ENDockerEN
+├── docker-start.sh        # DockerEN
+├── docker-stop.sh         # DockerEN
+├── docker-status.sh       # DockerEN
+├── .dockerignore          # DockerEN
+├── DOCKER.md              # DockerEN
+└── *.sh                   # EN
 ```
 
-## 🌐 API文档
+## 🌐 APIEN
 
-启动系统后访问以下地址查看API文档：
+ENAPIEN：
 
-- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) (本地开发环境)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) (本地开发环境)
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) (EN)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) (EN)
 
-### 主要API端点
+### ENAPIEN
 
-| 端点 | 方法 | 描述 |
+| EN | EN | EN |
 |------|------|------|
-| `/api/v1/projects` | GET | 获取项目列表 |
-| `/api/v1/projects` | POST | 创建新项目 |
-| `/api/v1/projects/{id}` | GET | 获取项目详情 |
-| `/api/v1/youtube/parse` | POST | 解析YouTube视频信息 |
-| `/api/v1/youtube/download` | POST | 下载YouTube视频 |
-| `/api/v1/bilibili/download` | POST | 下载B站视频 |
-| `/api/v1/projects/{id}/process` | POST | 开始处理项目 |
-| `/api/v1/projects/{id}/status` | GET | 获取处理状态 |
+| `/api/v1/projects` | GET | EN |
+| `/api/v1/projects` | POST | EN |
+| `/api/v1/projects/{id}` | GET | EN |
+| `/api/v1/youtube/parse` | POST | ENYouTubeEN |
+| `/api/v1/youtube/download` | POST | ENYouTubeEN |
+| `/api/v1/bilibili/download` | POST | ENBEN |
+| `/api/v1/projects/{id}/process` | POST | EN |
+| `/api/v1/projects/{id}/status` | GET | EN |
 
-## 🔍 故障排除
+## 🔍 Troubleshooting
 
-### 常见问题
+### FAQ
 
-#### 1. 端口被占用
+#### 1. EN
 
 ```bash
-# 检查端口占用
-lsof -i :8000  # 后端端口
-lsof -i :3000  # 前端端口
+# EN
+lsof -i :8000  # EN
+lsof -i :3000  # EN
 
-# 停止占用进程
+# EN
 kill -9 <PID>
 ```
 
-#### 2. Redis连接失败
+#### 2. RedisEN
 
 ```bash
-# 检查Redis状态
+# ENRedisEN
 redis-cli ping
 
-# 启动Redis服务
+# ENRedisEN
 brew services start redis  # macOS
 systemctl start redis      # Linux
 ```
 
-#### 3. YouTube下载失败
+#### 3. YouTubeEN
 
-- 检查网络连接
-- 更新yt-dlp版本：`pip install --upgrade yt-dlp`
-- 尝试使用浏览器Cookie
-- 检查视频是否可用
+- EN
+- ENyt-dlpEN：`pip install --upgrade yt-dlp`
+- ENCookie
+- EN
 
-#### 4. B站下载失败
+#### 4. BEN
 
-- 检查账号登录状态
-- 更新账号Cookie
-- 检查视频权限设置
+- ENAccountEN
+- ENAccountCookie
+- EN
 
-### 日志查看
+### EN
 
 ```bash
-# 查看所有日志
+# EN
 tail -f logs/*.log
 
-# 查看特定服务日志
-tail -f logs/backend.log    # 后端日志
-tail -f logs/frontend.log   # 前端日志
-tail -f logs/celery.log     # 任务队列日志
+# EN
+tail -f logs/backend.log    # EN
+tail -f logs/frontend.log   # EN
+tail -f logs/celery.log     # Task QueueEN
 ```
 
-### 系统状态检查
+### EN
 
 ```bash
-# 详细状态检查
+# EN
 ./status_autoclip.sh
 
-# 手动检查服务
-curl http://localhost:8000/api/v1/health/  # 后端健康检查
-curl http://localhost:3000/                # 前端访问测试
-redis-cli ping                             # Redis连接测试
+# EN
+curl http://localhost:8000/api/v1/health/  # ENHealth Check
+curl http://localhost:3000/                # EN
+redis-cli ping                             # RedisEN
 ```
 
-## 🛠️ 开发指南
+## 🛠️ Development Guide
 
-### 后端开发
+### EN
 
 ```bash
-# 激活虚拟环境
+# EN
 source venv/bin/activate
 
-# 设置Python路径
+# ENPythonEN
 export PYTHONPATH="${PWD}:${PYTHONPATH}"
 
-# 启动后端开发服务器
+# EN
 python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### 前端开发
+### EN
 
 ```bash
-# 进入前端目录
+# EN
 cd frontend
 
-# 启动开发服务器
+# EN
 npm run dev
 ```
 
 ### Celery Worker
 
 ```bash
-# 启动Worker（必须带 -Q：任务按 celery_app.task_routes 路由到专用队列，
-# 不带 -Q 的 worker 只消费默认 `celery` 队列，流水线任务会一直堆在 `processing` 里没人执行）
+# ENWorker（EN -Q：EN celery_app.task_routes EN，
+# EN -Q EN worker EN `celery` EN，EN `processing` EN）
 celery -A backend.core.celery_app worker --loglevel=info -Q celery,processing,video,notification,upload
 
-# 启动Beat调度器
+# ENBeatEN
 celery -A backend.core.celery_app beat --loglevel=info
 
-# 启动Flower监控
+# ENFlowerEN
 celery -A backend.core.celery_app flower --port=5555
 ```
 
-## 📊 性能优化
+## 📊 Performance
 
-### 生产环境配置
+### EN
 
-1. **数据库优化**
-   - 使用PostgreSQL替代SQLite
-   - 配置连接池
-   - 启用查询缓存
+1. **EN**
+   - ENPostgreSQLENSQLite
+   - EN
+   - EN
 
-2. **Redis优化**
-   - 配置内存限制
-   - 启用持久化
-   - 设置过期策略
+2. **RedisEN**
+   - EN
+   - EN
+   - EN
 
-3. **Celery优化**
-   - 调整并发数
-   - 配置任务路由
-   - 启用结果后端
+3. **CeleryEN**
+   - EN
+   - EN
+   - EN
 
-## 🔒 安全配置
+## 🔒 Security
 
-### 生产环境安全
+### EN
 
-1. **环境变量**
-   - 使用强密码
-   - 定期轮换密钥
-   - 限制API访问
+1. **EN**
+   - EN
+   - EN
+   - ENAPIEN
 
-2. **网络安全**
-   - 配置防火墙
-   - 使用HTTPS
-   - 限制CORS
+2. **EN**
+   - EN
+   - ENHTTPS
+   - ENCORS
 
-3. **数据安全**
-   - 定期备份
-   - 加密敏感数据
-   - 访问控制
+3. **EN**
+   - EN
+   - EN
+   - EN
 
-## 🚀 部署指南
+## 🚀 Deployment
 
-### Docker部署
+### DockerEN
 
-#### 快速启动
+#### EN
 
 ```bash
-# 克隆项目
-git clone https://github.com/zhouxiaoka/autoclip.git
+# EN
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# 配置环境变量
+# EN
 cp env.example .env
-# 编辑 .env 文件，填入必要的配置
+# EN .env EN，EN
 
-# 启动所有服务
+# EN
 docker-compose up -d
 
-# 查看服务状态
+# EN
 docker-compose ps
 ```
 
-#### 访问服务
+#### EN
 
-- **前端界面**: [http://localhost:3000](http://localhost:3000) (本地开发环境)
-- **后端API**: [http://localhost:8000](http://localhost:8000) (本地开发环境)
-- **API文档**: [http://localhost:8000/docs](http://localhost:8000/docs) (本地开发环境)
-- **Flower监控**: [http://localhost:5555](http://localhost:5555) (本地开发环境)
+- **ENInterface**: [http://localhost:3000](http://localhost:3000) (EN)
+- **ENAPI**: [http://localhost:8000](http://localhost:8000) (EN)
+- **APIEN**: [http://localhost:8000/docs](http://localhost:8000/docs) (EN)
+- **FlowerEN**: [http://localhost:5555](http://localhost:5555) (EN)
 
-#### 开发环境
+#### EN
 
 ```bash
-# 使用开发环境配置
+# EN
 docker-compose -f docker-compose.dev.yml up -d
 
-# 实时查看日志
+# EN
 docker-compose -f docker-compose.dev.yml logs -f
 ```
 
-#### 详细说明
+#### EN
 
-完整的Docker部署指南请参考 [DOCKER.md](DOCKER.md) 文档。
+ENDockerDeploymentENReference [DOCKER.md](DOCKER.md) EN。
 
-### 系统服务
+### EN
 
 ```bash
-# 创建systemd服务文件
+# ENsystemdEN
 sudo nano /etc/systemd/system/autoclip.service
 
 [Unit]
@@ -607,77 +607,77 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
-## 📈 路线图
+## 📈 Roadmap
 
-### 即将推出
+### EN
 
-- [ ] **B站上传功能**: 自动上传切片视频到B站，支持多账号管理
-- [ ] **字幕编辑功能**: 可视化字幕编辑器和同步功能
-- [ ] **多语言支持**: 支持更多语言的视频处理
-- [ ] **云端存储**: 集成云存储服务
-- [ ] **批量处理**: 支持批量视频处理
-- [ ] **API开放**: 提供公开API接口
-- [ ] **移动应用**: 开发移动端应用
+- [ ] **BENUploadEN**: Auto UploadENBEN，SupportMulti-Account Management
+- [ ] **Subtitle EditingEN**: VisualSubtitle EditingENSync
+- [ ] **ENLanguageSupport**: SupportENLanguageEN
+- [ ] **EN**: EN
+- [ ] **EN**: SupportEN
+- [ ] **APIEN**: ProvidesENAPIEN
+- [ ] **EN**: EN
 
-### 长期规划
+### Long-term Plan
 
-- [ ] **AI模型优化**: 集成更多AI模型
-- [ ] **实时协作**: 支持多用户协作
-- [ ] **插件系统**: 支持第三方插件
-- [ ] **企业版**: 企业级功能和服务
+- [ ] **AIEN**: ENAIEN
+- [ ] **EN**: SupportEN
+- [ ] **EN**: SupportEN
+- [ ] **EN**: EN
 
-## 🤝 贡献指南
+## 🤝 Contributing
 
-我们欢迎所有形式的贡献！无论是代码贡献、文档改进、问题报告还是功能建议。
+EN！EN、EN、EN。
 
-### 如何贡献
+### EN
 
-1. **Fork** 项目到您的GitHub账户
-2. 克隆您的Fork到本地：
+1. **Fork** ENGitHubEN
+2. ENForkEN：
 
    ```bash
-   git clone https://github.com/zhouxiaoka/autoclip.git
+   git clone https://github.com/nd7hdyt/YtClipper.git
    cd autoclip
    ```
 
-3. 创建功能分支：
+3. EN：
 
    ```bash
    git checkout -b feature/amazing-feature
    ```
 
-4. 进行开发和测试
-5. 提交更改：
+4. EN
+5. EN：
 
    ```bash
    git add .
    git commit -m 'feat: add amazing feature'
    ```
 
-6. 推送分支：
+6. EN：
 
    ```bash
    git push origin feature/amazing-feature
    ```
 
-7. 在GitHub上创建 **Pull Request**
+7. ENGitHubEN **Pull Request**
 
-### 开发规范
+### EN
 
-#### 代码规范
+#### EN
 
-- 后端：遵循PEP 8 Python代码规范
-- 前端：使用TypeScript，遵循ESLint规则
-- 提交信息：使用约定式提交格式（feat, fix, docs, style, refactor, test, chore）
+- EN：ENPEP 8 PythonEN
+- EN：ENTypeScript，ENESLintEN
+- EN：EN（feat, fix, docs, style, refactor, test, chore）
 
-#### 开发流程
+#### EN
 
-1. 确保所有测试通过
-2. 添加必要的测试用例
-3. 更新相关文档
-4. 确保代码质量检查通过
+1. EN
+2. EN
+3. EN
+4. EN
 
-#### 提交信息格式
+#### EN
 
 ```text
 <type>(<scope>): <description>
@@ -687,46 +687,46 @@ WantedBy=multi-user.target
 [optional footer(s)]
 ```
 
-示例：
+EN：
 
 - `feat(api): add video download endpoint`
 - `fix(ui): resolve upload modal display issue`
 - `docs(readme): update installation instructions`
 
-## 📄 许可证
+## 📄 License
 
-本项目采用 [MIT License](LICENSE) 许可证。
+ENAdopts [MIT License](LICENSE) License。
 
-## ❓ 常见问题
+## ❓ FAQ
 
-### 安装和启动问题
+### EN
 
-**Q: 启动时提示端口被占用怎么办？**
-A: 使用以下命令检查并停止占用端口的进程：
+**Q: EN？**
+A: EN：
 
 ```bash
-# 检查端口占用
-lsof -i :8000  # 后端端口
-lsof -i :3000  # 前端端口
+# EN
+lsof -i :8000  # EN
+lsof -i :3000  # EN
 
-# 停止进程
+# EN
 kill -9 <PID>
 ```
 
-**Q: Redis连接失败怎么办？**
-A: 确保Redis服务正在运行：
+**Q: RedisEN？**
+A: ENRedisEN：
 
 ```bash
-# 检查Redis状态
+# ENRedisEN
 redis-cli ping
 
-# 启动Redis服务
+# ENRedisEN
 brew services start redis  # macOS
 sudo systemctl start redis-server  # Linux
 ```
 
-**Q: 前端依赖安装失败怎么办？**
-A: 尝试清理缓存后重新安装：
+**Q: EN？**
+A: EN：
 
 ```bash
 cd frontend
@@ -735,135 +735,135 @@ npm cache clean --force
 npm install
 ```
 
-### 功能使用问题
+### EN
 
-**Q: YouTube视频下载失败怎么办？**
+**Q: YouTubeEN？**
 A:
 
-1. 检查网络连接
-2. 更新yt-dlp：`pip install --upgrade yt-dlp`
-3. 尝试使用浏览器Cookie
-4. 检查视频是否可用或需要登录
+1. EN
+2. ENyt-dlp：`pip install --upgrade yt-dlp`
+3. ENCookie
+4. EN
 
-**Q: B站视频下载失败怎么办？**
+**Q: BEN？**
 A:
 
-1. 检查账号登录状态
-2. 更新账号Cookie
-3. 检查视频权限设置
-4. 尝试使用其他账号
+1. ENAccountEN
+2. ENAccountCookie
+3. EN
+4. ENAccount
 
-**Q: AI处理速度慢怎么办？**
+**Q: AIEN？**
 A:
 
-1. 检查API密钥配置
-2. 调整处理参数（减少chunk_size）
-3. 检查网络连接
-4. 考虑使用更快的AI模型
+1. ENAPIEN
+2. EN（ENchunk_size）
+3. EN
+4. ENAIEN
 
-**Q: B站上传功能什么时候可以使用？**
-A: B站上传功能正在开发中，预计在下一个版本中发布。该功能将支持：
+**Q: BENUploadEN？**
+A: BENUploadENIn Development，EN。ENSupport：
 
-- 自动上传切片视频到B站
-- 多账号管理和切换
-- 批量上传和队列管理
-- 上传进度监控
+- Auto UploadENBEN
+- Multi-Account ManagementEN
+- ENUploadEN
+- UploadEN
 
-**Q: 字幕编辑功能什么时候可以使用？**
-A: 字幕编辑功能正在开发中，预计在下一个版本中发布。该功能将支持：
+**Q: Subtitle EditingEN？**
+A: Subtitle EditingENIn Development，EN。ENSupport：
 
-- 可视化字幕编辑器
-- 字幕时间轴同步
-- 多语言字幕支持
-- 字幕格式转换
+- VisualSubtitle EditingEN
+- EN
+- ENLanguageENSupport
+- EN
 
-### 性能优化
+### Performance
 
-**Q: 如何提高处理速度？**
+**Q: EN？**
 A:
 
-1. 增加Celery Worker并发数
-2. 使用SSD存储
-3. 增加系统内存
-4. 优化视频质量设置
+1. ENCelery WorkerEN
+2. ENSSDEN
+3. EN
+4. EN
 
-**Q: 如何减少存储空间占用？**
+**Q: EN？**
 A:
 
-1. 定期清理临时文件
-2. 压缩输出视频
-3. 删除不需要的项目
-4. 使用外部存储
+1. EN
+2. EN
+3. EN
+4. EN
 
-## 📞 支持与反馈
+## 📞 Support & Feedback
 
-### 获取帮助
+### EN
 
-- **问题反馈**: [GitHub Issues](https://github.com/zhouxiaoka/autoclip/issues)
-- **功能建议**: [GitHub Discussions](https://github.com/zhouxiaoka/autoclip/discussions)
-  (仓库创建后可用)
-- **Bug报告**: 请使用GitHub Issues模板
-- **文档**: [项目文档](docs/)
+- **EN**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
+- **EN**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions)
+  (EN)
+- **BugEN**: ENGitHub IssuesEN
+- **EN**: [EN](docs/)
 
-### 联系方式
+### ContactEN
 
-如有问题或建议，请通过以下方式联系：
+EN，ENContact：
 
 ### 💬 QQ
 
-<img src="./qq_qr.jpg" alt="QQ二维码" width="150">
+<img src="./qq_qr.jpg" alt="QQEN" width="150">
 
-### 📱 飞书
+### 📱 EN
 
-<img src="./feishu_qr.jpg" alt="飞书二维码" width="150">
+<img src="./feishu_qr.jpg" alt="EN" width="150">
 
-### 📧 其他联系方式
+### 📧 ENContactEN
 
-- 提交 [GitHub Issue](https://github.com/zhouxiaoka/autoclip/issues)
-- 发送邮件至：[christine_zhouye@163.com](mailto:christine_zhouye@163.com)
-- 添加上述QQ或飞书联系
+- EN [GitHub Issue](https://github.com/nd7hdyt/YtClipper/issues)
+- EN：[christine_zhouye@163.com](mailto:christine_zhouye@163.com)
+- ENQQENContact
 
-## 🙏 致谢
+## 🙏 Acknowledgments
 
-感谢以下开源项目和服务的支持：
+ENSupport：
 
-### 核心技术栈
+### ENTech Stack
 
-- [FastAPI](https://fastapi.tiangolo.com/) - 现代化Python Web框架
-- [React](https://reactjs.org/) - 用户界面库
-- [Ant Design](https://ant.design/) - 企业级UI设计语言
-- [TypeScript](https://typescriptlang.org/) - JavaScript的超集
-- [Celery](https://docs.celeryproject.org/) - 分布式任务队列
-- [Redis](https://redis.io/) - 内存数据结构存储
+- [FastAPI](https://fastapi.tiangolo.com/) - ENPython WebEN
+- [React](https://reactjs.org/) - ENInterfaceEN
+- [Ant Design](https://ant.design/) - ENUIENLanguage
+- [TypeScript](https://typescriptlang.org/) - JavaScriptEN
+- [Celery](https://docs.celeryproject.org/) - ENTask Queue
+- [Redis](https://redis.io/) - EN
 
-### 视频处理
+### EN
 
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTube视频下载工具
-- [FFmpeg](https://ffmpeg.org/) - 音视频处理框架
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTubeEN
+- [FFmpeg](https://ffmpeg.org/) - EN
 
-### AI服务
+### AIEN
 
-- [通义千问](https://tongyi.aliyun.com/) - 阿里云大语言模型服务
-- [DashScope](https://dashscope.aliyun.com/) - 阿里云AI服务平台
+- [EN](https://tongyi.aliyun.com/) - ENLanguageEN
+- [DashScope](https://dashscope.aliyun.com/) - ENAIEN
 
-### 开发工具
+### EN
 
-- [Vite](https://vitejs.dev/) - 前端构建工具
-- [Zustand](https://github.com/pmndrs/zustand) - 状态管理库
-- [Pydantic](https://pydantic-docs.helpmanual.io/) - 数据验证库
+- [Vite](https://vitejs.dev/) - EN
+- [Zustand](https://github.com/pmndrs/zustand) - EN
+- [Pydantic](https://pydantic-docs.helpmanual.io/) - EN
 
-### 特别感谢
+### EN
 
-- 所有为开源社区贡献的开发者
-- 提供反馈和建议的用户
-- 参与测试和贡献代码的社区成员
+- EN
+- ProvidesEN
+- EN
 
 ---
 
-## 如果这个项目对你有帮助，请给我们一个 ⭐ Star
+## EN，EN ⭐ Star
 
-[![Star History Chart](https://api.star-history.com/svg?repos=zhouxiaoka/autoclip&type=Date)](https://star-history.com/#zhouxiaoka/autoclip&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=nd7hdyt/YtClipper&type=Date)](https://star-history.com/#nd7hdyt/YtClipper&Date)
 
 Made with ❤️ by AutoClip Team
 
-⭐ 如果觉得有用，请给个Star支持一下！
+⭐ EN，ENStarSupportEN！

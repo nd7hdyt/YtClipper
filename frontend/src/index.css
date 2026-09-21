@@ -105,7 +105,7 @@ body {
   background-color: #0f0f0f !important;
 }
 
-/* 自定义滚动条 - 深色主题 */
+/* EN - EN */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -125,7 +125,7 @@ body {
   background: #555555;
 }
 
-/* 合集横向滚动容器样式 */
+/* EN */
 .collections-scroll-container {
   scrollbar-width: thin;
   scrollbar-color: #404040 #1a1a1a;
@@ -149,7 +149,7 @@ body {
   background: #555555;
 }
 
-/* Ant Design 深色主题覆盖 */
+/* Ant Design EN */
 .ant-card {
   background-color: #1a1a1a !important;
   border: 1px solid #2d2d2d !important;
@@ -172,7 +172,7 @@ body {
   color: #999999 !important;
 }
 
-/* 输入框样式增强 */
+/* EN */
 .ant-input {
   background-color: #2d2d2d !important;
   border-color: #404040 !important;
@@ -192,7 +192,7 @@ body {
   color: #888888 !important;
 }
 
-/* 密码输入框 */
+/* EN */
 .ant-input-password {
   background-color: #2d2d2d !important;
   border-color: #404040 !important;
@@ -207,7 +207,7 @@ body {
   color: #4facfe !important;
 }
 
-/* 数字输入框 */
+/* EN */
 .ant-input-number {
   background-color: #2d2d2d !important;
   border-color: #404040 !important;
@@ -219,7 +219,7 @@ body {
   color: #ffffff !important;
 }
 
-/* 选择器样式 */
+/* EN */
 .ant-select {
   color: #ffffff !important;
 }
@@ -258,7 +258,7 @@ body {
   color: #ffffff !important;
 }
 
-/* 按钮样式增强 */
+/* EN */
 .ant-btn {
   border-radius: 8px !important;
   font-weight: 500;
@@ -290,7 +290,7 @@ body {
   color: #ffffff !important;
 }
 
-/* 表单样式 */
+/* EN */
 .ant-form-item-label > label {
   color: #ffffff !important;
   font-weight: 500;
@@ -306,7 +306,7 @@ body {
   font-size: 12px;
 }
 
-/* 警告框样式 — Calm Premium, token 驱动 */
+/* EN — Calm Premium, token EN */
 .ant-alert {
   border-radius: 10px !important;
   border: 1px solid var(--ac-line) !important;
@@ -329,7 +329,7 @@ body {
   color: var(--ac-accent) !important;
 }
 
-/* 分割线样式 */
+/* EN */
 .ant-divider {
   border-color: #2d2d2d !important;
 }
@@ -343,7 +343,7 @@ body {
   font-weight: 500;
 }
 
-/* 空状态样式 */
+/* ENStatusEN */
 .ant-empty {
   color: #999999 !important;
 }
@@ -352,7 +352,7 @@ body {
   color: #999999 !important;
 }
 
-/* 加载状态 */
+/* ENStatus */
 .ant-spin-dot-item {
   background-color: #4facfe !important;
 }
@@ -361,7 +361,7 @@ body {
   color: #4facfe !important;
 }
 
-/* 消息提示样式 */
+/* EN */
 .ant-message-notice-content {
   background-color: #1a1a1a !important;
   border: 1px solid #2d2d2d !important;
@@ -386,7 +386,7 @@ body {
   color: #4facfe !important;
 }
 
-/* 模态框样式 */
+/* EN */
 .ant-modal-content {
   background-color: #1a1a1a !important;
   border-radius: 12px !important;
@@ -413,7 +413,7 @@ body {
   border-radius: 0 0 12px 12px !important;
 }
 
-/* 标签页样式 */
+/* EN */
 .ant-tabs-tab {
   color: #cccccc !important;
 }
@@ -434,7 +434,7 @@ body {
   color: #ffffff !important;
 }
 
-/* 表格样式 */
+/* EN */
 .ant-table {
   background-color: #1a1a1a !important;
   color: #ffffff !important;
@@ -456,7 +456,7 @@ body {
   background-color: #2d2d2d !important;
 }
 
-/* 分页样式 */
+/* EN */
 .ant-pagination-item {
   background-color: #2d2d2d !important;
   border-color: #404040 !important;
@@ -487,7 +487,7 @@ body {
   color: #4facfe !important;
 }
 
-/* 工具提示样式 */
+/* ToolEN */
 .ant-tooltip-inner {
   background-color: #1a1a1a !important;
   color: #ffffff !important;
@@ -498,7 +498,7 @@ body {
   background-color: #1a1a1a !important;
 }
 
-/* 下拉菜单样式 */
+/* EN */
 .ant-dropdown-menu {
   background-color: #1a1a1a !important;
   border: 1px solid #2d2d2d !important;
@@ -519,7 +519,7 @@ body {
   color: #ffffff !important;
 }
 
-/* 进度条样式 */
+/* EN */
 .ant-progress-bg {
   background-color: #4facfe !important;
 }
@@ -528,7 +528,7 @@ body {
   color: #ffffff !important;
 }
 
-/* 标签样式 */
+/* EN */
 .ant-tag {
   background-color: #2d2d2d !important;
   border-color: #404040 !important;
@@ -560,14 +560,14 @@ body {
   color: #faad14 !important;
 }
 
-/* 视频预览样式 - 深色主题 */
+/* EN - EN */
 .video-preview {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* 现代化卡片效果 */
+/* EN */
 .clip-card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
@@ -582,7 +582,7 @@ body {
   border-color: #404040;
 }
 
-/* 项目卡片样式 */
+/* ProjectEN */
 .project-card {
   background: #1a1a1a !important;
   border: 1px solid #333333 !important;
@@ -624,7 +624,7 @@ body {
   transform: scale(1.05) !important;
 }
 
-/* 卡片按钮悬停效果 */
+/* EN */
 .project-card .ant-btn:hover {
   background: #2d2d2d !important;
   border-color: #4facfe !important;
@@ -638,7 +638,7 @@ body {
   color: #ff6b6b !important;
 }
 
-/* 统计卡片动画 */
+/* EN */
 .project-card .ant-card-body > div > div[style*="background: rgb(38, 38, 38)"] {
   transition: all 0.3s ease !important;
 }
@@ -648,7 +648,7 @@ body {
   transform: translateY(-2px) !important;
 }
 
-/* 上传区域样式 */
+/* UploadEN */
 .upload-area {
   background: #262626 !important;
   border: 2px dashed #404040 !important;
@@ -686,20 +686,20 @@ body {
   box-shadow: 0 12px 40px rgba(79, 172, 254, 0.3) !important;
 }
 
-/* 上传按钮悬停效果 */
+/* UploadEN */
 .upload-area + div button[style*="linear-gradient"]:hover {
   transform: translateY(-2px) scale(1.05) !important;
   box-shadow: 0 8px 24px rgba(79, 172, 254, 0.6) !important;
 }
 
-/* 状态标签样式 */
+/* StatusEN */
 .status-tag {
   border-radius: 20px;
   font-weight: 500;
   backdrop-filter: blur(10px);
 }
 
-/* 渐变背景 */
+/* EN */
 .gradient-bg {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
@@ -712,14 +712,14 @@ body {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
 
-/* 毛玻璃效果 */
+/* EN */
 .glass-effect {
   backdrop-filter: blur(20px);
   background: rgba(26, 26, 26, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* 加载动画 */
+/* EN */
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -752,15 +752,15 @@ body { font-family: var(--ac-font-sans) !important; }
 .ant-select-item { color: var(--ac-ink) !important; }
 .ant-select-item:hover { background-color: var(--ac-line-2) !important; }
 .ant-select-item-option-selected { background-color: var(--ac-line-2) !important; color: var(--ac-ink) !important; }
-/* 主按钮统一为墨色（见 DESIGN.md）；蓝色只做强调，不做按钮 */
+/* EN（EN DESIGN.md）；EN，EN */
 .ant-btn-primary { background-color: var(--ac-cta-bg) !important; border-color: var(--ac-cta-bg) !important; color: var(--ac-cta-fg) !important; box-shadow: none !important; }
 .ant-btn-primary:hover, .ant-btn-primary:focus { background-color: color-mix(in srgb, var(--ac-cta-bg) 86%, #fff) !important; border-color: color-mix(in srgb, var(--ac-cta-bg) 86%, #fff) !important; color: var(--ac-cta-fg) !important; transform: none !important; }
 .ant-btn-default { background-color: var(--ac-card) !important; border-color: var(--ac-line) !important; color: var(--ac-ink) !important; }
 .ant-form-item-label > label { color: var(--ac-ink) !important; }
-/* 分段控件（时间/评分）高亮：墨色，不用蓝 */
+/* EN（EN/EN）EN：EN，EN */
 .ant-radio-button-wrapper-checked, .ant-radio-button-wrapper-checked:hover { background: var(--ac-cta-bg) !important; border-color: var(--ac-cta-bg) !important; color: var(--ac-cta-fg) !important; }
 .ant-radio-button-wrapper-checked::before { background-color: var(--ac-cta-bg) !important; }
-/* 链接色 = 强调蓝 */
+/* EN = EN */
 .ant-btn-link { color: var(--ac-accent) !important; }
 /* project cards → calm */
 .project-card { background: var(--ac-card) !important; border: 1px solid var(--ac-line) !important; box-shadow: none !important; }

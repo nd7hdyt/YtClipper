@@ -1,4 +1,4 @@
-"""出片质量：时长画像、时间线校正、评分对齐与筛选兜底（不调模型）"""
+"""EN：EN、EN、EN（EN）"""
 import json
 import sys
 from pathlib import Path
@@ -22,8 +22,8 @@ def test_profile_short_video_does_not_use_podcast_minimums():
     assert p.max_clip_sec <= 180
     assert p.topics_hint[1] <= 8
     hint = p.prompt_hint()
-    assert "本次任务参数" in hint and "5 分" in hint
-    assert "90 秒" in hint  # 明确覆盖旧规则
+    assert "EN" in hint and "5 EN" in hint
+    assert "90 EN" in hint  # EN
 
 
 def test_profile_long_keeps_podcast_scale():
@@ -34,24 +34,24 @@ def test_profile_long_keeps_podcast_scale():
 
 
 def test_refine_snaps_to_cue_and_drops_too_short():
-    # 0–80s，每条 cue 2 秒。短视频档 min=20s。
+    # 0–80s，EN cue 2 EN。EN min=20s。
     cues = [_cue(i, i + 2, f"c{i}") for i in range(0, 80, 2)]
     items = [
-        {"outline": "可延长", "start_time": "00:00:20,200", "end_time": "00:00:28,000", "content": ["b"]},
-        {"outline": "重叠甲", "start_time": "00:00:40,000", "end_time": "00:01:10,000", "content": ["c"]},
-        {"outline": "重叠乙", "start_time": "00:00:50,000", "end_time": "00:01:08,000", "content": ["d"]},
-        # 片尾 3 秒、与前一段空档 > 5s、后面没 cue 可延 → 丢弃
-        {"outline": "太短", "start_time": "00:01:17,000", "end_time": "00:01:19,400", "content": ["a"]},
+        {"outline": "EN", "start_time": "00:00:20,200", "end_time": "00:00:28,000", "content": ["b"]},
+        {"outline": "EN", "start_time": "00:00:40,000", "end_time": "00:01:10,000", "content": ["c"]},
+        {"outline": "EN", "start_time": "00:00:50,000", "end_time": "00:01:08,000", "content": ["d"]},
+        # EN 3 EN、EN > 5s、EN cue EN → EN
+        {"outline": "EN", "start_time": "00:01:17,000", "end_time": "00:01:19,400", "content": ["a"]},
     ]
     out, report = refine_timeline(items, cues, profile_for(300))
     titles = [_t(x) for x in out]
-    assert "太短" not in titles
-    assert any(d.get("outline") == "太短" for d in report["dropped"])
-    extend = next(x for x in out if x["outline"] == "可延长")
+    assert "EN" not in titles
+    assert any(d.get("outline") == "EN" for d in report["dropped"])
+    extend = next(x for x in out if x["outline"] == "EN")
     assert extend["duration_sec"] >= 20
     assert "snap" in extend["refine"]["ops"]
     assert report["output"] <= 3
-    assert any(m.get("absorbed") == "重叠乙" for m in report["merged"])
+    assert any(m.get("absorbed") == "EN" for m in report["merged"])
     for x in out:
         assert x["duration_sec"] >= 20
         assert abs(to_seconds(x["start_time"]) % 2) < 1e-6
@@ -64,22 +64,22 @@ def _t(x):
 
 def test_align_scores_falls_back_when_count_mismatch():
     clips = [
-        {"outline": "甲", "id": "1"},
-        {"outline": "乙", "id": "2"},
-        {"outline": "丙", "id": "3"},
+        {"outline": "EN", "id": "1"},
+        {"outline": "EN", "id": "2"},
+        {"outline": "EN", "id": "3"},
     ]
-    llm = [{"outline": "乙", "final_score": 0.9, "recommend_reason": "好"}]
+    llm = [{"outline": "EN", "final_score": 0.9, "recommend_reason": "EN"}]
     scored, stats = align_scores(clips, llm)
     assert stats["matched"] == 1 and stats["fallback"] == 2
     by = {c["outline"]: c for c in scored}
-    assert by["乙"]["final_score"] == 0.9
-    assert by["甲"]["score_source"] == "fallback"
-    assert by["甲"]["final_score"] == 0.5
+    assert by["EN"]["final_score"] == 0.9
+    assert by["EN"]["score_source"] == "fallback"
+    assert by["EN"]["final_score"] == 0.5
 
 
 def test_align_scores_normalizes_0_10_scale():
-    clips = [{"outline": "甲"}]
-    scored, _ = align_scores(clips, [{"outline": "甲", "final_score": 8, "recommend_reason": "x"}])
+    clips = [{"outline": "EN"}]
+    scored, _ = align_scores(clips, [{"outline": "EN", "final_score": 8, "recommend_reason": "x"}])
     assert scored[0]["final_score"] == 0.8
 
 
@@ -98,6 +98,6 @@ def test_select_clips_keeps_top_k_when_all_below_threshold():
 
 
 def test_excerpt_between_truncates():
-    cues = [_cue(0, 2, "一二三四五六七八九十" * 20), _cue(2, 4, "后段")]
+    cues = [_cue(0, 2, "EN" * 20), _cue(2, 4, "EN")]
     text = excerpt_between(cues, 0, 3, max_chars=20)
     assert len(text) == 20

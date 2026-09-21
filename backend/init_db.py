@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-数据库初始化脚本
-创建数据库表并插入初始数据
+databaseinitializeEN
+createdatabaseEN
 """
 
 import sys
 from pathlib import Path
 
-# 添加backend目录到Python路径
+# ENbackenddirectoryENPythonpath
 backend_dir = Path(__file__).parent
 if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
@@ -23,19 +23,19 @@ from sqlalchemy.orm import Session
 from ..core.database import SessionLocal
 
 def create_initial_data():
-    """创建初始测试数据"""
+    """createEN"""
     db = SessionLocal()
     try:
-        # 检查是否已有数据
+        # checkEN
         existing_projects = db.query(Project).count()
         if existing_projects > 0:
-            print("数据库中已有数据，跳过初始数据创建")
+            print("databaseEN，ENcreate")
             return
         
-        # 创建测试项目
+        # createENproject
         test_project = Project(
-            name="测试项目",
-            description="这是一个测试项目，用于验证系统功能",
+            name="ENproject",
+            description="ENproject，ENvalidatesystemEN",
             project_type=ProjectType.KNOWLEDGE,
             status=ProjectStatus.PENDING,
             processing_config={
@@ -48,23 +48,23 @@ def create_initial_data():
         db.commit()
         db.refresh(test_project)
         
-        # 创建测试任务
+        # createENtask
         test_task = Task(
-            name="测试任务",
-            description="测试处理任务",
+            name="ENtask",
+            description="ENprocessingtask",
             task_type=TaskType.VIDEO_PROCESSING,
             project_id=test_project.id,
             status=TaskStatus.PENDING,
             progress=0,
-            current_step="等待开始",
+            current_step="ENstart",
             total_steps=6
         )
         db.add(test_task)
         
-        # 创建测试切片
+        # createENclip
         test_clip = Clip(
-            title="测试切片",
-            content="这是一个测试切片的内容",
+            title="ENclip",
+            content="ENclipEN",
             start_time=0,
             end_time=30,
             score=0.8,
@@ -72,44 +72,44 @@ def create_initial_data():
         )
         db.add(test_clip)
         
-        # 创建测试合集
+        # createENcollection
         test_collection = Collection(
-            title="测试合集",
-            description="这是一个测试合集",
+            title="ENcollection",
+            description="ENcollection",
             project_id=test_project.id
         )
         db.add(test_collection)
         
         db.commit()
-        print("✅ 初始测试数据创建成功")
+        print("✅ ENcreatesucceeded")
         
     except Exception as e:
-        print(f"❌ 创建初始数据失败: {e}")
+        print(f"❌ createENfailed: {e}")
         db.rollback()
     finally:
         db.close()
 
 def main():
-    """主函数"""
-    print("🚀 开始初始化数据库...")
+    """EN"""
+    print("🚀 startinitializedatabase...")
     
-    # 初始化路径配置
+    # initializepathconfig
     init_paths()
     
-    # 显示数据库配置
-    print(f"数据库URL: {get_database_url()}")
-    print(f"数据目录: {get_data_directory()}")
+    # ENdatabaseconfig
+    print(f"databaseURL: {get_database_url()}")
+    print(f"ENdirectory: {get_data_directory()}")
     
-    # 初始化数据库
+    # initializedatabase
     if init_database():
-        print("✅ 数据库初始化成功")
+        print("✅ databaseinitializesucceeded")
         
-        # 创建初始数据
+        # createEN
         create_initial_data()
         
-        print("🎉 数据库初始化完成！")
+        print("🎉 databaseinitializeEN！")
     else:
-        print("❌ 数据库初始化失败")
+        print("❌ databaseinitializefailed")
         sys.exit(1)
 
 if __name__ == "__main__":

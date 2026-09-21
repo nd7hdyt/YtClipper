@@ -1,71 +1,71 @@
-# 🚀 AutoClip Desktop 构建指南
+# 🚀 AutoClip Desktop EN
 
-桌面客户端只有**一条**打包路线：python-build-standalone（PBS）。它把便携 Python 运行时、
-后端源码、静态 ffmpeg/ffprobe 全部打进 `.app`，用户机器**无需预装 Python 或 ffmpeg**。
+EN**EN**EN：python-build-standalone（PBS）。EN Python EN、
+EN、EN ffmpeg/ffprobe EN `.app`，EN**EN Python EN ffmpeg**。
 
-> 历史上的 PyInstaller / prepare_resources 路线（以及对应的 6+ 个 CI 工作流）从未成功产出可用包，已全部移除。
+> EN PyInstaller / prepare_resources EN（EN 6+ EN CI EN）EN，EN。
 
-## 本地构建（macOS Apple Silicon）
+## EN（macOS Apple Silicon）
 
 ```bash
 ./scripts/build_macos_arm.sh
 ```
 
-产物：
+EN：
 ```
 src-tauri/target/release/bundle/macos/
-├── AutoClip Desktop.app                    # 应用包（~550M）
-└── AutoClip Desktop_1.0.0_aarch64.dmg      # DMG 安装包（~260M）
+├── AutoClip Desktop.app                    # EN（~550M）
+└── AutoClip Desktop_1.0.0_aarch64.dmg      # DMG EN（~260M）
 ```
 
-脚本各步骤说明见 [`scripts/README.md`](scripts/README.md)。
+EN [`scripts/README.md`](scripts/README.md)。
 
-### 前置依赖
+### EN
 
-| 工具 | 版本 | 说明 |
+| EN | EN | EN |
 |------|------|------|
-| Node.js | 18+ | 前端构建 |
-| Rust | stable | 带 `aarch64-apple-darwin` target |
+| Node.js | 18+ | EN |
+| Rust | stable | EN `aarch64-apple-darwin` target |
 | cargo-tauri | 2.x | `cargo install tauri-cli` |
 
-系统 **不需要** 预装 Python / ffmpeg —— 脚本自带便携版（首次构建会下载并缓存到 `build/`）。
+EN **EN** EN Python / ffmpeg —— EN（EN `build/`）。
 
-## CI / 发布（GitHub Actions）
+## CI / EN（GitHub Actions）
 
-`.github/workflows/desktop-build.yml` 跑同一个 `build_macos_arm.sh`：
+`.github/workflows/desktop-build.yml` EN `build_macos_arm.sh`：
 
 ```bash
-# 手动触发：仓库页面 → Actions → "Desktop Build (macOS arm64)" → Run workflow
+# EN：EN → Actions → "Desktop Build (macOS arm64)" → Run workflow
 
-# 或打 tag 触发，并自动把 DMG 挂到 GitHub Release：
+# EN tag EN，EN DMG EN GitHub Release：
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-## 安装与首次运行
+## EN
 
-DMG 是 ad-hoc 签名（未做 Apple 公证），所以：
+DMG EN ad-hoc EN（EN Apple EN），EN：
 
-1. 双击 DMG，把 `AutoClip Desktop` 拖到 Applications
-2. **首次打开右键点应用 → 选「打开」** 以绕过 Gatekeeper
-3. 后端会自动启动并在 `~/Library/Application Support/AutoClip` 建数据目录
+1. EN DMG，EN `AutoClip Desktop` EN Applications
+2. **EN → EN「EN」** EN Gatekeeper
+3. EN `~/Library/Application Support/AutoClip` EN
 
-## 故障排除
+## Troubleshooting
 
-命令行直接跑 app 看后端输出：
+EN app EN：
 ```bash
 '/Applications/AutoClip Desktop.app/Contents/MacOS/autoclip-desktop'
 ```
-应看到 `Backend started on port: XXXXX` 和 `Application startup complete`。
+EN `Backend started on port: XXXXX` EN `Application startup complete`。
 
-| 现象 | 排查 |
+| EN | EN |
 |------|------|
-| `ModuleNotFoundError: No module named 'X'` | 把 `X` 加进 `requirements.txt` 重新构建（构建期的依赖检查应该已经拦下，正常不会发生）|
-| 窗口黑屏 | 前端没挂载，看 WebView 控制台；通常是打包/资源问题 |
-| 视频处理失败 | 确认 `Contents/Resources/resources/ffmpeg/{ffmpeg,ffprobe}` 存在且可执行 |
-| 构建失败想重来 | `rm -rf src-tauri/target build/pbs-cache build/ffmpeg-cache` 后重跑（会重新下载）|
+| `ModuleNotFoundError: No module named 'X'` | EN `X` EN `requirements.txt` EN（EN，EN）|
+| EN | EN，EN WebView EN；EN/EN |
+| EN | EN `Contents/Resources/resources/ffmpeg/{ffmpeg,ffprobe}` EN |
+| EN | `rm -rf src-tauri/target build/pbs-cache build/ffmpeg-cache` EN（EN）|
 
-## 已知限制
+## EN
 
-- 仅 Apple Silicon (arm64)，暂无 Intel / Windows / Linux 包
-- ad-hoc 签名、未公证，首次需右键打开
+- EN Apple Silicon (arm64)，EN Intel / Windows / Linux EN
+- ad-hoc EN、EN，EN

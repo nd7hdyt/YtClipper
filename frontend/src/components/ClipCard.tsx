@@ -30,7 +30,7 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
   const [exportDone, setExportDone] = useState<{ jobId: string; warnings?: string[] } | null>(null)
   const playerRef = useRef<ReactPlayer>(null)
 
-  // 从视频第 1 秒抓一帧当缩略图
+  // Capture a frame at 1s for the thumbnail
   useEffect(() => {
     if (!videoUrl) return
     const video = document.createElement('video')
@@ -52,8 +52,8 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
     try {
       await onDownload(clip.id)
     } catch (err) {
-      console.error('下载失败:', err)
-      message.error('下载失败')
+      console.error('Download failed:', err)
+      message.error('Download failed')
     }
   }
 
@@ -78,14 +78,14 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
           return
         }
         if (job.status === 'failed') {
-          setExportError(job.error || '导出失败')
+          setExportError(job.error || 'Export failed')
           setExporting(false)
           return
         }
       }
-      setExportError('导出超时，请稍后在输出目录查看')
+      setExportError('Export timed out, please check the output folder later')
     } catch (err: any) {
-      setExportError(err?.response?.data?.detail || err?.message || '导出失败')
+      setExportError(err?.response?.data?.detail || err?.message || 'Export failed')
     } finally {
       setExporting(false)
     }
@@ -93,7 +93,7 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
 
   const durationSec = Math.max(0, parseTimecode(clip.end_time) - parseTimecode(clip.start_time))
 
-  // 优先显示推荐理由；否则取内容要点；最后回退到大纲
+  // Prefer the recommend reason, then content points, then outline
   const getDisplayContent = () => {
     if (clip.recommend_reason && clip.recommend_reason.trim()) return clip.recommend_reason
     if (clip.content && Array.isArray(clip.content) && clip.content.length > 0) {
@@ -109,8 +109,8 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
     return ''
   }
 
-  const title = clip.title || clip.generated_title || '未命名片段'
-  // 后端评分历史上有 0–1 / 0–10 两种刻度，统一显示为 0–100 的整数
+  const title = clip.title || clip.generated_title || 'Untitled clip'
+  // Backend scores were historically 0-1 or 0-10; normalize to an integer 0-100 for display
   const raw = clip.final_score ?? 0
   const score = Math.round(raw <= 1 ? raw * 100 : raw <= 10 ? raw * 10 : raw)
 
@@ -122,10 +122,10 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
           style={videoThumbnail ? { backgroundImage: `url(${videoThumbnail})` } : undefined}
           onClick={() => setShowPlayer(true)}
           role="button"
-          aria-label="播放"
+          aria-label="Play"
         >
           <div className="play"><span><Icon.Play size={18} /></span></div>
-          <span className="ac-tag ac-tag--tr" title="推荐分">{score}</span>
+          <span className="ac-tag ac-tag--tr" title="Score">{score}</span>
           <span className="ac-tag ac-tag--bl">{fmtClock(clip.start_time)} – {fmtClock(clip.end_time)}</span>
         </div>
 
@@ -142,9 +142,9 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
           <div className="ac-card-foot">
             <span className="meta">{fmtDuration(durationSec)}</span>
             <div className="ac-card-actions">
-              <Btn variant="text" onClick={() => setShowPlayer(true)}>播放</Btn>
-              <Btn variant="text" onClick={handleDownload}>下载</Btn>
-              {projectId && <Btn variant="text" onClick={() => { setShowExport(true); setExportDone(null); setExportError(null) }}>导出</Btn>}
+              <Btn variant="text" onClick={() => setShowPlayer(true)}>Play</Btn>
+              <Btn variant="text" onClick={handleDownload}>Download</Btn>
+              {projectId && <Btn variant="text" onClick={() => { setShowExport(true); setExportDone(null); setExportError(null) }}>Export</Btn>}
             </div>
           </div>
         </div>
@@ -155,9 +155,9 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
         onCancel={() => setShowPlayer(false)}
         footer={
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-            {projectId && <Btn size="sm" onClick={() => { setShowPlayer(false); setShowExport(true) }}>发布导出</Btn>}
+            {projectId && <Btn size="sm" onClick={() => { setShowPlayer(false); setShowExport(true) }}>Publish export</Btn>}
             <Btn size="sm" variant="cta" onClick={handleDownload} style={{ height: 30, fontSize: 12.5, padding: '0 14px' }}>
-              下载
+              Download
             </Btn>
           </div>
         }
@@ -168,7 +168,7 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
         title={
           <div style={{ paddingRight: 30 }}>
             <EditableTitle
-              title={clip.title || clip.generated_title || '视频预览'}
+              title={clip.title || clip.generated_title || 'Video preview'}
               clipId={clip.id}
               onTitleUpdate={(t) => onClipUpdate?.(clip.id, { title: t })}
               style={{ color: 'var(--ac-ink)', fontSize: 15, fontWeight: 500 }}
@@ -178,7 +178,7 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
               <span className="dot" />
               <span className="ac-mono">{fmtDuration(durationSec)}</span>
               <span className="dot" />
-              <span>推荐分 <span className="ac-mono">{score}</span></span>
+              <span>Score <span className="ac-mono">{score}</span></span>
             </div>
           </div>
         }
@@ -202,49 +202,49 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
       <Dialog
         open={showExport}
         onClose={() => !exporting && setShowExport(false)}
-        title="发布导出"
-        description="渲成可直接上传的成片。默认流水线的切片不受影响。"
+        title="Publish export"
+        description="Render a publish-ready video. Pipeline clips are unaffected."
         footer={
           <div className="right" style={{ marginLeft: 'auto' }}>
-            <Btn size="sm" onClick={() => setShowExport(false)} disabled={exporting}>取消</Btn>
+            <Btn size="sm" onClick={() => setShowExport(false)} disabled={exporting}>Cancel</Btn>
             {exportDone ? (
               <Btn size="sm" variant="cta" onClick={() => projectId && projectApi.downloadExport(projectId, exportDone.jobId)}>
-                下载成片
+                Download video
               </Btn>
             ) : (
-              <Btn size="sm" variant="cta" loading={exporting} onClick={handleExport}>开始导出</Btn>
+              <Btn size="sm" variant="cta" loading={exporting} onClick={handleExport}>Start export</Btn>
             )}
           </div>
         }
       >
-        <Row label="平台" hint="画幅与时长按平台规格">
+        <Row label="Platform" hint="Size and length follow platform specs">
           <Segmented
             size="sm"
-            ariaLabel="导出预设"
+            ariaLabel="Export preset"
             value={preset}
             onChange={setPreset}
             options={[
-              { value: 'douyin', label: '抖音' },
-              { value: 'xiaohongshu', label: '小红书' },
+              { value: 'douyin', label: 'Douyin' },
+              { value: 'xiaohongshu', label: 'Xiaohongshu' },
               { value: 'shorts', label: 'Shorts' },
-              { value: 'bilibili', label: 'B 站' },
-              { value: 'original', label: '原画' },
+              { value: 'bilibili', label: 'Bilibili' },
+              { value: 'original', label: 'Original' },
             ]}
           />
         </Row>
-        <Row label="字幕" hint="从原字幕切出本段并烧进画面">
+        <Row label="Subtitles" hint="Cut and burn in subtitles for this segment">
           <Segmented size="sm" value={burnSub ? 'on' : 'off'} onChange={(v) => setBurnSub(v === 'on')}
-            options={[{ value: 'on', label: '烧录' }, { value: 'off', label: '不要' }]} />
+            options={[{ value: 'on', label: 'Burn in' }, { value: 'off', label: 'Off' }]} />
         </Row>
-        <Row label="标题卡" hint="片头约 4 秒显示切片标题">
+        <Row label="Title card" hint="Show the clip title for ~4s at the start">
           <Segmented size="sm" value={titleCard ? 'on' : 'off'} onChange={(v) => setTitleCard(v === 'on')}
-            options={[{ value: 'on', label: '显示' }, { value: 'off', label: '不要' }]} />
+            options={[{ value: 'on', label: 'Show' }, { value: 'off', label: 'Off' }]} />
         </Row>
         {exporting && <div style={{ marginTop: 16 }}><ProgressLine percent={exportPercent} /></div>}
         {exportError && <p style={{ marginTop: 12, color: 'var(--ac-error)', fontSize: 13 }}>{exportError}</p>}
         {exportDone && (
           <p style={{ marginTop: 12, color: 'var(--ac-sub)', fontSize: 13 }}>
-            已完成{exportDone.warnings?.length ? ` · ${exportDone.warnings.join('；')}` : ''}
+            Done{exportDone.warnings?.length ? ` · ${exportDone.warnings.join('; ')}` : ''}
           </p>
         )}
       </Dialog>
@@ -255,7 +255,7 @@ const ClipCard: React.FC<ClipCardProps> = ({ clip, videoUrl, onDownload, project
         projectId={projectId || ''}
         clipIds={[clip.id]}
         clipTitles={[title]}
-        onUploadSuccess={() => console.log('投稿成功')}
+        onUploadSuccess={() => console.log('Upload succeeded')}
       />
     </>
   )

@@ -1,6 +1,6 @@
 """
-统一配置管理系统
-整合所有配置源，提供统一的配置访问接口
+ENconfigENsystem
+ENallconfigEN，ENconfigENAPI
 """
 
 import json
@@ -17,98 +17,98 @@ logger = logging.getLogger(__name__)
 
 
 class DatabaseConfig(BaseModel):
-    """数据库配置"""
-    url: str = Field(default="sqlite:///./data/autoclip.db", description="数据库连接URL")
-    echo: bool = Field(default=False, description="是否打印SQL语句")
-    pool_size: int = Field(default=5, description="连接池大小")
-    max_overflow: int = Field(default=10, description="最大溢出连接数")
+    """databaseconfig"""
+    url: str = Field(default="sqlite:///./data/autoclip.db", description="databaseconnectURL")
+    echo: bool = Field(default=False, description="ENSQLEN")
+    pool_size: int = Field(default=5, description="connectEN")
+    max_overflow: int = Field(default=10, description="ENconnectEN")
 
 
 class RedisConfig(BaseModel):
-    """Redis配置"""
-    url: str = Field(default="redis://localhost:6379/0", description="Redis连接URL")
-    max_connections: int = Field(default=10, description="最大连接数")
-    socket_timeout: int = Field(default=5, description="Socket超时时间")
+    """Redisconfig"""
+    url: str = Field(default="redis://localhost:6379/0", description="RedisconnectURL")
+    max_connections: int = Field(default=10, description="ENconnectEN")
+    socket_timeout: int = Field(default=5, description="Sockettimeouttime")
 
 
 class APIConfig(BaseModel):
-    """API配置"""
-    dashscope_api_key: str = Field(default="", description="DashScope API密钥")
-    model_name: str = Field(default="qwen-plus", description="模型名称")
-    max_tokens: int = Field(default=4096, description="最大token数")
-    timeout: int = Field(default=30, description="API超时时间")
-    max_retries: int = Field(default=3, description="最大重试次数")
+    """APIconfig"""
+    dashscope_api_key: str = Field(default="", description="DashScope APIEN")
+    model_name: str = Field(default="qwen-plus", description="EN")
+    max_tokens: int = Field(default=4096, description="ENtokenEN")
+    timeout: int = Field(default=30, description="APItimeouttime")
+    max_retries: int = Field(default=3, description="ENretryEN")
     
     @validator('max_tokens')
     def validate_max_tokens(cls, v):
         if v <= 0:
-            raise ValueError('max_tokens必须大于0')
+            raise ValueError('max_tokensmustEN0')
         return v
     
     @validator('timeout')
     def validate_timeout(cls, v):
         if v <= 0:
-            raise ValueError('timeout必须大于0')
+            raise ValueError('timeoutmustEN0')
         return v
 
 
 class ProcessingConfig(BaseModel):
-    """处理配置"""
-    chunk_size: int = Field(default=5000, description="文本分块大小")
-    min_score_threshold: float = Field(default=0.7, description="最小评分阈值")
-    max_clips_per_collection: int = Field(default=5, description="每个合集最大切片数")
-    max_retries: int = Field(default=3, description="最大重试次数")
-    timeout_seconds: int = Field(default=30, description="处理超时时间")
+    """processingconfig"""
+    chunk_size: int = Field(default=5000, description="EN")
+    min_score_threshold: float = Field(default=0.7, description="ENscoringEN")
+    max_clips_per_collection: int = Field(default=5, description="eachcollectionENclipEN")
+    max_retries: int = Field(default=3, description="ENretryEN")
+    timeout_seconds: int = Field(default=30, description="processingtimeouttime")
     
-    # 话题提取控制参数
-    min_topic_duration_minutes: int = Field(default=2, description="最小话题时长(分钟)")
-    max_topic_duration_minutes: int = Field(default=12, description="最大话题时长(分钟)")
-    target_topic_duration_minutes: int = Field(default=5, description="目标话题时长(分钟)")
-    min_topics_per_chunk: int = Field(default=3, description="每个分块最小话题数")
-    max_topics_per_chunk: int = Field(default=8, description="每个分块最大话题数")
+    # ENparameters
+    min_topic_duration_minutes: int = Field(default=2, description="ENduration(EN)")
+    max_topic_duration_minutes: int = Field(default=12, description="ENduration(EN)")
+    target_topic_duration_minutes: int = Field(default=5, description="ENduration(EN)")
+    min_topics_per_chunk: int = Field(default=3, description="eachEN")
+    max_topics_per_chunk: int = Field(default=8, description="eachEN")
     
     @validator('min_score_threshold')
     def validate_score_threshold(cls, v):
         if not 0 <= v <= 1:
-            raise ValueError('评分阈值必须在0-1之间')
+            raise ValueError('scoringENmustEN0-1EN')
         return v
     
     @validator('chunk_size')
     def validate_chunk_size(cls, v):
         if v <= 0:
-            raise ValueError('分块大小必须大于0')
+            raise ValueError('ENmustEN0')
         return v
 
 
 class SpeechRecognitionConfig(BaseModel):
-    """语音识别配置"""
-    method: str = Field(default="whisper_local", description="识别方法")
-    language: str = Field(default="auto", description="识别语言")
-    model: str = Field(default="base", description="模型大小")
-    timeout: int = Field(default=1000, description="识别超时时间")
+    """ENconfig"""
+    method: str = Field(default="whisper_local", description="EN")
+    language: str = Field(default="auto", description="EN")
+    model: str = Field(default="base", description="EN")
+    timeout: int = Field(default=1000, description="ENtimeouttime")
 
 
 class BilibiliConfig(BaseModel):
-    """B站配置"""
-    auto_upload: bool = Field(default=False, description="是否自动上传")
-    default_tid: int = Field(default=21, description="默认分区ID")
-    max_concurrent_uploads: int = Field(default=3, description="最大并发上传数")
-    upload_timeout_minutes: int = Field(default=30, description="上传超时时间(分钟)")
-    auto_generate_tags: bool = Field(default=True, description="是否自动生成标签")
-    tag_limit: int = Field(default=12, description="标签数量限制")
+    """BENconfig"""
+    auto_upload: bool = Field(default=False, description="ENupload")
+    default_tid: int = Field(default=21, description="ENID")
+    max_concurrent_uploads: int = Field(default=3, description="ENuploadEN")
+    upload_timeout_minutes: int = Field(default=30, description="uploadtimeouttime(EN)")
+    auto_generate_tags: bool = Field(default=True, description="ENgeneratetags")
+    tag_limit: int = Field(default=12, description="tagsEN")
 
 
 class LoggingConfig(BaseModel):
-    """日志配置"""
-    level: str = Field(default="INFO", description="日志级别")
-    format: str = Field(default="%(asctime)s - %(name)s - %(levelname)s - %(message)s", description="日志格式")
-    file: str = Field(default="backend.log", description="日志文件")
-    max_size: int = Field(default=10 * 1024 * 1024, description="日志文件最大大小(字节)")
-    backup_count: int = Field(default=5, description="日志文件备份数量")
+    """logconfig"""
+    level: str = Field(default="INFO", description="logEN")
+    format: str = Field(default="%(asctime)s - %(name)s - %(levelname)s - %(message)s", description="logEN")
+    file: str = Field(default="backend.log", description="logfile")
+    max_size: int = Field(default=10 * 1024 * 1024, description="logfileEN(EN)")
+    backup_count: int = Field(default=5, description="logfileEN")
 
 
 class PathConfig(BaseModel):
-    """路径配置"""
+    """pathconfig"""
     project_root: Path = Field(default_factory=path_utils.get_project_root)
     data_dir: Path = Field(default_factory=path_utils.get_data_directory)
     uploads_dir: Path = Field(default_factory=path_utils.get_uploads_directory)
@@ -118,14 +118,14 @@ class PathConfig(BaseModel):
     
     def __init__(self, **data):
         super().__init__(**data)
-        # 确保所有目录存在
+        # ENalldirectoryEN
         for field_name, field_value in self.__dict__.items():
             if isinstance(field_value, Path):
                 field_value.mkdir(parents=True, exist_ok=True)
 
 
 class UnifiedConfig(BaseSettings):
-    """统一配置类"""
+    """ENconfigEN"""
     
     model_config = SettingsConfigDict(
         env_file='.env',
@@ -134,12 +134,12 @@ class UnifiedConfig(BaseSettings):
         env_nested_delimiter='__'
     )
     
-    # 环境配置
-    environment: str = Field(default="development", description="运行环境")
-    debug: bool = Field(default=True, description="调试模式")
-    encryption_key: str = Field(default="", description="加密密钥")
+    # ENconfig
+    environment: str = Field(default="development", description="runEN")
+    debug: bool = Field(default=True, description="EN")
+    encryption_key: str = Field(default="", description="EN")
     
-    # 子配置
+    # ENconfig
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     redis: RedisConfig = Field(default_factory=RedisConfig)
     api: APIConfig = Field(default_factory=APIConfig)
@@ -155,8 +155,8 @@ class UnifiedConfig(BaseSettings):
         self._setup_environment()
     
     def _load_from_files(self):
-        """从配置文件加载设置"""
-        # 从data/settings.json加载
+        """ENconfigfileloadsettings"""
+        # ENdata/settings.jsonload
         settings_file = self.paths.data_dir / "settings.json"
         if settings_file.exists():
             try:
@@ -164,17 +164,17 @@ class UnifiedConfig(BaseSettings):
                     file_settings = json.load(f)
                     self._merge_settings(file_settings)
             except Exception as e:
-                logger.warning(f"加载配置文件失败: {e}")
+                logger.warning(f"loadconfigfilefailed: {e}")
         
-        # 从环境变量加载
+        # ENload
         self._load_from_env()
     
     def _merge_settings(self, settings: Dict[str, Any]):
-        """合并设置到配置对象"""
+        """ENsettingsENconfigEN"""
         for key, value in settings.items():
             if hasattr(self, key):
                 if isinstance(getattr(self, key), BaseModel):
-                    # 如果是子配置对象，递归合并
+                    # ifENconfigEN，EN
                     sub_config = getattr(self, key)
                     if isinstance(value, dict):
                         for sub_key, sub_value in value.items():
@@ -184,65 +184,65 @@ class UnifiedConfig(BaseSettings):
                     setattr(self, key, value)
     
     def _load_from_env(self):
-        """从环境变量加载配置"""
-        # 数据库配置
+        """ENloadconfig"""
+        # databaseconfig
         if os.getenv("DATABASE_URL"):
             self.database.url = os.getenv("DATABASE_URL")
         
-        # Redis配置
+        # Redisconfig
         if os.getenv("REDIS_URL"):
             self.redis.url = os.getenv("REDIS_URL")
         
-        # API配置
+        # APIconfig
         if os.getenv("DASHSCOPE_API_KEY"):
             self.api.dashscope_api_key = os.getenv("DASHSCOPE_API_KEY")
         if os.getenv("API_MODEL_NAME"):
             self.api.model_name = os.getenv("API_MODEL_NAME")
         
-        # 处理配置
+        # processingconfig
         if os.getenv("PROCESSING_CHUNK_SIZE"):
             self.processing.chunk_size = int(os.getenv("PROCESSING_CHUNK_SIZE"))
         if os.getenv("PROCESSING_MIN_SCORE_THRESHOLD"):
             self.processing.min_score_threshold = float(os.getenv("PROCESSING_MIN_SCORE_THRESHOLD"))
         
-        # 日志配置
+        # logconfig
         if os.getenv("LOG_LEVEL"):
             self.logging.level = os.getenv("LOG_LEVEL")
         if os.getenv("LOG_FILE"):
             self.logging.file = os.getenv("LOG_FILE")
     
     def _setup_environment(self):
-        """设置环境变量"""
-        # 设置API密钥到环境变量
+        """settingsEN"""
+        # settingsAPIEN
         if self.api.dashscope_api_key:
             os.environ["DASHSCOPE_API_KEY"] = self.api.dashscope_api_key
         
-        # 设置数据库URL
+        # settingsdatabaseURL
         os.environ["DATABASE_URL"] = self.database.url
         
-        # 设置Redis URL
+        # settingsRedis URL
         os.environ["REDIS_URL"] = self.redis.url
     
     def save_to_file(self, file_path: Optional[Path] = None):
-        """保存配置到文件"""
+        """saveconfigENfile"""
         if file_path is None:
             file_path = self.paths.data_dir / "settings.json"
         
         try:
-            # 创建配置字典，排除敏感信息
+            # createconfigEN，EN
             config_dict = self._to_safe_dict()
             
             with open(file_path, 'w', encoding='utf-8') as f:
                 json.dump(config_dict, f, ensure_ascii=False, indent=2)
             
-            logger.info(f"配置已保存到: {file_path}")
+            logger.info(f"configENsaveEN: {file_path}")
             
         except Exception as e:
-            logger.error(f"保存配置文件失败: {e}")
+            logger.error(f"saveconfigfilefailed: {e}")
             raise
     
     def _to_safe_dict(self) -> Dict[str, Any]:
-        """转换为安全的字典格式（隐藏敏感信息）"""
+        """EN（EN）"""
         config_dict = {}
         
         for key, value in self.__dict__.items():
@@ -254,7 +254,7 @@ class UnifiedConfig(BaseSettings):
             else:
                 config_dict[key] = value
         
-        # 隐藏敏感信息
+        # EN
         if 'api' in config_dict and 'dashscope_api_key' in config_dict['api']:
             api_key = config_dict['api']['dashscope_api_key']
             if api_key:
@@ -263,11 +263,11 @@ class UnifiedConfig(BaseSettings):
         return config_dict
     
     def update_config(self, **kwargs):
-        """更新配置"""
+        """updateconfig"""
         for key, value in kwargs.items():
             if hasattr(self, key):
                 if isinstance(getattr(self, key), BaseModel):
-                    # 如果是子配置对象，递归更新
+                    # ifENconfigEN，ENupdate
                     sub_config = getattr(self, key)
                     if isinstance(value, dict):
                         for sub_key, sub_value in value.items():
@@ -276,14 +276,14 @@ class UnifiedConfig(BaseSettings):
                 else:
                     setattr(self, key, value)
         
-        # 重新设置环境变量
+        # ENsettingsEN
         self._setup_environment()
         
-        # 保存到文件
+        # saveENfile
         self.save_to_file()
     
     def get_config_summary(self) -> Dict[str, Any]:
-        """获取配置摘要"""
+        """fetchconfigEN"""
         return {
             "environment": self.environment,
             "debug": self.debug,
@@ -328,25 +328,25 @@ class UnifiedConfig(BaseSettings):
         }
     
     def validate_config(self) -> Dict[str, Any]:
-        """验证配置"""
+        """validateconfig"""
         issues = []
         
-        # 验证API配置
+        # validateAPIconfig
         if not self.api.dashscope_api_key:
-            issues.append("DashScope API密钥未配置")
+            issues.append("DashScope APIENconfig")
         
-        # 验证路径
+        # validatepath
         for path_name, path_value in self.paths.__dict__.items():
             if isinstance(path_value, Path) and not path_value.exists():
-                issues.append(f"路径不存在: {path_name} = {path_value}")
+                issues.append(f"pathdoes not exist: {path_name} = {path_value}")
         
-        # 验证数据库连接
+        # validatedatabaseconnect
         if not self.database.url:
-            issues.append("数据库URL未配置")
+            issues.append("databaseURLENconfig")
         
-        # 验证Redis连接
+        # validateRedisconnect
         if not self.redis.url:
-            issues.append("Redis URL未配置")
+            issues.append("Redis URLENconfig")
         
         return {
             "valid": len(issues) == 0,
@@ -354,68 +354,68 @@ class UnifiedConfig(BaseSettings):
         }
 
 
-# 全局配置实例
+# ENconfigEN
 config = UnifiedConfig()
 
 
-# 便捷函数
+# EN
 def get_config() -> UnifiedConfig:
-    """获取全局配置实例"""
+    """fetchENconfigEN"""
     return config
 
 
 def get_database_url() -> str:
-    """获取数据库URL"""
+    """fetchdatabaseURL"""
     return config.database.url
 
 
 def get_redis_url() -> str:
-    """获取Redis URL"""
+    """fetchRedis URL"""
     return config.redis.url
 
 
 def get_api_key() -> str:
-    """获取API密钥"""
+    """fetchAPIEN"""
     return config.api.dashscope_api_key
 
 
 def get_data_directory() -> Path:
-    """获取数据目录"""
+    """fetchENdirectory"""
     return config.paths.data_dir
 
 
 def get_uploads_directory() -> Path:
-    """获取上传目录"""
+    """fetchuploaddirectory"""
     return config.paths.uploads_dir
 
 
 def get_output_directory() -> Path:
-    """获取输出目录"""
+    """fetchENdirectory"""
     return config.paths.output_dir
 
 
 def get_temp_directory() -> Path:
-    """获取临时目录"""
+    """fetchENdirectory"""
     return config.paths.temp_dir
 
 
 def get_prompt_directory() -> Path:
-    """获取提示词目录"""
+    """fetchhintENdirectory"""
     return config.paths.prompt_dir
 
 
 def update_api_key(api_key: str):
-    """更新API密钥"""
+    """updateAPIEN"""
     config.api.dashscope_api_key = api_key
     config._setup_environment()
     config.save_to_file()
 
 
 def update_processing_config(**kwargs):
-    """更新处理配置"""
+    """updateprocessingconfig"""
     config.update_config(processing=kwargs)
 
 
 def update_bilibili_config(**kwargs):
-    """更新B站配置"""
+    """updateBENconfig"""
     config.update_config(bilibili=kwargs)

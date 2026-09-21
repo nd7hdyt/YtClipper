@@ -1,5 +1,5 @@
 """
-项目管理工具
+projectEN
 """
 import json
 import logging
@@ -8,11 +8,11 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 from datetime import datetime
 
-# 修复导入问题
+# EN
 try:
     from ..core.shared_config import config_manager
 except ImportError:
-    # 如果相对导入失败，尝试绝对导入
+    # ifENfailed，EN
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -23,28 +23,28 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 class ProjectManager:
-    """项目数据管理器"""
+    """projectEN"""
     
     def __init__(self):
         self.config = config_manager
     
     def create_project(self, project_name: Optional[str] = None) -> str:
         """
-        创建新项目
+        createENproject
         
         Args:
-            project_name: 项目名称（可选）
+            project_name: projectEN（EN）
             
         Returns:
-            项目ID
+            projectID
         """
         project_id = str(uuid.uuid4())
         project_name = project_name or f"project_{project_id[:8]}"
         
-        # 确保项目目录结构存在
+        # ENprojectdirectoryEN
         self.config.ensure_project_directories(project_id)
         
-        # 创建项目元数据
+        # createprojectEN
         project_metadata = {
             "project_id": project_id,
             "project_name": project_name,
@@ -60,54 +60,54 @@ class ProjectManager:
             }
         }
         
-        # 保存项目元数据
+        # saveprojectEN
         self._save_project_metadata(project_id, project_metadata)
         
-        logger.info(f"创建项目: {project_id} ({project_name})")
+        logger.info(f"createproject: {project_id} ({project_name})")
         return project_id
     
     def get_project_paths(self, project_id: str) -> Dict[str, Path]:
         """
-        获取项目路径配置
+        fetchprojectpathconfig
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            项目路径字典
+            projectpathEN
         """
         return self.config.get_project_paths(project_id)
     
     def validate_project_exists(self, project_id: str) -> bool:
         """
-        验证项目是否存在
+        validateprojectEN
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            项目是否存在
+            projectEN
         """
         paths = self.get_project_paths(project_id)
         return paths["project_base"].exists()
     
     def get_project_metadata(self, project_id: str) -> Dict[str, Any]:
         """
-        获取项目元数据
+        fetchprojectEN
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            项目元数据
+            projectEN
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         metadata_file = self.get_project_paths(project_id)["metadata_dir"] / "project_metadata.json"
         
         if not metadata_file.exists():
-            # 如果元数据文件不存在，创建默认元数据
+            # ifENfiledoes not exist，createEN
             default_metadata = {
                 "project_id": project_id,
                 "project_name": f"project_{project_id[:8]}",
@@ -129,15 +129,15 @@ class ProjectManager:
             with open(metadata_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            raise FileIOError(f"读取项目元数据失败: {e}")
+            raise FileIOError(f"readprojectENfailed: {e}")
     
     def update_project_metadata(self, project_id: str, updates: Dict[str, Any]):
         """
-        更新项目元数据
+        updateprojectEN
         
         Args:
-            project_id: 项目ID
-            updates: 要更新的字段
+            project_id: projectID
+            updates: ENupdateEN
         """
         metadata = self.get_project_metadata(project_id)
         metadata.update(updates)
@@ -146,42 +146,42 @@ class ProjectManager:
         self._save_project_metadata(project_id, metadata)
     
     def _save_project_metadata(self, project_id: str, metadata: Dict[str, Any]) -> None:
-        """保存项目元数据"""
+        """saveprojectEN"""
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
         metadata_file = metadata_dir / "project_metadata.json"
         
         try:
-            # 确保metadata目录存在
+            # ENmetadatadirectoryEN
             metadata_dir.mkdir(parents=True, exist_ok=True)
             
             with open(metadata_file, 'w', encoding='utf-8') as f:
                 json.dump(metadata, f, ensure_ascii=False, indent=2)
         except Exception as e:
-            raise FileIOError(f"保存项目元数据失败: {e}")
+            raise FileIOError(f"saveprojectENfailed: {e}")
     
     def save_input_file(self, project_id: str, file_path: Path, file_type: str) -> str:
         """
-        保存输入文件到项目目录
+        saveENfileENprojectdirectory
         
         Args:
-            project_id: 项目ID
-            file_path: 源文件路径
-            file_type: 文件类型 (video, srt, txt)
+            project_id: projectID
+            file_path: ENfilepath
+            file_type: fileEN (video, srt, txt)
             
         Returns:
-            保存后的文件路径
+            saveENfilepath
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         if not file_path.exists():
-            raise FileIOError(f"源文件不存在: {file_path}")
+            raise FileIOError(f"ENfiledoes not exist: {file_path}")
         
         paths = self.get_project_paths(project_id)
         input_dir = paths["input_dir"]
         
-        # 确定目标文件名
+        # ENfileEN
         if file_type == "video":
             target_name = "input.mp4"
         elif file_type == "srt":
@@ -189,54 +189,54 @@ class ProjectManager:
         elif file_type == "txt":
             target_name = "input.txt"
         else:
-            raise ValidationError(f"不支持的文件类型: {file_type}")
+            raise ValidationError(f"ENfileEN: {file_type}")
         
         target_path = input_dir / target_name
         
         try:
-            # 复制文件
+            # ENfile
             shutil.copy2(file_path, target_path)
             
-            # 更新项目元数据
+            # updateprojectEN
             metadata = self.get_project_metadata(project_id)
             metadata["file_info"][f"{file_type}_file"] = str(target_path)
             self._save_project_metadata(project_id, metadata)
             
-            logger.info(f"文件已保存到项目 {project_id}: {target_path}")
+            logger.info(f"fileENsaveENproject {project_id}: {target_path}")
             return str(target_path)
             
         except Exception as e:
-            raise FileIOError(f"保存文件失败: {e}")
+            raise FileIOError(f"savefilefailed: {e}")
     
     def get_input_files(self, project_id: str) -> Dict[str, Optional[Path]]:
         """
-        获取项目输入文件
+        fetchprojectENfile
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            输入文件路径字典
+            ENfilepathEN
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         paths = self.get_project_paths(project_id)
         project_base = paths["project_base"]
         input_dir = paths["input_dir"]
         
-        # 检查两个可能的位置：input子目录和项目根目录
+        # checkENmayEN：inputENdirectoryENprojectENdirectory
         file_names = ["input.mp4", "input.srt", "input.txt"]
         file_keys = ["video_file", "srt_file", "txt_file"]
         
         files = {}
         for key, name in zip(file_keys, file_names):
-            # 优先检查input子目录
+            # ENcheckinputENdirectory
             input_path = input_dir / name
             if input_path.exists():
                 files[key] = input_path
             else:
-                # 检查项目根目录
+                # checkprojectENdirectory
                 root_path = project_base / name
                 if root_path.exists():
                     files[key] = root_path
@@ -247,13 +247,13 @@ class ProjectManager:
     
     def validate_input_files(self, project_id: str) -> Dict[str, bool]:
         """
-        验证项目输入文件
+        validateprojectENfile
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            文件验证结果
+            filevalidateresult
         """
         files = self.get_input_files(project_id)
         
@@ -268,53 +268,53 @@ class ProjectManager:
     
     def save_processing_result(self, project_id: str, step: int, result: Dict[str, Any]):
         """
-        保存处理结果
+        saveprocessingresult
         
         Args:
-            project_id: 项目ID
-            step: 处理步骤
-            result: 处理结果
+            project_id: projectID
+            step: processingEN
+            result: processingresult
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
         
-        # 确保metadata目录存在
+        # ENmetadatadirectoryEN
         metadata_dir.mkdir(parents=True, exist_ok=True)
         
-        # 保存步骤结果
+        # saveENresult
         step_file = metadata_dir / f"step{step}_result.json"
         
         try:
             with open(step_file, 'w', encoding='utf-8') as f:
                 json.dump(result, f, ensure_ascii=False, indent=2)
             
-            # 更新项目状态
+            # updateprojectstatus
             self.update_project_metadata(project_id, {
                 "current_step": step,
                 "status": "processing" if step < 6 else "completed"
             })
             
-            logger.info(f"步骤 {step} 结果已保存到项目 {project_id}")
+            logger.info(f"EN {step} resultENsaveENproject {project_id}")
             
         except Exception as e:
-            raise FileIOError(f"保存处理结果失败: {e}")
+            raise FileIOError(f"saveprocessingresultfailed: {e}")
     
     def get_processing_result(self, project_id: str, step: int) -> Optional[Dict[str, Any]]:
         """
-        获取处理结果
+        fetchprocessingresult
         
         Args:
-            project_id: 项目ID
-            step: 处理步骤
+            project_id: projectID
+            step: processingEN
             
         Returns:
-            处理结果，如果不存在则返回None
+            processingresult，ifdoes not existthenreturnNone
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
@@ -327,27 +327,27 @@ class ProjectManager:
             with open(step_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            raise FileIOError(f"读取处理结果失败: {e}")
+            raise FileIOError(f"readprocessingresultfailed: {e}")
     
     def save_clip(self, project_id: str, clip_data: Dict[str, Any], clip_index: int):
         """
-        保存视频切片信息
+        savevideoclipEN
         
         Args:
-            project_id: 项目ID
-            clip_data: 切片数据
-            clip_index: 切片索引
+            project_id: projectID
+            clip_data: clipEN
+            clip_index: clipEN
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
         
-        # 确保metadata目录存在
+        # ENmetadatadirectoryEN
         metadata_dir.mkdir(parents=True, exist_ok=True)
         
-        # 读取现有切片数据
+        # readENclipEN
         clips_file = metadata_dir / "clips_metadata.json"
         clips_data = []
         
@@ -358,44 +358,44 @@ class ProjectManager:
             except Exception:
                 clips_data = []
         
-        # 添加新切片
+        # ENclip
         clip_data["clip_index"] = clip_index
         clip_data["created_at"] = datetime.now().isoformat()
         
-        # 确保不重复添加
+        # EN
         existing_indices = [clip["clip_index"] for clip in clips_data]
         if clip_index in existing_indices:
-            # 更新现有切片
+            # updateENclip
             for i, clip in enumerate(clips_data):
                 if clip["clip_index"] == clip_index:
                     clips_data[i] = clip_data
                     break
         else:
-            # 添加新切片
+            # ENclip
             clips_data.append(clip_data)
         
-        # 保存切片数据
+        # saveclipEN
         try:
             with open(clips_file, 'w', encoding='utf-8') as f:
                 json.dump(clips_data, f, ensure_ascii=False, indent=2)
             
-            logger.info(f"切片 {clip_index} 已保存到项目 {project_id}")
+            logger.info(f"clip {clip_index} ENsaveENproject {project_id}")
             
         except Exception as e:
-            raise FileIOError(f"保存切片数据失败: {e}")
+            raise FileIOError(f"saveclipENfailed: {e}")
     
     def get_clips(self, project_id: str) -> List[Dict[str, Any]]:
         """
-        获取项目所有切片
+        fetchprojectallclip
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            切片列表
+            clipEN
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
@@ -408,26 +408,26 @@ class ProjectManager:
             with open(clips_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            raise FileIOError(f"读取切片数据失败: {e}")
+            raise FileIOError(f"readclipENfailed: {e}")
     
     def save_collection(self, project_id: str, collection_data: Dict[str, Any]):
         """
-        保存合集信息
+        savecollectionEN
         
         Args:
-            project_id: 项目ID
-            collection_data: 合集数据
+            project_id: projectID
+            collection_data: collectionEN
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
         
-        # 确保metadata目录存在
+        # ENmetadatadirectoryEN
         metadata_dir.mkdir(parents=True, exist_ok=True)
         
-        # 读取现有合集数据
+        # readENcollectionEN
         collections_file = metadata_dir / "collections_metadata.json"
         collections_data = []
         
@@ -438,32 +438,32 @@ class ProjectManager:
             except Exception:
                 collections_data = []
         
-        # 添加新合集
+        # ENcollection
         collection_data["created_at"] = datetime.now().isoformat()
         collections_data.append(collection_data)
         
-        # 保存合集数据
+        # savecollectionEN
         try:
             with open(collections_file, 'w', encoding='utf-8') as f:
                 json.dump(collections_data, f, ensure_ascii=False, indent=2)
             
-            logger.info(f"合集已保存到项目 {project_id}")
+            logger.info(f"collectionENsaveENproject {project_id}")
             
         except Exception as e:
-            raise FileIOError(f"保存合集数据失败: {e}")
+            raise FileIOError(f"savecollectionENfailed: {e}")
     
     def get_collections(self, project_id: str) -> List[Dict[str, Any]]:
         """
-        获取项目所有合集
+        fetchprojectallcollection
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            合集列表
+            collectionEN
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
@@ -476,14 +476,14 @@ class ProjectManager:
             with open(collections_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            raise FileIOError(f"读取合集数据失败: {e}")
+            raise FileIOError(f"readcollectionENfailed: {e}")
     
     def list_projects(self) -> List[Dict[str, Any]]:
         """
-        列出所有项目
+        ENallproject
         
         Returns:
-            项目列表
+            projectEN
         """
         projects = []
         uploads_dir = Path(self.config.settings.uploads_dir)
@@ -497,24 +497,24 @@ class ProjectManager:
                     metadata = self.get_project_metadata(project_dir.name)
                     projects.append(metadata)
                 except Exception as e:
-                    logger.warning(f"读取项目 {project_dir.name} 元数据失败: {e}")
+                    logger.warning(f"readproject {project_dir.name} ENfailed: {e}")
         
-        # 按创建时间排序
+        # ENcreatetimeEN
         projects.sort(key=lambda x: x.get("created_at", ""), reverse=True)
         return projects
     
     def delete_project(self, project_id: str) -> bool:
         """
-        删除项目
+        deleteproject
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            是否删除成功
+            ENdeletesucceeded
         """
         if not self.validate_project_exists(project_id):
-            logger.warning(f"项目不存在: {project_id}")
+            logger.warning(f"projectdoes not exist: {project_id}")
             return False
         
         paths = self.get_project_paths(project_id)
@@ -522,24 +522,24 @@ class ProjectManager:
         
         try:
             shutil.rmtree(project_base)
-            logger.info(f"项目已删除: {project_id}")
+            logger.info(f"projectdeleted: {project_id}")
             return True
         except Exception as e:
-            logger.error(f"删除项目失败: {e}")
+            logger.error(f"deleteprojectfailed: {e}")
             return False
     
     def get_project_summary(self, project_id: str) -> Dict[str, Any]:
         """
-        获取项目摘要信息
+        fetchprojectEN
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            项目摘要
+            projectEN
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"项目不存在: {project_id}")
+            raise FileIOError(f"projectdoes not exist: {project_id}")
         
         metadata = self.get_project_metadata(project_id)
         validation = self.validate_input_files(project_id)
@@ -558,5 +558,5 @@ class ProjectManager:
             }
         }
 
-# 全局项目管理器实例
+# ENprojectEN
 project_manager = ProjectManager()

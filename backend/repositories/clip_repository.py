@@ -1,6 +1,6 @@
 """
-切片Repository
-提供切片相关的数据访问操作
+clipRepository
+ENclipEN
 """
 
 from typing import List, Optional, Dict, Any
@@ -11,59 +11,59 @@ from .base import BaseRepository
 from ..models.clip import Clip, ClipStatus
 
 class ClipRepository(BaseRepository[Clip]):
-    """切片Repository类"""
+    """clipRepositoryEN"""
     
     def __init__(self, db: Session):
         super().__init__(Clip, db)
     
     def get_by_project(self, project_id: str) -> List[Clip]:
         """
-        获取项目的所有切片
+        fetchprojectENallclip
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            切片列表
+            clipEN
         """
         return self.find_by(project_id=project_id)
     
     def get_by_status(self, status: ClipStatus) -> List[Clip]:
         """
-        根据状态获取切片列表
+        ENstatusfetchclipEN
         
         Args:
-            status: 切片状态
+            status: clipstatus
             
         Returns:
-            切片列表
+            clipEN
         """
         return self.find_by(status=status)
     
     def get_by_project_and_status(self, project_id: str, status: ClipStatus) -> List[Clip]:
         """
-        根据项目和状态获取切片列表
+        ENprojectENstatusfetchclipEN
         
         Args:
-            project_id: 项目ID
-            status: 切片状态
+            project_id: projectID
+            status: clipstatus
             
         Returns:
-            切片列表
+            clipEN
         """
         return self.find_by(project_id=project_id, status=status)
     
     def get_high_score_clips(self, project_id: str, min_score: float = 0.7, limit: int = 10) -> List[Clip]:
         """
-        获取高分切片
+        fetchENclip
         
         Args:
-            project_id: 项目ID
-            min_score: 最低评分
-            limit: 返回数量限制
+            project_id: projectID
+            min_score: ENscoring
+            limit: returnEN
             
         Returns:
-            高分切片列表
+            ENclipEN
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -72,15 +72,15 @@ class ClipRepository(BaseRepository[Clip]):
     
     def get_clips_by_duration_range(self, project_id: str, min_duration: int, max_duration: int) -> List[Clip]:
         """
-        根据时长范围获取切片
+        ENdurationENfetchclip
         
         Args:
-            project_id: 项目ID
-            min_duration: 最小时长（秒）
-            max_duration: 最大时长（秒）
+            project_id: projectID
+            min_duration: ENduration（EN）
+            max_duration: ENduration（EN）
             
         Returns:
-            切片列表
+            clipEN
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -90,15 +90,15 @@ class ClipRepository(BaseRepository[Clip]):
     
     def get_clips_by_time_range(self, project_id: str, start_time: int, end_time: int) -> List[Clip]:
         """
-        根据时间范围获取切片
+        ENtimeENfetchclip
         
         Args:
-            project_id: 项目ID
-            start_time: 开始时间（秒）
-            end_time: 结束时间（秒）
+            project_id: projectID
+            start_time: starttime（EN）
+            end_time: endtime（EN）
             
         Returns:
-            切片列表
+            clipEN
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -107,22 +107,22 @@ class ClipRepository(BaseRepository[Clip]):
         ).order_by(asc(self.model.start_time)).all()
     
     def create_clip(self, clip_data: Dict[str, Any]) -> Clip:
-        """创建切片记录（分离存储模式）"""
+        """createclipEN（EN）"""
         from ..services.storage_service import StorageService
         import uuid
         
-        # 生成切片ID（如果没有提供）
+        # generateclipID（ifEN）
         if "id" not in clip_data:
             clip_data["id"] = str(uuid.uuid4())
         
-        # 1. 保存切片文件到文件系统
+        # 1. saveclipfileENfilesystem
         storage_service = StorageService(clip_data["project_id"])
         video_path = storage_service.save_clip_file(clip_data, clip_data["id"])
         
-        # 2. 保存完整数据到文件系统
+        # 2. saveENfilesystem
         metadata_path = storage_service.save_metadata(clip_data, f"clip_{clip_data['id']}")
         
-        # 3. 保存元数据到数据库（只存储路径引用）
+        # 3. saveENdatabase（ENpathEN）
         clip = Clip(
             id=clip_data["id"],
             project_id=clip_data["project_id"],
@@ -132,9 +132,9 @@ class ClipRepository(BaseRepository[Clip]):
             end_time=clip_data["end_time"],
             duration=clip_data["duration"],
             score=clip_data.get("score"),
-            video_path=video_path,  # 只存储路径
+            video_path=video_path,  # ENpath
             clip_metadata={
-                'metadata_file': metadata_path,  # 完整数据文件路径
+                'metadata_file': metadata_path,  # ENfilepath
                 'clip_id': clip_data["id"],
                 'created_at': clip_data.get("created_at")
             }
@@ -145,19 +145,19 @@ class ClipRepository(BaseRepository[Clip]):
         return clip
     
     def get_clip_file(self, clip_id: str) -> Optional[Path]:
-        """获取切片文件路径"""
+        """fetchclipfilepath"""
         clip = self.get_by_id(clip_id)
         if clip and clip.video_path:
             return Path(clip.video_path)
         return None
     
     def get_clip_content(self, clip_id: str) -> Optional[Dict[str, Any]]:
-        """获取切片完整内容"""
+        """fetchclipEN"""
         clip = self.get_by_id(clip_id)
         if not clip:
             return None
         
-        # 从文件系统获取完整数据
+        # ENfilesystemfetchEN
         if clip.clip_metadata and 'metadata_file' in clip.clip_metadata:
             from ..services.storage_service import StorageService
             storage_service = StorageService(clip.project_id)
@@ -167,14 +167,14 @@ class ClipRepository(BaseRepository[Clip]):
     
     def search_clips(self, project_id: str, keyword: str) -> List[Clip]:
         """
-        搜索切片
+        ENclip
         
         Args:
-            project_id: 项目ID
-            keyword: 搜索关键词
+            project_id: projectID
+            keyword: EN
             
         Returns:
-            匹配的切片列表
+            ENclipEN
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -185,13 +185,13 @@ class ClipRepository(BaseRepository[Clip]):
     
     def get_clips_statistics(self, project_id: str) -> dict:
         """
-        获取切片统计信息
+        fetchclipEN
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            统计信息字典
+            EN
         """
         total_clips = self.db.query(self.model).filter(
             self.model.project_id == project_id
@@ -221,40 +221,40 @@ class ClipRepository(BaseRepository[Clip]):
     
     def update_clip_status(self, clip_id: str, status: ClipStatus) -> Optional[Clip]:
         """
-        更新切片状态
+        updateclipstatus
         
         Args:
-            clip_id: 切片ID
-            status: 新状态
+            clip_id: clipID
+            status: ENstatus
             
         Returns:
-            更新后的切片实例或None
+            updateENclipENNone
         """
         return self.update(clip_id, status=status)
     
     def update_clip_score(self, clip_id: str, score: float) -> Optional[Clip]:
         """
-        更新切片评分
+        updateclipscoring
         
         Args:
-            clip_id: 切片ID
-            score: 新评分
+            clip_id: clipID
+            score: ENscoring
             
         Returns:
-            更新后的切片实例或None
+            updateENclipENNone
         """
         return self.update(clip_id, score=score)
     
     def get_clips_for_collection(self, project_id: str, collection_size: int = 5) -> List[Clip]:
         """
-        获取适合合集的切片
+        fetchENcollectionENclip
         
         Args:
-            project_id: 项目ID
-            collection_size: 合集大小
+            project_id: projectID
+            collection_size: collectionEN
             
         Returns:
-            切片列表
+            clipEN
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -264,13 +264,13 @@ class ClipRepository(BaseRepository[Clip]):
     
     def get_clips_by_processing_step(self, project_id: str, step: int) -> List[Clip]:
         """
-        根据处理步骤获取切片
+        ENprocessingENfetchclip
         
         Args:
-            project_id: 项目ID
-            step: 处理步骤
+            project_id: projectID
+            step: processingEN
             
         Returns:
-            切片列表
+            clipEN
         """
         return self.find_by(project_id=project_id, processing_step=step)

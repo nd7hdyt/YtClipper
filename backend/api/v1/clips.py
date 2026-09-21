@@ -1,5 +1,5 @@
 """
-切片API路由
+clipAPIEN
 """
 
 from typing import List, Optional
@@ -32,17 +32,17 @@ async def update_clip_title(
     try:
         new_title = title_data.get("title", "").strip()
         if not new_title:
-            raise HTTPException(status_code=400, detail="标题不能为空")
+            raise HTTPException(status_code=400, detail="titleEN")
         
         if len(new_title) > 200:
-            raise HTTPException(status_code=400, detail="标题长度不能超过200个字符")
+            raise HTTPException(status_code=400, detail="titleEN200EN")
         
-        # 更新切片标题
+        # updatecliptitle
         clip = clip_service.update_clip(clip_id, ClipUpdate(title=new_title))
         if not clip:
-            raise HTTPException(status_code=404, detail="切片不存在")
+            raise HTTPException(status_code=404, detail="clipdoes not exist")
         
-        # 返回更新后的切片信息
+        # returnupdateENclipEN
         return ClipResponse(
             id=str(clip.id),
             project_id=str(clip.project_id),
@@ -64,8 +64,8 @@ async def update_clip_title(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"更新切片标题失败: {e}")
-        raise HTTPException(status_code=500, detail=f"更新切片标题失败: {str(e)}")
+        logger.error(f"updatecliptitlefailed: {e}")
+        raise HTTPException(status_code=500, detail=f"updatecliptitlefailed: {str(e)}")
 
 
 @router.post("/{clip_id}/generate-title", response_model=dict)
@@ -75,18 +75,18 @@ async def generate_clip_title(
 ):
     """Generate a new title for a clip using LLM."""
     try:
-        # 获取切片信息
+        # fetchclipEN
         clip = clip_service.get(clip_id)
         if not clip:
-            raise HTTPException(status_code=404, detail="切片不存在")
+            raise HTTPException(status_code=404, detail="clipdoes not exist")
         
-        # 直接从clip_metadata获取内容，不需要从文件系统获取
+        # ENclip_metadatafetchEN，ENneedENfilesystemfetch
         clip_metadata = getattr(clip, 'clip_metadata', {}) or {}
         
         if not clip_metadata:
-            raise HTTPException(status_code=404, detail="切片元数据不存在")
+            raise HTTPException(status_code=404, detail="clipENdoes not exist")
         
-        # 准备LLM输入数据
+        # ENLLMEN
         llm_input = [{
             "id": clip_id,
             "title": clip_metadata.get('outline', '') or getattr(clip, 'title', ''),
@@ -94,27 +94,27 @@ async def generate_clip_title(
             "recommend_reason": clip_metadata.get('recommend_reason', '')
         }]
         
-        # 调用LLM生成标题
+        # callLLMgeneratetitle
         from ...utils.llm_client import LLMClient
         from ...core.shared_config import PROMPT_FILES
         
         llm_client = LLMClient()
         
-        # 加载标题生成提示词
+        # loadtitlegeneratehintEN
         with open(PROMPT_FILES['title'], 'r', encoding='utf-8') as f:
             title_prompt = f.read()
         
-        # 调用LLM
+        # callLLM
         raw_response = llm_client.call_with_retry(title_prompt, llm_input)
         
         if not raw_response:
-            raise HTTPException(status_code=500, detail="LLM调用失败")
+            raise HTTPException(status_code=500, detail="LLMcallfailed")
         
-        # 解析LLM响应
+        # parseLLMresponse
         titles_map = llm_client.parse_json_response(raw_response)
         
         if not isinstance(titles_map, dict) or clip_id not in titles_map:
-            raise HTTPException(status_code=500, detail="LLM返回格式错误")
+            raise HTTPException(status_code=500, detail="LLMreturnENerror")
         
         generated_title = titles_map[clip_id]
         
@@ -127,8 +127,8 @@ async def generate_clip_title(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"生成切片标题失败: {e}")
-        raise HTTPException(status_code=500, detail=f"生成切片标题失败: {str(e)}")
+        logger.error(f"generatecliptitlefailed: {e}")
+        raise HTTPException(status_code=500, detail=f"generatecliptitlefailed: {str(e)}")
 
 
 @router.post("/", response_model=ClipResponse)
@@ -245,39 +245,39 @@ async def cleanup_duplicate_clips(
     project_id: str,
     db: Session = Depends(get_db)
 ):
-    """清理项目中的重复切片数据"""
+    """ENprojectENclipEN"""
     try:
         from ...models.project import Project
         import json
         from pathlib import Path
         from ...core.config import get_data_directory
         
-        # 获取项目
+        # fetchproject
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 获取数据库中的所有切片
+        # fetchdatabaseENallclip
         db_clips = db.query(Clip).filter(Clip.project_id == project_id).all()
-        logger.info(f"数据库中有 {len(db_clips)} 个切片")
+        logger.info(f"databaseEN {len(db_clips)} ENclip")
         
-        # 读取文件系统中的原始数据
+        # readfilesystemEN
         data_dir = get_data_directory()
         project_dir = data_dir / "projects" / project_id
         clips_metadata_file = project_dir / "metadata" / "clips_metadata.json"
         
         if not clips_metadata_file.exists():
-            raise HTTPException(status_code=404, detail="切片元数据文件不存在")
+            raise HTTPException(status_code=404, detail="clipENfiledoes not exist")
         
         with open(clips_metadata_file, 'r', encoding='utf-8') as f:
             original_clips = json.load(f)
         
-        logger.info(f"文件系统中有 {len(original_clips)} 个切片")
+        logger.info(f"filesystemEN {len(original_clips)} ENclip")
         
-        # 创建原始切片的ID映射
+        # createENclipENIDEN
         original_clip_ids = {clip['id']: clip for clip in original_clips}
         
-        # 清理重复数据
+        # EN
         deleted_count = 0
         kept_count = 0
         
@@ -286,12 +286,12 @@ async def cleanup_duplicate_clips(
             original_id = metadata.get('id')
             
             if original_id and original_id in original_clip_ids:
-                # 这个切片是有效的，保留
+                # thisclipEN，EN
                 kept_count += 1
-                logger.info(f"保留切片: {db_clip.title} (ID: {original_id})")
+                logger.info(f"ENclip: {db_clip.title} (ID: {original_id})")
             else:
-                # 这个切片是重复的或无效的，删除
-                logger.info(f"删除重复切片: {db_clip.title} (DB ID: {db_clip.id})")
+                # thisclipEN，delete
+                logger.info(f"deleteENclip: {db_clip.title} (DB ID: {db_clip.id})")
                 db.delete(db_clip)
                 deleted_count += 1
         
@@ -304,15 +304,15 @@ async def cleanup_duplicate_clips(
             "db_before_count": len(db_clips),
             "kept_count": kept_count,
             "deleted_count": deleted_count,
-            "message": f"清理完成：保留 {kept_count} 个，删除 {deleted_count} 个重复切片"
+            "message": f"EN：EN {kept_count} EN，delete {deleted_count} ENclip"
         }
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"清理重复切片失败: {e}")
+        logger.error(f"ENclipfailed: {e}")
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"清理失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"ENfailed: {str(e)}")
 
 
 @router.post("/resync-project")
@@ -320,27 +320,27 @@ async def resync_project_clips(
     project_id: str,
     db: Session = Depends(get_db)
 ):
-    """重新同步项目的切片数据"""
+    """ENprojectENclipEN"""
     try:
         from ...models.project import Project
         from ...services.data_sync_service import DataSyncService
         from pathlib import Path
         from ...core.config import get_data_directory
         
-        # 获取项目
+        # fetchproject
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 删除现有的切片数据
+        # deleteENclipEN
         existing_clips = db.query(Clip).filter(Clip.project_id == project_id).all()
         deleted_count = len(existing_clips)
         for clip in existing_clips:
             db.delete(clip)
         db.commit()
-        logger.info(f"删除了 {deleted_count} 个现有切片")
+        logger.info(f"deleteEN {deleted_count} ENclip")
         
-        # 重新同步数据
+        # EN
         data_dir = get_data_directory()
         project_dir = data_dir / "projects" / project_id
         
@@ -352,12 +352,12 @@ async def resync_project_clips(
             "project_name": project.name,
             "deleted_count": deleted_count,
             "synced_count": synced_count,
-            "message": f"重新同步完成：删除 {deleted_count} 个，同步 {synced_count} 个切片"
+            "message": f"EN：delete {deleted_count} EN，EN {synced_count} ENclip"
         }
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"重新同步切片失败: {e}")
+        logger.error(f"ENclipfailed: {e}")
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"重新同步失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"ENfailed: {str(e)}")

@@ -1,6 +1,6 @@
 """
-处理服务
-使用三件套框架：配置管理器、适配器、编排器
+processingservice
+useEN：configEN、EN、EN
 """
 
 import logging
@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from backend.models.task import Task, TaskStatus, TaskType
 from backend.repositories.task_repository import TaskRepository
 from backend.services.config_manager import ProjectConfigManager, ProcessingStep
-# from backend.services.pipeline_adapter import PipelineAdapter  # 临时注释，文件不存在
+# from backend.services.pipeline_adapter import PipelineAdapter  # EN，filedoes not exist
 from backend.services.processing_orchestrator import ProcessingOrchestrator
 from backend.services.processing_context import ProcessingContext
 from backend.services.exceptions import ServiceError, ProcessingError, TaskError, ProjectError, handle_service_error
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProcessingService:
-    """处理服务，使用三件套框架"""
+    """processingservice，useEN"""
     
     def __init__(self, db: Session):
         self.db = db
@@ -31,35 +31,35 @@ class ProcessingService:
     @with_concurrency_control()
     def start_processing(self, project_id: str, srt_path: Path) -> Dict[str, Any]:
         """
-        开始处理项目
+        startprocessingproject
         
         Args:
-            project_id: 项目ID
-            srt_path: SRT文件路径
+            project_id: projectID
+            srt_path: SRTfilepath
             
         Returns:
-            处理结果
+            processingresult
         """
-        logger.info(f"开始处理项目: {project_id}")
+        logger.info(f"startprocessingproject: {project_id}")
         
-        # 创建处理上下文
+        # createprocessingEN
         context = ProcessingContext(project_id, "temp_task_id", self.db)
         context.set_srt_path(srt_path)
         context.mark_initialized()
         
-        # 创建处理任务
+        # createprocessingtask
         task = self._create_processing_task(project_id)
         context.task_id = str(task.id)
         
-        # 初始化编排器
+        # initializeEN
         orchestrator = ProcessingOrchestrator(project_id, str(task.id), self.db)
         
-        # 执行完整流水线
+        # executeEN
         result = orchestrator.execute_pipeline(srt_path)
         
         context.mark_completed()
         
-        # 更新项目状态为已完成并同步数据
+        # updateprojectstatusENcompletedEN
         try:
             from ..models.project import Project, ProjectStatus
             from ..services.data_sync_service import DataSyncService
@@ -69,19 +69,19 @@ class ProcessingService:
             if project:
                 project.status = ProjectStatus.COMPLETED
                 self.db.commit()
-                logger.info(f"项目状态已更新为已完成: {project_id}")
+                logger.info(f"projectstatusupdatedENcompleted: {project_id}")
                 
-                # 同步数据到数据库
+                # ENdatabase
                 project_dir = Path(__file__).parent.parent / "data" / "projects" / project_id
                 if project_dir.exists():
                     sync_service = DataSyncService(self.db)
                     sync_result = sync_service.sync_project_from_filesystem(project_id, project_dir)
                     if sync_result.get("success"):
-                        logger.info(f"项目 {project_id} 数据同步成功: {sync_result}")
+                        logger.info(f"project {project_id} ENsucceeded: {sync_result}")
                     else:
-                        logger.error(f"项目 {project_id} 数据同步失败: {sync_result}")
+                        logger.error(f"project {project_id} ENfailed: {sync_result}")
         except Exception as e:
-            logger.warning(f"更新项目状态失败: {e}")
+            logger.warning(f"updateprojectstatusfailed: {e}")
         
         return {
             "success": True,
@@ -96,32 +96,32 @@ class ProcessingService:
     def execute_single_step(self, project_id: str, step: ProcessingStep, 
                            srt_path: Optional[Path] = None) -> Dict[str, Any]:
         """
-        执行单个步骤
+        executeEN
         
         Args:
-            project_id: 项目ID
-            step: 处理步骤
-            srt_path: SRT文件路径（仅Step1需要）
+            project_id: projectID
+            step: processingEN
+            srt_path: SRTfilepath（ENStep1need）
             
         Returns:
-            执行结果
+            executeresult
         """
-        logger.info(f"执行步骤: {step.value}")
+        logger.info(f"executeEN: {step.value}")
         
-        # 创建处理上下文
+        # createprocessingEN
         context = ProcessingContext(project_id, "temp_task_id", self.db)
         if srt_path:
             context.set_srt_path(srt_path)
         context.mark_initialized()
         
-        # 创建任务
+        # createtask
         task = self._create_processing_task(project_id, task_type=TaskType.VIDEO_PROCESSING)
         context.task_id = str(task.id)
         
-        # 初始化编排器
+        # initializeEN
         orchestrator = ProcessingOrchestrator(project_id, str(task.id), self.db)
         
-        # 执行步骤
+        # executeEN
         kwargs = {}
         if step == ProcessingStep.STEP1_OUTLINE and srt_path:
             kwargs['srt_path'] = srt_path
@@ -130,7 +130,7 @@ class ProcessingService:
         
         context.mark_completed()
         
-        # 如果是最后一步（step6_video），自动同步数据到数据库
+        # ifEN（step6_video），ENdatabase
         if step == ProcessingStep.STEP6_VIDEO:
             try:
                 from ..services.data_sync_service import DataSyncService
@@ -141,11 +141,11 @@ class ProcessingService:
                     sync_service = DataSyncService(self.db)
                     sync_result = sync_service.sync_project_from_filesystem(project_id, project_dir)
                     if sync_result.get("success"):
-                        logger.info(f"项目 {project_id} 数据同步成功: {sync_result}")
+                        logger.info(f"project {project_id} ENsucceeded: {sync_result}")
                     else:
-                        logger.error(f"项目 {project_id} 数据同步失败: {sync_result}")
+                        logger.error(f"project {project_id} ENfailed: {sync_result}")
             except Exception as e:
-                logger.warning(f"数据同步失败: {e}")
+                logger.warning(f"ENfailed: {e}")
         
         return {
             "success": True,
@@ -158,14 +158,14 @@ class ProcessingService:
     @handle_service_error
     def get_processing_status(self, project_id: str, task_id: str) -> Dict[str, Any]:
         """
-        获取处理状态
+        fetchprocessingstatus
         
         Args:
-            project_id: 项目ID
-            task_id: 任务ID
+            project_id: projectID
+            task_id: taskID
             
         Returns:
-            处理状态
+            processingstatus
         """
         orchestrator = ProcessingOrchestrator(project_id, task_id, self.db)
         return orchestrator.get_pipeline_status()
@@ -175,20 +175,20 @@ class ProcessingService:
     def retry_step(self, project_id: str, task_id: str, step: ProcessingStep,
                    srt_path: Optional[Path] = None) -> Dict[str, Any]:
         """
-        重试步骤
+        retryEN
         
         Args:
-            project_id: 项目ID
-            task_id: 任务ID
-            step: 处理步骤
-            srt_path: SRT文件路径（仅Step1需要）
+            project_id: projectID
+            task_id: taskID
+            step: processingEN
+            srt_path: SRTfilepath（ENStep1need）
             
         Returns:
-            重试结果
+            retryresult
         """
-        logger.info(f"重试步骤: {step.value}")
+        logger.info(f"retryEN: {step.value}")
         
-        # 创建处理上下文
+        # createprocessingEN
         context = ProcessingContext(project_id, task_id, self.db)
         if srt_path:
             context.set_srt_path(srt_path)
@@ -216,32 +216,32 @@ class ProcessingService:
     def resume_processing(self, project_id: str, start_step: str, 
                          srt_path: Optional[Path] = None) -> Dict[str, Any]:
         """
-        从指定步骤恢复处理
+        ENprocessing
         
         Args:
-            project_id: 项目ID
-            start_step: 开始步骤名称
-            srt_path: SRT文件路径（仅Step1需要）
+            project_id: projectID
+            start_step: startEN
+            srt_path: SRTfilepath（ENStep1need）
             
         Returns:
-            恢复处理结果
+            ENprocessingresult
         """
-        logger.info(f"从步骤 {start_step} 恢复处理项目: {project_id}")
+        logger.info(f"EN {start_step} ENprocessingproject: {project_id}")
         
-        # 创建处理上下文
+        # createprocessingEN
         context = ProcessingContext(project_id, "temp_task_id", self.db)
         if srt_path:
             context.set_srt_path(srt_path)
         context.mark_initialized()
         
-        # 创建处理任务
+        # createprocessingtask
         task = self._create_processing_task(project_id)
         context.task_id = str(task.id)
         
-        # 初始化编排器
+        # initializeEN
         orchestrator = ProcessingOrchestrator(project_id, str(task.id), self.db)
         
-        # 映射步骤名称到ProcessingStep枚举
+        # ENProcessingStepEN
         step_mapping = {
             "step1_outline": ProcessingStep.STEP1_OUTLINE,
             "step2_timeline": ProcessingStep.STEP2_TIMELINE,
@@ -252,16 +252,16 @@ class ProcessingService:
         }
         
         if start_step not in step_mapping:
-            raise ValueError(f"无效的步骤名称: {start_step}")
+            raise ValueError(f"EN: {start_step}")
         
         processing_step = step_mapping[start_step]
         
-        # 从指定步骤恢复执行
+        # ENexecute
         result = orchestrator.resume_from_step(processing_step, srt_path)
         
         context.mark_completed()
         
-        # 更新项目状态为已完成并同步数据
+        # updateprojectstatusENcompletedEN
         try:
             from ..models.project import Project, ProjectStatus
             from ..services.data_sync_service import DataSyncService
@@ -271,19 +271,19 @@ class ProcessingService:
             if project:
                 project.status = ProjectStatus.COMPLETED
                 self.db.commit()
-                logger.info(f"项目状态已更新为已完成: {project_id}")
+                logger.info(f"projectstatusupdatedENcompleted: {project_id}")
                 
-                # 同步数据到数据库
+                # ENdatabase
                 project_dir = Path(__file__).parent.parent / "data" / "projects" / project_id
                 if project_dir.exists():
                     sync_service = DataSyncService(self.db)
                     sync_result = sync_service.sync_project_from_filesystem(project_id, project_dir)
                     if sync_result.get("success"):
-                        logger.info(f"项目 {project_id} 数据同步成功: {sync_result}")
+                        logger.info(f"project {project_id} ENsucceeded: {sync_result}")
                     else:
-                        logger.error(f"项目 {project_id} 数据同步失败: {sync_result}")
+                        logger.error(f"project {project_id} ENfailed: {sync_result}")
         except Exception as e:
-            logger.warning(f"更新项目状态失败: {e}")
+            logger.warning(f"updateprojectstatusfailed: {e}")
         
         return {
             "success": True,
@@ -297,13 +297,13 @@ class ProcessingService:
     @handle_service_error
     def get_project_config(self, project_id: str) -> Dict[str, Any]:
         """
-        获取项目配置
+        fetchprojectconfig
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            项目配置
+            projectconfig
         """
         config_manager = ProjectConfigManager(project_id)
         return config_manager.export_config()
@@ -311,47 +311,47 @@ class ProcessingService:
     @handle_service_error
     def update_project_config(self, project_id: str, config_updates: Dict[str, Any]) -> Dict[str, Any]:
         """
-        更新项目配置
+        updateprojectconfig
         
         Args:
-            project_id: 项目ID
-            config_updates: 配置更新
+            project_id: projectID
+            config_updates: configupdate
             
         Returns:
-            更新结果
+            updateresult
         """
         config_manager = ProjectConfigManager(project_id)
         
-        # 更新处理参数
+        # updateprocessingparameters
         if "processing_params" in config_updates:
             config_manager.update_processing_params(**config_updates["processing_params"])
         
-        # 更新LLM配置
+        # updateLLMconfig
         if "llm_config" in config_updates:
             config_manager.update_llm_config(**config_updates["llm_config"])
         
-        # 更新步骤配置
+        # updateENconfig
         if "steps" in config_updates:
             for step_name, step_config in config_updates["steps"].items():
                 config_manager.update_step_config(step_name, **step_config)
         
         return {
             "success": True,
-            "message": "配置更新成功"
+            "message": "configupdatesucceeded"
         }
     
     @handle_service_error
     def validate_project_setup(self, project_id: str) -> Dict[str, Any]:
         """
-        验证项目设置
+        validateprojectsettings
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            验证结果
+            validateresult
         """
-        # 临时注释，PipelineAdapter 文件不存在
+        # EN，PipelineAdapter filedoes not exist
         # adapter = PipelineAdapter(project_id)
         # errors = adapter.validate_pipeline_prerequisites()
         
@@ -363,14 +363,14 @@ class ProcessingService:
         
         return {
             "valid": True,
-            "message": "项目设置验证通过（临时跳过PipelineAdapter验证）"
+            "message": "projectsettingsvalidatethrough（ENPipelineAdaptervalidate）"
         }
     
     def _create_processing_task(self, project_id: str, task_type: TaskType = TaskType.VIDEO_PROCESSING) -> Task:
-        """创建处理任务"""
+        """createprocessingtask"""
         task_data = {
-            "name": f"视频处理任务 - {project_id}",
-            "description": f"处理项目 {project_id} 的视频内容",
+            "name": f"videoprocessingtask - {project_id}",
+            "description": f"processingproject {project_id} ENvideoEN",
             "project_id": project_id,
             "task_type": task_type,
             "status": TaskStatus.PENDING,

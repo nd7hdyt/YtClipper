@@ -1,6 +1,6 @@
 """
-Celery应用配置
-任务队列配置和初始化
+CeleryENconfig
+taskqueueconfigENinitialize
 """
 
 import os
@@ -8,67 +8,67 @@ from celery import Celery
 from celery.schedules import crontab
 from pathlib import Path
 
-# 设置默认配置模块
+# settingsENconfigEN
 # os.environ.setdefault('CELERY_CONFIG_MODULE', 'backend.core.celery_app')
 
-# 创建Celery应用
+# createCeleryEN
 celery_app = Celery('autoclip')
 
-# 配置Celery
+# configCelery
 class CeleryConfig:
-    """Celery配置类"""
+    """CeleryconfigEN"""
     
-    # 任务序列化格式
+    # taskEN
     task_serializer = 'json'
     accept_content = ['json']
     result_serializer = 'json'
     timezone = 'Asia/Shanghai'
     enable_utc = True
     
-    # Redis配置
+    # Redisconfig
     broker_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
     result_backend = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
     
-    # 任务配置
-    task_always_eager = os.getenv('CELERY_ALWAYS_EAGER', 'False').lower() == 'true'  # 生产环境异步执行
+    # taskconfig
+    task_always_eager = os.getenv('CELERY_ALWAYS_EAGER', 'False').lower() == 'true'  # ENexecute
     task_eager_propagates = True
     
-    # 工作进程配置
+    # ENconfig
     worker_prefetch_multiplier = 1
     worker_max_tasks_per_child = 1000
     worker_disable_rate_limits = True
-    worker_concurrency = 1  # 强制设置并发数为1，防止重复处理
+    worker_concurrency = 1  # ENsettingsEN1，ENprocessing
     
-    # 任务路由
+    # taskEN
     task_routes = {
         'backend.tasks.processing.*': {'queue': 'processing'},
         'backend.tasks.video.*': {'queue': 'video'},
         'backend.tasks.notification.*': {'queue': 'notification'},
-        'backend.tasks.upload.*': {'queue': 'upload'},  # 添加upload任务路由
-        'backend.tasks.import_processing.*': {'queue': 'processing'},  # 导入任务路由
+        'backend.tasks.upload.*': {'queue': 'upload'},  # ENuploadtaskEN
+        'backend.tasks.import_processing.*': {'queue': 'processing'},  # ENtaskEN
     }
     
-    # 定时任务配置
+    # ENtaskconfig
     beat_schedule = {
         'cleanup-expired-tasks': {
             'task': 'backend.tasks.maintenance.cleanup_expired_tasks',
-            'schedule': crontab(hour=2, minute=0),  # 每天凌晨2点
+            'schedule': crontab(hour=2, minute=0),  # EN2EN
         },
         'health-check': {
             'task': 'backend.tasks.maintenance.health_check',
-            'schedule': crontab(minute='*/5'),  # 每5分钟
+            'schedule': crontab(minute='*/5'),  # EN5EN
         },
     }
     
-    # 结果配置
-    result_expires = 3600  # 1小时
+    # resultconfig
+    result_expires = 3600  # 1EN
     task_ignore_result = False
     
-    # 日志配置
+    # logconfig
     worker_log_format = '[%(asctime)s: %(levelname)s/%(processName)s] %(message)s'
     worker_task_log_format = '[%(asctime)s: %(levelname)s/%(processName)s] [%(task_name)s(%(task_id)s)] %(message)s'
 
-# 应用配置
+# ENconfig
 celery_app.config_from_object(CeleryConfig)
 
 
@@ -77,7 +77,7 @@ def _is_desktop_mode() -> bool:
 
 
 class _LocalAsyncResult:
-    """轻量级 AsyncResult 替身，桌面模式本地线程执行时返回。"""
+    """EN AsyncResult EN，ENexecuteENreturn。"""
 
     def __init__(self, task_id: str):
         self.id = task_id
@@ -92,13 +92,13 @@ class _LocalAsyncResult:
 
 
 class DesktopAwareTask(celery_app.Task):
-    """桌面安装包里没有 Redis broker，生产 core.celery_app 又指向 redis://localhost。
+    """EN Redis broker，EN core.celery_app EN redis://localhost。
 
-    所有端点都用 `task.delay(...)` / `apply_async(...)` 派发任务，默认会把任务塞进
-    Redis 队列 —— 桌面模式下没人消费，于是永远卡在 0%「初始化中」。
+    allEN `task.delay(...)` / `apply_async(...)` ENtask，ENtaskEN
+    Redis queue —— EN，EN 0%「initializeEN」。
 
-    这里在桌面模式下把 apply_async 改成「在后台守护线程里同步执行 apply()」：
-    不依赖任何 broker，立即返回，进度照常写库供前端轮询。生产模式行为不变。
+    EN apply_async EN「ENexecute apply()」：
+    EN broker，ENreturn，progressEN。EN。
     """
 
     def apply_async(self, args=None, kwargs=None, task_id=None, **options):
@@ -116,7 +116,7 @@ class DesktopAwareTask(celery_app.Task):
                 except Exception as exc:  # noqa: BLE001
                     import logging
                     logging.getLogger(__name__).error(
-                        f"桌面模式本地执行任务失败 {self.name} ({tid}): {exc}", exc_info=True
+                        f"ENexecutetaskfailed {self.name} ({tid}): {exc}", exc_info=True
                     )
 
             threading.Thread(target=_run, name=f"task-{self.name}", daemon=True).start()
@@ -125,23 +125,23 @@ class DesktopAwareTask(celery_app.Task):
         return super().apply_async(args=args, kwargs=kwargs, task_id=task_id, **options)
 
     def update_state(self, task_id=None, state=None, meta=None, **kwargs):
-        # 桌面模式没有 Redis 结果后端；任务里的 self.update_state() 会直接 ConnectionRefused，
-        # 把整条导入任务拖死。用户可见进度走 simple_progress，这里丢弃即可
+        # EN Redis resultEN；taskEN self.update_state() EN ConnectionRefused，
+        # ENtaskEN。userENprogressEN simple_progress，EN
         if _is_desktop_mode():
             return None
         return super().update_state(task_id=task_id, state=state, meta=meta, **kwargs)
 
 
-# 桌面模式下让所有 @celery_app.task 使用上面的本地执行基类
+# ENall @celery_app.task useENexecuteEN
 celery_app.Task = DesktopAwareTask
 
-# 自动发现任务
+# ENtask
 celery_app.autodiscover_tasks([
     'backend.tasks.processing',
     'backend.tasks.video', 
     'backend.tasks.notification',
     'backend.tasks.maintenance',
-    'backend.tasks.import_processing'  # 添加导入处理任务
+    'backend.tasks.import_processing'  # ENprocessingtask
 ])
 
 if __name__ == '__main__':

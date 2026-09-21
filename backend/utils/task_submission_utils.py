@@ -1,6 +1,6 @@
 """
-任务提交工具
-独立的工具函数，避免循环导入问题
+taskEN
+EN，EN
 """
 
 import logging
@@ -16,27 +16,27 @@ def _is_desktop_mode() -> bool:
 
 
 def _log_queue_depth(queue: str) -> Optional[int]:
-    """记录 Redis 队列深度，仅用于诊断；任何失败都只记 warning，不向上抛。"""
+    """EN Redis queueEN，EN；ENfailedEN warning，EN。"""
     try:
         import redis
 
         redis_url = os.getenv('REDIS_URL') or str(celery_app.conf.broker_url)
         client = redis.Redis.from_url(redis_url, socket_connect_timeout=2, socket_timeout=2)
         depth = client.llen(queue)
-        logger.info(f"Redis 队列 {queue} 深度: {depth}")
+        logger.info(f"Redis queue {queue} EN: {depth}")
         return depth
     except Exception as e:  # noqa: BLE001
-        logger.warning(f"读取 Redis 队列 {queue} 深度失败（仅诊断，不影响任务）: {e}")
+        logger.warning(f"read Redis queue {queue} ENfailed（EN，ENtask）: {e}")
         return None
 
 
 def _run_pipeline_locally(project_id: str, input_video_path: str, input_srt_path: str) -> Dict[str, Any]:
-    """桌面模式：不经过 Redis/Celery broker，直接在后台线程内同步执行流水线任务。
+    """EN：EN Redis/Celery broker，ENexecuteENtask。
 
-    桌面安装包里没有 Redis，而生产用的 core.celery_app 走 redis://localhost。
-    Celery 任务 process_video_pipeline 本身是「在任务内同步跑完整条流水线」
-    （asyncio.run(pipeline_adapter...)），不会再派发子任务，所以可以用 .apply()
-    在本地线程里直接跑，进度照常写进数据库的 Task 记录供前端轮询。
+    EN Redis，EN core.celery_app EN redis://localhost。
+    Celery task process_video_pipeline EN「ENtaskEN」
+    （asyncio.run(pipeline_adapter...)），ENtask，socanEN .apply()
+    EN，progressENdatabaseEN Task EN。
     """
     import uuid
     import threading
@@ -45,110 +45,110 @@ def _run_pipeline_locally(project_id: str, input_video_path: str, input_srt_path
 
     def run():
         try:
-            # 延迟导入，避免循环依赖
+            # EN，EN
             from ..tasks.processing import process_video_pipeline
             process_video_pipeline.apply(
                 args=[project_id, input_video_path, input_srt_path],
                 task_id=task_id,
             )
-            logger.info(f"桌面模式本地流水线执行结束: {project_id}, task_id={task_id}")
+            logger.info(f"ENexecuteend: {project_id}, task_id={task_id}")
         except Exception as e:  # noqa: BLE001
-            logger.error(f"桌面模式本地流水线执行失败: {project_id}, 错误: {e}", exc_info=True)
+            logger.error(f"ENexecutefailed: {project_id}, error: {e}", exc_info=True)
 
     threading.Thread(target=run, name=f"pipeline-{project_id[:8]}", daemon=True).start()
-    logger.info(f"桌面模式：已在本地后台线程启动视频流水线 {project_id}, task_id={task_id}")
+    logger.info(f"EN：ENstartvideoEN {project_id}, task_id={task_id}")
     return {
         'success': True,
         'task_id': task_id,
         'status': 'PENDING',
-        'message': '视频流水线任务已在本地启动',
+        'message': 'videoENtaskENstart',
     }
 
 
 def submit_video_pipeline_task(project_id: str, input_video_path: str, input_srt_path: str) -> Dict[str, Any]:
     """
-    提交视频流水线任务
+    ENvideoENtask
 
     Args:
-        project_id: 项目ID
-        input_video_path: 输入视频路径
-        input_srt_path: 输入SRT路径
+        project_id: projectID
+        input_video_path: ENvideopath
+        input_srt_path: ENSRTpath
 
     Returns:
-        任务提交结果
+        taskENresult
     """
-    # 桌面模式没有 Redis，走本地线程执行
+    # EN Redis，ENexecute
     if _is_desktop_mode():
         return _run_pipeline_locally(project_id, input_video_path, input_srt_path)
 
     try:
-        logger.info(f"提交视频流水线任务: {project_id}")
+        logger.info(f"ENvideoENtask: {project_id}")
         
-        # 直接使用celery_app提交任务
-        logger.info(f"准备提交任务到队列...")
-        logger.info(f"任务名称: backend.tasks.processing.process_video_pipeline")
-        logger.info(f"任务参数: {[project_id, input_video_path, input_srt_path]}")
+        # ENusecelery_appENtask
+        logger.info(f"ENtaskENqueue...")
+        logger.info(f"taskEN: backend.tasks.processing.process_video_pipeline")
+        logger.info(f"taskparameters: {[project_id, input_video_path, input_srt_path]}")
         
         celery_task = celery_app.send_task(
             'backend.tasks.processing.process_video_pipeline',
             args=[project_id, input_video_path, input_srt_path]
         )
-        logger.info(f"视频流水线任务已提交: {celery_task.id}")
+        logger.info(f"videoENtaskEN: {celery_task.id}")
 
-        # 队列深度只用于诊断。它必须走 REDIS_URL（docker-compose 里 Redis 不在 localhost），
-        # 且不能影响已经提交成功的任务。
+        # queueEN。ENmustEN REDIS_URL（docker-compose EN Redis EN localhost），
+        # ENalreadyENsucceededENtask。
         _log_queue_depth('processing')
 
         return {
             'success': True,
             'task_id': celery_task.id,
             'status': 'PENDING',
-            'message': '视频流水线任务已提交'
+            'message': 'videoENtaskEN'
         }
         
     except Exception as e:
-        logger.error(f"提交视频流水线任务失败: {project_id}, 错误: {e}")
+        logger.error(f"ENvideoENtaskfailed: {project_id}, error: {e}")
         return {
             'success': False,
             'error': str(e),
-            'message': '任务提交失败'
+            'message': 'taskENfailed'
         }
 
 def submit_single_step_task(project_id: str, step: str, config: Dict[str, Any]) -> Dict[str, Any]:
     """
-    提交单个步骤任务
+    ENtask
     
     Args:
-        project_id: 项目ID
-        step: 步骤名称
-        config: 处理配置
+        project_id: projectID
+        step: EN
+        config: processingconfig
         
     Returns:
-        任务提交结果
+        taskENresult
     """
     try:
-        logger.info(f"提交单个步骤任务: {project_id}, {step}")
+        logger.info(f"ENtask: {project_id}, {step}")
         
-        # 直接使用celery_app提交任务
+        # ENusecelery_appENtask
         celery_task = celery_app.send_task(
             'tasks.processing.process_single_step',
             args=[project_id, step, config]
         )
         
-        logger.info(f"单个步骤任务已提交: {celery_task.id}")
+        logger.info(f"ENtaskEN: {celery_task.id}")
         
         return {
             'success': True,
             'task_id': celery_task.id,
             'step': step,
             'status': 'PENDING',
-            'message': f'步骤 {step} 任务已提交'
+            'message': f'EN {step} taskEN'
         }
         
     except Exception as e:
-        logger.error(f"提交单个步骤任务失败: {project_id}, {step}, 错误: {e}")
+        logger.error(f"ENtaskfailed: {project_id}, {step}, error: {e}")
         return {
             'success': False,
             'error': str(e),
-            'message': '任务提交失败'
+            'message': 'taskENfailed'
         }

@@ -1,5 +1,5 @@
-"""视频处理Celery任务
-包含WebSocket实时通知和Pipeline适配器集成
+"""videoprocessingCelerytask
+ENWebSocketENPipelineEN
 """
 
 import os
@@ -21,12 +21,12 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 def run_async_notification(coro):
-    """运行异步通知的辅助函数 - 修复事件循环冲突"""
+    """runEN - EN"""
     try:
-        # 尝试获取现有的事件循环
+        # ENfetchEN
         loop = asyncio.get_event_loop()
         if loop.is_running():
-            # 如果事件循环正在运行，使用线程池执行
+            # ifENcurrentlyrun，useENexecute
             import concurrent.futures
             import threading
             
@@ -40,12 +40,12 @@ def run_async_notification(coro):
             
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 future = executor.submit(run_in_thread)
-                return future.result(timeout=10)  # 10秒超时
+                return future.result(timeout=10)  # 10ENtimeout
         else:
-            # 如果事件循环没有运行，直接运行
+            # ifENrun，ENrun
             return loop.run_until_complete(coro)
     except RuntimeError:
-        # 没有事件循环，创建新的
+        # EN，createEN
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
@@ -53,9 +53,9 @@ def run_async_notification(coro):
         finally:
             loop.close()
 
-# 同一项目同一时间只允许一条流水线在跑。桌面模式下多个入口（/process、/retry、
-# 前端自动启动、下载后自动启动）可能并发派发同一项目，过去任务都进 Redis 没人跑
-# 所以看不出来；现在任务真的会本地执行，必须防止并发重复执行撞数据库。
+# ENprojectENtimeEN。EN（/process、/retry、
+# ENstart、downloadENstart）mayENproject，ENtaskEN Redis EN
+# soEN；ENtaskENexecute，mustENexecuteENdatabase。
 import threading as _threading
 _active_pipeline_projects: set = set()
 _active_pipeline_lock = _threading.Lock()
@@ -69,90 +69,90 @@ def process_video_pipeline(
     input_srt_path: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
-    处理视频流水线任务 - 使用Pipeline适配器
+    processingvideoENtask - usePipelineEN
     
     Args:
-        project_id: 项目ID
-        input_video_path: 输入视频路径
-        input_srt_path: 输入SRT路径
+        project_id: projectID
+        input_video_path: ENvideopath
+        input_srt_path: ENSRTpath
         
     Returns:
-        处理结果
+        processingresult
     """
     task_id = self.request.id
-    logger.info(f"开始处理视频流水线: {project_id}, 任务ID: {task_id}")
+    logger.info(f"startprocessingvideoEN: {project_id}, taskID: {task_id}")
 
-    # 并发去重：同一项目已有流水线在跑就直接跳过本次重复派发
+    # EN：ENprojectEN
     with _active_pipeline_lock:
         if project_id in _active_pipeline_projects:
-            logger.warning(f"项目 {project_id} 已有流水线在运行，跳过重复任务 {task_id}")
+            logger.warning(f"project {project_id} ENrun，ENtask {task_id}")
             return {
                 "success": False,
                 "skipped": True,
                 "project_id": project_id,
                 "task_id": task_id,
-                "message": "已有流水线在运行，已跳过重复任务",
+                "message": "ENrun，ENtask",
             }
         _active_pipeline_projects.add(project_id)
 
     try:
-        # 创建数据库会话
+        # createdatabaseEN
         db = SessionLocal()
         
         try:
-            # 创建任务记录
+            # createtaskEN
             task = Task(
-                name=f"视频处理流水线",
-                description=f"处理项目 {project_id} 的完整视频流水线",
+                name=f"videoprocessingEN",
+                description=f"processingproject {project_id} ENvideoEN",
                 task_type=TaskType.VIDEO_PROCESSING,
                 project_id=project_id,
                 celery_task_id=task_id,
                 status=TaskStatus.RUNNING,
                 progress=0,
-                current_step="初始化",
+                current_step="initialize",
                 total_steps=6
             )
             db.add(task)
             db.commit()
             
-            # 发送开始通知
+            # sendstartEN
             run_async_notification(
                 notification_service.send_processing_start(project_id, task_id)
             )
             
-            # 简化的进度系统不需要复杂的回调函数
-            # 新的进度系统会在流水线内部自动发送进度事件
+            # ENprogresssystemENneedEN
+            # ENprogresssystemENsendprogressEN
             
-            # 使用简化的Pipeline适配器
+            # useENPipelineEN
             from backend.services.simple_pipeline_adapter import create_simple_pipeline_adapter
             pipeline_adapter = create_simple_pipeline_adapter(str(project_id), str(task.id))
             
-            # 执行Pipeline处理 - 使用异步包装器
+            # executePipelineprocessing - useEN
             import asyncio
             result = asyncio.run(pipeline_adapter.process_project_sync(input_video_path, input_srt_path))
             
-            # 检查处理结果
+            # checkprocessingresult
             if result.get("status") == "failed":
-                # 处理失败。adapter 返回的是 error（以前这里只读 message，用户看到的永远是「处理失败」四个字）
-                error_msg = result.get("error") or result.get("message") or "处理失败"
+                # processingfailed。adapter returnEN error（EN message，userEN「processingfailed」EN）
+                error_msg = result.get("error") or result.get("message") or "processingfailed"
                 task.status = TaskStatus.FAILED
                 task.error_message = error_msg
                 if result.get("stage"):
-                    task.current_step = f"失败于 {result['stage']}"
+                    task.current_step = f"failedEN {result['stage']}"
                 task.result_data = result
                 
-                # 更新项目状态为失败
+                # updateprojectstatusENfailed
                 project = db.query(Project).filter(Project.id == project_id).first()
                 if project:
                     project.status = ProjectStatus.FAILED
                     project.updated_at = datetime.utcnow()
-                    logger.info(f"项目状态已更新为失败: {project_id}")
+                    logger.info(f"projectstatusupdatedENfailed: {project_id}")
                 
                 db.commit()
                 
-                # 失败状态已由简化进度系统自动处理
+                # failedstatusENprogresssystemENprocessing
                 
-                # 发送错误通知（兼容旧版本） - 已禁用WebSocket通知
+                # senderrorEN（EN） - ENWebSocketEN
                 # run_async_notification(
                 #     notification_service.send_processing_error(project_id, task_id, error_msg)
                 # )
@@ -165,53 +165,53 @@ def process_video_pipeline(
                     "result": result
                 }
             else:
-                # 处理成功
+                # processingsucceeded
                 task.status = TaskStatus.COMPLETED
                 task.progress = 100
-                task.current_step = "处理完成"
+                task.current_step = "processingEN"
                 task.result_data = result
                 
-                # 更新项目状态为已完成
+                # updateprojectstatusENcompleted
                 project = db.query(Project).filter(Project.id == project_id).first()
                 if project:
                     project.status = ProjectStatus.COMPLETED
                     project.completed_at = datetime.utcnow()
                     project.updated_at = datetime.utcnow()
-                    logger.info(f"项目状态已更新为已完成: {project_id}")
+                    logger.info(f"projectstatusupdatedENcompleted: {project_id}")
                 
                 db.commit()
                 
-                # 完成状态已由简化进度系统自动处理
+                # ENstatusENprogresssystemENprocessing
                 
-                # 发送完成通知（兼容旧版本） - 已禁用WebSocket通知
+                # sendEN（EN） - ENWebSocketEN
                 # run_async_notification(
                 #     notification_service.send_processing_complete(project_id, task_id, result)
                 # )
             
-            logger.info(f"视频流水线处理完成: {project_id}")
+            logger.info(f"videoENprocessingEN: {project_id}")
             return {
                 "success": True,
                 "project_id": project_id,
                 "task_id": task_id,
                 "result": result,
-                "message": "视频处理流水线完成"
+                "message": "videoprocessingEN"
             }
             
         finally:
             db.close()
-            # 释放并发去重锁（无论成功/失败/提前返回都会走到这里）
+            # EN（ENsucceeded/failed/ENreturnEN）
             with _active_pipeline_lock:
                 _active_pipeline_projects.discard(project_id)
 
     except Exception as e:
-        error_msg = f"视频流水线处理失败: {str(e)}"
+        error_msg = f"videoENprocessingfailed: {str(e)}"
         logger.error(error_msg)
 
-        # 兜底释放并发锁（正常路径已在内层 finally 释放，这里防止极早期异常泄漏）
+        # EN（ENpathEN finally EN，ENexceptionEN）
         with _active_pipeline_lock:
             _active_pipeline_projects.discard(project_id)
 
-        # 更新任务状态为失败
+        # updatetaskstatusENfailed
         try:
             db = SessionLocal()
             task = db.query(Task).filter(Task.celery_task_id == task_id).first()
@@ -219,19 +219,19 @@ def process_video_pipeline(
                 task.status = TaskStatus.FAILED
                 task.error_message = error_msg
                 
-                # 更新项目状态为失败
+                # updateprojectstatusENfailed
                 project = db.query(Project).filter(Project.id == project_id).first()
                 if project:
                     project.status = ProjectStatus.FAILED
                     project.updated_at = datetime.utcnow()
-                    logger.info(f"项目状态已更新为失败: {project_id}")
+                    logger.info(f"projectstatusupdatedENfailed: {project_id}")
                 
                 db.commit()
             db.close()
         except Exception as db_error:
-            logger.error(f"更新任务状态失败: {str(db_error)}")
+            logger.error(f"updatetaskstatusfailed: {str(db_error)}")
         
-        # 发送错误通知
+        # senderrorEN
         run_async_notification(
             notification_service.send_processing_error(project_id, task_id, error_msg)
         )
@@ -241,86 +241,86 @@ def process_video_pipeline(
 @celery_app.task(bind=True, name='backend.tasks.processing.process_single_step')
 def process_single_step(self, project_id: str, step: str, config: Dict[str, Any]) -> Dict[str, Any]:
     """
-    处理单个步骤任务
+    processingENtask
     
     Args:
-        project_id: 项目ID
-        step: 步骤名称
-        config: 处理配置
+        project_id: projectID
+        step: EN
+        config: processingconfig
         
     Returns:
-        处理结果
+        processingresult
     """
     task_id = self.request.id
-    logger.info(f"开始处理单个步骤: {project_id}, 步骤: {step}, 任务ID: {task_id}")
+    logger.info(f"startprocessingEN: {project_id}, EN: {step}, taskID: {task_id}")
     
     try:
-        # 发送开始通知
-        # 发送处理开始通知（兼容旧版本） - 已禁用WebSocket通知
+        # sendstartEN
+        # sendprocessingstartEN（EN） - ENWebSocketEN
         # run_async_notification(
         #     notification_service.send_processing_start(project_id, task_id)
         # )
         
-        # 创建数据库会话
+        # createdatabaseEN
         db = SessionLocal()
         
         try:
-            # 创建处理服务
+            # createprocessingservice
             processing_service = ProcessingService(db)
             
-            # 根据步骤类型执行不同的处理
+            # ENexecuteENprocessing
             if step == "outline":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "生成大纲")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "generateEN")
                 )
                 result = processing_service.generate_outline(project_id, config)
                 
             elif step == "timeline":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "提取时间轴")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "ENtimeEN")
                 )
                 result = processing_service.extract_timeline(project_id, config)
                 
             elif step == "titles":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "生成标题")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "generatetitle")
                 )
                 result = processing_service.generate_titles(project_id, config)
                 
             elif step == "clips":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "视频切片")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "videoclip")
                 )
                 result = processing_service.extract_clips(project_id, config)
                 
             elif step == "collections":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "生成合集")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "generatecollection")
                 )
                 result = processing_service.generate_collections(project_id, config)
                 
             else:
-                raise Exception(f"未知的步骤类型: {step}")
+                raise Exception(f"EN: {step}")
             
             if not result.get("success"):
-                raise Exception(f"步骤 {step} 处理失败: {result.get('error')}")
+                raise Exception(f"EN {step} processingfailed: {result.get('error')}")
             
-            # 发送完成通知
+            # sendEN
             run_async_notification(
                 notification_service.send_processing_complete(project_id, task_id, result)
             )
             
-            logger.info(f"单个步骤处理完成: {project_id}, 步骤: {step}")
+            logger.info(f"ENprocessingEN: {project_id}, EN: {step}")
             return result
             
         finally:
             db.close()
             
     except Exception as e:
-        error_msg = f"单个步骤处理失败: {str(e)}"
+        error_msg = f"ENprocessingfailed: {str(e)}"
         logger.error(error_msg)
         
-        # 发送错误通知
+        # senderrorEN
         run_async_notification(
             notification_service.send_processing_error(project_id, task_id, error_msg)
         )
@@ -331,49 +331,49 @@ def process_single_step(self, project_id: str, step: str, config: Dict[str, Any]
 def retry_processing_step(self, project_id: str, step: str, config: Dict[str, Any], 
                          original_task_id: str) -> Dict[str, Any]:
     """
-    重试处理步骤任务
+    retryprocessingENtask
     
     Args:
-        project_id: 项目ID
-        step: 步骤名称
-        config: 处理配置
-        original_task_id: 原始任务ID
+        project_id: projectID
+        step: EN
+        config: processingconfig
+        original_task_id: ENtaskID
         
     Returns:
-        处理结果
+        processingresult
     """
     task_id = self.request.id
-    logger.info(f"开始重试处理步骤: {project_id}, 步骤: {step}, 任务ID: {task_id}")
+    logger.info(f"startretryprocessingEN: {project_id}, EN: {step}, taskID: {task_id}")
     
     try:
-        # 发送开始通知
-        # 发送处理开始通知（兼容旧版本） - 已禁用WebSocket通知
+        # sendstartEN
+        # sendprocessingstartEN（EN） - ENWebSocketEN
         # run_async_notification(
         #     notification_service.send_processing_start(project_id, task_id)
         # )
         
-        # 发送重试通知
+        # sendretryEN
         run_async_notification(
             notification_service.send_system_notification(
                 "retry_started",
-                "重试开始",
-                f"正在重试步骤: {step}",
+                "retrystart",
+                f"currentlyretryEN: {step}",
                 "warning"
             )
         )
         
-        # 调用单个步骤处理
+        # callENprocessing
         result = process_single_step.apply_async(
             args=[project_id, step, config],
             task_id=task_id
         ).get()
         
-        # 发送重试成功通知
+        # sendretrysucceededEN
         run_async_notification(
             notification_service.send_system_notification(
                 "retry_success",
-                "重试成功",
-                f"步骤 {step} 重试成功",
+                "retrysucceeded",
+                f"EN {step} retrysucceeded",
                 "success"
             )
         )
@@ -381,14 +381,14 @@ def retry_processing_step(self, project_id: str, step: str, config: Dict[str, An
         return result
         
     except Exception as e:
-        error_msg = f"重试处理步骤失败: {str(e)}"
+        error_msg = f"retryprocessingENfailed: {str(e)}"
         logger.error(error_msg)
         
-        # 发送重试失败通知
+        # sendretryfailedEN
         run_async_notification(
             notification_service.send_error_notification(
                 "retry_failed",
-                f"步骤 {step} 重试失败",
+                f"EN {step} retryfailed",
                 {"project_id": project_id, "step": step, "error": str(e)}
             )
         )

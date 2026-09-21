@@ -1,15 +1,19 @@
 """
-出片质量工程化：把「程序能算的事」从 LLM 手里拿回来。
+Clip-quality engineering: take back what can be computed programmatically from the LLM.
 
-- DurationProfile：按视频总时长选一组切片参数，并生成追加到提示词末尾的「本次任务参数」，
-  覆盖提示词里为 60 分钟播客写死的「最小 90 秒 / 目标 3–6 分钟」（#59：5 分钟视频切出 3×2 分钟）。
-- refine_timeline：把 LLM 给的时间区间对齐到字幕 cue 边界、施加时长上下限、去重合并，
-  输出 quality_report 供回归集与前端使用。
-- select_clips：评分筛选的兜底——阈值之上全留，不足 min_keep 按分补齐，超过 max_clips 截断（#11：切片为 0）。
-- align_scores：评分结果数量与输入不一致时按 outline 对齐，不再整块丢弃。
+- DurationProfile: pick a set of clip parameters from the total video length, and
+  generate the "parameters for this task" block appended to the end of prompts,
+  overriding the hardcoded "min 90s / target 3-6 min" written for 60-min podcasts
+  (#59: a 5-min video cut into 3x2-min clips).
+- refine_timeline: snap LLM time ranges to subtitle cue boundaries, enforce duration
+  bounds, dedupe and merge, and emit a quality_report for the regression set and frontend.
+- select_clips: backstop for score filtering — keep everything above threshold, top up
+  to min_keep by score when short, truncate past max_clips (#11: zero clips).
+- align_scores: when score counts mismatch the input, align by outline instead of
+  dropping the whole chunk.
 
-全部是纯函数（除了 save_* 落盘），方便单测与 eval。
-方案见 docs/QUALITY_AND_PUBLISH_PLAN.md。
+All pure functions (except save_* which hit disk), easy to unit-test and eval.
+Plan: docs/QUALITY_AND_PUBLISH_PLAN.md.
 """
 from __future__ import annotations
 
@@ -27,7 +31,7 @@ REPORT_FILE = "quality_report.json"
 
 # ---------------------------------------------------------------- time helpers ---
 def to_seconds(t: str) -> float:
-    """'HH:MM:SS,mmm' / 'HH:MM:SS.mmm' / 'MM:SS' → 秒。格式错误抛 ValueError。"""
+    """'HH:MM:SS,mmm' / 'HH:MM:SS.mmm' / 'MM:SS' → seconds. Bad format raises ValueError."""
     s = str(t).strip().replace(",", ".")
     parts = s.split(":")
     if len(parts) == 3:
@@ -35,7 +39,7 @@ def to_seconds(t: str) -> float:
     elif len(parts) == 2:
         h, (m, sec) = "0", parts
     else:
-        raise ValueError(f"无效时间: {t}")
+        raise ValueError(f"Invalid time: {t}")
     return int(h) * 3600 + int(m) * 60 + float(sec)
 
 
@@ -55,28 +59,28 @@ def to_srt_time(sec: float) -> str:
 class DurationProfile:
     tier: str                 # short / medium / long
     total_sec: float
-    min_clip_sec: float       # 低于此时长的片段要延长 / 合并 / 丢弃
-    target_clip_sec: Tuple[float, float]  # 目标时长区间，写进提示词
-    max_clip_sec: float       # 超过则按 cue 截断
-    topics_hint: Tuple[int, int]          # 建议话题数（整条视频）
-    min_keep: int             # 评分筛选后至少保留几条（有候选时）
-    max_clips: int            # 最多保留几条
-    snap_window_sec: float = 3.0   # 吸附到最近 cue 的搜索窗口
-    merge_gap_sec: float = 5.0     # 太短且与相邻段间隔小于此则合并
-    overlap_merge_ratio: float = 0.5  # 重叠超过较短者的这一比例 → 合并
+    min_clip_sec: float       # segments below this get extended / merged / dropped
+    target_clip_sec: Tuple[float, float]  # target duration range, written into prompts
+    max_clip_sec: float       # longer segments get truncated at a cue
+    topics_hint: Tuple[int, int]          # suggested topic count (whole video)
+    min_keep: int             # keep at least this many after score filtering (when candidates exist)
+    max_clips: int            # keep at most this many
+    snap_window_sec: float = 3.0   # search window for snapping to the nearest cue
+    merge_gap_sec: float = 5.0     # too-short segments within this gap of a neighbor get merged
+    overlap_merge_ratio: float = 0.5  # overlap beyond this fraction of the shorter one → merge
 
     def prompt_hint(self) -> str:
-        """追加到 step1 / step2 提示词末尾，覆盖提示词里写死的时长规则。"""
+        """Appended to the step1 / step2 prompts, overriding hardcoded duration rules there."""
         lo, hi = self.target_clip_sec
         n_lo, n_hi = self.topics_hint
-        total = f"{int(self.total_sec // 60)} 分 {int(self.total_sec % 60)} 秒"
+        total = f"{int(self.total_sec // 60)} min {int(self.total_sec % 60)} sec"
         return (
-            "\n\n---\n\n## 本次任务参数（优先级高于上文所有时长与数量规则）\n"
-            f"- 视频总时长：{total}（{self.tier} 类型）\n"
-            f"- 整条视频建议提取 {n_lo}–{n_hi} 个话题；话题之间不要重叠\n"
-            f"- 每个片段目标时长 {_fmt_dur(lo)}–{_fmt_dur(hi)}，最短不少于 {_fmt_dur(self.min_clip_sec)}，最长不超过 {_fmt_dur(self.max_clip_sec)}\n"
-            "- 上文中「至少 90 秒」「3–6 分钟」等具体数字一律以本节为准\n"
-            "- 起止时间必须落在字幕行的边界上，直接引用字幕行的时间戳，不要自行推算\n"
+            "\n\n---\n\n## Parameters for this task (take precedence over all duration and count rules above)\n"
+            f"- Total video length: {total} ({self.tier} type)\n"
+            f"- Extract {n_lo}–{n_hi} topics for the whole video; topics must not overlap\n"
+            f"- Target {_fmt_dur(lo)}–{_fmt_dur(hi)} per clip, no shorter than {_fmt_dur(self.min_clip_sec)}, no longer than {_fmt_dur(self.max_clip_sec)}\n"
+            "- Any concrete numbers above like \"at least 90 seconds\" or \"3–6 minutes\" defer to this section\n"
+            "- Start/end times must fall on subtitle-line boundaries: quote subtitle timestamps directly, do not estimate them yourself\n"
         )
 
     def to_dict(self) -> Dict[str, Any]:
@@ -89,14 +93,15 @@ class DurationProfile:
 def _fmt_dur(sec: float) -> str:
     sec = int(round(sec))
     if sec < 60:
-        return f"{sec} 秒"
+        return f"{sec} sec"
     if sec % 60 == 0:
-        return f"{sec // 60} 分钟"
-    return f"{sec // 60} 分 {sec % 60} 秒"
+        return f"{sec // 60} min"
+    return f"{sec // 60} min {sec % 60} sec"
 
 
 def profile_for(total_sec: float) -> DurationProfile:
-    """按总时长分档。数字是产品判断，不是实验结论——回归集起来后再调。"""
+    """Bucket by total length. The numbers are product judgment, not experimental
+    results — retune once the regression set exists."""
     total_sec = max(0.0, float(total_sec))
     if total_sec < 8 * 60:
         return DurationProfile(
@@ -110,7 +115,7 @@ def profile_for(total_sec: float) -> DurationProfile:
             min_clip_sec=45, target_clip_sec=(60, 180), max_clip_sec=300,
             topics_hint=(4, 10), min_keep=3, max_clips=10,
         )
-    # 长视频：保持原有播客口径，但上限收紧到 8 分钟
+    # Long videos: keep the original podcast buckets, but cap at 8 minutes
     hours = total_sec / 3600
     return DurationProfile(
         tier="long", total_sec=total_sec,
@@ -141,12 +146,12 @@ def load_profile(metadata_dir: Path) -> Optional[DurationProfile]:
         d["topics_hint"] = tuple(d["topics_hint"])
         return DurationProfile(**d)
     except Exception as e:  # noqa: BLE001
-        logger.warning(f"读取 {PROFILE_FILE} 失败: {e}")
+        logger.warning(f"Failed to read {PROFILE_FILE}: {e}")
         return None
 
 
 def excerpt_between(srt_entries: Sequence[Dict[str, Any]], start: float, end: float, max_chars: int = 600) -> str:
-    """截取时间范围内的转写原文，给评分 / 标题用。"""
+    """Slice the source transcript between two timestamps, for scoring / titles."""
     parts: List[str] = []
     for e in srt_entries:
         try:
@@ -161,7 +166,7 @@ def excerpt_between(srt_entries: Sequence[Dict[str, Any]], start: float, end: fl
 
 
 def load_srt_chunks(metadata_dir: Path) -> List[Dict[str, Any]]:
-    """step1 落盘的 SRT 块拼回完整 cue 列表（按块序号）。"""
+    """Reassemble the full cue list from the SRT chunks step1 persisted (by chunk order)."""
     chunks_dir = Path(metadata_dir) / "step1_srt_chunks"
     if not chunks_dir.exists():
         return []
@@ -171,7 +176,7 @@ def load_srt_chunks(metadata_dir: Path) -> List[Dict[str, Any]]:
         try:
             entries.extend(json.loads(f.read_text(encoding="utf-8")))
         except Exception as e:  # noqa: BLE001
-            logger.warning(f"读取 {f} 失败: {e}")
+            logger.warning(f"Failed to read {f}: {e}")
     return entries
 
 
@@ -198,7 +203,8 @@ def _cues(srt_entries: Sequence[Dict[str, Any]]) -> List[_Cue]:
 
 
 def _snap_start(sec: float, cues: List[_Cue], window: float) -> Tuple[float, int]:
-    """吸附到最近 cue 的 start；窗口内没有则取包含该时刻（或其后第一条）的 cue。返回 (时间, cue 下标)。"""
+    """Snap to the nearest cue start; with nothing in-window, take the cue containing
+    the timestamp (or the first one after it). Returns (time, cue index)."""
     if not cues:
         return sec, -1
     best_i, best_d = -1, float("inf")
@@ -235,7 +241,7 @@ def _snap_end(sec: float, cues: List[_Cue], window: float) -> Tuple[float, int]:
 
 
 def _extend_to_min(start: float, end_i: int, cues: List[_Cue], min_sec: float, limit: float) -> Tuple[float, int]:
-    """沿 cue 向后延长，直到时长 ≥ min_sec 或撞到 limit（下一段起点 / 视频末尾）。"""
+    """Extend forward along cues until duration ≥ min_sec or hitting limit (next segment start / video end)."""
     i = end_i
     end = cues[i].end if 0 <= i < len(cues) else start
     while end - start < min_sec and i + 1 < len(cues) and cues[i + 1].end <= limit + 1e-6:
@@ -256,10 +262,10 @@ def _trim_to_max(start: float, end_i: int, cues: List[_Cue], max_sec: float) -> 
 def refine_timeline(items: Sequence[Dict[str, Any]], srt_entries: Sequence[Dict[str, Any]],
                     profile: Optional[DurationProfile] = None) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """
-    对 step2 的时间区间做程序化校正。返回 (校正后的列表, 质量报告)。
+    Programmatically correct step2 time ranges. Returns (corrected list, quality report).
 
-    每条 item 需要 start_time / end_time（SRT 格式），其余字段原样保留；会补 `duration_sec`、
-    `refine` 字段（原始区间与做过的操作）。
+    Each item needs start_time / end_time (SRT format); all other fields pass through;
+    `duration_sec` and a `refine` field (original range plus operations applied) are added.
     """
     cues = _cues(srt_entries)
     if profile is None:
@@ -276,17 +282,17 @@ def refine_timeline(items: Sequence[Dict[str, Any]], srt_entries: Sequence[Dict[
         "trimmed": 0,
     }
 
-    # 1) 解析 + 吸附
+    # 1) Parse + snap
     parsed: List[Dict[str, Any]] = []
     for raw in items:
         it = dict(raw)
         try:
             s0, e0 = to_seconds(it["start_time"]), to_seconds(it["end_time"])
         except (KeyError, ValueError, TypeError):
-            report["dropped"].append({"outline": _title(it), "reason": "时间格式无效"})
+            report["dropped"].append({"outline": _title(it), "reason": "invalid time format"})
             continue
         if e0 <= s0:
-            report["dropped"].append({"outline": _title(it), "reason": "结束早于开始"})
+            report["dropped"].append({"outline": _title(it), "reason": "end before start"})
             continue
         ops: List[str] = []
         if cues:
@@ -306,7 +312,7 @@ def refine_timeline(items: Sequence[Dict[str, Any]], srt_entries: Sequence[Dict[
 
     parsed.sort(key=lambda x: (x["_s"], x["_e"]))
 
-    # 2) 去重 / 合并重叠
+    # 2) Dedupe / merge overlaps
     merged: List[Dict[str, Any]] = []
     for it in parsed:
         if merged:
@@ -315,21 +321,21 @@ def refine_timeline(items: Sequence[Dict[str, Any]], srt_entries: Sequence[Dict[
             shorter = max(1e-6, min(prev["_e"] - prev["_s"], it["_e"] - it["_s"]))
             if overlap > 0 and overlap / shorter >= profile.overlap_merge_ratio:
                 _merge_into(prev, it)
-                report["merged"].append({"kept": _title(prev), "absorbed": _title(it), "reason": f"重叠 {overlap:.1f}s"})
+                report["merged"].append({"kept": _title(prev), "absorbed": _title(it), "reason": f"overlap {overlap:.1f}s"})
                 continue
             if overlap > 0 and cues:
-                # 小重叠：后者起点推到前者终点之后的第一条 cue
+                # Small overlap: push the later start to the first cue after the previous end
                 ni = prev["_ei"] + 1
                 if ni < len(cues) and cues[ni].start < it["_e"]:
                     it["_s"], it["_si"] = cues[ni].start, ni
                     it["_ops"].append("shift_start")
                 else:
                     _merge_into(prev, it)
-                    report["merged"].append({"kept": _title(prev), "absorbed": _title(it), "reason": "重叠且无法后移"})
+                    report["merged"].append({"kept": _title(prev), "absorbed": _title(it), "reason": "overlapping and cannot shift later"})
                     continue
         merged.append(it)
 
-    # 3) 时长下限 / 上限（在 cue 边界上）
+    # 3) Duration floor / ceiling (on cue boundaries)
     if cues:
         for idx, it in enumerate(merged):
             limit = merged[idx + 1]["_s"] if idx + 1 < len(merged) else video_end
@@ -348,7 +354,7 @@ def refine_timeline(items: Sequence[Dict[str, Any]], srt_entries: Sequence[Dict[
                     it["_ops"].append("trim")
                     report["trimmed"] += 1
 
-        # 4) 仍然太短：与相邻段合并（间隔小）或丢弃
+        # 4) Still too short: merge into a neighbor (small gap) or drop
         result: List[Dict[str, Any]] = []
         for it in merged:
             if it["_e"] - it["_s"] >= profile.min_clip_sec:
@@ -357,12 +363,12 @@ def refine_timeline(items: Sequence[Dict[str, Any]], srt_entries: Sequence[Dict[
             if result and it["_s"] - result[-1]["_e"] <= profile.merge_gap_sec \
                     and (it["_e"] - result[-1]["_s"]) <= profile.max_clip_sec:
                 _merge_into(result[-1], it)
-                report["merged"].append({"kept": _title(result[-1]), "absorbed": _title(it), "reason": "过短，并入前一段"})
+                report["merged"].append({"kept": _title(result[-1]), "absorbed": _title(it), "reason": "too short, folded into previous segment"})
             else:
-                report["dropped"].append({"outline": _title(it), "reason": f"过短（{it['_e'] - it['_s']:.0f}s < {profile.min_clip_sec:.0f}s）且无法合并"})
+                report["dropped"].append({"outline": _title(it), "reason": f"too short ({it['_e'] - it['_s']:.0f}s < {profile.min_clip_sec:.0f}s) and cannot merge"})
         merged = result
 
-    # 5) 收尾：写回字段、重新编号
+    # 5) Finish: write fields back, renumber
     out: List[Dict[str, Any]] = []
     durations: List[float] = []
     for i, it in enumerate(merged, 1):
@@ -435,8 +441,9 @@ def save_report(report: Dict[str, Any], metadata_dir: Path) -> Path:
 def align_scores(clips: Sequence[Dict[str, Any]], llm_results: Any,
                  default_score: float = 0.5) -> Tuple[List[Dict[str, Any]], Dict[str, int]]:
     """
-    把 LLM 的评分结果合并回 clips。数量一致按序对齐；不一致按 outline 文本对齐；
-    对不上的给 default_score + 「未评分（自动兜底）」。返回 (clips, {matched, fallback})。
+    Merge the LLM scores back into clips. Same counts → align in order; mismatched
+    counts → align by outline text; unmatched clips get default_score plus an
+    "unscored (auto fallback)" note. Returns (clips, {matched, fallback}).
     """
     stats = {"matched": 0, "fallback": 0}
     results = llm_results if isinstance(llm_results, list) else []
@@ -458,7 +465,7 @@ def align_scores(clips: Sequence[Dict[str, Any]], llm_results: Any,
         score = _to_score(r.get("final_score")) if r else None
         if score is None:
             c["final_score"] = default_score
-            c["recommend_reason"] = (r or {}).get("recommend_reason") or "未评分（自动兜底）"
+            c["recommend_reason"] = (r or {}).get("recommend_reason") or "Unscored (auto fallback)"
             c["score_source"] = "fallback"
             stats["fallback"] += 1
         else:
@@ -479,7 +486,7 @@ def _to_score(v: Any) -> Optional[float]:
         f = float(v)
     except (TypeError, ValueError):
         return None
-    if f > 1.0:  # 有的模型会给 0–10 / 0–100
+    if f > 1.0:  # some models score 0-10 / 0-100
         f = f / 10 if f <= 10 else f / 100
     return round(max(0.0, min(1.0, f)), 2)
 
@@ -487,8 +494,9 @@ def _to_score(v: Any) -> Optional[float]:
 def select_clips(scored: Sequence[Dict[str, Any]], threshold: float,
                  profile: Optional[DurationProfile] = None) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     """
-    阈值之上全留；不足 min_keep 按分补齐（标 selected_by=fallback）；超过 max_clips 按分截断。
-    返回顺序按 id（时间序）。
+    Keep everything above threshold; top up to min_keep by score when short
+    (marked selected_by=fallback); truncate past max_clips by score.
+    Returned order is by id (time order).
     """
     min_keep = profile.min_keep if profile else 2
     max_clips = profile.max_clips if profile else 12

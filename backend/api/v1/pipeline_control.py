@@ -1,6 +1,6 @@
 """
-流水线控制API
-提供手动启动、停止和查询流水线状态的功能
+ENAPI
+ENstart、stopENstatusEN
 """
 
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
@@ -25,30 +25,30 @@ async def start_pipeline(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """手动启动项目流水线"""
+    """ENstartprojectEN"""
     try:
-        # 检查项目是否存在
+        # checkprojectEN
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
             raise HTTPException(status_code=404, detail="Project not found")
         
-        # 检查项目状态
+        # checkprojectstatus
         if project.status == ProjectStatus.PROCESSING:
-            return {"status": "skipped", "message": "项目已在处理中"}
+            return {"status": "skipped", "message": "projectENprocessing"}
         
         if project.status == ProjectStatus.COMPLETED:
-            return {"status": "skipped", "message": "项目已完成"}
+            return {"status": "skipped", "message": "projectcompleted"}
         
-        # 检查是否有运行中的任务
+        # checkENrunENtask
         running_task = db.query(Task).filter(
             Task.project_id == project_id,
             Task.status.in_([TaskStatus.PENDING, TaskStatus.RUNNING])
         ).first()
         
         if running_task and running_task.status == TaskStatus.RUNNING:
-            return {"status": "skipped", "message": "项目已有运行中的任务"}
+            return {"status": "skipped", "message": "projectENrunENtask"}
         
-        # 在后台启动流水线
+        # ENstartEN
         background_tasks.add_task(
             auto_pipeline_service.auto_start_pipeline,
             project_id
@@ -56,51 +56,51 @@ async def start_pipeline(
         
         return {
             "status": "started",
-            "message": "流水线启动任务已提交",
+            "message": "ENstarttaskEN",
             "project_id": project_id
         }
         
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"启动流水线失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"startENfailed: {str(e)}")
 
 @router.post("/stop/{project_id}")
 async def stop_pipeline(project_id: str, db: Session = Depends(get_db)):
-    """停止项目流水线"""
+    """stopprojectEN"""
     try:
-        # 检查项目是否存在
+        # checkprojectEN
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
             raise HTTPException(status_code=404, detail="Project not found")
         
-        # 查找运行中的任务
+        # ENrunENtask
         running_tasks = db.query(Task).filter(
             Task.project_id == project_id,
             Task.status.in_([TaskStatus.PENDING, TaskStatus.RUNNING])
         ).all()
         
         if not running_tasks:
-            return {"status": "skipped", "message": "没有运行中的任务"}
+            return {"status": "skipped", "message": "ENrunENtask"}
         
-        # 停止所有运行中的任务
+        # stopallrunENtask
         stopped_count = 0
         for task in running_tasks:
             task.status = TaskStatus.CANCELLED
             task.updated_at = datetime.utcnow()
             
-            # 通过进度更新服务通知任务停止
+            # throughprogressupdateserviceENtaskstop
             try:
                 await progress_update_service.complete_task(
                     task_id=task.id,
-                    error="任务被手动停止"
+                    error="taskENstop"
                 )
             except Exception as e:
-                logger.warning(f"通知任务停止失败: {e}")
+                logger.warning(f"ENtaskstopfailed: {e}")
             
             stopped_count += 1
         
-        # 更新项目状态
+        # updateprojectstatus
         project.status = ProjectStatus.PENDING
         project.updated_at = datetime.utcnow()
         
@@ -108,7 +108,7 @@ async def stop_pipeline(project_id: str, db: Session = Depends(get_db)):
         
         return {
             "status": "stopped",
-            "message": f"已停止 {stopped_count} 个任务",
+            "message": f"ENstop {stopped_count} ENtask",
             "project_id": project_id,
             "stopped_tasks": stopped_count
         }
@@ -116,7 +116,7 @@ async def stop_pipeline(project_id: str, db: Session = Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"停止流水线失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"stopENfailed: {str(e)}")
 
 @router.post("/restart/{project_id}")
 async def restart_pipeline(
@@ -124,42 +124,42 @@ async def restart_pipeline(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """重启项目流水线"""
+    """restartprojectEN"""
     try:
-        # 先停止现有流水线
+        # ENstopEN
         stop_result = await stop_pipeline(project_id, db)
         
-        # 等待一下确保停止完成
+        # ENstopEN
         import time
         time.sleep(2)
         
-        # 重新启动流水线
+        # ENstartEN
         start_result = await start_pipeline(project_id, background_tasks, db)
         
         return {
             "status": "restarted",
-            "message": "流水线已重启",
+            "message": "ENrestart",
             "project_id": project_id,
             "stop_result": stop_result,
             "start_result": start_result
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"重启流水线失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"restartENfailed: {str(e)}")
 
 @router.get("/status/{project_id}")
 async def get_pipeline_status(project_id: str, db: Session = Depends(get_db)):
-    """获取项目流水线状态"""
+    """fetchprojectENstatus"""
     try:
-        # 检查项目是否存在
+        # checkprojectEN
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
             raise HTTPException(status_code=404, detail="Project not found")
         
-        # 获取项目任务
+        # fetchprojecttask
         tasks = db.query(Task).filter(Task.project_id == project_id).all()
         
-        # 获取实时进度信息
+        # fetchENprogressEN
         task_statuses = []
         for task in tasks:
             realtime_progress = progress_update_service.get_task_progress(task.id)
@@ -198,13 +198,13 @@ async def get_pipeline_status(project_id: str, db: Session = Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取流水线状态失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchENstatusfailed: {str(e)}")
 
 @router.get("/overview")
 async def get_pipeline_overview(db: Session = Depends(get_db)):
-    """获取所有流水线概览"""
+    """fetchallEN"""
     try:
-        # 获取所有项目
+        # fetchallproject
         projects = db.query(Project).all()
         
         overview = {
@@ -217,7 +217,7 @@ async def get_pipeline_overview(db: Session = Depends(get_db)):
         }
         
         for project in projects:
-            # 获取项目任务统计
+            # fetchprojecttaskEN
             tasks = db.query(Task).filter(Task.project_id == project.id).all()
             
             project_info = {
@@ -232,7 +232,7 @@ async def get_pipeline_overview(db: Session = Depends(get_db)):
             
             overview['project_details'].append(project_info)
             
-            # 统计项目状态
+            # ENprojectstatus
             if project.status == ProjectStatus.PROCESSING:
                 overview['processing_projects'] += 1
             elif project.status == ProjectStatus.COMPLETED:
@@ -242,28 +242,28 @@ async def get_pipeline_overview(db: Session = Depends(get_db)):
             elif project.status == ProjectStatus.PENDING:
                 overview['pending_projects'] += 1
         
-        # 获取自动化服务状态
+        # fetchENservicestatus
         auto_service_status = auto_pipeline_service.get_processing_status()
         overview['auto_service'] = auto_service_status
         
         return overview
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取流水线概览失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchENfailed: {str(e)}")
 
 @router.post("/auto-start-all")
 async def auto_start_all_pending_pipelines(background_tasks: BackgroundTasks):
-    """自动启动所有等待中的流水线"""
+    """ENstartallEN"""
     try:
-        # 在后台启动所有等待中的项目
+        # ENstartallENproject
         background_tasks.add_task(
             auto_pipeline_service.auto_start_all_pending_pipelines
         )
         
         return {
             "status": "started",
-            "message": "自动启动所有等待中流水线的任务已提交"
+            "message": "ENstartallENtaskEN"
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"自动启动失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"ENstartfailed: {str(e)}")

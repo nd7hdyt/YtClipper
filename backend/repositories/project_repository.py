@@ -1,6 +1,6 @@
 """
-项目Repository
-提供项目相关的数据访问操作
+projectRepository
+ENprojectEN
 """
 
 from typing import List, Optional, Dict, Any
@@ -11,62 +11,62 @@ from .base import BaseRepository
 from ..models.project import Project, ProjectStatus, ProjectType
 
 class ProjectRepository(BaseRepository[Project]):
-    """项目Repository类"""
+    """projectRepositoryEN"""
     
     def __init__(self, db: Session):
         super().__init__(Project, db)
     
     def get_by_status(self, status: ProjectStatus) -> List[Project]:
         """
-        根据状态获取项目列表
+        ENstatusfetchprojectEN
         
         Args:
-            status: 项目状态
+            status: projectstatus
             
         Returns:
-            项目列表
+            projectEN
         """
         return self.find_by(status=status)
     
     def get_by_category(self, category: ProjectType) -> List[Project]:
         """
-        根据项目类型获取项目列表
+        ENprojectENfetchprojectEN
         
         Args:
-            category: 项目类型
+            category: projectEN
             
         Returns:
-            项目列表
+            projectEN
         """
         return self.find_by(project_type=category)
     
     def get_recent_projects(self, limit: int = 10) -> List[Project]:
         """
-        获取最近创建的项目
+        fetchENcreateENproject
         
         Args:
-            limit: 返回数量限制
+            limit: returnEN
             
         Returns:
-            最近的项目列表
+            ENprojectEN
         """
         return self.db.query(self.model).order_by(
             desc(self.model.created_at)
         ).limit(limit).all()
     
     def create_project(self, project_data: Dict[str, Any]) -> Project:
-        """创建项目记录（分离存储模式）"""
+        """createprojectEN（EN）"""
         from ..services.storage_service import StorageService
         import uuid
         
-        # 生成项目ID（如果没有提供）
+        # generateprojectID（ifEN）
         if "id" not in project_data:
             project_data["id"] = str(uuid.uuid4())
         
-        # 初始化存储服务
+        # initializeENservice
         storage_service = StorageService(project_data["id"])
         
-        # 创建项目记录
+        # createprojectEN
         project = Project(
             id=project_data["id"],
             name=project_data["name"],
@@ -86,7 +86,7 @@ class ProjectRepository(BaseRepository[Project]):
         return project
     
     def get_project_file_paths(self, project_id: str) -> Dict[str, Optional[Path]]:
-        """获取项目文件路径"""
+        """fetchprojectfilepath"""
         project = self.get_by_id(project_id)
         if not project:
             return {}
@@ -97,7 +97,7 @@ class ProjectRepository(BaseRepository[Project]):
         }
     
     def update_project_file_path(self, project_id: str, file_type: str, file_path: str) -> bool:
-        """更新项目文件路径"""
+        """updateprojectfilepath"""
         project = self.get_by_id(project_id)
         if not project:
             return False
@@ -113,7 +113,7 @@ class ProjectRepository(BaseRepository[Project]):
         return True
     
     def get_project_storage_info(self, project_id: str) -> Dict[str, Any]:
-        """获取项目存储信息"""
+        """fetchprojectEN"""
         from ..services.storage_service import StorageService
         
         project = self.get_by_id(project_id)
@@ -134,40 +134,40 @@ class ProjectRepository(BaseRepository[Project]):
     
     def get_processing_projects(self) -> List[Project]:
         """
-        获取正在处理的项目
+        fetchcurrentlyprocessingENproject
         
         Returns:
-            正在处理的项目列表
+            currentlyprocessingENprojectEN
         """
         return self.find_by(status=ProjectStatus.PROCESSING)
     
     def get_completed_projects(self) -> List[Project]:
         """
-        获取已完成的项目
+        fetchcompletedENproject
         
         Returns:
-            已完成的项目列表
+            completedENprojectEN
         """
         return self.find_by(status=ProjectStatus.COMPLETED)
     
     def get_error_projects(self) -> List[Project]:
         """
-        获取出错的项目
+        fetchENproject
         
         Returns:
-            出错的项目列表
+            ENprojectEN
         """
         return self.find_by(status=ProjectStatus.FAILED)
     
     def search_projects(self, keyword: str) -> List[Project]:
         """
-        搜索项目
+        ENproject
         
         Args:
-            keyword: 搜索关键词
+            keyword: EN
             
         Returns:
-            匹配的项目列表
+            ENprojectEN
         """
         return self.db.query(self.model).filter(
             self.model.name.contains(keyword) | 
@@ -176,28 +176,28 @@ class ProjectRepository(BaseRepository[Project]):
     
     def get_projects_with_clips_count(self, skip: int = 0, limit: int = 100) -> List[Project]:
         """
-        获取项目列表，包含切片数量
+        fetchprojectEN，ENclipEN
         
         Args:
-            skip: 跳过的记录数
-            limit: 返回的记录数限制
+            skip: EN
+            limit: returnEN
             
         Returns:
-            项目列表
+            projectEN
         """
         return self.db.query(self.model).options(
-            # 这里可以添加预加载选项，减少N+1查询问题
+            # ENcanENloadEN，ENN+1EN
         ).offset(skip).limit(limit).all()
     
     def get_project_with_details(self, project_id: str) -> Optional[Project]:
         """
-        获取项目详情，包含关联的切片和合集
+        fetchprojectEN，ENclipENcollection
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            项目实例或None
+            projectENNone
         """
         return self.db.query(self.model).filter(
             self.model.id == project_id
@@ -205,27 +205,27 @@ class ProjectRepository(BaseRepository[Project]):
     
     def update_project_status(self, project_id: str, status: ProjectStatus) -> Optional[Project]:
         """
-        更新项目状态
+        updateprojectstatus
         
         Args:
-            project_id: 项目ID
-            status: 新状态
+            project_id: projectID
+            status: ENstatus
             
         Returns:
-            更新后的项目实例或None
+            updateENprojectENNone
         """
         return self.update(project_id, status=status)
     
     def get_projects_by_date_range(self, start_date, end_date) -> List[Project]:
         """
-        根据日期范围获取项目
+        ENfetchproject
         
         Args:
-            start_date: 开始日期
-            end_date: 结束日期
+            start_date: startEN
+            end_date: endEN
             
         Returns:
-            项目列表
+            projectEN
         """
         return self.db.query(self.model).filter(
             self.model.created_at >= start_date,
@@ -234,10 +234,10 @@ class ProjectRepository(BaseRepository[Project]):
     
     def get_project_statistics(self) -> dict:
         """
-        获取项目统计信息
+        fetchprojectEN
         
         Returns:
-            统计信息字典
+            EN
         """
         total_projects = self.count()
         processing_projects = len(self.get_processing_projects())

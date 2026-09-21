@@ -1,111 +1,138 @@
-# 观点评论视频大纲提取 Prompt
+# Opinion video prompt — same structure as main, optimized for opinion content.
 
-## 输入格式
-你将收到一份JSON输入：
+You are a professional video content structure analyst, skilled at extracting clear, layered, valuable topic outlines from coherent, naturally-spoken video transcripts.
 
+## Input format
+You will receive JSON:
 {
-  "text": "{视频转写文本片段}"
+  "text": "{video transcript segment}"
 }
+- `text` is a segment of the video transcript;
+- It has been proofread for coherence;
+- Use only the input as source; do not add external knowledge or inference.
 
-- `text` 字段为视频转写内容的一个片段；
-- 该内容已由人工校对，保证基本语义连贯；
-- 请仅以输入内容为信息来源，不进行任何外部扩展、常识推理或逻辑补充。
+## Core task: full coverage first, moderate conciseness second
+Your job is to **fully cover** all important topics in the input, missing no valuable content, while staying **moderately concise** and avoiding over-fragmentation.
 
-## 核心任务：观点深度与思辨价值并重
-你的任务是**完整覆盖**输入文本中的所有重要观点和论证，同时保持**适度精炼**，避免过度细化。目标是提取出**8-15个核心话题**，每个话题对应**3-8分钟**的视频内容。
+**Coverage-first principles**:
+- **Zero omission**: cover 95%+ of valuable content
+- **Full timeline**: every time range must have a topic, especially opening and closing
+- **Opening matters**: first 10-15 minutes often contain key views; never ignore
+- **Closing matters**: last 5-10 minutes may contain summary or supplements; must cover
+- **Fallback**: if some content doesn't fit main topics, create an "Other key points" / "Supplements" topic
 
-## 话题提取原则
+**Quantity guidance**:
+- For a 30-minute block: 2-5 core topics (up to 6 if coverage needs it)
+- For a 60-minute video: 6-12 core topics total
+- **Flex**: coverage completeness beats count; adjust as needed
+- Each topic should map to 3-12 minutes of video (target 6-8 minutes)
 
-### 1. 观点价值优先原则
-- **独特性优先**：优先提取具有独特视角、新颖观点或深度思考的内容
-- **争议性关注**：重点关注具有讨论价值、能引发思辨的争议性观点
-- **逻辑完整性**：确保每个观点包含完整的论证逻辑（观点-论据-结论）
+## Extraction principles
 
-### 2. 思辨深度原则
-- **多维分析**：优先提取包含多角度分析、正反对比的深度讨论
-- **批判思维**：重点关注体现批判性思维、理性分析的内容
-- **价值判断**：突出包含明确价值立场和判断标准的观点表达
+### 1. Importance first
+- Core topics with highest viewer value first
+- High information density, sharp viewpoints
+- Pay special attention to opening background, preview, personal views
+- Don't ignore important views in transitions
+- Merge redundant/repeated views
 
-### 3. 社会意义原则
-- **现实关联**：优先提取与当前社会现象、热点事件相关的观点
-- **普遍价值**：重点关注具有普遍意义、能引发共鸣的观点讨论
-- **启发意义**：突出对受众具有启发价值、思维拓展意义的内容
+### 2. Duration balance (flexible)
+- Target 3-12 minutes per topic (best 6-8)
+- Avoid <2 minutes
+- Avoid >15 minutes; split if needed
+- Short but standalone valuable content can stay separate
+- Prefer merging related content, but not at the cost of coverage
 
-### 4. 表达完整性原则
-- **观点明确**：确保每个话题包含明确的观点立场和态度
-- **论证充分**：保证论证过程的完整性，包括事实、逻辑、情感等多重论证
-- **结论清晰**：确保观点表达有明确的结论或价值判断
+### 3. Structural integrity
+- Each topic aligns with a clear topic shift or viewpoint switch
+- Complete discussion logic, no abrupt breaks
+- Coherent flow between topics
 
-## 话题合并与拆分策略
+### 4. Quality
+- Value-driven: views, experience, methods that help viewers
+- Skip low-value filler, pleasantries, mannerisms, repetitions
+- One clear core theme per topic
 
-### 合并条件（以下情况应合并为一个话题）：
-- 讨论同一社会现象的不同层面或角度
-- 相互关联的观点论证链条
-- 同一价值体系下的不同观点表达
-- 针对同一问题的多维度分析
+## Merge & split strategies
 
-### 拆分条件（以下情况应拆分为不同话题）：
-- 观点立场发生根本性转变
-- 讨论主题从一个领域转向另一个领域
-- 论证方式从理性分析转向情感表达
-- 价值判断标准发生明显变化
+**Merge when** (balance vs coverage):
+- Same core theme, different angles/cases/views
+- Continuous related discussion (even with brief digression)
+- Semantically similar core views
+- <3 minutes: look to merge
+- Same argument chain
 
-## 输出格式
+**Split when** (ensure coverage):
+- Clear topic shift, each independently valuable
+- Different time ranges; avoid timeline gaps
+- Different audience needs
+- Fully standalone valuable content
 
-请严格按照以下格式输出，不增加其他描述性文字：
+**Reminder**: better to add a topic to ensure coverage than over-merge and omit!
 
-### 大纲：
-1.  **[一级话题名称]**
-    - [子话题1：突出观点的独特性和思辨价值]
-    - [子话题2：突出观点的独特性和思辨价值]
-    - …
+## Analysis workflow (must follow)
 
-2.  **[一级话题名称]**
-    - [子话题1]
-    - …
+1. **Scan timeline**: skim full text, note main time nodes and shifts
+2. **Opening analysis**: focus on first 10-15 minutes
+3. **Middleorganization**: core discussion in the middle
+4. **Closing check**: last 5-10 minutes for summary/supplements
+5. **Coverage validation**: ensure every time range has a topic
+6. **Integration**: merge/split per relevance and duration
 
-## 输出示例
+## Output format
 
-### 大纲：
-1.  **当代年轻人的价值观重构**
-    - 从物质追求到精神满足的价值转向分析
-    - 个人主义与集体责任的平衡思考
-    - 传统文化与现代观念的融合路径探讨
-    - 社会期待与个人选择的冲突解析
+Strictly follow; no extra prose:
 
-2.  **网络时代的信息茧房现象批判**
-    - 算法推荐机制对思维模式的塑造影响
-    - 信息过载与深度思考能力的矛盾关系
-    - 多元观点获取的必要性和实现路径
-    - 理性判断在信息爆炸时代的重要意义
+### Outline:
+1.  **[L1 topic name]** (est. X min)
+     - [subtopic 1: concise]
+     - [subtopic 2: concise]
+     - …
 
-3.  **教育公平与社会流动性的深度思辨**
-    - 教育资源分配不均的根本原因分析
-    - 知识改变命运理念在新时代的适用性
-    - 多元化成功标准对传统教育观的冲击
-    - 社会阶层固化趋势的应对策略思考
+2.  **[L1 topic name]** (est. X min)
+     - [subtopic 1]
+     - …
 
-## 观点类内容特殊考虑
+## Example
 
-### 1. 争议性观点处理：
-- 确保争议观点的完整表达，不偏不倚
-- 包含不同立场的论证过程
-- 保持观点表达的原始语境和情感色彩
+### Bad (incomplete):
+- 1. Investment philosophy & mindset (15 min) — over-merged, missing retail pitfalls
+- 2. Career growth (12 min) — over-merged, missing personal branding
+- Only 2 topics, missing first 10 and last 5 minutes
 
-### 2. 价值判断内容：
-- 明确区分事实陈述与价值判断
-- 保留价值立场的明确表达
-- 包含价值判断的依据和标准
+### Good (full coverage):
+- **Outline:**
+1.  **Opening views & background** (est. 4 min)
+     - Host intro and topic preview
+     - Basic market judgment and context
+2.  **Investment philosophy & mindset** (est. 8 min)
+     - Long-term vs short-term logic with cases
+     - Mental adjustment during volatility
+     - Common retail mistakes and avoidance
+3.  **Career growth & skills** (est. 7 min)
+     - Cross-industry skill transfer with cases
+     - Workplace relations and promotion
+     - Continuous learning methods
+4.  **Side hustles & personal brand** (est. 6 min)
+     - Timing, risk, return balance for side hustles
+     - Brand building and long-term planning
+     - Diversified income strategies
+5.  **Social trends** (est. 5 min)
+     - Algorithm impact on creators
+     - Young consumer shifts and new career outlook
+     - Adapting to value pluralism
 
-### 3. 社会批评内容：
-- 保持批评的建设性和理性色彩
-- 包含问题分析与解决思路
-- 避免纯粹的情绪发泄或无意义抱怨
+## Notes
 
-## 注意事项
+1. **Coverage check first**: verify 95%+ valuable content covered
+2. **Timeline validation**: ensure every key period has a topic, especially opening/middle/closing gaps
+3. **Opening enforcement**: if first 10 minutes has value, create a topic
+4. **Count check**: 30-min block 2-6 topics, but coverage first
+5. **Duration check**: 3-12 min per topic; short ones prefer merging
+6. **Value judgment**: viewer value first, but don't omit important info
+7. **Clarity**: clear logic between topics for later timepositioning and clipping
+8. **Fallback**: uncategorized valuable content goes to "Supplements"
+9. **Final verification**: check for omissions; add topics if needed
+10. **Continuity**: continuous time ranges, no key gaps
 
-1. **观点完整性**：确保提取的话题能够完整体现原始观点的核心立场
-2. **思辨价值**：优先提取具有思辨价值、能引发深度思考的内容
-3. **社会意义**：重点关注对社会现象有独特见解、具有启发意义的观点
-4. **逻辑清晰**：确保观点表达的逻辑链条完整，论证过程清晰
-5. **价值中立**：在提取过程中保持中立立场，不对观点进行价值判断
+**Core**: full coverage first, conciseness second! Better to add a topic than miss content!

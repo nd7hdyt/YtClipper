@@ -1,4 +1,4 @@
-"""OpenAI 兼容接口（自定义 base_url）与 provider 持久化 / 热重载的回归测试"""
+"""OpenAI EN（EN base_url）EN provider EN / EN"""
 import asyncio
 import json
 import os
@@ -50,7 +50,7 @@ def test_openai_provider_uses_custom_base_url_and_placeholder_key(fake_openai):
     assert provider.base_url == "http://localhost:11434/v1"
     assert provider.is_custom_endpoint is True
     created = dict(fake_openai.created[-1])
-    # 本地地址会额外带一个不走系统代理的 httpx.Client（见 is_local_url）
+    # EN httpx.Client（EN is_local_url）
     http_client = created.pop("http_client")
     assert http_client.trust_env is False
     assert created == {
@@ -91,7 +91,7 @@ def manager_env(monkeypatch, tmp_path, fake_openai):
                  "API_DASHSCOPE_API_KEY", "DASHSCOPE_API_KEY"):
         monkeypatch.delenv(name, raising=False)
 
-    # 不让配置同步服务碰真实用户目录
+    # EN
     from backend.core import llm_manager as manager_module
     monkeypatch.setattr(manager_module.config_sync_service, "is_sync_needed", lambda: False)
     return tmp_path / "settings.json"
@@ -131,13 +131,13 @@ def test_manager_allows_keyless_custom_endpoint(manager_env):
 def test_manager_reloads_when_settings_file_changes(manager_env):
     from backend.core.llm_manager import LLMManager
 
-    _write_client_settings(manager_env)  # 没有 key -> 未配置
+    _write_client_settings(manager_env)  # EN key -> EN
     manager = LLMManager(settings_file=manager_env)
     assert manager.get_current_provider_info()["available"] is False
 
     _write_client_settings(manager_env, api_provider="openai", api_base_url="http://localhost:11434/v1",
                            api_model="qwen2.5:7b")
-    # 同一秒内写两次 mtime 可能相同，强制改一下
+    # EN mtime EN，EN
     os.utime(manager_env, (manager_env.stat().st_atime, manager_env.stat().st_mtime + 5))
 
     info = manager.get_current_provider_info()
@@ -154,7 +154,7 @@ def test_manager_env_fallbacks_for_docker(manager_env, monkeypatch):
     monkeypatch.setenv("API_OPENAI_API_KEY", "zhipu-key-1234567890")
     monkeypatch.setenv("API_MODEL_NAME", "glm-4-flash")
 
-    manager = LLMManager(settings_file=manager_env)  # 文件不存在
+    manager = LLMManager(settings_file=manager_env)  # EN
 
     info = manager.get_current_provider_info()
     assert info == {
@@ -162,13 +162,13 @@ def test_manager_env_fallbacks_for_docker(manager_env, monkeypatch):
         "backend_provider": "openai",
         "model": "glm-4-flash",
         "available": True,
-        "display_name": "OpenAI / 兼容接口",
+        "display_name": "OpenAI / EN",
         "base_url": "https://open.bigmodel.cn/api/paas/v4",
     }
 
 
 class _ChatCapableClient(_FakeOpenAIClient):
-    """带 chat.completions.create 的假客户端，记录请求模型名"""
+    """EN chat.completions.create EN，EN"""
     last_model = None
 
     def __init__(self, **kwargs):
@@ -210,7 +210,7 @@ def test_test_api_endpoint_still_validates_official_key(monkeypatch, fake_openai
     result = asyncio.run(settings_api.test_api_connection(request))
 
     assert result["success"] is False
-    assert "过短" in result["error"]
+    assert "EN" in result["error"]
 
 
 def test_settings_file_provider_wins_over_env(manager_env, monkeypatch):

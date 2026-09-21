@@ -1,31 +1,31 @@
 #!/usr/bin/env python3
 """
-安装多模型提供商依赖脚本
+InstallENDependenciesScript
 """
 import subprocess
 import sys
 import os
 
 def install_package(package):
-    """安装Python包"""
+    """InstallPythonEN"""
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-        print(f"✅ 成功安装 {package}")
+        print(f"✅ SuccessInstall {package}")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"❌ 安装 {package} 失败: {e}")
+        print(f"❌ Install {package} Failed: {e}")
         return False
 
 def main():
-    """主函数"""
-    print("🚀 开始安装多模型提供商依赖...")
+    """EN"""
+    print("🚀 ENInstallENDependencies...")
     
-    # 需要安装的包
+    # NeedInstallEN
     packages = [
         "openai>=1.0.0",           # OpenAI
-        "google-genai>=1.0.0",     # Google Gemini (统一版 GenAI SDK)
-        "requests>=2.25.0",        # 硅基流动 (HTTP请求)
-        "dashscope>=1.10.0",       # 阿里通义千问 (如果还没有安装)
+        "google-genai>=1.0.0",     # Google Gemini (EN GenAI SDK)
+        "requests>=2.25.0",        # EN (HTTPPleaseEN)
+        "dashscope>=1.10.0",       # EN (IfENInstall)
     ]
     
     success_count = 0
@@ -35,18 +35,18 @@ def main():
         if install_package(package):
             success_count += 1
     
-    print(f"\n📊 安装结果: {success_count}/{total_count} 个包安装成功")
+    print(f"\n📊 InstallEN: {success_count}/{total_count} ENInstallSuccess")
     
     if success_count == total_count:
-        print("🎉 所有依赖安装完成！现在可以使用多模型提供商功能了。")
-        print("\n📝 使用说明:")
-        print("1. 启动系统: python backend/main.py")
-        print("2. 访问设置页面配置API密钥")
-        print("3. 选择您喜欢的AI模型提供商")
-        print("4. 开始使用AI自动切片功能")
+        print("🎉 AllDependenciesInstallCompleted！EN。")
+        print("\n📝 EN:")
+        print("1. StartSystem: python backend/main.py")
+        print("2. ENConfigAPIEN")
+        print("3. ENAIEN")
+        print("4. ENAIAutoEN")
     else:
-        print("⚠️  部分依赖安装失败，请检查网络连接或手动安装失败的包。")
-        print("手动安装命令:")
+        print("⚠️  ENDependenciesInstallFailed，PleaseCheckENManualInstallFailedEN。")
+        print("ManualInstallEN:")
         for package in packages:
             print(f"  pip install {package}")
 

@@ -1,6 +1,6 @@
 """
-合集模型
-定义视频合集的基本信息和组织方式
+collectionEN
+ENvideocollectionEN
 """
 
 import enum
@@ -10,133 +10,133 @@ from sqlalchemy.orm import relationship
 from .base import BaseModel
 
 class CollectionStatus(str, enum.Enum):
-    """合集状态枚举"""
-    CREATED = "created"           # 已创建
-    PROCESSING = "processing"     # 处理中
-    COMPLETED = "completed"       # 已完成
-    ERROR = "error"              # 错误
-    DELETED = "deleted"          # 已删除
+    """collectionstatusEN"""
+    CREATED = "created"           # created
+    PROCESSING = "processing"     # processing
+    COMPLETED = "completed"       # completed
+    ERROR = "error"              # error
+    DELETED = "deleted"          # deleted
 
-# 切片和合集的多对多关系表
+# clipENcollectionEN
 clip_collection = Table(
     'clip_collection',
     BaseModel.metadata,
     Column('clip_id', String(36), ForeignKey('clips.id', ondelete='CASCADE'), primary_key=True),
     Column('collection_id', String(36), ForeignKey('collections.id', ondelete='CASCADE'), primary_key=True),
-    Column('order_index', Integer, nullable=False, default=0, comment="在合集中的顺序")
+    Column('order_index', Integer, nullable=False, default=0, comment="ENcollectionEN")
 )
 
 class Collection(BaseModel):
-    """合集模型"""
+    """collectionEN"""
     
     __tablename__ = "collections"
     
-    # 基本信息
+    # EN
     name = Column(
         String(255), 
         nullable=False, 
-        comment="合集名称"
+        comment="collectionEN"
     )
     description = Column(
         Text, 
         nullable=True, 
-        comment="合集描述"
+        comment="collectiondescription"
     )
     
-    # 状态信息
+    # statusEN
     status = Column(
         Enum(CollectionStatus), 
         default=CollectionStatus.CREATED,
         nullable=False,
-        comment="合集状态"
+        comment="collectionstatus"
     )
     
-    # 主题信息
+    # EN
     theme = Column(
         String(255), 
         nullable=True, 
-        comment="合集主题"
+        comment="collectionEN"
     )
     tags = Column(
         JSON, 
         nullable=True, 
-        comment="合集标签"
+        comment="collectiontags"
     )
     
-    # 统计信息
+    # EN
     total_duration = Column(
         Integer, 
         nullable=True, 
-        comment="合集总时长（秒）"
+        comment="collectionENduration（EN）"
     )
     clips_count = Column(
         Integer, 
         default=0, 
-        comment="切片数量"
+        comment="clipEN"
     )
     
-    # 文件信息
+    # fileEN
     video_path = Column(
         String(500), 
         nullable=True, 
-        comment="合集视频文件路径"
+        comment="collectionvideofilepath"
     )
     thumbnail_path = Column(
         String(500), 
         nullable=True, 
-        comment="合集缩略图路径"
+        comment="collectionENpath"
     )
     
-    # 处理信息
+    # processingEN
     processing_result = Column(
         JSON, 
         nullable=True, 
-        comment="处理结果数据"
+        comment="processingresultEN"
     )
     
-    # 导出信息
+    # EN
     export_path = Column(
         String(500), 
         nullable=True, 
-        comment="合集导出文件路径"
+        comment="collectionENfilepath"
     )
     
-    # 元数据
+    # EN
     collection_metadata = Column(
         JSON, 
         nullable=True, 
-        comment="合集元数据（精简版，完整数据存储在文件系统）"
+        comment="collectionEN（EN，ENfilesystem）"
     )
     
-    # 添加计算属性
+    # EN
     @property
     def metadata_file_path(self) -> Optional[str]:
-        """获取完整元数据文件路径"""
+        """fetchENfilepath"""
         if self.collection_metadata and 'metadata_file' in self.collection_metadata:
             return self.collection_metadata['metadata_file']
         return None
     
     @property
     def has_full_content(self) -> bool:
-        """是否有完整内容文件"""
+        """ENfile"""
         return self.metadata_file_path is not None
     
     @property
     def clip_ids(self) -> List[str]:
-        """获取切片ID列表"""
+        """fetchclipIDEN"""
         if self.collection_metadata and 'clip_ids' in self.collection_metadata:
             return self.collection_metadata['clip_ids']
         return []
     
-    # 外键关联
+    # EN
     project_id = Column(
         String(36), 
         ForeignKey("projects.id", ondelete="CASCADE"),
         nullable=False,
-        comment="所属项目ID"
+        comment="ENprojectID"
     )
     
-    # 关联关系
+    # EN
     project = relationship(
         "Project", 
         back_populates="collections"
@@ -153,36 +153,36 @@ class Collection(BaseModel):
     
     @property
     def is_processing(self):
-        """是否正在处理"""
+        """ENcurrentlyprocessing"""
         return self.status == CollectionStatus.PROCESSING
     
     @property
     def is_completed(self):
-        """是否已完成"""
+        """ENcompleted"""
         return self.status == CollectionStatus.COMPLETED
     
     @property
     def has_error(self):
-        """是否有错误"""
+        """ENerror"""
         return self.status == CollectionStatus.ERROR
     
     def add_clip(self, clip, order_index=None):
-        """添加切片到合集"""
+        """ENclipENcollection"""
         if order_index is None:
             order_index = self.clips_count
         
-        # 使用关联表添加切片
+        # useENclip
         stmt = clip_collection.insert().values(
             clip_id=clip.id,
             collection_id=self.id,
             order_index=order_index
         )
-        # 这里需要在数据库会话中执行
+        # ENneedENdatabaseENexecute
         self.clips_count += 1
         return stmt
     
     def remove_clip(self, clip):
-        """从合集中移除切片"""
+        """ENcollectionENclip"""
         stmt = clip_collection.delete().where(
             clip_collection.c.clip_id == clip.id,
             clip_collection.c.collection_id == self.id
@@ -192,7 +192,7 @@ class Collection(BaseModel):
         return stmt
     
     def calculate_total_duration(self):
-        """计算合集总时长"""
+        """ENcollectionENduration"""
         total = 0
         for clip in self.clips:
             if clip.duration:

@@ -1,6 +1,6 @@
 """
-基础服务类
-提供通用的业务逻辑操作
+ENserviceEN
+EN
 """
 
 from typing import Generic, TypeVar, Type, Optional, List, Dict, Any

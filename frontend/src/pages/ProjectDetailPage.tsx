@@ -56,7 +56,7 @@ const ProjectDetailPage: React.FC = () => {
           ])
           const projectWithData = { ...project, clips: clips || [], collections: collections || [] }
           setCurrentProject(projectWithData)
-          // 同步更新项目列表，避免页面与列表状态漂移
+          // Keep the project list in sync to avoid drift between the page and the list
           upsertProject(projectWithData)
         } catch (err) {
           console.error('Failed to load clips/collections:', err)
@@ -67,7 +67,7 @@ const ProjectDetailPage: React.FC = () => {
       }
     } catch (err) {
       console.error('Failed to load project:', err)
-      message.error('加载项目失败')
+      message.error('Failed to load project')
     }
   }
 
@@ -87,11 +87,11 @@ const ProjectDetailPage: React.FC = () => {
     if (!id) return
     try {
       await projectApi.startProcessing(id)
-      message.success('开始处理')
+      message.success('Processing started')
       loadProcessingStatus()
     } catch (err) {
       console.error('Failed to start processing:', err)
-      message.error('启动处理失败')
+      message.error('Failed to start processing')
     }
   }
 
@@ -100,12 +100,12 @@ const ProjectDetailPage: React.FC = () => {
     setStatusLoading(true)
     try {
       await projectApi.retryProcessing(id)
-      message.success('已重新开始处理')
+      message.success('Processing restarted')
       loadProcessingStatus()
       await loadProject()
     } catch (err) {
       console.error('Failed to retry processing:', err)
-      message.error('重试失败，请稍后再试')
+      message.error('Retry failed, please try again later')
     } finally {
       setStatusLoading(false)
     }
@@ -123,10 +123,10 @@ const ProjectDetailPage: React.FC = () => {
         created_at: new Date().toISOString()
       })
       setShowCreateCollection(false)
-      message.success('合集创建成功')
+      message.success('Collection created successfully')
     } catch (err) {
       console.error('Failed to create collection:', err)
-      message.error('创建合集失败')
+      message.error('Failed to create collection')
     }
   }
 
@@ -139,10 +139,10 @@ const ProjectDetailPage: React.FC = () => {
     if (!id) return
     try {
       await removeClipFromCollection(id, collectionId, clipId)
-      message.success('切片已从合集中移除')
+      message.success('Clip removed from collection')
     } catch (err) {
       console.error('Failed to remove clip from collection:', err)
-      message.error('移除切片失败')
+      message.error('Failed to remove clip')
     }
   }
 
@@ -152,10 +152,10 @@ const ProjectDetailPage: React.FC = () => {
       await deleteCollection(id, collectionId)
       setShowCollectionDetail(false)
       setSelectedCollection(null)
-      message.success('合集已删除')
+      message.success('Collection deleted')
     } catch (err) {
       console.error('Failed to delete collection:', err)
-      message.error('删除合集失败')
+      message.error('Failed to delete collection')
     }
   }
 
@@ -163,10 +163,10 @@ const ProjectDetailPage: React.FC = () => {
     if (!id) return
     try {
       await reorderCollectionClips(id, collectionId, newClipIds)
-      message.success('合集顺序已更新')
+      message.success('Collection order updated')
     } catch (err) {
       console.error('Failed to reorder collection clips:', err)
-      message.error('更新合集顺序失败')
+      message.error('Failed to update collection order')
     }
   }
 
@@ -174,10 +174,10 @@ const ProjectDetailPage: React.FC = () => {
     if (!id) return
     try {
       await addClipToCollection(id, collectionId, clipIds)
-      message.success('切片已添加到合集')
+      message.success('Clips added to collection')
     } catch (err) {
       console.error('Failed to add clip to collection:', err)
-      message.error('添加切片失败')
+      message.error('Failed to add clips')
     }
   }
 
@@ -191,7 +191,7 @@ const ProjectDetailPage: React.FC = () => {
   if (loading) {
     return (
       <div className="ac-page" style={{ display: 'flex', justifyContent: 'center', paddingTop: 120 }}>
-        <span className="ac-btn ac-btn--text" style={{ color: 'var(--ac-muted)' }}><span className="spin" /> 加载中</span>
+        <span className="ac-btn ac-btn--text" style={{ color: 'var(--ac-muted)' }}><span className="spin" /> Loading</span>
       </div>
     )
   }
@@ -200,10 +200,10 @@ const ProjectDetailPage: React.FC = () => {
     return (
       <div className="ac-page">
         <div className="ac-empty">
-          <b>加载失败</b>
-          {error || '项目不存在'}
+          <b>Load failed</b>
+          {error || 'Project not found'}
           <div style={{ marginTop: 16 }}>
-            <Btn size="sm" onClick={() => navigate('/')}>返回首页</Btn>
+            <Btn size="sm" onClick={() => navigate('/')}>Back to Home</Btn>
           </div>
         </div>
       </div>
@@ -228,10 +228,10 @@ const ProjectDetailPage: React.FC = () => {
 
   return (
     <div className="ac-page">
-      {/* 页头：返回 · 标题 · mono 元信息 */}
+      {/* Page header: back · title · mono meta */}
       <header>
         <button className="ac-back" onClick={() => navigate('/')}>
-          <Icon.Back /> 项目
+          <Icon.Back /> Projects
         </button>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 24 }}>
           <div style={{ minWidth: 0 }}>
@@ -239,18 +239,18 @@ const ProjectDetailPage: React.FC = () => {
             <div className="ac-meta">
               {isCompleted ? (
                 <>
-                  <span><span className="ac-mono">{clips.length}</span> 切片</span>
+                  <span><span className="ac-mono">{clips.length}</span> clips</span>
                   <span className="dot" />
-                  <span><span className="ac-mono">{collections.length}</span> 合集</span>
+                  <span><span className="ac-mono">{collections.length}</span> collections</span>
                   {totalClipSec > 0 && (
                     <>
                       <span className="dot" />
-                      <span>共 <span className="ac-mono">{fmtDuration(totalClipSec)}</span></span>
+                      <span>Total <span className="ac-mono">{fmtDuration(totalClipSec)}</span></span>
                     </>
                   )}
                 </>
               ) : (
-                <span>{currentProject.status === 'pending' ? '等待处理' : isFailed ? '处理失败' : '处理中'}</span>
+                <span>{currentProject.status === 'pending' ? 'Pending' : isFailed ? 'Failed' : 'Processing'}</span>
               )}
               {currentProject.created_at && (
                 <>
@@ -261,12 +261,12 @@ const ProjectDetailPage: React.FC = () => {
             </div>
           </div>
           {currentProject.status === 'pending' && (
-            <Btn variant="cta" onClick={handleStartProcessing} loading={statusLoading}>开始处理</Btn>
+            <Btn variant="cta" onClick={handleStartProcessing} loading={statusLoading}>Start processing</Btn>
           )}
           {isFailed && (
             <div style={{ display: 'flex', gap: 8, flex: '0 0 auto' }}>
-              <Btn onClick={() => setFeedbackOpen(true)}>反馈问题</Btn>
-              <Btn variant="cta" onClick={handleRetryProcessing} loading={statusLoading}>重试</Btn>
+              <Btn onClick={() => setFeedbackOpen(true)}>Report issue</Btn>
+              <Btn variant="cta" onClick={handleRetryProcessing} loading={statusLoading}>Retry</Btn>
             </div>
           )}
         </div>
@@ -274,14 +274,14 @@ const ProjectDetailPage: React.FC = () => {
 
       {isCompleted ? (
         <>
-          {/* 合集 */}
+          {/* Collections */}
           <Section
-            title="合集"
+            title="Collections"
             count={collections.length}
-            description={collections.length > 0 ? 'AI 按主题把相关切片串成的成片，可编辑顺序与标题。' : '把几条切片串成一个主题成片。'}
+            description={collections.length > 0 ? 'AI stitches related clips into a finished video by topic; order and title are editable.' : 'Combine several clips into one themed video.'}
             right={
               <Btn size="sm" onClick={() => setShowCreateCollection(true)}>
-                <Icon.Plus size={13} /> 新建合集
+                <Icon.Plus size={13} /> New collection
               </Btn>
             }
           >
@@ -304,23 +304,23 @@ const ProjectDetailPage: React.FC = () => {
               </div>
             ) : (
               <div className="ac-empty">
-                <b>还没有合集</b>
-                从下方切片里挑几条，「新建合集」即可。
+                <b>No collections yet</b>
+                Pick a few clips below and click "New collection".
               </div>
             )}
           </Section>
 
-          {/* 切片 */}
+          {/* Clips */}
           <Section
-            title="切片"
+            title="Clips"
             count={clips.length}
             right={
               <Segmented
                 size="sm"
-                ariaLabel="排序"
+                ariaLabel="Sort"
                 value={sortBy}
                 onChange={setSortBy}
-                options={[{ value: 'score', label: '按评分' }, { value: 'time', label: '按时间' }]}
+                options={[{ value: 'score', label: 'By score' }, { value: 'time', label: 'By time' }]}
               />
             }
           >
@@ -345,10 +345,10 @@ const ProjectDetailPage: React.FC = () => {
               </div>
             ) : (
               <div className="ac-empty">
-                <b>没有切出片段</b>
-                可以在设置里调低「最低评分阈值」后重试。
+                <b>No clips produced</b>
+                You can lower the "Minimum score threshold" in settings and retry.
                 <div style={{ marginTop: 12 }}>
-                  <Btn variant="text" size="sm" onClick={() => setFeedbackOpen(true)}>觉得不该是这样？告诉我们</Btn>
+                  <Btn variant="text" size="sm" onClick={() => setFeedbackOpen(true)}>Looks wrong? Let us know</Btn>
                 </div>
               </div>
             )}
@@ -356,21 +356,21 @@ const ProjectDetailPage: React.FC = () => {
         </>
       ) : isFailed ? (
         <div className="ac-empty" style={{ marginTop: 32 }}>
-          <b>这次处理没有成功</b>
+          <b>Processing did not succeed</b>
           {currentProject.error_message ? (
             <span className="ac-mono" style={{ display: 'block', marginTop: 6, color: 'var(--ac-muted)', wordBreak: 'break-all' }}>
               {currentProject.error_message}
             </span>
           ) : (
-            '可以直接重试；如果反复失败，点「反馈问题」，运行环境与错误会自动附上。'
+            'You can retry directly; if it keeps failing, click "Report issue" and the environment and error will be attached automatically.'
           )}
         </div>
       ) : (
         <div style={{ marginTop: 32 }}>
           <ProjectTaskManager projectId={currentProject.id} projectName={currentProject.name} />
           <div className="ac-empty" style={{ marginTop: 24 }}>
-            <b>还在处理中</b>
-            完成后这里会出现切片与合集。
+            <b>Still processing</b>
+            Clips and collections will appear here when done.
           </div>
         </div>
       )}

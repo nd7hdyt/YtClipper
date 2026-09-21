@@ -14,9 +14,9 @@ generation
 [![Celery](https://img.shields.io/badge/Celery-Latest-green?style=flat&logo=celery)](https://celeryproject.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
-[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
-[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
-[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/zhouxiaoka/autoclip/issues)
+[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
+[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
+[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/nd7hdyt/YtClipper/issues)
 
 **Language**: [English](README-EN.md) | [中文](README.md)
 
@@ -126,7 +126,7 @@ graph TB
 
 ```bash
 # Clone the project
-git clone https://github.com/zhouxiaoka/autoclip.git
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
 # Docker one-click startup
@@ -146,7 +146,7 @@ cd autoclip
 
 ```bash
 # Clone the project
-git clone https://github.com/zhouxiaoka/autoclip.git
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
 # One-click startup (recommended, includes complete checks and monitoring)
@@ -585,7 +585,7 @@ celery -A backend.core.celery_app flower --port=5555
 
 ```bash
 # Clone the project
-git clone https://github.com/zhouxiaoka/autoclip.git
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
 # Configure environment variables
@@ -673,7 +673,7 @@ documentation improvements, issue reports, or feature suggestions.
 2. Clone your Fork to local:
 
    ```bash
-   git clone https://github.com/zhouxiaoka/autoclip.git
+   git clone https://github.com/nd7hdyt/YtClipper.git
    cd autoclip
    ```
 
@@ -835,8 +835,8 @@ A:
 
 ### Get Help
 
-- **Issue Reports**: [GitHub Issues](https://github.com/zhouxiaoka/autoclip/issues)
-- **Feature Suggestions**: [GitHub Discussions](https://github.com/zhouxiaoka/autoclip/discussions)
+- **Issue Reports**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
+- **Feature Suggestions**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions)
 - **Bug Reports**: Please use GitHub Issues template
 - **Documentation**: [Project Documentation](docs/)
 
@@ -854,7 +854,7 @@ For questions or suggestions, please contact us through:
 
 #### 📧 Other Contact Methods
 
-- Submit a [GitHub Issue](https://github.com/zhouxiaoka/autoclip/issues)
+- Submit a [GitHub Issue](https://github.com/nd7hdyt/YtClipper/issues)
 - Send email to: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
 - Add the above QQ or Feishu contact
 
@@ -901,8 +901,12 @@ Thanks to the following open source projects and services:
 
 ## If this project helps you, please give us a ⭐ Star
 
-[![Star History Chart](https://api.star-history.com/svg?repos=zhouxiaoka/autoclip&type=Date)](https://star-history.com/#zhouxiaoka/autoclip&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=nd7hdyt/YtClipper&type=Date)](https://star-history.com/#nd7hdyt/YtClipper&Date)
 
 Made with ❤️ by AutoClip Team
 
 ⭐ If you find it useful, please give us a Star!
+
+
+---
+**Credits:** Original project by [zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip) — this fork (YtClipper) is English-translated and rebranded, with gratitude to the original authors.

@@ -1,11 +1,11 @@
 /**
- * 浏览器「翻译此页」（Chrome / Edge / Safari）会把文本节点替换成 <font> 包裹的译文。
- * React 之后对这些节点做 removeChild / insertBefore 时，节点已不在它记录的父节点下，
- * 浏览器抛 NotFoundError，整棵树被 ErrorBoundary 卸载（issue #100：Docker Web 模式下
- * 海外用户开着翻译切换 LLM 提供商即崩）。
+ * EN「EN」（Chrome / Edge / Safari）ENTextEN <font> EN。
+ * React EN removeChild / insertBefore EN，EN，
+ * EN NotFoundError，EN ErrorBoundary uninstall（issue #100：Docker Web EN
+ * EN LLM EN）。
  *
- * 这里把这两个 DOM 操作降级为「节点已被外部脚本移动 → 跳过 / 追加到末尾」，
- * 代价是译文可能残留旧文案，但页面不会整体崩掉。做法同 facebook/react#11538 的官方建议。
+ * EN DOM ActionsEN「EN → EN / ENtoEN」，
+ * EN，EN。EN facebook/react#11538 EN。
  */
 
 const GUARD_FLAG = '__autoclipDomTranslationGuard'
@@ -16,7 +16,7 @@ export function isPageTranslated(): boolean {
   return (
     html.classList.contains('translated-ltr') ||
     html.classList.contains('translated-rtl') ||
-    // Safari / 部分 Chrome 版本不加 class，只能靠翻译注入的 <font> 结构判断
+    // Safari / EN Chrome versionEN class，EN <font> EN
     !!document.querySelector('font[style*="vertical-align: inherit"] > font')
   )
 }
@@ -39,7 +39,7 @@ export function installDomTranslationGuard(): void {
   Node.prototype.removeChild = function removeChild<T extends Node>(this: Node, child: T): T {
     if (child.parentNode !== this) {
       if (import.meta.env.DEV) {
-        console.warn('[dom-guard] removeChild 跳过：节点已被页面翻译等外部脚本移动', child)
+        console.warn('[dom-guard] removeChild EN：EN', child)
       }
       return child
     }
@@ -54,7 +54,7 @@ export function installDomTranslationGuard(): void {
   ): T {
     if (referenceNode && referenceNode.parentNode !== this) {
       if (import.meta.env.DEV) {
-        console.warn('[dom-guard] insertBefore 参考节点已被移动，改为追加到末尾', referenceNode)
+        console.warn('[dom-guard] insertBefore EN，ENtoEN', referenceNode)
       }
       return originalInsertBefore.call(this, newNode, null) as T
     }

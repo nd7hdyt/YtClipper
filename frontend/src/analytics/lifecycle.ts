@@ -1,12 +1,12 @@
 /**
- * 应用生命周期埋点 + 全局属性（super properties）。
+ * EN + Global properties（super properties）。
  *
- * - 全局属性：app_version / os / arch / locale，注册后每条事件自动携带，
- *   方便按"版本 / 系统 / 架构"切片分析（排查"某版本在某系统失败率高"等）。
- * - 生命周期事件：
- *   - app_installed：本设备首次启动（= 装机量代理指标）
- *   - app_opened：每次启动（PostHog 据此自动算 DAU / 留存）
- *   - app_updated：版本号较上次变化
+ * - Global properties：app_version / os / arch / locale，EN，
+ *   EN"version / system / arch"ClipEN（EN"ENversionENsystemFailedENHigh"EN）。
+ * - EN：
+ *   - app_installed：EN（= EN）
+ *   - app_opened：On each startup（PostHog EN DAU / EN）
+ *   - app_updated：versionENChange
  */
 import { getVersion } from '@tauri-apps/api/app'
 import { posthog } from './posthog'
@@ -15,7 +15,7 @@ const INSTALL_FLAG_KEY = 'autoclip.analytics.installed'
 const LAST_VERSION_KEY = 'autoclip.analytics.lastVersion'
 const SESSION_COUNT_KEY = 'autoclip.analytics.sessionCount'
 
-/** 从 webview 的 UA 粗略解析操作系统，避免引入需要改 Rust 侧的 plugin-os 依赖。 */
+/** EN webview EN UA Rough parseActionssystem，EN Rust EN plugin-os EN。 */
 function detectOS(): string {
   const ua = navigator.userAgent
   if (/Mac/i.test(ua)) return 'macos'
@@ -24,7 +24,7 @@ function detectOS(): string {
   return 'unknown'
 }
 
-/** 粗略解析 CPU 架构（用于区分 Intel / Apple Silicon 等）。 */
+/** Rough parse CPU arch（EN Intel / Apple Silicon EN）。 */
 function detectArch(): string {
   const ua = navigator.userAgent
   if (/arm64|aarch64/i.test(ua)) return 'arm64'
@@ -36,7 +36,7 @@ async function getAppVersion(): Promise<string> {
   try {
     return await getVersion()
   } catch {
-    // 非 Tauri 环境（如浏览器里跑 vite dev）取不到版本
+    // EN Tauri EN（EN vite dev）ENtoversion
     return 'unknown'
   }
 }
@@ -60,14 +60,14 @@ function safeSet(key: string, value: string): void {
 export interface RuntimeInfo { version: string; os: string; arch: string; locale: string }
 let runtimeInfo: RuntimeInfo = { version: 'unknown', os: detectOS(), arch: detectArch(), locale: typeof navigator !== 'undefined' ? navigator.language : '' }
 
-/** 启动后缓存的运行环境（版本 / 系统 / 架构），供反馈等场景复用；不依赖埋点是否开启。 */
+/** EN（version / system / arch），EN；EN。 */
 export function getRuntimeInfo(): RuntimeInfo {
   return runtimeInfo
 }
 
 /**
- * 注册全局属性并上报启动相关生命周期事件。
- * 在 initAnalytics() 之后调用一次。posthog 未初始化时仅缓存运行环境。
+ * ENGlobal propertiesEN。
+ * EN initAnalytics() ENonce。posthog EN。
  */
 export async function trackLaunch(): Promise<void> {
   const version = await getAppVersion()
@@ -78,7 +78,7 @@ export async function trackLaunch(): Promise<void> {
 
   if (typeof posthog?.register !== 'function') return
 
-  // 全局属性：后续每条事件自动携带
+  // Global properties：EN
   posthog.register({
     app_version: version,
     os,
@@ -86,11 +86,11 @@ export async function trackLaunch(): Promise<void> {
     app_locale: locale,
   })
 
-  // 会话计数
+  // EN
   const sessionCount = readInt(SESSION_COUNT_KEY) + 1
   safeSet(SESSION_COUNT_KEY, String(sessionCount))
 
-  // 首次安装
+  // ENinstall
   let isInstalled = false
   try {
     isInstalled = localStorage.getItem(INSTALL_FLAG_KEY) === 'true'
@@ -102,7 +102,7 @@ export async function trackLaunch(): Promise<void> {
     safeSet(INSTALL_FLAG_KEY, 'true')
   }
 
-  // 版本更新
+  // versionupdate
   let lastVersion: string | null = null
   try {
     lastVersion = localStorage.getItem(LAST_VERSION_KEY)
@@ -114,6 +114,6 @@ export async function trackLaunch(): Promise<void> {
   }
   safeSet(LAST_VERSION_KEY, version)
 
-  // 每次启动
+  // On each startup
   posthog.capture('app_opened', { version, session_number: sessionCount })
 }

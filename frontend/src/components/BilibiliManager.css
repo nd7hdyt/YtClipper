@@ -1,4 +1,4 @@
-/* B站管理弹窗样式 */
+/* BEN */
 .bilibili-manager-modal .ant-modal-content {
   background: var(--ac-card) !important;
   border: 1px solid var(--ac-line) !important;
@@ -32,7 +32,7 @@
   background: var(--ac-line) !important;
 }
 
-/* 自定义标题栏 */
+/* EN */
 .bilibili-manager-header {
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@
   line-height: 1.4;
 }
 
-/* 标签页样式优化 */
+/* EN */
 .bilibili-manager-tabs {
   padding: 0 24px;
 }
@@ -110,12 +110,12 @@
   padding: 24px 0;
 }
 
-/* 表单内容区域 */
+/* EN */
 .bilibili-manager-content {
   padding: 0 24px 24px 24px;
 }
 
-/* 投稿信息提示框样式优化 */
+/* EN */
 .bilibili-manager-content .ant-alert {
   background: var(--ac-line-2) !important;
   border: 1px solid var(--ac-line) !important;
@@ -136,7 +136,7 @@
   color: var(--ac-accent) !important;
 }
 
-/* 表单样式优化 */
+/* EN */
 .bilibili-manager-content .ant-form-item-label > label {
   color: var(--ac-ink) !important;
   font-weight: 500 !important;
@@ -147,7 +147,7 @@
   color: #ff4d4f !important;
 }
 
-/* 输入框样式优化 */
+/* EN */
 .bilibili-manager-content .ant-input,
 .bilibili-manager-content .ant-input-affix-wrapper,
 .bilibili-manager-content .ant-select-selector {
@@ -175,7 +175,7 @@
   color: var(--ac-muted) !important;
 }
 
-/* 按钮样式优化 */
+/* EN */
 .bilibili-manager-content .ant-btn-primary {
   background: linear-gradient(135deg, var(--ac-accent) 0%, var(--ac-accent) 100%) !important;
   border: none !important;
@@ -209,7 +209,7 @@
   color: var(--ac-ink) !important;
 }
 
-/* 账号管理表格样式 */
+/* EN */
 .bilibili-manager-content .ant-table {
   background: var(--ac-card) !important;
   border-radius: 12px !important;
@@ -233,7 +233,7 @@
   background: var(--ac-line-2) !important;
 }
 
-/* 添加账号按钮样式 */
+/* EN */
 .bilibili-manager-content .ant-btn-dashed {
   background: var(--ac-line-2) !important;
   border: 1px dashed var(--ac-line) !important;
@@ -250,7 +250,7 @@
   color: var(--ac-ink) !important;
 }
 
-/* 响应式设计 */
+/* EN */
 @media (max-width: 768px) {
   .bilibili-manager-header {
     padding: 20px 20px 12px 20px;

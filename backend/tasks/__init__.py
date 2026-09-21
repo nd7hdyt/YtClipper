@@ -1,37 +1,37 @@
 """
-任务模块
-包含所有异步任务定义
+taskEN
+ENallENtaskEN
 """
 
-# 移除通配导入，避免过早触发celery_app导入链
+# EN，ENcelery_appEN
 
 __all__ = [
-    # 处理任务
+    # processingtask
     'process_video_pipeline',
     'process_single_step',
     'retry_processing_step',
     
-    # 视频任务
+    # videotask
     'extract_video_clips',
     'generate_video_collections',
     'optimize_video_quality',
     
-    # 通知任务
+    # ENtask
     'send_processing_notification',
     'send_error_notification',
     'send_completion_notification',
     
-    # 维护任务
+    # ENtask
     'cleanup_expired_tasks',
     'health_check',
     'backup_project_data',
     
-    # 数据清理任务
+    # ENtask
     'cleanup_expired_data',
     'check_data_consistency',
     'cleanup_orphaned_data',
     
-    # 投稿任务
+    # ENtask
     'upload_clip_task',
     'batch_upload_task'
 ] 

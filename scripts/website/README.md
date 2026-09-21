@@ -1,40 +1,40 @@
-# 官网（autoclip_intro）随发版自动更新
+# EN（autoclip_intro）ENAutoEN
 
-官网是 GitHub Pages 上的单文件 `index.html`，版本号、下载链接、安装包体积硬编码在十来处（四语各一份）。
-以前发版后要手改三处；现在链路是：
+EN GitHub Pages EN `index.html`，VersionEN、DownloadEN、InstallEN（EN）。
+EN；EN：
 
 ```
-git tag vX.Y.0 ─▶ desktop-build.yml ─▶ Release 出包
+git tag vX.Y.0 ─▶ desktop-build.yml ─▶ Release EN
                         │
                         └─▶ repository_dispatch(autoclip-release, {tag}) ─▶ autoclip_intro/sync-release.yml
                                                                                │  python scripts/sync_release.py vX.Y.0
-                                                                               │  （读 GitHub Release API，改 index.html）
-                                                                               └▶ 提交到 main ─▶ Pages 约 1 分钟生效
+                                                                               │  （EN GitHub Release API，EN index.html）
+                                                                               └▶ EN main ─▶ Pages EN 1 EN
 ```
 
-兜底：官网 workflow 每天 03:17 UTC 也会拉一次 latest release，所以即使主仓库没配 token，官网最多落后一天。
+EN：EN workflow EN 03:17 UTC EN latest release，EN token，EN。
 
-## 一次性安装（官网仓库那边）
+## ENInstall（EN）
 
-主仓库的 token 没有官网仓库的写权限，所以文件放在这里，由你复制过去：
+EN token EN，EN，EN：
 
 ```bash
 bash scripts/website/install.sh ../autoclip_intro
 cd ../autoclip_intro && git add -A && git commit -m "build: sync release info automatically" && git push
 ```
 
-## 让发版即时触发（可选）
+## EN（EN）
 
-1. GitHub → Settings → Developer settings → Fine-grained tokens → 新建：Repository access 只选 `autoclip_intro`，Permissions → Contents: **Read and write**。
-2. 主仓库 `autoclip` → Settings → Secrets and variables → Actions → 新建 `WEBSITE_DISPATCH_TOKEN`。
-3. 之后每次 `desktop-build.yml` 的 `release` job 成功都会推一次 `autoclip-release` 事件；没配 token 时该步骤跳过，不影响发版。
+1. GitHub → Settings → Developer settings → Fine-grained tokens → EN：Repository access EN `autoclip_intro`，Permissions → Contents: **Read and write**。
+2. EN `autoclip` → Settings → Secrets and variables → Actions → EN `WEBSITE_DISPATCH_TOKEN`。
+3. EN `desktop-build.yml` EN `release` job SuccessEN `autoclip-release` EN；EN token EN，EN。
 
-## 文件
+## EN
 
-| 文件 | 去处 | 作用 |
+| EN | EN | EN |
 |---|---|---|
-| `sync_release.py` | `autoclip_intro/scripts/` | 读 Release → 改 `index.html`（`--check` 只报告） |
-| `sync-release.yml` | `autoclip_intro/.github/workflows/` | 三种触发（dispatch / cron / 手动）→ 跑脚本 → 有改动就提交 |
-| `install.sh` | 留在这里 | 复制上面两个文件并同步一次 |
+| `sync_release.py` | `autoclip_intro/scripts/` | EN Release → EN `index.html`（`--check` EN） |
+| `sync-release.yml` | `autoclip_intro/.github/workflows/` | EN（dispatch / cron / Manual）→ ENScript → EN |
+| `install.sh` | EN | EN |
 
-主仓库端：`.github/workflows/desktop-build.yml` → `release` job → "Notify website" 步骤。
+EN：`.github/workflows/desktop-build.yml` → `release` job → "Notify website" EN。

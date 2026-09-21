@@ -1,4 +1,4 @@
-/* 创建合集弹窗样式 */
+/* EN */
 .create-collection-modal .ant-modal-content {
   background: var(--ac-card) !important;
   border: 1px solid var(--ac-line) !important;
@@ -29,14 +29,14 @@
   border-radius: 8px !important;
 }
 
-/* 弹窗内容 */
+/* EN */
 .modal-content {
   padding: 32px;
   background: var(--ac-card);
   color: var(--ac-ink);
 }
 
-/* 头部样式 */
+/* EN */
 .modal-header {
   display: flex;
   align-items: center;
@@ -79,7 +79,7 @@
   margin: 0 0 32px 0 !important;
 }
 
-/* 表单区域 */
+/* EN */
 .form-section {
   display: flex;
   flex-direction: column;
@@ -110,7 +110,7 @@
   margin-left: 4px;
 }
 
-/* 表单控件样式 */
+/* EN */
 .form-input {
   background: var(--ac-line-2) !important;
   border: 1px solid var(--ac-line) !important;
@@ -154,7 +154,7 @@
   color: #666666 !important;
 }
 
-/* 片段选择区域 */
+/* EN */
 .clips-selection {
   border: 1px solid var(--ac-line);
   border-radius: 8px;
@@ -192,7 +192,7 @@
   color: var(--ac-accent) !important;
 }
 
-/* 片段网格 */
+/* EN */
 .clips-grid {
   max-height: 300px;
   overflow-y: auto;
@@ -216,7 +216,7 @@
   background: var(--ac-muted);
 }
 
-/* 片段项 */
+/* EN */
 .clip-item {
   display: flex;
   align-items: center;
@@ -277,7 +277,7 @@
   color: var(--ac-muted);
 }
 
-/* 底部操作 */
+/* EN */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -327,7 +327,7 @@
   cursor: not-allowed !important;
 }
 
-/* 响应式设计 */
+/* EN */
 @media (max-width: 768px) {
   .create-collection-modal .ant-modal {
     margin: 16px !important;

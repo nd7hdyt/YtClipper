@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# AutoClip Docker 启动脚本
-# 版本: 1.0
-# 功能: 使用Docker快速启动AutoClip系统
+# AutoClip Docker StartScript
+# Version: 1.0
+# EN: ENDockerENStartAutoClipSystem
 
 set -euo pipefail
 
 # =============================================================================
-# 配置区域
+# ConfigEN
 # =============================================================================
 
-# 颜色定义
+# EN
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -20,7 +20,7 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# 图标定义
+# EN
 ICON_SUCCESS="✅"
 ICON_ERROR="❌"
 ICON_WARNING="⚠️"
@@ -29,7 +29,7 @@ ICON_ROCKET="🚀"
 ICON_DOCKER="🐳"
 
 # =============================================================================
-# 工具函数
+# ToolEN
 # =============================================================================
 
 log_info() {
@@ -54,56 +54,56 @@ log_header() {
 }
 
 # =============================================================================
-# 检查函数
+# CheckEN
 # =============================================================================
 
 check_docker() {
-    log_header "检查Docker环境"
+    log_header "CheckDockerEnvironment"
     
     if ! command -v docker >/dev/null 2>&1; then
-        log_error "Docker未安装，请先安装Docker"
+        log_error "DockerENInstall，PleaseENInstallDocker"
         exit 1
     fi
-    log_success "Docker已安装"
+    log_success "DockerENInstall"
     
     if ! command -v docker-compose >/dev/null 2>&1; then
-        log_error "Docker Compose未安装，请先安装Docker Compose"
+        log_error "Docker ComposeENInstall，PleaseENInstallDocker Compose"
         exit 1
     fi
-    log_success "Docker Compose已安装"
+    log_success "Docker ComposeENInstall"
     
     if ! docker info >/dev/null 2>&1; then
-        log_error "Docker服务未运行，请启动Docker服务"
+        log_error "DockerServiceEN，PleaseStartDockerService"
         exit 1
     fi
-    log_success "Docker服务运行正常"
+    log_success "DockerServiceEN"
 }
 
 check_environment() {
-    log_header "检查环境配置"
+    log_header "CheckEnvironmentConfig"
     
     if [[ ! -f ".env" ]]; then
-        log_warning ".env文件不存在，创建默认配置..."
+        log_warning ".envEN，ENConfig..."
         if [[ -f "env.example" ]]; then
             cp env.example .env
-            log_success "已创建默认.env文件"
-            log_warning "请编辑.env文件，填入必要的配置（特别是API密钥）"
+            log_success "EN.envEN"
+            log_warning "PleaseEN.envEN，ENConfig（ENAPIEN）"
         else
-            log_error "env.example文件不存在"
+            log_error "env.exampleEN"
             exit 1
         fi
     else
-        log_success ".env文件存在"
+        log_success ".envEN"
     fi
     
-    # 检查必要的配置
+    # CheckENConfig
     if ! grep -q "API_DASHSCOPE_API_KEY" .env || grep -q "API_DASHSCOPE_API_KEY=$" .env; then
-        log_warning "API_DASHSCOPE_API_KEY未配置，AI功能将不可用"
+        log_warning "API_DASHSCOPE_API_KEYENConfig，AIEN"
     fi
 }
 
 check_ports() {
-    log_header "检查端口占用"
+    log_header "CheckEN"
     
     local ports=(8000 3000 6379 5555)
     local occupied_ports=()
@@ -115,112 +115,112 @@ check_ports() {
     done
     
     if [[ ${#occupied_ports[@]} -gt 0 ]]; then
-        log_warning "以下端口被占用: ${occupied_ports[*]}"
-        log_info "Docker会自动处理端口冲突，但建议先停止占用这些端口的服务"
+        log_warning "EN: ${occupied_ports[*]}"
+        log_info "DockerENAutoProcessingEN，ENStopENService"
     else
-        log_success "所有端口可用"
+        log_success "AllEN"
     fi
 }
 
 # =============================================================================
-# 启动函数
+# StartEN
 # =============================================================================
 
 start_services() {
-    log_header "启动AutoClip服务"
+    log_header "StartAutoClipService"
     
-    # 选择启动模式
+    # ENStartEN
     if [[ "${1:-}" == "dev" ]]; then
-        log_info "启动开发环境..."
+        log_info "StartENEnvironment..."
         docker-compose -f docker-compose.dev.yml up -d
         COMPOSE_FILE="docker-compose.dev.yml"
     else
-        log_info "启动生产环境..."
+        log_info "StartENEnvironment..."
         docker-compose up -d
         COMPOSE_FILE="docker-compose.yml"
     fi
     
-    # 等待服务启动
-    log_info "等待服务启动..."
+    # ENServiceStart
+    log_info "ENServiceStart..."
     sleep 10
     
-    # 检查服务状态
+    # CheckServiceStatus
     if docker-compose -f "$COMPOSE_FILE" ps | grep -q "Up"; then
-        log_success "服务启动成功"
+        log_success "ServiceStartSuccess"
     else
-        log_error "服务启动失败"
-        log_info "查看日志: docker-compose -f $COMPOSE_FILE logs"
+        log_error "ServiceStartFailed"
+        log_info "EN: docker-compose -f $COMPOSE_FILE logs"
         exit 1
     fi
 }
 
 show_status() {
-    log_header "服务状态"
+    log_header "ServiceStatus"
     
-    echo -e "${CYAN}📊 容器状态:${NC}"
+    echo -e "${CYAN}📊 ENStatus:${NC}"
     docker-compose ps
     
-    echo -e "\n${CYAN}🌐 访问地址:${NC}"
-    echo -e "  前端界面: http://localhost:3000"
-    echo -e "  后端API:  http://localhost:8000"
-    echo -e "  API文档:  http://localhost:8000/docs"
-    echo -e "  Flower监控: http://localhost:5555"
+    echo -e "\n${CYAN}🌐 EN:${NC}"
+    echo -e "  EN: http://localhost:3000"
+    echo -e "  ENAPI:  http://localhost:8000"
+    echo -e "  APIEN:  http://localhost:8000/docs"
+    echo -e "  FlowerEN: http://localhost:5555"
     
-    echo -e "\n${CYAN}📝 常用命令:${NC}"
-    echo -e "  查看日志: docker-compose logs -f"
-    echo -e "  停止服务: docker-compose down"
-    echo -e "  重启服务: docker-compose restart"
-    echo -e "  进入容器: docker-compose exec autoclip bash"
+    echo -e "\n${CYAN}📝 EN:${NC}"
+    echo -e "  EN: docker-compose logs -f"
+    echo -e "  StopService: docker-compose down"
+    echo -e "  ENService: docker-compose restart"
+    echo -e "  EN: docker-compose exec autoclip bash"
 }
 
 # =============================================================================
-# 主函数
+# EN
 # =============================================================================
 
 main() {
-    log_header "AutoClip Docker 启动器 v1.0"
+    log_header "AutoClip Docker StartEN v1.0"
     
-    # 解析参数
+    # EN
     local mode="production"
     if [[ "${1:-}" == "dev" ]]; then
         mode="development"
     fi
     
-    log_info "启动模式: $mode"
+    log_info "StartEN: $mode"
     
-    # 执行检查
+    # ENCheck
     check_docker
     check_environment
     check_ports
     
-    # 启动服务
+    # StartService
     start_services "$mode"
     
-    # 显示状态
+    # ENStatus
     show_status
     
-    echo -e "\n${WHITE}🎉 AutoClip Docker 部署完成！${NC}"
-    echo -e "${YELLOW}💡 提示: 首次启动可能需要几分钟来下载和构建镜像${NC}"
+    echo -e "\n${WHITE}🎉 AutoClip Docker ENCompleted！${NC}"
+    echo -e "${YELLOW}💡 EN: ENStartENNeedENDownloadEN${NC}"
 }
 
-# 显示帮助信息
+# EN
 show_help() {
-    echo "AutoClip Docker 启动脚本"
+    echo "AutoClip Docker StartScript"
     echo ""
-    echo "用法:"
-    echo "  $0 [选项]"
+    echo "EN:"
+    echo "  $0 [EN]"
     echo ""
-    echo "选项:"
-    echo "  dev     启动开发环境"
-    echo "  help    显示帮助信息"
+    echo "EN:"
+    echo "  dev     StartENEnvironment"
+    echo "  help    EN"
     echo ""
-    echo "示例:"
-    echo "  $0          # 启动生产环境"
-    echo "  $0 dev      # 启动开发环境"
-    echo "  $0 help     # 显示帮助"
+    echo "EN:"
+    echo "  $0          # StartENEnvironment"
+    echo "  $0 dev      # StartENEnvironment"
+    echo "  $0 help     # EN"
 }
 
-# 处理参数
+# ProcessingEN
 case "${1:-}" in
     "help"|"-h"|"--help")
         show_help

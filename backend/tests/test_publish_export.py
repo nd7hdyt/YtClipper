@@ -1,4 +1,4 @@
-"""发布导出：SRT 切片、预设、ffmpeg 真导出一条（有 ffmpeg 才跑）"""
+"""EN：SRT EN、EN、ffmpeg EN（EN ffmpeg EN）"""
 import json
 import shutil
 import subprocess
@@ -23,12 +23,12 @@ def data_dir(tmp_path, monkeypatch):
 def test_slice_srt_shifts_to_zero():
     from backend.services.publish_export import slice_srt
     entries = [
-        {"start_time": "00:00:08,000", "end_time": "00:00:10,000", "text": "前"},
-        {"start_time": "00:00:12,000", "end_time": "00:00:14,500", "text": "中"},
-        {"start_time": "00:00:20,000", "end_time": "00:00:22,000", "text": "后"},
+        {"start_time": "00:00:08,000", "end_time": "00:00:10,000", "text": "EN"},
+        {"start_time": "00:00:12,000", "end_time": "00:00:14,500", "text": "EN"},
+        {"start_time": "00:00:20,000", "end_time": "00:00:22,000", "text": "EN"},
     ]
     body = slice_srt(entries, 10.0, 16.0)
-    assert "中" in body and "前" not in body and "后" not in body
+    assert "EN" in body and "EN" not in body and "EN" not in body
     assert "00:00:02,000 --> 00:00:04,500" in body
 
 
@@ -38,7 +38,7 @@ def test_list_presets_has_vertical_and_horizontal():
     assert keys == {"douyin", "xiaohongshu", "shorts", "bilibili", "original"}
 
 
-@pytest.mark.skipif(not shutil.which("ffmpeg"), reason="本机没有 ffmpeg")
+@pytest.mark.skipif(not shutil.which("ffmpeg"), reason="EN ffmpeg")
 def test_export_original_reencodes_and_is_idempotent(data_dir, tmp_path):
     from backend.core.path_utils import get_project_directory
     from backend.services.publish_export import ExportRequest, export_clip
@@ -56,10 +56,10 @@ def test_export_original_reencodes_and_is_idempotent(data_dir, tmp_path):
     )
     (pdir / "metadata").mkdir(parents=True, exist_ok=True)
     (pdir / "metadata" / "clips_metadata.json").write_text(json.dumps([
-        {"id": cid, "generated_title": "测试片", "start_time": "00:00:00,500", "end_time": "00:00:02,500"}
+        {"id": cid, "generated_title": "EN", "start_time": "00:00:00,500", "end_time": "00:00:02,500"}
     ]), encoding="utf-8")
     (pdir / "raw" / "input.srt").write_text(
-        "1\n00:00:00,000 --> 00:00:02,000\n你好世界\n\n2\n00:00:02,000 --> 00:00:03,000\n第二句\n",
+        "1\n00:00:00,000 --> 00:00:02,000\nEN\n\n2\n00:00:02,000 --> 00:00:03,000\nEN\n",
         encoding="utf-8",
     )
 

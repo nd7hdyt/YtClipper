@@ -1,5 +1,5 @@
 """
-Step 3: 内容评分 - 对每个话题进行质量评分，筛选出高质量内容
+Step 3: Highlight scoring - score each topic for quality and keep the high-quality clips
 """
 import json
 import logging
@@ -8,20 +8,22 @@ from typing import List, Dict, Any, Optional
 from pathlib import Path
 from collections import defaultdict
 
-# 导入依赖
+# Import dependencies
 from ..utils.llm_client import LLMClient
 from ..utils.text_processor import TextProcessor
 from ..core.shared_config import PROMPT_FILES, METADATA_DIR, MIN_SCORE_THRESHOLD
 
 logger = logging.getLogger(__name__)
 
-# CLI `--min-score` 之类的显式覆盖：优先级最高。None = 用设置页保存的值，再退到 MIN_SCORE_THRESHOLD
+# Explicit CLI `--min-score` style override: highest priority. None = use the value
+# saved on the settings page, falling back to MIN_SCORE_THRESHOLD
 MIN_SCORE_OVERRIDE: Optional[float] = None
 
 
 def resolve_min_score_threshold() -> float:
-    """显式覆盖 > 设置页「最低评分阈值」（settings.json，热重载）> 代码默认 0.7。
-    设置页那个值以前只改了 API 进程的内存，流水线从来没读过。"""
+    """Explicit override > settings-page "minimum score threshold" (settings.json,
+    hot-reloaded) > code default 0.7. The settings-page value used to only tweak
+    the API process memory and was never read by the pipeline."""
     if MIN_SCORE_OVERRIDE is not None:
         return float(MIN_SCORE_OVERRIDE)
     try:
@@ -31,20 +33,20 @@ def resolve_min_score_threshold() -> float:
             value = float(value)
             if 0.0 < value <= 1.0:
                 return value
-            logger.warning(f"设置页的最低评分阈值 {value} 不在 (0, 1]，使用默认 {MIN_SCORE_THRESHOLD}")
+            logger.warning(f"Settings-page min score threshold {value} is outside (0, 1], using default {MIN_SCORE_THRESHOLD}")
     except Exception as e:  # noqa: BLE001
-        logger.debug(f"读取设置页评分阈值失败，使用默认值: {e}")
+        logger.debug(f"Failed to read the settings-page score threshold, using default: {e}")
     return float(MIN_SCORE_THRESHOLD)
 
 class ClipScorer:
-    """内容评分器"""
+    """Highlight scorer"""
     
     def __init__(self, prompt_files: Dict = None, metadata_dir: Path = None):
         self.llm_client = LLMClient()
         self.text_processor = TextProcessor()
         self.metadata_dir = Path(metadata_dir) if metadata_dir else None
         
-        # 加载提示词
+        # Load the prompt
         prompt_files_to_use = prompt_files if prompt_files is not None else PROMPT_FILES
         with open(prompt_files_to_use['recommendation'], 'r', encoding='utf-8') as f:
             self.recommendation_prompt = f.read()
@@ -54,51 +56,51 @@ class ClipScorer:
     
     def score_clips(self, timeline_data: List[Dict]) -> List[Dict]:
         """
-        为切片评分 (新版：按块批量处理，并使用LLM进行综合评估)
+        Score the clips (new version: batched per chunk with LLM-based holistic scoring)
         """
         if not timeline_data:
-            logger.warning("时间线数据为空，无法评分")
+            logger.warning("Timeline data is empty, nothing to score")
             return []
             
-        logger.info(f"开始为 {len(timeline_data)} 个切片进行批量评分...")
+        logger.info(f"Batch-scoring {len(timeline_data)} clips...")
         
-        # 1. 按 chunk_index 对所有 timeline 数据进行分组
+        # 1. Group all timeline items by chunk_index
         timeline_by_chunk = defaultdict(list)
         for item in timeline_data:
             chunk_index = item.get('chunk_index')
             if chunk_index is not None:
                 timeline_by_chunk[chunk_index].append(item)
             else:
-                logger.warning(f"  > 话题 '{item.get('outline', '未知')}' 缺少 chunk_index，将被跳过。")
+                logger.warning(f"  > Topic '{item.get('outline', 'unknown')}' is missing chunk_index, skipping.")
         
         all_scored_clips = []
-        # 2. 遍历每个块，批量处理其中的所有话题
+        # 2. Process the topics of each chunk in batch
         for chunk_index, chunk_items in timeline_by_chunk.items():
-            logger.info(f"处理块 {chunk_index}，其中包含 {len(chunk_items)} 个话题...")
+            logger.info(f"Processing chunk {chunk_index} with {len(chunk_items)} topics...")
             try:
-                # 3. 使用LLM进行批量评估
+                # 3. Batched scoring via the LLM
                 scored_chunk_items = self._get_llm_evaluation(chunk_items)
                 
                 if scored_chunk_items:
                     all_scored_clips.extend(scored_chunk_items)
                 else:
-                    logger.warning(f"块 {chunk_index} 的LLM评估返回为空，跳过。")
+                    logger.warning(f"Chunk {chunk_index} LLM evaluation came back empty, skipping.")
 
             except Exception as e:
-                logger.error(f"  > 处理块 {chunk_index} 进行评分时出错: {str(e)}")
+                logger.error(f"  > Error scoring chunk {chunk_index}: {str(e)}")
                 continue
 
-        # 4. 按最终得分对所有结果进行排序
+        # 4. Sort all results by final score
         if all_scored_clips:
             all_scored_clips.sort(key=lambda x: x.get('final_score', 0), reverse=True)
-            # 保持Step 2分配的固定ID，不再重新分配
-            logger.info("按评分排序完成，保持原有固定ID不变")
+            # Keep the stable IDs assigned in Step 2, do not reassign
+            logger.info("Sorted by score, keeping the original stable IDs")
             
-            # 最终按ID排序，确保时间顺序的一致性
+            # Sort by ID last to restore time order
             all_scored_clips.sort(key=lambda x: int(x.get('id', 0)))
-            logger.info("按ID排序完成，保持时间顺序")
+            logger.info("Sorted by ID, time order preserved")
                 
-        logger.info("所有切片评分完成")
+        logger.info("All clips scored")
         return all_scored_clips
     
     def _excerpt(self, clip: Dict) -> str:
@@ -112,8 +114,8 @@ class ClipScorer:
 
     def _get_llm_evaluation(self, clips: List[Dict]) -> List[Dict]:
         """
-        使用LLM进行批量评估，为每个clip添加 final_score 和 recommend_reason。
-        数量对不上时按 outline 对齐，不再整块丢弃（#11）。
+        Batched scoring via the LLM, adding final_score and recommend_reason to each clip.
+        When counts mismatch, align by outline instead of dropping the whole chunk (#11).
         """
         from .quality import align_scores
 
@@ -131,33 +133,33 @@ class ClipScorer:
             response = self.llm_client.call_with_retry(self.recommendation_prompt, input_for_llm)
             parsed_list = self.llm_client.parse_json_response(response)
             scored, stats = align_scores(clips, parsed_list)
-            logger.info(f"  > 评分对齐: 命中 {stats['matched']}，兜底 {stats['fallback']}")
+            logger.info(f"  > Score alignment: {stats['matched']} matched, {stats['fallback']} fallback")
             return scored
 
         except Exception as e:
-            logger.error(f"LLM批量评估失败: {e}")
+            logger.error(f"Batched LLM evaluation failed: {e}")
             scored, _ = align_scores(clips, [])
             return scored
 
     def save_scores(self, scored_clips: List[Dict], output_path: Path):
-        """保存评分结果"""
+        """Save the scoring results"""
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(scored_clips, f, ensure_ascii=False, indent=2)
-        logger.info(f"评分结果已保存到: {output_path}")
+        logger.info(f"Scoring results saved to: {output_path}")
 
 def run_step3_scoring(timeline_path: Path, metadata_dir: Path = None, output_path: Optional[Path] = None, prompt_files: Dict = None) -> List[Dict]:
     """
-    运行Step 3: 内容评分与筛选
+    Run Step 3: highlight scoring and filtering
     
     Args:
-        timeline_path: 时间线文件路径
-        output_path: 输出文件路径
-        prompt_files: 自定义提示词文件
+        timeline_path: path to the timeline file
+        output_path: output file path
+        prompt_files: custom prompt files
         
     Returns:
-        高分切片列表
+        list of high-scoring clips
     """
-    # 加载时间线数据
+    # Load the timeline data
     with open(timeline_path, 'r', encoding='utf-8') as f:
         timeline_data = json.load(f)
     
@@ -175,8 +177,8 @@ def run_step3_scoring(timeline_path: Path, metadata_dir: Path = None, output_pat
     select_info["threshold"] = threshold
     save_report({"step3": select_info}, metadata_dir)
     logger.info(
-        f"评分筛选: 候选 {select_info['candidates']} → 保留 {select_info['selected']}"
-        f"（阈值 {threshold}，兜底补齐 {select_info['fallback_selected']}）"
+        f"Score filtering: {select_info['candidates']} candidates → {select_info['selected']} kept"
+        f" (threshold {threshold}, fallback top-up {select_info['fallback_selected']})"
     )
 
     all_scored_path = metadata_dir / "step3_all_scored.json"

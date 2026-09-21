@@ -1,6 +1,6 @@
 """
-进度快照服务
-管理Redis快照存储和回放
+progressENservice
+ENRedisEN
 """
 
 import json
@@ -13,7 +13,7 @@ from ..core.config import get_redis_url
 logger = logging.getLogger(__name__)
 
 class ProgressSnapshotService:
-    """进度快照服务"""
+    """progressENservice"""
     
     def __init__(self):
         self.redis_url = get_redis_url()
@@ -21,7 +21,7 @@ class ProgressSnapshotService:
         self._connected = False
     
     async def connect(self):
-        """连接Redis"""
+        """connectRedis"""
         if self._connected:
             return
         
@@ -29,33 +29,33 @@ class ProgressSnapshotService:
             self.redis_client = redis.from_url(self.redis_url, decode_responses=True)
             await self.redis_client.ping()
             self._connected = True
-            logger.info("进度快照服务已连接Redis")
+            logger.info("progressENserviceENconnectRedis")
         except Exception as e:
-            logger.error(f"连接Redis失败: {e}")
+            logger.error(f"connectRedisfailed: {e}")
             self._connected = False
     
     async def disconnect(self):
-        """断开Redis连接"""
+        """disconnectRedisconnect"""
         if self.redis_client:
             await self.redis_client.aclose()
             self.redis_client = None
         self._connected = False
-        logger.info("进度快照服务已断开Redis")
+        logger.info("progressENserviceENdisconnectRedis")
     
     def _get_snapshot_key(self, channel: str) -> str:
-        """获取快照键名"""
+        """fetchEN"""
         return f"progress:last:{channel}"
     
     async def save_snapshot(self, channel: str, payload: dict) -> bool:
         """
-        保存进度快照
+        saveprogressEN
         
         Args:
-            channel: 频道名
-            payload: 消息载荷
+            channel: EN
+            payload: EN
             
         Returns:
-            是否保存成功
+            ENsavesucceeded
         """
         if not self._connected:
             await self.connect()
@@ -66,34 +66,34 @@ class ProgressSnapshotService:
         try:
             snapshot_key = self._get_snapshot_key(channel)
             
-            # 添加时间戳
+            # ENtimeEN
             payload_with_ts = {
                 **payload,
                 "snapshot_timestamp": datetime.utcnow().isoformat()
             }
             
-            # 保存到Redis Hash
+            # saveENRedis Hash
             await self.redis_client.hset(snapshot_key, mapping=payload_with_ts)
             
-            # 设置过期时间（24小时）
+            # settingsENtime（24EN）
             await self.redis_client.expire(snapshot_key, 86400)
             
-            logger.debug(f"快照已保存: {channel} -> {snapshot_key}")
+            logger.debug(f"ENsave: {channel} -> {snapshot_key}")
             return True
             
         except Exception as e:
-            logger.error(f"保存快照失败: {e}")
+            logger.error(f"saveENfailed: {e}")
             return False
     
     async def get_snapshot(self, channel: str) -> Optional[dict]:
         """
-        获取进度快照
+        fetchprogressEN
         
         Args:
-            channel: 频道名
+            channel: EN
             
         Returns:
-            快照数据或None
+            ENNone
         """
         if not self._connected:
             await self.connect()
@@ -106,25 +106,25 @@ class ProgressSnapshotService:
             snapshot_data = await self.redis_client.hgetall(snapshot_key)
             
             if snapshot_data:
-                logger.debug(f"快照已获取: {channel} -> {snapshot_data}")
+                logger.debug(f"ENfetch: {channel} -> {snapshot_data}")
                 return snapshot_data
             else:
-                logger.debug(f"快照不存在: {channel}")
+                logger.debug(f"ENdoes not exist: {channel}")
                 return None
                 
         except Exception as e:
-            logger.error(f"获取快照失败: {e}")
+            logger.error(f"fetchENfailed: {e}")
             return None
     
     async def delete_snapshot(self, channel: str) -> bool:
         """
-        删除进度快照
+        deleteprogressEN
         
         Args:
-            channel: 频道名
+            channel: EN
             
         Returns:
-            是否删除成功
+            ENdeletesucceeded
         """
         if not self._connected:
             await self.connect()
@@ -137,22 +137,22 @@ class ProgressSnapshotService:
             result = await self.redis_client.delete(snapshot_key)
             
             if result:
-                logger.debug(f"快照已删除: {channel}")
+                logger.debug(f"ENdeleted: {channel}")
             else:
-                logger.debug(f"快照不存在，无需删除: {channel}")
+                logger.debug(f"ENdoes not exist，ENdelete: {channel}")
             
             return bool(result)
             
         except Exception as e:
-            logger.error(f"删除快照失败: {e}")
+            logger.error(f"deleteENfailed: {e}")
             return False
     
     async def cleanup_expired_snapshots(self) -> int:
         """
-        清理过期的快照
+        EN
         
         Returns:
-            清理的快照数量
+            EN
         """
         if not self._connected:
             await self.connect()
@@ -161,27 +161,27 @@ class ProgressSnapshotService:
             return 0
         
         try:
-            # 查找所有快照键
+            # ENallEN
             pattern = "progress:last:*"
             keys = await self.redis_client.keys(pattern)
             
             cleaned_count = 0
             for key in keys:
-                # 检查是否过期
+                # checkEN
                 ttl = await self.redis_client.ttl(key)
-                if ttl == -1:  # 没有设置过期时间
-                    await self.redis_client.expire(key, 86400)  # 设置24小时过期
-                elif ttl == -2:  # 键不存在
+                if ttl == -1:  # ENsettingsENtime
+                    await self.redis_client.expire(key, 86400)  # settings24EN
+                elif ttl == -2:  # ENdoes not exist
                     cleaned_count += 1
             
             if cleaned_count > 0:
-                logger.info(f"清理了 {cleaned_count} 个过期快照")
+                logger.info(f"EN {cleaned_count} EN")
             
             return cleaned_count
             
         except Exception as e:
-            logger.error(f"清理过期快照失败: {e}")
+            logger.error(f"ENfailed: {e}")
             return 0
 
-# 全局快照服务实例
+# ENserviceEN
 snapshot_service = ProgressSnapshotService()

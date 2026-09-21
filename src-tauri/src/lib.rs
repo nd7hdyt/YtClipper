@@ -28,23 +28,23 @@ pub fn run() {
         ])
         .manage(BackendManager::new())
         .setup(|app| {
-            // 设置环境变量
+            // EN
             std::env::set_var("AUTOCLIP_DESKTOP_MODE", "true");
             std::env::set_var("AUTOCLIP_MODE", "desktop");
 
-            // 设置系统托盘
+            // EN
             if let Err(e) = setup_system_tray(&app.handle()) {
-                eprintln!("设置系统托盘失败: {}", e);
+                eprintln!("EN: {}", e);
             }
 
             let backend_manager = app.state::<BackendManager>();
             match backend_manager.start(app.handle().clone()) {
                 Ok(_) => {
-                    println!("后端服务启动中");
+                    println!("EN");
                 }
                 Err(e) => {
-                    eprintln!("后端服务启动失败: {}", e);
-                    eprintln!("应用将继续运行，但某些功能可能不可用");
+                    eprintln!("EN: {}", e);
+                    eprintln!("EN，EN");
                 }
             }
 

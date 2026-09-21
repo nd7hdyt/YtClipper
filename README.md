@@ -1,10 +1,11 @@
-# AutoClip - AI视频智能切片系统
+# AutoClip - AI Video Intelligent Clipping System
 
 ![AutoClip Logo](https://img.shields.io/badge/AutoClip-AI%20Video%20Processing-blue?style=for-the-badge&logo=video)
 
-## 基于AI的智能视频切片处理系统
+## AI-powered intelligent video clipping system
 
-支持YouTube/B站视频下载、自动切片、智能合集生成
+Supporting YouTube/Bilibili video download, automatic clipping, and smart collection
+generation
 
 [![Python](https://img.shields.io/badge/Python-3.8+-green?style=flat&logo=python)](https://python.org)
 [![React](https://img.shields.io/badge/React-18+-blue?style=flat&logo=react)](https://reactjs.org)
@@ -13,169 +14,182 @@
 [![Celery](https://img.shields.io/badge/Celery-Latest-green?style=flat&logo=celery)](https://celeryproject.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
-[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
-[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
-[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/zhouxiaoka/autoclip/issues)
+[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
+[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
+[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/nd7hdyt/YtClipper/issues)
 
-**语言**: [English](README-EN.md) | [中文](README.md)  
-**联系邮箱**: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
+**Language**: [English](README-EN.md) | [中文](README.md)
 
 </div>
 
-## 🎯 项目简介
+## 🎯 Project Overview
 
-AutoClip是一个基于AI的智能视频切片处理系统，能够自动从YouTube、B站等平台下载视频，通过AI分析提取精彩片段，并智能生成合集。系统采用现代化的前后端分离架构，提供直观的Web界面和强大的后端处理能力。
+AutoClip is an AI-powered intelligent video clipping system that can automatically
+download videos from YouTube, Bilibili, and other platforms, extract exciting clips
+through AI analysis, and intelligently generate collections. The system adopts a
+modern frontend-backend separation architecture, providing an intuitive web
+interface and powerful backend processing capabilities.
 
-**联系方式**: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
+### ✨ Core Features
 
-### ✨ 核心特性
+- 🎬 **Multi-platform Support**: One-click download from YouTube, Bilibili, and local
+  file upload
+- 🤖 **AI Intelligent Analysis**: Qwen / any OpenAI-compatible API / Gemini / SiliconFlow,
+  or fully local with **Ollama / LM Studio** (no API key, offline)
+- 🧑‍💻 **Developer Mode**: `autoclip run video.mp4 --provider ollama` clips a video in one
+  command; built-in **MCP server** + Agent skill so Cursor / Claude can call AutoClip directly
+  ([docs](docs/CLI_AND_MCP.md))
+- ✂️ **Automatic Clipping**: Intelligent recognition of exciting clips with automatic
+  cutting, supporting multiple video categories
+- 📚 **Smart Collections**: AI-recommended and manually created video collections
+  with drag-and-drop sorting
+- 🚀 **Real-time Processing**: Asynchronous task queue with real-time progress feedback
+  and WebSocket communication
+- 🎨 **Modern Interface**: React + TypeScript + Ant Design with responsive design
+- 📱 **Mobile Support** **[In Development]**: Responsive design, improving mobile
+  experience
+- 🔐 **Account Management** **[In Development]**: Support for multiple Bilibili account
+  management with automatic health checks
+- 📊 **Data Statistics**: Complete project management and data statistics functionality
+- 🛠️ **Easy Deployment**: One-click startup scripts, Docker support, and detailed
+  documentation
+- 📤 **Bilibili Upload** **[In Development]**: Automatic upload of clipped videos
+  to Bilibili
+- ✏️ **Subtitle Editing** **[In Development]**: Visual subtitle editing and
+  synchronization functionality
 
-- 🎬 **多平台支持**: YouTube、B站视频一键下载，支持本地文件上传
-- 🤖 **AI智能分析**: 通义千问 / OpenAI 兼容接口 / Gemini / 硅基流动，也可用 **Ollama、LM Studio 本地模型**（免 key、离线）
-- ✂️ **自动切片**: 智能识别精彩片段并自动切割，支持多种视频分类
-- 🧑‍💻 **开发者形态**: `autoclip run video.mp4 --provider ollama` 一条命令出片；内置 **MCP server** 与 Agent skill，Cursor / Claude 可直接调用（[文档](docs/CLI_AND_MCP.md)）
-- 📚 **智能合集**: AI推荐和手动创建视频合集，支持拖拽排序
-- 🚀 **实时处理**: 异步任务队列，实时进度反馈，WebSocket通信
-- 🎨 **现代界面**: React + TypeScript + Ant Design，响应式设计
-- 📱 **移动端支持**【开发中】: 响应式设计，正在完善移动端体验
-- 🔐 **账号管理**【开发中】: 支持B站多账号管理，自动健康检查
-- 📊 **数据统计**: 完整的项目管理和数据统计功能
-- 🛠️ **易于部署**: 一键启动脚本，Docker支持，详细文档
-- 📤 **B站上传**【开发中】: 自动上传切片视频到B站
-- ✏️ **字幕编辑**【开发中】: 可视化字幕编辑和同步功能
-
-## 🏗️ 系统架构
+## 🏗️ System Architecture
 
 ```mermaid
 graph TB
-    A[用户界面] --> B[FastAPI后端]
-    B --> C[Celery任务队列]
-    B --> D[Redis缓存]
-    B --> E[SQLite数据库]
-    C --> F[AI处理引擎]
-    F --> G[视频处理]
-    F --> H[字幕分析]
-    F --> I[内容理解]
-    B --> J[文件存储]
+    A[User Interface] --> B[FastAPI Backend]
+    B --> C[Celery Task Queue]
+    B --> D[Redis Cache]
+    B --> E[SQLite Database]
+    C --> F[AI Processing Engine]
+    F --> G[Video Processing]
+    F --> H[Subtitle Analysis]
+    F --> I[Content Understanding]
+    B --> J[File Storage]
     K[YouTube API] --> B
-    L[B站API] --> B
+    L[Bilibili API] --> B
 ```
 
-### 技术栈
+### Technology Stack
 
-#### 后端技术
+#### Backend Technologies
 
-- **FastAPI**: 现代化Python Web框架，自动API文档生成
-- **Celery**: 分布式任务队列，支持异步处理
-- **Redis**: 消息代理和缓存，任务状态管理
-- **SQLite**: 轻量级数据库，支持升级到PostgreSQL
-- **yt-dlp**: YouTube视频下载，支持多种格式
-- **通义千问**: AI内容分析，支持多种模型
-- **WebSocket**: 实时通信，进度推送
-- **Pydantic**: 数据验证和序列化
+- **FastAPI**: Modern Python web framework with automatic API documentation generation
+- **Celery**: Distributed task queue supporting asynchronous processing
+- **Redis**: Message broker and cache for task status management
+- **SQLite**: Lightweight database with PostgreSQL upgrade support
+- **yt-dlp**: YouTube video download supporting multiple formats
+- **Qwen**: AI content analysis supporting multiple models
+- **WebSocket**: Real-time communication and progress push
+- **Pydantic**: Data validation and serialization
 
-#### 前端技术
+#### Frontend Technologies
 
-- **React 18**: 用户界面框架，Hooks和函数组件
-- **TypeScript**: 类型安全，更好的开发体验
-- **Ant Design**: 企业级UI组件库
-- **Vite**: 快速构建工具，热重载
-- **Zustand**: 轻量级状态管理
-- **React Router**: 路由管理
-- **Axios**: HTTP客户端
-- **React Player**: 视频播放器
+- **React 18**: User interface framework with Hooks and functional components
+- **TypeScript**: Type safety for better development experience
+- **Ant Design**: Enterprise-grade UI component library
+- **Vite**: Fast build tool with hot reload
+- **Zustand**: Lightweight state management
+- **React Router**: Route management
+- **Axios**: HTTP client
+- **React Player**: Video player
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 环境要求
+### Environment Requirements
 
-#### Docker部署（推荐）
+#### Docker Deployment (Recommended)
 
 - **Docker**: 20.10+
 - **Docker Compose**: 2.0+
-- **内存**: 最少 4GB，推荐 8GB+
-- **存储**: 最少 10GB 可用空间
+- **Memory**: Minimum 4GB, recommended 8GB+
+- **Storage**: Minimum 10GB available space
 
-#### 本地部署
+#### Local Deployment
 
-- **操作系统**: macOS / Linux / Windows (WSL)
-- **Python**: 3.10+ (推荐 3.11；yt-dlp 已不支持 3.9)
-- **Node.js**: 16+ (推荐 18+)
-- **Redis**: 6.0+ (推荐 7.0+)
-- **FFmpeg**: 视频处理依赖
-- **内存**: 最少 4GB，推荐 8GB+
-- **存储**: 最少 10GB 可用空间
+- **Operating System**: macOS / Linux / Windows (WSL)
+- **Python**: 3.10+ (3.11 recommended; yt-dlp no longer supports 3.9)
+- **Node.js**: 16+ (recommended 18+)
+- **Redis**: 6.0+ (recommended 7.0+)
+- **FFmpeg**: Video processing dependency
+- **Memory**: Minimum 4GB, recommended 8GB+
+- **Storage**: Minimum 10GB available space
 
-### 一键启动
+### One-Click Startup
 
-#### 方式一：Docker部署（推荐）
+#### Method 1: Docker Deployment (Recommended)
 
 ```bash
-# 克隆项目
-git clone https://github.com/zhouxiaoka/autoclip.git
+# Clone the project
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# Docker一键启动
+# Docker one-click startup
 ./docker-start.sh
 
-# 开发环境启动
+# Development environment startup
 ./docker-start.sh dev
 
-# 停止服务
+# Stop services
 ./docker-stop.sh
 
-# 检查服务状态
+# Check service status
 ./docker-status.sh
 ```
 
-#### 方式二：本地部署
+#### Method 2: Local Deployment
 
 ```bash
-# 克隆项目
-git clone https://github.com/zhouxiaoka/autoclip.git
+# Clone the project
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# 一键启动（推荐，包含完整检查和监控）
+# One-click startup (recommended, includes complete checks and monitoring)
 ./start_autoclip.sh
 
-# 快速启动（开发环境，跳过详细检查）
+# Quick startup (development environment, skips detailed checks)
 ./quick_start.sh
 
-# 检查系统状态
+# Check system status
 ./status_autoclip.sh
 
-# 停止系统
+# Stop system
 ./stop_autoclip.sh
 ```
 
-#### 方式三：命令行 / MCP（开发者）
+#### Option 3: CLI / MCP (developers)
 
 ```bash
 pip install -r requirements.txt && pip install -e .
-autoclip doctor                                   # 检查 ffmpeg / Whisper / 模型
-autoclip run talk.mp4 --provider ollama           # 本地 Ollama，无需 key；产物与桌面应用共用
-autoclip run talk.mp4 --srt talk.srt --json       # 给脚本 / agent 用的 JSON 输出
-autoclip mcp                                      # MCP server（stdio），配到 Cursor / Claude 即可调用
+autoclip doctor                                   # check ffmpeg / Whisper / LLM
+autoclip run talk.mp4 --provider ollama           # local Ollama, no API key; output shared with the desktop app
+autoclip run talk.mp4 --srt talk.srt --json       # JSON output for scripts / agents
+autoclip mcp                                      # MCP server (stdio) for Cursor / Claude
 ```
 
-Cursor `~/.cursor/mcp.json`：`{"mcpServers": {"autoclip": {"command": "/path/to/venv/bin/autoclip", "args": ["mcp"]}}}`。
-详见 [docs/CLI_AND_MCP.md](docs/CLI_AND_MCP.md)，Agent skill 在 [skills/autoclip/SKILL.md](skills/autoclip/SKILL.md)。
+Cursor `~/.cursor/mcp.json`: `{"mcpServers": {"autoclip": {"command": "/path/to/venv/bin/autoclip", "args": ["mcp"]}}}`.
+See [docs/CLI_AND_MCP.md](docs/CLI_AND_MCP.md); the Agent skill lives in [skills/autoclip/SKILL.md](skills/autoclip/SKILL.md).
 
-### 手动安装
+### Manual Installation
 
 ```bash
-# 1. 创建虚拟环境
+# 1. Create virtual environment
 python3 -m venv venv
 source venv/bin/activate  # Linux/macOS
-# 或 venv\Scripts\activate  # Windows
+# or venv\Scripts\activate  # Windows
 
-# 2. 安装Python依赖
+# 2. Install Python dependencies
 pip install -r requirements.txt
 
-# 3. 安装前端依赖
+# 3. Install frontend dependencies
 cd frontend && npm install && cd ..
 
-# 4. 安装Redis
+# 4. Install Redis
 # macOS
 brew install redis
 brew services start redis
@@ -189,7 +203,7 @@ sudo systemctl start redis-server
 sudo yum install redis
 sudo systemctl start redis
 
-# 5. 安装FFmpeg
+# 5. Install FFmpeg
 # macOS
 brew install ffmpeg
 
@@ -199,417 +213,417 @@ sudo apt install ffmpeg
 # CentOS/RHEL
 sudo yum install ffmpeg
 
-# 6. 配置环境变量
+# 6. Configure environment variables
 cp env.example .env
-# 编辑 .env 文件，填入API密钥等配置
+# Edit .env file and fill in necessary configurations
 ```
 
-## 🎬 功能演示
+## 🎬 Feature Demo
 
-### 主要功能展示
+### Main Feature Showcase
 
-1. **视频下载与处理**
-   - 支持YouTube、B站视频链接解析
-   - 自动下载视频和字幕文件
-   - 支持本地文件上传
+1. **Video Download and Processing**
+   - Support for YouTube, Bilibili video link parsing
+   - Automatic video and subtitle file download
+   - Support for local file upload
 
-2. **AI智能分析**
-   - 自动提取视频大纲
-   - 智能识别话题时间点
-   - 对片段进行精彩度评分
+2. **AI Intelligent Analysis**
+   - Automatic video outline extraction
+   - Intelligent topic timeline identification
+   - Exciting clip scoring
 
-3. **视频切片与合集**
-   - 自动生成精彩片段
-   - 智能推荐合集组合
-   - 支持手动编辑和排序
+3. **Video Clipping and Collections**
+   - Automatic exciting clip generation
+   - Smart collection recommendations
+   - Support for manual editing and sorting
 
-4. **实时进度监控**
-   - WebSocket实时进度推送
-   - 详细的任务状态显示
-   - 错误处理和重试机制
+4. **Real-time Progress Monitoring**
+   - WebSocket real-time progress push
+   - Detailed task status display
+   - Error handling and retry mechanisms
 
-5. **B站上传功能**【开发中】
-   - 自动上传切片视频到B站
-   - 支持多账号管理
-   - 批量上传和队列管理
+5. **Bilibili Upload Feature** **[In Development]**
+   - Automatic upload of clipped videos to Bilibili
+   - Support for multiple account management
+   - Batch upload and queue management
 
-6. **字幕编辑功能**【开发中】
-   - 可视化字幕编辑器
-   - 字幕同步和调整
-   - 多语言字幕支持
+6. **Subtitle Editing Feature** **[In Development]**
+   - Visual subtitle editor
+   - Subtitle synchronization and adjustment
+   - Multi-language subtitle support
 
-## 📖 使用指南
+## 📖 User Guide
 
-### 1. 视频下载
+### 1. Video Download
 
-#### YouTube视频
+#### YouTube Videos
 
-1. 在首页点击"新建项目"
-2. 选择"YouTube链接"
-3. 粘贴视频URL
-4. 选择浏览器Cookie（可选）
-5. 点击"开始下载"
+1. Click "New Project" on the homepage
+2. Select "YouTube Link"
+3. Paste the video URL
+4. Choose browser cookies (optional)
+5. Click "Start Download"
 
-#### B站视频
+#### Bilibili Videos
 
-1. 在首页点击"新建项目"
-2. 选择"B站链接"
-3. 粘贴视频URL
-4. 选择登录账号
-5. 点击"开始下载"
+1. Click "New Project" on the homepage
+2. Select "Bilibili Link"
+3. Paste the video URL
+4. Choose login account
+5. Click "Start Download"
 
-#### 本地文件
+#### Local Files
 
-1. 在首页点击"新建项目"
-2. 选择"文件上传"
-3. 拖拽或选择视频文件
-4. 上传字幕文件（可选）
-5. 点击"开始处理"
+1. Click "New Project" on the homepage
+2. Select "File Upload"
+3. Drag and drop or select video files
+4. Upload subtitle files (optional)
+5. Click "Start Processing"
 
-### 2. 智能处理
+### 2. Intelligent Processing
 
-系统会自动执行以下步骤：
+The system will automatically execute the following steps:
 
-1. **素材准备**: 下载视频和字幕文件
-2. **内容分析**: AI提取视频大纲和关键信息
-3. **时间线提取**: 识别话题时间区间
-4. **精彩评分**: 对每个片段进行AI评分
-5. **标题生成**: 为精彩片段生成吸引人标题
-6. **合集推荐**: AI推荐视频合集
-7. **视频生成**: 生成切片视频和合集视频
+1. **Material Preparation**: Download video and subtitle files
+2. **Content Analysis**: AI extracts video outline and key information
+3. **Timeline Extraction**: Identify topic time intervals
+4. **Exciting Scoring**: AI scoring for each clip
+5. **Title Generation**: Generate attractive titles for exciting clips
+6. **Collection Recommendation**: AI-recommended video collections
+7. **Video Generation**: Generate clipped videos and collection videos
 
-### 3. 结果管理
+### 3. Result Management
 
-- **查看切片**: 在项目详情页查看所有生成的视频片段
-- **编辑信息**: 修改片段标题、描述等信息
-- **创建合集**: 手动创建或使用AI推荐的合集
-- **下载导出**: 下载单个片段或完整合集
-- **B站上传**【开发中】: 一键上传切片视频到B站
-- **字幕编辑**【开发中】: 可视化编辑和同步字幕文件
+- **View Clips**: View all generated video clips on the project detail page
+- **Edit Information**: Modify clip titles, descriptions, etc.
+- **Create Collections**: Manually create or use AI-recommended collections
+- **Download Export**: Download individual clips or complete collections
+- **Bilibili Upload** **[In Development]**: One-click upload of clipped videos to
+  Bilibili
+- **Subtitle Editing** **[In Development]**: Visual editing and synchronization of
+  subtitle files
 
-## 🔧 配置说明
+## 🔧 Configuration
 
-### 环境变量配置
+### Environment Variable Configuration
 
-创建 `.env` 文件：
+Create `.env` file:
 
 ```bash
-# 数据库配置
+# Database configuration
 DATABASE_URL=sqlite:///./data/autoclip.db
 
-# Redis配置
+# Redis configuration
 REDIS_URL=redis://localhost:6379/0
 
-# AI API配置
+# AI API configuration
 API_DASHSCOPE_API_KEY=your_dashscope_api_key
 API_MODEL_NAME=qwen-plus
 
-# 日志配置
+# Logging configuration
 LOG_LEVEL=INFO
 ENVIRONMENT=development
 DEBUG=true
 
-# 文件存储
+# File storage
 UPLOAD_DIR=./data/uploads
 PROJECT_DIR=./data/projects
 ```
 
-### B站账号配置【开发中】
+### Bilibili Account Configuration **[In Development]**
 
-1. 在设置页面点击"B站账号管理"
-2. 选择登录方式：
-   - **Cookie导入**（推荐）：从浏览器导出Cookie
-   - **账号密码**：直接输入账号密码
-   - **二维码登录**：扫描二维码登录
-3. 添加成功后系统会自动管理账号健康状态
+1. Click "Bilibili Account Management" on the settings page
+2. Choose login method:
+   - **Cookie Import** (recommended): Export cookies from browser
+   - **Account Password**: Directly input account and password
+   - **QR Code Login**: Scan QR code to login
+3. After successful addition, the system will automatically manage account health
+  status
 
-## 📁 项目结构
+## 📁 Project Structure
 
 ```text
 autoclip/
-├── backend/                 # 后端代码
-│   ├── api/                # API路由
-│   │   ├── v1/            # API v1版本
-│   │   │   ├── youtube.py # YouTube下载API
-│   │   │   ├── bilibili.py # B站下载API
-│   │   │   ├── projects.py # 项目管理API
-│   │   │   ├── clips.py   # 视频片段API
-│   │   │   ├── collections.py # 合集管理API
-│   │   │   └── settings.py # 系统设置API
-│   │   └── upload_queue.py # 上传队列管理
-│   ├── core/              # 核心配置
-│   │   ├── database.py    # 数据库配置
-│   │   ├── celery_app.py  # Celery配置
-│   │   ├── config.py      # 系统配置
-│   │   └── llm_manager.py # AI模型管理
-│   ├── models/            # 数据模型
-│   │   ├── project.py     # 项目模型
-│   │   ├── clip.py        # 片段模型
-│   │   ├── collection.py  # 合集模型
-│   │   └── bilibili.py    # B站账号模型
-│   ├── services/          # 业务逻辑
-│   │   ├── video_service.py # 视频处理服务
-│   │   ├── ai_service.py  # AI分析服务
-│   │   └── upload_service.py # 上传服务
-│   ├── tasks/             # Celery任务
-│   │   ├── processing.py  # 处理任务
-│   │   ├── upload.py      # 上传任务
-│   │   └── maintenance.py # 维护任务
-│   ├── pipeline/          # 处理流水线
-│   │   ├── step1_outline.py # 大纲提取
-│   │   ├── step2_timeline.py # 时间线分析
-│   │   ├── step3_scoring.py # 精彩度评分
-│   │   └── step6_video.py # 视频生成
-│   └── utils/             # 工具函数
-├── frontend/              # 前端代码
+├── backend/                 # Backend code
+│   ├── api/                # API routes
+│   │   ├── v1/            # API v1 version
+│   │   │   ├── youtube.py # YouTube download API
+│   │   │   ├── bilibili.py # Bilibili download API
+│   │   │   ├── projects.py # Project management API
+│   │   │   ├── clips.py   # Video clip API
+│   │   │   ├── collections.py # Collection management API
+│   │   │   └── settings.py # System settings API
+│   │   └── upload_queue.py # Upload queue management
+│   ├── core/              # Core configuration
+│   │   ├── database.py    # Database configuration
+│   │   ├── celery_app.py  # Celery configuration
+│   │   ├── config.py      # System configuration
+│   │   └── llm_manager.py # AI model management
+│   ├── models/            # Data models
+│   │   ├── project.py     # Project model
+│   │   ├── clip.py        # Clip model
+│   │   ├── collection.py  # Collection model
+│   │   └── bilibili.py    # Bilibili account model
+│   ├── services/          # Business logic
+│   │   ├── video_service.py # Video processing service
+│   │   ├── ai_service.py  # AI analysis service
+│   │   └── upload_service.py # Upload service
+│   ├── tasks/             # Celery tasks
+│   │   ├── processing.py  # Processing tasks
+│   │   ├── upload.py      # Upload tasks
+│   │   └── maintenance.py # Maintenance tasks
+│   ├── pipeline/          # Processing pipeline
+│   │   ├── step1_outline.py # Outline extraction
+│   │   ├── step2_timeline.py # Timeline analysis
+│   │   ├── step3_scoring.py # Exciting scoring
+│   │   └── step6_video.py # Video generation
+│   └── utils/             # Utility functions
+├── frontend/              # Frontend code
 │   ├── src/
-│   │   ├── components/    # React组件
-│   │   │   ├── UploadModal.tsx # 上传模态框
-│   │   │   ├── ClipCard.tsx # 片段卡片
-│   │   │   ├── CollectionCard.tsx # 合集卡片
-│   │   │   └── BilibiliManager.tsx # B站管理
-│   │   ├── pages/         # 页面组件
-│   │   │   ├── HomePage.tsx # 首页
-│   │   │   ├── ProjectDetailPage.tsx # 项目详情
-│   │   │   └── SettingsPage.tsx # 设置页面
-│   │   ├── services/      # API服务
-│   │   │   └── api.ts     # API客户端
-│   │   └── stores/        # 状态管理
+│   │   ├── components/    # React components
+│   │   │   ├── UploadModal.tsx # Upload modal
+│   │   │   ├── ClipCard.tsx # Clip card
+│   │   │   ├── CollectionCard.tsx # Collection card
+│   │   │   └── BilibiliManager.tsx # Bilibili management
+│   │   ├── pages/         # Page components
+│   │   │   ├── HomePage.tsx # Home page
+│   │   │   ├── ProjectDetailPage.tsx # Project detail
+│   │   │   └── SettingsPage.tsx # Settings page
+│   │   ├── services/      # API services
+│   │   │   └── api.ts     # API client
+│   │   └── stores/        # State management
 │   └── package.json
-├── data/                  # 数据存储
-│   ├── projects/          # 项目数据
-│   ├── uploads/           # 上传文件
-│   ├── temp/              # 临时文件
-│   ├── output/            # 输出文件
-│   └── autoclip.db        # 数据库文件
-├── scripts/               # 工具脚本
-│   ├── start_autoclip.sh  # 启动脚本
-│   ├── stop_autoclip.sh   # 停止脚本
-│   └── status_autoclip.sh # 状态检查
-├── docs/                  # 文档
-│   ├── README.md          # 文档中心
-│   ├── i18n.md           # 国际化配置
-│   └── *.md              # 其他文档
-├── logs/                  # 日志文件
-├── Dockerfile             # Docker镜像构建文件
-├── Dockerfile.dev         # 开发环境Docker文件
-├── docker-compose.yml     # 生产环境Docker编排
-├── docker-compose.dev.yml # 开发环境Docker编排
-├── docker-start.sh        # Docker启动脚本
-├── docker-stop.sh         # Docker停止脚本
-├── docker-status.sh       # Docker状态检查脚本
-├── .dockerignore          # Docker忽略文件
-├── DOCKER.md              # Docker部署文档
-└── *.sh                   # 启动脚本
+├── data/                  # Data storage
+│   ├── projects/          # Project data
+│   ├── uploads/           # Upload files
+│   ├── temp/              # Temporary files
+│   ├── output/            # Output files
+│   └── autoclip.db        # Database file
+├── scripts/               # Utility scripts
+│   ├── start_autoclip.sh  # Startup script
+│   ├── stop_autoclip.sh   # Stop script
+│   └── status_autoclip.sh # Status check
+├── docs/                  # Documentation
+├── logs/                  # Log files
+├── Dockerfile             # Docker image build file
+├── Dockerfile.dev         # Development environment Docker file
+├── docker-compose.yml     # Production environment Docker orchestration
+├── docker-compose.dev.yml # Development environment Docker orchestration
+├── docker-start.sh        # Docker startup script
+├── docker-stop.sh         # Docker stop script
+├── docker-status.sh       # Docker status check script
+├── .dockerignore          # Docker ignore file
+├── DOCKER.md              # Docker deployment documentation
+└── *.sh                   # Startup scripts
 ```
 
-## 🌐 API文档
+## 🌐 API Documentation
 
-启动系统后访问以下地址查看API文档：
+After starting the system, visit the following addresses to view API documentation:
 
-- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) (本地开发环境)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) (本地开发环境)
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
-### 主要API端点
+### Main API Endpoints
 
-| 端点 | 方法 | 描述 |
-|------|------|------|
-| `/api/v1/projects` | GET | 获取项目列表 |
-| `/api/v1/projects` | POST | 创建新项目 |
-| `/api/v1/projects/{id}` | GET | 获取项目详情 |
-| `/api/v1/youtube/parse` | POST | 解析YouTube视频信息 |
-| `/api/v1/youtube/download` | POST | 下载YouTube视频 |
-| `/api/v1/bilibili/download` | POST | 下载B站视频 |
-| `/api/v1/projects/{id}/process` | POST | 开始处理项目 |
-| `/api/v1/projects/{id}/status` | GET | 获取处理状态 |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/projects` | GET | Get project list |
+| `/api/v1/projects` | POST | Create new project |
+| `/api/v1/projects/{id}` | GET | Get project details |
+| `/api/v1/youtube/parse` | POST | Parse YouTube video information |
+| `/api/v1/youtube/download` | POST | Download YouTube video |
+| `/api/v1/bilibili/download` | POST | Download Bilibili video |
+| `/api/v1/projects/{id}/process` | POST | Start project processing |
+| `/api/v1/projects/{id}/status` | GET | Get processing status |
 
-## 🔍 故障排除
+## 🔍 Troubleshooting
 
-### 常见问题
+### Common Issues
 
-#### 1. 端口被占用
+#### 1. Port Occupied
 
 ```bash
-# 检查端口占用
-lsof -i :8000  # 后端端口
-lsof -i :3000  # 前端端口
+# Check port usage
+lsof -i :8000  # Backend port
+lsof -i :3000  # Frontend port
 
-# 停止占用进程
+# Stop occupying processes
 kill -9 <PID>
 ```
 
-#### 2. Redis连接失败
+#### 2. Redis Connection Failed
 
 ```bash
-# 检查Redis状态
+# Check Redis status
 redis-cli ping
 
-# 启动Redis服务
+# Start Redis service
 brew services start redis  # macOS
-systemctl start redis      # Linux
+systemctl start redis-server  # Linux
 ```
 
-#### 3. YouTube下载失败
+#### 3. YouTube Download Failed
 
-- 检查网络连接
-- 更新yt-dlp版本：`pip install --upgrade yt-dlp`
-- 尝试使用浏览器Cookie
-- 检查视频是否可用
+- Check network connection
+- Update yt-dlp: `pip install --upgrade yt-dlp`
+- Try using browser cookies
+- Check if video is available
 
-#### 4. B站下载失败
+#### 4. Bilibili Download Failed
 
-- 检查账号登录状态
-- 更新账号Cookie
-- 检查视频权限设置
+- Check account login status
+- Update account cookies
+- Check video permission settings
 
-### 日志查看
+### Log Viewing
 
 ```bash
-# 查看所有日志
+# View all logs
 tail -f logs/*.log
 
-# 查看特定服务日志
-tail -f logs/backend.log    # 后端日志
-tail -f logs/frontend.log   # 前端日志
-tail -f logs/celery.log     # 任务队列日志
+# View specific service logs
+tail -f logs/backend.log    # Backend logs
+tail -f logs/frontend.log   # Frontend logs
+tail -f logs/celery.log     # Task queue logs
 ```
 
-### 系统状态检查
+### System Status Check
 
 ```bash
-# 详细状态检查
+# Detailed status check
 ./status_autoclip.sh
 
-# 手动检查服务
-curl http://localhost:8000/api/v1/health/  # 后端健康检查
-curl http://localhost:3000/                # 前端访问测试
-redis-cli ping                             # Redis连接测试
+# Manual service check
+curl http://localhost:8000/api/v1/health/  # Backend health check
+curl http://localhost:3000/                # Frontend access test
+redis-cli ping                             # Redis connection test
 ```
 
-## 🛠️ 开发指南
+## 🛠️ Development Guide
 
-### 后端开发
+### Backend Development
 
 ```bash
-# 激活虚拟环境
+# Activate virtual environment
 source venv/bin/activate
 
-# 设置Python路径
+# Set Python path
 export PYTHONPATH="${PWD}:${PYTHONPATH}"
 
-# 启动后端开发服务器
+# Start backend development server
 python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### 前端开发
+### Frontend Development
 
 ```bash
-# 进入前端目录
+# Enter frontend directory
 cd frontend
 
-# 启动开发服务器
+# Start development server
 npm run dev
 ```
 
 ### Celery Worker
 
 ```bash
-# 启动Worker（必须带 -Q：任务按 celery_app.task_routes 路由到专用队列，
-# 不带 -Q 的 worker 只消费默认 `celery` 队列，流水线任务会一直堆在 `processing` 里没人执行）
+# Start Worker (must include -Q: tasks are routed to dedicated queues via celery_app.task_routes;
+# a worker without -Q only consumes the default `celery` queue, so pipeline tasks pile up in `processing` and never run)
 celery -A backend.core.celery_app worker --loglevel=info -Q celery,processing,video,notification,upload
 
-# 启动Beat调度器
+# Start Beat scheduler
 celery -A backend.core.celery_app beat --loglevel=info
 
-# 启动Flower监控
+# Start Flower monitoring
 celery -A backend.core.celery_app flower --port=5555
 ```
 
-## 📊 性能优化
+## 📊 Performance Optimization
 
-### 生产环境配置
+### Production Environment Configuration
 
-1. **数据库优化**
-   - 使用PostgreSQL替代SQLite
-   - 配置连接池
-   - 启用查询缓存
+1. **Database Optimization**
+   - Use PostgreSQL instead of SQLite
+   - Configure connection pooling
+   - Enable query caching
 
-2. **Redis优化**
-   - 配置内存限制
-   - 启用持久化
-   - 设置过期策略
+2. **Redis Optimization**
+   - Configure memory limits
+   - Enable persistence
+   - Set expiration policies
 
-3. **Celery优化**
-   - 调整并发数
-   - 配置任务路由
-   - 启用结果后端
+3. **Celery Optimization**
+   - Adjust concurrency
+   - Configure task routing
+   - Enable result backend
 
-## 🔒 安全配置
+## 🔒 Security Configuration
 
-### 生产环境安全
+### Production Environment Security
 
-1. **环境变量**
-   - 使用强密码
-   - 定期轮换密钥
-   - 限制API访问
+1. **Environment Variables**
+   - Use strong passwords
+   - Regularly rotate keys
+   - Limit API access
 
-2. **网络安全**
-   - 配置防火墙
-   - 使用HTTPS
-   - 限制CORS
+2. **Network Security**
+   - Configure firewall
+   - Use HTTPS
+   - Limit CORS
 
-3. **数据安全**
-   - 定期备份
-   - 加密敏感数据
-   - 访问控制
+3. **Data Security**
+   - Regular backups
+   - Encrypt sensitive data
+   - Access control
 
-## 🚀 部署指南
+## 🚀 Deployment Guide
 
-### Docker部署
+### Docker Deployment
 
-#### 快速启动
+#### Quick Start
 
 ```bash
-# 克隆项目
-git clone https://github.com/zhouxiaoka/autoclip.git
+# Clone the project
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# 配置环境变量
+# Configure environment variables
 cp env.example .env
-# 编辑 .env 文件，填入必要的配置
+# Edit .env file and fill in necessary configurations
 
-# 启动所有服务
+# Start all services
 docker-compose up -d
 
-# 查看服务状态
+# Check service status
 docker-compose ps
 ```
 
-#### 访问服务
+#### Access Services
 
-- **前端界面**: [http://localhost:3000](http://localhost:3000) (本地开发环境)
-- **后端API**: [http://localhost:8000](http://localhost:8000) (本地开发环境)
-- **API文档**: [http://localhost:8000/docs](http://localhost:8000/docs) (本地开发环境)
-- **Flower监控**: [http://localhost:5555](http://localhost:5555) (本地开发环境)
+- **Frontend Interface**: [http://localhost:3000](http://localhost:3000)
+- **Backend API**: [http://localhost:8000](http://localhost:8000)
+- **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Flower Monitoring**: [http://localhost:5555](http://localhost:5555)
 
-#### 开发环境
+#### Development Environment
 
 ```bash
-# 使用开发环境配置
+# Use development environment configuration
 docker-compose -f docker-compose.dev.yml up -d
 
-# 实时查看日志
+# View logs in real-time
 docker-compose -f docker-compose.dev.yml logs -f
 ```
 
-#### 详细说明
+#### Detailed Instructions
 
-完整的Docker部署指南请参考 [DOCKER.md](DOCKER.md) 文档。
+Complete Docker deployment guide please refer to [DOCKER.md](DOCKER.md) documentation.
 
-### 系统服务
+### System Service
 
 ```bash
-# 创建systemd服务文件
+# Create systemd service file
 sudo nano /etc/systemd/system/autoclip.service
 
 [Unit]
@@ -628,77 +642,80 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
-## 📈 路线图
+## 📈 Roadmap
 
-### 即将推出
+### Coming Soon
 
-- [ ] **B站上传功能**: 自动上传切片视频到B站，支持多账号管理
-- [ ] **字幕编辑功能**: 可视化字幕编辑器和同步功能
-- [ ] **多语言支持**: 支持更多语言的视频处理
-- [ ] **云端存储**: 集成云存储服务
-- [ ] **批量处理**: 支持批量视频处理
-- [ ] **API开放**: 提供公开API接口
-- [ ] **移动应用**: 开发移动端应用
+- [ ] **Bilibili Upload Feature**: Automatic upload of clipped videos to Bilibili
+  with multi-account management
+- [ ] **Subtitle Editing Feature**: Visual subtitle editor and synchronization functionality
+- [ ] **Multi-language Support**: Support for more language video processing
+- [ ] **Cloud Storage**: Integrate cloud storage services
+- [ ] **Batch Processing**: Support for batch video processing
+- [ ] **API Open**: Provide public API interface
+- [ ] **Mobile App**: Develop mobile application
 
-### 长期规划
+### Long-term Planning
 
-- [ ] **AI模型优化**: 集成更多AI模型
-- [ ] **实时协作**: 支持多用户协作
-- [ ] **插件系统**: 支持第三方插件
-- [ ] **企业版**: 企业级功能和服务
+- [ ] **AI Model Optimization**: Integrate more AI models
+- [ ] **Real-time Collaboration**: Support multi-user collaboration
+- [ ] **Plugin System**: Support third-party plugins
+- [ ] **Enterprise Edition**: Enterprise-level features and services
 
-## 🤝 贡献指南
+## 🤝 Contributing
 
-我们欢迎所有形式的贡献！无论是代码贡献、文档改进、问题报告还是功能建议。
+We welcome all forms of contributions! Whether it's code contributions,
+documentation improvements, issue reports, or feature suggestions.
 
-### 如何贡献
+### How to Contribute
 
-1. **Fork** 项目到您的GitHub账户
-2. 克隆您的Fork到本地：
+1. **Fork** the project to your GitHub account
+2. Clone your Fork to local:
 
    ```bash
-   git clone https://github.com/zhouxiaoka/autoclip.git
+   git clone https://github.com/nd7hdyt/YtClipper.git
    cd autoclip
    ```
 
-3. 创建功能分支：
+3. Create feature branch:
 
    ```bash
    git checkout -b feature/amazing-feature
    ```
 
-4. 进行开发和测试
-5. 提交更改：
+4. Develop and test
+5. Commit changes:
 
    ```bash
    git add .
    git commit -m 'feat: add amazing feature'
    ```
 
-6. 推送分支：
+6. Push branch:
 
    ```bash
    git push origin feature/amazing-feature
    ```
 
-7. 在GitHub上创建 **Pull Request**
+7. Create **Pull Request** on GitHub
 
-### 开发规范
+### Development Standards
 
-#### 代码规范
+#### Code Standards
 
-- 后端：遵循PEP 8 Python代码规范
-- 前端：使用TypeScript，遵循ESLint规则
-- 提交信息：使用约定式提交格式（feat, fix, docs, style, refactor, test, chore）
+- Backend: Follow PEP 8 Python code standards
+- Frontend: Use TypeScript, follow ESLint rules
+- Commit messages: Use conventional commit format (feat, fix, docs, style, refactor,
+  test, chore)
 
-#### 开发流程
+#### Development Process
 
-1. 确保所有测试通过
-2. 添加必要的测试用例
-3. 更新相关文档
-4. 确保代码质量检查通过
+1. Ensure all tests pass
+2. Add necessary test cases
+3. Update related documentation
+4. Ensure code quality checks pass
 
-#### 提交信息格式
+#### Commit Message Format
 
 ```text
 <type>(<scope>): <description>
@@ -708,46 +725,42 @@ WantedBy=multi-user.target
 [optional footer(s)]
 ```
 
-示例：
+Examples:
 
 - `feat(api): add video download endpoint`
 - `fix(ui): resolve upload modal display issue`
 - `docs(readme): update installation instructions`
 
-## 📄 许可证
+## ❓ FAQ
 
-本项目采用 [MIT License](LICENSE) 许可证。
+### Installation and Startup Issues
 
-## ❓ 常见问题
-
-### 安装和启动问题
-
-**Q: 启动时提示端口被占用怎么办？**
-A: 使用以下命令检查并停止占用端口的进程：
+**Q: What to do when ports are occupied during startup?**
+A: Use the following commands to check and stop processes occupying ports:
 
 ```bash
-# 检查端口占用
-lsof -i :8000  # 后端端口
-lsof -i :3000  # 前端端口
+# Check port usage
+lsof -i :8000  # Backend port
+lsof -i :3000  # Frontend port
 
-# 停止进程
+# Stop processes
 kill -9 <PID>
 ```
 
-**Q: Redis连接失败怎么办？**
-A: 确保Redis服务正在运行：
+**Q: What to do when Redis connection fails?**
+A: Ensure Redis service is running:
 
 ```bash
-# 检查Redis状态
+# Check Redis status
 redis-cli ping
 
-# 启动Redis服务
+# Start Redis service
 brew services start redis  # macOS
 sudo systemctl start redis-server  # Linux
 ```
 
-**Q: 前端依赖安装失败怎么办？**
-A: 尝试清理缓存后重新安装：
+**Q: What to do when frontend dependency installation fails?**
+A: Try clearing cache and reinstalling:
 
 ```bash
 cd frontend
@@ -756,135 +769,144 @@ npm cache clean --force
 npm install
 ```
 
-### 功能使用问题
+### Feature Usage Issues
 
-**Q: YouTube视频下载失败怎么办？**
+**Q: What to do when YouTube video download fails?**
 A:
 
-1. 检查网络连接
-2. 更新yt-dlp：`pip install --upgrade yt-dlp`
-3. 尝试使用浏览器Cookie
-4. 检查视频是否可用或需要登录
+1. Check network connection
+2. Update yt-dlp: `pip install --upgrade yt-dlp`
+3. Try using browser cookies
+4. Check if video is available or requires login
 
-**Q: B站视频下载失败怎么办？**
+**Q: What to do when Bilibili video download fails?**
 A:
 
-1. 检查账号登录状态
-2. 更新账号Cookie
-3. 检查视频权限设置
-4. 尝试使用其他账号
+1. Check account login status
+2. Update account cookies
+3. Check video permission settings
+4. Try using other accounts
 
-**Q: AI处理速度慢怎么办？**
+**Q: What to do when AI processing is slow?**
 A:
 
-1. 检查API密钥配置
-2. 调整处理参数（减少chunk_size）
-3. 检查网络连接
-4. 考虑使用更快的AI模型
+1. Check API key configuration
+2. Adjust processing parameters (reduce chunk_size)
+3. Check network connection
+4. Consider using faster AI models
 
-**Q: B站上传功能什么时候可以使用？**
-A: B站上传功能正在开发中，预计在下一个版本中发布。该功能将支持：
+**Q: When will Bilibili upload feature be available?**
+A: Bilibili upload feature is currently in development and is expected to be
+released in the next version. This feature will support:
 
-- 自动上传切片视频到B站
-- 多账号管理和切换
-- 批量上传和队列管理
-- 上传进度监控
+- Automatic upload of clipped videos to Bilibili
+- Multi-account management and switching
+- Batch upload and queue management
+- Upload progress monitoring
 
-**Q: 字幕编辑功能什么时候可以使用？**
-A: 字幕编辑功能正在开发中，预计在下一个版本中发布。该功能将支持：
+**Q: When will subtitle editing feature be available?**
+A: Subtitle editing feature is currently in development and is expected to be
+released in the next version. This feature will support:
 
-- 可视化字幕编辑器
-- 字幕时间轴同步
-- 多语言字幕支持
-- 字幕格式转换
+- Visual subtitle editor
+- Subtitle timeline synchronization
+- Multi-language subtitle support
+- Subtitle format conversion
 
-### 性能优化
+### Performance Optimization
 
-**Q: 如何提高处理速度？**
+**Q: How to improve processing speed?**
 A:
 
-1. 增加Celery Worker并发数
-2. 使用SSD存储
-3. 增加系统内存
-4. 优化视频质量设置
+1. Increase Celery Worker concurrency
+2. Use SSD storage
+3. Increase system memory
+4. Optimize video quality settings
 
-**Q: 如何减少存储空间占用？**
+**Q: How to reduce storage space usage?**
 A:
 
-1. 定期清理临时文件
-2. 压缩输出视频
-3. 删除不需要的项目
-4. 使用外部存储
+1. Regularly clean temporary files
+2. Compress output videos
+3. Delete unnecessary projects
+4. Use external storage
 
-## 📞 支持与反馈
+## 📞 Support & Feedback
 
-### 获取帮助
+### Get Help
 
-- **问题反馈**: [GitHub Issues](https://github.com/zhouxiaoka/autoclip/issues)
-- **功能建议**: [GitHub Discussions](https://github.com/zhouxiaoka/autoclip/discussions)
-  (仓库创建后可用)
-- **Bug报告**: 请使用GitHub Issues模板
-- **文档**: [项目文档](docs/)
+- **Issue Reports**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
+- **Feature Suggestions**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions)
+- **Bug Reports**: Please use GitHub Issues template
+- **Documentation**: [Project Documentation](docs/)
 
-### 联系方式
+### Contact
 
-如有问题或建议，请通过以下方式联系：
+For questions or suggestions, please contact us through:
 
-### 💬 QQ
+#### 💬 QQ
 
-![QQ二维码](./qq_qr.jpg)
+![QQ QR Code](./qq_qr.jpg)
 
-### 📱 飞书
+#### 📱 Feishu
 
-![飞书二维码](./feishu_qr.jpg)
+![Feishu QR Code](./feishu_qr.jpg)
 
-### 📧 其他联系方式
+#### 📧 Other Contact Methods
 
-- 提交 [GitHub Issue](https://github.com/zhouxiaoka/autoclip/issues)
-- 发送邮件至：[christine_zhouye@163.com](mailto:christine_zhouye@163.com)
-- 添加上述QQ或飞书联系
+- Submit a [GitHub Issue](https://github.com/nd7hdyt/YtClipper/issues)
+- Send email to: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
+- Add the above QQ or Feishu contact
 
-## 🙏 致谢
+## 📄 License
 
-感谢以下开源项目和服务的支持：
+This project is licensed under the [MIT License](LICENSE).
 
-### 核心技术栈
+## 🙏 Acknowledgments
 
-- [FastAPI](https://fastapi.tiangolo.com/) - 现代化Python Web框架
-- [React](https://reactjs.org/) - 用户界面库
-- [Ant Design](https://ant.design/) - 企业级UI设计语言
-- [TypeScript](https://typescriptlang.org/) - JavaScript的超集
-- [Celery](https://docs.celeryproject.org/) - 分布式任务队列
-- [Redis](https://redis.io/) - 内存数据结构存储
+Thanks to the following open source projects and services:
 
-### 视频处理
+### Core Technology Stack
 
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTube视频下载工具
-- [FFmpeg](https://ffmpeg.org/) - 音视频处理框架
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
+- [React](https://reactjs.org/) - User interface library
+- [Ant Design](https://ant.design/) - Enterprise-grade UI design language
+- [TypeScript](https://typescriptlang.org/) - JavaScript superset
+- [Celery](https://docs.celeryproject.org/) - Distributed task queue
+- [Redis](https://redis.io/) - In-memory data structure store
 
-### AI服务
+### Video Processing
 
-- [通义千问](https://tongyi.aliyun.com/) - 阿里云大语言模型服务
-- [DashScope](https://dashscope.aliyun.com/) - 阿里云AI服务平台
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTube video download tool
+- [FFmpeg](https://ffmpeg.org/) - Audio and video processing framework
 
-### 开发工具
+### AI Services
 
-- [Vite](https://vitejs.dev/) - 前端构建工具
-- [Zustand](https://github.com/pmndrs/zustand) - 状态管理库
-- [Pydantic](https://pydantic-docs.helpmanual.io/) - 数据验证库
+- [Qwen](https://tongyi.aliyun.com/) - Alibaba Cloud large language model service
+- [DashScope](https://dashscope.aliyun.com/) - Alibaba Cloud AI service platform
 
-### 特别感谢
+### Development Tools
 
-- 所有为开源社区贡献的开发者
-- 提供反馈和建议的用户
-- 参与测试和贡献代码的社区成员
+- [Vite](https://vitejs.dev/) - Frontend build tool
+- [Zustand](https://github.com/pmndrs/zustand) - State management library
+- [Pydantic](https://pydantic-docs.helpmanual.io/) - Data validation library
+
+### Special Thanks
+
+- All developers contributing to the open source community
+- Users providing feedback and suggestions
+- Community members participating in testing and code contributions
 
 ---
 
-## 如果这个项目对你有帮助，请给我们一个 ⭐ Star
+## If this project helps you, please give us a ⭐ Star
 
-[![Star History Chart](https://api.star-history.com/svg?repos=zhouxiaoka/autoclip&type=Date)](https://star-history.com/#zhouxiaoka/autoclip&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=nd7hdyt/YtClipper&type=Date)](https://star-history.com/#nd7hdyt/YtClipper&Date)
 
 Made with ❤️ by AutoClip Team
 
-⭐ 如果觉得有用，请给个Star支持一下！
+⭐ If you find it useful, please give us a Star!
+
+
+---
+**Credits:** Original project by [zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip) — this fork (YtClipper) is English-translated and rebranded, with gratitude to the original authors.

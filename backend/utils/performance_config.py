@@ -1,6 +1,6 @@
 """
-性能配置和优化设置
-提供系统性能相关的配置和优化参数
+ENconfigENsettings
+ENsystemENconfigENparameters
 """
 
 from pydantic import BaseModel, Field, validator
@@ -9,126 +9,126 @@ from enum import Enum
 
 
 class PerformanceLevel(Enum):
-    """性能级别"""
-    LOW = "low"          # 低性能，适合资源受限环境
-    MEDIUM = "medium"    # 中等性能，平衡性能和资源使用
-    HIGH = "high"        # 高性能，适合资源充足环境
-    CUSTOM = "custom"    # 自定义配置
+    """EN"""
+    LOW = "low"          # EN，EN
+    MEDIUM = "medium"    # EN，ENuse
+    HIGH = "high"        # EN，EN
+    CUSTOM = "custom"    # ENconfig
 
 
 class FileUploadConfig(BaseModel):
-    """文件上传配置"""
-    # 分片上传配置
-    chunk_size: int = Field(default=2 * 1024 * 1024, description="分片大小(字节)")  # 2MB
-    max_file_size: int = Field(default=2 * 1024 * 1024 * 1024, description="最大文件大小(字节)")  # 2GB
-    max_concurrent_uploads: int = Field(default=3, description="最大并发上传数")
-    upload_timeout: int = Field(default=1800, description="上传超时时间(秒)")  # 30分钟
+    """fileuploadconfig"""
+    # ENuploadconfig
+    chunk_size: int = Field(default=2 * 1024 * 1024, description="EN(EN)")  # 2MB
+    max_file_size: int = Field(default=2 * 1024 * 1024 * 1024, description="ENfileEN(EN)")  # 2GB
+    max_concurrent_uploads: int = Field(default=3, description="ENuploadEN")
+    upload_timeout: int = Field(default=1800, description="uploadtimeouttime(EN)")  # 30EN
     
-    # 重试配置
-    max_retries: int = Field(default=3, description="最大重试次数")
-    retry_delay: int = Field(default=5, description="重试延迟(秒)")
+    # retryconfig
+    max_retries: int = Field(default=3, description="ENretryEN")
+    retry_delay: int = Field(default=5, description="retryEN(EN)")
     
-    # 支持的格式
+    # EN
     supported_video_formats: list = Field(
         default=['.mp4', '.avi', '.mov', '.mkv', '.webm', '.flv', '.wmv'],
-        description="支持的视频格式"
+        description="ENvideoEN"
     )
     supported_subtitle_formats: list = Field(
         default=['.srt', '.vtt', '.ass', '.ssa'],
-        description="支持的字幕格式"
+        description="ENsubtitlesEN"
     )
     
     @validator('chunk_size')
     def validate_chunk_size(cls, v):
-        if v <= 0 or v > 10 * 1024 * 1024:  # 最大10MB
-            raise ValueError('分片大小必须在1字节到10MB之间')
+        if v <= 0 or v > 10 * 1024 * 1024:  # EN10MB
+            raise ValueError('ENmustEN1EN10MBEN')
         return v
     
     @validator('max_file_size')
     def validate_max_file_size(cls, v):
-        if v <= 0 or v > 10 * 1024 * 1024 * 1024:  # 最大10GB
-            raise ValueError('最大文件大小必须在1字节到10GB之间')
+        if v <= 0 or v > 10 * 1024 * 1024 * 1024:  # EN10GB
+            raise ValueError('ENfileENmustEN1EN10GBEN')
         return v
 
 
 class ProcessingConfig(BaseModel):
-    """处理配置"""
-    # 并发控制
-    max_concurrent_tasks: int = Field(default=2, description="最大并发处理任务数")
-    max_concurrent_workers: int = Field(default=4, description="最大并发工作进程数")
+    """processingconfig"""
+    # EN
+    max_concurrent_tasks: int = Field(default=2, description="ENprocessingtaskEN")
+    max_concurrent_workers: int = Field(default=4, description="EN")
     
-    # 内存控制
-    max_memory_usage: int = Field(default=4 * 1024 * 1024 * 1024, description="最大内存使用(字节)")  # 4GB
-    memory_check_interval: int = Field(default=30, description="内存检查间隔(秒)")
+    # EN
+    max_memory_usage: int = Field(default=4 * 1024 * 1024 * 1024, description="ENuse(EN)")  # 4GB
+    memory_check_interval: int = Field(default=30, description="ENcheckEN(EN)")
     
-    # 处理超时
-    video_processing_timeout: int = Field(default=3600, description="视频处理超时(秒)")  # 1小时
-    audio_processing_timeout: int = Field(default=1800, description="音频处理超时(秒)")  # 30分钟
-    ai_processing_timeout: int = Field(default=300, description="AI处理超时(秒)")  # 5分钟
+    # processingtimeout
+    video_processing_timeout: int = Field(default=3600, description="videoprocessingtimeout(EN)")  # 1EN
+    audio_processing_timeout: int = Field(default=1800, description="ENprocessingtimeout(EN)")  # 30EN
+    ai_processing_timeout: int = Field(default=300, description="AIprocessingtimeout(EN)")  # 5EN
     
-    # 批处理配置
-    batch_size: int = Field(default=10, description="批处理大小")
-    batch_timeout: int = Field(default=600, description="批处理超时(秒)")  # 10分钟
+    # ENprocessingconfig
+    batch_size: int = Field(default=10, description="ENprocessingEN")
+    batch_timeout: int = Field(default=600, description="ENprocessingtimeout(EN)")  # 10EN
     
     @validator('max_concurrent_tasks')
     def validate_max_concurrent_tasks(cls, v):
         if v <= 0 or v > 10:
-            raise ValueError('最大并发任务数必须在1到10之间')
+            raise ValueError('ENtaskENmustEN1EN10EN')
         return v
 
 
 class CacheConfig(BaseModel):
-    """缓存配置"""
-    # 缓存大小
-    max_cache_size: int = Field(default=1024 * 1024 * 1024, description="最大缓存大小(字节)")  # 1GB
-    cache_ttl: int = Field(default=3600, description="缓存生存时间(秒)")  # 1小时
+    """cacheconfig"""
+    # cacheEN
+    max_cache_size: int = Field(default=1024 * 1024 * 1024, description="ENcacheEN(EN)")  # 1GB
+    cache_ttl: int = Field(default=3600, description="cacheENtime(EN)")  # 1EN
     
-    # 缓存策略
-    enable_file_cache: bool = Field(default=True, description="启用文件缓存")
-    enable_result_cache: bool = Field(default=True, description="启用结果缓存")
-    enable_metadata_cache: bool = Field(default=True, description="启用元数据缓存")
+    # cacheEN
+    enable_file_cache: bool = Field(default=True, description="ENfilecache")
+    enable_result_cache: bool = Field(default=True, description="ENresultcache")
+    enable_metadata_cache: bool = Field(default=True, description="ENcache")
     
-    # 清理策略
-    cache_cleanup_interval: int = Field(default=1800, description="缓存清理间隔(秒)")  # 30分钟
-    cache_cleanup_threshold: float = Field(default=0.8, description="缓存清理阈值")  # 80%
+    # EN
+    cache_cleanup_interval: int = Field(default=1800, description="cacheEN(EN)")  # 30EN
+    cache_cleanup_threshold: float = Field(default=0.8, description="cacheEN")  # 80%
 
 
 class DatabaseConfig(BaseModel):
-    """数据库配置"""
-    # 连接池配置
-    pool_size: int = Field(default=10, description="连接池大小")
-    max_overflow: int = Field(default=20, description="最大溢出连接数")
-    pool_timeout: int = Field(default=30, description="连接池超时(秒)")
-    pool_recycle: int = Field(default=3600, description="连接回收时间(秒)")
+    """databaseconfig"""
+    # connectENconfig
+    pool_size: int = Field(default=10, description="connectEN")
+    max_overflow: int = Field(default=20, description="ENconnectEN")
+    pool_timeout: int = Field(default=30, description="connectENtimeout(EN)")
+    pool_recycle: int = Field(default=3600, description="connectENtime(EN)")
     
-    # 查询优化
-    query_timeout: int = Field(default=30, description="查询超时(秒)")
-    enable_query_cache: bool = Field(default=True, description="启用查询缓存")
+    # EN
+    query_timeout: int = Field(default=30, description="ENtimeout(EN)")
+    enable_query_cache: bool = Field(default=True, description="ENcache")
     
     @validator('pool_size')
     def validate_pool_size(cls, v):
         if v <= 0 or v > 100:
-            raise ValueError('连接池大小必须在1到100之间')
+            raise ValueError('connectENmustEN1EN100EN')
         return v
 
 
 class PerformanceConfig(BaseModel):
-    """性能配置主类"""
-    level: PerformanceLevel = Field(default=PerformanceLevel.MEDIUM, description="性能级别")
+    """ENconfigEN"""
+    level: PerformanceLevel = Field(default=PerformanceLevel.MEDIUM, description="EN")
     
-    # 子配置
+    # ENconfig
     file_upload: FileUploadConfig = Field(default_factory=FileUploadConfig)
     processing: ProcessingConfig = Field(default_factory=ProcessingConfig)
     cache: CacheConfig = Field(default_factory=CacheConfig)
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     
-    # 全局设置
-    enable_monitoring: bool = Field(default=True, description="启用性能监控")
-    monitoring_interval: int = Field(default=60, description="监控间隔(秒)")
-    log_performance_metrics: bool = Field(default=True, description="记录性能指标")
+    # ENsettings
+    enable_monitoring: bool = Field(default=True, description="EN")
+    monitoring_interval: int = Field(default=60, description="EN(EN)")
+    log_performance_metrics: bool = Field(default=True, description="EN")
     
     def get_config_for_level(self, level: PerformanceLevel) -> 'PerformanceConfig':
-        """根据性能级别获取配置"""
+        """ENfetchconfig"""
         if level == PerformanceLevel.LOW:
             return self._get_low_performance_config()
         elif level == PerformanceLevel.MEDIUM:
@@ -139,27 +139,27 @@ class PerformanceConfig(BaseModel):
             return self
     
     def _get_low_performance_config(self) -> 'PerformanceConfig':
-        """低性能配置"""
+        """ENconfig"""
         return PerformanceConfig(
             level=PerformanceLevel.LOW,
             file_upload=FileUploadConfig(
                 chunk_size=1024 * 1024,  # 1MB
                 max_file_size=512 * 1024 * 1024,  # 512MB
                 max_concurrent_uploads=1,
-                upload_timeout=900,  # 15分钟
+                upload_timeout=900,  # 15EN
                 max_retries=2
             ),
             processing=ProcessingConfig(
                 max_concurrent_tasks=1,
                 max_concurrent_workers=2,
                 max_memory_usage=2 * 1024 * 1024 * 1024,  # 2GB
-                video_processing_timeout=1800,  # 30分钟
-                audio_processing_timeout=900,  # 15分钟
-                ai_processing_timeout=180  # 3分钟
+                video_processing_timeout=1800,  # 30EN
+                audio_processing_timeout=900,  # 15EN
+                ai_processing_timeout=180  # 3EN
             ),
             cache=CacheConfig(
                 max_cache_size=256 * 1024 * 1024,  # 256MB
-                cache_ttl=1800,  # 30分钟
+                cache_ttl=1800,  # 30EN
                 enable_file_cache=False,
                 enable_result_cache=True,
                 enable_metadata_cache=True
@@ -172,27 +172,27 @@ class PerformanceConfig(BaseModel):
         )
     
     def _get_medium_performance_config(self) -> 'PerformanceConfig':
-        """中等性能配置"""
+        """ENconfig"""
         return PerformanceConfig(
             level=PerformanceLevel.MEDIUM,
             file_upload=FileUploadConfig(
                 chunk_size=2 * 1024 * 1024,  # 2MB
                 max_file_size=2 * 1024 * 1024 * 1024,  # 2GB
                 max_concurrent_uploads=3,
-                upload_timeout=1800,  # 30分钟
+                upload_timeout=1800,  # 30EN
                 max_retries=3
             ),
             processing=ProcessingConfig(
                 max_concurrent_tasks=2,
                 max_concurrent_workers=4,
                 max_memory_usage=4 * 1024 * 1024 * 1024,  # 4GB
-                video_processing_timeout=3600,  # 1小时
-                audio_processing_timeout=1800,  # 30分钟
-                ai_processing_timeout=300  # 5分钟
+                video_processing_timeout=3600,  # 1EN
+                audio_processing_timeout=1800,  # 30EN
+                ai_processing_timeout=300  # 5EN
             ),
             cache=CacheConfig(
                 max_cache_size=1024 * 1024 * 1024,  # 1GB
-                cache_ttl=3600,  # 1小时
+                cache_ttl=3600,  # 1EN
                 enable_file_cache=True,
                 enable_result_cache=True,
                 enable_metadata_cache=True
@@ -205,27 +205,27 @@ class PerformanceConfig(BaseModel):
         )
     
     def _get_high_performance_config(self) -> 'PerformanceConfig':
-        """高性能配置"""
+        """ENconfig"""
         return PerformanceConfig(
             level=PerformanceLevel.HIGH,
             file_upload=FileUploadConfig(
                 chunk_size=4 * 1024 * 1024,  # 4MB
                 max_file_size=5 * 1024 * 1024 * 1024,  # 5GB
                 max_concurrent_uploads=5,
-                upload_timeout=3600,  # 1小时
+                upload_timeout=3600,  # 1EN
                 max_retries=5
             ),
             processing=ProcessingConfig(
                 max_concurrent_tasks=4,
                 max_concurrent_workers=8,
                 max_memory_usage=8 * 1024 * 1024 * 1024,  # 8GB
-                video_processing_timeout=7200,  # 2小时
-                audio_processing_timeout=3600,  # 1小时
-                ai_processing_timeout=600  # 10分钟
+                video_processing_timeout=7200,  # 2EN
+                audio_processing_timeout=3600,  # 1EN
+                ai_processing_timeout=600  # 10EN
             ),
             cache=CacheConfig(
                 max_cache_size=2 * 1024 * 1024 * 1024,  # 2GB
-                cache_ttl=7200,  # 2小时
+                cache_ttl=7200,  # 2EN
                 enable_file_cache=True,
                 enable_result_cache=True,
                 enable_metadata_cache=True
@@ -238,7 +238,7 @@ class PerformanceConfig(BaseModel):
         )
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典"""
+        """EN"""
         return {
             "level": self.level.value,
             "file_upload": self.file_upload.dict(),
@@ -251,10 +251,10 @@ class PerformanceConfig(BaseModel):
         }
 
 
-# 全局性能配置实例
+# ENconfigEN
 performance_config = PerformanceConfig()
 
-# 性能级别配置映射
+# ENconfigEN
 PERFORMANCE_LEVELS = {
     PerformanceLevel.LOW: performance_config._get_low_performance_config(),
     PerformanceLevel.MEDIUM: performance_config._get_medium_performance_config(),
@@ -263,20 +263,20 @@ PERFORMANCE_LEVELS = {
 
 
 def get_performance_config(level: PerformanceLevel = PerformanceLevel.MEDIUM) -> PerformanceConfig:
-    """获取指定级别的性能配置"""
+    """fetchENconfig"""
     return PERFORMANCE_LEVELS.get(level, performance_config._get_medium_performance_config())
 
 
 def update_performance_config(config_dict: Dict[str, Any]) -> PerformanceConfig:
-    """更新性能配置"""
+    """updateENconfig"""
     global performance_config
     
-    # 更新配置
+    # updateconfig
     if 'level' in config_dict:
         level = PerformanceLevel(config_dict['level'])
         performance_config = performance_config.get_config_for_level(level)
     
-    # 更新子配置
+    # updateENconfig
     if 'file_upload' in config_dict:
         performance_config.file_upload = FileUploadConfig(**config_dict['file_upload'])
     
@@ -289,7 +289,7 @@ def update_performance_config(config_dict: Dict[str, Any]) -> PerformanceConfig:
     if 'database' in config_dict:
         performance_config.database = DatabaseConfig(**config_dict['database'])
     
-    # 更新全局设置
+    # updateENsettings
     if 'enable_monitoring' in config_dict:
         performance_config.enable_monitoring = config_dict['enable_monitoring']
     

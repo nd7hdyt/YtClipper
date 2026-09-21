@@ -1,6 +1,6 @@
 """
-数据访问层包
-实现Repository模式，提供统一的数据访问接口
+EN
+ENRepositoryEN，ENAPI
 """
 from .base import BaseRepository
 

@@ -3,13 +3,13 @@ import { projectApi } from '../services/api'
 import { Project, useProjectStore } from '../store/useProjectStore'
 
 interface UseProjectPollingOptions {
-  interval?: number // 轮询间隔，默认10秒
+  interval?: number // EN，EN10EN
   onProjectsUpdate?: (projects: Project[]) => void
-  enabled?: boolean // 是否启用轮询
+  enabled?: boolean // EN
 }
 
 export const useProjectPolling = ({
-  interval = 30000, // 默认30秒，减少频繁请求
+  interval = 30000, // EN30EN，ENrequest
   onProjectsUpdate,
   enabled = true
 }: UseProjectPollingOptions = {}) => {
@@ -24,10 +24,10 @@ export const useProjectPolling = ({
     
     const poll = async () => {
       try {
-        // 实时获取isDragging状态
+        // ENfetchisDraggingStatus
         const currentIsDragging = useProjectStore.getState().isDragging
         
-        // 如果正在拖拽，跳过这次轮询
+        // ENDrag，EN
         if (currentIsDragging) {
           console.log('Skipping poll: dragging in progress')
           return
@@ -37,7 +37,7 @@ export const useProjectPolling = ({
         const projects = await projectApi.getProjects()
         console.log('Polled projects:', projects)
         
-        // 确保projects是数组类型
+        // ensureprojectsEN
         const safeProjects = Array.isArray(projects) ? projects : []
         const hasProcessingProjects = safeProjects.some(p => p.status === 'processing')
         
@@ -48,20 +48,20 @@ export const useProjectPolling = ({
         
         setLastUpdateTime(Date.now())
         
-        // 智能轮询：如果没有正在处理的项目，增加轮询间隔
+        // EN：ENProcessingENproject，EN
         if (!hasProcessingProjects) {
-          // 如果没有活跃项目，可以进一步减少轮询频率
-          console.log('无活跃项目，将减少轮询频率')
+          // ENproject，EN
+          console.log('ENproject，EN')
         }
       } catch (error) {
         console.error('Polling error:', error)
       }
     }
 
-    // 立即执行一次
+    // Execute once immediately
     poll()
     
-    // 设置定时器
+    // Set timer
     intervalRef.current = window.setInterval(poll, interval)
   }
 
@@ -76,7 +76,7 @@ export const useProjectPolling = ({
   const refreshNow = async () => {
     try {
       const projects = await projectApi.getProjects()
-      // 确保projects是数组类型
+      // ensureprojectsEN
       const safeProjects = Array.isArray(projects) ? projects : []
       if (onProjectsUpdate) {
         onProjectsUpdate(safeProjects)

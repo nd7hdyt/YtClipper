@@ -1,4 +1,4 @@
-"""对一条校正后的时间线算回归指标。"""
+"""ENtimeEN。"""
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional

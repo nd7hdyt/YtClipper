@@ -1,6 +1,6 @@
 """
-项目配置管理器
-负责集中管理每个项目的配置信息，包括prompt文件、API密钥、处理参数等
+projectconfigEN
+ENeachprojectENconfigEN，includepromptfile、APIEN、processingparametersEN
 """
 
 import os
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProcessingStep(str, Enum):
-    """处理步骤枚举"""
+    """processingEN"""
     STEP1_OUTLINE = "step1_outline"
     STEP2_TIMELINE = "step2_timeline"
     STEP3_SCORING = "step3_scoring"
@@ -30,7 +30,7 @@ class ProcessingStep(str, Enum):
 
 @dataclass
 class LLMConfig:
-    """LLM配置"""
+    """LLMconfig"""
     api_key: str
     model_name: str = "qwen-plus"
     max_retries: int = 3
@@ -39,7 +39,7 @@ class LLMConfig:
 
 @dataclass
 class ProcessingParams:
-    """处理参数"""
+    """processingparameters"""
     chunk_size: int = 5000
     min_score_threshold: float = 0.7
     max_clips_per_collection: int = 5
@@ -51,99 +51,99 @@ class ProcessingParams:
 
 
 class ProjectConfigManager:
-    """项目配置管理器"""
+    """projectconfigEN"""
     
     def __init__(self, project_id: str):
         self.project_id = project_id
         self.project_dir = Path(f"data/projects/{project_id}")
         self.config_path = self.project_dir / "config.yaml"
-        # 使用绝对路径指向项目根目录的prompt文件夹
+        # useENpathENprojectENdirectoryENpromptfileEN
         project_root = Path(__file__).parent.parent.parent
         self.prompt_dir = Path(__file__).parent.parent / "prompt"
         
-        # 确保项目目录存在
+        # ENprojectdirectoryEN
         self.project_dir.mkdir(parents=True, exist_ok=True)
         
-        # 加载配置
+        # loadconfig
         self.config = self._load_config()
     
     def _load_config(self) -> Dict[str, Any]:
-        """加载项目配置"""
+        """loadprojectconfig"""
         if self.config_path.exists():
             try:
                 with open(self.config_path, 'r', encoding='utf-8') as f:
                     config = yaml.safe_load(f)
                     if config is None:
-                        logger.warning(f"配置文件为空: {self.config_path}")
+                        logger.warning(f"configfileEN: {self.config_path}")
                         return {}
                     return config
             except yaml.YAMLError as e:
-                logger.error(f"YAML解析错误: {self.config_path}, 错误: {e}")
+                logger.error(f"YAMLparseerror: {self.config_path}, error: {e}")
                 return {}
             except FileNotFoundError as e:
-                logger.error(f"配置文件不存在: {self.config_path}, 错误: {e}")
+                logger.error(f"configfiledoes not exist: {self.config_path}, error: {e}")
                 return {}
             except Exception as e:
-                logger.error(f"加载项目配置失败: {self.config_path}, 错误: {e}")
+                logger.error(f"loadprojectconfigfailed: {self.config_path}, error: {e}")
                 return {}
         return {}
     
     def _save_config(self):
-        """保存项目配置"""
+        """saveprojectconfig"""
         try:
-            # 确保目录存在
+            # ENdirectoryEN
             self.config_path.parent.mkdir(parents=True, exist_ok=True)
             
             with open(self.config_path, 'w', encoding='utf-8') as f:
                 yaml.dump(self.config, f, default_flow_style=False, allow_unicode=True)
             
-            logger.info(f"配置已保存: {self.config_path}")
+            logger.info(f"configENsave: {self.config_path}")
         except Exception as e:
-            logger.error(f"保存项目配置失败: {self.config_path}, 错误: {e}")
+            logger.error(f"saveprojectconfigfailed: {self.config_path}, error: {e}")
             raise
     
     def get_prompt_files(self, project_type: str = "default", language: str = "zh") -> Dict[str, Path]:
         """
-        获取项目对应的prompt文件路径
+        fetchprojectENpromptfilepath
         
         Args:
-            project_type: 项目类型，对应不同的prompt模板
-            language: 语言版本，支持多语言prompt
+            project_type: projectEN，ENpromptEN
+            language: EN，ENprompt
             
         Returns:
-            prompt文件路径字典
+            promptfilepathEN
         """
-        # 从配置中获取prompt设置
+        # ENconfigENfetchpromptsettings
         prompt_config = self.config.get("prompts", {})
         
-        # 基础prompt文件
+        # ENpromptfile
         base_prompts = {
-            "outline": self.prompt_dir / "大纲.txt",
-            "timeline": self.prompt_dir / "时间点.txt",
-            "recommendation": self.prompt_dir / "推荐理由.txt",
-            "title": self.prompt_dir / "标题生成.txt",
-            "clustering": self.prompt_dir / "主题聚类.txt"
+            "outline": self.prompt_dir / "EN.txt",
+            "timeline": self.prompt_dir / "timeEN.txt",
+            "recommendation": self.prompt_dir / "EN.txt",
+            "title": self.prompt_dir / "titlegenerate.txt",
+            "clustering": self.prompt_dir / "EN.txt"
         }
         
-        # 如果配置中指定了自定义prompt路径，使用配置的路径
+        # ifconfigENpromptpath，useconfigENpath
         if "custom_paths" in prompt_config:
             for key, custom_path in prompt_config["custom_paths"].items():
                 if key in base_prompts:
                     custom_file = Path(custom_path)
                     if custom_file.exists():
                         base_prompts[key] = custom_file
-                        logger.info(f"使用自定义prompt: {key} -> {custom_path}")
+                        logger.info(f"useENprompt: {key} -> {custom_path}")
         
-        # 检查项目类型特定的prompt文件
+        # checkprojectENpromptfile
         type_prompt_dir = self.prompt_dir / project_type
         if type_prompt_dir.exists():
             for key in base_prompts:
                 type_specific_prompt = type_prompt_dir / f"{key}.txt"
                 if type_specific_prompt.exists():
                     base_prompts[key] = type_specific_prompt
-                    logger.info(f"使用项目类型特定prompt: {key} -> {type_specific_prompt}")
+                    logger.info(f"useprojectENprompt: {key} -> {type_specific_prompt}")
         
-        # 检查多语言prompt文件
+        # checkENpromptfile
         if language != "zh":
             lang_prompt_dir = self.prompt_dir / "languages" / language
             if lang_prompt_dir.exists():
@@ -151,28 +151,28 @@ class ProjectConfigManager:
                     lang_specific_prompt = lang_prompt_dir / f"{key}.txt"
                     if lang_specific_prompt.exists():
                         base_prompts[key] = lang_specific_prompt
-                        logger.info(f"使用多语言prompt: {key} -> {lang_specific_prompt}")
+                        logger.info(f"useENprompt: {key} -> {lang_specific_prompt}")
         
-        # 验证所有prompt文件是否存在
+        # validateallpromptfileEN
         missing_prompts = []
         for key, path in base_prompts.items():
             if not path.exists():
                 missing_prompts.append(f"{key}: {path}")
         
         if missing_prompts:
-            logger.warning(f"缺少prompt文件: {missing_prompts}")
+            logger.warning(f"ENpromptfile: {missing_prompts}")
         
         return base_prompts
     
     def get_llm_config(self) -> LLMConfig:
-        """获取LLM配置"""
-        # 优先从项目配置获取
+        """fetchLLMconfig"""
+        # ENprojectconfigfetch
         llm_config = self.config.get("llm", {})
         
-        # API密钥优先级：项目配置 > 环境变量 > 默认值
+        # APIEN：projectconfig > EN > EN
         api_key = llm_config.get("api_key") or os.getenv("DASHSCOPE_API_KEY", "")
         if not api_key:
-            raise ValueError("DASHSCOPE_API_KEY 未在项目配置或环境变量中设置")
+            raise ValueError("DASHSCOPE_API_KEY ENprojectconfigENsettings")
         
         return LLMConfig(
             api_key=api_key,
@@ -182,7 +182,7 @@ class ProjectConfigManager:
         )
     
     def get_processing_params(self) -> ProcessingParams:
-        """获取处理参数"""
+        """fetchprocessingparameters"""
         params = self.config.get("processing_params", {})
         return ProcessingParams(
             chunk_size=params.get("chunk_size", 5000),
@@ -196,7 +196,7 @@ class ProjectConfigManager:
         )
     
     def update_processing_params(self, **kwargs):
-        """更新处理参数"""
+        """updateprocessingparameters"""
         if "processing_params" not in self.config:
             self.config["processing_params"] = {}
         
@@ -204,7 +204,7 @@ class ProjectConfigManager:
         self._save_config()
     
     def update_llm_config(self, **kwargs):
-        """更新LLM配置"""
+        """updateLLMconfig"""
         if "llm" not in self.config:
             self.config["llm"] = {}
         
@@ -212,7 +212,7 @@ class ProjectConfigManager:
         self._save_config()
     
     def get_project_paths(self) -> Dict[str, Path]:
-        """获取项目相关路径"""
+        """fetchprojectENpath"""
         return {
             "project_dir": self.project_dir,
             "metadata_dir": self.project_dir / "metadata",
@@ -222,18 +222,18 @@ class ProjectConfigManager:
         }
     
     def ensure_project_directories(self):
-        """确保项目目录结构存在"""
+        """ENprojectdirectoryEN"""
         paths = self.get_project_paths()
         for path in paths.values():
             path.mkdir(parents=True, exist_ok=True)
     
     def get_step_config(self, step_name: str) -> Dict[str, Any]:
-        """获取特定步骤的配置"""
+        """fetchENconfig"""
         step_configs = self.config.get("steps", {})
         return step_configs.get(step_name, {})
     
     def update_step_config(self, step_name: str, **kwargs):
-        """更新特定步骤的配置"""
+        """updateENconfig"""
         if "steps" not in self.config:
             self.config["steps"] = {}
         
@@ -244,7 +244,7 @@ class ProjectConfigManager:
         self._save_config()
     
     def backup_config(self, backup_path: Optional[Path] = None) -> Path:
-        """备份当前配置"""
+        """ENcurrentconfig"""
         if backup_path is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_path = self.project_dir / f"config_backup_{timestamp}.yaml"
@@ -254,36 +254,36 @@ class ProjectConfigManager:
             with open(backup_path, 'w', encoding='utf-8') as f:
                 yaml.dump(self.config, f, default_flow_style=False, allow_unicode=True)
             
-            logger.info(f"配置已备份到: {backup_path}")
+            logger.info(f"configEN: {backup_path}")
             return backup_path
         except Exception as e:
-            logger.error(f"配置备份失败: {e}")
+            logger.error(f"configENfailed: {e}")
             raise
     
     def restore_config(self, backup_path: Path) -> bool:
-        """从备份恢复配置"""
+        """ENconfig"""
         try:
             with open(backup_path, 'r', encoding='utf-8') as f:
                 backup_config = yaml.safe_load(f)
             
             if backup_config is None:
-                raise ValueError("备份文件为空")
+                raise ValueError("ENfileEN")
             
-            # 先备份当前配置
+            # ENcurrentconfig
             self.backup_config()
             
-            # 恢复配置
+            # ENconfig
             self.config = backup_config
             self._save_config()
             
-            logger.info(f"配置已从备份恢复: {backup_path}")
+            logger.info(f"configEN: {backup_path}")
             return True
         except Exception as e:
-            logger.error(f"配置恢复失败: {e}")
+            logger.error(f"configENfailed: {e}")
             return False
     
     def export_config(self) -> Dict[str, Any]:
-        """导出配置"""
+        """ENconfig"""
         return {
             "project_id": self.project_id,
             "llm_config": {
@@ -307,8 +307,8 @@ class ProjectConfigManager:
         }
     
     def get_project_config(self) -> Dict[str, Any]:
-        """获取项目配置"""
-        # 尝试从数据库获取项目配置
+        """fetchprojectconfig"""
+        # ENdatabasefetchprojectconfig
         try:
             from sqlalchemy.orm import Session
             from ..core.database import SessionLocal
@@ -322,13 +322,13 @@ class ProjectConfigManager:
             finally:
                 db.close()
         except Exception as e:
-            logger.warning(f"无法从数据库获取项目配置: {e}")
+            logger.warning(f"cannotENdatabasefetchprojectconfig: {e}")
         
-        # 回退到本地配置文件
+        # ENconfigfile
         return self.config
     
     def validate_config(self) -> Dict[str, Any]:
-        """验证配置的完整性和有效性"""
+        """validateconfigEN"""
         validation_result = {
             "valid": True,
             "errors": [],
@@ -336,36 +336,36 @@ class ProjectConfigManager:
             "missing_files": []
         }
         
-        # 验证LLM配置
+        # validateLLMconfig
         try:
             self.get_llm_config()
         except ValueError as e:
             validation_result["valid"] = False
-            validation_result["errors"].append(f"LLM配置错误: {e}")
+            validation_result["errors"].append(f"LLMconfigerror: {e}")
         
-        # 验证prompt文件
+        # validatepromptfile
         prompt_files = self.get_prompt_files()
         for key, path in prompt_files.items():
             if not path.exists():
-                validation_result["warnings"].append(f"Prompt文件不存在: {key} -> {path}")
+                validation_result["warnings"].append(f"Promptfiledoes not exist: {key} -> {path}")
                 validation_result["missing_files"].append(str(path))
         
-        # 验证项目目录
+        # validateprojectdirectory
         project_paths = self.get_project_paths()
         for key, path in project_paths.items():
             if not path.exists():
-                validation_result["warnings"].append(f"项目目录不存在: {key} -> {path}")
+                validation_result["warnings"].append(f"projectdirectorydoes not exist: {key} -> {path}")
         
-        # 验证处理参数
+        # validateprocessingparameters
         try:
             params = self.get_processing_params()
             if params.chunk_size <= 0:
-                validation_result["errors"].append("chunk_size必须大于0")
+                validation_result["errors"].append("chunk_sizemustEN0")
             if params.min_score_threshold < 0 or params.min_score_threshold > 1:
-                validation_result["errors"].append("min_score_threshold必须在0-1之间")
+                validation_result["errors"].append("min_score_thresholdmustEN0-1EN")
         except Exception as e:
             validation_result["valid"] = False
-            validation_result["errors"].append(f"处理参数错误: {e}")
+            validation_result["errors"].append(f"processingInvalid parameters: {e}")
         
         if validation_result["errors"]:
             validation_result["valid"] = False

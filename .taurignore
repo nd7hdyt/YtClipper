@@ -1,15 +1,15 @@
-# Git 相关
+# Git EN
 .git
 .gitignore
 
-# Node.js 相关
+# Node.js EN
 node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Python 相关
+# Python EN
 venv
 .venv
 venv_x86
@@ -22,32 +22,32 @@ __pycache__
 .mypy_cache
 .ruff_cache
 
-# 构建产物
+# EN
 dist
 dist-ssr
 build
 .cache
 *.log
 
-# PyInstaller 产物
+# PyInstaller EN
 *.exe
 autoclip-backend*
 backend/dist/
 backend/build/
 backend/*.spec
 
-# 开发工具
+# ENTool
 .vscode
 .idea
 *.swp
 *.swo
 *~
 
-# 系统文件
+# SystemEN
 .DS_Store
 Thumbs.db
 
-# 数据文件
+# EN
 data/
 logs/
 temp/
@@ -55,10 +55,10 @@ uploads/
 whisper_models/
 backups/
 
-# Tauri 构建缓存
+# Tauri EN
 src-tauri/target
 
-# 后端数据
+# EN
 backend/data/
 backend/__pycache__/
 backend/.mypy_cache/
@@ -66,23 +66,23 @@ backend/.ruff_cache/
 backend/tests/
 backend/.pytest_cache/
 
-# 前端开发文件
+# EN
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 
-# 文档和脚本
+# ENScript
 docs/
 scripts/
 cleanup_backup/
 control/
 
-# Docker 相关
+# Docker EN
 docker-compose*.yml
 Dockerfile*
 docker-*
 
-# 其他
+# EN
 *.pid
 *.rdb
 *.spec

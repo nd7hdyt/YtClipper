@@ -1,6 +1,6 @@
 """
-异步任务管理器
-防止未捕获的异常导致后端重启
+ENtaskEN
+ENexceptionENrestart
 """
 
 import asyncio
@@ -12,7 +12,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 class AsyncTaskManager:
-    """异步任务管理器"""
+    """ENtaskEN"""
     
     def __init__(self):
         self.running_tasks: Dict[str, asyncio.Task] = {}
@@ -26,29 +26,29 @@ class AsyncTaskManager:
         **kwargs
     ) -> asyncio.Task:
         """
-        创建安全的异步任务，防止未捕获异常
+        createENtask，ENexception
         
         Args:
-            task_id: 任务ID
-            coro: 协程函数
-            *args: 位置参数
-            **kwargs: 关键字参数
+            task_id: taskID
+            coro: EN
+            *args: ENparameters
+            **kwargs: ENparameters
             
         Returns:
-            异步任务对象
+            ENtaskEN
         """
         
         async def safe_wrapper():
-            """安全包装器，捕获所有异常"""
+            """EN，ENallexception"""
             try:
-                logger.info(f"开始执行任务: {task_id}")
+                logger.info(f"startexecutetask: {task_id}")
                 result = await coro(*args, **kwargs)
                 self.task_results[task_id] = {
                     "status": "completed",
                     "result": result,
                     "completed_at": datetime.now().isoformat()
                 }
-                logger.info(f"任务完成: {task_id}")
+                logger.info(f"taskEN: {task_id}")
                 return result
                 
             except Exception as e:
@@ -60,35 +60,35 @@ class AsyncTaskManager:
                     "failed_at": datetime.now().isoformat()
                 }
                 self.task_results[task_id] = error_info
-                logger.error(f"任务失败: {task_id}, 错误: {e}")
-                logger.error(f"错误详情: {traceback.format_exc()}")
+                logger.error(f"taskfailed: {task_id}, error: {e}")
+                logger.error(f"errorEN: {traceback.format_exc()}")
                 
-                # 不重新抛出异常，防止影响主事件循环
+                # ENexception，EN
                 return error_info
         
-        # 创建任务
+        # createtask
         task = asyncio.create_task(safe_wrapper())
         self.running_tasks[task_id] = task
         
-        # 添加完成回调
+        # EN
         task.add_done_callback(lambda t: self._cleanup_task(task_id))
         
         return task
     
     def _cleanup_task(self, task_id: str):
-        """清理完成的任务"""
+        """ENtask"""
         if task_id in self.running_tasks:
             del self.running_tasks[task_id]
-        logger.debug(f"任务已清理: {task_id}")
+        logger.debug(f"taskEN: {task_id}")
     
     def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
-        """获取任务状态"""
+        """fetchtaskstatus"""
         if task_id in self.running_tasks:
             task = self.running_tasks[task_id]
             return {
                 "status": "running",
                 "task_id": task_id,
-                "created_at": "unknown"  # 可以扩展记录创建时间
+                "created_at": "unknown"  # canENcreatetime
             }
         elif task_id in self.task_results:
             return self.task_results[task_id]
@@ -96,43 +96,43 @@ class AsyncTaskManager:
             return None
     
     def cancel_task(self, task_id: str) -> bool:
-        """取消任务"""
+        """canceltask"""
         if task_id in self.running_tasks:
             task = self.running_tasks[task_id]
             task.cancel()
-            logger.info(f"任务已取消: {task_id}")
+            logger.info(f"taskENcancel: {task_id}")
             return True
         return False
     
     def get_all_tasks(self) -> Dict[str, Any]:
-        """获取所有任务状态"""
+        """fetchalltaskstatus"""
         all_tasks = {}
         
-        # 运行中的任务
+        # runENtask
         for task_id, task in self.running_tasks.items():
             all_tasks[task_id] = {
                 "status": "running",
                 "task_id": task_id
             }
         
-        # 已完成的任务
+        # completedENtask
         for task_id, result in self.task_results.items():
             all_tasks[task_id] = result
         
         return all_tasks
 
-# 全局任务管理器实例
+# ENtaskEN
 task_manager = AsyncTaskManager()
 
-# 装饰器函数
+# EN
 def safe_async_task(task_id: str):
     """
-    装饰器：将函数包装为安全的异步任务
+    EN：ENtask
     
     Usage:
         @safe_async_task("my_task")
         async def my_function():
-            # 函数实现
+            # EN
             pass
     """
     def decorator(func: Callable):
@@ -141,28 +141,28 @@ def safe_async_task(task_id: str):
         return wrapper
     return decorator
 
-# 使用示例
+# useEN
 async def example_usage():
-    """使用示例"""
+    """useEN"""
     
     async def risky_task():
-        """可能失败的任务"""
+        """mayfailedENtask"""
         await asyncio.sleep(1)
-        # 模拟可能的异常
-        if True:  # 可以改为False来测试正常情况
-            raise ValueError("模拟错误")
-        return "任务完成"
+        # ENmayENexception
+        if True:  # canENFalseEN
+            raise ValueError("ENerror")
+        return "taskEN"
     
-    # 创建安全任务
+    # createENtask
     task = await task_manager.create_safe_task("example_task", risky_task)
     
-    # 等待任务完成
+    # ENtaskEN
     result = await task
-    print(f"任务结果: {result}")
+    print(f"taskresult: {result}")
     
-    # 检查任务状态
+    # checktaskstatus
     status = task_manager.get_task_status("example_task")
-    print(f"任务状态: {status}")
+    print(f"taskstatus: {status}")
 
 if __name__ == "__main__":
     asyncio.run(example_usage())

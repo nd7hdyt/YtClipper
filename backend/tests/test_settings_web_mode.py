@@ -1,8 +1,8 @@
 """
-设置端点在非桌面模式（Docker / 本地脚本）下必须可用（issue #100）。
+EN（Docker / EN）EN（issue #100）。
 
-以前 GET/PUT /settings、/test-api、/current-provider 等都被 check_desktop_mode() 拦成 400，
-Docker 用户只能改 .env。这里直接调用端点函数验证：读、写、热重载、环境变量回显都能走通。
+EN GET/PUT /settings、/test-api、/current-provider EN check_desktop_mode() EN 400，
+Docker EN .env。EN：EN、EN、EN、EN。
 """
 
 import asyncio
@@ -35,7 +35,7 @@ def web_mode(monkeypatch, tmp_path):
         database_url=f"sqlite:///{tmp_path / 'autoclip.db'}",
     ))
 
-    # LLM 管理器读同一份 settings.json，且不碰真实用户目录
+    # LLM EN settings.json，EN
     monkeypatch.setattr(manager_module.config_sync_service, "is_sync_needed", lambda: False)
     manager = manager_module.LLMManager(settings_file=tmp_path / "settings.json")
     monkeypatch.setattr(manager_module, "get_llm_manager", lambda: manager)
@@ -72,7 +72,7 @@ def test_get_settings_works_without_desktop_mode(web_mode):
 
 
 def test_get_settings_reflects_env_config_before_first_save(web_mode, monkeypatch):
-    """Docker 用户在 .env 里写了 LLM_PROVIDER=gemini，设置页首屏就该显示 Gemini，而不是通义千问"""
+    """Docker EN .env EN LLM_PROVIDER=gemini，EN Gemini，EN"""
     settings_api, _, manager = web_mode
     monkeypatch.setenv("LLM_PROVIDER", "gemini")
     monkeypatch.setenv("API_MODEL_NAME", "gemini-2.5-flash")
@@ -99,7 +99,7 @@ def test_update_then_get_roundtrip_and_manager_reload(web_mode):
     assert reloaded.api.api_provider == "gemini"
     assert reloaded.api.api_model == "gemini-2.5-flash"
 
-    # API 进程内的 LLM 管理器立刻切换；worker 进程靠 mtime 走同一条重载逻辑
+    # API EN LLM EN；worker EN mtime EN
     info = manager.get_current_provider_info()
     assert info["provider"] == "gemini"
     assert info["model"] == "gemini-2.5-flash"
@@ -119,8 +119,8 @@ def test_test_api_endpoint_no_longer_requires_desktop_mode(web_mode):
     settings_api, _, _ = web_mode
     request = settings_api.TestApiRequest(provider="gemini", api_key="short")
 
-    # 走到了业务校验（key 过短），而不是被 400 拦在门外
+    # EN（key EN），EN 400 EN
     result = asyncio.run(settings_api.test_api_connection(request))
 
     assert result["success"] is False
-    assert "过短" in result["error"]
+    assert "EN" in result["error"]

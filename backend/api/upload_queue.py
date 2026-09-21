@@ -5,11 +5,11 @@ from pydantic import BaseModel
 
 from ..core.database import get_db
 from ..services.upload_queue_service import UploadQueueService, TaskPriority
-# from ..utils.auth import get_current_user  # 暂时注释掉，如需要可以实现
+# from ..utils.auth import get_current_user  # EN，ENneedcanEN
 
 router = APIRouter(prefix="/api/upload-queue", tags=["upload-queue"])
 
-# 请求模型
+# requestEN
 class UploadTaskRequest(BaseModel):
     video_path: str
     title: str
@@ -45,12 +45,12 @@ class QueueStatusResponse(BaseModel):
     queue_details: List[Dict[str, Any]]
     processing_details: List[Dict[str, Any]]
 
-# 全局队列服务实例
+# ENqueueserviceEN
 queue_services: Dict[int, UploadQueueService] = {}
 
 def get_queue_service(db: Session = Depends(get_db)) -> UploadQueueService:
-    """获取队列服务实例"""
-    # 暂时使用默认用户ID，后续可以添加认证
+    """fetchqueueserviceEN"""
+    # ENuseENuserID，ENcanEN
     user_id = 1
     
     if user_id not in queue_services:
@@ -63,9 +63,9 @@ async def add_upload_task(
     request: UploadTaskRequest,
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """添加单个上传任务"""
+    """ENuploadtask"""
     try:
-        # 转换优先级
+        # EN
         priority_map = {
             "low": TaskPriority.LOW,
             "normal": TaskPriority.NORMAL,
@@ -83,7 +83,7 @@ async def add_upload_task(
             priority=priority
         )
         
-        return {"task_id": task_id, "message": "任务已添加到队列"}
+        return {"task_id": task_id, "message": "taskENqueue"}
         
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -93,9 +93,9 @@ async def add_batch_upload_tasks(
     request: BatchUploadRequest,
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """批量添加上传任务"""
+    """ENuploadtask"""
     try:
-        # 转换任务数据
+        # ENtaskEN
         tasks_data = []
         priority_map = {
             "low": TaskPriority.LOW,
@@ -120,7 +120,7 @@ async def add_batch_upload_tasks(
         return {
             "task_ids": task_ids,
             "count": len(task_ids),
-            "message": f"已添加 {len(task_ids)} 个任务到队列"
+            "message": f"EN {len(task_ids)} ENtaskENqueue"
         }
         
     except Exception as e:
@@ -131,11 +131,11 @@ async def get_task_status(
     task_id: str,
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """获取任务状态"""
+    """fetchtaskstatus"""
     try:
         task_status = queue_service.get_task_status(task_id)
         if not task_status:
-            raise HTTPException(status_code=404, detail="任务不存在")
+            raise HTTPException(status_code=404, detail="taskdoes not exist")
         
         return task_status
         
@@ -149,13 +149,13 @@ async def cancel_task(
     task_id: str,
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """取消任务"""
+    """canceltask"""
     try:
         success = queue_service.cancel_task(task_id)
         if not success:
-            raise HTTPException(status_code=404, detail="任务不存在或无法取消")
+            raise HTTPException(status_code=404, detail="taskdoes not existENcannotcancel")
         
-        return {"message": "任务已取消"}
+        return {"message": "taskENcancel"}
         
     except HTTPException:
         raise
@@ -166,7 +166,7 @@ async def cancel_task(
 async def get_queue_status(
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """获取队列状态"""
+    """fetchqueuestatus"""
     try:
         status = queue_service.get_queue_status()
         return status
@@ -179,17 +179,17 @@ async def retry_failed_task(
     task_id: str,
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """重试失败的任务"""
+    """retryfailedENtask"""
     try:
-        # 获取任务状态
+        # fetchtaskstatus
         task_status = queue_service.get_task_status(task_id)
         if not task_status:
-            raise HTTPException(status_code=404, detail="任务不存在")
+            raise HTTPException(status_code=404, detail="taskdoes not exist")
         
         if task_status["status"] != "failed":
-            raise HTTPException(status_code=400, detail="只能重试失败的任务")
+            raise HTTPException(status_code=400, detail="ENretryfailedENtask")
         
-        # 重新添加任务
+        # ENtask
         new_task_id = queue_service.add_task(
             video_path=task_status["video_path"],
             title=task_status["title"],
@@ -201,7 +201,7 @@ async def retry_failed_task(
         
         return {
             "new_task_id": new_task_id,
-            "message": "任务已重新添加到队列"
+            "message": "taskENqueue"
         }
         
     except HTTPException:
@@ -215,9 +215,9 @@ async def get_upload_history(
     offset: int = 0,
     status: Optional[str] = None,
     db: Session = Depends(get_db),
-    # current_user = Depends(get_current_user)  # 暂时移除认证
+    # current_user = Depends(get_current_user)  # EN
 ):
-    """获取上传历史记录"""
+    """fetchuploadEN"""
     try:
         from ..models.bilibili import BilibiliUploadRecord
         
@@ -226,7 +226,7 @@ async def get_upload_history(
         if status:
             query = query.filter(BilibiliUploadRecord.status == status)
         
-        # 按创建时间倒序
+        # ENcreatetimeEN
         records = query.order_by(BilibiliUploadRecord.created_at.desc()).offset(offset).limit(limit).all()
         
         return {
@@ -254,11 +254,11 @@ async def get_upload_history(
 async def clear_completed_tasks(
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """清理已完成的任务"""
+    """ENcompletedENtask"""
     try:
-        # 这里可以添加清理逻辑
-        # 由于任务完成后会自动从内存队列中移除，主要是清理数据库中的旧记录
-        return {"message": "已完成任务清理"}
+        # ENcanEN
+        # ENtaskENqueueEN，ENdatabaseEN
+        return {"message": "completedtaskEN"}
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -267,18 +267,18 @@ async def clear_completed_tasks(
 async def get_upload_statistics(
     days: int = 7,
     db: Session = Depends(get_db),
-    # current_user = Depends(get_current_user)  # 暂时移除认证
+    # current_user = Depends(get_current_user)  # EN
 ):
-    """获取上传统计信息"""
+    """fetchuploadEN"""
     try:
         from ..models.bilibili import BilibiliUploadRecord
         from datetime import datetime, timedelta
         from sqlalchemy import func
         
-        # 计算时间范围
+        # ENtimeEN
         start_date = datetime.now() - timedelta(days=days)
         
-        # 总体统计
+        # EN
         total_uploads = db.query(BilibiliUploadRecord).filter(
             BilibiliUploadRecord.created_at >= start_date
         ).count()
@@ -293,7 +293,7 @@ async def get_upload_statistics(
             BilibiliUploadRecord.status == 'failed'
         ).count()
         
-        # 按账号统计
+        # ENaccountEN
         account_stats = db.query(
             BilibiliUploadRecord.account_id,
             func.count(BilibiliUploadRecord.id).label('count'),

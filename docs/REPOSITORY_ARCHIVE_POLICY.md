@@ -1,22 +1,22 @@
-# 仓库归档规范（Repository Archive Policy）
+# EN（Repository Archive Policy）
 
-## 目标
+## EN
 
-本规范用于约束“备份/归档/临时副本”在 AutoClip 仓库中的存放方式，避免：
+EN“EN/EN/EN”EN AutoClip EN，EN：
 
-- 敏感信息意外入仓（如 `.env.backup`）
-- 历史快照污染主分支（如 `cleanup_backup/`）
-- 无法区分“生产代码”与“本地临时文件”
+- EN（EN `.env.backup`）
+- EN（EN `cleanup_backup/`）
+- EN“EN”EN“EN”
 
-## 基本原则
+## EN
 
-- 生产仓库只保留**可运行、可维护、可测试**的源码与文档。
-- 任何“仅本地有用”的备份文件一律不提交 Git。
-- 归档内容优先放在仓库外；若必须在仓库内临时落地，需使用被 `.gitignore` 屏蔽的目录。
+- EN**EN、EN、EN**EN。
+- EN“EN”EN Git。
+- EN；EN，EN `.gitignore` EN。
 
-## 目录与文件约定
+## EN
 
-以下内容默认只允许本地存在，不允许提交：
+EN，EN：
 
 - `cleanup_backup/`
 - `archive_local/`
@@ -24,45 +24,45 @@
 - `.env.backup`
 - `.env.*.backup`
 
-说明：上述规则已写入 `.gitignore`。如果本地已有历史文件，请保持在忽略目录中，不要 `git add`。
+EN：EN `.gitignore`。EN，EN，Do not `git add`。
 
-## 允许入仓的“归档”类型
+## EN“EN”EN
 
-仅允许以下“非运行态”内容入仓：
+EN“EN”EN：
 
-- 稳定且可复用的迁移脚本（放在 `scripts/`，需可执行并有说明）
-- 面向团队的决策文档（放在 `docs/`，如迁移说明、架构决策记录）
+- EN（EN `scripts/`，EN）
+- ENDecisionsEN（EN `docs/`，EN、ENDecisionsEN）
 
-不允许入仓：
+EN：
 
-- 任意时间戳快照目录（如 `*_backup_2025xxxx`）
-- 带密钥/令牌/账号信息的配置副本
-- 未接入主流程的临时 `_fixed` 平行实现（应合并或删除）
+- EN（EN `*_backup_2025xxxx`）
+- EN/EN/AccountEN
+- EN `_fixed` EN（EN）
 
-## 提交前检查清单
+## EN
 
-每次提交前至少检查：
+EN：
 
-1. `git status --short` 中是否出现 `cleanup_backup/`、`.env.backup`、`*.backup`
-2. 是否误提交含敏感字段的配置文件（API Key、Cookie、Token）
-3. 是否把“临时修复副本”当成正式代码提交（如 `_fixed` 文件）
+1. `git status --short` EN `cleanup_backup/`、`.env.backup`、`*.backup`
+2. EN（API Key、Cookie、Token）
+3. EN“EN”EN（EN `_fixed` EN）
 
-## 历史清理建议（一次性）
+## EN（EN）
 
-建议在单独 PR 中完成以下清理：
+EN PR EN：
 
-- 删除已入仓的历史备份目录（如 `cleanup_backup/`）
-- 删除 `.env.backup` 等敏感副本文件
-- 清理未引用的 `_fixed` 并行文件，合并到唯一实现
+- EN（EN `cleanup_backup/`）
+- EN `.env.backup` EN
+- EN `_fixed` EN，EN
 
-## 例外流程
+## EN
 
-若确需短期共享归档文件（例如联调排障）：
+EN（EN）：
 
-1. 放入 `archive_local/`（被忽略）
-2. 在 PR 描述中说明获取方式（不要直接入仓）
-3. 约定过期时间，过期后本地删除
+1. EN `archive_local/`（EN）
+2. EN PR EN（Do notEN）
+3. EN，EN
 
 ---
 
-维护建议：每月做一次“归档与备份”巡检，确保主仓库持续保持可维护的最小集合。
+EN：EN“EN”EN，EN。

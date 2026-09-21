@@ -1,6 +1,6 @@
 """
-统一错误处理中间件
-为FastAPI应用提供统一的错误处理机制
+ENerrorprocessingEN
+ENFastAPIENerrorprocessingEN
 """
 
 import logging
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class ErrorResponse:
-    """统一错误响应格式"""
+    """ENerrorresponseEN"""
     
     def __init__(self, 
                  error_code: str,
@@ -54,7 +54,7 @@ def create_error_response(
     details: dict = None,
     request_id: str = None
 ) -> JSONResponse:
-    """创建统一格式的错误响应"""
+    """createENerrorresponse"""
     response = ErrorResponse(error_code, message, details, request_id)
     response.timestamp = time.time()
     
@@ -65,12 +65,12 @@ def create_error_response(
 
 
 async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-    """全局异常处理器"""
+    """ENexceptionprocessingEN"""
     request_id = getattr(request.state, 'request_id', None)
     
-    # 记录异常详情
+    # ENexceptionEN
     logger.error(
-        f"未处理的异常: {type(exc).__name__}: {str(exc)}",
+        f"ENprocessingENexception: {type(exc).__name__}: {str(exc)}",
         extra={
             "request_id": request_id,
             "path": request.url.path,
@@ -79,7 +79,7 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
         }
     )
     
-    # 根据异常类型返回不同的错误响应
+    # ENexceptionENreturnENerrorresponse
     if isinstance(exc, AutoClipsException):
         return handle_autoclips_exception(exc, request_id)
     elif isinstance(exc, ServiceError):
@@ -95,7 +95,7 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
 
 
 def handle_autoclips_exception(exc: AutoClipsException, request_id: str = None) -> JSONResponse:
-    """处理AutoClipsException"""
+    """processingAutoClipsException"""
     status_code = get_status_code_for_category(exc.category)
     
     return create_error_response(
@@ -108,7 +108,7 @@ def handle_autoclips_exception(exc: AutoClipsException, request_id: str = None) 
 
 
 def handle_service_error(exc: ServiceError, request_id: str = None) -> JSONResponse:
-    """处理ServiceError"""
+    """processingServiceError"""
     status_code = get_status_code_for_service_error(exc.error_code)
     
     return create_error_response(
@@ -121,7 +121,7 @@ def handle_service_error(exc: ServiceError, request_id: str = None) -> JSONRespo
 
 
 def handle_http_exception(exc: HTTPException, request_id: str = None) -> JSONResponse:
-    """处理HTTPException"""
+    """processingHTTPException"""
     return create_error_response(
         status_code=exc.status_code,
         error_code=f"HTTP_{exc.status_code}",
@@ -131,7 +131,7 @@ def handle_http_exception(exc: HTTPException, request_id: str = None) -> JSONRes
 
 
 def handle_validation_error(exc: RequestValidationError, request_id: str = None) -> JSONResponse:
-    """处理请求验证错误"""
+    """processingrequestvalidateerror"""
     errors = []
     for error in exc.errors():
         errors.append({
@@ -143,14 +143,14 @@ def handle_validation_error(exc: RequestValidationError, request_id: str = None)
     return create_error_response(
         status_code=422,
         error_code="VALIDATION_ERROR",
-        message="请求参数验证失败",
+        message="requestparametersvalidatefailed",
         details={"errors": errors},
         request_id=request_id
     )
 
 
 def handle_starlette_http_exception(exc: StarletteHTTPException, request_id: str = None) -> JSONResponse:
-    """处理StarletteHTTPException"""
+    """processingStarletteHTTPException"""
     return create_error_response(
         status_code=exc.status_code,
         error_code=f"STARLETTE_{exc.status_code}",
@@ -160,18 +160,18 @@ def handle_starlette_http_exception(exc: StarletteHTTPException, request_id: str
 
 
 def handle_generic_exception(exc: Exception, request_id: str = None) -> JSONResponse:
-    """处理通用异常"""
+    """processingENexception"""
     return create_error_response(
         status_code=500,
         error_code="INTERNAL_SERVER_ERROR",
-        message="服务器内部错误",
+        message="serviceENerror",
         details={"exception_type": type(exc).__name__},
         request_id=request_id
     )
 
 
 def get_status_code_for_category(category: ErrorCategory) -> int:
-    """根据错误分类获取HTTP状态码"""
+    """ENerrorcategoryfetchHTTPstatusEN"""
     status_mapping = {
         ErrorCategory.CONFIGURATION: 500,
         ErrorCategory.NETWORK: 503,
@@ -185,7 +185,7 @@ def get_status_code_for_category(category: ErrorCategory) -> int:
 
 
 def get_status_code_for_service_error(error_code) -> int:
-    """根据服务错误代码获取HTTP状态码"""
+    """ENserviceerrorENfetchHTTPstatusEN"""
     status_mapping = {
         "CONFIG_NOT_FOUND": 500,
         "CONFIG_INVALID": 500,
@@ -211,22 +211,22 @@ def get_status_code_for_service_error(error_code) -> int:
     return status_mapping.get(error_code.value, 500)
 
 
-# 装饰器：自动错误处理
+# EN：ENerrorprocessing
 def handle_errors(error_category: ErrorCategory = ErrorCategory.SYSTEM):
-    """错误处理装饰器"""
+    """errorprocessingEN"""
     def decorator(func):
         @functools.wraps(func)
         async def async_wrapper(*args, **kwargs):
             try:
                 return await func(*args, **kwargs)
             except AutoClipsException:
-                # 重新抛出AutoClipsException
+                # ENAutoClipsException
                 raise
             except ServiceError:
-                # 重新抛出ServiceError
+                # ENServiceError
                 raise
             except Exception as e:
-                # 转换为AutoClipsException
+                # ENAutoClipsException
                 raise AutoClipsException(
                     message=str(e),
                     category=error_category,
@@ -238,20 +238,20 @@ def handle_errors(error_category: ErrorCategory = ErrorCategory.SYSTEM):
             try:
                 return func(*args, **kwargs)
             except AutoClipsException:
-                # 重新抛出AutoClipsException
+                # ENAutoClipsException
                 raise
             except ServiceError:
-                # 重新抛出ServiceError
+                # ENServiceError
                 raise
             except Exception as e:
-                # 转换为AutoClipsException
+                # ENAutoClipsException
                 raise AutoClipsException(
                     message=str(e),
                     category=error_category,
                     original_exception=e
                 )
         
-        # 根据函数类型返回对应的包装器
+        # ENreturnEN
         if asyncio.iscoroutinefunction(func):
             return async_wrapper
         else:
@@ -260,18 +260,18 @@ def handle_errors(error_category: ErrorCategory = ErrorCategory.SYSTEM):
     return decorator
 
 
-# 上下文管理器：错误上下文
+# EN：errorEN
 @contextmanager
 def error_context(category: ErrorCategory, context_info: dict = None):
-    """错误上下文管理器"""
+    """errorEN"""
     try:
         yield
     except Exception as e:
         if isinstance(e, AutoClipsException):
-            # 已经是自定义异常，直接抛出
+            # alreadyENexception，EN
             raise
         else:
-            # 转换为自定义异常
+            # ENexception
             details = context_info or {}
             details["original_exception_type"] = type(e).__name__
             

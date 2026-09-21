@@ -1,6 +1,6 @@
 # AutoClip Privacy Policy
 
-*[中文版 →](./PRIVACY.md)*
+*[ChineseEN →](./PRIVACY.md)*
 
 **Effective Date: June 3, 2026**
 **Last Updated: June 3, 2026**

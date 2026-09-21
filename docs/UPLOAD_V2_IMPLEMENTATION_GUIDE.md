@@ -1,183 +1,183 @@
-# 投稿上传功能 v2.0 实现指南
+# ENUploadEN v2.0 EN
 
-## 概述
+## EN
 
-基于 [biliup-rs](https://github.com/biliup/biliup-rs) 项目的实现思路，我们重新开发了B站投稿上传功能，支持多种上传线路、智能线路选择和完整的错误处理。
+Based on [biliup-rs](https://github.com/biliup/biliup-rs) EN，ENBENUploadEN，SupportENUploadEN、EN。
 
-## 新功能特性
+## EN
 
-### 🚀 核心功能
-- **多种上传线路**: 支持 bda2、qn、alia、bldsa、tx、txa、bda 等线路
-- **智能线路选择**: 自动测速选择最佳上传线路
-- **分片上传**: 支持大文件分片上传，提高稳定性
-- **完整错误处理**: 详细的错误信息和重试机制
-- **进度跟踪**: 实时上传进度和状态更新
+### 🚀 EN
+- **ENUploadEN**: Support bda2、qn、alia、bldsa、tx、txa、bda EN
+- **EN**: ENUploadEN
+- **ENUpload**: SupportENUpload，EN
+- **EN**: EN
+- **EN**: ENUploadEN
 
-### 🔧 技术改进
-- **基于 biliup-rs**: 借鉴成熟的实现方案
-- **异步处理**: 完整的异步上传流程
-- **Cookie管理**: 修复了加密系统，支持正确的密钥格式
-- **API兼容**: 与现有系统完全兼容
+### 🔧 EN
+- **Based on biliup-rs**: EN
+- **EN**: ENUploadEN
+- **CookieEN**: EN，SupportEN
+- **APIEN**: EN
 
-## 实现架构
+## EN
 
-### 文件结构
+### EN
 ```
 backend/services/
-├── bilibili_service.py          # 原有服务（已更新）
-├── bilibili_upload_v2.py        # 新的v2.0上传实现
-└── bilibili_service_backup.py   # 备份文件
+├── bilibili_service.py          # EN（EN）
+├── bilibili_upload_v2.py        # ENv2.0UploadEN
+└── bilibili_service_backup.py   # EN
 ```
 
-### 核心类
-- `BilibiliUploaderV2`: 核心上传器，处理具体的上传逻辑
-- `BilibiliUploadServiceV2`: 上传服务，管理上传流程和状态
+### EN
+- `BilibiliUploaderV2`: ENUploadEN，ENUploadEN
+- `BilibiliUploadServiceV2`: UploadEN，ENUploadEN
 
-## 使用步骤
+## EN
 
-### 1. 重新导入Cookie
+### 1. ENCookie
 
-由于加密系统已更新，需要重新导入B站Cookie：
+EN，ENBENCookie：
 
-1. **获取Cookie**:
-   - 登录B站网页版
-   - 打开开发者工具 (F12)
-   - 在Network标签页中找到任意请求
-   - 复制Cookie值
+1. **ENCookie**:
+   - ENBEN
+   - EN (F12)
+   - ENNetworkEN
+   - ENCookieEN
 
-2. **导入Cookie**:
-   - 访问投稿状态页面: `http://localhost:3000/upload-status`
-   - 点击"投稿状态"按钮进入B站管理
-   - 在"账号管理"标签页中点击"添加账号"
-   - 选择"Cookie登录"方式
-   - 粘贴完整的Cookie字符串
+2. **ENCookie**:
+   - EN: `http://localhost:3000/upload-status`
+   - EN"EN"ENBEN
+   - EN"Account Management"EN"ENAccount"
+   - EN"CookieEN"EN
+   - ENCookieEN
 
-### 2. 测试上传功能
+### 2. ENUploadEN
 
-1. **检查账号状态**:
-   - 确保账号状态显示为"活跃"
-   - 检查Cookie是否有效
+1. **ENAccountEN**:
+   - ENAccountEN"EN"
+   - ENCookieEN
 
-2. **创建投稿任务**:
-   - 在项目详情页选择视频切片
-   - 点击"投稿到B站"按钮
-   - 填写标题、描述、标签等信息
-   - 选择投稿账号和分区
+2. **EN**:
+   - EN
+   - EN"ENBEN"EN
+   - EN、EN、EN
+   - ENAccountEN
 
-3. **监控上传进度**:
-   - 在投稿状态页面查看任务进度
-   - 实时监控上传状态和错误信息
+3. **ENUploadEN**:
+   - EN
+   - ENUploadEN
 
-## 技术细节
+## EN
 
-### 上传流程
+### UploadEN
 ```
-1. 验证登录状态 → 2. 预上传获取ID → 3. 选择最佳线路
+1. EN → 2. ENUploadENID → 3. EN
     ↓
-4. 分片上传 → 5. 合并分片 → 6. 提交投稿 → 7. 返回BV号
+4. ENUpload → 5. EN → 6. EN → 7. ENBVEN
 ```
 
-### 上传线路
-| 线路 | 提供商 | 特点 |
+### UploadEN
+| EN | ProvidesEN | EN |
 |------|--------|------|
-| bda2 | 百度云 | 默认线路，稳定性好 |
-| qn | 七牛 | 速度快 |
-| alia | 阿里云海外 | 海外访问优化 |
-| bldsa | B站自建 | 官方线路 |
-| tx | 腾讯云 | 国内优化 |
-| txa | 腾讯云海外 | 海外优化 |
-| bda | 百度云海外 | 海外优化 |
+| bda2 | EN | EN，EN |
+| qn | EN | EN |
+| alia | EN | EN |
+| bldsa | BEN | EN |
+| tx | EN | EN |
+| txa | EN | EN |
+| bda | EN | EN |
 
-### 错误处理
-- **网络错误**: 自动重试，最多3次
-- **认证错误**: 提示重新登录
-- **文件错误**: 检查文件格式和大小
-- **API错误**: 详细错误信息显示
+### EN
+- **EN**: EN，EN3EN
+- **EN**: EN
+- **EN**: EN
+- **APIEN**: EN
 
-## 配置说明
+## Configuration
 
-### 环境变量
+### EN
 ```bash
-# 加密密钥（已自动生成）
+# EN（EN）
 export ENCRYPTION_KEY="BekpMhcsOolyI_n9Hz9NxzLqMgll3vfa9qJYPOxtQXM="
 ```
 
-### 上传参数
+### UploadEN
 ```python
 metadata = {
-    'title': '视频标题',           # 最大80字符
-    'description': '视频描述',     # 最大2000字符
-    'tags': ['标签1', '标签2'],   # 标签列表
-    'partition_id': 3             # 分区ID
+    'title': 'EN',           # EN80EN
+    'description': 'EN',     # EN2000EN
+    'tags': ['EN1', 'EN2'],   # EN
+    'partition_id': 3             # ENID
 }
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 常见问题
+### FAQ
 
-1. **Cookie解密失败**
-   - 原因: 使用了旧的加密密钥
-   - 解决: 重新导入Cookie
+1. **CookieEN**
+   - EN: EN
+   - EN: ENCookie
 
-2. **上传失败**
-   - 原因: 网络问题或API限制
-   - 解决: 检查网络连接，尝试不同线路
+2. **UploadEN**
+   - EN: ENAPIEN
+   - EN: EN，EN
 
-3. **文件过大**
-   - 原因: 超过B站8GB限制
-   - 解决: 压缩视频或分割文件
+3. **EN**
+   - EN: ENBEN8GBEN
+   - EN: EN
 
-4. **账号状态异常**
-   - 原因: Cookie过期或无效
-   - 解决: 重新登录获取新Cookie
+4. **AccountEN**
+   - EN: CookieEN
+   - EN: ENCookie
 
-### 调试方法
+### EN
 
-1. **查看日志**:
+1. **EN**:
    ```bash
    tail -f logs/celery.log
    ```
 
-2. **检查数据库**:
+2. **EN**:
    ```sql
    SELECT * FROM bilibili_upload_records ORDER BY created_at DESC LIMIT 5;
    ```
 
-3. **测试API**:
+3. **ENAPI**:
    ```bash
    curl -s http://localhost:8000/api/v1/upload/records | jq .
    ```
 
-## 性能优化
+## Performance
 
-### 上传速度优化
-- **并发上传**: 支持多分片并发上传
-- **线路选择**: 自动选择最快线路
-- **重试机制**: 智能重试失败的分片
+### UploadEN
+- **ENUpload**: SupportENUpload
+- **EN**: EN
+- **EN**: EN
 
-### 稳定性优化
-- **错误恢复**: 自动处理网络中断
-- **状态同步**: 实时更新上传状态
-- **数据完整性**: 确保文件完整上传
+### EN
+- **EN**: EN
+- **EN**: ENUploadEN
+- **EN**: ENUpload
 
-## 更新日志
+## EN
 
 ### v2.0.0 (2025-09-11)
-- ✅ 基于 biliup-rs 重新实现上传功能
-- ✅ 支持多种上传线路和智能选择
-- ✅ 修复Cookie加密系统
-- ✅ 完善错误处理和重试机制
-- ✅ 添加详细的上传进度跟踪
+- ✅ Based on biliup-rs ENUploadEN
+- ✅ SupportENUploadEN
+- ✅ ENCookieEN
+- ✅ EN
+- ✅ ENUploadEN
 
-### 后续计划
-- 🔄 支持多P投稿
-- 🔄 添加上传队列管理
-- 🔄 实现断点续传
-- 🔄 支持批量投稿
+### EN
+- 🔄 SupportENPEN
+- 🔄 ENUploadEN
+- 🔄 EN
+- 🔄 SupportEN
 
-## 相关链接
+## EN
 
-- [biliup-rs 项目](https://github.com/biliup/biliup-rs)
-- [B站投稿API文档](https://github.com/biliup/biliup-rs)
-- [投稿状态页面使用指南](./UPLOAD_STATUS_PAGE_GUIDE.md)
+- [biliup-rs EN](https://github.com/biliup/biliup-rs)
+- [BENAPIEN](https://github.com/biliup/biliup-rs)
+- [ENUsage Guide](./UPLOAD_STATUS_PAGE_GUIDE.md)

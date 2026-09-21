@@ -1,6 +1,6 @@
 """
-服务异常体系
-统一的异常处理机制
+serviceexceptionEN
+ENexceptionprocessingEN
 """
 
 import logging
@@ -11,46 +11,46 @@ logger = logging.getLogger(__name__)
 
 
 class ErrorCode(Enum):
-    """错误代码枚举"""
-    # 配置相关错误
+    """errorEN"""
+    # configENerror
     CONFIG_NOT_FOUND = "CONFIG_NOT_FOUND"
     CONFIG_INVALID = "CONFIG_INVALID"
     CONFIG_MISSING_REQUIRED = "CONFIG_MISSING_REQUIRED"
     
-    # 文件相关错误
+    # fileENerror
     FILE_NOT_FOUND = "FILE_NOT_FOUND"
     FILE_PERMISSION_DENIED = "FILE_PERMISSION_DENIED"
     FILE_CORRUPTED = "FILE_CORRUPTED"
     
-    # 处理相关错误
+    # processingENerror
     PROCESSING_FAILED = "PROCESSING_FAILED"
     STEP_EXECUTION_FAILED = "STEP_EXECUTION_FAILED"
     PIPELINE_VALIDATION_FAILED = "PIPELINE_VALIDATION_FAILED"
     
-    # 任务相关错误
+    # taskENerror
     TASK_NOT_FOUND = "TASK_NOT_FOUND"
     TASK_ALREADY_RUNNING = "TASK_ALREADY_RUNNING"
     TASK_CANCELLED = "TASK_CANCELLED"
     
-    # 项目相关错误
+    # projectENerror
     PROJECT_NOT_FOUND = "PROJECT_NOT_FOUND"
     PROJECT_ALREADY_EXISTS = "PROJECT_ALREADY_EXISTS"
     
-    # 系统相关错误
+    # systemENerror
     SYSTEM_ERROR = "SYSTEM_ERROR"
     NETWORK_ERROR = "NETWORK_ERROR"
     TIMEOUT_ERROR = "TIMEOUT_ERROR"
     
-    # 并发相关错误
+    # ENerror
     CONCURRENT_ACCESS = "CONCURRENT_ACCESS"
     LOCK_ACQUISITION_FAILED = "LOCK_ACQUISITION_FAILED"
     
-    # 未知错误
+    # Unknown error
     UNKNOWN_ERROR = "UNKNOWN_ERROR"
 
 
 class ServiceError(Exception):
-    """服务异常基类"""
+    """serviceexceptionEN"""
     
     def __init__(self, 
                  message: str,
@@ -62,13 +62,13 @@ class ServiceError(Exception):
         self.error_code = error_code
         self.details = details or {}
         self.cause = cause
-        self.timestamp = None  # 将在子类中设置
+        self.timestamp = None  # ENsettings
         
-        # 记录错误日志
+        # ENerrorlog
         self._log_error()
     
     def _log_error(self):
-        """记录错误日志"""
+        """ENerrorlog"""
         log_message = f"ServiceError: {self.error_code.value} - {self.message}"
         if self.details:
             log_message += f" | Details: {self.details}"
@@ -78,7 +78,7 @@ class ServiceError(Exception):
         logger.error(log_message)
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典格式"""
+        """EN"""
         return {
             "error_code": self.error_code.value,
             "message": self.message,
@@ -88,14 +88,14 @@ class ServiceError(Exception):
 
 
 class ConfigurationError(ServiceError):
-    """配置相关错误"""
+    """configENerror"""
     
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         super().__init__(message, ErrorCode.CONFIG_INVALID, details, cause)
 
 
 class FileOperationError(ServiceError):
-    """文件操作相关错误"""
+    """fileENerror"""
     
     def __init__(self, message: str, file_path: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if file_path:
@@ -105,7 +105,7 @@ class FileOperationError(ServiceError):
 
 
 class ProcessingError(ServiceError):
-    """处理相关错误"""
+    """processingENerror"""
     
     def __init__(self, message: str, step_name: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if step_name:
@@ -115,7 +115,7 @@ class ProcessingError(ServiceError):
 
 
 class TaskError(ServiceError):
-    """任务相关错误"""
+    """taskENerror"""
     
     def __init__(self, message: str, task_id: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if task_id:
@@ -125,7 +125,7 @@ class TaskError(ServiceError):
 
 
 class ProjectError(ServiceError):
-    """项目相关错误"""
+    """projectENerror"""
     
     def __init__(self, message: str, project_id: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if project_id:
@@ -135,7 +135,7 @@ class ProjectError(ServiceError):
 
 
 class ConcurrentError(ServiceError):
-    """并发相关错误"""
+    """ENerror"""
     
     def __init__(self, message: str, resource: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if resource:
@@ -145,29 +145,29 @@ class ConcurrentError(ServiceError):
 
 
 class SystemError(ServiceError):
-    """系统相关错误"""
+    """systemENerror"""
     
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         super().__init__(message, ErrorCode.SYSTEM_ERROR, details, cause)
 
 
 def handle_service_error(func):
-    """服务错误处理装饰器"""
+    """serviceerrorprocessingEN"""
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except ServiceError:
-            # 重新抛出ServiceError
+            # ENServiceError
             raise
         except Exception as e:
-            # 将其他异常包装为ServiceError
-            logger.error(f"未处理的异常: {e}")
-            raise SystemError(f"系统错误: {str(e)}", cause=e)
+            # ENexceptionENServiceError
+            logger.error(f"ENprocessingENexception: {e}")
+            raise SystemError(f"systemerror: {str(e)}", cause=e)
     return wrapper
 
 
 def create_error_response(error: ServiceError) -> Dict[str, Any]:
-    """创建错误响应"""
+    """createerrorresponse"""
     return {
         "success": False,
         "error": error.to_dict()
@@ -175,5 +175,5 @@ def create_error_response(error: ServiceError) -> Dict[str, Any]:
 
 
 def is_service_error(exception: Exception) -> bool:
-    """检查是否为服务异常"""
+    """checkENserviceexception"""
     return isinstance(exception, ServiceError) 

@@ -1,275 +1,275 @@
-# AutoClip 系统启动指南
+# AutoClip EN
 
-## 📋 概述
+## 📋 EN
 
-AutoClip 是一个基于AI的视频切片处理系统，采用前后端分离架构。本指南将帮助您快速启动和运行整个系统。
+AutoClip ENBased onAIENProcessing System，AdoptsFrontend-Backend SeparationEN。EN。
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 1. 一键启动（推荐）
+### 1. One-Click Start（EN）
 
 ```bash
-# 完整启动（包含详细检查和健康监控）
+# EN（EN）
 ./start_autoclip.sh
 
-# 快速启动（开发环境，跳过详细检查）
+# EN（EN，EN）
 ./quick_start.sh
 ```
 
-### 2. 系统管理
+### 2. EN
 
 ```bash
-# 检查系统状态
+# EN
 ./status_autoclip.sh
 
-# 停止所有服务
+# EN
 ./stop_autoclip.sh
 ```
 
-## 📊 系统架构
+## 📊 System Architecture
 
-### 后端服务
-- **FastAPI**: RESTful API 和 WebSocket 支持
-- **Celery**: 异步任务队列
-- **Redis**: 消息代理和缓存
-- **SQLite**: 数据存储
+### EN
+- **FastAPI**: RESTful API EN WebSocket Support
+- **Celery**: ENTask Queue
+- **Redis**: EN
+- **SQLite**: EN
 
-### 前端服务
-- **React**: 用户界面
-- **Vite**: 开发服务器
-- **TypeScript**: 类型安全
+### EN
+- **React**: ENInterface
+- **Vite**: EN
+- **TypeScript**: EN
 
-## 🔧 环境要求
+## 🔧 Requirements
 
-### 系统要求
-- macOS 或 Linux
+### EN
+- macOS EN Linux
 - Python 3.8+
 - Node.js 16+
-- Redis 服务器
+- Redis EN
 
-### 依赖安装
+### EN
 
 ```bash
-# 1. 创建虚拟环境
+# 1. EN
 python3 -m venv venv
 source venv/bin/activate
 
-# 2. 安装Python依赖
+# 2. ENPythonEN
 pip install -r requirements.txt
 
-# 3. 安装前端依赖
+# 3. EN
 cd frontend
 npm install
 cd ..
 
-# 4. 安装Redis（macOS）
+# 4. ENRedis（macOS）
 brew install redis
 brew services start redis
 
-# 5. 配置环境变量
+# 5. EN
 cp env.example .env
-# 编辑 .env 文件，填入必要的配置
+# EN .env EN，EN
 ```
 
-## 📝 配置文件
+## 📝 EN
 
-### 环境变量 (.env)
+### EN (.env)
 
 ```bash
-# 数据库配置
+# EN
 DATABASE_URL=sqlite:///./data/autoclip.db
 
-# Redis配置
+# RedisEN
 REDIS_URL=redis://localhost:6379/0
 
-# API配置
+# APIEN
 API_DASHSCOPE_API_KEY=your_api_key_here
 API_MODEL_NAME=qwen-plus
 
-# 日志配置
+# EN
 LOG_LEVEL=INFO
 ENVIRONMENT=development
 DEBUG=true
 ```
 
-## 🌐 服务端口
+## 🌐 EN
 
-| 服务 | 端口 | 描述 |
+| EN | EN | EN |
 |------|------|------|
-| 前端界面 | 3000 | React 开发服务器 |
-| 后端API | 8000 | FastAPI 服务器 |
-| Redis | 6379 | 消息代理 |
-| API文档 | 8000/docs | Swagger UI |
+| ENInterface | 3000 | React EN |
+| ENAPI | 8000 | FastAPI EN |
+| Redis | 6379 | EN |
+| APIEN | 8000/docs | Swagger UI |
 
-## 📁 目录结构
+## 📁 EN
 
 ```
 autoclip/
-├── backend/                 # 后端代码
-│   ├── api/                # API路由
-│   ├── core/               # 核心配置
-│   ├── models/             # 数据模型
-│   ├── services/           # 业务逻辑
-│   └── tasks/              # Celery任务
-├── frontend/               # 前端代码
-│   ├── src/                # 源代码
-│   └── public/             # 静态资源
-├── data/                   # 数据存储
-│   ├── projects/           # 项目数据
-│   └── uploads/            # 上传文件
-├── logs/                   # 日志文件
-├── scripts/                # 工具脚本
-└── *.sh                    # 启动脚本
+├── backend/                 # EN
+│   ├── api/                # APIEN
+│   ├── core/               # EN
+│   ├── models/             # EN
+│   ├── services/           # EN
+│   └── tasks/              # CeleryEN
+├── frontend/               # EN
+│   ├── src/                # EN
+│   └── public/             # EN
+├── data/                   # EN
+│   ├── projects/           # EN
+│   └── uploads/            # UploadEN
+├── logs/                   # EN
+├── scripts/                # EN
+└── *.sh                    # EN
 ```
 
-## 🔍 故障排除
+## 🔍 Troubleshooting
 
-### 常见问题
+### FAQ
 
-1. **端口被占用**
+1. **EN**
    ```bash
-   # 检查端口占用
+   # EN
    lsof -i :8000
    lsof -i :3000
    
-   # 停止占用进程
+   # EN
    kill -9 <PID>
    ```
 
-2. **Redis连接失败**
+2. **RedisEN**
    ```bash
-   # 检查Redis状态
+   # ENRedisEN
    redis-cli ping
    
-   # 启动Redis
+   # ENRedis
    brew services start redis  # macOS
    systemctl start redis      # Linux
    ```
 
-3. **Python依赖问题**
+3. **PythonEN**
    ```bash
-   # 重新安装依赖
+   # EN
    pip install -r requirements.txt --force-reinstall
    ```
 
-4. **前端依赖问题**
+4. **EN**
    ```bash
-   # 清理并重新安装
+   # EN
    cd frontend
    rm -rf node_modules package-lock.json
    npm install
    ```
 
-### 日志查看
+### EN
 
 ```bash
-# 查看所有日志
+# EN
 tail -f logs/*.log
 
-# 查看特定服务日志
+# EN
 tail -f logs/backend.log
 tail -f logs/frontend.log
 tail -f logs/celery.log
 ```
 
-### 系统状态检查
+### EN
 
 ```bash
-# 详细状态检查
+# EN
 ./status_autoclip.sh
 
-# 手动检查服务
+# EN
 curl http://localhost:8000/api/v1/health/
 curl http://localhost:3000/
 redis-cli ping
 ```
 
-## 🛠️ 开发模式
+## 🛠️ EN
 
-### 后端开发
+### EN
 
 ```bash
-# 激活虚拟环境
+# EN
 source venv/bin/activate
 
-# 设置Python路径
+# ENPythonEN
 export PYTHONPATH="${PWD}:${PYTHONPATH}"
 
-# 启动后端（开发模式）
+# EN（EN）
 python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### 前端开发
+### EN
 
 ```bash
-# 进入前端目录
+# EN
 cd frontend
 
-# 启动开发服务器
+# EN
 npm run dev
 ```
 
 ### Celery Worker
 
 ```bash
-# 启动Worker（必须带 -Q：任务按 celery_app.task_routes 路由到专用队列，
-# 不带 -Q 的 worker 只消费默认 `celery` 队列，流水线任务会一直堆在 `processing` 里没人执行）
+# ENWorker（EN -Q：EN celery_app.task_routes EN，
+# EN -Q EN worker EN `celery` EN，EN `processing` EN）
 celery -A backend.core.celery_app worker --loglevel=info -Q celery,processing,video,notification,upload
 
-# 启动Beat调度器
+# ENBeatEN
 celery -A backend.core.celery_app beat --loglevel=info
 
-# 启动Flower监控
+# ENFlowerEN
 celery -A backend.core.celery_app flower --port=5555
 ```
 
-## 📈 性能优化
+## 📈 Performance
 
-### 生产环境配置
+### EN
 
-1. **数据库优化**
-   - 使用PostgreSQL替代SQLite
-   - 配置连接池
-   - 启用查询缓存
+1. **EN**
+   - ENPostgreSQLENSQLite
+   - EN
+   - EN
 
-2. **Redis优化**
-   - 配置内存限制
-   - 启用持久化
-   - 设置过期策略
+2. **RedisEN**
+   - EN
+   - EN
+   - EN
 
-3. **Celery优化**
-   - 调整并发数
-   - 配置任务路由
-   - 启用结果后端
+3. **CeleryEN**
+   - EN
+   - EN
+   - EN
 
-## 🔒 安全配置
+## 🔒 Security
 
-### 生产环境安全
+### EN
 
-1. **环境变量**
-   - 使用强密码
-   - 定期轮换密钥
-   - 限制API访问
+1. **EN**
+   - EN
+   - EN
+   - ENAPIEN
 
-2. **网络安全**
-   - 配置防火墙
-   - 使用HTTPS
-   - 限制CORS
+2. **EN**
+   - EN
+   - ENHTTPS
+   - ENCORS
 
-3. **数据安全**
-   - 定期备份
-   - 加密敏感数据
-   - 访问控制
+3. **EN**
+   - EN
+   - EN
+   - EN
 
-## 📞 支持
+## 📞 Support
 
-如果遇到问题，请：
+EN，EN：
 
-1. 查看日志文件
-2. 运行状态检查脚本
-3. 检查环境配置
-4. 参考故障排除部分
+1. EN
+2. EN
+3. EN
+4. ReferenceTroubleshootingEN
 
-## 📄 许可证
+## 📄 License
 
-本项目采用 MIT 许可证。
+ENAdopts MIT License。

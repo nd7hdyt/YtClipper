@@ -1,5 +1,5 @@
 .collection-preview-modal .ant-modal-content {
-  /* 使用 dvh 适配桌面客户端与移动端可视高度差异 */
+  /* EN dvh EN */
   max-height: 96dvh;
   height: auto;
   display: flex;
@@ -15,7 +15,7 @@
 
 .collection-preview-modal .ant-modal-body {
   padding: 0 !important;
-  /* 让主体区域在内容超出时可滚动，避免底部被裁切 */
+  /* EN，EN */
   max-height: calc(96dvh - 48px);
   overflow: hidden;
 }
@@ -27,7 +27,7 @@
   background: var(--ac-bg);
 }
 
-/* 头部标题栏 */
+/* EN */
 .preview-header {
   display: flex;
   justify-content: space-between;
@@ -88,14 +88,14 @@
   align-items: center;
 }
 
-/* 主体内容 */
+/* EN */
 .preview-content {
   flex: 1;
-  min-height: 0; /* 使内部使用 flex 的子项正确收缩 */
+  min-height: 0; /* EN flex EN */
   overflow: hidden;
 }
 
-/* 视频区域 */
+/* EN */
 .video-section {
   height: 100%;
   background: #000;
@@ -192,7 +192,7 @@
   color: var(--ac-muted);
 }
 
-/* 播放列表区域 */
+/* EN */
 .playlist-section {
   height: 100%;
   background: var(--ac-card);
@@ -364,7 +364,7 @@
   color: #ff7875;
 }
 
-/* 滚动条样式 */
+/* EN */
 .clips-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -383,7 +383,7 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* 响应式设计 */
+/* EN */
 @media (max-width: 1200px) {
   .collection-preview-modal .ant-modal {
     width: 95vw !important;
@@ -427,7 +427,7 @@
   }
 }
 
-/* 动画效果 */
+/* EN */
 @keyframes slideInRight {
   from {
     transform: translateX(100%);
@@ -458,19 +458,19 @@
   animation: slideInRight 0.3s ease-out;
 }
 
-/* 加载状态 */
+/* ENStatus */
 .clip-item .ant-btn-loading {
   pointer-events: none;
   opacity: 0.6;
 }
 
-/* 空状态 */
+/* ENStatus */
 .clips-list .ant-empty {
   padding: 40px 20px;
   color: var(--ac-muted);
 }
 
-/* 模态框样式优化 */
+/* EN */
 .collection-preview-modal {
   backdrop-filter: blur(10px);
 }
@@ -498,7 +498,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* 拖拽占位符 */
+/* EN */
 .drag-placeholder {
   background: rgba(79, 172, 254, 0.1);
   border: 2px dashed var(--ac-accent);
@@ -512,7 +512,7 @@
   font-size: 12px;
 }
 
-/* 加载容器 */
+/* EN */
 .loading-container {
   display: flex;
   align-items: center;

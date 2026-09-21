@@ -1,5 +1,5 @@
 /**
- * 简化的进度状态管理 - 基于固定阶段和轮询
+ * Simplified progress management — fixed stages + polling
  */
 
 import { create } from 'zustand'
@@ -13,21 +13,21 @@ export interface SimpleProgress {
 }
 
 interface SimpleProgressState {
-  // 状态数据
+  // Status data
   byId: Record<string, SimpleProgress>
   
-  // 轮询控制
+  // Polling control
   pollingInterval: number | null
   isPolling: boolean
   
-  // 操作方法
+  // Actions
   upsert: (progress: SimpleProgress) => void
   startPolling: (projectIds: string[], intervalMs?: number) => void
   stopPolling: () => void
   clearProgress: (projectId: string) => void
   clearAllProgress: () => void
   
-  // 获取方法
+  // Getters
   getProgress: (projectId: string) => SimpleProgress | null
   getAllProgress: () => Record<string, SimpleProgress>
 }
@@ -36,12 +36,12 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
   let timer: number | null = null
 
   return {
-    // 初始状态
+    // Initial status
     byId: {},
     pollingInterval: null,
     isPolling: false,
 
-    // 更新或插入进度数据
+    // Update or insert progress data
     upsert: (progress: SimpleProgress) => {
       set((state) => ({
         byId: {
@@ -51,23 +51,23 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       }))
     },
 
-    // 开始轮询
+    // Start polling
     startPolling: (projectIds: string[], intervalMs: number = 5000) => {
       const { stopPolling, isPolling } = get()
       
-      // 如果已经在轮询，先停止
+      // If already polling, stop first
       if (isPolling) {
         stopPolling()
       }
 
       if (projectIds.length === 0) {
-        console.warn('没有项目ID，跳过轮询')
+        console.warn('No project ID, skipping polling')
         return
       }
 
-      console.log(`开始轮询进度: ${projectIds.join(', ')}`)
+      console.log(`Start pollingProgress: ${projectIds.join(', ')}`)
 
-      // 立即获取一次
+      // Fetch once immediately
       const fetchSnapshots = async () => {
         try {
           const queryString = projectIds.map(id => `project_ids=${id}`).join('&')
@@ -79,41 +79,41 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
           
           const snapshots: SimpleProgress[] = await response.json()
           
-          // 更新状态
+          // Update status
           snapshots.forEach(snapshot => {
-            console.log(`更新进度: ${snapshot.project_id} - ${snapshot.stage} (${snapshot.percent}%)`)
+            console.log(`Update progress: ${snapshot.project_id} - ${snapshot.stage} (${snapshot.percent}%)`)
             get().upsert(snapshot)
           })
           
-          console.log(`轮询更新: ${snapshots.length} 个项目`)
+          console.log(`Polling update: ${snapshots.length} ENproject`)
           
-          // 如果没有任何进度，或所有项目均已到达终态，则自动停止轮询
+          // If no progress or all projects reached terminal state, auto-stop polling
           try {
             const allTerminal = snapshots.length > 0 && snapshots.every(s => {
               return isCompleted(s.stage) || isFailed(s.message)
             })
-            // 只有当有进度且所有项目都已完成时才停止轮询
-            // 如果snapshots.length === 0，说明项目可能还在pending状态，不应该停止轮询
+            // Only stop when progress exists and all projects are completed
+            // If snapshots.length === 0, project may still be pending; don't stop polling
             if (snapshots.length > 0 && allTerminal) {
-              console.log('所有项目已完成，自动停止轮询')
+              console.log('All projects completed, auto-stopping polling')
               get().stopPolling()
             } else if (snapshots.length === 0) {
-              console.log('项目可能还在pending状态，继续轮询等待')
+              console.log('Project may still be pending, continue polling')
             }
           } catch (e) {
-            // 保护性捕获，避免影响后续轮询逻辑
-            console.warn('检测终态时出现问题，但不影响继续运行:', e)
+            // Guarded catch to avoid breaking subsequent polling
+            console.warn('Error detecting terminal state, but continuing:', e)
           }
           
         } catch (error) {
-          console.error('轮询进度失败:', error)
+          console.error('Polling progress failed:', error)
         }
       }
 
-      // 立即执行一次
+      // Execute once immediately
       fetchSnapshots()
 
-      // 设置定时器
+      // Set timer
       timer = window.setInterval(fetchSnapshots, intervalMs)
 
       set({
@@ -122,7 +122,7 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       })
     },
 
-    // 停止轮询
+    // Stop polling
     stopPolling: () => {
       if (timer) {
         clearInterval(timer)
@@ -134,10 +134,10 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
         pollingInterval: null
       })
       
-      console.log('停止轮询进度')
+      console.log('Stop pollingProgress')
     },
 
-    // 清除单个项目进度
+    // Clear single project progress
     clearProgress: (projectId: string) => {
       set((state) => {
         const newById = { ...state.byId }
@@ -146,59 +146,59 @@ export const useSimpleProgressStore = create<SimpleProgressState>((set, get) => 
       })
     },
 
-    // 清除所有进度
+    // Clear all progress
     clearAllProgress: () => {
       set({ byId: {} })
     },
 
-    // 获取单个项目进度
+    // Get single project progress
     getProgress: (projectId: string) => {
       return get().byId[projectId] || null
     },
 
-    // 获取所有进度
+    // Get all progress
     getAllProgress: () => {
       return get().byId
     }
   }
 })
 
-// 阶段显示名称映射
+// Stage display name map
 export const STAGE_DISPLAY_NAMES: Record<string, string> = {
-  'INGEST': '素材准备',
-  'SUBTITLE': '字幕处理',
-  'ANALYZE': '内容分析', 
-  'HIGHLIGHT': '片段定位',
-  'EXPORT': '视频导出',
-  'DONE': '处理完成'
+  'INGEST': 'Ingest',
+  'SUBTITLE': 'Subtitles',
+  'ANALYZE': 'Analysis', 
+  'HIGHLIGHT': 'Highlights',
+  'EXPORT': 'Export',
+  'DONE': 'Done'
 }
 
-// 阶段颜色映射
+// Stage color map
 export const STAGE_COLORS: Record<string, string> = {
-  'INGEST': '#1890ff',      // 蓝色
-  'SUBTITLE': '#52c41a',    // 绿色
-  'ANALYZE': '#fa8c16',     // 橙色
-  'HIGHLIGHT': '#722ed1',   // 紫色
-  'EXPORT': '#eb2f96',      // 粉色
-  'DONE': '#13c2c2'         // 青色
+  'INGEST': '#1890ff',      // blue
+  'SUBTITLE': '#52c41a',    // green
+  'ANALYZE': '#fa8c16',     // orange
+  'HIGHLIGHT': '#722ed1',   // purple
+  'EXPORT': '#eb2f96',      // pink
+  'DONE': '#13c2c2'         // cyan
 }
 
-// 获取阶段显示名称
+// Get stage display name
 export const getStageDisplayName = (stage: string): string => {
   return STAGE_DISPLAY_NAMES[stage] || stage
 }
 
-// 获取阶段颜色
+// Get stage color
 export const getStageColor = (stage: string): string => {
   return STAGE_COLORS[stage] || '#666666'
 }
 
-// 判断是否为完成状态
+// Check if completed
 export const isCompleted = (stage: string): boolean => {
   return stage === 'DONE'
 }
 
-// 判断是否为失败状态
+// Check if failed
 export const isFailed = (message: string): boolean => {
-  return message.includes('失败') || message.includes('错误') || message.includes('失败')
+  return message.includes('Failed') || message.includes('Error') || message.includes('Failed')
 }

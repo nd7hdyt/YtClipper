@@ -1,12 +1,14 @@
 """
-本地运行器：不起 FastAPI、不起 Celery，在当前进程里把一条视频跑完整条流水线。
+Local runner: no FastAPI, no Celery — run a video through the full pipeline in-process.
 
-给 `autoclip` CLI（backend/cli.py）和 MCP server（backend/mcp_server.py）共用。
-复用的是桌面端真正在用的 `SimplePipelineAdapter`，产物目录、metadata、SQLite 记录
-都和桌面应用一致——CLI 出的片，打开桌面应用也能看到。
+Shared by the `autoclip` CLI (backend/cli.py) and the MCP server (backend/mcp_server.py).
+It reuses the same `SimplePipelineAdapter` the desktop app actually runs, so output
+directories, metadata, and SQLite records all match the desktop app — clips produced
+via CLI show up when you open the desktop app.
 
-注意：`configure_environment()` 必须在 import 任何 `backend.core.database` 相关模块之前调用，
-因为 SQLAlchemy engine 在 import 时就按 `DATABASE_URL` 建好了。
+Note: `configure_environment()` must be called before importing anything from
+`backend.core.database`, because the SQLAlchemy engine is built from `DATABASE_URL`
+at import time.
 """
 from __future__ import annotations
 
@@ -30,7 +32,7 @@ PROVIDER_CHOICES = ("dashscope", "openai", "gemini", "siliconflow", "ollama", "l
 
 # ---------------------------------------------------------------- environment ---
 def default_app_dir() -> Path:
-    """与桌面应用一致的数据目录：mac 为 ~/Library/Application Support/AutoClip。"""
+    """Same data directory as the desktop app: ~/Library/Application Support/AutoClip on macOS."""
     env = os.getenv("AUTOCLIP_DATA_DIR") or os.getenv("AUTOCLIP_APP_DIR")
     if env:
         return Path(env).expanduser()
@@ -46,8 +48,8 @@ def default_app_dir() -> Path:
 
 def configure_environment(data_dir: Optional[Path] = None, quiet: bool = True) -> Path:
     """
-    设定数据目录 / 数据库 / 日志相关环境变量。返回实际数据目录。
-    必须在 import backend.core.database 之前调用。
+    Set data-directory / database / log env vars. Returns the actual data directory.
+    Must be called before importing backend.core.database.
     """
     target = (data_dir or default_app_dir()).expanduser()
     target.mkdir(parents=True, exist_ok=True)
@@ -56,10 +58,10 @@ def configure_environment(data_dir: Optional[Path] = None, quiet: bool = True) -
     os.environ["AUTOCLIP_DATA_DIR"] = str(target)
     os.environ.setdefault("DATABASE_URL", f"sqlite:///{target / 'autoclip.db'}")
     os.environ.setdefault("LOG_FILE", str(target / "logs" / "cli.log"))
-    # 流水线内部日志很吵；CLI 默认只看进度，日志落文件
+    # The in-pipeline logs are noisy; the CLI shows progress by default, logs go to file
     if quiet:
         os.environ.setdefault("AUTOCLIP_CLI_QUIET", "1")
-    # 让 `backend.*` 可 import（从任意 cwd 运行 `python -m backend.cli`）
+    # Make `backend.*` importable (running `python -m backend.cli` from any cwd)
     root = str(Path(__file__).resolve().parent.parent.parent)
     if root not in sys.path:
         sys.path.insert(0, root)
@@ -67,7 +69,7 @@ def configure_environment(data_dir: Optional[Path] = None, quiet: bool = True) -
 
 
 def setup_logging(verbose: bool = False) -> None:
-    """CLI 日志策略：文件里全量，终端只在 --verbose 时输出 backend 日志。"""
+    """CLI logging policy: everything to the file, backend logs on terminal only with --verbose."""
     log_file = os.getenv("LOG_FILE")
     handlers: List[logging.Handler] = []
     if log_file:
@@ -82,7 +84,7 @@ def setup_logging(verbose: bool = False) -> None:
         handlers.append(sh)
     logging.basicConfig(level=logging.INFO, handlers=handlers, force=True)
     if not verbose:
-        # 第三方库的 WARNING 也不要刷屏
+        # Third-party WARNINGs should not flood the terminal either
         for noisy in ("httpx", "openai", "urllib3", "faster_whisper", "sqlalchemy"):
             logging.getLogger(noisy).setLevel(logging.ERROR)
 
@@ -101,10 +103,11 @@ class LLMOverride:
 
 def configure_llm(override: LLMOverride) -> Dict[str, Any]:
     """
-    应用命令行给的 provider / model / base_url / api_key。
-    没给任何覆盖 → 直接用桌面应用的 settings.json。
-    给了 → 在数据目录下写一份 `cli-settings.json`（平铺格式，不动用户的正式设置），
-          用它初始化全局 LLMManager。返回当前 provider 信息。
+    Apply the CLI-provided provider / model / base_url / api_key.
+    No overrides → use the desktop app's settings.json as-is.
+    Overrides given → write a `cli-settings.json` (flat format, leaving the user's real
+    settings untouched) in the data directory and init the global LLMManager with it.
+    Returns the current provider info.
     """
     from backend.core.llm_manager import get_llm_manager, initialize_llm_manager
     from backend.core.local_presets import resolve_provider, LOCAL_PRESETS
@@ -113,7 +116,7 @@ def configure_llm(override: LLMOverride) -> Dict[str, Any]:
     if override.is_empty():
         return get_llm_manager().get_current_provider_info()
 
-    base = get_llm_manager()  # 读取用户正式设置作为底稿（key 等）
+    base = get_llm_manager()  # read the user's real settings as a base (keys etc.)
     settings = dict(base.settings)
     settings.pop("llm_provider_preset", None)
 
@@ -140,22 +143,23 @@ def configure_llm(override: LLMOverride) -> Dict[str, Any]:
     info = manager.get_current_provider_info()
     if not info.get("available"):
         raise RuntimeError(
-            f"LLM 提供商 {info.get('provider')} 未就绪：缺少 API Key（或本地服务地址）。"
-            f" 用 --api-key / --base-url 指定，或先在桌面应用设置页配置。"
+            f"LLM provider {info.get('provider')} is not ready: missing API key (or local server address). "
+            f"Pass --api-key / --base-url, or configure it on the desktop app settings page first."
         )
     return info
 
 
 def check_llm_connection() -> Dict[str, Any]:
-    """用当前全局 LLMManager 发一条最短请求，返回 {ok, provider, model, error}."""
+    """Send one minimal request through the current global LLMManager. Returns {ok, provider, model, error}."""
     from backend.core.llm_manager import get_llm_manager
     m = get_llm_manager()
     info = m.get_current_provider_info()
     if not m.current_provider:
-        return {"ok": False, **info, "error": "未配置 API Key / 本地服务地址"}
+        return {"ok": False, **info, "error": "No API key / local server address configured"}
     base_url = info.get("base_url")
     if base_url:
-        # 本地 / 自建服务先探一下地址，避免 SDK 重试半天只留下一句「连接失败」
+        # For local / self-hosted servers, probe the address first so a dead endpoint
+        # surfaces here instead of a bare "connection failed" after long SDK retries
         try:
             import httpx
             from backend.core.llm_providers import is_local_url
@@ -164,11 +168,11 @@ def check_llm_connection() -> Dict[str, Any]:
         except Exception as e:  # noqa: BLE001
             from backend.core.local_presets import LOCAL_PRESETS
             preset = LOCAL_PRESETS.get(info.get("provider") or "")
-            tip = f"请先启动 {preset.display_name.split('（')[0]}（{preset.docs_url}）" if preset else "请检查地址是否正确、服务是否已启动"
-            return {"ok": False, **info, "error": f"{base_url} 不可达：{type(e).__name__}。{tip}"}
+            tip = f"Please start {preset.display_name.split('（')[0]} first ({preset.docs_url})" if preset else "Please check the address and that the server is running"
+            return {"ok": False, **info, "error": f"{base_url} unreachable: {type(e).__name__}. {tip}"}
     try:
         ok = bool(m.current_provider.test_connection())
-        return {"ok": ok, **info, "error": None if ok else "连接测试失败"}
+        return {"ok": ok, **info, "error": None if ok else "Connection test failed"}
     except Exception as e:  # noqa: BLE001
         return {"ok": False, **info, "error": str(e)[:300]}
 
@@ -187,10 +191,10 @@ class RunRequest:
 
 
 def _write_project_json(project_dir: Path, req: RunRequest, extra: Optional[Dict[str, Any]] = None) -> None:
-    """`DataSyncService` 会读 project.json 拿名字；顺手把来源记下来。"""
+    """`DataSyncService` reads project.json for the name; record the source while at it."""
     meta = {
         "project_name": req.name or req.video.stem,
-        "description": f"由 autoclip CLI 从 {req.video} 创建",
+        "description": f"Created by the autoclip CLI from {req.video}",
         "created_at": datetime.now().isoformat(),
         "source": {"video": str(req.video), "srt": str(req.srt) if req.srt else None, "via": "cli"},
         "video_category": req.category,
@@ -200,7 +204,7 @@ def _write_project_json(project_dir: Path, req: RunRequest, extra: Optional[Dict
 
 
 def _register_project(req: RunRequest, video_path: Path) -> None:
-    """在 SQLite 里建项目行，这样桌面应用首页能直接看到并进入详情页。"""
+    """Insert the project row into SQLite so the desktop app home page lists it directly."""
     from backend.core.database import SessionLocal, create_tables
     from backend.models.project import Project, ProjectStatus, ProjectType
 
@@ -215,15 +219,16 @@ def _register_project(req: RunRequest, video_path: Path) -> None:
             ptype = ProjectType.DEFAULT if hasattr(ProjectType, "DEFAULT") else list(ProjectType)[0]
         thumbnail = None
         try:
-            # 桌面首页卡片要缩略图；和上传流程一样用 ffmpeg 抽一帧转 base64
+            # Desktop home-page cards need a thumbnail; extract one frame via ffmpeg
+            # and base64 it, same as the upload flow
             from backend.utils.thumbnail_generator import generate_project_thumbnail
             thumbnail = generate_project_thumbnail(req.project_id, video_path)
         except Exception as e:  # noqa: BLE001
-            logger.debug(f"缩略图生成失败: {e}")
+            logger.debug(f"Thumbnail generation failed: {e}")
         project = Project(
             id=req.project_id,
             name=req.name or req.video.stem,
-            description=f"由 autoclip CLI 从 {req.video.name} 创建",
+            description=f"Created by the autoclip CLI from {req.video.name}",
             project_type=ptype,
             status=ProjectStatus.PROCESSING,
             video_path=str(video_path),
@@ -252,8 +257,10 @@ def _set_project_status(project_id: str, status: str, error: Optional[str] = Non
             if status == "completed":
                 p.completed_at = datetime.utcnow()
             if error is not None:
-                # Project 表没有 error_message 列；CLI 路径也不建 Task 行，所以记到 metadata，
-                # ProjectService.latest_error_message 会回退读它，桌面首页 / 详情页照样能看到原因
+                # The Project table has no error_message column, and the CLI path creates
+                # no Task row either, so record it in metadata instead —
+                # ProjectService.latest_error_message falls back to reading it, so the
+                # desktop home / detail pages still show the reason
                 meta = dict(p.project_metadata or {})
                 meta["last_error"] = error[:2000]
                 p.project_metadata = meta
@@ -261,23 +268,23 @@ def _set_project_status(project_id: str, status: str, error: Optional[str] = Non
         finally:
             db.close()
     except Exception as e:  # noqa: BLE001
-        logger.warning(f"更新项目状态失败: {e}")
+        logger.warning(f"Failed to update project status: {e}")
 
 
 def prepare_project(req: RunRequest, link: bool = True) -> Path:
     """
-    建项目目录、把视频放进 raw/（默认硬链接，失败则复制；`link=False` 强制复制）。
-    返回 raw 里的视频路径。
+    Create the project directory and place the video into raw/ (hard link by default,
+    copy on failure; `link=False` forces a copy). Returns the video path inside raw/.
     """
     from backend.core.path_utils import get_project_directory
 
     req.video = req.video.expanduser().resolve()
     if not req.video.exists():
-        raise FileNotFoundError(f"视频不存在: {req.video}")
+        raise FileNotFoundError(f"Video not found: {req.video}")
     if req.srt:
         req.srt = req.srt.expanduser().resolve()
         if not req.srt.exists():
-            raise FileNotFoundError(f"字幕不存在: {req.srt}")
+            raise FileNotFoundError(f"Subtitle file not found: {req.srt}")
 
     project_dir = get_project_directory(req.project_id)
     raw_dir = project_dir / "raw"
@@ -307,12 +314,13 @@ ProgressFn = Callable[[Dict[str, Any]], None]
 
 
 def run_pipeline(req: RunRequest, video_in_raw: Path, on_progress: Optional[ProgressFn] = None) -> Dict[str, Any]:
-    """同步跑完整条流水线（阻塞）。返回 adapter 的结果 dict（status: succeeded / failed）。"""
+    """Run the full pipeline synchronously (blocking). Returns the adapter result dict (status: succeeded / failed)."""
     from backend.services.simple_progress import add_progress_listener, remove_progress_listener
     from backend.services.simple_pipeline_adapter import SimplePipelineAdapter
 
     import backend.pipeline.step3_scoring as step3
-    # CLI 显式给的阈值优先于设置页；没给就让 step3 自己读设置页 / 默认值
+    # An explicit CLI threshold wins over the settings page; without one, step3 reads
+    # the settings page / default itself
     step3.MIN_SCORE_OVERRIDE = float(req.min_score) if req.min_score is not None else None
 
     srt_in_raw = video_in_raw.parent / "input.srt"
@@ -348,7 +356,7 @@ def _load_json(path: Path, default: Any) -> Any:
 
 
 def normalize_score(score: Any) -> Optional[int]:
-    """流水线评分有 0–1 / 0–10 两种口径，统一成 0–100 整数（与前端 ClipCard 一致）。"""
+    """Pipeline scores come in 0-1 and 0-10 flavors; normalize to a 0-100 int (same as the frontend ClipCard)."""
     if not isinstance(score, (int, float)):
         return None
     s = float(score)
@@ -360,12 +368,12 @@ def normalize_score(score: Any) -> Optional[int]:
 
 
 def summarize_project(project_id: str) -> Dict[str, Any]:
-    """从项目目录读出切片 / 合集 / 文件路径，给 CLI --json 和 MCP 返回。"""
+    """ENprojectdirectoryENclip / collection / filepath，EN CLI --json EN MCP return。"""
     from backend.core.path_utils import get_projects_directory
 
     project_dir = get_projects_directory() / project_id
     if not project_dir.exists():
-        raise FileNotFoundError(f"项目不存在: {project_id}")
+        raise FileNotFoundError(f"projectdoes not exist: {project_id}")
     meta_dir = project_dir / "metadata"
     out_dir = project_dir / "output"
     project_meta = _load_json(project_dir / "project.json", {})
@@ -424,7 +432,7 @@ def summarize_project(project_id: str) -> Dict[str, Any]:
 
 
 def _db_projects() -> Dict[str, Dict[str, Any]]:
-    """SQLite 里的项目（桌面应用建的项目没有 project.json，名字 / 状态在这里）。读不到就返回空。"""
+    """SQLite ENproject（ENprojectEN project.json，EN / statusEN）。ENreturnEN。"""
     try:
         from backend.core.database import SessionLocal
         from backend.models.project import Project
@@ -441,12 +449,12 @@ def _db_projects() -> Dict[str, Dict[str, Any]]:
         finally:
             db.close()
     except Exception as e:  # noqa: BLE001
-        logger.debug(f"读取数据库项目失败: {e}")
+        logger.debug(f"readdatabaseprojectfailed: {e}")
         return {}
 
 
 def list_projects(limit: int = 50) -> List[Dict[str, Any]]:
-    """数据目录下的项目（按修改时间倒序），名字 / 状态优先取 SQLite，其次看文件。"""
+    """ENdirectoryENproject（ENtimeEN），EN / statusEN SQLite，ENfile。"""
     from backend.core.path_utils import get_projects_directory
 
     db_rows = _db_projects()
@@ -473,7 +481,7 @@ def list_projects(limit: int = 50) -> List[Dict[str, Any]]:
 
 # ---------------------------------------------------------------- doctor ---
 def environment_report() -> Dict[str, Any]:
-    """ffmpeg / whisper 运行时 / LLM 配置 / 数据目录一览，给 `autoclip doctor` 和 MCP 用。"""
+    """ffmpeg / whisper runEN / LLM config / ENdirectoryEN，EN `autoclip doctor` EN MCP EN。"""
     from backend.core.path_utils import get_data_directory
     from backend.services import whisper_runtime
 

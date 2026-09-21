@@ -1,19 +1,21 @@
 """
-流水线「明确失败」异常。
+Pipeline "explicit failure" exceptions.
 
-原则：LLM 不可用、字幕缺失、大纲 / 评分为空、切片没产出文件——这些都必须让项目进 failed 态，
-带上阶段和一句用户能照着做的提示；不能吞掉后继续跑成 `Completed · 0 切片`（#100 #11 #24 的共同表象）。
+Principle: LLM unavailable, missing subtitles, empty outline / scores, clips with no
+output files — all of these must put the project into a failed state, with the stage
+and one actionable user-facing hint; they must not be swallowed and continue into a
+`Completed with 0 clips` result (#100 #11 #24 share this symptom).
 """
 
 from __future__ import annotations
 
 
 class PipelineFailure(RuntimeError):
-    """带阶段与用户提示的流水线失败。
+    """Pipeline failure carrying a stage and a user hint.
 
-    stage: 与 simple_progress 的阶段名一致（INGEST / SUBTITLE / ANALYZE / HIGHLIGHT / EXPORT），
-           前端失败态与应用内反馈会带上它。
-    hint:  用户下一步能做什么（去哪个设置项、装什么），追加在错误正文后面。
+    stage: matches the simple_progress stage names (INGEST / SUBTITLE / ANALYZE / HIGHLIGHT / EXPORT),
+           surfaced with the frontend failure state and in-app feedback.
+    hint:  what the user can do next (which settings page, what to install), appended after the message.
     """
 
     def __init__(self, stage: str, message: str, hint: str = ""):
@@ -29,7 +31,7 @@ class PipelineFailure(RuntimeError):
         return f"{self.message} {self.hint}".strip()
 
 
-HINT_CHECK_LLM = "请到「设置 → 模型」检查提供商、API Key 与模型名，点「测试连接」确认后重试。"
-HINT_SUBTITLE = "到「设置 → 转写」安装 Whisper 模型让 AutoClip 自动转写，或导入 .srt 字幕后重试。"
-HINT_LOWER_THRESHOLD = "到「设置 → 模型 → 最低评分阈值」调低后重试，或换一个更强的模型。"
-HINT_CHECK_FFMPEG = "确认 ffmpeg 可用（桌面版内置；Docker / 脚本模式请检查 PATH），以及原视频文件完整可播放。"
+HINT_CHECK_LLM = "Go to Settings > Model to check the provider, API key, and model name, click Test Connection, then retry."
+HINT_SUBTITLE = "Go to Settings > Transcription to install a Whisper model for automatic transcription, or import an .srt subtitle file and retry."
+HINT_LOWER_THRESHOLD = "Lower the minimum score threshold under Settings > Model and retry, or switch to a stronger model."
+HINT_CHECK_FFMPEG = "Make sure ffmpeg is available (bundled in the desktop build; check PATH for Docker / script mode) and that the source video file is complete and playable."

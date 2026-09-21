@@ -1,14 +1,14 @@
-# Issue 收件箱自动打理：
-# 1. 新 issue 自动回一条说明（预期节奏 + 去哪看状态），维护者不用手动回。
-# 2. 打了 needs-info 却 14 天没人补信息 → 标 stale，再 7 天关闭。
-# 3. 其他 issue 60 天无活动 → 标 stale，再 14 天关闭。feature / pinned 永不自动关。
+# Issue ENAutoEN：
+# 1. EN issue AutoEN（EN + ENStatus），ENManualEN。
+# 2. EN needs-info EN 14 EN → EN stale，EN 7 EN。
+# 3. EN issue 60 EN → EN stale，EN 14 EN。feature / pinned ENAutoEN。
 name: Issue hygiene
 
 on:
   issues:
     types: [opened]
   schedule:
-    - cron: "0 2 * * *"   # 每天 10:00 北京时间
+    - cron: "0 2 * * *"   # EN 10:00 EN
   workflow_dispatch:
 
 permissions:
@@ -24,11 +24,11 @@ jobs:
         with:
           script: |
             const body = [
-              '收到，感谢反馈。这是一个业余时间维护的开源项目，issue 通常在 **一周内** 统一 triage，不会逐条即时回复。',
+              'EN，EN。ENProject，issue EN **EN** EN triage，EN。',
               '',
-              '- 当前状态与已知问题：#96',
-              '- 如果是 bug 且缺少 **版本 / 平台 / 模型** 信息，会被打上 `needs-info`，14 天内没补充会自动关闭（补充后重开即可）。',
-              '- 使用类问题建议移到 [Discussions](https://github.com/zhouxiaoka/autoclip/discussions)。',
+              '- CurrentStatusEN：#96',
+              '- IfEN bug EN **Version / EN / EN** EN，EN `needs-info`，14 ENAutoEN（EN）。',
+              '- EN [Discussions](https://github.com/nd7hdyt/YtClipper/discussions)。',
               '',
               '_This project is maintained in spare time; issues are triaged weekly. Bugs missing version / platform / model get `needs-info` and auto-close after 14 days without a reply._'
             ].join('\n');
@@ -51,8 +51,8 @@ jobs:
           days-before-pr-stale: -1
           days-before-pr-close: -1
           stale-issue-label: stale
-          stale-issue-message: "还缺少复现所需的信息（版本 / 平台 / 模型 / 日志），7 天内没有补充会自动关闭。补充后会自动重开处理。"
-          close-issue-message: "因长期缺少复现信息已关闭。补充信息后回复即可重开。"
+          stale-issue-message: "EN（Version / EN / EN / EN），7 ENAutoEN。ENAutoENProcessing。"
+          close-issue-message: "EN。EN。"
           remove-stale-when-updated: true
           operations-per-run: 100
 
@@ -70,9 +70,9 @@ jobs:
           days-before-pr-close: 14
           stale-issue-label: stale
           stale-pr-label: stale
-          stale-issue-message: "60 天没有新动态，先标记为 stale；如果问题仍然存在请回复一下，否则 14 天后自动关闭。"
-          stale-pr-message: "45 天没有新动态，先标记为 stale；如仍在推进请回复，否则 14 天后自动关闭。"
-          close-issue-message: "因长期无活动自动关闭。问题仍存在的话欢迎重开或新开 issue。"
-          close-pr-message: "因长期无活动自动关闭。"
+          stale-issue-message: "60 EN，EN stale；IfENPleaseEN，Else 14 ENAutoEN。"
+          stale-pr-message: "45 EN，EN stale；ENPleaseEN，Else 14 ENAutoEN。"
+          close-issue-message: "ENAutoEN。EN issue。"
+          close-pr-message: "ENAutoEN。"
           remove-stale-when-updated: true
           operations-per-run: 100

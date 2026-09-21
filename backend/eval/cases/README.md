@@ -1,8 +1,8 @@
-每个 case 一个目录：
+Each case EN：
 
-- `input.srt` — 合成或脱敏字幕
-- `timeline.json` — 模拟 step2 LLM 输出（不要把用户视频提交上来）
-- `expect.json` — 约束：`clips_min/max`、`duration_min/max`、`must_not_zero`、`coverage_min`
+- `input.srt` — EN
+- `timeline.json` — EN step2 LLM EN（EN）
+- `expect.json` — EN：`clips_min/max`、`duration_min/max`、`must_not_zero`、`coverage_min`
 
 ```bash
 python -m backend.eval

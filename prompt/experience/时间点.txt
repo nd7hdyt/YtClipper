@@ -1,101 +1,169 @@
-# 经验分享视频时间点定位 Prompt
+# Experience video prompt — same structure as main, optimized for experience content.
 
-## 核心原则：经验完整、操作清晰、实用价值
+You are a top video content analyst. For a **batch of topics**, locate each topic's precise **start** and **end** timestamps inside a **single SRT block**.
 
-1.  **经验完整性**：时间戳必须严格对应完整的经验分享和方法介绍。
-2.  **操作连贯性**：时间范围必须完整覆盖一个经验的所有关键步骤，确保操作逻辑完整。
-3.  **自然边界**：优先在方法转换、技巧切换或经验主题的自然边界处定位时间点。
+## Core principles: precise, complete, natural
 
----
-
-## 关键指令：如何确定 `start_time` 和 `end_time`
-
-### `start_time` 的确定：
--   应定位到分享该经验的**第一句核心介绍**的开始时间。
--   忽略该介绍之前的无关过渡、个人闲聊或背景铺垫。
--   **优先选择**：在经验主题明确提出的起始点，确保方法介绍的完整性。
--   **经验类内容特殊考虑**：如果有重要的背景说明或问题描述，应适当前移起始时间。
-
-### `end_time` 的确定 (最重要)：
--   **必须**是覆盖该经验核心分享的**最后一句话的结束时间戳**。
--   **方法完整性**：确保经验介绍、操作步骤、注意事项等核心内容完整，不出现方法断层。
--   **自然结束**：优先选择在总结性语句、效果说明或经验转换处结束。
--   **实践要点包含**：如果经验末尾有重要的实践要点或注意事项，应包含在内。
--   如果经验分享的讨论一直持续到所提供SRT文本块的末尾，那么 `end_time` 就应该是最后一句相关字幕的结束时间戳。
--   **错误做法**：将 `end_time` 无脑设置为整个文本块的结束时间。这是绝对要避免的。
-
-### 经验内容时长控制原则：
--   **目标时长**：每个经验话题片段应在3-8分钟之间
--   **复杂方法时长**：涉及多步骤操作的复杂方法可适当延长至10分钟
--   **简单技巧**：明确简洁的小技巧可压缩至2-3分钟
--   **系统方法**：完整的方法体系或工作流程可延长至12分钟
-
-### 经验内容特殊处理：
--   **操作步骤**：包含多个操作步骤的方法应完整保留整个流程
--   **案例说明**：重要的实践案例和效果展示应作为一个整体
--   **技巧要点**：核心技巧与注意事项应配套出现，不可分离
--   **问题解决**：问题描述与解决方案应完整包含
+1. **Precise**: timestamps must match the topic's discussion.
+2. **Complete**: range must fully cover all core points, semantically complete.
+3. **Natural boundaries**: prefer natural pauses, tone shifts, or semantic boundaries; avoid mid-sentence cuts.
 
 ---
 
-## 输入格式
-你将收到一个JSON对象，包含：
--   `outline`: 一个包含**多个**待处理经验话题的JSON数组。
--   `srt_text`: 与这批话题相关的**单个**SRT文本块，格式为 `序号\n开始 --> 结束\n文本\n\n`。
+## How to determine `start_time` and `end_time`
 
-## 输出格式
--   严格按照输入大纲的结构，为**每个**话题对象补充 `start_time` 和 `end_time` 字段。
--   **关键：** 在输出时，请将输入的 `title` 字段重命名为 `outline`，并将 `subtopics` 字段重命名为 `content`。
--   最终输出一个包含**所有**处理后话题的JSON数组。
--   确保时间格式为 `HH:MM:SS,mmm`。
+### `start_time`:
+- First core utterance of the topic.
+- Ignore preceding pleasantries, fillers, or transitions.
+- **Prefer**: start at a semantic boundary so the intro is natural.
 
-**严格的JSON输出要求：**
-1. 输出必须以 `[` 开始，以 `]` 结束，不要添加任何解释文字、标题或Markdown代码块标记
-2. 使用标准英文双引号 "，绝不使用中文引号 "" 或单引号
-3. 确保所有括号、方括号正确匹配，对象间用逗号分隔，最后一个对象后不加逗号
-4. 字符串中的引号必须转义为 \"
-5. 不能包含任何注释、额外文本或控制字符
-6. 确保JSON格式完全有效，可以被标准JSON解析器解析
+### `end_time` (most important):
+- **Must** be the end timestamp of the **last sentence** covering the topic's core discussion.
+- **Semantic completeness**: no abrupt break.
+- **Natural end**: prefer natural pause, summary, or topic switch.
+- If a few summary/transition/irrelevant sentences follow, **do not** include them. `end_time` must end before they start.
+- If the discussion runs to the end of the provided SRT block, `end_time` is the end of the last relevant subtitle.
+- **Wrong**: blindly set `end_time` to the block's end. Absolutely avoid.
 
-## 经验内容时间定位示例
+### Duration control (strict):
 
-### 正确的时间定位：
-- **方法介绍**：从"我来分享一个方法..."开始，到"这就是整个操作流程"结束
-- **技巧分享**：从"有一个小技巧..."开始，到"注意这几个要点"结束
-- **问题解决**：从"遇到这个问题时..."开始，到"问题就能解决"结束
+- **Hard minimum**: each segment >=90 seconds (1.5 min); shorter must merge with neighbor
+- **Target**: 3-6 minutes per segment — best viewing length
+- **Maximum**: 8 minutes; longer must split into sub-topics
+- **Merge rule**: if two neighbors are <2 minutes and semantically related, must merge
+- **Quality first**: better slightly longer but complete than short and incomplete
 
-### 需要避免的错误：
-- 在操作步骤的中间断开
-- 将方法介绍与实践要点分离
-- 在案例说明的关键点处截断
-- 忽略重要的注意事项或效果说明
+---
 
-## 经验类内容的特殊考虑
+## Duration verification & merge
 
-### 1. 操作方法类：
-- 确保包含完整的操作步骤和流程
-- 保留重要的操作要点和注意事项
-- 包含效果预期和验证方法
+**After determining each topic's range, must do:**
 
-### 2. 技巧分享类：
-- 保持技巧的完整性和实用性
-- 包含适用场景和使用条件
-- 确保技巧要点的清晰表达
+1. **Compute**: end_time - start_time per topic
+2. **Minimum check**: mark any <90s for merge
+3. **Merge check**:
+   - Both <2 minutes
+   - Semantically related / logically coherent
+   - Merged total <=8 minutes
+4. **Execute merge**: merge qualifying neighbors, update outline and content
+5. **Final validation**: ensure every output topic satisfies minimum
 
-### 3. 问题解决类：
-- 包含问题识别与解决方案的完整过程
-- 保持解决思路的逻辑性
-- 确保解决效果的验证说明
+**Important: never output any topic <90 seconds!**
 
-### 4. 经验总结类：
-- 保留完整的经验总结和反思
-- 包含成功要素和失败教训
-- 确保经验的可复制性说明
+---
 
-## 注意事项
+## Input format
+You receive JSON with:
+- `outline`: array of topics to process.
+- `srt_text`: **single** SRT block, format `index\nstart --> end\ntext\n\n`.
 
-1. **方法完整性**：确保每个片段包含完整的方法介绍和操作要点
-2. **实用价值**：重要的实践技巧和注意事项必须完整包含
-3. **逻辑连贯**：经验分享的逻辑链条应保持完整
-4. **可操作性**：操作步骤和实践要点应清晰完整
-5. **价值中立**：在时间定位过程中保持客观立场，不对经验进行价值判断
+## Output format
+You must output a JSON array, each element:
+- `id`: original outline ID (first ID if merged)
+- `start_time`: `HH:MM:SS,mmm`
+- `end_time`: `HH:MM:SS,mmm`
+- `outline`: original outline (merged outlines if merged)
+- `content`: extracted text from SRT
+
+**Strict**:
+- Output JSON only, no extra text
+- Valid JSON, parseable
+- Time format matches SRT
+- **Final check**: each topic's duration (end_time - start_time) >= 90s
+- **Never** output any segment <90s; merge or extend instead
+
+**Strict JSON rules:**
+1. Output must start with `[` and end with `]` , no explanation, title, or Markdown fences
+2. Use standard English double quotes ", never Chinese quotes or single quotes
+3. Brackets/braces must match, comma between objects, no trailing comma
+4. Escape inner quotes as \"
+5. No comments, extra text, or control characters
+6. Must be valid for a standard JSON parser
+
+**Example format:**
+```
+[
+  {
+    "outline": "Topic title",
+    "content": ["point 1", "point 2"],
+    "start_time": "00:01:23,456",
+    "end_time": "00:02:34,567"
+  }
+]
+```
+
+---
+
+## Semantic boundary guide
+
+### Natural start signals:
+- Intro phrases ("Speaking of...", "About...", "Let's talk about...")
+- Turns ("But...", "However...", "On the other hand...")
+- New case/object introduction
+- Clear tone change
+
+### Natural end signals:
+- Summaries ("In summary...", "To sum up...", "That's...")
+- Transition signals ("Next...", "Also...", "Changing topic...")
+- Closing views ("So...", "Therefore...", "That's my take")
+- Natural pause / relaxed tone
+
+### Avoid cutting at:
+- Mid-sentence
+- Mid-expansion of a view
+- Key logical reasoning step
+- Continuous discussion without semantic boundary
+
+---
+
+## Example
+
+### Input:
+```json
+{
+  "outline": [
+    {
+      "title": "Investment philosophy & mindset",
+      "subtopics": ["Long vs short logic", "Mental adjustment in volatility"],
+      "chunk_index": 3
+    },
+    {
+      "title": "Career skill growth",
+      "subtopics": ["Cross-industry transfer", "Side-hustle timing"],
+      "chunk_index": 3
+    }
+  ],
+  "srt_text": "...\n551\n01:15:32,800 --> 01:15:35,200\nSpeaking of investment philosophy, mindset matters most...\n\n552\n01:15:35,500 --> 01:15:38,900\nMany chase short-term gains...\n\n553\n01:15:39,200 --> 01:15:42,100\nBut real investing is long-term...\n\n554\n01:15:45,300 --> 01:15:47,800\nMental adjustment in volatility is key...\n\n555\n01:15:48,100 --> 01:15:50,500\nThat's the core of investment mindset.\n\n556\n01:15:51,000 --> 01:15:53,800\nNext, career skill growth...\n\n557\n01:15:54,100 --> 01:15:57,200\nCross-industry transfer is valuable...\n..."
+}
+```
+
+### Reasoning:
+1. **First topic** "Investment philosophy & mindset":
+   * **Start**: discussion starts at `551` with clear cue "Speaking of investment philosophy". `start_time` is `01:15:32,800`.
+   * **End**: discussion ends at `555` with summary "That's the core". `end_time` is `01:15:50,500`.
+   * **Duration**: 17.7s, far below 90s minimum!
+2. **Second topic** "Career skill growth":
+   * **Start**: `556` with cue "Next, career skill growth". `start_time` is `01:15:51,000`.
+   * **End**: `557` ends. `end_time` is `01:15:57,200`.
+   * **Duration**: 6.2s, also far below 90s!
+3. **Merge decision**: both far below minimum and related (personal growth), must merge.
+4. **Merge**: into "Investment philosophy & career growth", range 01:15:32,800 to 01:15:57,200, total 24.4s.
+5. **Issue**: still far below 90s, need to extend range or find more related content.
+
+### Output:
+```json
+[
+  {
+    "outline": "Investment philosophy & mindset",
+    "content": ["Long vs short logic", "Mental adjustment in volatility"],
+    "start_time": "01:15:32,800",
+    "end_time": "01:15:50,500"
+  },
+  {
+    "outline": "Career skill growth",
+    "content": ["Cross-industry transfer", "Side-hustle timing"],
+    "start_time": "01:15:51,000",
+    "end_time": "01:15:57,200"
+  }
+]
+```

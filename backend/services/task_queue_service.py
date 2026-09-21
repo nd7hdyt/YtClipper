@@ -1,6 +1,6 @@
 """
-任务队列管理服务
-管理Celery任务的提交、监控和状态查询
+taskqueueENservice
+ENCelerytaskEN、ENstatusEN
 """
 
 import logging
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class TaskQueueService:
-    """任务队列管理服务"""
+    """taskqueueENservice"""
     
     def __init__(self, db: Session):
         self.db = db
@@ -34,52 +34,52 @@ class TaskQueueService:
         input_srt_path: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        提交视频处理任务
+        ENvideoprocessingtask
         
         Args:
-            project_id: 项目ID
-            input_video_path: 输入视频路径
-            input_srt_path: 输入SRT路径
+            project_id: projectID
+            input_video_path: ENvideopath
+            input_srt_path: ENSRTpath
             
         Returns:
-            任务提交结果
+            taskENresult
         """
-        logger.info(f"提交视频处理任务: {project_id}")
+        logger.info(f"ENvideoprocessingtask: {project_id}")
         
         try:
-            # 创建并保存任务记录
+            # createENsavetaskEN
             task = self.task_repo.create(
                 project_id=project_id,
-                name="视频流水线处理",
-                description=f"处理项目 {project_id} 的视频流水线",
+                name="videoENprocessing",
+                description=f"processingproject {project_id} ENvideoEN",
                 task_type=TaskType.VIDEO_PROCESSING,
                 status=TaskStatus.PENDING,
                 priority=1
             )
             
-            # 提交Celery任务
+            # ENCelerytask
             celery_task = process_video_pipeline.delay(
                 project_id=project_id,
                 input_video_path=input_video_path,
                 input_srt_path=input_srt_path,
             )
             
-            # 更新任务记录
+            # updatetaskEN
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"视频处理任务已提交: {task.id}, Celery任务ID: {celery_task.id}")
+            logger.info(f"videoprocessingtaskEN: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': task.id,
                 'celery_task_id': celery_task.id,
                 'status': 'PENDING',
-                'message': '视频处理任务已提交'
+                'message': 'videoprocessingtaskEN'
             }
             
         except Exception as e:
-            logger.error(f"提交视频处理任务失败: {project_id}, 错误: {e}")
+            logger.error(f"ENvideoprocessingtaskfailed: {project_id}, error: {e}")
             raise
     
     def submit_single_step_task(
@@ -89,37 +89,37 @@ class TaskQueueService:
         config: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
-        提交单个步骤处理任务
+        ENprocessingtask
         
         Args:
-            project_id: 项目ID
-            step_name: 步骤名称
-            config: 步骤配置参数
+            project_id: projectID
+            step_name: EN
+            config: ENconfigparameters
             
         Returns:
-            任务提交结果
+            taskENresult
         """
-        logger.info(f"提交单个步骤任务: {project_id}, {step_name}")
+        logger.info(f"ENtask: {project_id}, {step_name}")
         
         try:
-            # 创建并保存任务记录
+            # createENsavetaskEN
             task = self.task_repo.create(
                 project_id=project_id,
-                name=f"步骤处理: {step_name}",
-                description=f"处理项目 {project_id} 的步骤 {step_name}",
+                name=f"ENprocessing: {step_name}",
+                description=f"processingproject {project_id} EN {step_name}",
                 task_type=TaskType.VIDEO_PROCESSING,
                 status=TaskStatus.PENDING,
                 priority=2
             )
             
-            # 提交Celery任务
+            # ENCelerytask
             celery_task = process_single_step.delay(project_id, step_name, config or {})
             
-            # 更新任务记录
+            # updatetaskEN
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"单个步骤任务已提交: {task.id}, Celery任务ID: {celery_task.id}")
+            logger.info(f"ENtaskEN: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
@@ -127,11 +127,11 @@ class TaskQueueService:
                 'celery_task_id': celery_task.id,
                 'step': step_name,
                 'status': 'PENDING',
-                'message': f'步骤 {step_name} 处理任务已提交'
+                'message': f'EN {step_name} processingtaskEN'
             }
             
         except Exception as e:
-            logger.error(f"提交单个步骤任务失败: {project_id}, {step_name}, 错误: {e}")
+            logger.error(f"ENtaskfailed: {project_id}, {step_name}, error: {e}")
             raise
     
     def submit_retry_task(
@@ -142,38 +142,38 @@ class TaskQueueService:
         config: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
-        提交重试任务
+        ENretrytask
         
         Args:
-            project_id: 项目ID
-            task_id: 任务ID
-            step_name: 步骤名称
-            config: 步骤配置参数
+            project_id: projectID
+            task_id: taskID
+            step_name: EN
+            config: ENconfigparameters
             
         Returns:
-            任务提交结果
+            taskENresult
         """
-        logger.info(f"提交重试任务: {project_id}, {task_id}, {step_name}")
+        logger.info(f"ENretrytask: {project_id}, {task_id}, {step_name}")
         
         try:
-            # 创建并保存任务记录
+            # createENsavetaskEN
             task = self.task_repo.create(
                 project_id=project_id,
-                name=f"重试步骤: {step_name}",
-                description=f"重试项目 {project_id} 的步骤 {step_name}",
+                name=f"retryEN: {step_name}",
+                description=f"retryproject {project_id} EN {step_name}",
                 task_type=TaskType.VIDEO_PROCESSING,
                 status=TaskStatus.PENDING,
                 priority=3
             )
             
-            # 提交Celery任务
+            # ENCelerytask
             celery_task = retry_processing_step.delay(project_id, step_name, config or {}, task_id)
             
-            # 更新任务记录
+            # updatetaskEN
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"重试任务已提交: {task.id}, Celery任务ID: {celery_task.id}")
+            logger.info(f"retrytaskEN: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
@@ -182,30 +182,30 @@ class TaskQueueService:
                 'original_task_id': task_id,
                 'step': step_name,
                 'status': 'PENDING',
-                'message': f'步骤 {step_name} 重试任务已提交'
+                'message': f'EN {step_name} retrytaskEN'
             }
             
         except Exception as e:
-            logger.error(f"提交重试任务失败: {project_id}, {task_id}, {step_name}, 错误: {e}")
+            logger.error(f"ENretrytaskfailed: {project_id}, {task_id}, {step_name}, error: {e}")
             raise
     
     def get_task_status(self, task_id: str) -> Dict[str, Any]:
         """
-        获取任务状态
+        fetchtaskstatus
         
         Args:
-            task_id: 任务ID
+            task_id: taskID
             
         Returns:
-            任务状态信息
+            taskstatusEN
         """
         try:
-            # 获取数据库任务记录
+            # fetchdatabasetaskEN
             task = self.task_repo.get_by_id(task_id)
             if not task:
-                return {'error': '任务不存在'}
+                return {'error': 'taskdoes not exist'}
             
-            # 获取Celery任务状态
+            # fetchCelerytaskstatus
             celery_status = {}
             if task.celery_task_id:
                 celery_result = AsyncResult(task.celery_task_id, app=celery_app)
@@ -231,18 +231,18 @@ class TaskQueueService:
             }
             
         except Exception as e:
-            logger.error(f"获取任务状态失败: {task_id}, 错误: {e}")
-            return {'error': f'获取任务状态失败: {e}'}
+            logger.error(f"fetchtaskstatusfailed: {task_id}, error: {e}")
+            return {'error': f'fetchtaskstatusfailed: {e}'}
     
     def get_project_tasks(self, project_id: str) -> List[Dict[str, Any]]:
         """
-        获取项目的所有任务
+        fetchprojectENalltask
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            任务列表
+            taskEN
         """
         try:
             tasks = self.task_repo.get_by_project(project_id)
@@ -260,77 +260,77 @@ class TaskQueueService:
             ]
             
         except Exception as e:
-            logger.error(f"获取项目任务失败: {project_id}, 错误: {e}")
+            logger.error(f"fetchprojecttaskfailed: {project_id}, error: {e}")
             return []
     
     def cancel_task(self, task_id: str) -> Dict[str, Any]:
         """
-        取消任务
+        canceltask
         
         Args:
-            task_id: 任务ID
+            task_id: taskID
             
         Returns:
-            取消结果
+            cancelresult
         """
         try:
             task = self.task_repo.get_by_id(task_id)
             if not task:
-                return {'error': '任务不存在'}
+                return {'error': 'taskdoes not exist'}
             
-            # 取消Celery任务
+            # cancelCelerytask
             if task.celery_task_id:
                 celery_result = AsyncResult(task.celery_task_id, app=celery_app)
                 celery_result.revoke(terminate=True)
             
-            # 更新任务状态
+            # updatetaskstatus
             task.status = TaskStatus.CANCELLED
             self.db.commit()
             
-            logger.info(f"任务已取消: {task_id}")
+            logger.info(f"taskENcancel: {task_id}")
             return {
                 'success': True,
                 'task_id': task_id,
                 'status': 'CANCELLED',
-                'message': '任务已取消'
+                'message': 'taskENcancel'
             }
             
         except Exception as e:
-            logger.error(f"取消任务失败: {task_id}, 错误: {e}")
-            return {'error': f'取消任务失败: {e}'}
+            logger.error(f"canceltaskfailed: {task_id}, error: {e}")
+            return {'error': f'canceltaskfailed: {e}'}
     
     def submit_video_clips_task(self, project_id: str, clip_data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        提交视频片段提取任务
+        ENvideoENtask
         
         Args:
-            project_id: 项目ID
-            clip_data: 片段数据
+            project_id: projectID
+            clip_data: EN
             
         Returns:
-            任务提交结果
+            taskENresult
         """
-        logger.info(f"提交视频片段提取任务: {project_id}")
+        logger.info(f"ENvideoENtask: {project_id}")
         
         try:
-            # 创建并保存任务记录
+            # createENsavetaskEN
             task = self.task_repo.create(
                 project_id=project_id,
-                name="视频片段提取",
-                description=f"提取项目 {project_id} 的视频片段",
+                name="videoEN",
+                description=f"ENproject {project_id} ENvideoEN",
                 task_type=TaskType.VIDEO_PROCESSING,
                 status=TaskStatus.PENDING,
                 priority=2
             )
             
-            # 提交Celery任务
+            # ENCelerytask
             celery_task = extract_video_clips.delay(project_id, clip_data)
             
-            # 更新任务记录
+            # updatetaskEN
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"视频片段提取任务已提交: {task.id}, Celery任务ID: {celery_task.id}")
+            logger.info(f"videoENtaskEN: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
@@ -338,45 +338,45 @@ class TaskQueueService:
                 'celery_task_id': celery_task.id,
                 'clip_count': len(clip_data),
                 'status': 'PENDING',
-                'message': f'视频片段提取任务已提交，共 {len(clip_data)} 个片段'
+                'message': f'videoENtaskEN，EN {len(clip_data)} EN'
             }
             
         except Exception as e:
-            logger.error(f"提交视频片段提取任务失败: {project_id}, 错误: {e}")
+            logger.error(f"ENvideoENtaskfailed: {project_id}, error: {e}")
             raise
     
     def submit_collection_generation_task(self, project_id: str, collection_data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        提交合集生成任务
+        ENcollectiongeneratetask
         
         Args:
-            project_id: 项目ID
-            collection_data: 合集数据
+            project_id: projectID
+            collection_data: collectionEN
             
         Returns:
-            任务提交结果
+            taskENresult
         """
-        logger.info(f"提交合集生成任务: {project_id}")
+        logger.info(f"ENcollectiongeneratetask: {project_id}")
         
         try:
-            # 创建并保存任务记录
+            # createENsavetaskEN
             task = self.task_repo.create(
                 project_id=project_id,
-                name="视频合集生成",
-                description=f"生成项目 {project_id} 的视频合集",
+                name="videocollectiongenerate",
+                description=f"generateproject {project_id} ENvideocollection",
                 task_type=TaskType.VIDEO_PROCESSING,
                 status=TaskStatus.PENDING,
                 priority=2
             )
             
-            # 提交Celery任务
+            # ENCelerytask
             celery_task = generate_video_collections.delay(project_id, collection_data)
             
-            # 更新任务记录
+            # updatetaskEN
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"合集生成任务已提交: {task.id}, Celery任务ID: {celery_task.id}")
+            logger.info(f"collectiongeneratetaskEN: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
@@ -384,9 +384,9 @@ class TaskQueueService:
                 'celery_task_id': celery_task.id,
                 'collection_count': len(collection_data),
                 'status': 'PENDING',
-                'message': f'视频合集生成任务已提交，共 {len(collection_data)} 个合集'
+                'message': f'videocollectiongeneratetaskEN，EN {len(collection_data)} ENcollection'
             }
             
         except Exception as e:
-            logger.error(f"提交合集生成任务失败: {project_id}, 错误: {e}")
+            logger.error(f"ENcollectiongeneratetaskfailed: {project_id}, error: {e}")
             raise 

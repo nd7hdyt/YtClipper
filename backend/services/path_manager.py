@@ -1,6 +1,6 @@
 """
-路径管理器
-专门管理项目相关的路径操作
+pathEN
+ENprojectENpathEN
 """
 
 import logging
@@ -11,16 +11,16 @@ logger = logging.getLogger(__name__)
 
 
 class PathManager:
-    """路径管理器，负责项目路径的统一管理"""
+    """pathEN，ENprojectpathEN"""
     
     def __init__(self, project_id: str, base_dir: str = "data/projects"):
         self.project_id = project_id
-        # 使用绝对路径
+        # useENpath
         project_root = Path(__file__).parent.parent.parent
         self.base_dir = project_root / base_dir
         self.project_dir = self.base_dir / project_id
         
-        # 定义项目目录结构
+        # ENprojectdirectoryEN
         self.directory_structure = {
             "project_dir": self.project_dir,
             "metadata_dir": self.project_dir / "metadata",
@@ -31,28 +31,28 @@ class PathManager:
             "temp_dir": self.project_dir / "temp"
         }
         
-        # 确保目录结构存在
+        # ENdirectoryEN
         self.ensure_directories()
     
     def ensure_directories(self):
-        """确保所有必要的目录存在"""
+        """ENallENdirectoryEN"""
         for dir_name, dir_path in self.directory_structure.items():
             dir_path.mkdir(parents=True, exist_ok=True)
-            logger.debug(f"确保目录存在: {dir_name} -> {dir_path}")
+            logger.debug(f"ENdirectoryEN: {dir_name} -> {dir_path}")
     
     def get_project_paths(self) -> Dict[str, Path]:
-        """获取项目相关路径"""
+        """fetchprojectENpath"""
         return self.directory_structure.copy()
     
     def get_step_paths(self, step_name: str) -> Dict[str, Path]:
         """
-        获取步骤相关的路径
+        fetchENpath
         
         Args:
-            step_name: 步骤名称
+            step_name: EN
             
         Returns:
-            步骤相关路径
+            ENpath
         """
         metadata_dir = self.directory_structure["metadata_dir"]
         
@@ -64,36 +64,36 @@ class PathManager:
         }
     
     def get_step_input_path(self, step_name: str) -> Path:
-        """获取步骤输入文件路径"""
+        """fetchENfilepath"""
         return self.get_step_paths(step_name)["input_path"]
     
     def get_step_output_path(self, step_name: str) -> Path:
-        """获取步骤输出文件路径"""
+        """fetchENfilepath"""
         return self.get_step_paths(step_name)["output_path"]
     
     def get_step_intermediate_dir(self, step_name: str) -> Path:
-        """获取步骤中间文件目录"""
+        """fetchENfiledirectory"""
         return self.get_step_paths(step_name)["intermediate_dir"]
     
     def get_step_log_path(self, step_name: str) -> Path:
-        """获取步骤日志文件路径"""
+        """fetchENlogfilepath"""
         return self.get_step_paths(step_name)["log_path"]
     
     def get_backup_path(self, filename: str) -> Path:
-        """获取备份文件路径"""
+        """fetchENfilepath"""
         return self.directory_structure["backups_dir"] / filename
     
     def get_temp_path(self, filename: str) -> Path:
-        """获取临时文件路径"""
+        """fetchENfilepath"""
         return self.directory_structure["temp_dir"] / filename
     
     def get_config_path(self) -> Path:
-        """获取配置文件路径"""
+        """fetchconfigfilepath"""
         return self.project_dir / "config.yaml"
     
     def get_srt_path(self) -> Path:
-        """获取SRT文件路径"""
-        # 尝试从项目配置中获取SRT文件名
+        """fetchSRTfilepath"""
+        # ENprojectconfigENfetchSRTfileEN
         try:
             from .config_manager import ProjectConfigManager
             config_manager = ProjectConfigManager(self.project_id)
@@ -104,7 +104,7 @@ class PathManager:
                 if srt_file:
                     return self.directory_structure["raw_dir"] / srt_file
             
-            # 如果配置中没有，尝试查找raw目录中的SRT文件
+            # ifconfigEN，ENrawdirectoryENSRTfile
             raw_dir = self.directory_structure["raw_dir"]
             srt_files = list(raw_dir.glob("*.srt"))
             if srt_files:
@@ -112,12 +112,12 @@ class PathManager:
             
             return raw_dir / "transcript.srt"
         except Exception as e:
-            logger.warning(f"获取SRT路径失败: {e}")
+            logger.warning(f"fetchSRTpathfailed: {e}")
             return self.directory_structure["raw_dir"] / "transcript.srt"
     
     def get_video_path(self) -> Path:
-        """获取视频文件路径"""
-        # 尝试从项目配置中获取视频文件名
+        """fetchvideofilepath"""
+        # ENprojectconfigENfetchvideofileEN
         try:
             from .config_manager import ProjectConfigManager
             config_manager = ProjectConfigManager(self.project_id)
@@ -128,7 +128,7 @@ class PathManager:
                 if video_file:
                     return self.directory_structure["raw_dir"] / video_file
             
-            # 如果配置中没有，尝试查找raw目录中的视频文件
+            # ifconfigEN，ENrawdirectoryENvideofile
             raw_dir = self.directory_structure["raw_dir"]
             video_extensions = [".mp4", ".avi", ".mov", ".mkv", ".flv"]
             for ext in video_extensions:
@@ -138,76 +138,76 @@ class PathManager:
             
             return None
         except Exception as e:
-            logger.warning(f"获取视频路径失败: {e}")
+            logger.warning(f"fetchvideopathfailed: {e}")
             return None
             
             if project_config and "srt_file" in project_config:
                 srt_filename = project_config["srt_file"]
                 return self.directory_structure["raw_dir"] / srt_filename
         except Exception as e:
-            logger.warning(f"无法从项目配置获取SRT文件名: {e}")
+            logger.warning(f"cannotENprojectconfigfetchSRTfileEN: {e}")
         
-        # 回退到默认文件名
+        # ENfileEN
         return self.directory_structure["raw_dir"] / "transcript.srt"
     
     def get_prompt_dir(self) -> Path:
-        """获取prompt目录路径"""
-        # 使用绝对路径指向项目根目录的prompt文件夹
+        """fetchpromptdirectorypath"""
+        # useENpathENprojectENdirectoryENpromptfileEN
         project_root = Path(__file__).parent.parent.parent
         return project_root / "prompt"
     
     def create_step_directories(self, step_name: str):
-        """为特定步骤创建必要的目录"""
+        """ENcreateENdirectory"""
         step_paths = self.get_step_paths(step_name)
         
-        # 创建中间文件目录
+        # createENfiledirectory
         step_paths["intermediate_dir"].mkdir(parents=True, exist_ok=True)
         
-        # 确保日志目录存在
+        # ENlogdirectoryEN
         step_paths["log_path"].parent.mkdir(parents=True, exist_ok=True)
         
-        logger.debug(f"为步骤 {step_name} 创建目录结构")
+        logger.debug(f"EN {step_name} createdirectoryEN")
     
     def cleanup_step_files(self, step_name: str, keep_output: bool = True):
         """
-        清理步骤的临时文件
+        ENfile
         
         Args:
-            step_name: 步骤名称
-            keep_output: 是否保留输出文件
+            step_name: EN
+            keep_output: ENfile
         """
         step_paths = self.get_step_paths(step_name)
         
-        # 清理中间文件目录
+        # ENfiledirectory
         if step_paths["intermediate_dir"].exists():
             import shutil
             shutil.rmtree(step_paths["intermediate_dir"])
-            logger.info(f"已清理步骤 {step_name} 的中间文件")
+            logger.info(f"EN {step_name} ENfile")
         
-        # 清理输入文件（可选）
+        # ENfile（EN）
         if step_paths["input_path"].exists():
             step_paths["input_path"].unlink()
-            logger.debug(f"已清理步骤 {step_name} 的输入文件")
+            logger.debug(f"EN {step_name} ENfile")
         
-        # 清理输出文件（可选）
+        # ENfile（EN）
         if not keep_output and step_paths["output_path"].exists():
             step_paths["output_path"].unlink()
-            logger.info(f"已清理步骤 {step_name} 的输出文件")
+            logger.info(f"EN {step_name} ENfile")
     
     def get_directory_size(self, dir_path: Path) -> int:
-        """获取目录大小（字节）"""
+        """fetchdirectoryEN（EN）"""
         total_size = 0
         try:
             for file_path in dir_path.rglob("*"):
                 if file_path.is_file():
                     total_size += file_path.stat().st_size
         except Exception as e:
-            logger.warning(f"计算目录大小时出错: {dir_path}, 错误: {e}")
+            logger.warning(f"ENdirectoryEN: {dir_path}, error: {e}")
         
         return total_size
     
     def get_project_size_info(self) -> Dict[str, Any]:
-        """获取项目大小信息"""
+        """fetchprojectEN"""
         size_info = {}
         
         for dir_name, dir_path in self.directory_structure.items():
@@ -228,35 +228,35 @@ class PathManager:
         return size_info
     
     def validate_paths(self) -> List[str]:
-        """验证路径的有效性"""
+        """validatepathEN"""
         errors = []
         
-        # 检查项目目录是否可写
+        # checkprojectdirectoryEN
         if not self.project_dir.exists():
             try:
                 self.project_dir.mkdir(parents=True, exist_ok=True)
             except Exception as e:
-                errors.append(f"无法创建项目目录: {self.project_dir}, 错误: {e}")
+                errors.append(f"cannotcreateprojectdirectory: {self.project_dir}, error: {e}")
         
-        # 检查各个子目录
+        # checkENdirectory
         for dir_name, dir_path in self.directory_structure.items():
             if not dir_path.exists():
                 try:
                     dir_path.mkdir(parents=True, exist_ok=True)
                 except Exception as e:
-                    errors.append(f"无法创建目录 {dir_name}: {dir_path}, 错误: {e}")
+                    errors.append(f"cannotcreatedirectory {dir_name}: {dir_path}, error: {e}")
             elif not dir_path.is_dir():
-                errors.append(f"路径不是目录: {dir_name} -> {dir_path}")
+                errors.append(f"pathENdirectory: {dir_name} -> {dir_path}")
         
         return errors
     
     def get_relative_path(self, absolute_path: Path) -> str:
-        """获取相对于项目目录的路径"""
+        """fetchENprojectdirectoryENpath"""
         try:
             return str(absolute_path.relative_to(self.project_dir))
         except ValueError:
             return str(absolute_path)
     
     def get_absolute_path(self, relative_path: str) -> Path:
-        """获取绝对路径"""
+        """fetchENpath"""
         return self.project_dir / relative_path 

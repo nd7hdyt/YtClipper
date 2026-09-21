@@ -106,7 +106,7 @@
   text-align: center;
 }
 
-/* 自定义滚动条 */
+/* EN */
 .clips-list-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -125,7 +125,7 @@
   background: rgba(255, 255, 255, 0.5);
 }
 
-/* 搜索框样式 */
+/* EN */
 .add-clip-modal .ant-input-affix-wrapper {
   background: var(--ac-line);
   border: 1px solid var(--ac-line);
@@ -145,7 +145,7 @@
   color: #888;
 }
 
-/* 复选框样式 */
+/* EN */
 .add-clip-modal .ant-checkbox-wrapper {
   color: var(--ac-ink);
 }
@@ -160,7 +160,7 @@
   border-color: var(--ac-accent);
 }
 
-/* 按钮样式 */
+/* EN */
 .add-clip-modal .ant-btn-link {
   color: var(--ac-accent);
 }
@@ -169,13 +169,13 @@
   color: #40a9ff;
 }
 
-/* 标签样式 */
+/* EN */
 .add-clip-modal .ant-tag {
   border-radius: 4px;
   font-size: 11px;
 }
 
-/* 列表样式 */
+/* EN */
 .add-clip-modal .ant-list {
   background: transparent;
 }

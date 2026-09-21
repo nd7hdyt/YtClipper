@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Whisper进程监控工具
-用于检测和防止重复的Whisper进程
+WhisperENTool
+ENWhisperEN
 """
 
 import psutil
@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def find_whisper_processes():
-    """查找所有正在运行的Whisper进程"""
+    """ENAllCurrentlyENWhisperEN"""
     whisper_processes = []
     
     for proc in psutil.process_iter(['pid', 'name', 'cmdline', 'cpu_percent', 'memory_info']):
@@ -33,20 +33,20 @@ def find_whisper_processes():
     return whisper_processes
 
 def check_duplicate_whisper_processes():
-    """检查是否有重复的Whisper进程处理同一个文件"""
+    """CheckENWhisperENProcessingEN"""
     whisper_processes = find_whisper_processes()
     
     if not whisper_processes:
-        logger.info("没有发现Whisper进程")
+        logger.info("ENWhisperEN")
         return True
     
-    logger.info(f"发现 {len(whisper_processes)} 个Whisper进程:")
+    logger.info(f"EN {len(whisper_processes)} ENWhisperEN:")
     
-    # 按视频文件分组
+    # EN
     video_files = {}
     for proc in whisper_processes:
         cmdline = proc['cmdline']
-        # 提取视频文件路径
+        # EN
         parts = cmdline.split()
         video_file = None
         for i, part in enumerate(parts):
@@ -59,29 +59,29 @@ def check_duplicate_whisper_processes():
                 video_files[video_file] = []
             video_files[video_file].append(proc)
     
-    # 检查重复处理
+    # CheckENProcessing
     duplicates_found = False
     for video_file, processes in video_files.items():
         if len(processes) > 1:
-            logger.warning(f"发现重复处理文件 {video_file}:")
+            logger.warning(f"ENProcessingEN {video_file}:")
             duplicates_found = True
             for proc in processes:
-                logger.warning(f"  PID {proc['pid']}: CPU {proc['cpu_percent']:.1f}%, 内存 {proc['memory_mb']:.1f}MB")
+                logger.warning(f"  PID {proc['pid']}: CPU {proc['cpu_percent']:.1f}%, EN {proc['memory_mb']:.1f}MB")
     
     if not duplicates_found:
-        logger.info("没有发现重复处理的Whisper进程")
+        logger.info("ENProcessingENWhisperEN")
     
     return not duplicates_found
 
 def kill_duplicate_whisper_processes():
-    """终止重复的Whisper进程"""
+    """ENWhisperEN"""
     whisper_processes = find_whisper_processes()
     
     if not whisper_processes:
-        logger.info("没有Whisper进程需要终止")
+        logger.info("ENWhisperENNeedEN")
         return
     
-    # 按视频文件分组
+    # EN
     video_files = {}
     for proc in whisper_processes:
         cmdline = proc['cmdline']
@@ -97,39 +97,39 @@ def kill_duplicate_whisper_processes():
                 video_files[video_file] = []
             video_files[video_file].append(proc)
     
-    # 保留CPU使用率最高的进程，终止其他的
+    # ENCPUEN，EN
     for video_file, processes in video_files.items():
         if len(processes) > 1:
-            logger.info(f"处理重复进程 - 文件: {video_file}")
+            logger.info(f"ProcessingEN - EN: {video_file}")
             
-            # 按CPU使用率排序，保留最高的
+            # ENCPUEN，EN
             processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
             keep_process = processes[0]
             
-            logger.info(f"保留进程 PID {keep_process['pid']} (CPU: {keep_process['cpu_percent']:.1f}%)")
+            logger.info(f"EN PID {keep_process['pid']} (CPU: {keep_process['cpu_percent']:.1f}%)")
             
-            # 终止其他进程
+            # EN
             for proc in processes[1:]:
                 try:
-                    logger.info(f"终止重复进程 PID {proc['pid']}")
+                    logger.info(f"EN PID {proc['pid']}")
                     psutil.Process(proc['pid']).terminate()
                 except psutil.NoSuchProcess:
-                    logger.info(f"进程 PID {proc['pid']} 已经不存在")
+                    logger.info(f"EN PID {proc['pid']} AlreadyEN")
                 except psutil.AccessDenied:
-                    logger.error(f"无法终止进程 PID {proc['pid']} (权限不足)")
+                    logger.error(f"EN PID {proc['pid']} (EN)")
 
 def main():
-    """主函数"""
+    """EN"""
     if len(sys.argv) > 1 and sys.argv[1] == '--kill-duplicates':
-        logger.info("检查并终止重复的Whisper进程...")
+        logger.info("CheckENWhisperEN...")
         kill_duplicate_whisper_processes()
     else:
-        logger.info("检查Whisper进程状态...")
+        logger.info("CheckWhisperENStatus...")
         if check_duplicate_whisper_processes():
-            logger.info("✅ 系统状态正常")
+            logger.info("✅ SystemStatusEN")
             sys.exit(0)
         else:
-            logger.warning("⚠️ 发现重复的Whisper进程")
+            logger.warning("⚠️ ENWhisperEN")
             sys.exit(1)
 
 if __name__ == '__main__':

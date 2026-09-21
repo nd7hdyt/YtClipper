@@ -1,11 +1,11 @@
 """
-FFmpeg 可执行路径解析工具
+FFmpeg ENexecutepathparseEN
 
-优先顺序：
-1) 环境变量 AUTOCLIP_FFMPEG_PATH / AUTOCLIP_FFPROBE_PATH / FFMPEG_PATH / FFPROBE_PATH
-2) 系统 PATH 中的 ffmpeg/ffprobe
+EN：
+1) EN AUTOCLIP_FFMPEG_PATH / AUTOCLIP_FFPROBE_PATH / FFMPEG_PATH / FFPROBE_PATH
+2) system PATH EN ffmpeg/ffprobe
 
-用途：统一为后端所有调用点提供 ffmpeg/ffprobe 路径，便于在桌面安装包内置二进制并实现零依赖。
+EN：ENallcallEN ffmpeg/ffprobe path，EN。
 """
 
 import os
@@ -22,8 +22,8 @@ def _resolve_from_env(var_names: list[str]) -> Optional[str]:
 
 
 def get_ffmpeg_path() -> str:
-    """返回 ffmpeg 可执行文件路径（或命令名）。"""
-    # 1) 环境变量优先
+    """return ffmpeg ENexecutefilepath（EN）。"""
+    # 1) EN
     env_path = _resolve_from_env([
         "AUTOCLIP_FFMPEG_PATH",
         "FFMPEG_PATH",
@@ -31,18 +31,18 @@ def get_ffmpeg_path() -> str:
     if env_path:
         return env_path
 
-    # 2) 系统 PATH
+    # 2) system PATH
     which = shutil.which("ffmpeg")
     if which:
         return which
 
-    # 3) 兜底返回命令名（可能仍会失败，但保留兼容性）
+    # 3) ENreturnEN（mayENfailed，EN）
     return "ffmpeg"
 
 
 def get_ffprobe_path() -> str:
-    """返回 ffprobe 可执行文件路径（或命令名）。"""
-    # 1) 环境变量优先
+    """return ffprobe ENexecutefilepath（EN）。"""
+    # 1) EN
     env_path = _resolve_from_env([
         "AUTOCLIP_FFPROBE_PATH",
         "FFPROBE_PATH",
@@ -50,12 +50,12 @@ def get_ffprobe_path() -> str:
     if env_path:
         return env_path
 
-    # 2) 系统 PATH
+    # 2) system PATH
     which = shutil.which("ffprobe")
     if which:
         return which
 
-    # 3) 兜底返回命令名
+    # 3) ENreturnEN
     return "ffprobe"
 
 

@@ -50,7 +50,7 @@ class ConfigSyncService:
                 json.dump(data, target, ensure_ascii=False, indent=2)
             return True
         except Exception as exc:
-            logger.warning("同步客户端配置失败: %s", exc)
+            logger.warning("ENconfigfailed: %s", exc)
             return False
 
 

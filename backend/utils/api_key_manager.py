@@ -1,5 +1,5 @@
 """
-API密钥管理系统 - 提供安全的密钥存储、验证和轮换功能
+APIENsystem - EN、validateEN
 """
 import os
 import json
@@ -19,15 +19,15 @@ from .error_handler import ConfigurationError, APIError, ValidationError
 logger = logging.getLogger(__name__)
 
 class APIKeyManager:
-    """API密钥管理器"""
+    """APIEN"""
     
     def __init__(self, storage_path: Optional[Path] = None, master_password: Optional[str] = None):
         """
-        初始化API密钥管理器
+        initializeAPIEN
         
         Args:
-            storage_path: 密钥存储路径
-            master_password: 主密码，用于加密存储
+            storage_path: ENpath
+            master_password: EN，EN
         """
         self.storage_path = storage_path or Path.home() / ".auto_clips" / "api_keys"
         self.master_password = master_password or self._get_master_password()
@@ -35,32 +35,32 @@ class APIKeyManager:
         self.keys_file = self.storage_path / "keys.enc"
         self.metadata_file = self.storage_path / "metadata.json"
         
-        # 确保存储目录存在
+        # ENsaveENdirectoryEN
         self.storage_path.mkdir(parents=True, exist_ok=True)
         
-        # 加载现有密钥
+        # loadEN
         self._load_keys()
     
     def _get_master_password(self) -> str:
-        """获取主密码"""
-        # 优先从环境变量获取
+        """fetchEN"""
+        # ENfetch
         master_password = os.getenv("AUTO_CLIPS_MASTER_PASSWORD")
         if master_password:
             return master_password
         
-        # 如果没有设置，使用默认密码（仅用于开发环境）
+        # ifENsettings，useEN（EN）
         if os.getenv("AUTO_CLIPS_DEV_MODE"):
             return "dev_master_password"
         
-        # 生产环境应该设置环境变量
+        # ENshouldsettingsEN
         raise ConfigurationError(
-            "未设置主密码。请设置 AUTO_CLIPS_MASTER_PASSWORD 环境变量。"
+            "ENsettingsEN。pleasesettings AUTO_CLIPS_MASTER_PASSWORD EN。"
         )
     
     def _create_fernet(self) -> Fernet:
-        """创建Fernet加密器"""
-        # 使用主密码生成密钥
-        salt = b'auto_clips_salt'  # 在实际应用中应该使用随机salt
+        """createFernetEN"""
+        # useENgenerateEN
+        salt = b'auto_clips_salt'  # ENshoulduseENsalt
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
@@ -71,7 +71,7 @@ class APIKeyManager:
         return Fernet(key)
     
     def _load_keys(self):
-        """加载存储的密钥"""
+        """loadEN"""
         self.keys: Dict[str, Dict[str, Any]] = {}
         
         if self.keys_file.exists():
@@ -80,65 +80,65 @@ class APIKeyManager:
                     encrypted_data = f.read()
                     decrypted_data = self.fernet.decrypt(encrypted_data)
                     self.keys = json.loads(decrypted_data.decode())
-                logger.info(f"成功加载 {len(self.keys)} 个API密钥")
+                logger.info(f"succeededload {len(self.keys)} ENAPIEN")
             except Exception as e:
-                logger.warning(f"加载API密钥失败: {e}")
+                logger.warning(f"loadAPIENfailed: {e}")
                 self.keys = {}
         
-        # 加载元数据
+        # loadEN
         self.metadata: Dict[str, Any] = {}
         if self.metadata_file.exists():
             try:
                 with open(self.metadata_file, 'r', encoding='utf-8') as f:
                     self.metadata = json.load(f)
             except Exception as e:
-                logger.warning(f"加载API密钥元数据失败: {e}")
+                logger.warning(f"loadAPIENfailed: {e}")
                 self.metadata = {}
     
     def _save_keys(self):
-        """保存密钥到文件"""
+        """saveENfile"""
         try:
-            # 加密并保存密钥
+            # ENsaveEN
             data = json.dumps(self.keys, ensure_ascii=False)
             encrypted_data = self.fernet.encrypt(data.encode())
             
             with open(self.keys_file, 'wb') as f:
                 f.write(encrypted_data)
             
-            # 保存元数据（不加密）
+            # saveEN（EN）
             with open(self.metadata_file, 'w', encoding='utf-8') as f:
                 json.dump(self.metadata, f, ensure_ascii=False, indent=2)
             
-            logger.debug("API密钥已保存")
+            logger.debug("APIENsave")
         except Exception as e:
-            logger.error(f"保存API密钥失败: {e}")
-            raise ConfigurationError(f"保存API密钥失败: {e}")
+            logger.error(f"saveAPIENfailed: {e}")
+            raise ConfigurationError(f"saveAPIENfailed: {e}")
     
     def add_api_key(self, key_name: str, api_key: str, provider: str = "dashscope", 
                    description: str = "", expires_at: Optional[datetime] = None) -> bool:
         """
-        添加API密钥
+        ENAPIEN
         
         Args:
-            key_name: 密钥名称
-            api_key: API密钥值
-            provider: 提供商（如dashscope）
-            description: 描述信息
-            expires_at: 过期时间
+            key_name: EN
+            api_key: APIEN
+            provider: EN（ENdashscope）
+            description: descriptionEN
+            expires_at: ENtime
             
         Returns:
-            是否添加成功
+            ENsucceeded
         """
         try:
-            # 验证密钥格式
+            # validateEN
             if not self._validate_api_key_format(api_key, provider):
-                raise ValidationError(f"无效的{provider} API密钥格式")
+                raise ValidationError(f"EN{provider} APIEN")
             
-            # 检查密钥是否已存在
+            # checkENalready exists
             if key_name in self.keys:
-                logger.warning(f"密钥名称 '{key_name}' 已存在，将被覆盖")
+                logger.warning(f"EN '{key_name}' already exists，EN")
             
-            # 存储密钥信息
+            # EN
             self.keys[key_name] = {
                 "api_key": api_key,
                 "provider": provider,
@@ -150,48 +150,48 @@ class APIKeyManager:
                 "is_active": True
             }
             
-            # 更新元数据
+            # updateEN
             self.metadata["last_updated"] = datetime.now().isoformat()
             self.metadata["total_keys"] = len(self.keys)
             
-            # 保存到文件
+            # saveENfile
             self._save_keys()
             
-            logger.info(f"成功添加API密钥: {key_name}")
+            logger.info(f"succeededENAPIEN: {key_name}")
             return True
             
         except Exception as e:
-            logger.error(f"添加API密钥失败: {e}")
+            logger.error(f"ENAPIENfailed: {e}")
             raise
     
     def get_api_key(self, key_name: str) -> Optional[str]:
         """
-        获取API密钥
+        fetchAPIEN
         
         Args:
-            key_name: 密钥名称
+            key_name: EN
             
         Returns:
-            API密钥值，如果不存在或已过期则返回None
+            APIEN，ifdoes not existENthenreturnNone
         """
         if key_name not in self.keys:
             return None
         
         key_info = self.keys[key_name]
         
-        # 检查是否激活
+        # checkEN
         if not key_info.get("is_active", True):
-            logger.warning(f"API密钥 '{key_name}' 已停用")
+            logger.warning(f"APIEN '{key_name}' EN")
             return None
         
-        # 检查是否过期
+        # checkEN
         if key_info.get("expires_at"):
             expires_at = datetime.fromisoformat(key_info["expires_at"])
             if datetime.now() > expires_at:
-                logger.warning(f"API密钥 '{key_name}' 已过期")
+                logger.warning(f"APIEN '{key_name}' EN")
                 return None
         
-        # 更新使用统计
+        # updateuseEN
         key_info["last_used"] = datetime.now().isoformat()
         key_info["usage_count"] = key_info.get("usage_count", 0) + 1
         self._save_keys()
@@ -200,13 +200,13 @@ class APIKeyManager:
     
     def get_active_api_key(self, provider: str = "dashscope") -> Optional[str]:
         """
-        获取活跃的API密钥
+        fetchENAPIEN
         
         Args:
-            provider: 提供商
+            provider: EN
             
         Returns:
-            活跃的API密钥，如果没有则返回None
+            ENAPIEN，ifENthenreturnNone
         """
         active_keys = []
         
@@ -214,7 +214,7 @@ class APIKeyManager:
             if (key_info.get("provider") == provider and 
                 key_info.get("is_active", True)):
                 
-                # 检查是否过期
+                # checkEN
                 if key_info.get("expires_at"):
                     expires_at = datetime.fromisoformat(key_info["expires_at"])
                     if datetime.now() > expires_at:
@@ -225,22 +225,22 @@ class APIKeyManager:
         if not active_keys:
             return None
         
-        # 优先返回最近使用的密钥
+        # ENreturnENuseEN
         active_keys.sort(key=lambda x: x[1].get("last_used", ""), reverse=True)
         return active_keys[0][1]["api_key"]
     
     def remove_api_key(self, key_name: str) -> bool:
         """
-        删除API密钥
+        deleteAPIEN
         
         Args:
-            key_name: 密钥名称
+            key_name: EN
             
         Returns:
-            是否删除成功
+            ENdeletesucceeded
         """
         if key_name not in self.keys:
-            logger.warning(f"API密钥 '{key_name}' 不存在")
+            logger.warning(f"APIEN '{key_name}' does not exist")
             return False
         
         del self.keys[key_name]
@@ -248,25 +248,25 @@ class APIKeyManager:
         self.metadata["total_keys"] = len(self.keys)
         self._save_keys()
         
-        logger.info(f"成功删除API密钥: {key_name}")
+        logger.info(f"succeededdeleteAPIEN: {key_name}")
         return True
     
     def update_api_key(self, key_name: str, **updates) -> bool:
         """
-        更新API密钥信息
+        updateAPIEN
         
         Args:
-            key_name: 密钥名称
-            **updates: 要更新的字段
+            key_name: EN
+            **updates: ENupdateEN
             
         Returns:
-            是否更新成功
+            ENupdatesucceeded
         """
         if key_name not in self.keys:
-            logger.warning(f"API密钥 '{key_name}' 不存在")
+            logger.warning(f"APIEN '{key_name}' does not exist")
             return False
         
-        # 允许更新的字段
+        # ENupdateEN
         allowed_fields = ["description", "expires_at", "is_active"]
         
         for field, value in updates.items():
@@ -279,20 +279,20 @@ class APIKeyManager:
         self.metadata["last_updated"] = datetime.now().isoformat()
         self._save_keys()
         
-        logger.info(f"成功更新API密钥: {key_name}")
+        logger.info(f"succeededupdateAPIEN: {key_name}")
         return True
     
     def list_api_keys(self) -> List[Dict[str, Any]]:
         """
-        列出所有API密钥（不包含实际密钥值）
+        ENallAPIEN（EN）
         
         Returns:
-            API密钥信息列表
+            APIEN
         """
         result = []
         
         for key_name, key_info in self.keys.items():
-            # 不返回实际的API密钥值
+            # ENreturnENAPIEN
             safe_info = {
                 "name": key_name,
                 "provider": key_info.get("provider"),
@@ -304,7 +304,7 @@ class APIKeyManager:
                 "is_active": key_info.get("is_active", True)
             }
             
-            # 检查是否过期
+            # checkEN
             if key_info.get("expires_at"):
                 expires_at = datetime.fromisoformat(key_info["expires_at"])
                 safe_info["is_expired"] = datetime.now() > expires_at
@@ -317,83 +317,83 @@ class APIKeyManager:
     
     def test_api_key(self, key_name: str) -> Dict[str, Any]:
         """
-        测试API密钥
+        ENAPIEN
         
         Args:
-            key_name: 密钥名称
+            key_name: EN
             
         Returns:
-            测试结果
+            ENresult
         """
         api_key = self.get_api_key(key_name)
         if not api_key:
             return {
                 "success": False,
-                "error": "密钥不存在或已过期"
+                "error": "ENdoes not existEN"
             }
         
         try:
-            # 这里可以添加实际的API测试逻辑
-            # 目前只是简单的格式验证
+            # ENcanENAPIEN
+            # ENvalidate
             if self._validate_api_key_format(api_key, "dashscope"):
                 return {
                     "success": True,
-                    "message": "API密钥格式正确"
+                    "message": "APIEN"
                 }
             else:
                 return {
                     "success": False,
-                    "error": "API密钥格式不正确"
+                    "error": "APIEN"
                 }
         except Exception as e:
             return {
                 "success": False,
-                "error": f"测试失败: {str(e)}"
+                "error": f"ENfailed: {str(e)}"
             }
     
     def _validate_api_key_format(self, api_key: str, provider: str) -> bool:
         """
-        验证API密钥格式
+        validateAPIEN
         
         Args:
-            api_key: API密钥
-            provider: 提供商
+            api_key: APIEN
+            provider: EN
             
         Returns:
-            格式是否正确
+            EN
         """
         if not api_key or len(api_key.strip()) < 10:
             return False
         
         if provider == "dashscope":
-            # DashScope API密钥通常是sk-开头的字符串
+            # DashScope APIENsk-EN
             return api_key.startswith("sk-") and len(api_key) >= 20
         
-        # 其他提供商可以添加相应的验证逻辑
+        # ENcanENvalidateEN
         return True
     
     def rotate_api_key(self, key_name: str, new_api_key: str) -> bool:
         """
-        轮换API密钥
+        ENAPIEN
         
         Args:
-            key_name: 密钥名称
-            new_api_key: 新的API密钥
+            key_name: EN
+            new_api_key: ENAPIEN
             
         Returns:
-            是否轮换成功
+            ENsucceeded
         """
         if key_name not in self.keys:
-            logger.warning(f"API密钥 '{key_name}' 不存在")
+            logger.warning(f"APIEN '{key_name}' does not exist")
             return False
         
         old_key_info = self.keys[key_name]
         
-        # 验证新密钥格式
+        # validateEN
         if not self._validate_api_key_format(new_api_key, old_key_info.get("provider", "dashscope")):
-            raise ValidationError("新API密钥格式不正确")
+            raise ValidationError("ENAPIEN")
         
-        # 更新密钥
+        # updateEN
         self.keys[key_name]["api_key"] = new_api_key
         self.keys[key_name]["rotated_at"] = datetime.now().isoformat()
         self.keys[key_name]["last_used"] = None
@@ -402,15 +402,15 @@ class APIKeyManager:
         self.metadata["last_updated"] = datetime.now().isoformat()
         self._save_keys()
         
-        logger.info(f"成功轮换API密钥: {key_name}")
+        logger.info(f"succeededENAPIEN: {key_name}")
         return True
     
     def get_usage_statistics(self) -> Dict[str, Any]:
         """
-        获取使用统计
+        fetchuseEN
         
         Returns:
-            使用统计信息
+            useEN
         """
         total_keys = len(self.keys)
         active_keys = sum(1 for k in self.keys.values() if k.get("is_active", True))
@@ -435,10 +435,10 @@ class APIKeyManager:
     
     def cleanup_expired_keys(self) -> int:
         """
-        清理过期的API密钥
+        ENAPIEN
         
         Returns:
-            清理的密钥数量
+            EN
         """
         cleaned_count = 0
         current_time = datetime.now()
@@ -456,23 +456,23 @@ class APIKeyManager:
             cleaned_count += 1
         
         if cleaned_count > 0:
-            logger.info(f"清理了 {cleaned_count} 个过期的API密钥")
+            logger.info(f"EN {cleaned_count} ENAPIEN")
         
         return cleaned_count
 
-# 全局API密钥管理器实例
+# ENAPIEN
 api_key_manager = APIKeyManager()
 
 def get_api_key(key_name: Optional[str] = None, provider: str = "dashscope") -> Optional[str]:
     """
-    获取API密钥的便捷函数
+    fetchAPIEN
     
     Args:
-        key_name: 密钥名称，如果为None则获取活跃密钥
-        provider: 提供商
+        key_name: EN，ifENNonethenfetchEN
+        provider: EN
         
     Returns:
-        API密钥
+        APIEN
     """
     if key_name:
         return api_key_manager.get_api_key(key_name)
@@ -481,14 +481,14 @@ def get_api_key(key_name: Optional[str] = None, provider: str = "dashscope") -> 
 
 def set_api_key(api_key: str, key_name: str = "default", provider: str = "dashscope") -> bool:
     """
-    设置API密钥的便捷函数
+    settingsAPIEN
     
     Args:
-        api_key: API密钥
-        key_name: 密钥名称
-        provider: 提供商
+        api_key: APIEN
+        key_name: EN
+        provider: EN
         
     Returns:
-        是否设置成功
+        ENsettingssucceeded
     """
     return api_key_manager.add_api_key(key_name, api_key, provider) 

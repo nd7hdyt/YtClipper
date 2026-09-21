@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   
   return {
     plugins: [react()],
-    base: isProduction ? './' : '/', // 生产环境使用相对路径
+    base: isProduction ? './' : '/', // ENEnvironmentEN
     optimizeDeps: {
       include: ['@tauri-apps/api', '@tauri-apps/api/dialog']
     },
@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
         // undefined (reading 'createContext')" → blank/black screen. Letting
         // Rollup decide chunking keeps React's evaluation ordered correctly.
       },
-      // 生产环境禁用 Service Worker
+      // ENEnvironmentEN Service Worker
       serviceWorker: false
     },
     resolve: {
@@ -36,9 +36,9 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3000,
-      strictPort: true, // 如果端口被占用则报错，而不是自动切换
+      strictPort: true, // IfENThenEN，ENAutoEN
       hmr: {
-        overlay: false // 禁用错误覆盖层
+        overlay: false // ENErrorEN
       },
       proxy: {
         '/api': {

@@ -1,6 +1,6 @@
 """
-统一的Celery应用配置
-根据环境变量选择桌面版或服务端配置
+ENCeleryENconfig
+ENserviceENconfig
 """
 
 import os
@@ -8,10 +8,10 @@ import os
 IS_DESKTOP = os.getenv("AUTOCLIP_DESKTOP_MODE") == "1"
 
 if IS_DESKTOP:
-    # 仅桌面模式才使用文件系统 broker / sqlite backend 的轻量 Celery
+    # ENusefilesystem broker / sqlite backend EN Celery
     from .desktop_celery import celery_app  # noqa: F401
 else:
-    # 服务端/开发常规模式：Redis 或你配置的 broker/backend
+    # serviceEN/EN：Redis ENconfigEN broker/backend
     from celery import Celery
 
     broker_url = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
@@ -24,7 +24,7 @@ else:
         result_serializer='json',
         timezone='Asia/Shanghai',
         enable_utc=True,
-        task_always_eager=False,  # 服务端模式异步执行
+        task_always_eager=False,  # serviceENexecute
         task_eager_propagates=True,
         result_expires=3600,
         task_ignore_result=False,
@@ -37,7 +37,7 @@ else:
         },
     )
 
-# 自动发现任务
+# ENtask
 celery_app.autodiscover_tasks([
     'backend.tasks.processing',
     'backend.tasks.video', 

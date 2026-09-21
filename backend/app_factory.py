@@ -1,6 +1,6 @@
 """
-统一的后端应用工厂函数
-支持 web 和 desktop 两种模式
+EN
+EN web EN desktop EN
 """
 import logging
 import os
@@ -19,15 +19,15 @@ logger = logging.getLogger(__name__)
 
 def create_app(mode: str = "web") -> FastAPI:
     """
-    创建 FastAPI 应用实例
+    create FastAPI EN
     
     Args:
-        mode: 运行模式，支持 "web" 或 "desktop"
+        mode: runEN，EN "web" EN "desktop"
     """
-    # 设置模式环境变量
+    # settingsEN
     os.environ["AUTOCLIP_MODE"] = mode
     
-    # 配置日志
+    # configlog
     logging_config = get_logging_config()
     logging.basicConfig(
         level=getattr(logging, logging_config["level"]),
@@ -38,118 +38,118 @@ def create_app(mode: str = "web") -> FastAPI:
         ]
     )
     
-    # 创建 FastAPI 应用
+    # create FastAPI EN
     app = FastAPI(
         title="AutoClip API",
-        description="AI视频切片处理API",
+        description="AIvideoclipprocessingAPI",
         version="1.0.0",
         docs_url="/docs",
         redoc_url="/redoc"
     )
     
-    # 设置应用状态
+    # settingsENstatus
     app.state.mode = mode
     
-    # 配置 CORS
+    # config CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # 生产环境需要配置具体域名
+        allow_origins=["*"],  # ENneedconfigEN
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
     
-    # 注册全局异常处理器
+    # registerENexceptionprocessingEN
     app.add_exception_handler(Exception, global_exception_handler)
     
-    # 启动事件
+    # startEN
     @app.on_event("startup")
     async def startup_event():
-        logger.info(f"启动 AutoClip API 服务 (模式: {mode})...")
+        logger.info(f"start AutoClip API service (EN: {mode})...")
         
-        # 导入所有模型以确保表被创建
+        # ENallENcreate
         from backend.models.bilibili import BilibiliAccount, UploadRecord
         Base.metadata.create_all(bind=engine)
-        logger.info("数据库表创建完成")
+        logger.info("databaseENcreateEN")
         
-        # 加载 API 密钥到环境变量
+        # load API EN
         api_key = get_api_key()
         if api_key:
             os.environ["DASHSCOPE_API_KEY"] = api_key
-            logger.info("API 密钥已加载到环境变量")
+            logger.info("API ENloadEN")
         else:
-            logger.warning("未找到 API 密钥配置")
+            logger.warning("not found API ENconfig")
         
-        # 根据模式进行不同的初始化
+        # ENinitialize
         if mode == "desktop":
-            logger.info("桌面模式：使用本地队列和 SQLite")
+            logger.info("EN：useENqueueEN SQLite")
         else:
-            logger.info("Web 模式：使用 Redis/Celery")
+            logger.info("Web EN：use Redis/Celery")
         
-        logger.info("WebSocket 网关服务已禁用，使用新的简化进度系统")
+        logger.info("WebSocket ENserviceEN，useENprogresssystem")
     
-    # 关闭事件
+    # EN
     @app.on_event("shutdown")
     async def shutdown_event():
-        logger.info("正在关闭 AutoClip API 服务...")
-        logger.info("WebSocket 网关服务已禁用")
+        logger.info("currentlyEN AutoClip API service...")
+        logger.info("WebSocket ENserviceEN")
     
-    # 注册路由
+    # registerEN
     app.include_router(health_router, prefix="/api/health", tags=["health"])
     app.include_router(api_router, prefix="/api/v1")
     
-    # 添加 video-categories 路由（统一到 api_router 中）
+    # EN video-categories EN（EN api_router EN）
     @app.get("/api/v1/video-categories")
     async def get_video_categories():
-        """获取视频分类配置."""
+        """fetchvideocategoryconfig."""
         return {
             "categories": [
                 {
                     "value": "default",
-                    "name": "默认",
-                    "description": "通用视频内容处理",
+                    "name": "EN",
+                    "description": "ENvideoENprocessing",
                     "icon": "🎬",
                     "color": "#4facfe"
                 },
                 {
                     "value": "knowledge",
-                    "name": "知识科普",
-                    "description": "科学、技术、历史、文化等知识类内容",
+                    "name": "EN",
+                    "description": "EN、EN、EN、EN",
                     "icon": "📚",
                     "color": "#52c41a"
                 },
                 {
                     "value": "entertainment",
-                    "name": "娱乐",
-                    "description": "游戏、音乐、电影等娱乐内容",
+                    "name": "EN",
+                    "description": "EN、EN、EN",
                     "icon": "🎮",
                     "color": "#722ed1"
                 },
                 {
                     "value": "business",
-                    "name": "商业",
-                    "description": "商业、创业、投资等商业内容",
+                    "name": "EN",
+                    "description": "EN、EN、EN",
                     "icon": "💼",
                     "color": "#fa8c16"
                 },
                 {
                     "value": "experience",
-                    "name": "经验分享",
-                    "description": "个人经历、生活感悟等经验内容",
+                    "name": "EN",
+                    "description": "EN、EN",
                     "icon": "🌟",
                     "color": "#eb2f96"
                 },
                 {
                     "value": "opinion",
-                    "name": "观点评论",
-                    "description": "时事评论、观点分析等评论内容",
+                    "name": "EN",
+                    "description": "EN、ENanalysisEN",
                     "icon": "💭",
                     "color": "#13c2c2"
                 },
                 {
                     "value": "speech",
-                    "name": "演讲",
-                    "description": "公开演讲、讲座等演讲内容",
+                    "name": "EN",
+                    "description": "EN、EN",
                     "icon": "🎤",
                     "color": "#f5222d"
                 }
@@ -157,7 +157,7 @@ def create_app(mode: str = "web") -> FastAPI:
             "default_category": "default"
         }
     
-    # 根健康检查
+    # ENcheck
     @app.get("/health")
     async def root_health():
         try:

@@ -29,16 +29,16 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
     userId,
     taskId,
     onProgressUpdate: (state) => {
-      console.log('任务进度更新:', state);
+      console.log('Task progress update:', state);
     },
     onTaskComplete: (state) => {
-      console.log('任务完成:', state);
-      message.success('任务处理完成！');
+      console.log('Task completed:', state);
+      message.success('Task completed!');
       onTaskComplete?.(state);
     },
     onTaskFailed: (state) => {
-      console.log('任务失败:', state);
-      message.error(`任务处理失败: ${state.message}`);
+      console.log('Task failed:', state);
+      message.error(`Task failed: ${state.message}`);
       onTaskFailed?.(state);
     }
   });
@@ -56,11 +56,11 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
 
   const getPhaseText = (phase: string) => {
     switch (phase) {
-      case 'transcribe': return '语音识别';
-      case 'analyze': return '内容分析';
-      case 'clip': return '视频切片';
-      case 'encode': return '视频编码';
-      case 'upload': return '上传处理';
+      case 'transcribe': return 'Transcription';
+      case 'analyze': return 'Analysis';
+      case 'clip': return 'Clipping';
+      case 'encode': return 'Encoding';
+      case 'upload': return 'Upload';
       default: return phase;
     }
   };
@@ -77,10 +77,10 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
 
   const getStatusText = (status: string) => {
     switch (status) {
-      case 'PENDING': return '等待中';
-      case 'PROGRESS': return '进行中';
-      case 'DONE': return '已完成';
-      case 'FAIL': return '失败';
+      case 'PENDING': return 'Pending';
+      case 'PROGRESS': return 'In progress';
+      case 'DONE': return 'Completed';
+      case 'FAIL': return 'Failed';
       default: return status;
     }
   };
@@ -89,12 +89,12 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
     return (
       <Card size="small" style={{ marginBottom: 16 }}>
         <Space>
-          <Text type="secondary">任务 {taskId}</Text>
+          <Text type="secondary">Task {taskId}</Text>
           <Tag color={isConnected ? 'success' : 'error'}>
-            {isConnected ? '已连接' : '未连接'}
+            {isConnected ? 'Connected' : 'Disconnected'}
           </Tag>
           <Tag color={isSubscribed ? 'success' : 'default'}>
-            {isSubscribed ? '已订阅' : '未订阅'}
+            {isSubscribed ? 'Subscribed' : 'Unsubscribed'}
           </Tag>
         </Space>
       </Card>
@@ -107,7 +107,7 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
       style={{ marginBottom: 16 }}
       title={
         <Space>
-          <Text strong>任务进度</Text>
+          <Text strong>Task progress</Text>
           <Tag color={getStatusColor(taskState.status)}>
             {getStatusText(taskState.status)}
           </Tag>
@@ -122,20 +122,20 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
             size="small" 
             icon={<ReloadOutlined />}
             onClick={performFinalStateCheck}
-            title="终态校准"
+            title="Final state check"
           />
           <Button 
             size="small" 
             type="text"
             onClick={() => setIsExpanded(!isExpanded)}
           >
-            {isExpanded ? '收起' : '展开'}
+            {isExpanded ? 'Collapse' : 'Expand'}
           </Button>
         </Space>
       }
     >
       <Space direction="vertical" style={{ width: '100%' }}>
-        {/* 进度条 */}
+        {/* Progress bar */}
         <div>
           <Progress 
             percent={taskState.progress}
@@ -147,14 +147,14 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
             }}
           />
           <Text type="secondary" style={{ fontSize: '12px' }}>
-            {taskState.step}/{taskState.total} 步骤
+            {taskState.step}/{taskState.total} steps
           </Text>
         </div>
 
-        {/* 当前消息 */}
+        {/* Current message */}
         <Text>{taskState.message}</Text>
 
-        {/* 展开的详细信息 */}
+        {/* Expanded details */}
         {isExpanded && (
           <div style={{ 
             padding: '12px', 
@@ -164,29 +164,29 @@ export const TaskProgressDisplay: React.FC<TaskProgressDisplayProps> = ({
           }}>
             <Space direction="vertical" size="small" style={{ width: '100%' }}>
               <div>
-                <Text strong>任务ID:</Text> {taskState.task_id}
+                <Text strong>Task ID:</Text> {taskState.task_id}
               </div>
               <div>
-                <Text strong>序列号:</Text> {taskState.seq}
+                <Text strong>Seq:</Text> {taskState.seq}
               </div>
               <div>
-                <Text strong>时间戳:</Text> {new Date(taskState.ts * 1000).toLocaleString()}
+                <Text strong>Timestamp:</Text> {new Date(taskState.ts * 1000).toLocaleString()}
               </div>
               <div>
-                <Text strong>最后更新:</Text> {new Date(taskState.last_updated).toLocaleString()}
+                <Text strong>Last updated:</Text> {new Date(taskState.last_updated).toLocaleString()}
               </div>
               {taskState.meta && (
                 <div>
-                  <Text strong>元数据:</Text> {JSON.stringify(taskState.meta, null, 2)}
+                  <Text strong>Metadata:</Text> {JSON.stringify(taskState.meta, null, 2)}
                 </div>
               )}
               <div>
-                <Text strong>连接状态:</Text> 
+                <Text strong>Connection:</Text> 
                 <Tag color={isConnected ? 'success' : 'error'} style={{ marginLeft: 8 }}>
-                  {isConnected ? '已连接' : '未连接'}
+                  {isConnected ? 'Connected' : 'Disconnected'}
                 </Tag>
                 <Tag color={isSubscribed ? 'success' : 'default'} style={{ marginLeft: 4 }}>
-                  {isSubscribed ? '已订阅' : '未订阅'}
+                  {isSubscribed ? 'Subscribed' : 'Unsubscribed'}
                 </Tag>
               </div>
             </Space>

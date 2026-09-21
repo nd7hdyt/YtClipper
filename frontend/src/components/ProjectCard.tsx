@@ -18,14 +18,14 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
-import 'dayjs/locale/zh-cn'
+import 'dayjs/locale/en'
 
 dayjs.extend(relativeTime)
 dayjs.extend(timezone)
 dayjs.extend(utc)
-dayjs.locale('zh-cn')
+dayjs.locale('en')
 
-// 添加CSS动画样式
+// Pulse animation
 const pulseAnimation = `
   @keyframes pulse {
     0% {
@@ -43,7 +43,7 @@ const pulseAnimation = `
   }
 `
 
-// 将样式注入到页面
+// Inject styles into the page
 if (typeof document !== 'undefined') {
   const style = document.createElement('style')
   style.textContent = pulseAnimation
@@ -72,40 +72,40 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
   const [thumbnailLoading, setThumbnailLoading] = useState(false)
   const [isRetrying, setIsRetrying] = useState(false)
 
-  // 获取分类信息
+  // Category info
   const getCategoryInfo = (category?: string) => {
     const categoryMap: Record<string, { name: string; icon: string; color: string }> = {
-      'default': { name: '默认', icon: '🎬', color: '#4facfe' },
-      'knowledge': { name: '知识科普', icon: '📚', color: '#52c41a' },
-      'business': { name: '商业财经', icon: '💼', color: '#faad14' },
-      'opinion': { name: '观点评论', icon: '💭', color: '#722ed1' },
-      'experience': { name: '经验分享', icon: '🌟', color: '#13c2c2' },
-      'speech': { name: '演讲脱口秀', icon: '🎤', color: '#eb2f96' },
-      'content_review': { name: '内容解说', icon: '🎭', color: '#f5222d' },
-      'entertainment': { name: '娱乐内容', icon: '🎪', color: '#fa8c16' }
+      'default': { name: 'Default', icon: '🎬', color: '#4facfe' },
+      'knowledge': { name: 'Knowledge', icon: '📚', color: '#52c41a' },
+      'business': { name: 'Business', icon: '💼', color: '#faad14' },
+      'opinion': { name: 'Opinion', icon: '💭', color: '#722ed1' },
+      'experience': { name: 'Experience', icon: '🌟', color: '#13c2c2' },
+      'speech': { name: 'Talk & Speech', icon: '🎤', color: '#eb2f96' },
+      'content_review': { name: 'Commentary', icon: '🎭', color: '#f5222d' },
+      'entertainment': { name: 'Entertainment', icon: '🎪', color: '#fa8c16' }
     }
     return categoryMap[category || 'default'] || categoryMap['default']
   }
 
-  // 缩略图缓存管理
+  // Thumbnail cache
   const thumbnailCacheKey = `thumbnail_${project.id}`
   
-  // 生成项目视频缩略图（带缓存）
+  // Generate the project video thumbnail (cached)
   useEffect(() => {
     const generateThumbnail = async () => {
-      // 优先使用后端提供的缩略图
+      // Prefer the backend-provided thumbnail
       if (project.thumbnail) {
         setVideoThumbnail(project.thumbnail)
-        console.log(`使用后端提供的缩略图: ${project.id}`)
+        console.log(`Using backend thumbnail: ${project.id}`)
         return
       }
       
       if (!project.video_path) {
-        console.log('项目没有视频路径:', project.id)
+        console.log('No video path for project:', project.id)
         return
       }
       
-      // 检查缓存
+      // Check the cache
       const cachedThumbnail = localStorage.getItem(thumbnailCacheKey)
       if (cachedThumbnail) {
         setVideoThumbnail(cachedThumbnail)
@@ -120,7 +120,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
         video.muted = true
         video.preload = 'metadata'
         
-        // 尝试多个可能的视频文件路径
+        // Try multiple possible video file paths
         const possiblePaths = [
           'input/input.mp4',
           'input.mp4',
@@ -135,17 +135,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
           
           try {
             const videoUrl = projectApi.getProjectFileUrl(project.id, path)
-            console.log('尝试加载视频:', videoUrl)
+            console.log('Trying video:', videoUrl)
             
             await new Promise((resolve, reject) => {
               const timeoutId = setTimeout(() => {
-                reject(new Error('视频加载超时'))
-              }, 10000) // 10秒超时
+                reject(new Error('Video load timed out'))
+              }, 10000) // 10s timeout
               
               video.onloadedmetadata = () => {
                 clearTimeout(timeoutId)
-                console.log('视频元数据加载成功:', videoUrl)
-                video.currentTime = Math.min(5, video.duration / 4) // 取视频1/4处或5秒处的帧
+                console.log('Video metadata loaded:', videoUrl)
+                video.currentTime = Math.min(5, video.duration / 4) // Frame at 1/4 or 5s
               }
               
               video.onseeked = () => {
@@ -154,11 +154,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                   const canvas = document.createElement('canvas')
                   const ctx = canvas.getContext('2d')
                   if (!ctx) {
-                    reject(new Error('无法获取canvas上下文'))
+                    reject(new Error('Canvas context unavailable'))
                     return
                   }
                   
-                  // 设置合适的缩略图尺寸
+                  // Thumbnail size
                   const maxWidth = 320
                   const maxHeight = 180
                   const aspectRatio = video.videoWidth / video.videoHeight
@@ -179,13 +179,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                   const thumbnail = canvas.toDataURL('image/jpeg', 0.7)
                   setVideoThumbnail(thumbnail)
                   
-                  // 缓存缩略图
+                  // Cache the thumbnail
                   try {
                     localStorage.setItem(thumbnailCacheKey, thumbnail)
                   } catch (e) {
-                    // 如果localStorage空间不足，清理旧缓存
+                    // Evict old cache when localStorage is full
                     const keys = Object.keys(localStorage).filter(key => key.startsWith('thumbnail_'))
-                    if (keys.length > 50) { // 保留最多50个缩略图缓存
+                    if (keys.length > 50) { // Keep at most 50 thumbnails
                       keys.slice(0, 10).forEach(key => localStorage.removeItem(key))
                       localStorage.setItem(thumbnailCacheKey, thumbnail)
                     }
@@ -200,25 +200,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
               
               video.onerror = (error) => {
                 clearTimeout(timeoutId)
-                console.error('视频加载失败:', videoUrl, error)
+                console.error('Video load failed:', videoUrl, error)
                 reject(error)
               }
               
               video.src = videoUrl
             })
             
-            break // 如果成功加载，跳出循环
+            break // Break on success
           } catch (error) {
-            console.warn(`路径 ${path} 加载失败:`, error)
-            continue // 尝试下一个路径
+            console.warn(`Path ${path} failed:`, error)
+            continue // Try the next path
           }
         }
         
         if (!videoLoaded) {
-          console.error('所有视频路径都加载失败')
+          console.error('All video paths failed')
         }
       } catch (error) {
-        console.error('生成缩略图时发生错误:', error)
+        console.error('Thumbnail generation error:', error)
       } finally {
         setThumbnailLoading(false)
       }
@@ -227,17 +227,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
     generateThumbnail()
   }, [project.id, project.video_path, thumbnailCacheKey])
 
-  // 检查是否是下载状态 - 根据下载进度判断
+  // Download state from the download progress
   const downloadProgress = project.processing_config?.download_progress || 0
   const isDownloading = project.status === 'pending' && downloadProgress > 0 && downloadProgress < 100
   const isImporting = project.status === 'pending' && !isDownloading
   
-  // 状态标准化处理
+  // Normalized status
   const normalizedStatus = project.status === 'error' ? 'failed' : 
                           isDownloading ? 'downloading' :
                           isImporting ? 'importing' : project.status
   
-  // 调试信息
+  // Debug info
   console.log('ProjectCard Debug:', {
     projectId: project.id,
     projectStatus: project.status,
@@ -248,12 +248,13 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
     processingConfig: project.processing_config
   })
 
-  // 自动启动 pending 状态的项目（但不包括下载中的项目）。
-  // 关键：每个项目最多只自动尝试一次，且失败时不弹 toast。
-  // 之前这里把 isRetrying 放进依赖、又在 handleRetry 里翻转 isRetrying，
-  // 导致 effect 反复触发 → 对一个还没下载完的 B站项目疯狂 POST /process（返回
-  // 400 "Video file not found"）→ 满屏「重试失败」。下载完成后后端会自动启动
-  // 流水线，所以这里只需做一次「尽力而为」的启动即可。
+  // Auto-start pending projects (excluding downloads).
+  // Key: each project auto-attempts at most once, and failures stay silent.
+  // Previously isRetrying was a dep while handleRetry flipped it,
+  // re-triggering the effect -> spamming POST /process for a Bilibili
+  // project whose download wasn't done (400 "Video file not found") ->
+  // endless "retry failed" toasts. The backend auto-starts the
+  // pipeline once the download finishes, so one best-effort start is enough.
   useEffect(() => {
     if (
       project.status === 'pending' &&
@@ -261,8 +262,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
       !autoStartedProjectIds.has(project.id)
     ) {
       autoStartedProjectIds.add(project.id)
-      // Best-effort, one-shot per project. Uploads (file already present) start
-      // processing; B站 imports whose download isn't done yet return 400 here —
+      // Bilibili imports whose download isn't done yet return 400 here —
       // that's fine, the backend auto-starts the pipeline when the download
       // completes. Silent + no onRetry so this never drives the parent's
       // toast/reload path.
@@ -270,11 +270,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
     }
   }, [project.status, project.id, isDownloading])
   
-  // 计算进度百分比
+  // Progress percent
   const progressPercent = project.status === 'completed' ? 100 : 
                          project.status === 'failed' ? 0 :
-                         isDownloading ? downloadProgress : // 下载中显示实际下载进度
-                         isImporting ? 5 : // pending状态显示5%进度，表示等待处理
+                         isDownloading ? downloadProgress : // Show real download progress while downloading
+                         isImporting ? 5 : // Pending shows 5% as waiting
                          project.current_step && project.total_steps ? 
                          Math.round((project.current_step / project.total_steps) * 100) : 
                          project.status === 'processing' ? 10 : 0
@@ -293,23 +293,24 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
 
     setIsRetrying(true)
     try {
-      // 对于PENDING状态的项目，使用startProcessing；对于其他状态，使用retryProcessing
+      // PENDING uses startProcessing; other states use retryProcessing
       if (project.status === 'pending') {
         await projectApi.startProcessing(project.id)
       } else {
         await projectApi.retryProcessing(project.id)
       }
-      // 让父组件统一处理 toast / 刷新。但「静默自动启动」绝不能触发父组件，
-      // 否则会走 handleRetryProject → loadProjects → 列表重挂载 → 再次自动启动
-      // 的死循环。只有用户手动点重试才通知父组件。
+      // Let the parent handle toast / refresh. But silent auto-start must never
+      // notify the parent, otherwise we'd loop:
+      // handleRetryProject -> loadProjects -> list remount -> auto-start again.
+      // Only manual retries notify the parent.
       if (onRetry && !opts?.silent) {
         onRetry(project.id)
       }
     } catch (error) {
-      console.error('重试失败:', error)
-      // 自动启动（silent）失败不打扰用户；只有用户手动点重试才提示。
+      console.error('Retry failed:', error)
+      // Silent auto-start failures stay quiet; only manual retries toast.
       if (!opts?.silent) {
-        message.error('重试失败，请稍后再试')
+        message.error('Retry failed, please try again later')
       }
     } finally {
       setIsRetrying(false)
@@ -360,15 +361,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
             overflow: 'hidden'
           }}
           onClick={() => {
-            // 导入中状态的项目不能点击进入详情页
+            // Importing projects can't be opened
             if (project.status === 'pending') {
-              message.warning('项目正在导入中，请稍后再查看详情')
+              message.warning('Project is importing, please check back later')
               return
             }
             
-            // 处理中状态的项目不能点击进入详情页
+            // Processing projects can't be opened
             if (project.status === 'processing') {
-              message.warning('项目处理中，请完成后再查看')
+              message.warning('Project is processing, please wait until it finishes')
               return
             }
             
@@ -379,20 +380,20 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
             }
           }}
         >
-          {/* 缩略图加载状态 */}
+          {/* Thumbnail loading state */}
           {thumbnailLoading && (
             <div style={{ textAlign: 'center', color: 'var(--ac-muted)' }}>
               <LoadingOutlined style={{ fontSize: '22px', marginBottom: '4px' }} />
-              <div style={{ fontSize: '12px' }}>生成封面中…</div>
+              <div style={{ fontSize: '12px' }}>Generating cover…</div>
             </div>
           )}
 
-          {/* 无缩略图时的默认显示 */}
+          {/* Default when there is no thumbnail */}
           {!videoThumbnail && !thumbnailLoading && (
             <PlayCircleOutlined style={{ fontSize: '32px', color: 'var(--ac-muted)' }} />
           )}
           
-          {/* 分类标签 - 左上角 */}
+          {/* Category tag - top left */}
           {project.video_category && project.video_category !== 'default' && (
             <div style={{
               position: 'absolute',
@@ -405,9 +406,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
             </div>
           )}
           
-          {/* 移除右上角状态指示器 - 可读性差且冗余 */}
+          {/* Removed top-right status dot - noisy and redundant */}
           
-          {/* 更新时间和操作按钮 - 移动到封面底部 */}
+          {/* Timestamp and actions - moved to cover bottom */}
           <div style={{
             position: 'absolute',
             bottom: '0',
@@ -425,7 +426,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
               {dayjs(project.created_at).tz('Asia/Shanghai').fromNow()}
             </Text>
             
-            {/* 操作按钮 */}
+            {/* Actions */}
             <div 
               className="card-action-buttons"
               style={{
@@ -435,7 +436,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                 transition: 'opacity 0.3s ease'
               }}
             >
-              {/* 失败状态：只显示重试和删除按钮 */}
+              {/* Failed: only retry + delete */}
               {normalizedStatus === 'failed' ? (
                 <>
                   <Button
@@ -460,8 +461,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                   />
                   
                   <Popconfirm
-                    title="确定要删除这个项目吗？"
-                    description="删除后无法恢复"
+                    title="Delete this project?"
+                    description="This cannot be undone"
                     onConfirm={(e) => {
                       e?.stopPropagation()
                       onDelete(project.id)
@@ -469,8 +470,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                     onCancel={(e) => {
                       e?.stopPropagation()
                     }}
-                    okText="确定"
-                    cancelText="取消"
+                    okText="Delete"
+                    cancelText="Cancel"
                   >
                     <Button
                       type="text"
@@ -493,12 +494,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                   </Popconfirm>
                 </>
               ) : (
-                /* 其他状态：显示下载、重试和删除按钮 */
+                /* Other states: download + retry + delete */
                 <>
                   <Space size={4}>
-                    {/* 重试按钮 - 在处理中和等待中状态显示，允许用户重新提交任务 */}
+                    {/* Retry button - shown while processing/waiting so users can resubmit */}
                     {(normalizedStatus === 'processing' || normalizedStatus === 'importing' || project.status === 'pending') && (
-                      <Tooltip title={project.status === 'pending' ? "开始处理" : "重新提交任务"}>
+                      <Tooltip title={project.status === 'pending' ? "Start processing" : "Resubmit task"}>
                         <Button
                           type="text"
                           icon={<ReloadOutlined />}
@@ -522,15 +523,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                       </Tooltip>
                     )}
                     
-                    {/* 下载按钮 - 仅在完成状态显示 */}
+                    {/* Download button - completed only */}
                     {normalizedStatus === 'completed' && (
                       <Button
                         type="text"
                         icon={<DownloadOutlined />}
                         onClick={(e) => {
                           e.stopPropagation()
-                          // 实现下载功能
-                          message.info('下载功能开发中...')
+                          // Download action
+                          message.info('Download is coming soon...')
                         }}
                         style={{
                       height: '22px',
@@ -546,10 +547,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                       />
                     )}
                     
-                    {/* 删除按钮 */}
+                    {/* Delete button */}
                     <Popconfirm
-                      title="确定要删除这个项目吗？"
-                      description="删除后无法恢复"
+                      title="Delete this project?"
+                      description="This cannot be undone"
                       onConfirm={(e) => {
                         e?.stopPropagation()
                         onDelete(project.id)
@@ -557,8 +558,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                       onCancel={(e) => {
                         e?.stopPropagation()
                       }}
-                      okText="确定"
-                      cancelText="取消"
+                      okText="Delete"
+                      cancelText="Cancel"
                     >
                       <Button
                         type="text"
@@ -589,7 +590,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
     >
       <div style={{ padding: '0', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         <div>
-          {/* 项目名称 - 始终在顶部 */}
+          {/* Project name - always on top */}
           <div style={{ marginBottom: '12px', position: 'relative' }}>
             <Tooltip title={project.name} placement="top">
               <Text 
@@ -613,31 +614,31 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
             </Tooltip>
           </div>
           
-          {/* 状态和统计信息 — Calm Premium，见 DESIGN.md */}
+          {/* Status and stats - Calm Premium, see DESIGN.md */}
           {(normalizedStatus === 'importing' || normalizedStatus === 'downloading' || normalizedStatus === 'processing' || normalizedStatus === 'failed') ? (
-            // 进行中 / 失败：细进度线或终态点，占满宽度
+            // In progress / failed: thin line or terminal dot, full width
             <div style={{ marginBottom: '2px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
               <UnifiedStatusBar
                 projectId={project.id}
                 status={normalizedStatus}
                 downloadProgress={progressPercent}
                 onStatusChange={(newStatus) => {
-                  console.log(`项目 ${project.id} 状态变化: ${normalizedStatus} -> ${newStatus}`)
+                  console.log(`Project ${project.id} status: ${normalizedStatus} -> ${newStatus}`)
                 }}
                 onDownloadProgressUpdate={(progress) => {
-                  console.log(`项目 ${project.id} 下载进度更新: ${progress}%`)
+                  console.log(`Project ${project.id} download progress: ${progress}%`)
                 }}
               />
               {normalizedStatus === 'failed' && (
-                // 失败态：重试 + 反馈（反馈自动带上阶段 / 错误 / 版本 / 模型上下文）
+                // Failed: retry + feedback (feedback auto-attaches stage / error / version / model)
                 <div style={{ display: 'flex', gap: 2, flex: '0 0 auto' }} onClick={(e) => e.stopPropagation()}>
-                  <Btn variant="text" size="sm" style={{ height: 26, padding: '0 8px', fontSize: 12.5 }} loading={isRetrying} onClick={() => handleRetry()}>重试</Btn>
-                  <Btn variant="text" size="sm" style={{ height: 26, padding: '0 8px', fontSize: 12.5 }} onClick={() => setFeedbackOpen(true)}>反馈</Btn>
+                  <Btn variant="text" size="sm" style={{ height: 26, padding: '0 8px', fontSize: 12.5 }} loading={isRetrying} onClick={() => handleRetry()}>Retry</Btn>
+                  <Btn variant="text" size="sm" style={{ height: 26, padding: '0 8px', fontSize: 12.5 }} onClick={() => setFeedbackOpen(true)}>Feedback</Btn>
                 </div>
               )}
             </div>
           ) : (
-            // 已完成：● 已完成  +  灰色 mono 元信息（N 切片 · M 合集）
+            // Completed: dot + gray mono meta (N clips, M collections)
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2px' }}>
               <UnifiedStatusBar
                 projectId={project.id}
@@ -646,14 +647,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, onDelete, onRetry, o
                 onStatusChange={() => {}}
               />
               <div style={{ color: 'var(--ac-muted)', fontSize: '12.5px', whiteSpace: 'nowrap' }}>
-                <span className="ac-mono">{project.total_clips || 0}</span> 切片
+                <span className="ac-mono">{project.total_clips || 0}</span> clips
                 <span style={{ margin: '0 6px' }}>·</span>
-                <span className="ac-mono">{project.total_collections || 0}</span> 合集
+                <span className="ac-mono">{project.total_collections || 0}</span> collections
               </div>
             </div>
           )}
 
-          {/* 详细进度显示已隐藏 - 只在状态块中显示百分比 */}
+          {/* Detailed progress hidden - percent only in the status block */}
 
         </div>
       </div>

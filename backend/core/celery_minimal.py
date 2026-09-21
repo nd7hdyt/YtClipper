@@ -1,6 +1,6 @@
 """
-最小化Celery应用配置
-避免所有导入问题，只提供基本的任务处理功能
+ENCeleryENconfig
+ENallEN，ENtaskprocessingEN
 """
 
 import os
@@ -8,111 +8,111 @@ import sys
 from pathlib import Path
 from celery import Celery
 
-# 创建Celery应用
+# createCeleryEN
 celery_app = Celery('autoclip')
 
-# 基本配置
+# ENconfig
 celery_app.conf.update(
-    # 序列化格式
+    # EN
     task_serializer='json',
     accept_content=['json'],
     result_serializer='json',
     
-    # Redis配置
+    # Redisconfig
     broker_url='redis://localhost:6379/0',
     result_backend='redis://localhost:6379/0',
     
-    # 时区
+    # EN
     timezone='Asia/Shanghai',
     enable_utc=True,
     
-    # 任务配置
+    # taskconfig
     task_always_eager=False,
     task_eager_propagates=True,
     
-    # 工作进程配置
+    # ENconfig
     worker_prefetch_multiplier=1,
     worker_max_tasks_per_child=1000,
     worker_disable_rate_limits=True,
     
-    # 结果配置
+    # resultconfig
     result_expires=3600,
     task_ignore_result=False,
     
-    # 禁用自动发现
+    # EN
     autodiscover_tasks=False,
 )
 
-# 手动注册任务
+# ENregistertask
 @celery_app.task(bind=True, name='tasks.processing.process_video_pipeline')
 def process_video_pipeline(self, project_id: str, input_video_path: str, input_srt_path: str):
-    """视频处理流水线任务"""
-    print(f"🎬 开始处理项目: {project_id}")
-    print(f"📹 视频路径: {input_video_path}")
-    print(f"📝 字幕路径: {input_srt_path}")
+    """videoprocessingENtask"""
+    print(f"🎬 startprocessingproject: {project_id}")
+    print(f"📹 videopath: {input_video_path}")
+    print(f"📝 subtitlespath: {input_srt_path}")
     
-    # 模拟处理过程
+    # ENprocessingEN
     import time
     steps = [
-        "大纲提取",
-        "时间定位", 
-        "内容评分",
-        "标题生成",
-        "主题聚类",
-        "视频切割"
+        "EN",
+        "timeEN", 
+        "ENscoring",
+        "titlegenerate",
+        "EN",
+        "videoEN"
     ]
     
     for i, step in enumerate(steps):
-        progress = (i + 1) * 16  # 每步16%
-        print(f"📊 步骤 {i+1}/6: {step} - {progress}%")
+        progress = (i + 1) * 16  # EN16%
+        print(f"📊 EN {i+1}/6: {step} - {progress}%")
         
-        # 更新任务状态
+        # updatetaskstatus
         self.update_state(
             state='PROGRESS',
             meta={
                 'current': i + 1,
                 'total': 6,
-                'status': f'正在执行: {step}',
+                'status': f'currentlyexecute: {step}',
                 'progress': progress
             }
         )
         
-        time.sleep(2)  # 模拟处理时间
+        time.sleep(2)  # ENprocessingtime
     
-    print(f"✅ 项目 {project_id} 处理完成")
+    print(f"✅ project {project_id} processingEN")
     return {
         "success": True,
         "project_id": project_id,
-        "message": "视频处理完成",
+        "message": "videoprocessingEN",
         "steps": steps
     }
 
 @celery_app.task(bind=True, name='tasks.processing.process_single_step')
 def process_single_step(self, project_id: str, step: str, config: dict):
-    """单个步骤处理任务"""
-    print(f"🔧 开始处理项目 {project_id} 的步骤: {step}")
+    """ENprocessingtask"""
+    print(f"🔧 startprocessingproject {project_id} EN: {step}")
     
-    # 模拟处理过程
+    # ENprocessingEN
     import time
     time.sleep(3)
     
-    print(f"✅ 步骤 {step} 处理完成")
+    print(f"✅ EN {step} processingEN")
     return {
         "success": True,
         "project_id": project_id,
         "step": step,
-        "message": f"步骤 {step} 处理完成"
+        "message": f"EN {step} processingEN"
     }
 
-# 兼容性任务名称
+# ENtaskEN
 @celery_app.task(bind=True, name='backend.tasks.processing.process_video_pipeline')
 def backend_process_video_pipeline(self, project_id: str, input_video_path: str, input_srt_path: str):
-    """后端视频处理流水线任务（兼容性）"""
+    """ENvideoprocessingENtask（EN）"""
     return process_video_pipeline(self, project_id, input_video_path, input_srt_path)
 
 @celery_app.task(bind=True, name='backend.tasks.processing.process_single_step')
 def backend_process_single_step(self, project_id: str, step: str, config: dict):
-    """后端单个步骤处理任务（兼容性）"""
+    """ENprocessingtask（EN）"""
     return process_single_step(self, project_id, step, config)
 
 if __name__ == '__main__':

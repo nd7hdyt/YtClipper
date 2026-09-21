@@ -1,5 +1,5 @@
 """
-分层错误处理系统 - 提供统一的错误处理、重试机制和熔断器
+ENerrorprocessingsystem - ENerrorprocessing、retryEN
 """
 import logging
 import time
@@ -12,7 +12,7 @@ from contextlib import contextmanager
 logger = logging.getLogger(__name__)
 
 class ErrorLevel(Enum):
-    """错误级别枚举"""
+    """errorEN"""
     DEBUG = "DEBUG"
     INFO = "INFO"
     WARNING = "WARNING"
@@ -20,7 +20,7 @@ class ErrorLevel(Enum):
     CRITICAL = "CRITICAL"
 
 class ErrorCategory(Enum):
-    """错误分类枚举"""
+    """errorcategoryEN"""
     CONFIGURATION = "CONFIGURATION"
     NETWORK = "NETWORK"
     API = "API"
@@ -30,7 +30,7 @@ class ErrorCategory(Enum):
     SYSTEM = "SYSTEM"
 
 class AutoClipsException(Exception):
-    """自动切片工具基础异常类"""
+    """ENclipENexceptionEN"""
     
     def __init__(self, message: str, category: ErrorCategory, level: ErrorLevel = ErrorLevel.ERROR, 
                  details: Optional[Dict[str, Any]] = None, original_exception: Optional[Exception] = None):
@@ -46,7 +46,7 @@ class AutoClipsException(Exception):
         return f"[{self.category.value}] {self.message}"
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典格式"""
+        """EN"""
         return {
             "message": self.message,
             "category": self.category.value,
@@ -57,17 +57,17 @@ class AutoClipsException(Exception):
         }
 
 class ConfigurationError(AutoClipsException):
-    """配置错误"""
+    """configerror"""
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
         super().__init__(message, ErrorCategory.CONFIGURATION, ErrorLevel.ERROR, details)
 
 class NetworkError(AutoClipsException):
-    """网络错误"""
+    """ENerror"""
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None, original_exception: Optional[Exception] = None):
         super().__init__(message, ErrorCategory.NETWORK, ErrorLevel.ERROR, details, original_exception)
 
 class APIError(AutoClipsException):
-    """API调用错误"""
+    """APIcallerror"""
     def __init__(self, message: str, status_code: Optional[int] = None, details: Optional[Dict[str, Any]] = None):
         api_details = details or {}
         if status_code:
@@ -75,7 +75,7 @@ class APIError(AutoClipsException):
         super().__init__(message, ErrorCategory.API, ErrorLevel.ERROR, api_details)
 
 class FileIOError(AutoClipsException):
-    """文件IO错误"""
+    """fileIOerror"""
     def __init__(self, message: str, file_path: Optional[str] = None, details: Optional[Dict[str, Any]] = None):
         file_details = details or {}
         if file_path:
@@ -83,7 +83,7 @@ class FileIOError(AutoClipsException):
         super().__init__(message, ErrorCategory.FILE_IO, ErrorLevel.ERROR, file_details)
 
 class ProcessingError(AutoClipsException):
-    """处理错误"""
+    """processingerror"""
     def __init__(self, message: str, step: Optional[str] = None, details: Optional[Dict[str, Any]] = None):
         processing_details = details or {}
         if step:
@@ -91,7 +91,7 @@ class ProcessingError(AutoClipsException):
         super().__init__(message, ErrorCategory.PROCESSING, ErrorLevel.ERROR, processing_details)
 
 class ValidationError(AutoClipsException):
-    """验证错误"""
+    """validateerror"""
     def __init__(self, message: str, field: Optional[str] = None, details: Optional[Dict[str, Any]] = None):
         validation_details = details or {}
         if field:
@@ -100,7 +100,7 @@ class ValidationError(AutoClipsException):
 
 @dataclass
 class RetryConfig:
-    """重试配置"""
+    """retryconfig"""
     max_retries: int = 3
     base_delay: float = 1.0
     max_delay: float = 60.0
@@ -118,7 +118,7 @@ class RetryConfig:
             ]
 
 class CircuitBreaker:
-    """熔断器实现"""
+    """EN"""
     
     def __init__(self, failure_threshold: int = 5, recovery_timeout: float = 60.0, 
                  expected_exception: Type[Exception] = Exception):
@@ -130,13 +130,13 @@ class CircuitBreaker:
         self.state = "CLOSED"  # CLOSED, OPEN, HALF_OPEN
     
     def call(self, func: Callable, *args, **kwargs) -> Any:
-        """执行函数，应用熔断器逻辑"""
+        """executeEN，EN"""
         if self.state == "OPEN":
             if time.time() - self.last_failure_time > self.recovery_timeout:
                 self.state = "HALF_OPEN"
             else:
                 raise AutoClipsException(
-                    "熔断器处于开启状态，拒绝执行",
+                    "ENstatus，ENexecute",
                     ErrorCategory.SYSTEM,
                     ErrorLevel.WARNING
                 )
@@ -157,7 +157,7 @@ class CircuitBreaker:
             raise e
 
 def retry_with_backoff(config: Optional[RetryConfig] = None):
-    """重试装饰器，支持指数退避"""
+    """retryEN，EN"""
     if config is None:
         config = RetryConfig()
     
@@ -173,16 +173,16 @@ def retry_with_backoff(config: Optional[RetryConfig] = None):
                     last_exception = e
                     
                     if attempt == config.max_retries:
-                        logger.error(f"函数 {func.__name__} 在 {config.max_retries} 次重试后失败: {e}")
+                        logger.error(f"EN {func.__name__} EN {config.max_retries} ENretryENfailed: {e}")
                         raise e
                     
-                    # 计算延迟时间
+                    # ENtime
                     delay = min(
                         config.base_delay * (config.exponential_base ** attempt),
                         config.max_delay
                     )
                     
-                    logger.warning(f"函数 {func.__name__} 第 {attempt + 1} 次尝试失败，{delay}秒后重试: {e}")
+                    logger.warning(f"EN {func.__name__} EN {attempt + 1} ENfailed，{delay}ENretry: {e}")
                     time.sleep(delay)
             
             if last_exception:
@@ -193,15 +193,15 @@ def retry_with_backoff(config: Optional[RetryConfig] = None):
 
 @contextmanager
 def error_context(category: ErrorCategory, context_info: Optional[Dict[str, Any]] = None):
-    """错误上下文管理器"""
+    """errorEN"""
     try:
         yield
     except Exception as e:
         if isinstance(e, AutoClipsException):
-            # 已经是自定义异常，直接抛出
+            # alreadyENexception，EN
             raise
         else:
-            # 转换为自定义异常
+            # ENexception
             details = context_info or {}
             details["original_exception_type"] = type(e).__name__
             
@@ -219,18 +219,18 @@ def error_context(category: ErrorCategory, context_info: Optional[Dict[str, Any]
                 raise AutoClipsException(str(e), category, details=details, original_exception=e)
 
 class ErrorHandler:
-    """错误处理器"""
+    """errorprocessingEN"""
     
     def __init__(self):
         self.error_log: List[AutoClipsException] = []
         self.circuit_breakers: Dict[str, CircuitBreaker] = {}
     
     def handle_error(self, error: AutoClipsException, context: Optional[str] = None):
-        """处理错误"""
-        # 记录错误
+        """processingerror"""
+        # ENerror
         self.error_log.append(error)
         
-        # 根据错误级别记录日志
+        # ENerrorENlog
         if error.level == ErrorLevel.DEBUG:
             logger.debug(f"[{context}] {error}")
         elif error.level == ErrorLevel.INFO:
@@ -242,7 +242,7 @@ class ErrorHandler:
         elif error.level == ErrorLevel.CRITICAL:
             logger.critical(f"[{context}] {error}")
         
-        # 根据错误分类进行特殊处理
+        # ENerrorcategoryENprocessing
         if error.category == ErrorCategory.API and isinstance(error, APIError):
             self._handle_api_error(error)
         elif error.category == ErrorCategory.NETWORK and isinstance(error, NetworkError):
@@ -251,31 +251,31 @@ class ErrorHandler:
             self._handle_configuration_error(error)
     
     def _handle_api_error(self, error: APIError):
-        """处理API错误"""
-        # 可以在这里添加API错误的具体处理逻辑
-        # 比如更新API密钥、切换备用API等
+        """processingAPIerror"""
+        # canENAPIerrorENprocessingEN
+        # ENupdateAPIEN、ENAPIEN
         pass
     
     def _handle_network_error(self, error: NetworkError):
-        """处理网络错误"""
-        # 可以在这里添加网络错误的具体处理逻辑
-        # 比如切换网络、重试连接等
+        """processingENerror"""
+        # canENerrorENprocessingEN
+        # EN、retryconnectEN
         pass
     
     def _handle_configuration_error(self, error: ConfigurationError):
-        """处理配置错误"""
-        # 可以在这里添加配置错误的具体处理逻辑
-        # 比如加载默认配置、提示用户修复等
+        """processingconfigerror"""
+        # canENconfigerrorENprocessingEN
+        # ENloadENconfig、hintuserEN
         pass
     
     def get_circuit_breaker(self, name: str, **kwargs) -> CircuitBreaker:
-        """获取或创建熔断器"""
+        """fetchENcreateEN"""
         if name not in self.circuit_breakers:
             self.circuit_breakers[name] = CircuitBreaker(**kwargs)
         return self.circuit_breakers[name]
     
     def get_error_summary(self) -> Dict[str, Any]:
-        """获取错误摘要"""
+        """fetcherrorEN"""
         if not self.error_log:
             return {"total_errors": 0}
         
@@ -291,15 +291,15 @@ class ErrorHandler:
         }
     
     def clear_error_log(self):
-        """清空错误日志"""
+        """ENerrorlog"""
         self.error_log.clear()
 
-# 全局错误处理器实例
+# ENerrorprocessingEN
 error_handler = ErrorHandler()
 
 def safe_execute(func: Callable, *args, context: Optional[str] = None, 
                 retry_config: Optional[RetryConfig] = None, **kwargs) -> Any:
-    """安全执行函数，包含错误处理和重试"""
+    """ENexecuteEN，ENerrorprocessingENretry"""
     if retry_config:
         func = retry_with_backoff(retry_config)(func)
     
@@ -309,7 +309,7 @@ def safe_execute(func: Callable, *args, context: Optional[str] = None,
         error_handler.handle_error(e, context)
         raise
     except Exception as e:
-        # 转换为通用异常
+        # ENexception
         auto_clips_error = AutoClipsException(
             str(e), 
             ErrorCategory.SYSTEM, 

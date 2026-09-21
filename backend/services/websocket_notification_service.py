@@ -1,6 +1,6 @@
 """
-WebSocket通知服务
-提供实时通知功能
+WebSocketENservice
+EN
 """
 
 import logging
@@ -12,12 +12,12 @@ from ..core.websocket_manager import manager, WebSocketMessage
 logger = logging.getLogger(__name__)
 
 class WebSocketNotificationService:
-    """WebSocket通知服务"""
+    """WebSocketENservice"""
     
     @staticmethod
     async def send_task_update(task_id: str, status: str, progress: Optional[int] = None,
                               message: Optional[str] = None, error: Optional[str] = None):
-        """发送任务更新通知"""
+        """sendtaskupdateEN"""
         try:
             notification = WebSocketMessage.create_task_update(
                 task_id=task_id,
@@ -27,22 +27,22 @@ class WebSocketNotificationService:
                 error=error
             )
             
-            # 广播给所有连接的用户
+            # ENallconnectENuser
             await manager.broadcast(notification)
             
-            # 同时发送给特定任务主题的订阅者
+            # meanwhilesendENtaskEN
             topic = f"task_{task_id}"
             await manager.broadcast_to_topic(notification, topic)
             
-            logger.info(f"任务更新通知已发送: {task_id} - {status}")
+            logger.info(f"taskupdateENsend: {task_id} - {status}")
             
         except Exception as e:
-            logger.error(f"发送任务更新通知失败: {e}")
+            logger.error(f"sendtaskupdateENfailed: {e}")
     
     @staticmethod
     async def send_project_update(project_id: str, status: str, progress: Optional[int] = None,
                                 message: Optional[str] = None):
-        """发送项目更新通知"""
+        """sendprojectupdateEN"""
         try:
             notification = WebSocketMessage.create_project_update(
                 project_id=project_id,
@@ -51,22 +51,22 @@ class WebSocketNotificationService:
                 message=message
             )
             
-            # 广播给所有连接的用户
+            # ENallconnectENuser
             await manager.broadcast(notification)
             
-            # 同时发送给特定项目主题的订阅者
+            # meanwhilesendENprojectEN
             topic = f"project_{project_id}"
             await manager.broadcast_to_topic(notification, topic)
             
-            logger.info(f"项目更新通知已发送: {project_id} - {status}")
+            logger.info(f"projectupdateENsend: {project_id} - {status}")
             
         except Exception as e:
-            logger.error(f"发送项目更新通知失败: {e}")
+            logger.error(f"sendprojectupdateENfailed: {e}")
     
     @staticmethod
     async def send_system_notification(notification_type: str, title: str, message: str,
                                      level: str = "info"):
-        """发送系统通知"""
+        """sendsystemEN"""
         try:
             notification = WebSocketMessage.create_system_notification(
                 notification_type=notification_type,
@@ -75,18 +75,18 @@ class WebSocketNotificationService:
                 level=level
             )
             
-            # 广播给所有连接的用户
+            # ENallconnectENuser
             await manager.broadcast(notification)
             
-            logger.info(f"系统通知已发送: {title} - {message}")
+            logger.info(f"systemENsend: {title} - {message}")
             
         except Exception as e:
-            logger.error(f"发送系统通知失败: {e}")
+            logger.error(f"sendsystemENfailed: {e}")
     
     @staticmethod
     async def send_error_notification(error_type: str, error_message: str,
                                     details: Optional[Dict[str, Any]] = None):
-        """发送错误通知"""
+        """senderrorEN"""
         try:
             notification = WebSocketMessage.create_error_notification(
                 error_type=error_type,
@@ -94,43 +94,43 @@ class WebSocketNotificationService:
                 details=details
             )
             
-            # 广播给所有连接的用户
+            # ENallconnectENuser
             await manager.broadcast(notification)
             
-            logger.error(f"错误通知已发送: {error_type} - {error_message}")
+            logger.error(f"errorENsend: {error_type} - {error_message}")
             
         except Exception as e:
-            logger.error(f"发送错误通知失败: {e}")
+            logger.error(f"senderrorENfailed: {e}")
     
     @staticmethod
     async def send_processing_start(project_id: str, task_id: str):
-        """发送处理开始通知"""
+        """sendprocessingstartEN"""
         try:
             notification = WebSocketMessage.create_task_update(
                 task_id=task_id,
                 status="running",
                 progress=0,
-                message="开始处理项目"
+                message="startprocessingproject"
             )
             
-            # 广播给所有连接的用户
+            # ENallconnectENuser
             await manager.broadcast(notification)
             
-            # 同时发送给特定项目主题的订阅者
+            # meanwhilesendENprojectEN
             topic = f"project_{project_id}"
             await manager.broadcast_to_topic(notification, topic)
             
-            logger.info(f"处理开始通知已发送: {project_id} - {task_id}")
+            logger.info(f"processingstartENsend: {project_id} - {task_id}")
             
         except Exception as e:
-            logger.error(f"发送处理开始通知失败: {e}")
+            logger.error(f"sendprocessingstartENfailed: {e}")
     
     @staticmethod
     async def send_processing_progress(project_id: str, task_id: str, progress: int, message: str, 
                                      current_step: int = 0, total_steps: int = 6, step_name: str = ""):
-        """发送处理进度通知"""
+        """sendprocessingprogressEN"""
         try:
-            # 创建增强的进度更新消息
+            # createENprogressupdateEN
             notification = {
                 'type': 'task_progress_update',
                 'task_id': task_id,
@@ -144,50 +144,50 @@ class WebSocketNotificationService:
                 'timestamp': datetime.utcnow().isoformat()
             }
             
-            logger.info(f"准备发送进度通知: {notification}")
+            logger.info(f"ENsendprogressEN: {notification}")
             
-            # 广播给所有连接的用户
+            # ENallconnectENuser
             await manager.broadcast(notification)
-            logger.info(f"已广播进度通知给所有用户: {notification}")
+            logger.info(f"ENprogressENalluser: {notification}")
             
-            # 同时发送给特定项目主题的订阅者
+            # meanwhilesendENprojectEN
             topic = f"project_{project_id}"
             await manager.broadcast_to_topic(notification, topic)
-            logger.info(f"已发送进度通知给主题 {topic} 的订阅者: {notification}")
+            logger.info(f"ENsendprogressEN {topic} EN: {notification}")
             
-            logger.info(f"处理进度通知已发送: {project_id} - {task_id} - {progress}% - {step_name}")
+            logger.info(f"processingprogressENsend: {project_id} - {task_id} - {progress}% - {step_name}")
             
         except Exception as e:
-            logger.error(f"发送处理进度通知失败: {e}")
+            logger.error(f"sendprocessingprogressENfailed: {e}")
             import traceback
-            logger.error(f"错误详情: {traceback.format_exc()}")
+            logger.error(f"errorEN: {traceback.format_exc()}")
     
     @staticmethod
     async def send_processing_complete(project_id: str, task_id: str, result: dict):
-        """发送处理完成通知"""
+        """sendprocessingEN"""
         try:
             notification = WebSocketMessage.create_task_update(
                 task_id=task_id,
                 status="completed",
                 progress=100,
-                message="项目处理完成"
+                message="projectprocessingEN"
             )
             
-            # 广播给所有连接的用户
+            # ENallconnectENuser
             await manager.broadcast(notification)
             
-            # 同时发送给特定项目主题的订阅者
+            # meanwhilesendENprojectEN
             topic = f"project_{project_id}"
             await manager.broadcast_to_topic(notification, topic)
             
-            logger.info(f"处理完成通知已发送: {project_id} - {task_id}")
+            logger.info(f"processingENsend: {project_id} - {task_id}")
             
         except Exception as e:
-            logger.error(f"发送处理完成通知失败: {e}")
+            logger.error(f"sendprocessingENfailed: {e}")
     
     @staticmethod
     async def send_processing_error(project_id: str, task_id: str, error_message: str):
-        """发送处理错误通知"""
+        """sendprocessingerrorEN"""
         try:
             notification = WebSocketMessage.create_task_update(
                 task_id=task_id,
@@ -196,21 +196,21 @@ class WebSocketNotificationService:
                 error=error_message
             )
             
-            # 广播给所有连接的用户
+            # ENallconnectENuser
             await manager.broadcast(notification)
             
-            # 同时发送给特定项目主题的订阅者
+            # meanwhilesendENprojectEN
             topic = f"project_{project_id}"
             await manager.broadcast_to_topic(notification, topic)
             
-            logger.info(f"处理错误通知已发送: {project_id} - {task_id} - {error_message}")
+            logger.info(f"processingerrorENsend: {project_id} - {task_id} - {error_message}")
             
         except Exception as e:
-            logger.error(f"发送处理错误通知失败: {e}")
+            logger.error(f"sendprocessingerrorENfailed: {e}")
     
     @staticmethod
-    async def send_processing_started(project_id: str, message: str = "开始视频处理流程"):
-        """发送处理开始通知（别名方法）"""
+    async def send_processing_started(project_id: str, message: str = "startvideoprocessingEN"):
+        """sendprocessingstartEN（EN）"""
         await WebSocketNotificationService.send_project_update(
             project_id=project_id,
             status="processing",
@@ -218,5 +218,5 @@ class WebSocketNotificationService:
             message=message
         )
 
-# 全局通知服务实例
+# ENserviceEN
 notification_service = WebSocketNotificationService()

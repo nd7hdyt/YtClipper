@@ -1,6 +1,6 @@
 """
-统一路径配置管理
-确保所有路径配置都从同一个地方获取，避免路径混乱
+ENpathconfigEN
+ENallpathconfigENfetch，ENpathEN
 """
 
 from pathlib import Path
@@ -9,22 +9,22 @@ from typing import Dict, Any
 from . import path_utils
 
 class UnifiedPathManager:
-    """统一的路径管理器"""
+    """ENpathEN"""
     
     def __init__(self):
         self._project_root = self._get_project_root()
         self._data_dir = path_utils.get_data_directory()
         self._output_dir = path_utils.get_output_directory()
         
-        # 确保关键目录存在
+        # ENdirectoryEN
         self._ensure_directories()
     
     def _get_project_root(self) -> Path:
-        """获取项目根目录"""
+        """fetchprojectENdirectory"""
         return path_utils.get_project_root()
     
     def _ensure_directories(self):
-        """确保关键目录存在"""
+        """ENdirectoryEN"""
         directories = [
             self._data_dir,
             self._output_dir,
@@ -42,114 +42,114 @@ class UnifiedPathManager:
     
     @property
     def project_root(self) -> Path:
-        """项目根目录"""
+        """projectENdirectory"""
         return self._project_root
     
     @property
     def data_directory(self) -> Path:
-        """数据目录"""
+        """ENdirectory"""
         return self._data_dir
     
     @property
     def output_directory(self) -> Path:
-        """输出目录"""
+        """ENdirectory"""
         return self._output_dir
     
     @property
     def clips_directory(self) -> Path:
-        """切片目录"""
+        """clipdirectory"""
         return self._output_dir / "clips"
     
     @property
     def collections_directory(self) -> Path:
-        """合集目录"""
+        """collectiondirectory"""
         return self._output_dir / "collections"
     
     @property
     def metadata_directory(self) -> Path:
-        """元数据目录"""
+        """ENdirectory"""
         return self._output_dir / "metadata"
     
     @property
     def projects_directory(self) -> Path:
-        """项目目录"""
+        """projectdirectory"""
         return self._data_dir / "projects"
     
     @property
     def uploads_directory(self) -> Path:
-        """上传目录"""
+        """uploaddirectory"""
         return self._data_dir / "uploads"
     
     @property
     def temp_directory(self) -> Path:
-        """临时目录"""
+        """ENdirectory"""
         return self._data_dir / "temp"
     
     @property
     def backups_directory(self) -> Path:
-        """备份目录"""
+        """ENdirectory"""
         return self._data_dir / "backups"
     
     def get_project_directory(self, project_id: str) -> Path:
-        """获取项目目录"""
+        """fetchprojectdirectory"""
         project_dir = self.projects_directory / project_id
         project_dir.mkdir(exist_ok=True)
         return project_dir
     
     def get_project_raw_directory(self, project_id: str) -> Path:
-        """获取项目原始文件目录"""
+        """fetchprojectENfiledirectory"""
         raw_dir = self.get_project_directory(project_id) / "raw"
         raw_dir.mkdir(exist_ok=True)
         return raw_dir
     
     def get_project_output_directory(self, project_id: str) -> Path:
-        """获取项目输出目录"""
+        """fetchprojectENdirectory"""
         output_dir = self.get_project_directory(project_id) / "output"
         output_dir.mkdir(exist_ok=True)
         return output_dir
     
     def get_project_clips_directory(self, project_id: str) -> Path:
-        """获取项目切片目录"""
+        """fetchprojectclipdirectory"""
         clips_dir = self.clips_directory / project_id
         clips_dir.mkdir(exist_ok=True)
         return clips_dir
     
     def get_project_collections_directory(self, project_id: str) -> Path:
-        """获取项目合集目录"""
+        """fetchprojectcollectiondirectory"""
         collections_dir = self.collections_directory / project_id
         collections_dir.mkdir(exist_ok=True)
         return collections_dir
     
     def get_database_path(self) -> Path:
-        """获取数据库路径"""
+        """fetchdatabasepath"""
         return self.data_directory / "autoclip.db"
     
     def get_settings_file_path(self) -> Path:
-        """获取设置文件路径"""
+        """fetchsettingsfilepath"""
         return self.data_directory / "settings.json"
     
     def get_clip_file_path(self, project_id: str, clip_title: str, extension: str = "mp4") -> Path:
-        """获取切片文件路径"""
+        """fetchclipfilepath"""
         clips_dir = self.get_project_clips_directory(project_id)
-        # 清理文件名，移除特殊字符
+        # ENfileEN，EN
         safe_title = "".join(c for c in clip_title if c.isalnum() or c in (' ', '-', '_')).rstrip()
         return clips_dir / f"{safe_title}.{extension}"
     
     def get_collection_file_path(self, project_id: str, collection_title: str, extension: str = "mp4") -> Path:
-        """获取合集文件路径"""
+        """fetchcollectionfilepath"""
         collections_dir = self.get_project_collections_directory(project_id)
-        # 清理文件名，移除特殊字符
+        # ENfileEN，EN
         safe_title = "".join(c for c in collection_title if c.isalnum() or c in (' ', '-', '_')).rstrip()
         return collections_dir / f"{safe_title}.{extension}"
     
     def get_metadata_file_path(self, project_id: str, step_name: str, filename: str) -> Path:
-        """获取元数据文件路径"""
+        """fetchENfilepath"""
         metadata_dir = self.get_project_directory(project_id) / step_name
         metadata_dir.mkdir(exist_ok=True)
         return metadata_dir / filename
     
     def validate_paths(self) -> Dict[str, Any]:
-        """验证所有路径配置"""
+        """validateallpathconfig"""
         validation_result = {
             "valid": True,
             "errors": [],
@@ -158,7 +158,7 @@ class UnifiedPathManager:
         }
         
         try:
-            # 检查关键目录
+            # checkENdirectory
             key_paths = {
                 "project_root": self.project_root,
                 "data_directory": self.data_directory,
@@ -173,25 +173,25 @@ class UnifiedPathManager:
                 validation_result["paths"][name] = str(path)
                 
                 if not path.exists():
-                    validation_result["warnings"].append(f"目录不存在: {name} = {path}")
+                    validation_result["warnings"].append(f"directorydoes not exist: {name} = {path}")
                 elif not path.is_dir():
-                    validation_result["errors"].append(f"路径不是目录: {name} = {path}")
+                    validation_result["errors"].append(f"pathENdirectory: {name} = {path}")
                     validation_result["valid"] = False
             
-            # 检查是否有重复或冲突的路径
+            # checkENpath
             all_paths = list(validation_result["paths"].values())
             if len(all_paths) != len(set(all_paths)):
-                validation_result["errors"].append("存在重复的路径配置")
+                validation_result["errors"].append("ENpathconfig")
                 validation_result["valid"] = False
             
         except Exception as e:
-            validation_result["errors"].append(f"路径验证失败: {str(e)}")
+            validation_result["errors"].append(f"pathvalidatefailed: {str(e)}")
             validation_result["valid"] = False
         
         return validation_result
     
     def get_path_summary(self) -> Dict[str, str]:
-        """获取路径配置摘要"""
+        """fetchpathconfigEN"""
         return {
             "project_root": str(self.project_root),
             "data_directory": str(self.data_directory),
@@ -205,10 +205,10 @@ class UnifiedPathManager:
             "backups_directory": str(self.backups_directory)
         }
 
-# 全局路径管理器实例
+# ENpathEN
 path_manager = UnifiedPathManager()
 
-# 向后兼容的路径常量
+# ENpathEN
 PROJECT_ROOT = path_manager.project_root
 DATA_DIR = path_manager.data_directory
 OUTPUT_DIR = path_manager.output_directory
@@ -220,23 +220,23 @@ UPLOADS_DIR = path_manager.uploads_directory
 TEMP_DIR = path_manager.temp_directory
 BACKUPS_DIR = path_manager.backups_directory
 
-# 便捷函数
+# EN
 def get_project_directory(project_id: str) -> Path:
-    """获取项目目录"""
+    """fetchprojectdirectory"""
     return path_manager.get_project_directory(project_id)
 
 def get_clip_file_path(project_id: str, clip_title: str, extension: str = "mp4") -> Path:
-    """获取切片文件路径"""
+    """fetchclipfilepath"""
     return path_manager.get_clip_file_path(project_id, clip_title, extension)
 
 def get_collection_file_path(project_id: str, collection_title: str, extension: str = "mp4") -> Path:
-    """获取合集文件路径"""
+    """fetchcollectionfilepath"""
     return path_manager.get_collection_file_path(project_id, collection_title, extension)
 
 def validate_paths() -> Dict[str, Any]:
-    """验证所有路径配置"""
+    """validateallpathconfig"""
     return path_manager.validate_paths()
 
 def get_path_summary() -> Dict[str, str]:
-    """获取路径配置摘要"""
+    """fetchpathconfigEN"""
     return path_manager.get_path_summary()

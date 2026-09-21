@@ -1,111 +1,111 @@
-# 贡献指南
+# Contributing
 
-感谢您对AutoClip项目的关注！我们欢迎所有形式的贡献，包括但不限于：
+ENAutoClipEN！EN，EN：
 
-- 🐛 Bug修复
-- ✨ 新功能开发
-- 📚 文档改进
-- 🧪 测试用例
-- 💡 功能建议
-- 🎨 UI/UX改进
+- 🐛 BugEN
+- ✨ EN
+- 📚 EN
+- 🧪 EN
+- 💡 EN
+- 🎨 UI/UXEN
 
-## 开发环境设置
+## EN
 
-### 1. Fork并克隆项目
+### 1. ForkEN
 
 ```bash
-# Fork项目到您的GitHub账户，然后克隆
+# ForkENGitHubEN，EN
 git clone https://github.com/your-username/autoclip.git
 cd autoclip
 
-# 添加上游仓库
+# EN
 git remote add upstream https://github.com/original-username/autoclip.git
 ```
 
-### 2. 设置开发环境
+### 2. EN
 
 ```bash
-# 创建虚拟环境
+# EN
 python3 -m venv venv
 source venv/bin/activate  # Linux/macOS
-# 或 venv\Scripts\activate  # Windows
+# EN venv\Scripts\activate  # Windows
 
-# 安装依赖
+# EN
 pip install -r requirements.txt
 cd frontend && npm install && cd ..
 
-# 配置环境变量
+# EN
 cp env.example .env
-# 编辑.env文件，填入必要的配置
+# EN.envEN，EN
 ```
 
-### 3. 启动开发服务器
+### 3. EN
 
 ```bash
-# 启动Redis
+# ENRedis
 brew services start redis  # macOS
-# 或 sudo systemctl start redis-server  # Linux
+# EN sudo systemctl start redis-server  # Linux
 
-# 启动后端
+# EN
 python -m uvicorn backend.main:app --reload --port 8000
 
-# 启动Celery Worker（必须带 -Q，否则只消费默认 `celery` 队列，流水线任务无人执行）
+# ENCelery Worker（EN -Q，EN `celery` EN，EN）
 celery -A backend.core.celery_app worker --loglevel=info -Q celery,processing,video,notification,upload
 
-# 启动前端
+# EN
 cd frontend && npm run dev
 ```
 
-## 开发流程
+## EN
 
-### 1. 创建功能分支
+### 1. EN
 
 ```bash
-# 从main分支创建新分支
+# ENmainEN
 git checkout main
 git pull upstream main
 git checkout -b feature/your-feature-name
 ```
 
-### 2. 开发规范
+### 2. EN
 
-#### 代码风格
+#### EN
 
-**Python (后端)**
-- 遵循PEP 8规范
-- 使用Black进行代码格式化
-- 使用isort进行导入排序
-- 函数和类需要添加docstring
+**Python (EN)**
+- ENPEP 8EN
+- ENBlackEN
+- ENisortEN
+- ENdocstring
 
 ```python
 def example_function(param1: str, param2: int) -> bool:
     """
-    示例函数的文档字符串
+    EN
     
     Args:
-        param1: 参数1的描述
-        param2: 参数2的描述
+        param1: EN1EN
+        param2: EN2EN
         
     Returns:
-        返回值的描述
+        EN
     """
     pass
 ```
 
-**TypeScript (前端)**
-- 使用ESLint和Prettier
-- 组件需要添加JSDoc注释
-- 使用函数组件和Hooks
-- 遵循Ant Design设计规范
+**TypeScript (EN)**
+- ENESLintENPrettier
+- ENJSDocEN
+- ENHooks
+- ENAnt DesignEN
 
 ```typescript
 /**
- * 示例组件的描述
+ * EN
  */
 interface ExampleProps {
-  /** 属性描述 */
+  /** EN */
   title: string;
-  /** 可选属性描述 */
+  /** EN */
   optional?: boolean;
 }
 
@@ -114,9 +114,9 @@ const ExampleComponent: React.FC<ExampleProps> = ({ title, optional = false }) =
 };
 ```
 
-#### 提交信息规范
+#### EN
 
-使用约定式提交格式：
+EN：
 
 ```
 <type>(<scope>): <description>
@@ -126,182 +126,182 @@ const ExampleComponent: React.FC<ExampleProps> = ({ title, optional = false }) =
 [optional footer(s)]
 ```
 
-**类型 (type):**
-- `feat`: 新功能
-- `fix`: Bug修复
-- `docs`: 文档更新
-- `style`: 代码格式调整
-- `refactor`: 代码重构
-- `test`: 测试相关
-- `chore`: 构建过程或辅助工具的变动
+**EN (type):**
+- `feat`: EN
+- `fix`: BugEN
+- `docs`: EN
+- `style`: EN
+- `refactor`: EN
+- `test`: EN
+- `chore`: EN
 
-**示例:**
+**EN:**
 ```
 feat(api): add video download endpoint
 fix(ui): resolve upload modal display issue
 docs(readme): update installation instructions
 ```
 
-### 3. 测试
+### 3. EN
 
-#### 后端测试
+#### EN
 
 ```bash
-# 运行所有测试
+# EN
 pytest
 
-# 运行特定测试文件
+# EN
 pytest tests/test_api.py
 
-# 生成覆盖率报告
+# EN
 pytest --cov=backend --cov-report=html
 ```
 
-#### 前端测试
+#### EN
 
 ```bash
 cd frontend
 
-# 运行测试
+# EN
 npm test
 
-# 运行lint检查
+# ENlintEN
 npm run lint
 
-# 类型检查
+# EN
 npm run type-check
 ```
 
-### 4. 提交代码
+### 4. EN
 
 ```bash
-# 添加更改
+# EN
 git add .
 
-# 提交更改
+# EN
 git commit -m "feat(api): add video download endpoint"
 
-# 推送分支
+# EN
 git push origin feature/your-feature-name
 ```
 
-### 5. 创建Pull Request
+### 5. ENPull Request
 
-1. 在GitHub上创建Pull Request
-2. 填写PR模板
-3. 确保所有检查通过
-4. 等待代码审查
+1. ENGitHubENPull Request
+2. ENPREN
+3. EN
+4. ENCode Review
 
-## 代码审查流程
+## Code ReviewEN
 
-### 审查标准
+### EN
 
-- ✅ 代码符合项目规范
-- ✅ 功能正常工作
-- ✅ 测试用例覆盖
-- ✅ 文档已更新
-- ✅ 无安全漏洞
-- ✅ 性能影响评估
+- ✅ EN
+- ✅ EN
+- ✅ EN
+- ✅ EN
+- ✅ EN
+- ✅ EN
 
-### 审查反馈
+### EN
 
-- 积极回应审查意见
-- 及时修复问题
-- 保持PR更新
-- 与审查者保持沟通
+- EN
+- EN
+- ENPREN
+- EN
 
-## 问题报告
+## EN
 
-### Bug报告
+### BugEN
 
-使用GitHub Issues报告Bug时，请包含：
+ENGitHub IssuesENBugEN，EN：
 
-1. **环境信息**
-   - 操作系统版本
-   - Python版本
-   - Node.js版本
-   - 浏览器版本
+1. **EN**
+   - EN
+   - PythonEN
+   - Node.jsEN
+   - EN
 
-2. **重现步骤**
-   - 详细的操作步骤
-   - 预期结果
-   - 实际结果
+2. **EN**
+   - EN
+   - EN
+   - EN
 
-3. **错误信息**
-   - 完整的错误日志
-   - 截图或录屏
+3. **EN**
+   - EN
+   - EN
 
-4. **附加信息**
-   - 相关配置文件
-   - 网络环境
-   - 其他可能相关的信息
+4. **EN**
+   - EN
+   - EN
+   - EN
 
-### 功能建议
+### EN
 
-提出新功能建议时，请说明：
+EN，EN：
 
-1. **功能描述**
-   - 详细的功能说明
-   - 使用场景
-   - 预期效果
+1. **EN**
+   - EN
+   - EN
+   - EN
 
-2. **实现方案**
-   - 技术实现思路
-   - 可能的挑战
-   - 替代方案
+2. **EN**
+   - EN
+   - EN
+   - EN
 
-3. **影响评估**
-   - 对现有功能的影响
-   - 性能影响
-   - 用户体验影响
+3. **EN**
+   - EN
+   - EN
+   - EN
 
-## 文档贡献
+## EN
 
-### 文档类型
+### EN
 
-- 📖 用户文档
-- 🔧 开发者文档
-- 🚀 部署指南
-- ❓ 常见问题
-- 📝 API文档
+- 📖 EN
+- 🔧 EN
+- 🚀 Deployment
+- ❓ FAQ
+- 📝 APIEN
 
-### 文档规范
+### EN
 
-- 使用Markdown格式
-- 添加目录结构
-- 包含代码示例
-- 保持内容更新
-- 使用清晰的标题层级
+- ENMarkdownEN
+- EN
+- EN
+- EN
+- EN
 
-## 社区行为准则
+## ENAs StandardEN
 
-### 我们的承诺
+### EN
 
-为了营造开放和友好的环境，我们承诺：
+EN，EN：
 
-- 尊重所有贡献者
-- 接受建设性批评
-- 关注社区最佳利益
-- 对其他社区成员表示同理心
+- EN
+- EN
+- EN
+- EN
 
-### 不可接受的行为
+### EN
 
-- 使用性暗示的语言或图像
-- 人身攻击或侮辱性评论
-- 公开或私下骚扰
-- 未经许可发布他人私人信息
-- 其他在专业环境中不当的行为
+- ENLanguageEN
+- EN
+- EN
+- EN
+- EN
 
-## 联系方式
+## ContactEN
 
-- **GitHub Issues**: [项目Issues](https://github.com/your-username/autoclip/issues)
-- **GitHub Discussions**: [项目讨论](https://github.com/your-username/autoclip/discussions)
-- **邮箱**: support@autoclip.com
+- **GitHub Issues**: [ENIssues](https://github.com/your-username/autoclip/issues)
+- **GitHub Discussions**: [EN](https://github.com/your-username/autoclip/discussions)
+- **EN**: support@autoclip.com
 
-## 致谢
+## Acknowledgments
 
-感谢所有为AutoClip项目做出贡献的开发者！您的贡献让这个项目变得更好。
+ENAutoClipEN！EN。
 
 ---
 
-**再次感谢您的贡献！** 🎉
+**EN！** 🎉

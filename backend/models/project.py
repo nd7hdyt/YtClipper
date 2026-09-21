@@ -1,6 +1,6 @@
 """
-项目模型
-定义项目的基本信息和状态
+projectEN
+ENprojectENstatus
 """
 
 import enum
@@ -10,116 +10,116 @@ from sqlalchemy.orm import relationship
 from .base import BaseModel
 
 class ProjectStatus(str, enum.Enum):
-    """项目状态枚举"""
-    PENDING = "pending"           # 等待中
-    PROCESSING = "processing"     # 处理中
-    COMPLETED = "completed"       # 已完成
-    FAILED = "failed"            # 失败
+    """projectstatusEN"""
+    PENDING = "pending"           # EN
+    PROCESSING = "processing"     # processing
+    COMPLETED = "completed"       # completed
+    FAILED = "failed"            # failed
 
 class ProjectType(str, enum.Enum):
-    """项目类型枚举"""
-    DEFAULT = "default"           # 默认
-    KNOWLEDGE = "knowledge"       # 知识科普
-    BUSINESS = "business"         # 商业财经
-    OPINION = "opinion"          # 观点评论
-    EXPERIENCE = "experience"    # 经验分享
-    SPEECH = "speech"            # 演讲脱口秀
-    CONTENT_REVIEW = "content_review"  # 内容解说
-    ENTERTAINMENT = "entertainment"    # 娱乐内容
+    """projectEN"""
+    DEFAULT = "default"           # EN
+    KNOWLEDGE = "knowledge"       # EN
+    BUSINESS = "business"         # EN
+    OPINION = "opinion"          # EN
+    EXPERIENCE = "experience"    # EN
+    SPEECH = "speech"            # EN
+    CONTENT_REVIEW = "content_review"  # EN
+    ENTERTAINMENT = "entertainment"    # EN
 
 class Project(BaseModel):
-    """项目模型"""
+    """projectEN"""
     
     __tablename__ = "projects"
     
-    # 基本信息
+    # EN
     name = Column(
         String(255), 
         nullable=False, 
-        comment="项目名称"
+        comment="projectEN"
     )
     description = Column(
         Text, 
         nullable=True, 
-        comment="项目描述"
+        comment="projectdescription"
     )
     
-    # 状态信息
+    # statusEN
     status = Column(
         Enum(ProjectStatus), 
         default=ProjectStatus.PENDING,
         nullable=False,
-        comment="项目状态"
+        comment="projectstatus"
     )
     
-    # 项目类型
+    # projectEN
     project_type = Column(
         Enum(ProjectType), 
         default=ProjectType.DEFAULT,
         nullable=False,
-        comment="项目类型"
+        comment="projectEN"
     )
     video_path = Column(
         String(500), 
         nullable=True, 
-        comment="视频文件路径"
+        comment="videofilepath"
     )
     subtitle_path = Column(
         String(500), 
         nullable=True, 
-        comment="字幕文件路径"
+        comment="subtitlesfilepath"
     )
     video_duration = Column(
         Integer, 
         nullable=True, 
-        comment="视频时长（秒）"
+        comment="videoduration（EN）"
     )
     thumbnail = Column(
         Text, 
         nullable=True, 
-        comment="项目缩略图（base64编码）"
+        comment="projectEN（base64EN）"
     )
     
-    # 处理配置
+    # processingconfig
     processing_config = Column(
         JSON, 
         nullable=True, 
-        comment="处理配置参数"
+        comment="processingconfigparameters"
     )
     
-    # 元数据
+    # EN
     project_metadata = Column(
         JSON, 
         nullable=True, 
-        comment="项目元数据（精简版，完整数据存储在文件系统）"
+        comment="projectEN（EN，ENfilesystem）"
     )
     
-    # 添加计算属性
+    # EN
     @property
     def storage_initialized(self) -> bool:
-        """存储服务是否已初始化"""
+        """ENserviceENinitialize"""
         if self.project_metadata and 'storage_service_initialized' in self.project_metadata:
             return self.project_metadata['storage_service_initialized']
         return False
     
     @property
     def has_video_file(self) -> bool:
-        """是否有视频文件"""
+        """ENvideofile"""
         return self.video_path is not None
     
     @property
     def has_subtitle_file(self) -> bool:
-        """是否有字幕文件"""
+        """ENsubtitlesfile"""
         return self.subtitle_path is not None
     
-    # 完成时间
+    # ENtime
     completed_at = Column(
         DateTime, 
         nullable=True, 
-        comment="项目完成时间"
+        comment="projectENtime"
     )
     
-    # 关联关系
+    # EN
     clips = relationship(
         "Clip", 
         back_populates="project",
@@ -141,25 +141,25 @@ class Project(BaseModel):
     
     @property
     def clips_count(self):
-        """获取切片数量"""
+        """fetchclipEN"""
         return len(self.clips) if self.clips else 0
     
     @property
     def collections_count(self):
-        """获取合集数量"""
+        """fetchcollectionEN"""
         return len(self.collections) if self.collections else 0
     
     @property
     def is_processing(self):
-        """是否正在处理"""
+        """ENcurrentlyprocessing"""
         return self.status == ProjectStatus.PROCESSING
     
     @property
     def is_completed(self):
-        """是否已完成"""
+        """ENcompleted"""
         return self.status == ProjectStatus.COMPLETED
     
     @property
     def has_error(self):
-        """是否有错误"""
+        """ENerror"""
         return self.status == ProjectStatus.FAILED

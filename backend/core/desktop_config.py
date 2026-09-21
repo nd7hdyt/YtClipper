@@ -129,9 +129,9 @@ class DesktopConfig:
             try:
                 directory.mkdir(parents=True, exist_ok=True)
             except Exception as exc:
-                errors.append(f"目录不可用: {directory} ({exc})")
+                errors.append(f"directoryEN: {directory} ({exc})")
         if not self.settings.api_dashscope_api_key:
-            warnings.append("未配置 DashScope API Key")
+            warnings.append("ENconfig DashScope API Key")
         return {"valid": not errors, "errors": errors, "warnings": warnings}
 
     def dict(self):
@@ -156,7 +156,7 @@ class DesktopConfig:
 
     @property
     def app_version(self) -> str:
-        # 桌面壳（Rust）启动后端时注入 CARGO_PKG_VERSION；直接跑源码时回退到当前版本号
+        # EN（Rust）startEN CARGO_PKG_VERSION；ENcurrentEN
         return os.getenv("AUTOCLIP_APP_VERSION", "1.3.0")
 
     @property

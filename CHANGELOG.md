@@ -1,143 +1,143 @@
-# 更新日志
+# EN
 
-本文档记录了AutoClip项目的所有重要变更。
+ENAutoClipEN。
 
-格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
-项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
+ENBased on [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
+EN [EN](https://semver.org/lang/zh-CN/)。
 
-## [未发布]
+## [EN]
 
-_（本周尚无改动）_
+_（EN）_
 
 ## [1.3.0] - 2026-09-20
 
-### 新增
-- **`autoclip` 命令行**：`autoclip run video.mp4 --provider ollama` 一条命令出片，`list / show / providers / doctor` 子命令，`--json` 给脚本与 agent；与桌面应用共用数据目录与 SQLite（`pip install -e .`；`docs/CLI_AND_MCP.md`）
-- **MCP server**（`autoclip mcp`，stdio）：`clip_video`、`start_clip_job` / `get_job_status`、`get_project`、`list_projects`、`list_providers`、`check_environment`，Cursor / Claude 可直接调用；Agent skill `skills/autoclip/SKILL.md`
-- **本地模型预设 Ollama / LM Studio**：设置页提供商下拉直接可选，自动列出服务端模型，无需 API Key；Docker / CLI 可用 `LLM_PROVIDER=ollama`
-- `GET /settings/local-presets`、`GET /settings/compatible-models?base_url=`；`POST /settings/test-api` 接受 `ollama` / `lmstudio`
-- **出片质量工程化**：按时长分档（短/中/长）覆盖提示词里写死的 90 秒规则；时间线对齐字幕边界并去重；评分数量不匹配不再整块丢、低于阈值保底 top-K。回归入口 `python -m backend.eval`
-- **发布导出**：切片可渲成抖音/小红书/Shorts 9:16 或 B 站横屏（烧字幕 + 标题卡）。入口：详情页「导出」、`autoclip export`、MCP `export_clip`
-- **Docker / 本地脚本模式可用设置页**：`GET/PUT /settings`、`/test-api`、`/current-provider`、`/compatible-models` 等配置端点不再要求桌面模式；Web 端设置页可直接保存 LLM 提供商与密钥到数据目录的 `settings.json`，api 与 worker 自动热重载。首屏如实显示 `.env` 里的 `LLM_PROVIDER` / `API_MODEL_NAME`（#100）
-- **失败要像失败**：LLM 未配置 / 字幕缺失或为空 / 大纲提取全部失败或不可解析 / 时间线为空 / 没有片段过评分 / ffmpeg 没产出切片——
-  流水线一律进 `failed`，带阶段（SUBTITLE / ANALYZE / EXPORT）和一句可执行的提示（去哪个设置项、装什么）。不再出现 `Completed · 0 切片`
-  或永远 `processing`。`ProjectResponse` 新增 `error_message`（取最近失败任务，CLI 路径回退 `project_metadata.last_error`），详情页 / 项目卡 / 应用内反馈直接展示（#100 #11 #24）
-- LLM 单个文本块失败仍继续（长视频偶发超时不毁整条），只有全部失败才报错
-- **通义千问国际站**（#45）：设置页通义千问卡片新增「中国站 / 国际站」开关，alibabacloud.com 开通的 Key 可直接用；Docker 用 `DASHSCOPE_BASE_URL`。国际站走 OpenAI 兼容模式，按实例隔离，不改全局 SDK 地址
-- **设置页「最低评分阈值」真正生效**：以前只改了 API 进程内存，流水线（worker / 本地线程）一直用常量 0.7；现在 step3 按 settings.json 热重载读取，CLI `--min-score` 仍优先。`chunk_size` / `max_clips` 同样进入 settings，供后续步骤接入
-- 发版工具：`scripts/bump_version.py`（四处版本号统一 + CHANGELOG 滚动，`--check` 校验一致）、`scripts/release_notes.py`（Release 正文从 CHANGELOG 生成）；`RELEASE_CHECKLIST.md` 改写为周更流程
+### EN
+- **`autoclip` EN**：`autoclip run video.mp4 --provider ollama` One command to produce clips，`list / show / providers / doctor` EN，`--json` EN agent；EN SQLite（`pip install -e .`；`docs/CLI_AND_MCP.md`）
+- **MCP server**（`autoclip mcp`，stdio）：`clip_video`、`start_clip_job` / `get_job_status`、`get_project`、`list_projects`、`list_providers`、`check_environment`，Cursor / Claude Can be called directly；Agent skill `skills/autoclip/SKILL.md`
+- **EN Ollama / LM Studio**：ENProvidesEN，EN，EN API Key；Docker / CLI EN `LLM_PROVIDER=ollama`
+- `GET /settings/local-presets`、`GET /settings/compatible-models?base_url=`；`POST /settings/test-api` EN `ollama` / `lmstudio`
+- **EN**：EN（EN/EN/EN）EN 90 EN；EN；EN、EN top-K。EN `python -m backend.eval`
+- **EN**：EN/EN/Shorts 9:16 EN B EN（EN + EN）。EN：EN「EN」、`autoclip export`、MCP `export_clip`
+- **Docker / EN**：`GET/PUT /settings`、`/test-api`、`/current-provider`、`/compatible-models` EN；Web EN LLM ProvidesEN `settings.json`，api EN worker EN。EN `.env` EN `LLM_PROVIDER` / `API_MODEL_NAME`（#100）
+- **EN**：LLM EN / EN / EN / EN / EN / ffmpeg EN——
+  EN `failed`，EN（SUBTITLE / ANALYZE / EXPORT）EN（EN、EN）。EN `Completed · 0 EN`
+  EN `processing`。`ProjectResponse` EN `error_message`（EN，CLI EN `project_metadata.last_error`），EN / EN / EN（#100 #11 #24）
+- LLM EN（EN），EN
+- **EN**（#45）：EN「EN / EN」EN，alibabacloud.com EN Key EN；Docker EN `DASHSCOPE_BASE_URL`。EN OpenAI EN，EN，EN SDK EN
+- **EN「EN」EN**：EN API EN，EN（worker / EN）EN 0.7；EN step3 EN settings.json EN，CLI `--min-score` EN。`chunk_size` / `max_clips` EN settings，EN
+- EN：`scripts/bump_version.py`（EN + CHANGELOG EN，`--check` EN）、`scripts/release_notes.py`（Release EN CHANGELOG EN）；`RELEASE_CHECKLIST.md` EN
 
-### 修复
-- DashScope 提供商不再把完整 API Key 打进 INFO 日志
-- **本地上传的项目从不自动开始处理**：`/projects/upload` 启动导入任务的代码引用了未定义的 `db`，`NameError` 被吞掉，项目一直停在 pending 等用户手点「开始处理」（自 2026-05 `593cc62b` 起）
-- **桌面模式多线程写 SQLite 互相回滚**：文件型 SQLite 之前用 `StaticPool`（全进程一条连接），导入线程结束时的 ROLLBACK 会抹掉流水线线程刚写入的 Task 行（`ObjectDeletedError`、任务凭空消失、进度卡住）。改为默认连接池 + WAL，`StaticPool` 仅保留给 `:memory:`
-- 桌面模式下 Celery 任务内的 `self.update_state()` 不再去连 Redis 结果后端（直接 ConnectionRefused 拖死导入任务）
-- **开着浏览器「翻译此页」时切换提供商 / 输入模型名整页崩溃**（#100）：Chrome / Edge 翻译会把文本节点换成 `<font>`，React 更新时抛 `removeChild NotFoundError`。现在在挂载前对 `removeChild` / `insertBefore` 做守卫，节点已被外部脚本移动时跳过而不是崩；错误边界页识别到该情况会用中英双语提示关闭翻译
-- 错误边界降级页按 `DESIGN.md` 重做（去掉紫色渐变与 AntD `Result`，单色卡片 + `Btn` 原语），「返回首页」在 HashRouter 下真正回到首页
-- macOS 开着系统代理（Clash 等）时本地 Ollama / LM Studio 请求被送进代理导致 502：对 localhost / 内网地址不再读取代理环境变量
-- 设置页首屏偶发不请求当前模型（`apiConfig.notifyListeners` 遍历中被 listener 自删）
-- 从本地预设切回云端提供商时模型名不再残留 `qwen2.5:7b` 之类本地模型名
+### EN
+- DashScope ProvidesEN API Key EN INFO EN
+- **ENUploadEN**：`/projects/upload` EN `db`，`NameError` EN，EN pending EN「EN」（EN 2026-05 `593cc62b` EN）
+- **EN SQLite EN**：EN SQLite EN `StaticPool`（EN），EN ROLLBACK EN Task EN（`ObjectDeletedError`、EN、EN）。EN + WAL，`StaticPool` EN `:memory:`
+- EN Celery EN `self.update_state()` EN Redis EN（EN ConnectionRefused EN）
+- **EN「EN」ENProvidesEN / EN**（#100）：Chrome / Edge EN `<font>`，React EN `removeChild NotFoundError`。EN `removeChild` / `insertBefore` EN，EN；EN
+- EN `DESIGN.md` EN（ENPurple GradientEN AntD `Result`，EN + `Btn` EN），「EN」EN HashRouter EN
+- macOS EN（Clash EN）EN Ollama / LM Studio EN 502：EN localhost / EN
+- EN（`apiConfig.notifyListeners` EN listener EN）
+- ENProvidesEN `qwen2.5:7b` EN
 
 ## [1.2.1] - 2026-09-06
 
-> 止血版：让 README 推荐的 `docker compose` 路径和本地脚本路径真正能跑通一次完整处理（issue #88 及其一长串重复 issue）。
+> EN：EN README EN `docker compose` EN（issue #88 EN issue）。
 
-### 新增
-- **OpenAI 兼容接口自定义 `base_url`**：设置页 OpenAI 提供商新增「接口地址」，可接智谱 / DeepSeek / OpenRouter / 本地 Ollama、vLLM、LM Studio 等；自建服务可不填 key（#72 #57，替代 #78）
-- **Windows x64 安装包**（首个版本，NSIS，按用户安装）：`scripts/build_windows_x64.sh` + `desktop-build.yml` Windows job；与 macOS 共用 `scripts/lib/desktop_build_common.sh`（#73）
-- Docker / 脚本模式可用环境变量配置 LLM：`LLM_PROVIDER`、`API_MODEL_NAME`、`OPENAI_BASE_URL`、`API_{DASHSCOPE,OPENAI,GEMINI,SILICONFLOW}_API_KEY`；compose 透传给 api 与 worker，CI docker-smoke 断言其生效
-- `requirements.txt` 直接依赖全部锁定版本（与 CI / Docker 实装一致；3.11 与便携 3.13 均可解析）
+### EN
+- **OpenAI EN `base_url`**：EN OpenAI ProvidesEN「EN」，EN / DeepSeek / OpenRouter / EN Ollama、vLLM、LM Studio EN；EN key（#72 #57，EN #78）
+- **Windows x64 EN**（EN，NSIS，EN）：`scripts/build_windows_x64.sh` + `desktop-build.yml` Windows job；EN macOS EN `scripts/lib/desktop_build_common.sh`（#73）
+- Docker / EN LLM：`LLM_PROVIDER`、`API_MODEL_NAME`、`OPENAI_BASE_URL`、`API_{DASHSCOPE,OPENAI,GEMINI,SILICONFLOW}_API_KEY`；compose EN api EN worker，CI docker-smoke EN
+- `requirements.txt` EN（EN CI / Docker EN；3.11 EN 3.13 EN）
 
-### 修复
-- **设置页选择的 LLM 提供商从未被持久化**：`api_provider` / `api_base_url` 现在真正写入 `settings.json` 并被流水线读取；`/settings/current-provider` 不再固定返回通义千问；设置保存后 API 进程与 Celery worker 按文件 mtime 自动重载，不必重启
-- 模型选择框（`mode="tags"`）手动输入后会把数组发给后端导致保存失败，已归一为字符串
-- Docker 镜像无法构建：`.dockerignore` 误排除 `docker-entrypoint.sh` / `docker-dev-entrypoint.sh`（#1 #4 #9 #47 #50 #88）
-- Windows 克隆后容器无法启动：新增 `.gitattributes`，shell 脚本强制 LF 行尾（#73 #88）
-- Docker 下任何任务都不执行：compose / dev compose 的 Celery worker 未指定 `-Q`，只监听默认队列；现在消费 `celery,processing,video,notification,upload`。本地脚本 `start_autoclip.sh` 同步补齐 `celery` 与 `video` 队列（#88）
-- Docker 下项目提交后立刻被标记失败：`task_submission_utils` 里一段仅用于诊断的 `redis.Redis(host='localhost')` 位于 `try` 内并向上抛异常；改为走 `REDIS_URL` 且失败仅记 warning（#88）
-- YouTube 解析在作者机器以外 500：`youtube.py` 中硬编码的 `/Users/zhoukk/...` yt-dlp 路径与 `cwd` 改为 `sys.executable -m yt_dlp` + 数据目录；同步清理 `fix_project_thumbnails.py` 与设置页里的硬编码路径（#88）
-- LLM 评分步骤对 list 输入未做 JSON 序列化（`_build_full_input`）（#53）
-- 一次请求 5 种字幕语言触发 YouTube 429：默认改为 `zh-Hans,zh,en`，可用 `AUTOCLIP_YT_SUBTITLE_LANGS` 覆盖（#88）
+### EN
+- **EN LLM ProvidesEN**：`api_provider` / `api_base_url` EN `settings.json` EN；`/settings/current-provider` EN；EN API EN Celery worker EN mtime EN，EN
+- EN（`mode="tags"`）EN，EN
+- Docker EN：`.dockerignore` EN `docker-entrypoint.sh` / `docker-dev-entrypoint.sh`（#1 #4 #9 #47 #50 #88）
+- Windows EN：EN `.gitattributes`，shell EN LF EN（#73 #88）
+- Docker EN：compose / dev compose EN Celery worker EN `-Q`，EN；EN `celery,processing,video,notification,upload`。EN `start_autoclip.sh` EN `celery` EN `video` EN（#88）
+- Docker EN：`task_submission_utils` EN `redis.Redis(host='localhost')` EN `try` EN；EN `REDIS_URL` EN warning（#88）
+- YouTube EN 500：`youtube.py` EN `/Users/zhoukk/...` yt-dlp EN `cwd` EN `sys.executable -m yt_dlp` + EN；EN `fix_project_thumbnails.py` EN（#88）
+- LLM EN list EN JSON EN（`_build_full_input`）（#53）
+- EN 5 ENLanguageEN YouTube 429：EN `zh-Hans,zh,en`，EN `AUTOCLIP_YT_SUBTITLE_LANGS` EN（#88）
 
-### 改进
-- Docker 基础镜像 `python:3.9-slim` → `python:3.11-slim`（当前 yt-dlp 已不支持 3.9，且 3.9 下只能拿到 360p）
-- `docker-compose.yml` 四个服务共用 `autoclip:local` 镜像，只需构建一次
-- CI 新增 `docker-smoke` job：构建镜像、拉起 redis + api + worker、校验健康检查、yt-dlp 可用、REDIS_URL 连通、worker 监听了全部路由队列
-- 桌面壳启动后端时注入 `AUTOCLIP_APP_VERSION`，后端 `/settings` 不再固定返回 `1.0.0`
-- 桌面壳按平台设置数据目录 `AUTOCLIP_APP_DIR`（macOS 路径不变；Windows 为 `%APPDATA%\AutoClip`），Windows 下强制 `PYTHONUTF8=1` 且不弹控制台窗口
-- `src-tauri/Cargo.toml` 版本与 `tauri.conf.json` 对齐
-- `desktop-build.yml` 改为 macOS + Windows 并行构建，`release` job 汇总产物，单一平台失败不阻塞另一平台上传
+### EN
+- Docker EN `python:3.9-slim` → `python:3.11-slim`（EN yt-dlp ENSupport 3.9，EN 3.9 EN 360p）
+- `docker-compose.yml` EN `autoclip:local` EN，EN
+- CI EN `docker-smoke` job：EN、EN redis + api + worker、ENHealth Check、yt-dlp EN、REDIS_URL EN、worker EN
+- EN `AUTOCLIP_APP_VERSION`，EN `/settings` EN `1.0.0`
+- EN `AUTOCLIP_APP_DIR`（macOS EN；Windows EN `%APPDATA%\AutoClip`），Windows EN `PYTHONUTF8=1` EN
+- `src-tauri/Cargo.toml` EN `tauri.conf.json` EN
+- `desktop-build.yml` EN macOS + Windows EN，`release` job EN，ENUpload
 
-### 移除
-- 删除无任何引用的 `backend/api/v1/youtube_improved.py`
+### EN
+- EN `backend/api/v1/youtube_improved.py`
 
 ## [1.2.0] - 2026-06-03
 
-> 接入产品分析,为后续账号 / 商业化打数据地基。
+> EN,ENAccount / EN。
 
-### 新增
-- 接入 PostHog 匿名产品分析：覆盖安装/启动/更新、素材导入、出片导出、流程失败、设置 API key 等关键事件，每条事件自动携带应用版本/系统/架构等全局属性
-- 设置页新增「隐私与数据」开关，可随时关闭匿名使用统计（关闭立即停止上报，重启仍生效）
-- 新增埋点体系文档 `docs/ANALYTICS.md` 与中英文隐私政策 `docs/PRIVACY.md` / `docs/PRIVACY.en.md`
+### EN
+- EN PostHog EN：EN/EN/EN、EN、EN、EN、EN API key EN，EN/EN/EN
+- EN「EN」EN，EN（EN，EN）
+- ENAnalyticsEN `docs/ANALYTICS.md` ENEnglishEN `docs/PRIVACY.md` / `docs/PRIVACY.en.md`
 
-### 历史累积（1.0.0 之后陆续加入、此前未单独记录）
-- 视频标题编辑、B站多账号管理与账号健康状态监控、拖拽排序、视频分类、Docker 管理脚本
+### EN（1.0.0 EN、EN）
+- EN、BENMulti-Account ManagementENAccountEN、EN、EN、Docker EN
 
 ## [1.1.0] - 2026-05-31
 
-> 让 macOS 桌面客户端真正可装、可用、能出片。
+> EN macOS EN、EN、EN。
 
-### 新增
-- 🖥️ 桌面客户端零依赖安装：内置便携 Python 运行时 + 静态 ffmpeg/ffprobe，用户无需预装 Python/ffmpeg
-- 🗣️ 本地字幕转写（按需安装）：无字幕视频可在「设置 → 语音转写」一键安装 faster-whisper 并自选模型
+### EN
+- 🖥️ EN：Built-inEN Python EN + EN ffmpeg/ffprobe，EN Python/ffmpeg
+- 🗣️ EN（EN）：EN「EN → EN」EN faster-whisper EN
 
-### 修复
-- 修复桌面应用启动黑屏（前端 vendor chunk 加载顺序导致 React 未挂载）
-- 修复项目列表一直「加载中」（运行时缺少 pytz 等依赖导致接口 500）
-- 修复导入/重试时「重试失败 / 已开始重试」提示疯狂弹窗的循环
-- 修复处理一直卡在 0%「初始化中」（桌面模式流水线改为本地执行，不再依赖 Redis）
-- 修复换机后无法处理视频（内置 ffmpeg 改为静态自包含版本并正确接入后端）
+### EN
+- EN（EN vendor chunk EN React EN）
+- EN「EN」（EN pytz EN 500）
+- EN/EN「EN / EN」EN
+- EN 0%「EN」（EN，EN Redis）
+- EN（Built-in ffmpeg EN）
 
-### 改进
-- AI 提供商 Gemini 迁移到官方新版 `google-genai` SDK
-- CI 桌面构建统一为一条经过验证的流程（python-build-standalone）
-- 仓库清理：移除大量历史脚本与一次性文档，整理项目结构
+### EN
+- AI ProvidesEN Gemini EN `google-genai` SDK
+- CI EN（python-build-standalone）
+- EN：EN，ENProject Structure
 
 ## [1.0.0] - 2024-01-15
 
-### 新增
-- 🎬 支持YouTube视频下载
-- 🎬 支持B站视频下载
-- 🎬 支持本地文件上传
-- 🤖 AI智能视频分析
-- ✂️ 自动视频切片
-- 📚 智能合集生成
-- 🎨 现代化Web界面
-- 🚀 异步任务处理
-- 📊 实时进度监控
-- 🔐 B站账号管理
-- 📱 响应式设计
-- 🛠️ 一键启动脚本
+### EN
+- 🎬 SupportYouTubeEN
+- 🎬 SupportBEN
+- 🎬 SupportLocal File Upload
+- 🤖 AIEN
+- ✂️ EN
+- 📚 Smart CollectionsEN
+- 🎨 ENWebInterface
+- 🚀 EN
+- 📊 EN
+- 🔐 BENAccount Management
+- 📱 Responsive Design
+- 🛠️ One-Click Start Script
 
-### 技术特性
-- FastAPI后端框架
-- React + TypeScript前端
-- Celery异步任务队列
-- Redis消息代理
-- SQLite数据库
-- WebSocket实时通信
-- 通义千问AI集成
+### EN
+- FastAPIEN
+- React + TypeScriptEN
+- CeleryENTask Queue
+- RedisEN
+- SQLiteEN
+- WebSocketENCommunication
+- ENAIEN
 
 ## [0.9.0] - 2024-01-01
 
-### 新增
-- 基础项目架构
-- 核心API接口
-- 基础前端界面
-- 视频处理流水线
-- AI分析服务
+### EN
+- EN
+- ENAPIEN
+- ENInterface
+- EN
+- AIEN
 
-### 技术栈
+### Tech Stack
 - Python 3.8+
 - React 18
 - FastAPI
@@ -147,29 +147,29 @@ _（本周尚无改动）_
 
 ---
 
-## 版本说明
+## EN
 
-### 版本号格式
+### EN
 
-我们使用语义化版本控制 (SemVer)：
+EN (SemVer)：
 
-- **主版本号**: 不兼容的API修改
-- **次版本号**: 向下兼容的功能性新增
-- **修订号**: 向下兼容的问题修正
+- **EN**: ENAPIEN
+- **EN**: EN
+- **EN**: EN
 
-### 变更类型
+### EN
 
-- **新增**: 新功能
-- **改进**: 现有功能的改进
-- **修复**: Bug修复
-- **移除**: 移除的功能
-- **安全**: 安全相关的修复
+- **EN**: EN
+- **EN**: EN
+- **EN**: BugEN
+- **EN**: EN
+- **EN**: EN
 
-### 链接
+### EN
 
-- [Unreleased]: https://github.com/zhouxiaoka/autoclip/compare/v1.3.0...HEAD
-- [1.3.0]: https://github.com/zhouxiaoka/autoclip/compare/v1.2.1...v1.3.0
-- [1.2.1]: https://github.com/zhouxiaoka/autoclip/compare/v1.2.0...v1.2.1
-- [1.2.0]: https://github.com/zhouxiaoka/autoclip/releases/tag/v1.2.0
-- [1.1.0]: https://github.com/zhouxiaoka/autoclip/releases/tag/v1.1.0
-- [1.0.0]: https://github.com/zhouxiaoka/autoclip/releases/tag/v1.0.0
+- [Unreleased]: https://github.com/nd7hdyt/YtClipper/compare/v1.3.0...HEAD
+- [1.3.0]: https://github.com/nd7hdyt/YtClipper/compare/v1.2.1...v1.3.0
+- [1.2.1]: https://github.com/nd7hdyt/YtClipper/compare/v1.2.0...v1.2.1
+- [1.2.0]: https://github.com/nd7hdyt/YtClipper/releases/tag/v1.2.0
+- [1.1.0]: https://github.com/nd7hdyt/YtClipper/releases/tag/v1.1.0
+- [1.0.0]: https://github.com/nd7hdyt/YtClipper/releases/tag/v1.0.0

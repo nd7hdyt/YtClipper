@@ -1,7 +1,7 @@
-"""ProjectResponse 必填字段回归测试
+"""ProjectResponse EN
 
-create_project / update_project 构造响应时不传 video_path / thumbnail，
-schema 里 Optional 字段必须带 default，否则 Pydantic 校验失败导致接口 500。
+create_project / update_project EN video_path / thumbnail，
+schema EN Optional EN default，EN Pydantic EN 500。
 """
 import sys
 from datetime import datetime
@@ -13,7 +13,7 @@ from backend.schemas.project import ProjectResponse
 
 
 def _minimal_kwargs():
-    """与 backend/api/v1/projects.py 中 create_project 传入的字段保持一致"""
+    """EN backend/api/v1/projects.py EN create_project EN"""
     return {
         "id": "test-project-id",
         "name": "test project",

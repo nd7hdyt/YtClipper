@@ -1,6 +1,6 @@
 """
-依赖注入配置
-提供FastAPI的依赖注入服务
+ENconfig
+ENFastAPIENservice
 """
 
 from typing import Generator

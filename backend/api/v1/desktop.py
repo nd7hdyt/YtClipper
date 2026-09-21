@@ -1,6 +1,6 @@
 """
-桌面专用API端点
-提供桌面应用需要的特殊功能
+ENAPIEN
+ENneedEN
 """
 import os
 import psutil
@@ -14,13 +14,13 @@ from backend.core.desktop_config import get_desktop_config, is_desktop_mode
 
 router = APIRouter()
 
-# 检查桌面模式
+# checkEN
 def check_desktop_mode():
     if not is_desktop_mode():
-        raise HTTPException(status_code=400, detail="此端点仅在桌面模式下可用")
+        raise HTTPException(status_code=400, detail="EN")
 
 class SystemInfo(BaseModel):
-    """系统信息模型"""
+    """systemEN"""
     platform: str
     platform_version: str
     architecture: str
@@ -33,7 +33,7 @@ class SystemInfo(BaseModel):
     app_version: str
 
 class ServiceStatus(BaseModel):
-    """服务状态模型"""
+    """servicestatusEN"""
     is_running: bool
     port: int
     uptime: str
@@ -43,11 +43,11 @@ class ServiceStatus(BaseModel):
 
 @router.get("/system/info", response_model=SystemInfo)
 async def get_system_info():
-    """获取系统信息"""
+    """fetchsystemEN"""
     check_desktop_mode()
     
     try:
-        # 获取系统信息
+        # fetchsystemEN
         memory = psutil.virtual_memory()
         disk = psutil.disk_usage('/')
         
@@ -64,11 +64,11 @@ async def get_system_info():
             app_version=get_desktop_config().app_version
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取系统信息失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchsystemENfailed: {str(e)}")
 
 @router.get("/service/status", response_model=ServiceStatus)
 async def get_service_status():
-    """获取服务状态"""
+    """fetchservicestatus"""
     check_desktop_mode()
     
     try:
@@ -84,11 +84,11 @@ async def get_service_status():
             last_health_check=datetime.now().isoformat()
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取服务状态失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchservicestatusfailed: {str(e)}")
 
 @router.get("/logs")
 async def get_logs(lines: int = 100):
-    """获取应用日志"""
+    """fetchENlog"""
     check_desktop_mode()
     
     try:
@@ -96,9 +96,9 @@ async def get_logs(lines: int = 100):
         log_file = config.data_dir / "logs" / "autoclip.log"
         
         if not log_file.exists():
-            return {"logs": [], "message": "日志文件不存在"}
+            return {"logs": [], "message": "logfiledoes not exist"}
         
-        # 读取最后N行日志
+        # readENNENlog
         with open(log_file, 'r', encoding='utf-8') as f:
             all_lines = f.readlines()
             recent_lines = all_lines[-lines:] if len(all_lines) > lines else all_lines
@@ -109,21 +109,21 @@ async def get_logs(lines: int = 100):
             "returned_lines": len(recent_lines)
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"读取日志失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"readlogfailed: {str(e)}")
 
 @router.post("/service/restart")
 async def restart_service():
-    """重启服务（仅返回成功，实际重启由Tauri处理）"""
+    """restartservice（ENreturnsucceeded，ENrestartENTauriprocessing）"""
     check_desktop_mode()
     
     return {
-        "message": "服务重启请求已发送",
+        "message": "servicerestartrequestENsend",
         "timestamp": datetime.now().isoformat()
     }
 
 @router.get("/config")
 async def get_config():
-    """获取当前配置"""
+    """fetchcurrentconfig"""
     check_desktop_mode()
     
     try:
@@ -137,46 +137,46 @@ async def get_config():
             }
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"获取配置失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchconfigfailed: {str(e)}")
 
 @router.put("/config")
 async def update_config(config_data: Dict[str, Any]):
-    """更新配置"""
+    """updateconfig"""
     check_desktop_mode()
     
     try:
         from backend.core.desktop_config import save_desktop_config, DesktopConfig
         
-        # 验证配置数据
+        # validateconfigEN
         config = DesktopConfig(**config_data)
         
-        # 保存配置
+        # saveconfig
         if save_desktop_config(config):
-            return {"message": "配置更新成功", "config": config.dict()}
+            return {"message": "configupdatesucceeded", "config": config.dict()}
         else:
-            raise HTTPException(status_code=500, detail="配置保存失败")
+            raise HTTPException(status_code=500, detail="configsavefailed")
             
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"配置更新失败: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"configupdatefailed: {str(e)}")
 
 @router.get("/health/detailed")
 async def detailed_health_check():
-    """详细健康检查"""
+    """ENcheck"""
     check_desktop_mode()
     
     try:
         config = get_desktop_config()
         
-        # 检查数据库连接
+        # checkdatabaseconnect
         db_status = "healthy"
         try:
             from backend.core.database import get_db
-            # 简单的数据库连接测试
+            # ENdatabaseconnectEN
             db_status = "healthy"
         except Exception:
             db_status = "unhealthy"
         
-        # 检查Celery连接
+        # checkCeleryconnect
         celery_status = "healthy"
         try:
             from backend.desktop_celery import celery_app
@@ -202,4 +202,4 @@ async def detailed_health_check():
             }
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"健康检查失败: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"ENcheckfailed: {str(e)}")

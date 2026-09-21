@@ -1,85 +1,85 @@
-# AutoClip 埋点体系
+# AutoClip AnalyticsEN
 
-> 工具：**PostHog**（US 区，`https://us.i.posthog.com`）
-> 原则（见 `ROADMAP.md` Phase 0）：**匿名 · 可关 · 本地缓冲**。不采集 PII、视频内容、字幕文本、API key 明文。
+> EN：**PostHog**（US EN，`https://us.i.posthog.com`）
+> EN（EN `ROADMAP.md` Phase 0）：**EN · EN · EN**。EN PII、EN、EN、API key EN。
 
-## 1. 指标框架
+## 1. EN
 
-| 层级 | 指标 | 数据来源 |
+| EN | EN | EN |
 |------|------|---------|
-| 🌟 北极星 | 周成功出片用户数 | `clips_exported` |
-| 获取 | 下载数 / 安装数 | 下载页 / `app_installed` |
-| 激活 | 导入→出片转化率、首次出片耗时 | 漏斗事件 |
-| 留存 | D1/D7/D30、周活 | `app_opened`（PostHog 自动算） |
-| 参与 | 人均出片数、功能渗透率 | 各功能事件 |
-| 变现就绪 | 模型分布、配 key 率、失败率 | `api_key_configured` / `processing_failed` |
+| 🌟 EN | EN | `clips_exported` |
+| EN | EN / EN | EN / `app_installed` |
+| EN | EN→EN、EN | EN |
+| EN | D1/D7/D30、EN | `app_opened`（PostHog EN） |
+| EN | EN、EN | EN |
+| EN | EN、EN key EN、EN | `api_key_configured` / `processing_failed` |
 
-## 2. 核心漏斗
+## 2. EN
 
 ```
-下载 .dmg → app_installed → video_imported → clips_exported(★激活) → 回访(留存)
+EN .dmg → app_installed → video_imported → clips_exported(★EN) → EN(EN)
 ```
 
-## 3. 事件字典
+## 3. EN
 
-命名规范：`对象_动作`，snake_case。代码统一走 `src/analytics/events.ts`，未配置 key 或用户关闭时自动 no-op。
+EN：`EN_EN`，snake_case。EN `src/analytics/events.ts`，EN key EN no-op。
 
-### 生命周期（`src/analytics/lifecycle.ts`）
-| 事件 | 触发 | 属性 |
+### EN（`src/analytics/lifecycle.ts`）
+| EN | EN | EN |
 |------|------|------|
-| `app_installed` | 设备首次启动 | `version, os, arch` |
-| `app_opened` | 每次启动 | `version, session_number` |
-| `app_updated` | 版本号变化 | `from_version, to_version` |
+| `app_installed` | EN | `version, os, arch` |
+| `app_opened` | EN | `version, session_number` |
+| `app_updated` | EN | `from_version, to_version` |
 
-### 激活漏斗
-| 事件 | 触发位置 | 属性 |
+### EN
+| EN | EN | EN |
 |------|---------|------|
 | `video_imported` | `api.ts` `uploadFiles` / `createDownloadTask` / `createYouTubeDownloadTask` | `source(upload/url), fileType, sizeBytes` |
 | `clips_exported` ★ | `api.ts` `downloadVideo` | `clipCount, exportType(clip/collection/project)` |
 
-### 配置
-| 事件 | 触发位置 | 属性 |
+### EN
+| EN | EN | EN |
 |------|---------|------|
-| `api_key_configured` | `SettingsPage` 保存成功后 | `provider, hasKey`（**不传明文**） |
+| `api_key_configured` | `SettingsPage` EN | `provider, hasKey`（**EN**） |
 
-### 错误
-| 事件 | 触发位置 | 属性 |
+### EN
+| EN | EN | EN |
 |------|---------|------|
-| `processing_failed` | `api.ts` 导入/导出 catch | `stage(import/export/...), code, message` |
+| `processing_failed` | `api.ts` EN/EN catch | `stage(import/export/...), code, message` |
 
-> 崩溃/异常栈交给 **Sentry**（Phase 0 另接），PostHog 只记业务失败。
+> EN/EN **Sentry**（Phase 0 EN），PostHog EN。
 
-## 4. 全局属性（Super Properties）
+## 4. EN（Super Properties）
 
-每条事件自动携带，在 `lifecycle.ts` 的 `trackLaunch()` 里注册：
+EN，EN `lifecycle.ts` EN `trackLaunch()` EN：
 `app_version`（Tauri `getVersion()`）· `os` · `arch` · `app_locale`。
 
-## 5. 身份模型
+## 5. EN
 
-- 现在：匿名设备 ID（PostHog 自动，`localStorage` 持久化）。
-- Phase 1 账号上线后：登录 `identifyUser(userId)`、登出 `resetUser()`（`src/analytics/posthog.ts` 已备好）。
+- EN：EN ID（PostHog EN，`localStorage` EN）。
+- Phase 1 AccountEN：EN `identifyUser(userId)`、EN `resetUser()`（`src/analytics/posthog.ts` EN）。
 
-## 6. 下载量（App 外）
+## 6. EN（App EN）
 
-App 内用 `app_installed` 当装机量。若有官网，加 PostHog 网页 snippet 埋 `download_clicked`，串成"落地页→下载→安装"全漏斗。
+App EN `app_installed` EN。EN，EN PostHog EN snippet EN `download_clicked`，EN"EN→EN→EN"EN。
 
-## 7. 隐私 / 合规
+## 7. EN / EN
 
-- 设置页 → 应用设置 → **隐私与数据** 开关（`setAnalyticsEnabled`），状态持久化，重启生效。
-- 默认关录屏、不采 PII、key 只记 `hasKey`。
-- 上线前需配套**隐私政策**（《个人信息保护法》要求）。
+- EN → EN → **EN** EN（`setAnalyticsEnabled`），EN，EN。
+- EN、EN PII、key EN `hasKey`。
+- EN**EN**（《EN》EN）。
 
-## 8. 配置
+## 8. EN
 
-环境变量（`frontend/.env.local`，已 gitignore）：
+EN（`frontend/.env.local`，EN gitignore）：
 ```
 VITE_PUBLIC_POSTHOG_KEY=phc_xxx
 VITE_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
 ```
-缺省时埋点全程 no-op。模板见 `frontend/.env.example`。
+ENAnalyticsEN no-op。EN `frontend/.env.example`。
 
-## 9. 加新事件的步骤
+## 9. EN
 
-1. 在 `events.ts` 的 `AnalyticsEvent` 加常量 + 类型化封装函数。
-2. 在调用点 import 调用（优先放 `services/api.ts` 这类集中层）。
-3. 更新本文件的事件字典。
+1. EN `events.ts` EN `AnalyticsEvent` EN + EN。
+2. EN import EN（EN `services/api.ts` EN）。
+3. EN。

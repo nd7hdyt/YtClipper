@@ -1,9 +1,9 @@
 """
-发布导出：按需把一条切片渲成可直接上传的成片。
+EN：ENclipENuploadEN。
 
-默认流水线仍出 16:9 stream-copy 素材；用户点「发布导出」才重编码。
-一个 ffmpeg 调用：帧精确裁切 + 画幅预设 + 烧字幕 + 标题卡。
-方案见 docs/QUALITY_AND_PUBLISH_PLAN.md 线 2。
+EN 16:9 stream-copy EN；userEN「EN」EN。
+EN ffmpeg call：EN + EN + ENsubtitles + titleEN。
+EN docs/QUALITY_AND_PUBLISH_PLAN.md EN 2。
 """
 from __future__ import annotations
 
@@ -23,11 +23,11 @@ from backend.utils.ffmpeg_utils import get_ffmpeg_path, get_ffprobe_path
 logger = logging.getLogger(__name__)
 
 PRESETS: Dict[str, Dict[str, Any]] = {
-    "douyin": {"label": "抖音 9:16", "w": 1080, "h": 1920, "layout": "blur", "max_sec": None},
-    "xiaohongshu": {"label": "小红书 9:16", "w": 1080, "h": 1920, "layout": "blur", "max_sec": None},
+    "douyin": {"label": "EN 9:16", "w": 1080, "h": 1920, "layout": "blur", "max_sec": None},
+    "xiaohongshu": {"label": "EN 9:16", "w": 1080, "h": 1920, "layout": "blur", "max_sec": None},
     "shorts": {"label": "YouTube Shorts", "w": 1080, "h": 1920, "layout": "crop", "max_sec": 60},
-    "bilibili": {"label": "B 站横屏", "w": 1920, "h": 1080, "layout": "fit", "max_sec": None},
-    "original": {"label": "原画重编码", "w": None, "h": None, "layout": "none", "max_sec": None},
+    "bilibili": {"label": "B EN", "w": 1920, "h": 1080, "layout": "fit", "max_sec": None},
+    "original": {"label": "EN", "w": None, "h": None, "layout": "none", "max_sec": None},
 }
 
 _jobs: Dict[str, Dict[str, Any]] = {}
@@ -41,7 +41,7 @@ class ExportRequest:
     preset: str = "douyin"
     subtitles: bool = True
     title_card: bool = True
-    layout: Optional[str] = None  # 覆盖预设：blur / crop / fit / none
+    layout: Optional[str] = None  # EN：blur / crop / fit / none
 
 
 # ---------------------------------------------------------------- resolve ---
@@ -58,7 +58,7 @@ def find_source_video(project_id: str) -> Path:
     vids = sorted(raw.glob("input.*"))
     if vids:
         return vids[0]
-    raise FileNotFoundError(f"项目 {project_id} 没有源视频（raw/input.*）")
+    raise FileNotFoundError(f"project {project_id} ENvideo（raw/input.*）")
 
 
 def find_source_srt(project_id: str) -> Optional[Path]:
@@ -79,7 +79,7 @@ def load_clip_meta(project_id: str, clip_id: str) -> Dict[str, Any]:
         for c in clips:
             if str(c.get("id")) == str(clip_id):
                 return c
-    raise FileNotFoundError(f"项目 {project_id} 没有切片 {clip_id}")
+    raise FileNotFoundError(f"project {project_id} ENclip {clip_id}")
 
 
 def resolve_cjk_font() -> Optional[Path]:
@@ -160,7 +160,7 @@ def _build_filter(req: ExportRequest, spec: Dict[str, Any], srt_path: Optional[P
     if srt_path is not None:
         style = "Fontsize=16,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Outline=2,Shadow=0,MarginV=48,Alignment=2"
         if font:
-            # FontName 给 libass；mac 上 PingFang SC 通常能解析
+            # FontName EN libass；mac EN PingFang SC ENparse
             style = "FontName=PingFang SC," + style
         nxt = "sub"
         parts.append(f"[{last}]subtitles='{_escape_filter_path(srt_path)}':force_style='{style}'[{nxt}]")
@@ -175,15 +175,15 @@ def _build_filter(req: ExportRequest, spec: Dict[str, Any], srt_path: Optional[P
         last = nxt
     if not parts:
         return None
-    # 最后一条没有输出标签时 ffmpeg 也能用，但我们都打了标签：把最后标签接到默认输出
-    # filter_complex 最后一个 [tag] 需要 map
+    # ENtagsEN ffmpeg EN，ENweENtags：ENtagsEN
+    # filter_complex EN [tag] need map
     return ";".join(parts), last
 
 
 def export_clip(req: ExportRequest) -> Dict[str, Any]:
-    """同步导出一条切片。幂等：同参数已存在直接返回。"""
+    """ENclip。EN：ENparametersalready existsENreturn。"""
     if req.preset not in PRESETS:
-        raise ValueError(f"未知预设: {req.preset}（可选 {', '.join(PRESETS)}）")
+        raise ValueError(f"EN: {req.preset}（EN {', '.join(PRESETS)}）")
     spec = PRESETS[req.preset]
     clip = load_clip_meta(req.project_id, req.clip_id)
     video = find_source_video(req.project_id)
@@ -193,9 +193,9 @@ def export_clip(req: ExportRequest) -> Dict[str, Any]:
     warnings: List[str] = []
     if spec.get("max_sec") and duration > spec["max_sec"]:
         duration = float(spec["max_sec"])
-        warnings.append(f"按时长上限截到 {spec['max_sec']}s（{req.preset}）")
+        warnings.append(f"ENdurationEN {spec['max_sec']}s（{req.preset}）")
 
-    title = str(clip.get("generated_title") or clip.get("title") or clip.get("outline") or f"切片{req.clip_id}")
+    title = str(clip.get("generated_title") or clip.get("title") or clip.get("outline") or f"clip{req.clip_id}")
     from backend.core.path_utils import get_project_directory
     out_dir = get_project_directory(req.project_id) / "output" / "exports"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -217,7 +217,7 @@ def export_clip(req: ExportRequest) -> Dict[str, Any]:
 
     font = resolve_cjk_font()
     if req.title_card and not font:
-        warnings.append("没找到中文字体，已跳过标题卡")
+        warnings.append("EN，ENtitleEN")
     tmpdir = Path(tempfile.mkdtemp(prefix="ac-export-"))
     srt_file = None
     title_file = None
@@ -229,7 +229,7 @@ def export_clip(req: ExportRequest) -> Dict[str, Any]:
                 srt_file = tmpdir / "clip.srt"
                 srt_file.write_text(body, encoding="utf-8")
             else:
-                warnings.append("没有可用字幕，成片不烧字")
+                warnings.append("ENsubtitles，EN")
         if req.title_card and font:
             title_file = tmpdir / "title.txt"
             title_file.write_text(title[:40], encoding="utf-8")
@@ -246,10 +246,10 @@ def export_clip(req: ExportRequest) -> Dict[str, Any]:
             cmd += ["-map", "0:v:0"]
         cmd += ["-map", "0:a:0?", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
                 "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", "-y", str(out_path)]
-        logger.info("发布导出: %s", " ".join(cmd))
+        logger.info("EN: %s", " ".join(cmd))
         proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="ignore")
         if proc.returncode != 0 or not out_path.exists() or out_path.stat().st_size == 0:
-            raise RuntimeError((proc.stderr or proc.stdout or "ffmpeg 失败")[-800])
+            raise RuntimeError((proc.stderr or proc.stdout or "ffmpeg failed")[-800])
 
         info = _probe(out_path)
         result = {
@@ -279,7 +279,7 @@ def _probe(path: Path) -> Dict[str, Any]:
             "duration": round(float((data.get("format") or {}).get("duration") or 0), 2),
         }
     except Exception as e:  # noqa: BLE001
-        logger.debug(f"ffprobe 失败: {e}")
+        logger.debug(f"ffprobe failed: {e}")
         return {}
 
 
@@ -301,7 +301,7 @@ def _run_job(job_id: str, req: ExportRequest) -> None:
         with _jobs_lock:
             _jobs[job_id].update(status="completed", percent=100, result=result)
     except Exception as e:  # noqa: BLE001
-        logger.exception("发布导出失败")
+        logger.exception("ENfailed")
         with _jobs_lock:
             _jobs[job_id].update(status="failed", percent=100, error=str(e)[:500])
 

@@ -1,6 +1,6 @@
 """
-pytest配置文件
-提供共享的fixtures和测试工具
+pytestEN
+ENfixturesEN
 """
 
 import pytest
@@ -12,32 +12,32 @@ from unittest.mock import Mock, MagicMock
 import sys
 import os
 
-# 添加项目根目录到Python路径
+# ENPythonEN
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
 
 @pytest.fixture(scope="session")
 def test_data_dir(tmp_path_factory):
-    """创建测试数据目录"""
+    """EN"""
     return tmp_path_factory.mktemp("test_data")
 
 
 @pytest.fixture
 def sample_srt_file(test_data_dir):
-    """创建示例SRT文件"""
+    """ENSRTEN"""
     srt_file = test_data_dir / "sample.srt"
     srt_content = """1
 00:00:01,000 --> 00:00:05,000
-这是第一段字幕内容
+EN
 
 2
 00:00:05,000 --> 00:00:10,000
-这是第二段字幕内容
+EN
 
 3
 00:00:10,000 --> 00:00:15,000
-这是第三段字幕内容
+EN
 """
     srt_file.write_text(srt_content, encoding='utf-8')
     return srt_file
@@ -45,7 +45,7 @@ def sample_srt_file(test_data_dir):
 
 @pytest.fixture
 def mock_db_session():
-    """创建模拟数据库会话"""
+    """EN"""
     session = Mock()
     session.commit = Mock()
     session.rollback = Mock()
@@ -55,7 +55,7 @@ def mock_db_session():
 
 @pytest.fixture
 def mock_task_repository():
-    """创建模拟任务仓库"""
+    """EN"""
     mock_repo = Mock()
     mock_task = Mock()
     mock_task.id = "test_task_001"
@@ -70,7 +70,7 @@ def mock_task_repository():
 
 @pytest.fixture
 def temp_project_dir(tmp_path):
-    """创建临时项目目录"""
+    """EN"""
     project_dir = tmp_path / "test_project"
     project_dir.mkdir()
     return project_dir
@@ -78,15 +78,15 @@ def temp_project_dir(tmp_path):
 
 @pytest.fixture
 def mock_srt_file(tmp_path):
-    """创建模拟SRT文件"""
+    """ENSRTEN"""
     srt_file = tmp_path / "test.srt"
     srt_content = """1
 00:00:01,000 --> 00:00:05,000
-这是第一段字幕
+EN
 
 2
 00:00:05,000 --> 00:00:10,000
-这是第二段字幕
+EN
 """
     srt_file.write_text(srt_content, encoding='utf-8')
     return srt_file
@@ -94,15 +94,15 @@ def mock_srt_file(tmp_path):
 
 @pytest.fixture
 def invalid_srt_file(tmp_path):
-    """创建无效的SRT文件"""
+    """ENSRTEN"""
     srt_file = tmp_path / "invalid.srt"
-    srt_file.write_text("这不是有效的SRT格式")
+    srt_file.write_text("ENSRTEN")
     return srt_file
 
 
 @pytest.fixture
 def mock_config():
-    """创建模拟配置"""
+    """EN"""
     return {
         "processing_params": {
             "max_clips": 50,
@@ -123,7 +123,7 @@ def mock_config():
 
 @pytest.fixture
 def mock_pipeline_result():
-    """创建模拟流水线结果"""
+    """EN"""
     return {
         "success": True,
         "output_files": {
@@ -141,7 +141,7 @@ def mock_pipeline_result():
 
 @pytest.fixture
 def mock_orchestrator_status():
-    """创建模拟编排器状态"""
+    """EN"""
     return {
         "project_id": "test_project",
         "task_id": "test_task",
@@ -158,7 +158,7 @@ def mock_orchestrator_status():
 
 
 class TestDataManager:
-    """测试数据管理器"""
+    """EN"""
     
     def __init__(self, base_dir: Path):
         self.base_dir = base_dir
@@ -166,15 +166,15 @@ class TestDataManager:
         self.created_dirs = []
     
     def create_srt_file(self, name: str, content: Optional[str] = None) -> Path:
-        """创建SRT文件"""
+        """ENSRTEN"""
         if content is None:
             content = f"""1
 00:00:01,000 --> 00:00:05,000
-{name} 第一段字幕
+{name} EN
 
 2
 00:00:05,000 --> 00:00:10,000
-{name} 第二段字幕
+{name} EN
 """
         
         srt_file = self.base_dir / f"{name}.srt"
@@ -183,11 +183,11 @@ class TestDataManager:
         return srt_file
     
     def create_project_structure(self, project_id: str) -> Path:
-        """创建项目目录结构"""
+        """EN"""
         project_dir = self.base_dir / project_id
         project_dir.mkdir(exist_ok=True)
         
-        # 创建子目录
+        # EN
         subdirs = ["srt", "output", "logs", "temp"]
         for subdir in subdirs:
             (project_dir / subdir).mkdir(exist_ok=True)
@@ -197,7 +197,7 @@ class TestDataManager:
         return project_dir
     
     def create_config_file(self, project_dir: Path, config: dict) -> Path:
-        """创建配置文件"""
+        """EN"""
         config_file = project_dir / "config.yaml"
         import yaml
         with open(config_file, 'w', encoding='utf-8') as f:
@@ -207,7 +207,7 @@ class TestDataManager:
         return config_file
     
     def cleanup(self):
-        """清理创建的测试数据"""
+        """EN"""
         for file_path in self.created_files:
             if file_path.exists():
                 file_path.unlink()
@@ -219,32 +219,32 @@ class TestDataManager:
 
 @pytest.fixture
 def test_data_manager(tmp_path):
-    """创建测试数据管理器"""
+    """EN"""
     manager = TestDataManager(tmp_path)
     yield manager
     manager.cleanup()
 
 
 def assert_file_exists(file_path: Path, description: str = ""):
-    """断言文件存在"""
-    assert file_path.exists(), f"文件不存在: {file_path} {description}"
+    """EN"""
+    assert file_path.exists(), f"EN: {file_path} {description}"
 
 
 def assert_file_content(file_path: Path, expected_content: str, description: str = ""):
-    """断言文件内容"""
+    """EN"""
     assert_file_exists(file_path, description)
     actual_content = file_path.read_text(encoding='utf-8')
     assert actual_content.strip() == expected_content.strip(), \
-        f"文件内容不匹配: {file_path} {description}"
+        f"EN: {file_path} {description}"
 
 
 def assert_dict_contains(dict_obj: dict, expected_keys: list, description: str = ""):
-    """断言字典包含指定键"""
+    """EN"""
     for key in expected_keys:
-        assert key in dict_obj, f"字典缺少键: {key} {description}"
+        assert key in dict_obj, f"EN: {key} {description}"
 
 
 def assert_error_contains(error: Exception, expected_message: str, description: str = ""):
-    """断言错误信息包含指定内容"""
+    """EN"""
     assert expected_message in str(error), \
-        f"错误信息不包含预期内容: {expected_message} {description}" 
+        f"EN: {expected_message} {description}" 

@@ -1,5 +1,5 @@
 """
-投稿相关Celery任务
+ENCelerytask
 """
 
 import logging
@@ -16,48 +16,48 @@ logger = logging.getLogger(__name__)
 
 @celery_app.task(bind=True, name='backend.tasks.upload.upload_clip_task')
 def upload_clip_task(self, record_id: str, clip_id: str):
-    """上传切片任务"""
+    """uploadcliptask"""
     db = SessionLocal()
     try:
-        logger.info(f"开始上传切片: record_id={record_id}, clip_id={clip_id}")
+        logger.info(f"startuploadclip: record_id={record_id}, clip_id={clip_id}")
         
-        # 获取投稿服务
+        # fetchENservice
         upload_service = BilibiliUploadService(db)
         
-        # 转换record_id为整数类型
+        # ENrecord_idEN
         try:
             record_id_int = int(record_id)
         except ValueError:
-            raise ValueError(f"无效的record_id格式: {record_id}")
+            raise ValueError(f"ENrecord_idEN: {record_id}")
         
-        # 获取投稿记录
+        # fetchEN
         upload_record = upload_service.get_upload_record_by_id(record_id_int)
         if not upload_record:
-            raise ValueError(f"投稿记录不存在: {record_id}")
+            raise ValueError(f"ENdoes not exist: {record_id}")
         
-        # 构建视频文件路径
+        # ENvideofilepath
         project_output_dir = get_project_output_directory(str(upload_record.project_id))
-        logger.info(f"项目输出目录: {project_output_dir}")
+        logger.info(f"projectENdirectory: {project_output_dir}")
         
-        # 获取clip信息以匹配正确的文件名
+        # fetchclipENfileEN
         from ..models.clip import Clip
         clip = db.query(Clip).filter(Clip.id == clip_id).first()
         if not clip:
-            raise ValueError(f"切片记录不存在: {clip_id}")
+            raise ValueError(f"clipENdoes not exist: {clip_id}")
         
         clip_title = clip.title or clip.generated_title or ""
-        logger.info(f"切片标题: {clip_title}")
+        logger.info(f"cliptitle: {clip_title}")
         
-        # 尝试多种可能的文件命名模式
+        # ENmayENfileEN
         possible_paths = [
-            project_output_dir / "clips" / f"{clip_id}.mp4",  # 标准命名
-            project_output_dir / "clips" / f"{clip_id}_clip_{clip_id}.mp4",  # 带clip后缀的命名
-            project_output_dir / "clips" / f"{clip_id}_clip.mp4",  # 简化clip后缀
+            project_output_dir / "clips" / f"{clip_id}.mp4",  # EN
+            project_output_dir / "clips" / f"{clip_id}_clip_{clip_id}.mp4",  # ENclipEN
+            project_output_dir / "clips" / f"{clip_id}_clip.mp4",  # ENclipEN
         ]
         
-        # 如果clip有标题，尝试通过标题匹配
+        # ifclipENtitle，ENthroughtitleEN
         if clip_title:
-            # 清理标题中的特殊字符，用于文件名匹配
+            # ENtitleEN，ENfileEN
             import re
             clean_title = re.sub(r'[<>:"/\\|?*]', '', clip_title)
             possible_paths.extend([
@@ -65,68 +65,68 @@ def upload_clip_task(self, record_id: str, clip_id: str):
                 project_output_dir / "clips" / f"*{clean_title}*.mp4",
             ])
         
-        logger.info(f"尝试查找文件，可能的路径: {[str(p) for p in possible_paths]}")
+        logger.info(f"ENfile，mayENpath: {[str(p) for p in possible_paths]}")
         
-        # 查找视频文件
+        # ENvideofile
         video_path = None
         for path in possible_paths:
             if path.exists():
                 video_path = path
-                logger.info(f"找到视频文件: {video_path}")
+                logger.info(f"ENvideofile: {video_path}")
                 break
         
         if not video_path:
-            # 如果标准路径都没找到，尝试在clips目录下查找所有mp4文件
+            # ifENpathEN，ENclipsdirectoryENallmp4file
             clips_dir = project_output_dir / "clips"
             if clips_dir.exists():
                 mp4_files = list(clips_dir.glob("*.mp4"))
-                logger.info(f"clips目录下的所有mp4文件: {[str(f) for f in mp4_files]}")
+                logger.info(f"clipsdirectoryENallmp4file: {[str(f) for f in mp4_files]}")
                 
-                # 如果只有一个mp4文件，就使用它
+                # ifENmp4file，ENuseEN
                 if len(mp4_files) == 1:
                     video_path = mp4_files[0]
-                    logger.info(f"使用唯一的mp4文件: {video_path}")
+                    logger.info(f"useENmp4file: {video_path}")
                 else:
-                    # 尝试通过标题匹配文件名
+                    # ENthroughtitleENfileEN
                     if clip_title:
                         for mp4_file in mp4_files:
-                            # 检查文件名是否包含标题的关键词
-                            if any(keyword in mp4_file.name for keyword in clip_title.split()[:3]):  # 使用标题的前3个词
+                            # checkfileENtitleEN
+                            if any(keyword in mp4_file.name for keyword in clip_title.split()[:3]):  # usetitleEN3EN
                                 video_path = mp4_file
-                                logger.info(f"通过标题匹配找到: {video_path}")
+                                logger.info(f"throughtitleEN: {video_path}")
                                 break
                     
-                    # 如果还是没找到，尝试通过clip_id匹配
+                    # ifEN，ENthroughclip_idEN
                     if not video_path:
                         for mp4_file in mp4_files:
                             if clip_id in mp4_file.name:
                                 video_path = mp4_file
-                                logger.info(f"通过clip_id匹配找到: {video_path}")
+                                logger.info(f"throughclip_idEN: {video_path}")
                                 break
         
         if not video_path:
-            raise FileNotFoundError(f"未找到切片视频文件: {clip_id}")
+            raise FileNotFoundError(f"not foundclipvideofile: {clip_id}")
         
-        # 检查文件大小
+        # checkfileEN
         file_size = video_path.stat().st_size
-        logger.info(f"视频文件大小: {file_size} bytes")
+        logger.info(f"videofileEN: {file_size} bytes")
         
         if file_size == 0:
-            raise ValueError("视频文件为空")
+            raise ValueError("videofileEN")
         
-        # 执行上传
-        logger.info(f"开始上传视频: {video_path}")
+        # executeupload
+        logger.info(f"startuploadvideo: {video_path}")
         success = upload_service.upload_clip_sync(record_id_int, str(video_path))
         
         if success:
-            logger.info(f"切片上传成功: {clip_id}")
+            logger.info(f"clipuploadsucceeded: {clip_id}")
             upload_service.update_upload_status(record_id_int, "success")
         else:
-            logger.error(f"切片上传失败: {clip_id}")
-            upload_service.update_upload_status(record_id_int, "failed", "上传失败")
+            logger.error(f"clipuploadfailed: {clip_id}")
+            upload_service.update_upload_status(record_id_int, "failed", "uploadfailed")
             
     except Exception as e:
-        logger.error(f"上传切片任务失败: {str(e)}")
+        logger.error(f"uploadcliptaskfailed: {str(e)}")
         upload_service.update_upload_status(record_id_int, "failed", str(e))
         raise
     finally:
@@ -135,67 +135,67 @@ def upload_clip_task(self, record_id: str, clip_id: str):
 
 @celery_app.task(bind=True, name='backend.tasks.upload.upload_project_task')
 def upload_project_task(self, record_id: str, clip_ids: list):
-    """上传项目任务"""
+    """uploadprojecttask"""
     db = SessionLocal()
     try:
-        logger.info(f"开始上传项目: record_id={record_id}, clip_ids={clip_ids}")
+        logger.info(f"startuploadproject: record_id={record_id}, clip_ids={clip_ids}")
         
-        # 获取投稿服务
+        # fetchENservice
         upload_service = BilibiliUploadService(db)
         
-        # 转换record_id为整数类型
+        # ENrecord_idEN
         try:
             record_id_int = int(record_id)
         except ValueError:
-            raise ValueError(f"无效的record_id格式: {record_id}")
+            raise ValueError(f"ENrecord_idEN: {record_id}")
         
-        # 获取投稿记录
+        # fetchEN
         upload_record = upload_service.get_upload_record_by_id(record_id_int)
         if not upload_record:
-            raise ValueError(f"投稿记录不存在: {record_id}")
+            raise ValueError(f"ENdoes not exist: {record_id}")
         
-        # 构建视频文件路径
+        # ENvideofilepath
         project_output_dir = get_project_output_directory(str(upload_record.project_id))
-        logger.info(f"项目输出目录: {project_output_dir}")
+        logger.info(f"projectENdirectory: {project_output_dir}")
         
-        # 查找所有切片文件
+        # ENallclipfile
         clips_dir = project_output_dir / "clips"
         if not clips_dir.exists():
-            raise FileNotFoundError(f"clips目录不存在: {clips_dir}")
+            raise FileNotFoundError(f"clipsdirectorydoes not exist: {clips_dir}")
         
-        # 获取所有mp4文件
+        # fetchallmp4file
         mp4_files = list(clips_dir.glob("*.mp4"))
-        logger.info(f"找到的mp4文件: {[str(f) for f in mp4_files]}")
+        logger.info(f"ENmp4file: {[str(f) for f in mp4_files]}")
         
         if not mp4_files:
-            raise FileNotFoundError("未找到任何mp4文件")
+            raise FileNotFoundError("not foundENmp4file")
         
-        # 如果只有一个文件，直接上传
+        # ifENfile，ENupload
         if len(mp4_files) == 1:
             video_path = mp4_files[0]
-            logger.info(f"单个文件上传: {video_path}")
+            logger.info(f"ENfileupload: {video_path}")
             
-            # 检查文件大小
+            # checkfileEN
             file_size = video_path.stat().st_size
             if file_size == 0:
-                raise ValueError("视频文件为空")
+                raise ValueError("videofileEN")
             
-            # 执行上传
+            # executeupload
             success = upload_service.upload_clip(record_id_int, str(video_path))
             
             if success:
-                logger.info("项目上传成功")
+                logger.info("projectuploadsucceeded")
                 upload_service.update_upload_status(record_id_int, "success")
             else:
-                logger.error("项目上传失败")
-                upload_service.update_upload_status(record_id_int, "failed", "上传失败")
+                logger.error("projectuploadfailed")
+                upload_service.update_upload_status(record_id_int, "failed", "uploadfailed")
         else:
-            # 多个文件的情况，这里可以扩展为合并上传或分别上传
-            logger.warning(f"发现多个视频文件，当前只支持单个文件上传: {len(mp4_files)}")
-            upload_service.update_upload_status(record_id_int, "failed", "暂不支持多文件上传")
+            # ENfileEN，ENcanENuploadENupload
+            logger.warning(f"ENvideofile，currentENfileupload: {len(mp4_files)}")
+            upload_service.update_upload_status(record_id_int, "failed", "ENfileupload")
             
     except Exception as e:
-        logger.error(f"上传项目任务失败: {str(e)}")
+        logger.error(f"uploadprojecttaskfailed: {str(e)}")
         upload_service.update_upload_status(record_id_int, "failed", str(e))
         raise
     finally:

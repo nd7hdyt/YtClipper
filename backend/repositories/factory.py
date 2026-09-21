@@ -1,6 +1,6 @@
 """
-Repository工厂
-提供统一的Repository实例化和管理
+RepositoryEN
+ENRepositoryEN
 """
 
 from typing import Dict, Type
@@ -12,51 +12,51 @@ from ..repositories.collection_repository import CollectionRepository
 from ..repositories.task_repository import TaskRepository
 
 class RepositoryFactory:
-    """Repository工厂类"""
+    """RepositoryEN"""
     
     def __init__(self, db: Session):
         """
-        初始化Repository工厂
+        initializeRepositoryEN
         
         Args:
-            db: 数据库会话
+            db: databaseEN
         """
         self.db = db
         self._repositories: Dict[str, BaseRepository] = {}
     
     def get_project_repository(self) -> ProjectRepository:
-        """获取项目Repository"""
+        """fetchprojectRepository"""
         if "project" not in self._repositories:
             self._repositories["project"] = ProjectRepository(self.db)
         return self._repositories["project"]
     
     def get_clip_repository(self) -> ClipRepository:
-        """获取切片Repository"""
+        """fetchclipRepository"""
         if "clip" not in self._repositories:
             self._repositories["clip"] = ClipRepository(self.db)
         return self._repositories["clip"]
     
     def get_collection_repository(self) -> CollectionRepository:
-        """获取合集Repository"""
+        """fetchcollectionRepository"""
         if "collection" not in self._repositories:
             self._repositories["collection"] = CollectionRepository(self.db)
         return self._repositories["collection"]
     
     def get_task_repository(self) -> TaskRepository:
-        """获取任务Repository"""
+        """fetchtaskRepository"""
         if "task" not in self._repositories:
             self._repositories["task"] = TaskRepository(self.db)
         return self._repositories["task"]
     
     def get_repository(self, repository_type: str) -> BaseRepository:
         """
-        根据类型获取Repository
+        ENfetchRepository
         
         Args:
-            repository_type: Repository类型
+            repository_type: RepositoryEN
             
         Returns:
-            Repository实例
+            RepositoryEN
         """
         repository_map = {
             "project": self.get_project_repository,
@@ -71,29 +71,29 @@ class RepositoryFactory:
         return repository_map[repository_type]()
     
     def clear_cache(self):
-        """清除Repository缓存"""
+        """ENRepositorycache"""
         self._repositories.clear()
     
     def __enter__(self):
-        """上下文管理器入口"""
+        """EN"""
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """上下文管理器出口"""
+        """EN"""
         self.clear_cache()
 
-# 全局Repository工厂实例
+# ENRepositoryEN
 _repository_factory: RepositoryFactory = None
 
 def get_repository_factory(db: Session) -> RepositoryFactory:
     """
-    获取Repository工厂实例
+    fetchRepositoryEN
     
     Args:
-        db: 数据库会话
+        db: databaseEN
         
     Returns:
-        Repository工厂实例
+        RepositoryEN
     """
     global _repository_factory
     if _repository_factory is None or _repository_factory.db != db:
@@ -102,48 +102,48 @@ def get_repository_factory(db: Session) -> RepositoryFactory:
 
 def get_project_repository(db: Session) -> ProjectRepository:
     """
-    获取项目Repository
+    fetchprojectRepository
     
     Args:
-        db: 数据库会话
+        db: databaseEN
         
     Returns:
-        项目Repository实例
+        projectRepositoryEN
     """
     return get_repository_factory(db).get_project_repository()
 
 def get_clip_repository(db: Session) -> ClipRepository:
     """
-    获取切片Repository
+    fetchclipRepository
     
     Args:
-        db: 数据库会话
+        db: databaseEN
         
     Returns:
-        切片Repository实例
+        clipRepositoryEN
     """
     return get_repository_factory(db).get_clip_repository()
 
 def get_collection_repository(db: Session) -> CollectionRepository:
     """
-    获取合集Repository
+    fetchcollectionRepository
     
     Args:
-        db: 数据库会话
+        db: databaseEN
         
     Returns:
-        合集Repository实例
+        collectionRepositoryEN
     """
     return get_repository_factory(db).get_collection_repository()
 
 def get_task_repository(db: Session) -> TaskRepository:
     """
-    获取任务Repository
+    fetchtaskRepository
     
     Args:
-        db: 数据库会话
+        db: databaseEN
         
     Returns:
-        任务Repository实例
+        taskRepositoryEN
     """
     return get_repository_factory(db).get_task_repository() 

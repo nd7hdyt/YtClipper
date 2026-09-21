@@ -1,5 +1,5 @@
 """
-文本处理工具
+ENprocessingEN
 """
 import json
 import logging
@@ -7,11 +7,11 @@ import re
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 
-# 修复导入问题
+# EN
 try:
     from ..core.shared_config import CHUNK_SIZE
 except ImportError:
-    # 如果相对导入失败，尝试绝对导入
+    # ifENfailed，EN
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -24,19 +24,19 @@ import pysrt
 logger = logging.getLogger(__name__)
 
 class TextProcessor:
-    """文本处理工具类"""
+    """ENprocessingEN"""
     
     @staticmethod
     def chunk_text(text: str, chunk_size: int = CHUNK_SIZE) -> List[str]:
         """
-        将长文本按指定大小分块
+        EN
         
         Args:
-            text: 输入文本
-            chunk_size: 分块大小
+            text: EN
+            chunk_size: EN
             
         Returns:
-            文本块列表
+            EN
         """
         if len(text) <= chunk_size:
             return [text]
@@ -44,21 +44,21 @@ class TextProcessor:
         chunks = []
         current_chunk = ""
         
-        # 按段落分割
+        # EN
         paragraphs = text.split('\n')
         
         for paragraph in paragraphs:
-            # 如果当前块加上新段落不超过限制，则添加
+            # ifcurrentEN，thenEN
             if len(current_chunk) + len(paragraph) + 1 <= chunk_size:
                 current_chunk += paragraph + '\n'
             else:
-                # 如果当前块不为空，保存它
+                # ifcurrentEN，saveEN
                 if current_chunk.strip():
                     chunks.append(current_chunk.strip())
                 
-                # 如果单个段落就超过限制，需要进一步分割
+                # ifEN，needEN
                 if len(paragraph) > chunk_size:
-                    # 按句子分割
+                    # EN
                     sentences = re.split(r'[。！？]', paragraph)
                     temp_chunk = ""
                     for sentence in sentences:
@@ -72,7 +72,7 @@ class TextProcessor:
                 else:
                     current_chunk = paragraph + '\n'
         
-        # 添加最后一个块
+        # EN
         if current_chunk.strip():
             chunks.append(current_chunk.strip())
         
@@ -80,21 +80,21 @@ class TextProcessor:
     
     def chunk_srt_data(self, srt_data: List[Dict], interval_minutes: int = 30, pause_threshold_ms: int = 1000) -> List[Dict]:
         """
-        根据停顿时间，将SRT数据切分为大约相等时间长度的块。
-        这可以避免在对话中间断开。
+        ENtime，ENSRTENtimeEN。
+        ENcanENdisconnect。
 
         Args:
-            srt_data: SRT数据列表
-            interval_minutes: 每个块的目标时间长度（分钟）
-            pause_threshold_ms: 识别为停顿的最小毫秒数
+            srt_data: SRTEN
+            interval_minutes: eachENtimeEN（EN）
+            pause_threshold_ms: EN
 
         Returns:
-            结构化的块列表，其中的 srt_entries 不包含临时处理字段。
+            EN，amongEN srt_entries ENprocessingEN。
         """
         if not srt_data:
             return []
 
-        # 创建一个带有秒数的新列表，而不是修改原始数据
+        # createEN，EN
         srt_data_with_seconds = []
         for sub in srt_data:
             entry = sub.copy()
@@ -112,47 +112,47 @@ class TextProcessor:
         while current_chunk_start_index < len(srt_data_with_seconds):
             target_cut_time = last_cut_time + interval_seconds
             
-            # 寻找接近目标时间的最佳切分点
+            # ENtimeEN
             best_cut_index = -1
             
-            # 查找从当前块开始后的 90% 到 110% 目标时间内的一个停顿
+            # ENcurrentENstartEN 90% EN 110% ENtimeEN
             search_start_index = current_chunk_start_index
             while search_start_index < len(srt_data_with_seconds) and srt_data_with_seconds[search_start_index]['start_seconds'] < target_cut_time * 0.9:
                 search_start_index += 1
 
-            # 从搜索起点开始寻找超过阈值的停顿
+            # ENstartEN
             for i in range(search_start_index, len(srt_data_with_seconds) - 1):
                 current_sub = srt_data_with_seconds[i]
                 next_sub = srt_data_with_seconds[i+1]
                 
-                # 如果我们已经超出了目标时间的110%，就停止搜索
+                # ifwealreadyENtimeEN110%，ENstopEN
                 if current_sub['start_seconds'] > target_cut_time * 1.1:
                     break
                 
-                # 计算两个字幕条目之间的停顿时间
+                # ENsubtitlesENtime
                 pause = next_sub['start_seconds'] - current_sub['end_seconds']
                 if pause * 1000 >= pause_threshold_ms:
-                    best_cut_index = i + 1  # 在停顿后切分
+                    best_cut_index = i + 1  # EN
                     break
             
-            # 如果没有找到合适的停顿点，就在目标时间点强制切分
+            # ifEN，ENtimeEN
             if best_cut_index == -1:
-                # 寻找最接近目标时间的字幕条目
+                # ENtimeENsubtitlesEN
                 i = current_chunk_start_index
                 while i < len(srt_data_with_seconds) and srt_data_with_seconds[i]['start_seconds'] < target_cut_time:
                     i += 1
                 best_cut_index = i if i < len(srt_data_with_seconds) else len(srt_data_with_seconds)
 
-            # 如果切分点无效或过小，则将所有剩余部分作为一个块
+            # ifEN，thenENallEN
             if best_cut_index <= current_chunk_start_index:
                  best_cut_index = len(srt_data_with_seconds)
 
-            # 创建块
+            # createEN
             chunk_entries_with_seconds = srt_data_with_seconds[current_chunk_start_index:best_cut_index]
             if not chunk_entries_with_seconds:
                 break
 
-            # 移除临时字段，得到干净的srt_entries
+            # EN，ENsrt_entries
             chunk_entries = []
             for entry in chunk_entries_with_seconds:
                 clean_entry = entry.copy()
@@ -181,27 +181,27 @@ class TextProcessor:
     @staticmethod
     def parse_srt(srt_path: Path) -> List[Dict]:
         """
-        解析SRT字幕文件
+        parseSRTsubtitlesfile
         
         Args:
-            srt_path: SRT文件路径
+            srt_path: SRTfilepath
             
         Returns:
-            字幕数据列表，每个元素包含时间戳和文本
+            subtitlesEN，eachENtimeEN
         """
         if not srt_path.exists():
-            logger.error(f"SRT文件不存在: {srt_path}")
+            logger.error(f"SRTfiledoes not exist: {srt_path}")
             return []
         
         if srt_path.stat().st_size == 0:
-            logger.warning(f"SRT文件为空: {srt_path}")
+            logger.warning(f"SRTfileEN: {srt_path}")
             return []
 
         try:
             try:
                 subs = pysrt.open(str(srt_path), encoding='utf-8')
             except UnicodeDecodeError:
-                logger.warning("UTF-8解码失败，尝试使用 utf-8-sig...")
+                logger.warning("UTF-8ENfailed，ENuse utf-8-sig...")
                 subs = pysrt.open(str(srt_path), encoding='utf-8-sig')
 
             subtitles = []
@@ -214,40 +214,40 @@ class TextProcessor:
                 })
 
             if not subtitles:
-                logger.warning(f"成功打开SRT文件但未能解析出任何字幕内容: {srt_path}")
+                logger.warning(f"succeededENSRTfileENparseENsubtitlesEN: {srt_path}")
             
             return subtitles
         except Exception as e:
-            logger.error(f"使用pysrt解析SRT文件'{srt_path}'时发生未知错误: {e}", exc_info=True)
+            logger.error(f"usepysrtparseSRTfile'{srt_path}'ENUnknown error: {e}", exc_info=True)
             return []
     
     @staticmethod
     def extract_text_by_time_range(text: str, srt_data: List[Dict], 
                                   start_time: str, end_time: str) -> str:
         """
-        根据时间范围从文本中提取对应内容
+        ENtimeEN
         
         Args:
-            text: 完整文本
-            srt_data: SRT字幕数据
-            start_time: 开始时间 (格式: "00:01:25")
-            end_time: 结束时间 (格式: "00:02:53")
+            text: EN
+            srt_data: SRTsubtitlesEN
+            start_time: starttime (EN: "00:01:25")
+            end_time: endtime (EN: "00:02:53")
             
         Returns:
-            对应时间范围的文本内容
+            ENtimeEN
         """
-        # 找到时间范围内的字幕
+        # ENtimeENsubtitles
         target_subtitles = []
         
         for sub in srt_data:
             sub_start = sub['start_time']
             sub_end = sub['end_time']
             
-            # 检查时间重叠
+            # checktimeEN
             if (sub_start <= end_time and sub_end >= start_time):
                 target_subtitles.append(sub)
         
-        # 提取对应的文本
+        # EN
         extracted_text = ""
         for sub in target_subtitles:
             extracted_text += sub['text'] + " "
@@ -257,13 +257,13 @@ class TextProcessor:
     @staticmethod
     def time_to_seconds(time_str: str) -> float:
         """
-        将SRT时间字符串（HH:MM:SS,mmm）转换为秒数
+        ENSRTtimeEN（HH:MM:SS,mmm）EN
         
         Args:
-            time_str: 时间字符串
+            time_str: timeEN
             
         Returns:
-            秒数
+            EN
         """
         time_str = time_str.replace(',', '.')
         parts = time_str.split(':')
@@ -276,18 +276,18 @@ class TextProcessor:
             ms = int(s_parts[1]) if len(s_parts) > 1 else 0
             return h * 3600 + m * 60 + s + ms / 1000.0
         
-        raise ValueError(f"无效的时间格式: {time_str}")
+        raise ValueError(f"ENtimeEN: {time_str}")
     
     @staticmethod
     def seconds_to_time(seconds: float) -> str:
         """
-        将秒数转换为时间字符串
+        ENtimeEN
         
         Args:
-            seconds: 秒数
+            seconds: EN
             
         Returns:
-            时间字符串 (格式: "00:01:25")
+            timeEN (EN: "00:01:25")
         """
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)

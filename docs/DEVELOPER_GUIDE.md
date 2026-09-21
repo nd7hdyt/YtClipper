@@ -1,200 +1,200 @@
-# 👨‍💻 AutoClip Desktop 开发者指南
+# 👨‍💻 AutoClip Desktop EN
 
-## 📋 目录
+## 📋 EN
 
-- [项目架构](#项目架构)
-- [开发环境设置](#开发环境设置)
-- [代码结构](#代码结构)
-- [核心模块](#核心模块)
-- [API接口](#api接口)
-- [前端开发](#前端开发)
-- [后端开发](#后端开发)
-- [Tauri集成](#tauri集成)
-- [构建和部署](#构建和部署)
-- [测试](#测试)
-- [贡献指南](#贡献指南)
+- [EN](#EN)
+- [EN](#EN)
+- [EN](#EN)
+- [EN](#EN)
+- [APIEN](#apiEN)
+- [EN](#EN)
+- [EN](#EN)
+- [TauriEN](#tauriEN)
+- [EN](#EN)
+- [EN](#EN)
+- [Contributing](#Contributing)
 
-## 🏗️ 项目架构
+## 🏗️ EN
 
-### 整体架构
+### EN
 
 ```
 AutoClip Desktop
 ├── Frontend (React + TypeScript + Ant Design)
 ├── Backend (Python + FastAPI + Celery)
 ├── Tauri (Rust + WebView)
-└── Resources (FFmpeg + 模型文件)
+└── Resources (FFmpeg + EN)
 ```
 
-### 技术栈
+### Tech Stack
 
-- **前端**: React 18, TypeScript, Ant Design, Vite
-- **后端**: Python 3.10+, FastAPI, Celery, SQLAlchemy
-- **桌面**: Tauri 2.0, Rust
-- **数据库**: SQLite (桌面模式)
-- **任务队列**: Celery with SQLite transport
-- **AI服务**: OpenAI, DashScope, Google Gemini
-- **语音识别**: Whisper, 云端API
+- **EN**: React 18, TypeScript, Ant Design, Vite
+- **EN**: Python 3.10+, FastAPI, Celery, SQLAlchemy
+- **EN**: Tauri 2.0, Rust
+- **EN**: SQLite (EN)
+- **Task Queue**: Celery with SQLite transport
+- **AIEN**: OpenAI, DashScope, Google Gemini
+- **EN**: Whisper, ENAPI
 
-## 🛠️ 开发环境设置
+## 🛠️ EN
 
-### 系统要求
+### EN
 
 - **Node.js**: 18.0+
-- **Python**: 3.10+（推荐 3.11）
+- **Python**: 3.10+（EN 3.11）
 - **Rust**: 1.70+
 - **Git**: 2.0+
 
-### 安装步骤
+### EN
 
-1. **克隆项目**
+1. **EN**
 ```bash
 git clone https://github.com/your-org/autoclip-desktop.git
 cd autoclip-desktop
 ```
 
-2. **安装前端依赖**
+2. **EN**
 ```bash
 cd frontend
 npm install
 ```
 
-3. **安装后端依赖**
+3. **EN**
 ```bash
 cd ../backend
 pip install -r requirements.txt
 ```
 
-4. **安装Tauri依赖**
+4. **ENTauriEN**
 ```bash
 cd ../src-tauri
 cargo install tauri-cli
 ```
 
-5. **设置环境变量**
+5. **EN**
 ```bash
-# 复制环境变量模板
+# EN
 cp .env.example .env
 
-# 编辑环境变量
+# EN
 nano .env
 ```
 
-### 开发环境配置
+### EN
 
 ```bash
-# 启动开发环境
+# EN
 npm run dev
 
-# 启动后端服务
+# EN
 python backend/desktop_main.py
 
-# 构建Tauri应用
+# ENTauriEN
 npm run tauri build
 ```
 
-## 📁 代码结构
+## 📁 EN
 
-### 前端结构
+### EN
 
 ```
 frontend/
 ├── src/
-│   ├── components/          # 通用组件
+│   ├── components/          # EN
 │   │   ├── ErrorBoundary.tsx
 │   │   ├── OfflineIndicator.tsx
 │   │   └── ...
-│   ├── pages/              # 页面组件
+│   ├── pages/              # EN
 │   │   ├── HomePage.tsx
 │   │   ├── SettingsPage.tsx
 │   │   ├── OnboardingPage.tsx
 │   │   └── ...
-│   ├── hooks/              # 自定义Hooks
+│   ├── hooks/              # ENHooks
 │   │   ├── useFirstRun.ts
 │   │   ├── useDesktopConfig.ts
 │   │   └── ...
-│   ├── services/           # API服务
+│   ├── services/           # APIEN
 │   │   ├── api.ts
 │   │   ├── projectApi.ts
 │   │   └── ...
-│   ├── store/              # 状态管理
+│   ├── store/              # EN
 │   │   ├── useProjectStore.ts
 │   │   ├── useConfigStore.ts
 │   │   └── ...
-│   ├── utils/              # 工具函数
+│   ├── utils/              # EN
 │   │   ├── apiUtils.ts
 │   │   ├── errorHandler.ts
 │   │   └── ...
-│   └── types/              # 类型定义
+│   └── types/              # EN
 │       ├── api.ts
 │       ├── project.ts
 │       └── ...
-├── public/                 # 静态资源
+├── public/                 # EN
 └── package.json
 ```
 
-### 后端结构
+### EN
 
 ```
 backend/
-├── api/                    # API路由
+├── api/                    # APIEN
 │   └── v1/
 │       ├── projects.py
 │       ├── settings.py
 │       ├── health.py
 │       └── ...
-├── core/                   # 核心模块
+├── core/                   # EN
 │   ├── desktop_config.py
 │   ├── llm_providers.py
 │   ├── speech_recognition.py
 │   └── ...
-├── services/               # 业务服务
+├── services/               # EN
 │   ├── project_service.py
 │   ├── video_service.py
 │   ├── ai_service.py
 │   └── ...
-├── models/                 # 数据模型
+├── models/                 # EN
 │   ├── project.py
 │   ├── clip.py
 │   └── ...
-├── utils/                  # 工具模块
+├── utils/                  # EN
 │   ├── error_handler.py
 │   ├── performance_config.py
 │   ├── chunked_upload.py
 │   └── ...
-├── tasks/                  # Celery任务
+├── tasks/                  # CeleryEN
 │   ├── __init__.py
 │   ├── video_tasks.py
 │   └── ...
-├── desktop_main.py         # 桌面应用入口
-├── desktop_celery.py       # 桌面Celery配置
+├── desktop_main.py         # EN
+├── desktop_celery.py       # ENCeleryEN
 └── requirements.txt
 ```
 
-### Tauri结构
+### TauriEN
 
 ```
 src-tauri/
 ├── src/
-│   ├── lib.rs              # 主入口
-│   ├── commands.rs         # Tauri命令
-│   ├── backend_manager.rs  # 后端管理
-│   └── tray.rs             # 系统托盘
-├── Cargo.toml              # Rust依赖
-├── tauri.conf.json         # Tauri配置
-└── resources/              # 资源文件
-    └── ffmpeg/             # FFmpeg二进制
+│   ├── lib.rs              # EN
+│   ├── commands.rs         # TauriEN
+│   ├── backend_manager.rs  # EN
+│   └── tray.rs             # EN
+├── Cargo.toml              # RustEN
+├── tauri.conf.json         # TauriEN
+└── resources/              # EN
+    └── ffmpeg/             # FFmpegEN
 ```
 
-## 🔧 核心模块
+## 🔧 EN
 
-### 1. 桌面配置管理
+### 1. EN
 
-**文件**: `backend/core/desktop_config.py`
+**EN**: `backend/core/desktop_config.py`
 
 ```python
 class DesktopConfig:
-    """桌面应用配置管理"""
+    """EN"""
     
     def __init__(self):
         self.data_dir = self._get_desktop_data_dir()
@@ -202,10 +202,10 @@ class DesktopConfig:
         self.settings_file = self.data_dir / "settings.json"
     
     def save_desktop_config(self, config: 'DesktopConfig') -> bool:
-        """保存桌面配置"""
+        """EN"""
         try:
             config_dict = config.dict()
-            # 递归转换Path对象为字符串
+            # ENPathEN
             config_dict = self._convert_paths_to_strings(config_dict)
             
             with open(self.config_file, 'w', encoding='utf-8') as f:
@@ -213,45 +213,45 @@ class DesktopConfig:
             
             return True
         except Exception as e:
-            logger.error(f"保存桌面配置失败: {e}")
+            logger.error(f"EN: {e}")
             return False
 ```
 
-### 2. 语音识别服务
+### 2. EN
 
-**文件**: `backend/core/speech_recognition.py`
+**EN**: `backend/core/speech_recognition.py`
 
 ```python
 class SpeechRecognizer:
-    """语音识别服务"""
+    """EN"""
     
     def __init__(self, config: SpeechRecognitionConfig):
         self.config = config
         self.recognizer = self._create_recognizer()
     
     def transcribe_audio(self, audio_path: str) -> str:
-        """转写音频文件"""
+        """EN"""
         if self.config.provider == "whisper_local":
             return self._transcribe_with_whisper(audio_path)
         elif self.config.provider == "openai":
             return self._transcribe_with_openai(audio_path)
-        # ... 其他服务
+        # ... EN
 ```
 
-### 3. 性能优化
+### 3. Performance
 
-**文件**: `backend/utils/performance_config.py`
+**EN**: `backend/utils/performance_config.py`
 
 ```python
 class PerformanceConfig:
-    """性能配置管理"""
+    """EN"""
     
     def __init__(self, level: str = "medium"):
         self.level = level
         self.settings = self._get_settings_for_level(level)
     
     def _get_settings_for_level(self, level: str) -> PerformanceSettings:
-        """根据级别获取性能设置"""
+        """EN"""
         levels = {
             "low": PerformanceSettings(
                 max_concurrent_tasks=1,
@@ -272,56 +272,56 @@ class PerformanceConfig:
         return levels.get(level, levels["medium"])
 ```
 
-## 🔌 API接口
+## 🔌 APIEN
 
-### 项目管理API
+### Project ManagementAPI
 
 ```python
-# 创建项目
+# EN
 @router.post("/projects", response_model=ProjectResponse)
 async def create_project(project: ProjectCreate):
-    """创建新项目"""
+    """EN"""
     return await project_service.create_project(project)
 
-# 获取项目列表
+# EN
 @router.get("/projects", response_model=List[ProjectResponse])
 async def get_projects():
-    """获取项目列表"""
+    """EN"""
     return await project_service.get_projects()
 
-# 获取项目详情
+# EN
 @router.get("/projects/{project_id}", response_model=ProjectDetailResponse)
 async def get_project(project_id: int):
-    """获取项目详情"""
+    """EN"""
     return await project_service.get_project(project_id)
 ```
 
-### 设置管理API
+### ENAPI
 
 ```python
-# 更新设置
+# EN
 @router.put("/settings", response_model=SettingsResponse)
 async def update_settings(settings: DesktopSettings):
-    """更新应用设置"""
+    """EN"""
     config = get_desktop_config()
     config.settings = settings
     save_desktop_config(config)
     return SettingsResponse(success=True)
 
-# 测试API连接
+# ENAPIEN
 @router.post("/settings/test-api", response_model=ApiTestResponse)
 async def test_api_connection(request: TestApiRequest):
-    """测试API连接"""
+    """ENAPIEN"""
     provider = create_llm_provider(request.provider, request.api_key)
     success = provider.test_connection()
     return ApiTestResponse(success=success)
 ```
 
-## 🎨 前端开发
+## 🎨 EN
 
-### 状态管理
+### EN
 
-**文件**: `frontend/src/store/useProjectStore.ts`
+**EN**: `frontend/src/store/useProjectStore.ts`
 
 ```typescript
 interface ProjectStore {
@@ -353,13 +353,13 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
   },
   
-  // ... 其他actions
+  // ... ENactions
 }))
 ```
 
-### 自定义Hooks
+### ENHooks
 
-**文件**: `frontend/src/hooks/useFirstRun.ts`
+**EN**: `frontend/src/hooks/useFirstRun.ts`
 
 ```typescript
 export const useFirstRun = () => {
@@ -372,7 +372,7 @@ export const useFirstRun = () => {
       const hasApiKey = !!(config.settings?.llm?.api_key)
       setIsFirstRun(!hasApiKey)
     } catch (error) {
-      console.error('检查首次运行状态失败:', error)
+      console.error('EN:', error)
       setIsFirstRun(true)
     } finally {
       setLoading(false)
@@ -387,9 +387,9 @@ export const useFirstRun = () => {
 }
 ```
 
-### 错误处理
+### EN
 
-**文件**: `frontend/src/utils/errorHandler.ts`
+**EN**: `frontend/src/utils/errorHandler.ts`
 
 ```typescript
 class ErrorHandler {
@@ -403,21 +403,21 @@ class ErrorHandler {
   }
   
   public handleError(error: any, category: ErrorCategory = 'SYSTEM', context?: string) {
-    let errorMessage = '发生未知错误，请重试'
+    let errorMessage = 'EN，EN'
     let errorLevel: 'error' | 'warning' | 'info' = 'error'
     
     if (error.response) {
-      // 处理HTTP错误
-      errorMessage = error.response.data?.message || `服务器错误: ${error.response.status}`
+      // ENHTTPEN
+      errorMessage = error.response.data?.message || `EN: ${error.response.status}`
       if (error.response.status === 429) {
-        errorMessage = '系统正在处理其他项目，请稍后再试'
+        errorMessage = 'EN，EN'
         errorLevel = 'warning'
       }
     } else if (error.request) {
-      // 处理网络错误
-      errorMessage = '网络连接失败，请检查网络或后端服务是否运行'
+      // EN
+      errorMessage = 'EN，EN'
     } else if (error.message) {
-      // 处理其他错误
+      // EN
       errorMessage = error.message
     }
     
@@ -433,15 +433,15 @@ class ErrorHandler {
 }
 ```
 
-## 🐍 后端开发
+## 🐍 EN
 
-### 服务管理
+### EN
 
-**文件**: `backend/desktop_main.py`
+**EN**: `backend/desktop_main.py`
 
 ```python
 class DesktopServiceManager:
-    """桌面服务管理器"""
+    """EN"""
     
     def __init__(self, config: DesktopConfig):
         self.config = config
@@ -450,89 +450,89 @@ class DesktopServiceManager:
         self.celery_worker_process = None
     
     def start(self):
-        """启动所有服务"""
+        """EN"""
         if self.is_running:
             return
         
         try:
-            # 启动FastAPI服务器
+            # ENFastAPIEN
             self._start_fastapi_server()
             
-            # 启动Celery Worker
+            # ENCelery Worker
             self._start_celery_worker()
             
             self.is_running = True
             self.start_time = time.time()
-            logger.info("✅ 所有服务启动成功")
+            logger.info("✅ EN")
             
         except Exception as e:
-            logger.error(f"❌ 服务启动失败: {e}")
+            logger.error(f"❌ EN: {e}")
             self.stop()
             raise
     
     def stop(self):
-        """停止所有服务"""
+        """EN"""
         if not self.is_running:
             return
         
         try:
-            # 停止Celery Worker进程
+            # ENCelery WorkerEN
             if hasattr(self, 'celery_worker_process') and self.celery_worker_process:
                 self.celery_worker_process.terminate()
                 self.celery_worker_process.wait(timeout=5)
             
-            # 停止FastAPI服务器
+            # ENFastAPIEN
             if self.server_thread and self.server_thread.is_alive():
                 self.server_thread.join(timeout=5)
             
             self.is_running = False
-            logger.info("✅ 服务已停止")
+            logger.info("✅ EN")
             
         except Exception as e:
-            logger.error(f"❌ 停止服务失败: {e}")
+            logger.error(f"❌ EN: {e}")
 ```
 
-### 任务处理
+### EN
 
-**文件**: `backend/tasks/video_tasks.py`
+**EN**: `backend/tasks/video_tasks.py`
 
 ```python
 @celery_app.task(bind=True)
 def process_video_task(self, project_id: int, video_path: str):
-    """处理视频任务"""
+    """EN"""
     try:
-        # 更新任务状态
-        self.update_state(state='PROGRESS', meta={'status': '开始处理视频'})
+        # EN
+        self.update_state(state='PROGRESS', meta={'status': 'EN'})
         
-        # 提取音频
+        # EN
         audio_path = extract_audio(video_path)
-        self.update_state(state='PROGRESS', meta={'status': '音频提取完成'})
+        self.update_state(state='PROGRESS', meta={'status': 'EN'})
         
-        # 语音识别
+        # EN
         transcript = transcribe_audio(audio_path)
-        self.update_state(state='PROGRESS', meta={'status': '语音识别完成'})
+        self.update_state(state='PROGRESS', meta={'status': 'EN'})
         
-        # 生成切片
+        # EN
         clips = generate_clips(transcript, video_path)
-        self.update_state(state='PROGRESS', meta={'status': '切片生成完成'})
+        self.update_state(state='PROGRESS', meta={'status': 'EN'})
         
-        # 保存结果
+        # EN
         save_project_results(project_id, clips)
         
-        return {'status': '处理完成', 'clips_count': len(clips)}
+        return {'status': 'EN', 'clips_count': len(clips)}
         
     except Exception as e:
-        logger.error(f"视频处理失败: {e}")
+        logger.error(f"EN: {e}")
         raise self.retry(exc=e, countdown=60, max_retries=3)
 ```
 
-### 错误处理
+### EN
 
-**文件**: `backend/utils/error_handler.py`
+**EN**: `backend/utils/error_handler.py`
 
 ```python
 class AutoClipsException(Exception):
-    """AutoClip自定义异常"""
+    """AutoClipEN"""
     
     def __init__(self, 
                  message: str, 
@@ -546,7 +546,7 @@ class AutoClipsException(Exception):
         super().__init__(self.message)
 
 def handle_autoclips_exception(exc: AutoClipsException, request_id: str = None) -> JSONResponse:
-    """处理AutoClip异常"""
+    """ENAutoClipEN"""
     status_code = 500
     if exc.category == ErrorCategory.VALIDATION:
         status_code = 422
@@ -568,11 +568,11 @@ def handle_autoclips_exception(exc: AutoClipsException, request_id: str = None) 
     )
 ```
 
-## 🦀 Tauri集成
+## 🦀 TauriEN
 
-### 命令定义
+### EN
 
-**文件**: `src-tauri/src/commands.rs`
+**EN**: `src-tauri/src/commands.rs`
 
 ```rust
 #[tauri::command]
@@ -581,7 +581,7 @@ pub async fn start_backend_service(
 ) -> Result<BackendStatus, String> {
     match manager.start().await {
         Ok(_) => Ok(BackendStatus::Running),
-        Err(e) => Err(format!("启动后端服务失败: {}", e)),
+        Err(e) => Err(format!("EN: {}", e)),
     }
 }
 
@@ -591,7 +591,7 @@ pub async fn stop_backend_service(
 ) -> Result<BackendStatus, String> {
     match manager.stop().await {
         Ok(_) => Ok(BackendStatus::Stopped),
-        Err(e) => Err(format!("停止后端服务失败: {}", e)),
+        Err(e) => Err(format!("EN: {}", e)),
     }
 }
 
@@ -603,9 +603,9 @@ pub async fn get_service_status(
 }
 ```
 
-### 后端管理
+### EN
 
-**文件**: `src-tauri/src/backend_manager.rs`
+**EN**: `src-tauri/src/backend_manager.rs`
 
 ```rust
 pub struct BackendManager {
@@ -626,12 +626,12 @@ impl BackendManager {
             return Ok(());
         }
         
-        // 启动后端进程
+        // EN
         let mut cmd = Command::new("python")
             .arg("backend/desktop_main.py")
             .current_dir(std::env::current_dir().unwrap())
             .spawn()
-            .map_err(|e| format!("启动后端进程失败: {}", e))?;
+            .map_err(|e| format!("EN: {}", e))?;
         
         self.process = Some(cmd);
         self.status = BackendStatus::Running;
@@ -641,7 +641,7 @@ impl BackendManager {
     
     pub async fn stop(&mut self) -> Result<(), String> {
         if let Some(mut process) = self.process.take() {
-            process.kill().map_err(|e| format!("停止后端进程失败: {}", e))?;
+            process.kill().map_err(|e| format!("EN: {}", e))?;
         }
         
         self.status = BackendStatus::Stopped;
@@ -650,19 +650,19 @@ impl BackendManager {
 }
 ```
 
-### 系统托盘
+### EN
 
-**文件**: `src-tauri/src/tray.rs`
+**EN**: `src-tauri/src/tray.rs`
 
 ```rust
 pub fn setup_system_tray(app_handle: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
     let tray_menu = MenuBuilder::new()
-        .item(&MenuItem::new("显示主窗口", "show_main_window"))
+        .item(&MenuItem::new("EN", "show_main_window"))
         .separator()
-        .item(&MenuItem::new("启动服务", "start_service"))
-        .item(&MenuItem::new("停止服务", "stop_service"))
+        .item(&MenuItem::new("EN", "start_service"))
+        .item(&MenuItem::new("EN", "stop_service"))
         .separator()
-        .item(&MenuItem::new("退出", "quit_app"))
+        .item(&MenuItem::new("EN", "quit_app"))
         .build()?;
     
     let _tray = TrayIconBuilder::new()
@@ -677,10 +677,10 @@ pub fn setup_system_tray(app_handle: &AppHandle) -> Result<(), Box<dyn std::erro
                     }
                 }
                 "start_service" => {
-                    // 启动服务逻辑
+                    // EN
                 }
                 "stop_service" => {
-                    // 停止服务逻辑
+                    // EN
                 }
                 "quit_app" => {
                     app.exit(0);
@@ -694,166 +694,166 @@ pub fn setup_system_tray(app_handle: &AppHandle) -> Result<(), Box<dyn std::erro
 }
 ```
 
-## 🏗️ 构建和部署
+## 🏗️ EN
 
-### 前端构建
+### EN
 
 ```bash
-# 开发环境
+# EN
 npm run dev
 
-# 生产构建
+# EN
 npm run build
 
-# 预览构建结果
+# EN
 npm run preview
 ```
 
-### 后端构建
+### EN
 
 ```bash
-# 安装依赖
+# EN
 pip install -r requirements.txt
 
-# 运行测试
+# EN
 pytest
 
-# 代码检查
+# EN
 flake8 backend/
 black backend/
 ```
 
-### Tauri构建
+### TauriEN
 
 ```bash
-# 开发模式
+# EN
 npm run tauri dev
 
-# 生产构建
+# EN
 npm run tauri build
 
-# 构建特定平台
+# EN
 npm run tauri build -- --target x86_64-apple-darwin  # macOS Intel
 npm run tauri build -- --target aarch64-apple-darwin # macOS ARM
 npm run tauri build -- --target x86_64-pc-windows-msvc # Windows
 npm run tauri build -- --target x86_64-unknown-linux-gnu # Linux
 ```
 
-### 跨平台构建
+### EN
 
 ```bash
-# 构建所有平台
+# EN
 npm run build:all
 
-# 构建特定平台
+# EN
 npm run build:macos
 npm run build:windows
 npm run build:linux
 ```
 
-## 🧪 测试
+## 🧪 EN
 
-### 前端测试
+### EN
 
 ```bash
-# 运行测试
+# EN
 npm test
 
-# 运行测试并生成覆盖率报告
+# EN
 npm run test:coverage
 
-# 运行E2E测试
+# ENE2EEN
 npm run test:e2e
 ```
 
-### 后端测试
+### EN
 
 ```bash
-# 运行所有测试
+# EN
 pytest
 
-# 运行特定测试
+# EN
 pytest tests/test_project_service.py
 
-# 运行测试并生成覆盖率报告
+# EN
 pytest --cov=backend tests/
 
-# 运行性能测试
+# EN
 pytest tests/performance/
 ```
 
-### 集成测试
+### EN
 
 ```bash
-# 启动测试环境
+# EN
 docker-compose -f docker-compose.test.yml up -d
 
-# 运行集成测试
+# EN
 pytest tests/integration/
 
-# 清理测试环境
+# EN
 docker-compose -f docker-compose.test.yml down
 ```
 
-## 🤝 贡献指南
+## 🤝 Contributing
 
-### 开发流程
+### EN
 
-1. **Fork项目**
+1. **ForkEN**
    ```bash
    git clone https://github.com/your-username/autoclip-desktop.git
    cd autoclip-desktop
    ```
 
-2. **创建分支**
+2. **EN**
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-3. **开发功能**
-   - 编写代码
-   - 添加测试
-   - 更新文档
+3. **EN**
+   - EN
+   - EN
+   - EN
 
-4. **提交代码**
+4. **EN**
    ```bash
    git add .
    git commit -m "feat: add your feature"
    git push origin feature/your-feature-name
    ```
 
-5. **创建Pull Request**
-   - 在GitHub上创建PR
-   - 填写详细的描述
-   - 等待代码审查
+5. **ENPull Request**
+   - ENGitHubENPR
+   - EN
+   - ENCode Review
 
-### 代码规范
+### EN
 
-#### 前端规范
+#### EN
 
-- 使用TypeScript
-- 遵循ESLint规则
-- 使用Prettier格式化
-- 组件使用函数式组件
-- 使用Hooks进行状态管理
+- ENTypeScript
+- ENESLintEN
+- ENPrettierEN
+- EN
+- ENHooksEN
 
-#### 后端规范
+#### EN
 
-- 使用Python 3.10+
-- 遵循PEP 8规范
-- 使用类型注解
-- 编写文档字符串
-- 使用Pydantic进行数据验证
+- ENPython 3.10+
+- ENPEP 8EN
+- EN
+- EN
+- ENPydanticEN
 
-#### Rust规范
+#### RustEN
 
-- 使用Rust 1.70+
-- 遵循Clippy建议
-- 使用rustfmt格式化
-- 编写文档注释
-- 使用Result处理错误
+- ENRust 1.70+
+- ENClippyEN
+- ENrustfmtEN
+- EN
+- ENResultEN
 
-### 提交信息规范
+### EN
 
 ```
 <type>(<scope>): <subject>
@@ -863,16 +863,16 @@ docker-compose -f docker-compose.test.yml down
 <footer>
 ```
 
-**类型**:
-- `feat`: 新功能
-- `fix`: 修复bug
-- `docs`: 文档更新
-- `style`: 代码格式
-- `refactor`: 重构
-- `test`: 测试
-- `chore`: 构建/工具
+**EN**:
+- `feat`: EN
+- `fix`: ENbug
+- `docs`: EN
+- `style`: EN
+- `refactor`: EN
+- `test`: EN
+- `chore`: EN/EN
 
-**示例**:
+**EN**:
 ```
 feat(api): add project creation endpoint
 
@@ -882,35 +882,35 @@ and error handling.
 Closes #123
 ```
 
-### 测试要求
+### EN
 
-- 新功能必须包含测试
-- 测试覆盖率不低于80%
-- 所有测试必须通过
-- 包含单元测试和集成测试
+- EN
+- EN80%
+- EN
+- EN
 
-### 文档要求
+### EN
 
-- 更新相关文档
-- 添加API文档
-- 更新用户指南
-- 添加代码注释
+- EN
+- ENAPIEN
+- EN
+- EN
 
-## 📚 相关资源
+## 📚 EN
 
-- [Tauri官方文档](https://tauri.app/)
-- [FastAPI文档](https://fastapi.tiangolo.com/)
-- [React文档](https://react.dev/)
-- [Ant Design文档](https://ant.design/)
-- [Rust文档](https://doc.rust-lang.org/)
+- [TauriEN](https://tauri.app/)
+- [FastAPIEN](https://fastapi.tiangolo.com/)
+- [ReactEN](https://react.dev/)
+- [Ant DesignEN](https://ant.design/)
+- [RustEN](https://doc.rust-lang.org/)
 
-## 🆘 获取帮助
+## 🆘 EN
 
-- **GitHub Issues**: 报告bug和功能请求
-- **Discussions**: 技术讨论和问题解答
-- **Discord**: 实时交流和协作
-- **邮件**: 联系维护者
+- **GitHub Issues**: ENbugEN
+- **Discussions**: EN
+- **Discord**: EN
+- **EN**: ContactEN
 
 ---
 
-🎉 **感谢您的贡献！**
+🎉 **EN！**

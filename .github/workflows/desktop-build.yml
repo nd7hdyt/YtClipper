@@ -163,7 +163,7 @@ jobs:
     needs: [build-macos-arm64, build-windows-x64]
     runs-on: ubuntu-latest
     env:
-      # 放在 job 级：step 自己的 env 在它的 if 里读不到
+      # EN job EN：step EN env EN if EN
       WEBSITE_DISPATCH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
@@ -178,7 +178,7 @@ jobs:
       - name: List artifacts
         run: ls -la dist
 
-      # Release 正文 = CHANGELOG.md 里该版本的段落 + 平台安装说明（scripts/release_notes.py，仅标准库）
+      # Release EN = CHANGELOG.md ENVersionEN + ENInstallEN（scripts/release_notes.py，EN）
       - name: Render release notes from CHANGELOG
         run: python3 scripts/release_notes.py "${{ github.ref_name }}" -o release_body.md && cat release_body.md
 
@@ -191,9 +191,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 通知官网仓库更新版本号 / 下载链接（autoclip_intro/.github/workflows/sync-release.yml）。
-      # 需要 WEBSITE_DISPATCH_TOKEN（fine-grained PAT，仓库 autoclip_intro，Contents: Read and write）；
-      # 没配就跳过——官网那边有每日 cron 兜底。见 scripts/website/README.md。
+      # ENVersionEN / DownloadEN（autoclip_intro/.github/workflows/sync-release.yml）。
+      # Need WEBSITE_DISPATCH_TOKEN（fine-grained PAT，EN autoclip_intro，Contents: Read and write）；
+      # EN——EN cron EN。EN scripts/website/README.md。
       - name: Notify website (repository_dispatch)
         if: env.WEBSITE_DISPATCH_TOKEN != ''
         run: |
@@ -202,4 +202,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             https://api.github.com/repos/zhouxiaoka/autoclip_intro/dispatches \
             -d '{"event_type":"autoclip-release","client_payload":{"tag":"${{ github.ref_name }}"}}'
-          echo "已通知官网同步到 ${{ github.ref_name }}"
+          echo "EN ${{ github.ref_name }}"

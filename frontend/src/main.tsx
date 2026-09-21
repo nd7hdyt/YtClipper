@@ -17,25 +17,25 @@ import { trackLaunch } from './analytics/lifecycle'
 import { installDomTranslationGuard } from './utils/domTranslationGuard'
 import './index.css'
 
-// 必须在 React 挂载前装好：浏览器网页翻译会移动文本节点，否则 React 更新时整页崩（#100）
+// EN React EN：ENTextEN，EN React updateEN（#100）
 installDomTranslationGuard()
 
-// 初始化产品分析 / 埋点（无 key 时自动 no-op，不发任何网络请求）
+// EN / EN（EN key EN no-op，ENrequest）
 initAnalytics()
-// 注册全局属性 + 上报启动/安装/更新事件
+// ENGlobal properties + EN/install/updateEN
 void trackLaunch()
 
-// 配置dayjs插件
+// configdayjsEN
 dayjs.extend(relativeTime)
 dayjs.extend(timezone)
 dayjs.extend(utc)
 
-// 设置dayjs中文和时区
+// settingsdayjsEN
 dayjs.locale('zh-cn')
 dayjs.tz.setDefault('Asia/Shanghai')
 
 function Root() {
-  // 统一在根节点接入错误边界，避免运行时异常导致白屏
+  // ENErrorEN，ENErrorEN
   return (
     <ErrorBoundary showDetails={import.meta.env.DEV}>
       <App />

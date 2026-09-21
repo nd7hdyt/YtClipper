@@ -16,34 +16,34 @@ const ProjectStatusIndicator: React.FC<ProjectStatusIndicatorProps> = ({
   project,
   size = 'default'
 }) => {
-  // 暂时使用简单的状态处理
+  // Simple status handling for now
   const normalizedStatus = project.status === 'error' ? 'failed' : project.status
 
   const getStepName = () => {
     if (normalizedStatus === 'processing' && project.current_step) {
       const stepNames = {
-        1: '内容大纲分析',
-        2: '时间轴生成',
-        3: '片段评分',
-        4: '标题生成',
-        5: '主题聚类',
-        6: '视频生成'
+        1: 'Outline analysis',
+        2: 'Timeline generation',
+        3: 'Clip scoring',
+        4: 'Title generation',
+        5: 'Topic clustering',
+        6: 'Video rendering'
       }
-      return stepNames[project.current_step as keyof typeof stepNames] || '处理中'
+      return stepNames[project.current_step as keyof typeof stepNames] || 'Processing'
     }
-    return '处理中'
+    return 'Processing'
   }
 
   const getStatusConfig = () => {
     switch (normalizedStatus) {
       case 'processing':
-        return { text: '处理中', badgeStatus: 'processing' as const, color: '#1890ff' }
+        return { text: 'Processing', badgeStatus: 'processing' as const, color: '#1890ff' }
       case 'completed':
-        return { text: '已完成', badgeStatus: 'success' as const, color: '#52c41a' }
+        return { text: 'Completed', badgeStatus: 'success' as const, color: '#52c41a' }
       case 'failed':
-        return { text: '失败', badgeStatus: 'error' as const, color: '#ff4d4f' }
+        return { text: 'Failed', badgeStatus: 'error' as const, color: '#ff4d4f' }
       default:
-        return { text: '未知', badgeStatus: 'default' as const, color: '#d9d9d9' }
+        return { text: 'Unknown', badgeStatus: 'default' as const, color: '#d9d9d9' }
     }
   }
 

@@ -27,12 +27,12 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
   });
   const [isChecking, setIsChecking] = useState(false);
 
-  // 检查网络连接质量
+  // checkEN
   const checkConnectionQuality = async (): Promise<NetworkStatus> => {
     const startTime = Date.now();
     
     try {
-      // 尝试访问健康检查端点
+      // ENHealth checkEN
       const response = await fetch('/health', {
         method: 'GET',
         timeout: 5000
@@ -67,7 +67,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
     }
   };
 
-  // 手动检查网络状态
+  // ENcheckENStatus
   const handleCheckNetwork = async () => {
     setIsChecking(true);
     try {
@@ -75,13 +75,13 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
       setNetworkStatus(status);
       onStatusChange?.(status);
     } catch (error) {
-      console.error('网络检查失败:', error);
+      console.error('ENcheckFailed:', error);
     } finally {
       setIsChecking(false);
     }
   };
 
-  // 监听网络状态变化
+  // ENStatusChange
   useEffect(() => {
     const handleOnline = () => {
       setNetworkStatus(prev => ({
@@ -104,7 +104,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // 定期检查网络质量
+    // ENcheckEN
     const interval = setInterval(() => {
       if (navigator.onLine) {
         checkConnectionQuality().then(status => {
@@ -112,7 +112,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
           onStatusChange?.(status);
         });
       }
-    }, 30000); // 每30秒检查一次
+    }, 30000); // EN30ENcheckonce
 
     return () => {
       window.removeEventListener('online', handleOnline);
@@ -121,7 +121,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
     };
   }, [onStatusChange]);
 
-  // 获取状态图标和颜色
+  // fetchStatusIconEN
   const getStatusIcon = () => {
     if (!networkStatus.isOnline) {
       return <WifiDisconnectedOutlined style={{ color: '#ff4d4f' }} />;
@@ -139,34 +139,34 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
     }
   };
 
-  // 获取状态文本
+  // fetchStatusText
   const getStatusText = () => {
     if (!networkStatus.isOnline) {
-      return '离线模式';
+      return 'EN';
     }
     
     switch (networkStatus.connectionQuality) {
       case 'excellent':
-        return '网络优秀';
+        return 'EN';
       case 'good':
-        return '网络良好';
+        return 'EN';
       case 'poor':
-        return '网络较差';
+        return 'EN';
       default:
-        return '网络未知';
+        return 'ENunknown';
     }
   };
 
-  // 获取状态描述
+  // fetchStatusDescription
   const getStatusDescription = () => {
     if (!networkStatus.isOnline) {
-      return '当前处于离线模式，部分功能可能受限';
+      return 'EN，EN';
     }
     
-    const latencyText = networkStatus.latency ? `延迟: ${networkStatus.latency}ms` : '';
+    const latencyText = networkStatus.latency ? `EN: ${networkStatus.latency}ms` : '';
     const lastCheck = new Date(networkStatus.lastCheck).toLocaleTimeString();
     
-    return `最后检查: ${lastCheck} ${latencyText}`.trim();
+    return `Last check: ${lastCheck} ${latencyText}`.trim();
   };
 
   return (
@@ -191,7 +191,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
         icon={<ReloadOutlined spin={isChecking} />}
         onClick={handleCheckNetwork}
         loading={isChecking}
-        title="检查网络状态"
+        title="checkENStatus"
         style={{
           color: '#ffffff',
           border: '1px solid transparent',

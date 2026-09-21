@@ -1,6 +1,6 @@
 /**
- * React 错误边界组件
- * 捕获子组件中的 JavaScript 错误，记录错误信息，并显示降级 UI（样式遵循 DESIGN.md：单色、无渐变）
+ * React error boundary
+ * Catches JS errors in children, logs them, and shows a fallback UI (per DESIGN.md: monochrome, no gradients)
  */
 
 import { Component, ErrorInfo, ReactNode } from 'react'
@@ -22,7 +22,7 @@ interface State {
   errorId: string
 }
 
-const ISSUE_URL = 'https://github.com/zhouxiaoka/autoclip/issues/new/choose'
+const ISSUE_URL = 'https://github.com/nd7hdyt/YtClipper/issues/new/choose'
 
 const preStyle: React.CSSProperties = {
   margin: 0,
@@ -52,7 +52,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
-    // 更新 state 使下一次渲染能够显示降级后的 UI
+    // Show the fallback UI on the next render
     return {
       hasError: true,
       error,
@@ -80,7 +80,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   handleGoHome = () => {
     this.setState({ hasError: false, error: null, errorInfo: null, errorId: '' })
-    // HashRouter：首页是 #/，直接改 href 会保留当前 hash 导致原地刷新
+    // HashRouter: home is #/; assigning href would keep the hash and reload in place
     window.location.hash = '#/'
     window.location.reload()
   }
@@ -111,7 +111,7 @@ class ErrorBoundary extends Component<Props, State> {
     }
 
     const { error, errorInfo, errorId } = this.state
-    // 浏览器「翻译此页」移动了 DOM 节点导致 React 更新失败（#100），给出能自救的提示
+    // Browser "Translate this page" moves DOM nodes and breaks React updates (#100); show a self-serve hint
     const translationSuspected = isDomDisplacementError(error) || isPageTranslated()
 
     return (
@@ -137,35 +137,35 @@ class ErrorBoundary extends Component<Props, State> {
             padding: '32px 32px 28px',
           }}
         >
-          <div className="ac-eyebrow">页面出错</div>
+          <div className="ac-eyebrow">Page error</div>
           <h1 style={{ margin: '10px 0 0', fontSize: 20, fontWeight: 600, lineHeight: 1.3, letterSpacing: '-0.01em' }}>
-            {translationSuspected ? '浏览器翻译打断了页面渲染' : '这个页面遇到了意外错误'}
+            {translationSuspected ? 'Browser translation broke rendering' : 'This page hit an unexpected error'}
           </h1>
           <p style={{ margin: '8px 0 0', fontSize: 13.5, color: 'var(--ac-sub)', lineHeight: 1.6, maxWidth: '60ch' }}>
             {translationSuspected ? (
               <>
-                检测到网页正在被浏览器翻译（Chrome / Edge「翻译此页」）。翻译会改写页面结构，导致界面在切换选项时崩溃。
-                请在地址栏右侧关闭翻译、恢复原文后再刷新。
+                This page is being translated by the browser (Chrome / Edge “Translate this page”). Translation rewrites the page structure and can crash the UI when switching options.
+                Turn translation off in the address bar, show the original, then reload.
                 <span style={{ display: 'block', marginTop: 6 }}>
                   Page translation (Chrome / Edge “Translate this page”) rewrites the DOM and breaks the UI.
                   Please turn translation off, show the original page, then reload.
                 </span>
               </>
             ) : (
-              '问题已记录到本地日志。先试试刷新；仍然出现的话把下面的错误信息带上，到 GitHub 提一个 issue。'
+              'The issue is logged locally. Try reloading; if it persists, file a GitHub issue with the error details below.'
             )}
           </p>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 24, flexWrap: 'wrap' }}>
-            <Btn variant="cta" onClick={this.handleReload}>刷新页面</Btn>
-            <Btn onClick={this.handleGoHome}>返回首页</Btn>
-            <Btn variant="text" onClick={this.handleReportError}>报告问题</Btn>
+            <Btn variant="cta" onClick={this.handleReload}>Reload page</Btn>
+            <Btn onClick={this.handleGoHome}>Go home</Btn>
+            <Btn variant="text" onClick={this.handleReportError}>Report issue</Btn>
           </div>
 
           {error && (
             <details style={{ marginTop: 24 }} open={!!this.props.showDetails}>
               <summary style={{ cursor: 'pointer', fontSize: 12.5, color: 'var(--ac-muted)', userSelect: 'none' }}>
-                错误详情 <span className="ac-mono" style={{ fontFamily: 'var(--ac-font-mono)' }}>{errorId}</span>
+                Error details <span className="ac-mono" style={{ fontFamily: 'var(--ac-font-mono)' }}>{errorId}</span>
               </summary>
               <div style={{ display: 'grid', gap: 10, marginTop: 12 }}>
                 <pre style={preStyle}>{error.message}</pre>

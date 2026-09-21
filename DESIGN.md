@@ -1,159 +1,159 @@
 # Design System — AutoClip
 
-> AutoClip 的设计唯一标准。做任何 UI/视觉决策前先读这里。
-> 方向：**克制专业 / Calm Premium**（参考 Dia Browser）。安静、精确、留白多、几乎全单色，
-> 只用一个克制的蓝做强调。给"认真做内容的人"用，不是玩具风、不是冷黑科技风。
+> AutoClip EN。EN UI/VisualDecisionsEN。
+> EN：**Restrained Professional / Calm Premium**（Reference Dia Browser）。Quiet、EN、Ample Whitespace、EN，
+> Only one restrained blue for emphasis。EN"EN"EN，EN、EN。
 
 ## Product Context
-- **是什么**：基于 AI 的视频切片桌面工具。粘 B站/YouTube 链接或本地视频 → 自动出切片与合集。
-- **给谁用**：内容创作者 / 剪辑者。
-- **类型**：macOS 桌面应用（Tauri + React + TypeScript）。当前用 Ant Design，需按本系统逐屏重做。
-- **记忆点**：有调性、克制、专业——让人觉得"这是认真的好工具"。
+- **EN**：Based on AI EN。EN BEN/YouTube EN → EN。
+- **EN**：EN / EN。
+- **EN**：macOS EN（Tauri + React + TypeScript）。EN Ant Design，EN。
+- **EN**：EN、EN、EN——EN"EN"。
 
 ## Aesthetic Direction
-- **方向**：Calm Premium / 克制编辑感。
-- **装饰级别**：minimal（排版和留白做所有的活，不堆装饰）。
-- **气质**：安静、精确、从容、高级。大量留白、低信息密度、发丝级分隔。
-- **参考**：Dia Browser (diabrowser.com) —— sans+serif 混排、近乎全单色、一抹克制强调色。
-- **明确不要**：玩具撞色、彩色 chip、紫色渐变、霓虹、3 列图标网格、居中堆砌、死黑 `#000`。
+- **EN**：Calm Premium / EN。
+- **EN**：minimal（EN，EN）。
+- **EN**：Quiet、EN、EN、EN。EN、EN、EN。
+- **Reference**：Dia Browser (diabrowser.com) —— sans+serif EN、Near-Monochrome、EN。
+- **ENDo not**：Toy-like Contrasting Colors、Colorful chip、Purple Gradient、Neon、3 EN、EN、Pure Black `#000`。
 
 ## Color
 
-双主题（浅色为主，深色等价）。强调色**极克制**：只用于进行中状态、活动态、链接；其余一律单色。
+EN（EN，EN）。EN**EN**：EN、EN、EN；EN。
 
-### 浅色（默认）
+### EN（EN）
 ```css
---bg:        #F6F5F3;  /* 暖浅灰底，非纯白 */
+--bg:        #F6F5F3;  /* EN，EN */
 --card:      #FFFFFF;
---ink:       #1A1A19;  /* 柔近黑正文，非纯黑 */
---sub:       #6E6B66;  /* 次级文字 */
---muted:     #A8A59F;  /* 弱化/占位 */
---line:      #EBE9E4;  /* 发丝边框 */
---line-2:    #F0EEEA;  /* 更弱分隔 */
---accent:    #2D6BFF;  /* 唯一强调蓝，克制使用 */
---thumb:     #EEECE8;  /* 缩略图占位底 */
---cta-bg:    #1A1A19;  /* 主按钮：实心墨 */
+--ink:       #1A1A19;  /* EN，EN */
+--sub:       #6E6B66;  /* EN */
+--muted:     #A8A59F;  /* EN/EN */
+--line:      #EBE9E4;  /* EN */
+--line-2:    #F0EEEA;  /* EN */
+--accent:    #2D6BFF;  /* EN，EN */
+--thumb:     #EEECE8;  /* EN */
+--cta-bg:    #1A1A19;  /* EN：EN */
 --cta-fg:    #FFFFFF;
 ```
 
-### 深色
+### EN
 ```css
---bg:        #19181A;  /* 暖近黑，非纯黑 */
+--bg:        #19181A;  /* EN，EN */
 --card:      #211F22;
---ink:       #ECEAE6;  /* 暖白正文 */
+--ink:       #ECEAE6;  /* EN */
 --sub:       #A6A29B;
 --muted:     #76726C;
 --line:      #2C2A2D;
 --line-2:    #232124;
---accent:    #5A8BFF;  /* 深色下蓝亮一档 */
+--accent:    #5A8BFF;  /* EN */
 --thumb:     #262428;
---cta-bg:    #ECEAE6;  /* 主按钮：浅墨 */
+--cta-bg:    #ECEAE6;  /* EN：EN */
 --cta-fg:    #19181A;
 ```
 
-### 语义色（两主题通用，克制使用）
+### EN（EN，EN）
 ```css
---ok:    #5BB36A;  /* 已完成（小圆点） */
+--ok:    #5BB36A;  /* EN（EN） */
 --warn:  #E6B23C;
---error: #E66A5C;  /* 失败 */
+--error: #E66A5C;  /* EN */
 --info:  var(--accent);
 ```
-- **暗色策略**：不是把浅色反相，而是重设表面层级；强调蓝提亮约 10–15% 保证对比。
+- **EN**：EN，EN；EN 10–15% EN。
 
 ## Typography
 
-sans + serif 混排是高级感来源：衬线只用于**拉丁品牌时刻**（wordmark、大数字），中文与 UI 一律干净无衬线。
+sans + serif EN：EN**EN**（wordmark、EN），ChineseEN UI EN。
 
-- **品牌/衬线（仅拉丁）**：`Instrument Serif`（含 italic）。用于 `AutoClip` wordmark、大号英文数字等点睛处。
-- **中文**：`PingFang SC`（mac 原生、最克制）优先，跨平台回退 `Noto Sans SC`。
-- **UI / 正文（拉丁）**：`Geist`（400/500/600）。**不用 Inter/Roboto**。
-- **数据 / 数字 / 时间码**：`Geist Mono`（tabular）。
-- **字体栈**：
+- **EN/EN（EN）**：`Instrument Serif`（EN italic）。EN `AutoClip` wordmark、ENEnglishEN。
+- **Chinese**：`PingFang SC`（mac EN、EN）EN，EN `Noto Sans SC`。
+- **UI / EN（EN）**：`Geist`（400/500/600）。**EN Inter/Roboto**。
+- **EN / EN / EN**：`Geist Mono`（tabular）。
+- **TypographyEN**：
   ```css
   --font-sans: "Geist", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
-  --font-serif: "Instrument Serif", Georgia, serif;   /* 仅拉丁 */
+  --font-serif: "Instrument Serif", Georgia, serif;   /* EN */
   --font-mono: "Geist Mono", ui-monospace, monospace;
   ```
-- **字号阶**（rem，16px 基准）：
-  | 角色 | 字号 | 字重 | 行高 |
+- **EN**（rem，16px EN）：
+  | EN | EN | EN | EN |
   |------|------|------|------|
   | wordmark（serif）| 28px | 400 | 1.1 |
-  | 区块标题 h2 | 16px | 600 | 1.3 |
-  | 卡片标题 | 15px | 500 | 1.45 |
-  | 正文 | 14–15px | 400 | 1.5 |
-  | 次级/元信息 | 12.5–13px | 400/500 | 1.4 |
-  | 标签/uppercase | 11px / letter-spacing .8px | 500 | — |
+  | EN h2 | 16px | 600 | 1.3 |
+  | EN | 15px | 500 | 1.45 |
+  | EN | 14–15px | 400 | 1.5 |
+  | EN/EN | 12.5–13px | 400/500 | 1.4 |
+  | EN/uppercase | 11px / letter-spacing .8px | 500 | — |
 
 ## Spacing
-- **基准**：4px。
-- **密度**：spacious（留白多、信息少）。
-- **阶**：`2(2) xs(4) sm(8) md(16) lg(24) xl(32) 2xl(40) 3xl(56)`。
-- **常用**：窗口内边距 56px；区块间距 56px；卡片网格 gap 24px；卡片内边距 20–22px；导入框与首项目区之间大留白。
+- **EN**：4px。
+- **EN**：spacious（Ample Whitespace、EN）。
+- **EN**：`2(2) xs(4) sm(8) md(16) lg(24) xl(32) 2xl(40) 3xl(56)`。
+- **EN**：EN 56px；ENSpacing 56px；EN gap 24px；EN 20–22px；EN。
 
 ## Layout
-- **方式**：grid-disciplined（克制网格），不玩编辑式破格。
-- **项目网格**：3 列（大间距、大卡片），窄屏降到 2/1 列。
-- **最大内容宽度**：跟随窗口，左右 56px 安全边距。
-- **圆角**：卡片/输入框/缩略图 `16px`；小元素 `10px`；按钮/徽章/分段切换 `999px`（胶囊）。
-- **边框**：发丝级 `1px solid var(--line)`，靠边框而非重阴影分隔。
+- **EN**：grid-disciplined（EN），EN。
+- **EN**：3 EN（ENSpacing、EN），EN 2/1 EN。
+- **EN**：EN，EN 56px EN。
+- **Border Radius**：EN/EN/EN `16px`；EN `10px`；EN/EN/EN `999px`（EN）。
+- **EN**：EN `1px solid var(--line)`，EN。
 
 ## Components
-- **主按钮**：实心墨胶囊（浅色=黑/深色=浅墨），文字 14.5px/500，内边距 ~14×26px。
-- **次按钮**：发丝边框胶囊，文字 `--sub`。
-- **分段切换**（链接/文件）：胶囊容器 `--line-2` 底，选中项 `--card` 底 + 极轻阴影。
-- **状态表达（克制）**：缩略图左上角小圆点 + 文字标签（`下载中`/`分析中`=accent、`已完成`=ok、`失败`=error）。进度用 4px 细线（accent），右侧百分比用 mono。
-- **已完成元信息**：纯灰 mono 数字 + 中点分隔，例 `7 切片 · 1 合集 · 8 个月前`，**不用彩色 chip**。
-- **阴影**：极轻。`0 1px 2px rgba(0,0,0,.03), 0 8px 24px rgba(0,0,0,.04)`（深色相应降透明度）。
+- **EN**：EN（EN=EN/EN=EN），EN 14.5px/500，EN ~14×26px。
+- **EN**：EN，EN `--sub`。
+- **EN**（EN/EN）：EN `--line-2` EN，EN `--card` EN + EN。
+- **State Expression（EN）**：EN + EN（`EN`/`EN`=accent、`EN`=ok、`EN`=error）。EN 4px EN（accent），EN mono。
+- **EN**：EN mono EN + EN，EN `7 EN · 1 EN · 8 EN`，**ENColorful chip**。
+- **EN**：EN。`0 1px 2px rgba(0,0,0,.03), 0 8px 24px rgba(0,0,0,.04)`（EN）。
 
-## App Layer（产品内实现约定，2026-09-07）
-产品内 UI 优先用 `frontend/src/ui/`（`index.tsx` + `ac.css`）里的原生原语，AntD 只保留复杂交互（Select / Form 校验 / message）。新页面、重做页面**不要**再直接用 AntD `Card` / `Tag` / `Tabs` / `Alert` / `Button` 搭版面。
+## App Layer（EN，2026-09-07）
+EN UI EN `frontend/src/ui/`（`index.tsx` + `ac.css`）EN，AntD EN（Select / Form EN / message）。EN、EN**Do not**EN AntD `Card` / `Tag` / `Tabs` / `Alert` / `Button` EN。
 
-| 原语 | 用途 | 规则 |
+| EN | EN | EN |
 |------|------|------|
-| `ac-page` / `ac-back` / `ac-title` / `ac-meta` | 页面壳与页头 | 标题 22px/600；元信息 12.5px `--muted`，数字 mono，中点 `.dot` 分隔；返回是页内的 `‹ 项目`，不是全局按钮 |
-| `Section` | 区块 | 标题 15px/600 + mono 计数（`--muted`）+ 一行说明；右侧最多一个动作或一个分段切换 |
-| `Row` | 设置行 | 左标签+说明、右控件，发丝线分隔（macOS 系统设置式）；数字输入右侧单位用 `.ac-unit` 定宽 |
-| `Segmented` | 二/四选一 | 胶囊；选中项 `--card` 底 + 极轻阴影；不用 Tabs |
-| `Btn` | 按钮 | `cta`（实心墨）/ 默认（发丝边）/ `text`（安静文字）/ `danger`（仅红字，不用红底）；卡片内动作用 `text` 且 hover 才显 |
-| `StatusDot` | 状态 | 6px 圆点 + 文字：`--accent` 进行中 / `--ok` 完成 / `--error` 失败；**没有彩色 chip** |
-| `ProgressLine` | 进度 | 4px 细线 + 右侧 mono 百分比 |
-| `ac-card` + `ac-card-thumb` + `ac-tag` | 媒体卡（切片 / 合集 / 项目） | 16:9 缩略图；左上 mono 玻璃标签（时长 / 评分 / 数量）；标题 14px 两行截断；元信息 mono |
-| `Dialog` | 轻对话框 | portal 到 body；520px；标题 + 一句说明 + 内容 + 右对齐脚部；Esc / 点背景关闭 |
-| `ac-empty` | 空态 / 失败态 | 虚线发丝框，`b` 一句话 + 一句可做的事；失败态用它承载错误 mono 文本，不用红色 Alert |
-| `Icon.*` | 图标 | 内联 SVG、1.5px 线；不用 emoji、不用 icon 字体 |
+| `ac-page` / `ac-back` / `ac-title` / `ac-meta` | EN | EN 22px/600；EN 12.5px `--muted`，EN mono，EN `.dot` EN；EN `‹ EN`，EN |
+| `Section` | EN | EN 15px/600 + mono EN（`--muted`）+ EN；EN |
+| `Row` | EN | EN+EN、EN，EN（macOS EN）；EN `.ac-unit` EN |
+| `Segmented` | EN/EN | EN；EN `--card` EN + EN；EN Tabs |
+| `Btn` | EN | `cta`（EN）/ EN（EN）/ `text`（QuietEN）/ `danger`（EN，EN）；EN `text` EN hover EN |
+| `StatusDot` | EN | 6px EN + EN：`--accent` EN / `--ok` EN / `--error` EN；**ENColorful chip** |
+| `ProgressLine` | EN | 4px EN + EN mono EN |
+| `ac-card` + `ac-card-thumb` + `ac-tag` | EN（EN / EN / EN） | 16:9 EN；EN mono EN（EN / EN / EN）；EN 14px EN；EN mono |
+| `Dialog` | EN | portal EN body；520px；EN + EN + EN + EN；Esc / EN |
+| `ac-empty` | EN / EN | EN，`b` EN + EN；EN mono EN，EN Alert |
+| `Icon.*` | EN | EN SVG、1.5px EN；EN emoji、EN icon Typography |
 
-- **分类标签**：不用 emoji + 彩色（旧 `getCategoryInfo` 色表已废），只在缩略图上用中性玻璃 chip 写文字。
-- **反馈入口**：设置页「反馈」区 + 所有失败态（项目卡 `重试 · 反馈`、详情页 `反馈问题`、切片为 0 空态）。对话框自动带版本 / OS / 架构 / 模型，用户只写一句话。
+- **EN**：EN emoji + Colorful（EN `getCategoryInfo` EN），EN chip EN。
+- **EN**：EN「EN」EN + EN（EN `EN · EN`、EN `EN`、EN 0 EN）。EN / OS / EN / EN，EN。
 
 ## Motion
-- **方式**：minimal-functional + 个别 intentional。只做有意义的过渡，不炫技。
-- **缓动**：进入 `ease-out`、退出 `ease-in`、位移 `ease-in-out`。
-- **时长**：micro 80–120ms、short 150–250ms。
-- **微交互**：卡片 hover 上移 2px + 极轻阴影；进度线平滑过渡。
-- **一个值得做的高光**：「出片成功」给一个克制但有仪式感的过渡（无彩纸、无弹跳），服务"想分享"。
+- **EN**：minimal-functional + EN intentional。EN，EN。
+- **EN**：EN `ease-out`、EN `ease-in`、EN `ease-in-out`。
+- **EN**：micro 80–120ms、short 150–250ms。
+- **EN**：EN hover EN 2px + EN；EN。
+- **EN**：「EN」EN（EN、EN），EN"EN"。
 
-## Web / Marketing Layer（官网 autoclip_intro）
-官网与产品共用同一套 token（变量名一致：`--ac-*`，见 `autoclip_intro/tokens.css`），只在"营销面"多加一层展示级规格。原则：**官网是产品的放大版，不是另一个品牌**。
+## Web / Marketing Layer（EN autoclip_intro）
+EN token（EN：`--ac-*`，EN `autoclip_intro/tokens.css`），EN"EN"EN。EN：**EN，EN**。
 
-- **Display 字号阶**（web 专用，产品内不用）：
-  | 角色 | 字号 | 字重 | 备注 |
+- **Display EN**（web EN，EN）：
+  | EN | EN | EN | EN |
   |------|------|------|------|
-  | hero h1 | `clamp(40px, 1.6rem+3vw, 60px)` | 500 | 行高 1.12，letter-spacing −.02em；英文允许一个 serif italic 词做点睛，中文一律无衬线 |
-  | hero wordmark | 28–40px serif | 400 | 放在 h1 之上，替代 logo 大图 |
-  | section h2 | `clamp(28px, 1.3rem+1.5vw, 36px)` | 500 | 上方配 11px uppercase eyebrow（`--muted`） |
-  | lede | 17px | 400 | `--sub`，最大 56ch |
-  | 正文 | 16px | 400 | 产品内为 14–15px |
-- **节奏**：容器 1120px；区块纵向间距 `clamp(72px, 6vw+40px, 128px)`；区块之间用发丝线分隔，不换底色。
-- **产品框（Product Frame）**：hero 下方用 HTML/CSS 搭出的应用窗口（窗框三点为 `--line` 灰，不用红黄绿），内部严格按产品规范渲染（导入框、分段切换、3 列项目卡、状态小圆点、4px 进度线）。它既是官网主视觉，也是产品 UI 的设计基准——产品重做时以此为对照。**不放旧版截图**。
-- **三步说明**：左文右图（5:7），每步配一块最小化 UI 片段（导入框 / 评分列表 / 切片卡），不用插画、不用图标。
-- **为什么 / FAQ**：纯文字 + mono 编号 + 发丝线；FAQ 用 `details`，右侧 `+ / –` mono 符号。
-- **下载**：两张等高卡（macOS / Windows），mono 版本号 + 体积，首启提示折叠；主 CTA 按 UA 自动切换平台。
-- **语言切换**：胶囊分段（中 / EN / 日 / 한），文字不加旗帜图标。
-- **深色**：跟随系统 `prefers-color-scheme`，不提供手动切换；缩略图占位在深色下整体压暗而非换色。
+  | hero h1 | `clamp(40px, 1.6rem+3vw, 60px)` | 500 | EN 1.12，letter-spacing −.02em；EnglishEN serif italic EN，ChineseEN |
+  | hero wordmark | 28–40px serif | 400 | EN h1 EN，EN logo EN |
+  | section h2 | `clamp(28px, 1.3rem+1.5vw, 36px)` | 500 | EN 11px uppercase eyebrow（`--muted`） |
+  | lede | 17px | 400 | `--sub`，EN 56ch |
+  | EN | 16px | 400 | EN 14–15px |
+- **EN**：EN 1120px；ENSpacing `clamp(72px, 6vw+40px, 128px)`；EN，EN。
+- **EN（Product Frame）**：hero EN HTML/CSS EN（EN `--line` EN，EN），EN（EN、EN、3 EN、EN、4px EN）。ENVisual，EN UI EN——EN。**EN**。
+- **EN**：EN（5:7），EN UI EN（EN / EN / EN），EN、EN。
+- **EN / FAQ**：EN + mono EN + EN；FAQ EN `details`，EN `+ / –` mono EN。
+- **EN**：EN（macOS / Windows），mono EN + EN，EN；EN CTA EN UA EN。
+- **LanguageEN**：EN（EN / EN / EN / 한），EN。
+- **EN**：EN `prefers-color-scheme`，ENProvidesEN；EN。
 
 ## Decisions Log
-| 日期 | 决策 | 理由 |
+| EN | Decisions | EN |
 |------|------|------|
-| 2026-05-31 | 初版设计系统 | /design-consultation 产出。方向几经迭代（暖编辑→玩具风→否决）最终锁定 Dia 式「克制专业」，浅/深双主题，去大标题、低密度、单一克制蓝。 |
-| 2026-09-06 | 官网改版并入同一系统；新增 Web 层规范 | 旧官网为 2025 年 Tailwind 模板风（紫渐变、彩色 icon 网格、旧截图），与产品方向割裂。改版不做第二套视觉，而是把产品 token 原样搬到官网、补 display 字号阶与区块节奏；hero 用代码搭的产品框替代截图，既不会过时，也作为下一轮产品 UI 迭代的对照基准。技术形态保持单文件 `index.html` + `tokens.css`（GitHub Pages 零构建）。 |
-| 2026-09-07 | 产品内高频屏重做（详情 / 设置 / 卡片）；新增 App Layer 原语 | 主产品仍是 AntD 默认件堆出来的「上一代 AI 工具」味：彩色 Tag、卡片套卡片、绿/红实心按钮、emoji 分类。参照 Granola / Raycast / Dia 这类「安静、留白、单强调色、设置页系统化」的桌面工具，把详情页、设置页、切片 / 合集 / 项目卡换成 `frontend/src/ui/` 原生原语；AntD 只留 Select / Form / message。反馈入口按同一规范做进设置页与全部失败态。 |
+| 2026-05-31 | ENDesign System | /design-consultation EN。EN（EN→EN→EN）EN Dia EN「Restrained Professional」，EN/EN，EN、EN、EN。 |
+| 2026-09-06 | EN；EN Web EN | EN 2025 EN Tailwind EN（EN、Colorful icon EN、EN），EN。ENVisual，EN token EN、EN display EN；hero EN，EN，EN UI EN。EN `index.html` + `tokens.css`（GitHub Pages EN）。 |
+| 2026-09-07 | EN（EN / EN / EN）；EN App Layer EN | EN AntD EN「EN AI EN」EN：Colorful Tag、EN、EN/EN、emoji EN。EN Granola / Raycast / Dia EN「Quiet、EN、EN、EN」EN，EN、EN、EN / EN / EN `frontend/src/ui/` EN；AntD EN Select / Form / message。EN。 |

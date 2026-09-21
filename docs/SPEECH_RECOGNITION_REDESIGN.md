@@ -1,103 +1,103 @@
-# 🎤 语音识别模块重新设计
+# 🎤 EN
 
-## 📋 概述
+## 📋 EN
 
-根据用户需求，我们对语音识别模块进行了全面重新设计，主要改进包括：
+EN，EN，EN：
 
-1. **移除测试字幕数据** - 转写失败直接报任务失败，不再使用mock数据
-2. **支持多语种识别** - 支持中文、英文、日文、韩文等多种语言
-3. **支持多种API接入** - 支持本地Whisper、OpenAI API、Azure Speech Services等
+1. **EN** - EN，ENmockEN
+2. **SupportEN** - SupportChinese、English、EN、ENLanguage
+3. **SupportENAPIEN** - SupportENWhisper、OpenAI API、Azure Speech ServicesEN
 
-## 🔧 主要改进
+## 🔧 EN
 
-### 1. 移除测试字幕功能
+### 1. EN
 
-**之前的问题：**
-- 当语音识别失败时，系统会生成测试字幕文件
-- 测试字幕内容不准确，影响后续处理质量
-- 用户可能误以为处理成功
+**EN：**
+- EN，EN
+- EN，EN
+- EN
 
-**现在的改进：**
-- 完全移除测试字幕生成功能
-- 语音识别失败时直接抛出异常
-- 确保生产环境的数据质量
+**EN：**
+- EN
+- EN
+- EN
 
 ```python
-# 之前：返回None或测试字幕
+# EN：ENNoneEN
 result = generate_subtitle_for_video(video_path)
 if result is None:
-    # 生成测试字幕...
+    # EN...
 
-# 现在：失败时抛出异常
+# EN：EN
 try:
     result = generate_subtitle_for_video(video_path)
 except SpeechRecognitionError as e:
-    # 处理语音识别失败
-    logger.error(f"语音识别失败: {e}")
+    # EN
+    logger.error(f"EN: {e}")
     raise
 ```
 
-### 2. 多语种支持
+### 2. ENSupport
 
-**支持的语言：**
-- 中文（简体/繁体）
-- 英文（美式/英式）
-- 日文
-- 韩文
-- 法文
-- 德文
-- 西班牙文
-- 俄文
-- 阿拉伯文
-- 葡萄牙文
-- 意大利文
-- 自动检测
+**SupportENLanguage：**
+- Chinese（EN/EN）
+- English（EN/EN）
+- EN
+- EN
+- EN
+- EN
+- EN
+- EN
+- EN
+- EN
+- EN
+- EN
 
-**使用方式：**
+**EN：**
 ```python
 from shared.utils.speech_recognizer import generate_subtitle_for_video, LanguageCode
 
-# 指定语言
+# ENLanguage
 result = generate_subtitle_for_video(
     video_path, 
     language=LanguageCode.CHINESE_SIMPLIFIED
 )
 
-# 自动检测语言
+# ENLanguage
 result = generate_subtitle_for_video(
     video_path, 
     language=LanguageCode.AUTO
 )
 ```
 
-### 3. 多种语音识别服务
+### 3. EN
 
-**支持的服务：**
+**SupportEN：**
 
-| 服务 | 特点 | 配置要求 |
+| EN | EN | EN |
 |------|------|----------|
-| 本地Whisper | 免费、离线、准确率高 | 安装whisper和ffmpeg |
-| OpenAI API | 准确率最高、支持多种语言 | OpenAI API密钥 |
-| Azure Speech | 企业级、功能丰富 | Azure账户和API密钥 |
-| Google Speech | 准确率高、支持高级功能 | Google Cloud账户 |
-| 阿里云语音 | 中文识别效果好 | 阿里云账户和API密钥 |
+| ENWhisper | EN、EN、EN | ENwhisperENffmpeg |
+| OpenAI API | EN、SupportENLanguage | OpenAI APIEN |
+| Azure Speech | EN、EN | AzureENAPIEN |
+| Google Speech | EN、SupportEN | Google CloudEN |
+| EN | ChineseEN | ENAPIEN |
 
-**自动选择策略：**
-1. 本地Whisper（推荐）
+**EN：**
+1. ENWhisper（EN）
 2. OpenAI API
 3. Azure Speech Services
 4. Google Speech-to-Text
-5. 阿里云语音识别
+5. EN
 
-## 🚀 新的API接口
+## 🚀 ENAPIEN
 
-### 语音识别状态查询
+### EN
 
 ```bash
 GET /api/v1/speech-recognition/status
 ```
 
-返回：
+EN：
 ```json
 {
   "available_methods": {
@@ -118,13 +118,13 @@ GET /api/v1/speech-recognition/status
 }
 ```
 
-### 配置测试
+### EN
 
 ```bash
 POST /api/v1/speech-recognition/test
 ```
 
-请求体：
+EN：
 ```json
 {
   "method": "whisper_local",
@@ -134,30 +134,30 @@ POST /api/v1/speech-recognition/test
 }
 ```
 
-### 安装指南
+### EN
 
 ```bash
 GET /api/v1/speech-recognition/install-guide?method=whisper_local
 ```
 
-## 📝 配置管理
+## 📝 EN
 
-### 环境变量配置
+### EN
 
 ```bash
-# 语音识别方法
+# EN
 export SPEECH_RECOGNITION_METHOD="whisper_local"
 
-# 语言设置
+# LanguageEN
 export SPEECH_RECOGNITION_LANGUAGE="zh"
 
-# Whisper模型
+# WhisperEN
 export SPEECH_RECOGNITION_MODEL="base"
 
-# 超时时间
+# EN
 export SPEECH_RECOGNITION_TIMEOUT="300"
 
-# API密钥（根据选择的服务）
+# APIEN（EN）
 export OPENAI_API_KEY="your-openai-key"
 export AZURE_SPEECH_KEY="your-azure-key"
 export AZURE_SPEECH_REGION="your-region"
@@ -167,9 +167,9 @@ export ALIYUN_ACCESS_KEY_SECRET="your-secret-key"
 export ALIYUN_SPEECH_APP_KEY="your-app-key"
 ```
 
-### 配置文件
+### EN
 
-在 `data/settings.json` 中可以配置：
+EN `data/settings.json` EN：
 
 ```json
 {
@@ -180,9 +180,9 @@ export ALIYUN_SPEECH_APP_KEY="your-app-key"
 }
 ```
 
-## 🔍 错误处理
+## 🔍 EN
 
-### 新的异常类型
+### EN
 
 ```python
 from shared.utils.speech_recognizer import SpeechRecognitionError
@@ -190,46 +190,46 @@ from shared.utils.speech_recognizer import SpeechRecognitionError
 try:
     result = generate_subtitle_for_video(video_path)
 except SpeechRecognitionError as e:
-    # 处理语音识别错误
-    logger.error(f"语音识别失败: {e}")
-    # 可以选择重试或使用其他方法
+    # EN
+    logger.error(f"EN: {e}")
+    # EN
 ```
 
-### 错误类型
+### EN
 
-1. **服务不可用** - 指定的语音识别服务未安装或配置
-2. **文件不存在** - 视频文件不存在或无法访问
-3. **执行超时** - 语音识别处理超时
-4. **执行失败** - 语音识别服务执行失败
-5. **配置错误** - 参数配置不正确
+1. **EN** - EN
+2. **EN** - EN
+3. **EN** - EN
+4. **EN** - EN
+5. **EN** - EN
 
-## 📊 性能优化
+## 📊 Performance
 
-### Whisper模型选择
+### WhisperEN
 
-| 模型 | 大小 | 速度 | 准确率 | 适用场景 |
+| EN | EN | EN | EN | EN |
 |------|------|------|--------|----------|
-| tiny | 39MB | ⭐⭐⭐⭐⭐ | ⭐⭐ | 快速测试 |
-| base | 74MB | ⭐⭐⭐⭐ | ⭐⭐⭐ | 日常使用 |
-| small | 244MB | ⭐⭐⭐ | ⭐⭐⭐⭐ | 高质量需求 |
-| medium | 769MB | ⭐⭐ | ⭐⭐⭐⭐⭐ | 专业用途 |
-| large | 1550MB | ⭐ | ⭐⭐⭐⭐⭐ | 最高质量 |
+| tiny | 39MB | ⭐⭐⭐⭐⭐ | ⭐⭐ | EN |
+| base | 74MB | ⭐⭐⭐⭐ | ⭐⭐⭐ | EN |
+| small | 244MB | ⭐⭐⭐ | ⭐⭐⭐⭐ | EN |
+| medium | 769MB | ⭐⭐ | ⭐⭐⭐⭐⭐ | EN |
+| large | 1550MB | ⭐ | ⭐⭐⭐⭐⭐ | EN |
 
-### 超时设置
+### EN
 
-- 短视频（<5分钟）：60秒
-- 中等视频（5-30分钟）：300秒
-- 长视频（>30分钟）：600秒
+- EN（<5EN）：60EN
+- EN（5-30EN）：300EN
+- EN（>30EN）：600EN
 
-## 🛠️ 安装指南
+## 🛠️ EN
 
-### 本地Whisper安装
+### ENWhisperEN
 
 ```bash
-# 安装Python依赖
+# ENPythonEN
 pip install openai-whisper
 
-# 安装系统依赖
+# EN
 # Ubuntu/Debian
 sudo apt update && sudo apt install ffmpeg
 
@@ -237,13 +237,13 @@ sudo apt update && sudo apt install ffmpeg
 brew install ffmpeg
 
 # Windows
-# 下载ffmpeg并添加到PATH
+# ENffmpegENPATH
 
-# 验证安装
+# EN
 whisper --help
 ```
 
-### API服务配置
+### APIEN
 
 #### OpenAI API
 ```bash
@@ -261,23 +261,23 @@ export AZURE_SPEECH_REGION="your-region"
 export GOOGLE_APPLICATION_CREDENTIALS="path/to/credentials.json"
 ```
 
-#### 阿里云语音识别
+#### EN
 ```bash
 export ALIYUN_ACCESS_KEY_ID="your-access-key"
 export ALIYUN_ACCESS_KEY_SECRET="your-secret-key"
 export ALIYUN_SPEECH_APP_KEY="your-app-key"
 ```
 
-## 🔄 迁移指南
+## 🔄 EN
 
-### 从旧版本迁移
+### EN
 
-1. **更新导入语句**
+1. **EN**
 ```python
-# 旧版本
+# EN
 from shared.utils.speech_recognizer import generate_subtitle_for_video
 
-# 新版本
+# EN
 from shared.utils.speech_recognizer import (
     generate_subtitle_for_video, 
     SpeechRecognitionError,
@@ -285,105 +285,105 @@ from shared.utils.speech_recognizer import (
 )
 ```
 
-2. **更新错误处理**
+2. **EN**
 ```python
-# 旧版本
+# EN
 result = generate_subtitle_for_video(video_path)
 if result is None:
-    # 处理失败
+    # EN
 
-# 新版本
+# EN
 try:
     result = generate_subtitle_for_video(video_path)
 except SpeechRecognitionError as e:
-    # 处理失败
+    # EN
 ```
 
-3. **移除测试字幕相关代码**
+3. **EN**
 ```python
-# 删除这些代码
+# EN
 if method == "simple":
     return recognizer.generate_subtitle_simple(video_path, output_path)
 ```
 
-## 📈 监控和日志
+## 📈 EN
 
-### 日志记录
+### EN
 
 ```python
 import logging
 logger = logging.getLogger(__name__)
 
-# 语音识别开始
-logger.info(f"开始语音识别: {video_path}")
+# EN
+logger.info(f"EN: {video_path}")
 
-# 语音识别成功
-logger.info(f"语音识别成功: {output_path}")
+# EN
+logger.info(f"EN: {output_path}")
 
-# 语音识别失败
-logger.error(f"语音识别失败: {error}")
+# EN
+logger.error(f"EN: {error}")
 ```
 
-### 性能监控
+### EN
 
-建议监控以下指标：
-- 语音识别成功率
-- 处理时间
-- 错误类型分布
-- 不同服务的使用情况
+EN：
+- EN
+- EN
+- EN
+- EN
 
-## 🎯 最佳实践
+## 🎯 EN
 
-1. **生产环境建议**
-   - 使用 `small` 或 `medium` 模型
-   - 设置合理的超时时间
-   - 配置错误重试机制
+1. **EN**
+   - EN `small` EN `medium` EN
+   - EN
+   - EN
 
-2. **多语言处理**
-   - 优先使用自动语言检测
-   - 对于特定语言内容，明确指定语言代码
-   - 考虑使用专门的语音识别服务
+2. **ENLanguageEN**
+   - ENLanguageEN
+   - ENLanguageEN，ENLanguageEN
+   - EN
 
-3. **错误处理**
-   - 实现优雅的错误处理
-   - 提供用户友好的错误信息
-   - 考虑降级策略
+3. **EN**
+   - EN
+   - ProvidesEN
+   - EN
 
-4. **性能优化**
-   - 根据视频长度选择合适的模型
-   - 使用GPU加速（如果可用）
-   - 考虑并行处理多个视频
+4. **Performance**
+   - EN
+   - ENGPUEN（EN）
+   - EN
 
-## 🔮 未来计划
+## 🔮 EN
 
-1. **实现更多API服务**
-   - 百度语音识别
-   - 腾讯云语音识别
-   - 华为云语音识别
+1. **ENAPIEN**
+   - EN
+   - EN
+   - EN
 
-2. **增强功能**
-   - 说话人分离
-   - 情感识别
-   - 关键词提取
+2. **EN**
+   - EN
+   - EN
+   - EN
 
-3. **性能优化**
-   - 流式处理
-   - 缓存机制
-   - 分布式处理
+3. **Performance**
+   - EN
+   - EN
+   - EN
 
-## 📞 技术支持
+## 📞 ENSupport
 
-如果遇到问题，请：
+EN，EN：
 
-1. 检查日志文件中的错误信息
-2. 验证语音识别服务是否正确安装
-3. 确认配置文件是否正确
-4. 查看API文档和安装指南
+1. EN
+2. EN
+3. EN
+4. ENAPIEN
 
-更多帮助请参考：
-- [Whisper官方文档](https://github.com/openai/whisper)
-- [OpenAI API文档](https://platform.openai.com/docs/api-reference)
-- [Azure Speech Services文档](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/)
-- [Google Speech-to-Text文档](https://cloud.google.com/speech-to-text/docs)
-- [阿里云语音识别文档](https://help.aliyun.com/product/30413.html)
+ENReference：
+- [WhisperEN](https://github.com/openai/whisper)
+- [OpenAI APIEN](https://platform.openai.com/docs/api-reference)
+- [Azure Speech ServicesEN](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/)
+- [Google Speech-to-TextEN](https://cloud.google.com/speech-to-text/docs)
+- [EN](https://help.aliyun.com/product/30413.html)
 

@@ -82,7 +82,7 @@ const DesktopSettings: React.FC = () => {
   const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
   const [serviceStatus, setServiceStatus] = useState<ServiceStatus | null>(null);
 
-  // 加载配置
+  // Load config
   const loadConfig = async () => {
     try {
       const response = await fetch('/api/v1/desktop/config');
@@ -91,15 +91,15 @@ const DesktopSettings: React.FC = () => {
         setConfig(data.config);
         form.setFieldsValue(data.config);
       } else {
-        message.error('加载配置失败');
+        message.error('Load configFailed');
       }
     } catch (error) {
-      console.error('加载配置错误:', error);
-      message.error('加载配置失败');
+      console.error('Load configError:', error);
+      message.error('Load configFailed');
     }
   };
 
-  // 加载系统信息
+  // Load system info
   const loadSystemInfo = async () => {
     try {
       const response = await fetch('/api/v1/desktop/system/info');
@@ -108,11 +108,11 @@ const DesktopSettings: React.FC = () => {
         setSystemInfo(data);
       }
     } catch (error) {
-      console.error('加载系统信息失败:', error);
+      console.error('Load system infoFailed:', error);
     }
   };
 
-  // 加载服务状态
+  // Load servicesStatus
   const loadServiceStatus = async () => {
     try {
       const response = await fetch('/api/v1/desktop/service/status');
@@ -121,15 +121,15 @@ const DesktopSettings: React.FC = () => {
         setServiceStatus(data);
       }
     } catch (error) {
-      console.error('加载服务状态失败:', error);
+      console.error('Load servicesStatusFailed:', error);
     }
   };
 
-  // 保存配置
+  // Saveconfig
   const saveConfig = async (values: DesktopConfig) => {
     setLoading(true);
     try {
-      // 转换扁平结构为后端期望的DesktopConfig结构
+      // ENDesktopConfigEN
       const configData = {
         app_name: values.app_name || "AutoClip Desktop",
         app_version: values.app_version || "1.0.0",
@@ -165,15 +165,15 @@ const DesktopSettings: React.FC = () => {
       });
 
       if (response.ok) {
-        message.success('配置保存成功');
+        message.success('configSaveSucceeded');
         setConfig(configData);
       } else {
         const errorData = await response.json();
-        message.error(`配置保存失败: ${errorData.detail || '未知错误'}`);
+        message.error(`configSave failed: ${errorData.detail || 'Unknown error'}`);
       }
     } catch (error) {
-      console.error('配置保存错误:', error);
-      message.error('配置保存失败');
+      console.error('configSaveError:', error);
+      message.error('configSave failed');
     } finally {
       setLoading(false);
     }
@@ -196,12 +196,12 @@ const DesktopSettings: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <Title level={2}>
-        <SettingOutlined /> 桌面设置
+        <SettingOutlined /> ENsettings
       </Title>
       
       <Tabs defaultActiveKey="basic">
-        {/* 基础设置 */}
-        <TabPane tab={<span><SettingOutlined />基础设置</span>} key="basic">
+        {/* Basic settings */}
+        <TabPane tab={<span><SettingOutlined />Basic settings</span>} key="basic">
           <Card>
             <Form
               form={form}
@@ -213,8 +213,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="app_name"
-                    label="应用名称"
-                    rules={[{ required: true, message: '请输入应用名称' }]}
+                    label="App name"
+                    rules={[{ required: true, message: 'Please enterApp name' }]}
                   >
                     <Input />
                   </Form.Item>
@@ -222,8 +222,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="app_version"
-                    label="应用版本"
-                    rules={[{ required: true, message: '请输入应用版本' }]}
+                    label="App version"
+                    rules={[{ required: true, message: 'Please enterApp version' }]}
                   >
                     <Input />
                   </Form.Item>
@@ -232,7 +232,7 @@ const DesktopSettings: React.FC = () => {
 
               <Form.Item
                 name="debug_mode"
-                label="调试模式"
+                label="EN"
                 valuePropName="checked"
               >
                 <Switch />
@@ -240,13 +240,13 @@ const DesktopSettings: React.FC = () => {
 
               <Divider />
 
-              <Title level={4}>服务配置</Title>
+              <Title level={4}>serviceconfig</Title>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
                     name="host"
-                    label="主机地址"
-                    rules={[{ required: true, message: '请输入主机地址' }]}
+                    label="Host"
+                    rules={[{ required: true, message: 'Please enterHost' }]}
                   >
                     <Input />
                   </Form.Item>
@@ -254,8 +254,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="port"
-                    label="端口"
-                    rules={[{ required: true, message: '请输入端口' }]}
+                    label="port"
+                    rules={[{ required: true, message: 'Please enterport' }]}
                   >
                     <InputNumber min={1} max={65535} style={{ width: '100%' }} />
                   </Form.Item>
@@ -264,8 +264,8 @@ const DesktopSettings: React.FC = () => {
 
               <Form.Item
                 name="max_memory_usage"
-                label="最大内存使用 (MB)"
-                rules={[{ required: true, message: '请输入最大内存使用' }]}
+                label="Max memory usage (MB)"
+                rules={[{ required: true, message: 'Please enterMax memory usage' }]}
               >
                 <InputNumber min={512} max={8192} style={{ width: '100%' }} />
               </Form.Item>
@@ -278,13 +278,13 @@ const DesktopSettings: React.FC = () => {
                     loading={loading}
                     icon={<SaveOutlined />}
                   >
-                    保存配置
+                    Saveconfig
                   </Button>
                   <Button 
                     icon={<ReloadOutlined />}
                     onClick={loadConfig}
                   >
-                    重新加载
+                    EN
                   </Button>
                 </Space>
               </Form.Item>
@@ -292,8 +292,8 @@ const DesktopSettings: React.FC = () => {
           </Card>
         </TabPane>
 
-        {/* API设置 */}
-        <TabPane tab={<span><ApiOutlined />API设置</span>} key="api">
+        {/* APIsettings */}
+        <TabPane tab={<span><ApiOutlined />APIsettings</span>} key="api">
           <Card>
             <Form
               form={form}
@@ -301,44 +301,44 @@ const DesktopSettings: React.FC = () => {
               onFinish={saveConfig}
               initialValues={config ?? undefined}
             >
-              <Title level={4}>API密钥</Title>
+              <Title level={4}>APIEN</Title>
               <Form.Item
                 name="dashscope_api_key"
                 label="DashScope API Key"
               >
-                <Input.Password placeholder="请输入DashScope API Key" />
+                <Input.Password placeholder="Please enterDashScope API Key" />
               </Form.Item>
 
               <Form.Item
                 name="openai_api_key"
                 label="OpenAI API Key"
               >
-                <Input.Password placeholder="请输入OpenAI API Key" />
+                <Input.Password placeholder="Please enterOpenAI API Key" />
               </Form.Item>
 
               <Form.Item
                 name="gemini_api_key"
                 label="Gemini API Key"
               >
-                <Input.Password placeholder="请输入Gemini API Key" />
+                <Input.Password placeholder="Please enterGemini API Key" />
               </Form.Item>
 
               <Form.Item
                 name="siliconflow_api_key"
                 label="SiliconFlow API Key"
               >
-                <Input.Password placeholder="请输入SiliconFlow API Key" />
+                <Input.Password placeholder="Please enterSiliconFlow API Key" />
               </Form.Item>
 
               <Divider />
 
-              <Title level={4}>模型配置</Title>
+              <Title level={4}>Modelconfig</Title>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
                     name="default_model"
-                    label="默认模型"
-                    rules={[{ required: true, message: '请输入默认模型' }]}
+                    label="Default model"
+                    rules={[{ required: true, message: 'Please enterDefault model' }]}
                   >
                     <Input />
                   </Form.Item>
@@ -346,8 +346,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="max_tokens"
-                    label="最大Token数"
-                    rules={[{ required: true, message: '请输入最大Token数' }]}
+                    label="maxTokenEN"
+                    rules={[{ required: true, message: 'Please entermaxTokenEN' }]}
                   >
                     <InputNumber min={100} max={8000} style={{ width: '100%' }} />
                   </Form.Item>
@@ -356,8 +356,8 @@ const DesktopSettings: React.FC = () => {
 
               <Form.Item
                 name="timeout"
-                label="超时时间 (秒)"
-                rules={[{ required: true, message: '请输入超时时间' }]}
+                label="Timeout (EN)"
+                rules={[{ required: true, message: 'Please enterTimeout' }]}
               >
                 <InputNumber min={10} max={300} style={{ width: '100%' }} />
               </Form.Item>
@@ -369,15 +369,15 @@ const DesktopSettings: React.FC = () => {
                   loading={loading}
                   icon={<SaveOutlined />}
                 >
-                  保存配置
+                  Saveconfig
                 </Button>
               </Form.Item>
             </Form>
           </Card>
         </TabPane>
 
-        {/* 处理设置 */}
-        <TabPane tab={<span><ToolOutlined />处理设置</span>} key="processing">
+        {/* Processing settings */}
+        <TabPane tab={<span><ToolOutlined />Processing settings</span>} key="processing">
           <Card>
             <Form
               form={form}
@@ -389,8 +389,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="chunk_size"
-                    label="块大小"
-                    rules={[{ required: true, message: '请输入块大小' }]}
+                    label="Chunk size"
+                    rules={[{ required: true, message: 'Please enterChunk size' }]}
                   >
                     <InputNumber min={1000} max={10000} style={{ width: '100%' }} />
                   </Form.Item>
@@ -398,8 +398,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="min_score_threshold"
-                    label="最小评分阈值"
-                    rules={[{ required: true, message: '请输入最小评分阈值' }]}
+                    label="Min score threshold"
+                    rules={[{ required: true, message: 'Please enterMin score threshold' }]}
                   >
                     <InputNumber min={0.1} max={1.0} step={0.1} style={{ width: '100%' }} />
                   </Form.Item>
@@ -410,8 +410,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="max_clips_per_collection"
-                    label="每个合集最大片段数"
-                    rules={[{ required: true, message: '请输入最大片段数' }]}
+                    label="ENCollectionMax clips"
+                    rules={[{ required: true, message: 'Please enterMax clips' }]}
                   >
                     <InputNumber min={1} max={20} style={{ width: '100%' }} />
                   </Form.Item>
@@ -419,8 +419,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="max_retries"
-                    label="最大重试次数"
-                    rules={[{ required: true, message: '请输入最大重试次数' }]}
+                    label="maxRetryEN"
+                    rules={[{ required: true, message: 'Please entermaxRetryEN' }]}
                   >
                     <InputNumber min={1} max={10} style={{ width: '100%' }} />
                   </Form.Item>
@@ -434,34 +434,34 @@ const DesktopSettings: React.FC = () => {
                   loading={loading}
                   icon={<SaveOutlined />}
                 >
-                  保存配置
+                  Saveconfig
                 </Button>
               </Form.Item>
             </Form>
           </Card>
         </TabPane>
 
-        {/* 系统信息 */}
-        <TabPane tab={<span><DatabaseOutlined />系统信息</span>} key="system">
+        {/* System info */}
+        <TabPane tab={<span><DatabaseOutlined />System info</span>} key="system">
           <Card>
             {systemInfo && (
               <Row gutter={16}>
                 <Col span={8}>
                   <Statistic
-                    title="操作系统"
+                    title="Actionssystem"
                     value={systemInfo.platform}
                     suffix={systemInfo.platform_version}
                   />
                 </Col>
                 <Col span={8}>
                   <Statistic
-                    title="架构"
+                    title="arch"
                     value={systemInfo.architecture}
                   />
                 </Col>
                 <Col span={8}>
                   <Statistic
-                    title="Python版本"
+                    title="Pythonversion"
                     value={systemInfo.python_version}
                   />
                 </Col>
@@ -474,13 +474,13 @@ const DesktopSettings: React.FC = () => {
                 <Row gutter={16}>
                   <Col span={12}>
                     <Statistic
-                      title="总内存"
+                      title="EN"
                       value={formatBytes(systemInfo.memory_total)}
                     />
                   </Col>
                   <Col span={12}>
                     <Statistic
-                      title="可用内存"
+                      title="EN"
                       value={formatBytes(systemInfo.memory_available)}
                     />
                   </Col>
@@ -488,14 +488,14 @@ const DesktopSettings: React.FC = () => {
                 <Row gutter={16}>
                   <Col span={12}>
                     <Statistic
-                      title="内存使用率"
+                      title="EN"
                       value={systemInfo.memory_usage_percent}
                       suffix="%"
                     />
                   </Col>
                   <Col span={12}>
                     <Statistic
-                      title="磁盘使用率"
+                      title="EN"
                       value={systemInfo.disk_usage_percent}
                       suffix="%"
                     />
@@ -507,24 +507,24 @@ const DesktopSettings: React.FC = () => {
             {serviceStatus && (
               <>
                 <Divider />
-                <Title level={4}>服务状态</Title>
+                <Title level={4}>serviceStatus</Title>
                 <Row gutter={16}>
                   <Col span={8}>
                     <Statistic
-                      title="服务状态"
-                      value={serviceStatus.is_running ? "运行中" : "已停止"}
+                      title="serviceStatus"
+                      value={serviceStatus.is_running ? "running" : "EN"}
                       valueStyle={{ color: serviceStatus.is_running ? '#3f8600' : '#cf1322' }}
                     />
                   </Col>
                   <Col span={8}>
                     <Statistic
-                      title="端口"
+                      title="port"
                       value={serviceStatus.port}
                     />
                   </Col>
                   <Col span={8}>
                     <Statistic
-                      title="运行时间"
+                      title="EN"
                       value={serviceStatus.uptime}
                     />
                   </Col>
@@ -540,7 +540,7 @@ const DesktopSettings: React.FC = () => {
                 loadServiceStatus();
               }}
             >
-              刷新信息
+              Refreshinfo
             </Button>
           </Card>
         </TabPane>

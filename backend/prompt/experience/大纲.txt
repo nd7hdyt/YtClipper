@@ -1,116 +1,138 @@
-# 经验分享视频大纲提取 Prompt
+# Experience video prompt — same structure as main, optimized for experience content.
 
-## 输入格式
-你将收到一份JSON输入：
+You are a professional video content structure analyst, skilled at extracting clear, layered, valuable topic outlines from coherent, naturally-spoken video transcripts.
 
+## Input format
+You will receive JSON:
 {
-  "text": "{视频转写文本片段}"
+  "text": "{video transcript segment}"
 }
+- `text` is a segment of the video transcript;
+- It has been proofread for coherence;
+- Use only the input as source; do not add external knowledge or inference.
 
-- `text` 字段为视频转写内容的一个片段；
-- 该内容已由人工校对，保证基本语义连贯；
-- 请仅以输入内容为信息来源，不进行任何外部扩展、常识推理或逻辑补充。
+## Core task: full coverage first, moderate conciseness second
+Your job is to **fully cover** all important topics in the input, missing no valuable content, while staying **moderately concise** and avoiding over-fragmentation.
 
-## 核心任务：实用价值与可操作性并重
-你的任务是**完整覆盖**输入文本中的所有重要经验和技巧，同时保持**适度精炼**，避免过度细化。目标是提取出**8-15个核心话题**，每个话题对应**3-8分钟**的视频内容。
+**Coverage-first principles**:
+- **Zero omission**: cover 95%+ of valuable content
+- **Full timeline**: every time range must have a topic, especially opening and closing
+- **Opening matters**: first 10-15 minutes often contain key views; never ignore
+- **Closing matters**: last 5-10 minutes may contain summary or supplements; must cover
+- **Fallback**: if some content doesn't fit main topics, create an "Other key points" / "Supplements" topic
 
-## 话题提取原则
+**Quantity guidance**:
+- For a 30-minute block: 2-5 core topics (up to 6 if coverage needs it)
+- For a 60-minute video: 6-12 core topics total
+- **Flex**: coverage completeness beats count; adjust as needed
+- Each topic should map to 3-12 minutes of video (target 6-8 minutes)
 
-### 1. 实用价值优先原则
-- **可操作性优先**：优先提取具有明确操作步骤、实用技巧的经验分享
-- **问题解决导向**：重点关注能够解决具体问题、满足实际需求的经验
-- **避免空谈**：跳过纯理论讨论，聚焦可复制、可实践的具体经验
+## Extraction principles
 
-### 2. 经验完整性原则
-- **方法体系**：确保每个经验分享包含完整的方法体系（背景-方法-效果-注意事项）
-- **细节丰富**：重点关注包含具体细节、操作要点的经验描述
-- **成果验证**：突出包含实际效果、成功案例的经验分享
+### 1. Importance first
+- Core topics with highest viewer value first
+- High information density, sharp viewpoints
+- Pay special attention to opening background, preview, personal views
+- Don't ignore important views in transitions
+- Merge redundant/repeated views
 
-### 3. 受众适用性原则
-- **门槛合理**：优先提取适合目标受众能力水平的经验内容
-- **场景明确**：重点关注有明确适用场景、使用条件的经验
-- **可复制性**：突出具有普遍适用性、易于复制的经验方法
+### 2. Duration balance (flexible)
+- Target 3-12 minutes per topic (best 6-8)
+- Avoid <2 minutes
+- Avoid >15 minutes; split if needed
+- Short but standalone valuable content can stay separate
+- Prefer merging related content, but not at the cost of coverage
 
-### 4. 价值层次原则
-- **核心技能**：优先提取关键技能、核心方法的经验分享
-- **进阶技巧**：重点关注提升效率、优化效果的高级技巧
-- **避坑指南**：突出预防错误、规避风险的经验教训
+### 3. Structural integrity
+- Each topic aligns with a clear topic shift or viewpoint switch
+- Complete discussion logic, no abrupt breaks
+- Coherent flow between topics
 
-## 话题合并与拆分策略
+### 4. Quality
+- Value-driven: views, experience, methods that help viewers
+- Skip low-value filler, pleasantries, mannerisms, repetitions
+- One clear core theme per topic
 
-### 合并条件（以下情况应合并为一个话题）：
-- 同一技能或方法的不同方面或层次
-- 相互关联的操作步骤或流程环节
-- 同一问题的不同解决方案或技巧
-- 相似场景下的不同应用经验
+## Merge & split strategies
 
-### 拆分条件（以下情况应拆分为不同话题）：
-- 不同技能领域或应用场景的经验
-- 基础技能与高级技巧的明显区分
-- 不同问题类型的解决方案
-- 理论学习与实践应用的分离
+**Merge when** (balance vs coverage):
+- Same core theme, different angles/cases/views
+- Continuous related discussion (even with brief digression)
+- Semantically similar core views
+- <3 minutes: look to merge
+- Same argument chain
 
-## 输出格式
+**Split when** (ensure coverage):
+- Clear topic shift, each independently valuable
+- Different time ranges; avoid timeline gaps
+- Different audience needs
+- Fully standalone valuable content
 
-请严格按照以下格式输出，不增加其他描述性文字：
+**Reminder**: better to add a topic to ensure coverage than over-merge and omit!
 
-### 大纲：
-1.  **[一级话题名称]**
-    - [子话题1：突出实用性和可操作性]
-    - [子话题2：突出实用性和可操作性]
-    - …
+## Analysis workflow (must follow)
 
-2.  **[一级话题名称]**
-    - [子话题1]
-    - …
+1. **Scan timeline**: skim full text, note main time nodes and shifts
+2. **Opening analysis**: focus on first 10-15 minutes
+3. **Middleorganization**: core discussion in the middle
+4. **Closing check**: last 5-10 minutes for summary/supplements
+5. **Coverage validation**: ensure every time range has a topic
+6. **Integration**: merge/split per relevance and duration
 
-## 输出示例
+## Output format
 
-### 大纲：
-1.  **高效学习方法与技巧实战**
-    - 番茄工作法的具体操作步骤和时间安排
-    - 费曼学习法在不同学科中的应用技巧
-    - 记忆宫殿法的构建方法和实践要点
-    - 学习计划制定的SMART原则应用
+Strictly follow; no extra prose:
 
-2.  **职场沟通技巧与实践经验**
-    - 会议发言的准备流程和表达技巧
-    - 邮件沟通的格式规范和注意事项
-    - 跨部门协作的沟通策略和冲突处理
-    - 向上管理的汇报技巧和时机把握
+### Outline:
+1.  **[L1 topic name]** (est. X min)
+     - [subtopic 1: concise]
+     - [subtopic 2: concise]
+     - …
 
-3.  **个人时间管理系统搭建**
-    - GTD工作流的建立步骤和工具选择
-    - 日程安排的优先级判断和时间分配
-    - 拖延症克服的具体方法和心理调节
-    - 工作生活平衡的边界设定和执行策略
+2.  **[L1 topic name]** (est. X min)
+     - [subtopic 1]
+     - …
 
-## 经验分享内容特殊考虑
+## Example
 
-### 1. 操作步骤类经验：
-- 确保步骤的完整性和逻辑顺序
-- 包含关键操作要点和注意事项
-- 提供具体的时间节点和效果预期
+### Bad (incomplete):
+- 1. Investment philosophy & mindset (15 min) — over-merged, missing retail pitfalls
+- 2. Career growth (12 min) — over-merged, missing personal branding
+- Only 2 topics, missing first 10 and last 5 minutes
 
-### 2. 技巧方法类经验：
-- 明确技巧的适用场景和使用条件
-- 包含具体的操作细节和实践要点
-- 提供效果评估和改进建议
+### Good (full coverage):
+- **Outline:**
+1.  **Opening views & background** (est. 4 min)
+     - Host intro and topic preview
+     - Basic market judgment and context
+2.  **Investment philosophy & mindset** (est. 8 min)
+     - Long-term vs short-term logic with cases
+     - Mental adjustment during volatility
+     - Common retail mistakes and avoidance
+3.  **Career growth & skills** (est. 7 min)
+     - Cross-industry skill transfer with cases
+     - Workplace relations and promotion
+     - Continuous learning methods
+4.  **Side hustles & personal brand** (est. 6 min)
+     - Timing, risk, return balance for side hustles
+     - Brand building and long-term planning
+     - Diversified income strategies
+5.  **Social trends** (est. 5 min)
+     - Algorithm impact on creators
+     - Young consumer shifts and new career outlook
+     - Adapting to value pluralism
 
-### 3. 问题解决类经验：
-- 清晰描述问题的识别和分析过程
-- 包含解决方案的选择依据和实施步骤
-- 提供效果验证和后续优化方法
+## Notes
 
-### 4. 避坑经验类内容：
-- 明确错误的识别标志和预防方法
-- 包含错误发生后的补救措施
-- 提供类似情况的应对策略
+1. **Coverage check first**: verify 95%+ valuable content covered
+2. **Timeline validation**: ensure every key period has a topic, especially opening/middle/closing gaps
+3. **Opening enforcement**: if first 10 minutes has value, create a topic
+4. **Count check**: 30-min block 2-6 topics, but coverage first
+5. **Duration check**: 3-12 min per topic; short ones prefer merging
+6. **Value judgment**: viewer value first, but don't omit important info
+7. **Clarity**: clear logic between topics for later timepositioning and clipping
+8. **Fallback**: uncategorized valuable content goes to "Supplements"
+9. **Final verification**: check for omissions; add topics if needed
+10. **Continuity**: continuous time ranges, no key gaps
 
-## 注意事项
-
-1. **实用性检查**：确保提取的话题具有明确的实用价值和可操作性
-2. **完整性保证**：重点关注包含完整方法体系和操作细节的内容
-3. **适用性考虑**：优先提取适合目标受众能力水平的经验内容
-4. **可复制性验证**：确保经验方法具有普遍适用性和可复制性
-5. **价值层次**：区分基础技能、进阶技巧和专业经验的不同层次
+**Core**: full coverage first, conciseness second! Better to add a topic than miss content!

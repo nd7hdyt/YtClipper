@@ -1,6 +1,6 @@
 """
-切片服务
-提供切片相关的业务逻辑操作
+clipservice
+ENclipEN
 """
 
 from typing import Optional, List, Dict, Any

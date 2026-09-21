@@ -1,5 +1,5 @@
 """
-Step 1: 大纲提取 - 从转写文本中提取结构性大纲
+Step 1: Outline extraction - extract a structural outline from transcript text
 """
 import json
 import logging
@@ -7,7 +7,7 @@ import re
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 
-# 导入依赖
+# Import dependencies
 from ..utils.llm_client import LLMClient
 from ..utils.text_processor import TextProcessor
 from ..core.shared_config import PROMPT_FILES, METADATA_DIR
@@ -16,67 +16,70 @@ from .failures import PipelineFailure, HINT_CHECK_LLM, HINT_SUBTITLE
 logger = logging.getLogger(__name__)
 
 class OutlineExtractor:
-    """大纲提取器（重构版）"""
+    """Outline extractor (refactored version)"""
     
     def __init__(self, metadata_dir: Path = None, prompt_files: Dict = None):
         self.llm_client = LLMClient()
         self.text_processor = TextProcessor()
         
-        # 使用传入的metadata_dir或默认值
+        # Use the provided metadata_dir or the default
         if metadata_dir is None:
             metadata_dir = METADATA_DIR
         self.metadata_dir = metadata_dir
         
-        # 使用传入的prompt_files或默认值
+        # Use the provided prompt_files or the defaults
         if prompt_files is None:
             prompt_files = PROMPT_FILES
         
-        # 加载提示词
+        # Load the prompt
         with open(prompt_files['outline'], 'r', encoding='utf-8') as f:
             self.outline_prompt = f.read()
             
-        # 创建用于存放中间文本块的目录
+        # Directory for intermediate text chunks
         self.chunks_dir = self.metadata_dir / "step1_chunks"
         self.chunks_dir.mkdir(parents=True, exist_ok=True)
-        # 创建用于存放中间SRT块的目录
+        # Directory for intermediate SRT chunks
         self.srt_chunks_dir = self.metadata_dir / "step1_srt_chunks"
         self.srt_chunks_dir.mkdir(parents=True, exist_ok=True)
 
     def extract_outline(self, srt_path: Path) -> List[Dict]:
         """
-        从SRT文件提取视频大纲
+        Extract the video outline from an SRT file
         
         Args:
-            srt_path: SRT文件路径
+            srt_path: path to the SRT file
             
         Returns:
-            视频大纲列表
+            list of video outline topics
         """
-        logger.info("开始提取视频大纲...")
+        logger.info("Extracting video outline...")
         
-        # 1. 解析SRT文件。空字幕 / 解析失败必须让流水线失败，不能静默返回 [] 让后面跑成 0 切片
+        # 1. Parse the SRT file. Empty subtitles / parse failure must fail the
+        # pipeline, never silently return [] and let later steps run into 0 clips
         try:
             srt_data = self.text_processor.parse_srt(srt_path)
         except Exception as e:
-            logger.error(f"解析SRT文件失败: {e}")
-            raise PipelineFailure("SUBTITLE", f"字幕文件无法解析：{e}", HINT_SUBTITLE) from e
+            logger.error(f"Failed to parse SRT file: {e}")
+            raise PipelineFailure("SUBTITLE", f"Subtitle file could not be parsed: {e}", HINT_SUBTITLE) from e
         if not srt_data:
-            logger.warning("SRT文件为空或解析失败")
-            raise PipelineFailure("SUBTITLE", "字幕文件为空，没有可分析的文本。", HINT_SUBTITLE)
+            logger.warning("SRT file is empty or failed to parse")
+            raise PipelineFailure("SUBTITLE", "Subtitle file is empty; there is no text to analyze.", HINT_SUBTITLE)
             
-        # 1.5 时长画像：短视频不能套播客参数（#59）。写盘给 step2 / step3 复用
+        # 1.5 Duration profile: short videos must not reuse podcast parameters (#59).
+        # Persist to disk for step2 / step3 reuse
         from .quality import profile_from_srt, save_profile
         profile = profile_from_srt(srt_data)
         save_profile(profile, self.metadata_dir)
         outline_prompt = self.outline_prompt + profile.prompt_hint()
-        logger.info(f"时长画像: {profile.tier}，总时长 {profile.total_sec:.0f}s，建议话题数 {profile.topics_hint}")
+        logger.info(f"Duration profile: {profile.tier}, total {profile.total_sec:.0f}s, suggested topics {profile.topics_hint}")
 
-        # 2. 基于时间智能分块（短 / 中视频整条一块，长视频 ~30 分钟一块）
+        # 2. Time-based smart chunking (short/medium videos as a single chunk,
+        # long videos ~30 minutes per chunk)
         interval = 30 if profile.tier == "long" else max(1, int(profile.total_sec // 60) + 1)
         chunks = self.text_processor.chunk_srt_data(srt_data, interval_minutes=interval)
-        logger.info(f"文本已按~{interval}分钟/块切分，共{len(chunks)}个块")
+        logger.info(f"Text split into ~{interval} min/chunk, {len(chunks)} chunks total")
         
-        # 3. 保存文本块和SRT块到中间文件
+        # 3. Save text chunks and SRT chunks to intermediate files
         chunk_files = self._save_chunks_to_files(chunks)
         self._save_srt_chunks(chunks)
         
@@ -84,57 +87,59 @@ class OutlineExtractor:
         failed_chunks = 0
         last_error: Optional[BaseException] = None
         
-        # 4. 逐一处理每个文本块文件
+        # 4. Process each text-chunk file one by one
         for i, chunk_file in enumerate(chunk_files):
-            logger.info(f"处理第{i+1}/{len(chunks)}个文本块: {chunk_file.name}")
+            logger.info(f"Processing chunk {i+1}/{len(chunks)}: {chunk_file.name}")
             try:
-                # 读取文本块内容
+                # Read the chunk content
                 with open(chunk_file, 'r', encoding='utf-8') as f:
                     chunk_text = f.read()
                 
-                # 为每个块调用LLM
+                # Call the LLM for each chunk
                 input_data = {"text": chunk_text}
                 response = self.llm_client.call_with_retry(outline_prompt, input_data)
                 
                 if response:
-                    # 解析响应并附加块索引
-                    # 注意：这里的chunk_index直接用i，与文件名和原始chunk对应
+                    # Parse the response and attach the chunk index
+                    # Note: chunk_index uses i directly, matching the file name and original chunk
                     parsed_outlines = self._parse_outline_response(response, i)
                     all_outlines.extend(parsed_outlines)
                 else:
-                    logger.warning(f"处理第{i+1}个文本块时返回空响应")
+                    logger.warning(f"Chunk {i+1} returned an empty response")
             except Exception as e:
-                # 单块失败可以继续（长视频某一块偶发超时不该毁掉整条），但要记账：
-                # 全部失败 = 提供商 / key / 模型不对，必须报错而不是交一个空大纲出去
+                # A single-chunk failure is tolerable (an occasional timeout on one
+                # chunk of a long video should not kill the whole run), but count it:
+                # all chunks failing = wrong provider / key / model, which must raise
+                # instead of handing downstream an empty outline
                 failed_chunks += 1
                 last_error = e
-                logger.error(f"处理第{i+1}个文本块失败: {e}")
+                logger.error(f"Failed to process chunk {i+1}: {e}")
                 continue
 
         total_chunks = len(chunk_files)
         if total_chunks and failed_chunks == total_chunks:
             raise PipelineFailure(
                 "ANALYZE",
-                f"大纲提取失败：{failed_chunks}/{total_chunks} 个文本块调用模型都失败了。最后一次错误：{last_error}",
+                f"Outline extraction failed: model calls failed for {failed_chunks}/{total_chunks} text chunks. Last error: {last_error}",
                 HINT_CHECK_LLM,
             ) from last_error
         if failed_chunks:
-            logger.warning(f"{failed_chunks}/{total_chunks} 个文本块失败，用其余块继续。最后一次错误：{last_error}")
+            logger.warning(f"{failed_chunks}/{total_chunks} chunks failed, continuing with the rest. Last error: {last_error}")
         
-        # 5. 合并和去重
+        # 5. Merge and deduplicate
         final_outlines = self._merge_outlines(all_outlines)
         if not final_outlines:
             raise PipelineFailure(
                 "ANALYZE",
-                f"模型返回的内容无法解析为大纲（{total_chunks} 个文本块均未得到有效话题）。",
-                "换一个更强或更稳定的模型（如 qwen-plus / gpt-4o-mini）后重试；若用本地模型，确认它支持中文长文本。",
+                f"Model output could not be parsed into an outline (no valid topics from any of the {total_chunks} text chunks).",
+                "Retry with a stronger or more stable model (e.g. qwen-plus / gpt-4o-mini); for a local model, make sure it handles long Chinese text.",
             )
         
-        logger.info(f"大纲提取完成，共{len(final_outlines)}个话题")
+        logger.info(f"Outline extraction done, {len(final_outlines)} topics total")
         return final_outlines
 
     def _save_chunks_to_files(self, chunks: List[Dict]) -> List[Path]:
-        """将文本块保存为单独的 .txt 文件"""
+        """Save text chunks as individual .txt files"""
         chunk_files = []
         for chunk in chunks:
             chunk_index = chunk['chunk_index']
@@ -145,11 +150,11 @@ class OutlineExtractor:
                 f.write(text_content)
             chunk_files.append(file_path)
         
-        logger.info(f"所有文本块已保存到: {self.chunks_dir}")
+        logger.info(f"All text chunks saved to: {self.chunks_dir}")
         return chunk_files
 
     def _save_srt_chunks(self, chunks: List[Dict]):
-        """将SRT数据块保存为单独的 .json 文件"""
+        """Save SRT data chunks as individual .json files"""
         for chunk in chunks:
             chunk_index = chunk['chunk_index']
             srt_entries = chunk['srt_entries']
@@ -158,18 +163,18 @@ class OutlineExtractor:
             with open(file_path, 'w', encoding='utf-8') as f:
                 json.dump(srt_entries, f, ensure_ascii=False, indent=2)
         
-        logger.info(f"所有SRT块已保存到: {self.srt_chunks_dir}")
+        logger.info(f"All SRT chunks saved to: {self.srt_chunks_dir}")
 
     def _parse_outline_response(self, response: str, chunk_index: int) -> List[Dict]:
         """
-        解析大模型的大纲响应 (与之前版本保持一致，无质量检查)
+        Parse the outline response from the LLM (same as the previous version, no quality checks)
         
         Args:
-            response: 大模型响应
-            chunk_index: 当前处理的块索引
+            response: LLM response
+            chunk_index: index of the chunk being processed
             
         Returns:
-            解析后的大纲结构
+            parsed outline structure
         """
         outlines = []
         lines = response.split('\n')
@@ -201,7 +206,7 @@ class OutlineExtractor:
     
     def _merge_outlines(self, outlines: List[Dict]) -> List[Dict]:
         """
-        合并和去重大纲，保留最先出现的版本
+        Merge and deduplicate outlines, keeping the first occurrence of each title
         """
         unique_outlines = {}
         for outline in outlines:
@@ -212,7 +217,7 @@ class OutlineExtractor:
     
     def save_outline(self, outlines: List[Dict], output_path: Optional[Path] = None) -> Path:
         """
-        保存大纲到文件
+        Save the outline to a file
         """
         if output_path is None:
             output_path = self.metadata_dir / "step1_outline.json"
@@ -222,19 +227,19 @@ class OutlineExtractor:
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(outlines, f, ensure_ascii=False, indent=2)
         
-        logger.info(f"大纲已保存到: {output_path}")
+        logger.info(f"Outline saved to: {output_path}")
         return output_path
     
     def load_outline(self, input_path: Path) -> List[Dict]:
         """
-        从文件加载大纲
+        Load the outline from a file
         """
         with open(input_path, 'r', encoding='utf-8') as f:
             return json.load(f)
 
 def run_step1_outline(srt_path: Path, metadata_dir: Path = None, output_path: Optional[Path] = None, prompt_files: Dict = None) -> List[Dict]:
     """
-    运行Step 1: 大纲提取
+    Run Step 1: outline extraction
     """
     if metadata_dir is None:
         metadata_dir = METADATA_DIR

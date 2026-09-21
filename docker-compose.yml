@@ -1,5 +1,5 @@
 services:
-  # Redis服务
+  # RedisService
   redis:
     image: redis:7-alpine
     container_name: autoclip-redis
@@ -15,18 +15,18 @@ services:
       timeout: 5s
       retries: 5
 
-  # 主应用服务
+  # ENService
   autoclip:
     build:
       context: .
       dockerfile: Dockerfile
-    # 四个服务共用同一个镜像；统一 image 名后只需 build 一次
+    # ENServiceEN；EN image EN build EN
     image: autoclip:local
     container_name: autoclip-app
     restart: unless-stopped
     ports:
-      - "8000:8000"  # 后端API
-      - "3000:3000"  # 前端界面
+      - "8000:8000"  # ENAPI
+      - "3000:3000"  # EN
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
@@ -37,8 +37,8 @@ services:
       - ENVIRONMENT=production
       - DEBUG=false
       - LOG_LEVEL=INFO
-      # LLM 配置从宿主机 .env / shell 透传（compose 会自动读项目根目录的 .env 做变量替换）。
-      # 没有这一段时 DOCKER.md 里让用户填的 API_DASHSCOPE_API_KEY 根本进不了容器。
+      # LLM ConfigEN .env / shell EN（compose ENAutoENProjectEN .env EN）。
+      # EN DOCKER.md EN API_DASHSCOPE_API_KEY EN。
       - LLM_PROVIDER=${LLM_PROVIDER:-dashscope}
       - API_MODEL_NAME=${API_MODEL_NAME:-qwen-plus}
       - API_DASHSCOPE_API_KEY=${API_DASHSCOPE_API_KEY:-}
@@ -58,7 +58,7 @@ services:
       retries: 3
       start_period: 40s
 
-  # Celery Worker服务
+  # Celery WorkerService
   celery-worker:
     build:
       context: .
@@ -76,8 +76,8 @@ services:
       - ENVIRONMENT=production
       - DEBUG=false
       - LOG_LEVEL=INFO
-      # LLM 配置从宿主机 .env / shell 透传（compose 会自动读项目根目录的 .env 做变量替换）。
-      # 没有这一段时 DOCKER.md 里让用户填的 API_DASHSCOPE_API_KEY 根本进不了容器。
+      # LLM ConfigEN .env / shell EN（compose ENAutoENProjectEN .env EN）。
+      # EN DOCKER.md EN API_DASHSCOPE_API_KEY EN。
       - LLM_PROVIDER=${LLM_PROVIDER:-dashscope}
       - API_MODEL_NAME=${API_MODEL_NAME:-qwen-plus}
       - API_DASHSCOPE_API_KEY=${API_DASHSCOPE_API_KEY:-}
@@ -87,8 +87,8 @@ services:
       - API_GEMINI_API_KEY=${API_GEMINI_API_KEY:-}
       - API_SILICONFLOW_API_KEY=${API_SILICONFLOW_API_KEY:-}
       - AUTOCLIP_YT_SUBTITLE_LANGS=${AUTOCLIP_YT_SUBTITLE_LANGS:-}
-    # 任务通过 celery_app.task_routes 被路由到专用队列；不带 -Q 的 worker 只消费默认的
-    # `celery` 队列，流水线任务会一直堆在 `processing` 里没人执行，项目永远卡在处理中。
+    # EN celery_app.task_routes EN；EN -Q EN worker EN
+    # `celery` EN，EN `processing` EN，ProjectENProcessingEN。
     command: celery -A backend.core.celery_app worker --loglevel=info --concurrency=2 -Q celery,processing,video,notification,upload
     depends_on:
       redis:
@@ -96,7 +96,7 @@ services:
       autoclip:
         condition: service_healthy
 
-  # Celery Beat调度器
+  # Celery BeatEN
   celery-beat:
     build:
       context: .
@@ -120,7 +120,7 @@ services:
       autoclip:
         condition: service_healthy
 
-  # Flower监控服务（可选）
+  # FlowerENService（EN）
   flower:
     build:
       context: .

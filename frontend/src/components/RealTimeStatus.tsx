@@ -25,38 +25,38 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId, projectI
   >([]);
   const [loading, setLoading] = useState(false);
   
-  // 直接使用简单的状态管理，不使用复杂的Hook
+  // Simple state only, no complex hook
   const loadProjectTasks = useCallback(async (projectId: string) => {
-    console.log('📤 开始加载项目任务:', projectId);
+    console.log('Loading project tasks:', projectId);
     setLoading(true);
     try {
       const response = await fetch(`/api/v1/tasks/project/${projectId}`);
-      console.log('📡 API响应状态:', response.status);
+      console.log('API status:', response.status);
       
       if (response.ok) {
         const data = await response.json();
-        const projectTasks = data.items || []; // 使用正确的字段名
-        console.log('📋 获取到任务数量:', projectTasks.length);
+        const projectTasks = data.items || []; // Use the correct field name
+        console.log('Task count:', projectTasks.length);
         
-        // 转换为TaskProgress组件期望的格式
+        // Shape for the TaskProgress component
         const formattedTasks = projectTasks.map((task: any) => ({
           id: task.id,
           status: task.status,
           progress: task.progress || 0,
-          message: task.name || `任务 ${task.id}`, // 使用name字段或默认值
+          message: task.name || `Task ${task.id}`, // Use name field or fallback
           updatedAt: task.created_at || task.updated_at || new Date().toISOString(),
-          project_id: task.project_id // 添加项目ID字段
+          project_id: task.project_id // Include project id
         }));
         
         setTasks(formattedTasks);
       } else {
-        console.error('❌ API调用失败:', response.status, response.statusText);
+        console.error('API call failed:', response.status, response.statusText);
       }
     } catch (error) {
-      console.error('❌ 加载项目任务失败:', error);
+      console.error('Failed to load project tasks:', error);
     } finally {
       setLoading(false);
-      console.log('✅ 任务加载完成');
+      console.log('Tasks loaded');
     }
   }, []);
 
@@ -69,25 +69,25 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId, projectI
     clearAll: clearAllNotifications
   } = useNotifications();
 
-  // 加载项目任务
+  // Load project tasks
   useEffect(() => {
     const activeProjectId = projectId || currentProject?.id;
     if (!activeProjectId) {
       setTasks([]);
       return;
     }
-    console.log('🔄 开始加载项目任务:', activeProjectId);
+    console.log('Loading project tasks:', activeProjectId);
     loadProjectTasks(activeProjectId);
   }, [projectId, currentProject?.id, loadProjectTasks]);
 
   return (
     <div style={{ padding: 16 }}>
       <Row gutter={[16, 16]}>
-        {/* 统计信息 */}
+        {/* Stats */}
         <Col span={6}>
           <Card size="small">
             <Statistic
-              title="任务总数"
+              title="Total tasks"
               value={tasks.length}
               valueStyle={{ color: '#1890ff' }}
             />
@@ -96,8 +96,8 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId, projectI
         <Col span={6}>
           <Card size="small">
             <Statistic
-              title="加载状态"
-              value={loading ? '加载中' : '已完成'}
+              title="Load status"
+              value={loading ? 'Loading' : 'Done'}
               valueStyle={{ color: loading ? '#52c41a' : '#999' }}
             />
           </Card>
@@ -105,28 +105,28 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId, projectI
         <Col span={6}>
           <Card size="small">
             <Statistic
-              title="未读通知"
+              title="Unread"
               value={unreadCount}
               valueStyle={{ color: unreadCount > 0 ? '#ff4d4f' : '#999' }}
             />
           </Card>
         </Col>
 
-        {/* 任务进度 */}
+        {/* Task progress */}
         <Col span={12}>
           <Card 
-            title="任务进度" 
+            title="Task progress" 
             size="small"
             extra={
               <Button size="small" onClick={() => setTasks([])}>
-                清空
+                Clear
               </Button>
             }
           >
             <div style={{ maxHeight: 300, overflowY: 'auto' }}>
               {tasks.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: 20, color: '#999' }}>
-                  暂无任务
+                  No tasks yet
                 </div>
               ) : (
                 tasks.map((task) => (
@@ -142,7 +142,7 @@ export const RealTimeStatus: React.FC<RealTimeStatusProps> = ({ userId, projectI
           </Card>
         </Col>
 
-        {/* 通知列表 */}
+        {/* Notifications */}
         <Col span={12}>
           <NotificationList
             notifications={notifications}

@@ -1,125 +1,125 @@
-# B站管理功能使用指南
+# BENUsage Guide
 
-## 📋 功能概述
+## 📋 EN
 
-新的B站管理功能专为小白用户设计，提供最简单、最直观的账号管理和投稿体验。
+ENBEN，ProvidesEN、ENIntuitiveENAccount ManagementEN。
 
-## 🎯 核心功能
+## 🎯 EN
 
-### 1. 账号管理
-- **添加账号**: 支持Cookie导入方式，安全可靠
-- **多账号支持**: 可以添加多个B站账号
-- **账号状态**: 实时显示账号健康状态
-- **快速删除**: 一键删除不需要的账号
+### 1. Account Management
+- **ENAccount**: SupportCookieEN，EN
+- **ENAccountSupport**: ENBENAccount
+- **AccountEN**: ENAccountEN
+- **EN**: ENAccount
 
-### 2. 投稿上传
-- **切片投稿**: 在切片详情页直接投稿
-- **批量投稿**: 支持同时上传多个切片
-- **账号选择**: 灵活选择投稿账号
-- **分区设置**: 支持B站所有分区
+### 2. ENUpload
+- **EN**: EN
+- **EN**: SupportENUploadEN
+- **AccountEN**: ENAccount
+- **EN**: SupportBEN
 
-## 🚀 使用流程
+## 🚀 EN
 
-### 第一步：添加B站账号
+### EN：ENBENAccount
 
-1. **进入设置页面**
-   - 点击左侧导航栏的"设置"
-   - 选择"B站账号管理"标签页
+1. **EN**
+   - EN"EN"
+   - EN"BENAccount Management"EN
 
-2. **添加账号**
-   - 点击"管理B站账号"按钮
-   - 选择"账号管理"标签页
-   - 点击"添加账号"按钮
+2. **ENAccount**
+   - EN"ENBENAccount"EN
+   - EN"Account Management"EN
+   - EN"ENAccount"EN
 
-3. **获取Cookie**
-   - 打开B站网站并登录
-   - 按F12打开开发者工具
-   - 点击Network标签页
-   - 刷新页面
-   - 找到任意请求，点击查看
-   - 在Request Headers中找到Cookie字段
-   - 复制Cookie的值（不包含"Cookie: "前缀）
+3. **ENCookie**
+   - ENBEN
+   - ENF12EN
+   - ENNetworkEN
+   - EN
+   - EN，EN
+   - ENRequest HeadersENCookieEN
+   - ENCookieEN（EN"Cookie: "EN）
 
-4. **导入账号**
-   - 输入账号昵称（用于识别）
-   - 粘贴Cookie内容
-   - 点击"添加账号"
+4. **ENAccount**
+   - ENAccountEN（EN）
+   - ENCookieEN
+   - EN"ENAccount"
 
-### 第二步：投稿切片
+### EN：EN
 
-1. **选择切片**
-   - 进入项目详情页
-   - 找到要投稿的切片
-   - 点击切片卡片上的"投稿"按钮
+1. **EN**
+   - EN
+   - EN
+   - EN"EN"EN
 
-2. **配置投稿信息**
-   - 选择要使用的B站账号
-   - 选择视频分区
-   - 输入视频标题
-   - 添加描述和标签（可选）
+2. **EN**
+   - ENBENAccount
+   - EN
+   - EN
+   - EN（EN）
 
-3. **开始投稿**
-   - 点击"开始投稿"按钮
-   - 系统会在后台处理投稿
-   - 投稿完成后会显示成功提示
+3. **EN**
+   - EN"EN"EN
+   - EN
+   - EN
 
-## 💡 使用技巧
+## 💡 EN
 
-### Cookie获取技巧
-- **推荐浏览器**: Chrome、Edge、Firefox
-- **获取位置**: 开发者工具 → Network → 任意请求 → Request Headers
-- **格式要求**: 完整的Cookie字符串，用分号分隔
-- **有效期**: Cookie通常有7-30天有效期，过期后需要重新获取
+### CookieEN
+- **EN**: Chrome、Edge、Firefox
+- **EN**: EN → Network → EN → Request Headers
+- **EN**: ENCookieEN，EN
+- **EN**: CookieEN7-30EN，EN
 
-### 账号管理技巧
-- **昵称设置**: 使用有意义的昵称，如"主账号"、"备用账号"
-- **定期检查**: 建议定期检查账号状态，及时更新过期Cookie
-- **多账号策略**: 可以设置不同用途的账号，如"测试账号"、"正式账号"
+### Account ManagementEN
+- **EN**: EN，EN"ENAccount"、"ENAccount"
+- **EN**: ENAccountEN，ENCookie
+- **ENAccountEN**: ENAccount，EN"ENAccount"、"ENAccount"
 
-### 投稿优化技巧
-- **标题优化**: 使用吸引人的标题，避免过长
-- **分区选择**: 选择合适的分区，提高推荐效果
-- **标签设置**: 添加相关标签，增加曝光度
-- **批量投稿**: 对于多个相关切片，可以批量投稿
+### EN
+- **EN**: EN，EN
+- **EN**: EN，EN
+- **EN**: EN，EN
+- **EN**: EN，EN
 
-## ⚠️ 注意事项
+## ⚠️ EN
 
-### 安全提醒
-- **Cookie安全**: Cookie包含登录信息，请妥善保管
-- **账号安全**: 不要在公共设备上登录
-- **定期更新**: 建议定期更新Cookie，避免过期
+### EN
+- **CookieEN**: CookieEN，EN
+- **AccountEN**: Do notEN
+- **EN**: ENCookie，EN
 
-### 使用限制
-- **上传限制**: 遵守B站上传规则和限制
-- **内容规范**: 确保内容符合B站社区规范
-- **频率控制**: 避免频繁投稿，防止触发风控
+### EN
+- **UploadEN**: ENBENUploadEN
+- **EN**: ENBEN
+- **EN**: EN，EN
 
-### 故障排除
-- **Cookie无效**: 检查Cookie格式和有效期
-- **上传失败**: 检查网络连接和账号状态
-- **分区错误**: 确认分区ID是否正确
+### Troubleshooting
+- **CookieEN**: ENCookieEN
+- **UploadEN**: ENAccountEN
+- **EN**: ENIDEN
 
-## 🔧 技术说明
+## 🔧 EN
 
-### 支持的登录方式
-- **Cookie导入** (推荐): 最安全，不会触发风控
-- **账号密码登录**: 传统方式，可能有验证码
-- **扫码登录**: 需要B站APP，可能触发风控
+### SupportEN
+- **CookieEN** (EN): EN，EN
+- **AccountEN**: EN，EN
+- **EN**: ENBENAPP，EN
 
-### 上传机制
-- **直接API调用**: 使用B站官方API，稳定可靠
-- **分片上传**: 支持大文件分片上传
-- **重试机制**: 自动重试失败的上传
-- **进度跟踪**: 实时显示上传进度
+### UploadEN
+- **ENAPIEN**: ENBENAPI，EN
+- **ENUpload**: SupportENUpload
+- **EN**: ENUpload
+- **EN**: ENUploadEN
 
-## 📞 技术支持
+## 📞 ENSupport
 
-如果遇到问题，可以：
-1. 查看系统日志获取详细错误信息
-2. 检查网络连接和账号状态
-3. 重新获取Cookie并更新账号
-4. 联系技术支持获取帮助
+EN，EN：
+1. EN
+2. ENAccountEN
+3. ENCookieENAccount
+4. ContactENSupportEN
 
 ---
 
-*最后更新: 2024年12月*
+*EN: 2024EN12EN*

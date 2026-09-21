@@ -1,20 +1,20 @@
 #!/bin/bash
 
-# AutoClip 快速启动脚本
-# 版本: 2.0
-# 功能: 快速启动开发环境，跳过详细检查
+# AutoClip ENStartScript
+# Version: 2.0
+# EN: ENStartENEnvironment，ENCheck
 
 set -euo pipefail
 
 # =============================================================================
-# 配置区域
+# ConfigEN
 # =============================================================================
 
 BACKEND_PORT=8000
 FRONTEND_PORT=3000
 
 # =============================================================================
-# 颜色定义
+# EN
 # =============================================================================
 
 GREEN='\033[0;32m'
@@ -23,7 +23,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # =============================================================================
-# 工具函数
+# ToolEN
 # =============================================================================
 
 log_info() {
@@ -39,95 +39,95 @@ log_warning() {
 }
 
 # =============================================================================
-# 主函数
+# EN
 # =============================================================================
 
 main() {
-    echo -e "${GREEN}🚀 AutoClip 快速启动${NC}"
+    echo -e "${GREEN}🚀 AutoClip ENStart${NC}"
     echo ""
     
-    # 检查虚拟环境
+    # CheckENEnvironment
     if [[ ! -d "venv" ]]; then
-        log_warning "虚拟环境不存在，请先运行: python3 -m venv venv"
+        log_warning "ENEnvironmentEN，PleaseEN: python3 -m venv venv"
         exit 1
     fi
     
-    # 激活虚拟环境
-    log_info "激活虚拟环境..."
+    # ENEnvironment
+    log_info "ENEnvironment..."
     source venv/bin/activate
     
-    # 设置Python路径
+    # ENPythonEN
     : "${PYTHONPATH:=}"
     export PYTHONPATH="${PWD}:${PYTHONPATH}"
     
-    # 加载环境变量
+    # ENEnvironmentEN
     if [[ -f ".env" ]]; then
         set -a
         source .env
         set +a
     fi
     
-    # 启动Redis（如果需要）
+    # StartRedis（IfNeed）
     if ! redis-cli ping >/dev/null 2>&1; then
-        log_info "启动Redis..."
+        log_info "StartRedis..."
         if command -v brew >/dev/null; then
             brew services start redis
             sleep 2
         fi
     fi
     
-    # 创建日志目录
+    # EN
     mkdir -p logs
     
-    # 启动后端
-    log_info "启动后端服务..."
+    # StartEN
+    log_info "StartENService..."
     nohup python -m uvicorn backend.main:app --host 0.0.0.0 --port "$BACKEND_PORT" --reload > logs/backend.log 2>&1 &
     echo $! > backend.pid
     
-    # 启动Celery Worker
-    log_info "启动Celery Worker..."
+    # StartCelery Worker
+    log_info "StartCelery Worker..."
     nohup celery -A backend.core.celery_app worker --loglevel=info --concurrency=1 --prefetch-multiplier=1 -Q celery,processing,video,notification,upload > logs/celery.log 2>&1 &
     echo $! > celery.pid
     
-    # 启动前端
-    log_info "启动前端服务..."
+    # StartEN
+    log_info "StartENService..."
     cd frontend
     nohup npm run dev -- --host 0.0.0.0 --port "$FRONTEND_PORT" > ../logs/frontend.log 2>&1 &
     echo $! > ../frontend.pid
     cd ..
     
-    # 等待服务启动
-    log_info "等待服务启动..."
+    # ENServiceStart
+    log_info "ENServiceStart..."
     sleep 5
     
-    # 检查服务状态
+    # CheckServiceStatus
     if curl -fsS "http://localhost:$BACKEND_PORT/api/v1/health/" >/dev/null 2>&1; then
-        log_success "后端服务已启动"
+        log_success "ENServiceENStart"
     else
-        log_warning "后端服务启动可能有问题"
+        log_warning "ENServiceStartEN"
     fi
     
     if curl -fsS "http://localhost:$FRONTEND_PORT/" >/dev/null 2>&1; then
-        log_success "前端服务已启动"
+        log_success "ENServiceENStart"
     else
-        log_warning "前端服务启动可能有问题"
+        log_warning "ENServiceStartEN"
     fi
     
     echo ""
-    log_success "快速启动完成！"
+    log_success "ENStartCompleted！"
     echo ""
-    echo "🌐 访问地址:"
-    echo "  前端: http://localhost:$FRONTEND_PORT"
-    echo "  后端: http://localhost:$BACKEND_PORT"
-    echo "  API文档: http://localhost:$BACKEND_PORT/docs"
+    echo "🌐 EN:"
+    echo "  EN: http://localhost:$FRONTEND_PORT"
+    echo "  EN: http://localhost:$BACKEND_PORT"
+    echo "  APIEN: http://localhost:$BACKEND_PORT/docs"
     echo ""
-    echo "📝 查看日志:"
+    echo "📝 EN:"
     echo "  tail -f logs/backend.log"
     echo "  tail -f logs/frontend.log"
     echo "  tail -f logs/celery.log"
     echo ""
-    echo "🛑 停止服务: ./stop_autoclip.sh"
+    echo "🛑 StopService: ./stop_autoclip.sh"
 }
 
-# 运行主函数
+# EN
 main "$@"

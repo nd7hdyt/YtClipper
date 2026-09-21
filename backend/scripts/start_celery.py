@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Celery启动脚本
-启动Celery Worker和Beat调度器
+CelerystartEN
+startCelery WorkerENBeatEN
 """
 
 import os
@@ -11,13 +11,13 @@ import signal
 import time
 from pathlib import Path
 
-# 添加项目根目录到Python路径
+# ENprojectENdirectoryENPythonpath
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
 def start_celery_worker():
-    """启动Celery Worker"""
-    print("🚀 启动Celery Worker...")
+    """startCelery Worker"""
+    print("🚀 startCelery Worker...")
     
     cmd = [
         "celery", "-A", "backend.core.celery_app", "worker",
@@ -29,15 +29,15 @@ def start_celery_worker():
     
     try:
         process = subprocess.Popen(cmd, cwd=str(project_root))
-        print(f"✅ Celery Worker已启动 (PID: {process.pid})")
+        print(f"✅ Celery WorkerENstart (PID: {process.pid})")
         return process
     except Exception as e:
-        print(f"❌ 启动Celery Worker失败: {e}")
+        print(f"❌ startCelery Workerfailed: {e}")
         return None
 
 def start_celery_beat():
-    """启动Celery Beat调度器"""
-    print("⏰ 启动Celery Beat调度器...")
+    """startCelery BeatEN"""
+    print("⏰ startCelery BeatEN...")
     
     cmd = [
         "celery", "-A", "backend.core.celery_app", "beat",
@@ -48,15 +48,15 @@ def start_celery_beat():
     
     try:
         process = subprocess.Popen(cmd, cwd=str(project_root))
-        print(f"✅ Celery Beat已启动 (PID: {process.pid})")
+        print(f"✅ Celery BeatENstart (PID: {process.pid})")
         return process
     except Exception as e:
-        print(f"❌ 启动Celery Beat失败: {e}")
+        print(f"❌ startCelery Beatfailed: {e}")
         return None
 
 def start_flower():
-    """启动Flower监控界面"""
-    print("🌸 启动Flower监控界面...")
+    """startFlowerEN"""
+    print("🌸 startFlowerEN...")
     
     cmd = [
         "celery", "-A", "backend.core.celery_app", "flower",
@@ -66,79 +66,79 @@ def start_flower():
     
     try:
         process = subprocess.Popen(cmd, cwd=str(project_root))
-        print(f"✅ Flower已启动 (PID: {process.pid})")
-        print("🌐 Flower监控界面: http://localhost:5555")
+        print(f"✅ FlowerENstart (PID: {process.pid})")
+        print("🌐 FlowerEN: http://localhost:5555")
         return process
     except Exception as e:
-        print(f"❌ 启动Flower失败: {e}")
+        print(f"❌ startFlowerfailed: {e}")
         return None
 
 def signal_handler(signum, frame):
-    """信号处理函数"""
-    print("\n🛑 收到停止信号，正在关闭服务...")
+    """ENprocessingEN"""
+    print("\n🛑 ENstopEN，currentlyENservice...")
     sys.exit(0)
 
 def main():
-    """主函数"""
-    print("🎯 AutoClip Celery 任务队列启动器")
+    """EN"""
+    print("🎯 AutoClip Celery taskqueuestartEN")
     print("=" * 50)
     
-    # 设置信号处理
+    # settingsENprocessing
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
     
-    # 检查Redis连接
+    # checkRedisconnect
     try:
         import redis
         r = redis.Redis.from_url('redis://localhost:6379/0')
         r.ping()
-        print("✅ Redis连接正常")
+        print("✅ RedisconnectEN")
     except Exception as e:
-        print(f"❌ Redis连接失败: {e}")
-        print("请确保Redis服务正在运行: redis-server")
+        print(f"❌ Redisconnectfailed: {e}")
+        print("pleaseENRedisservicecurrentlyrun: redis-server")
         return
     
-    # 启动服务
+    # startservice
     processes = []
     
-    # 启动Worker
+    # startWorker
     worker_process = start_celery_worker()
     if worker_process:
         processes.append(worker_process)
     
-    # 启动Beat
+    # startBeat
     beat_process = start_celery_beat()
     if beat_process:
         processes.append(beat_process)
     
-    # 启动Flower
+    # startFlower
     flower_process = start_flower()
     if flower_process:
         processes.append(flower_process)
     
     if not processes:
-        print("❌ 没有成功启动任何服务")
+        print("❌ ENsucceededstartENservice")
         return
     
-    print("\n🎉 所有服务已启动!")
-    print("📊 服务状态:")
-    print("   - Celery Worker: 处理任务")
-    print("   - Celery Beat: 定时任务调度")
-    print("   - Flower: 任务监控界面 (http://localhost:5555)")
-    print("\n按 Ctrl+C 停止所有服务")
+    print("\n🎉 allserviceENstart!")
+    print("📊 servicestatus:")
+    print("   - Celery Worker: processingtask")
+    print("   - Celery Beat: ENtaskEN")
+    print("   - Flower: taskEN (http://localhost:5555)")
+    print("\nEN Ctrl+C stopallservice")
     
     try:
-        # 等待进程
+        # EN
         while True:
             time.sleep(1)
-            # 检查进程是否还在运行
+            # checkENrun
             for process in processes:
                 if process.poll() is not None:
-                    print(f"⚠️  进程 {process.pid} 已退出")
+                    print(f"⚠️  EN {process.pid} ENlogout")
     except KeyboardInterrupt:
-        print("\n🛑 正在停止服务...")
+        print("\n🛑 currentlystopservice...")
     finally:
-        # 停止所有进程
+        # stopallEN
         for process in processes:
             if process.poll() is None:
                 process.terminate()
@@ -146,7 +146,7 @@ def main():
                     process.wait(timeout=5)
                 except subprocess.TimeoutExpired:
                     process.kill()
-                print(f"🛑 进程 {process.pid} 已停止")
+                print(f"🛑 EN {process.pid} ENstop")
 
 if __name__ == "__main__":
     main() 

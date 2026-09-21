@@ -1,6 +1,6 @@
 """
-进度事件服务
-基于Redis PubSub实现任务进度同步
+progressENservice
+ENRedis PubSubENtaskprogressEN
 """
 
 import json
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ProgressEvent:
-    """进度事件数据结构"""
+    """progressEN"""
     task_id: str
     progress: int  # 0-100
     step: int
@@ -26,44 +26,44 @@ class ProgressEvent:
     phase: str  # transcribe|analyze|clip|encode|upload
     message: str
     status: str  # PENDING|PROGRESS|DONE|FAIL
-    seq: int  # 递增序列号
-    ts: float  # 单调递增时间戳
+    seq: int  # EN
+    ts: float  # ENtimeEN
     meta: Optional[Dict[str, Any]] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典格式"""
+        """EN"""
         return asdict(self)
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'ProgressEvent':
-        """从字典创建实例"""
+        """ENcreateEN"""
         return cls(**data)
 
 class ProgressEventService:
-    """进度事件服务"""
+    """progressENservice"""
     
     def __init__(self):
         self.redis_url = get_redis_url()
         self.redis_client: Optional[redis.Redis] = None
-        self.sequence_counters: Dict[str, int] = {}  # 每个task_id的序列号计数器
-        self.throttle_cache: Dict[str, Dict[str, Any]] = {}  # 节流缓存
-        self.throttle_interval = 0.2  # 200ms节流间隔
+        self.sequence_counters: Dict[str, int] = {}  # eachtask_idEN
+        self.throttle_cache: Dict[str, Dict[str, Any]] = {}  # ENcache
+        self.throttle_interval = 0.2  # 200msEN
         
     async def _get_redis_client(self) -> redis.Redis:
-        """获取Redis客户端"""
+        """fetchRedisEN"""
         if self.redis_client is None:
             self.redis_client = redis.from_url(self.redis_url, decode_responses=True)
         return self.redis_client
     
     def _get_next_seq(self, task_id: str) -> int:
-        """获取下一个序列号"""
+        """fetchEN"""
         if task_id not in self.sequence_counters:
             self.sequence_counters[task_id] = 0
         self.sequence_counters[task_id] += 1
         return self.sequence_counters[task_id]
     
     def _should_throttle(self, task_id: str, progress: int) -> bool:
-        """检查是否需要节流"""
+        """checkENneedEN"""
         now = time.time()
         cache_key = f"{task_id}_{progress}"
         
@@ -72,13 +72,13 @@ class ProgressEventService:
             if now - last_time < self.throttle_interval:
                 return True
         
-        # 更新缓存
+        # updatecache
         self.throttle_cache[cache_key] = {
             'timestamp': now,
             'progress': progress
         }
         
-        # 清理过期缓存（超过1分钟的）
+        # ENcache（EN1EN）
         expired_keys = [
             key for key, data in self.throttle_cache.items()
             if now - data['timestamp'] > 60
@@ -99,14 +99,14 @@ class ProgressEventService:
         status: str = "PROGRESS",
         meta: Optional[Dict[str, Any]] = None
     ) -> bool:
-        """报告任务进度"""
+        """ENtaskprogress"""
         try:
-            # 节流检查
+            # ENcheck
             if status == "PROGRESS" and self._should_throttle(task_id, progress):
-                logger.debug(f"任务 {task_id} 进度 {progress}% 被节流")
+                logger.debug(f"task {task_id} progress {progress}% EN")
                 return True
             
-            # 创建进度事件
+            # createprogressEN
             event = ProgressEvent(
                 task_id=task_id,
                 progress=progress,
@@ -120,41 +120,41 @@ class ProgressEventService:
                 meta=meta
             )
             
-            # 发布到Redis频道 - 使用项目ID而不是任务ID
-            # 从task_id中提取project_id，或者使用meta中的project_id
+            # ENRedisEN - useprojectIDENtaskID
+            # ENtask_idENproject_id，orusemetaENproject_id
             project_id = meta.get("project_id") if meta else None
             if not project_id:
-                # 如果meta中没有project_id，尝试从task_id推断
-                # 这里需要根据实际情况调整
-                project_id = task_id  # 临时使用task_id，后续需要优化
+                # ifmetaENproject_id，ENtask_idEN
+                # ENneedEN
+                project_id = task_id  # ENusetask_id，ENneedEN
             channel = project_progress_channel(project_id)
             redis_client = await self._get_redis_client()
             
-            # 同时保存快照到Redis Hash
+            # meanwhilesaveENRedis Hash
             snapshot_key = f"progress:last:{channel}"
             event_dict = event.to_dict()
             
-            # 过滤掉None值，并将所有值转换为字符串，避免Redis存储错误
+            # ENNoneEN，ENallEN，ENRedisENerror
             filtered_dict = {}
             for k, v in event_dict.items():
                 if v is not None:
                     if isinstance(v, dict):
-                        # 将字典转换为JSON字符串
+                        # ENJSONEN
                         filtered_dict[k] = json.dumps(v, ensure_ascii=False)
                     else:
                         filtered_dict[k] = str(v)
             
             await redis_client.hset(snapshot_key, mapping=filtered_dict)
-            await redis_client.expire(snapshot_key, 3600)  # 1小时过期
+            await redis_client.expire(snapshot_key, 3600)  # 1EN
             
-            # 发布到频道
+            # EN
             await redis_client.publish(channel, json.dumps(event_dict))
             
-            logger.info(f"进度事件已发布: {task_id} - {progress}% - {phase} - seq:{event.seq}")
+            logger.info(f"progressEN: {task_id} - {progress}% - {phase} - seq:{event.seq}")
             return True
             
         except Exception as e:
-            logger.error(f"发布进度事件失败: {e}")
+            logger.error(f"ENprogressENfailed: {e}")
             return False
     
     async def subscribe_to_task(
@@ -162,7 +162,7 @@ class ProgressEventService:
         task_id: str,
         callback: Callable[[ProgressEvent], None]
     ) -> bool:
-        """订阅特定任务的进度事件"""
+        """ENtaskENprogressEN"""
         try:
             channel = f"progress:{task_id}"
             redis_client = await self._get_redis_client()
@@ -170,9 +170,9 @@ class ProgressEventService:
             pubsub = redis_client.pubsub()
             await pubsub.subscribe(channel)
             
-            logger.info(f"已订阅任务进度频道: {channel}")
+            logger.info(f"ENtaskprogressEN: {channel}")
             
-            # 异步处理消息
+            # ENprocessingEN
             async def message_handler():
                 try:
                     async for message in pubsub.listen():
@@ -182,30 +182,30 @@ class ProgressEventService:
                                 event = ProgressEvent.from_dict(data)
                                 callback(event)
                             except Exception as e:
-                                logger.error(f"处理进度事件失败: {e}")
+                                logger.error(f"processingprogressENfailed: {e}")
                 except Exception as e:
-                    logger.error(f"订阅消息处理失败: {e}")
+                    logger.error(f"ENprocessingfailed: {e}")
                 finally:
                     await pubsub.unsubscribe(channel)
                     await pubsub.close()
             
-            # 启动消息处理协程
+            # startENprocessingEN
             asyncio.create_task(message_handler())
             return True
             
         except Exception as e:
-            logger.error(f"订阅任务进度失败: {e}")
+            logger.error(f"ENtaskprogressfailed: {e}")
             return False
     
     async def get_task_snapshot(self, task_id: str) -> Optional[Dict[str, Any]]:
-        """获取任务进度快照"""
+        """fetchtaskprogressEN"""
         try:
             redis_client = await self._get_redis_client()
             channel = f"progress:{task_id}"
             snapshot_key = f"progress:last:{channel}"
             snapshot = await redis_client.hgetall(snapshot_key)
             if snapshot:
-                # 转换字符串值回适当类型
+                # ENwhenEN
                 if 'progress' in snapshot:
                     snapshot['progress'] = int(snapshot['progress'])
                 if 'step' in snapshot:
@@ -219,11 +219,11 @@ class ProgressEventService:
                 return snapshot
             return None
         except Exception as e:
-            logger.error(f"获取任务进度快照失败: {e}")
+            logger.error(f"fetchtaskprogressENfailed: {e}")
             return None
 
     async def get_task_final_state(self, task_id: str) -> Optional[Dict[str, Any]]:
-        """获取任务最终状态（用于终态校准）"""
+        """fetchtaskENstatus（EN）"""
         try:
             redis_client = await self._get_redis_client()
             key = f"task_final_state:{task_id}"
@@ -232,29 +232,29 @@ class ProgressEventService:
                 return json.loads(data)
             return None
         except Exception as e:
-            logger.error(f"获取任务最终状态失败: {e}")
+            logger.error(f"fetchtaskENstatusfailed: {e}")
             return None
     
     async def save_task_final_state(self, task_id: str, state: Dict[str, Any]) -> bool:
-        """保存任务最终状态"""
+        """savetaskENstatus"""
         try:
             redis_client = await self._get_redis_client()
             key = f"task_final_state:{task_id}"
-            await redis_client.setex(key, 3600, json.dumps(state))  # 1小时过期
+            await redis_client.setex(key, 3600, json.dumps(state))  # 1EN
             return True
         except Exception as e:
-            logger.error(f"保存任务最终状态失败: {e}")
+            logger.error(f"savetaskENstatusfailed: {e}")
             return False
     
     async def close(self):
-        """关闭Redis连接"""
+        """ENRedisconnect"""
         if self.redis_client:
             await self.redis_client.close()
 
-# 全局实例
+# EN
 progress_event_service = ProgressEventService()
 
-# 便捷函数
+# EN
 async def report_progress(
     task_id: str,
     progress: int,
@@ -265,7 +265,7 @@ async def report_progress(
     status: str = "PROGRESS",
     meta: Optional[Dict[str, Any]] = None
 ) -> bool:
-    """报告任务进度的便捷函数"""
+    """ENtaskprogressEN"""
     return await progress_event_service.report_progress(
         task_id, progress, step, total, phase, message, status, meta
     )

@@ -1,6 +1,6 @@
 """
-语音识别工具 - 支持多种语音识别服务
-支持本地Whisper、OpenAI API、Azure Speech Services等多种语音识别服务
+EN - ENservice
+ENWhisper、OpenAI API、Azure Speech ServicesENservice
 """
 import logging
 import subprocess
@@ -18,62 +18,62 @@ logger = logging.getLogger(__name__)
 
 
 class SpeechRecognitionMethod(str, Enum):
-    """语音识别方法枚举"""
+    """EN"""
     WHISPER_LOCAL = "whisper_local"
     OPENAI_API = "openai_api"
     AZURE_SPEECH = "azure_speech"
     GOOGLE_SPEECH = "google_speech"
     ALIYUN_SPEECH = "aliyun_speech"
-    # 预留其他服务扩展
+    # ENserviceEN
     CUSTOM_API = "custom_api"
 
 
 class LanguageCode(str, Enum):
-    """支持的语言代码"""
-    # 中文
+    """EN"""
+    # EN
     CHINESE_SIMPLIFIED = "zh"
     CHINESE_TRADITIONAL = "zh-TW"
-    # 英文
+    # EN
     ENGLISH = "en"
     ENGLISH_US = "en-US"
     ENGLISH_UK = "en-GB"
-    # 日文
+    # EN
     JAPANESE = "ja"
-    # 韩文
+    # EN
     KOREAN = "ko"
-    # 法文
+    # EN
     FRENCH = "fr"
-    # 德文
+    # EN
     GERMAN = "de"
-    # 西班牙文
+    # EN
     SPANISH = "es"
-    # 俄文
+    # EN
     RUSSIAN = "ru"
-    # 阿拉伯文
+    # EN
     ARABIC = "ar"
-    # 葡萄牙文
+    # EN
     PORTUGUESE = "pt"
-    # 意大利文
+    # EN
     ITALIAN = "it"
-    # 自动检测
+    # EN
     AUTO = "auto"
 
 
 @dataclass
 class SpeechRecognitionConfig:
-    """语音识别配置"""
+    """ENconfig"""
     method: SpeechRecognitionMethod = SpeechRecognitionMethod.WHISPER_LOCAL
     language: LanguageCode = LanguageCode.AUTO
-    model: str = "base"  # Whisper模型大小
-    timeout: int = 0  # 超时时间（秒），0表示无限制
-    output_format: str = "srt"  # 输出格式
-    enable_timestamps: bool = True  # 是否启用时间戳
-    enable_punctuation: bool = True  # 是否启用标点符号
-    enable_speaker_diarization: bool = False  # 是否启用说话人分离
-    enable_fallback: bool = True  # 是否启用回退机制
-    fallback_method: SpeechRecognitionMethod = SpeechRecognitionMethod.WHISPER_LOCAL  # 回退方法
+    model: str = "base"  # WhisperEN
+    timeout: int = 0  # timeouttime（EN），0EN
+    output_format: str = "srt"  # EN
+    enable_timestamps: bool = True  # ENtimeEN
+    enable_punctuation: bool = True  # EN
+    enable_speaker_diarization: bool = False  # EN
+    enable_fallback: bool = True  # EN
+    fallback_method: SpeechRecognitionMethod = SpeechRecognitionMethod.WHISPER_LOCAL  # EN
     
-    # API配置
+    # APIconfig
     openai_api_key: Optional[str] = None
     azure_speech_key: Optional[str] = None
     azure_speech_region: Optional[str] = None
@@ -84,108 +84,108 @@ class SpeechRecognitionConfig:
     custom_api_key: Optional[str] = None
     
     def __post_init__(self):
-        """验证配置参数"""
-        # 验证方法
+        """validateconfigparameters"""
+        # validateEN
         if not isinstance(self.method, SpeechRecognitionMethod):
             try:
                 self.method = SpeechRecognitionMethod(self.method)
             except ValueError:
-                raise ValueError(f"不支持的语音识别方法: {self.method}")
+                raise ValueError(f"EN: {self.method}")
         
-        # 验证语言
+        # validateEN
         if not isinstance(self.language, LanguageCode):
             try:
                 self.language = LanguageCode(self.language)
             except ValueError:
-                raise ValueError(f"不支持的语言代码: {self.language}")
+                raise ValueError(f"EN: {self.language}")
         
-        # 验证模型
+        # validateEN
         valid_models = ["tiny", "base", "small", "medium", "large"]
         if self.model not in valid_models:
-            raise ValueError(f"不支持的Whisper模型: {self.model}")
+            raise ValueError(f"ENWhisperEN: {self.model}")
         
-        # 验证超时时间
+        # validatetimeouttime
         if self.timeout < 0:
-            raise ValueError("超时时间不能为负数")
+            raise ValueError("timeouttimeEN")
         
-        # 验证输出格式
+        # validateEN
         valid_formats = ["srt", "vtt", "txt", "json"]
         if self.output_format not in valid_formats:
-            raise ValueError(f"不支持的输出格式: {self.output_format}")
+            raise ValueError(f"EN: {self.output_format}")
 
 
 class SpeechRecognitionError(Exception):
-    """语音识别错误"""
+    """ENerror"""
     pass
 
 
 class SpeechRecognizer:
-    """语音识别器，支持多种语音识别服务"""
+    """EN，ENservice"""
     
     def __init__(self, config: Optional[SpeechRecognitionConfig] = None):
         self.config = config or SpeechRecognitionConfig()
         self.available_methods = self._check_available_methods()
     
     def _check_available_methods(self) -> Dict[SpeechRecognitionMethod, bool]:
-        """检查可用的语音识别方法"""
+        """checkEN"""
         methods = {}
         
-        # 检查本地Whisper
+        # checkENWhisper
         methods[SpeechRecognitionMethod.WHISPER_LOCAL] = self._check_whisper_availability()
         
-        # 检查OpenAI API
+        # checkOpenAI API
         methods[SpeechRecognitionMethod.OPENAI_API] = self._check_openai_availability()
         
-        # 检查Azure Speech Services
+        # checkAzure Speech Services
         methods[SpeechRecognitionMethod.AZURE_SPEECH] = self._check_azure_speech_availability()
         
-        # 检查Google Speech-to-Text
+        # checkGoogle Speech-to-Text
         methods[SpeechRecognitionMethod.GOOGLE_SPEECH] = self._check_google_speech_availability()
         
-        # 检查阿里云语音识别
+        # checkEN
         methods[SpeechRecognitionMethod.ALIYUN_SPEECH] = self._check_aliyun_speech_availability()
         
-        # 检查自定义API
+        # checkENAPI
         methods[SpeechRecognitionMethod.CUSTOM_API] = self._check_custom_api_availability()
         
         return methods
     
     def _check_whisper_availability(self) -> bool:
-        """检查本地 Whisper(mlx) 运行时是否已安装。"""
+        """checkEN Whisper(mlx) runEN。"""
         try:
             from backend.services import whisper_runtime
             return whisper_runtime.is_installed()
         except Exception:
-            logger.warning("本地Whisper未安装或不可用")
+            logger.warning("ENWhisperEN")
             return False
     
     def _check_openai_availability(self) -> bool:
-        """检查OpenAI API是否可用"""
+        """checkOpenAI APIEN"""
         api_key = os.getenv("OPENAI_API_KEY")
         return api_key is not None and len(api_key.strip()) > 0
     
     def _check_azure_speech_availability(self) -> bool:
-        """检查Azure Speech Services是否可用"""
+        """checkAzure Speech ServicesEN"""
         api_key = os.getenv("AZURE_SPEECH_KEY")
         region = os.getenv("AZURE_SPEECH_REGION")
         return api_key is not None and region is not None
     
     def _check_google_speech_availability(self) -> bool:
-        """检查Google Speech-to-Text是否可用"""
-        # 检查Google Cloud凭证文件
+        """checkGoogle Speech-to-TextEN"""
+        # checkGoogle CloudENfile
         cred_file = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
         if cred_file and Path(cred_file).exists():
             return True
         
-        # 检查API密钥
+        # checkAPIEN
         api_key = os.getenv("GOOGLE_SPEECH_API_KEY")
         return api_key is not None
     
     def _check_aliyun_speech_availability(self) -> bool:
-        """检查阿里云语音识别是否可用"""
+        """checkEN"""
         try:
-            # 检查配置中的API Key
-            # 这里可以检查环境变量或者配置对象中的API Key
+            # checkconfigENAPI Key
+            # ENcancheckENorconfigENAPI Key
             access_key = os.getenv("ALIYUN_API_KEY") or (self.config.aliyun_access_key if hasattr(self, 'config') else None)
             return bool(access_key)
         except Exception:
@@ -193,89 +193,89 @@ class SpeechRecognizer:
     
     def _extract_audio_from_video(self, video_path: Path, output_dir: Path) -> Path:
         """
-        从视频文件中提取音频
+        ENvideofileEN
         
         Args:
-            video_path: 视频文件路径
-            output_dir: 输出目录
+            video_path: videofilepath
+            output_dir: ENdirectory
             
         Returns:
-            提取的音频文件路径
+            ENfilepath
         """
         try:
-            # 检查ffmpeg是否可用
+            # checkffmpegEN
             ffmpeg_bin = get_ffmpeg_path()
             result = subprocess.run([ffmpeg_bin, '-version'], 
                                   capture_output=True, text=True, timeout=10)
             if result.returncode != 0:
-                raise SpeechRecognitionError("ffmpeg不可用，请安装ffmpeg")
+                raise SpeechRecognitionError("ffmpegEN，pleaseENffmpeg")
             
-            # 生成音频文件路径
+            # generateENfilepath
             audio_filename = f"{video_path.stem}_audio.wav"
             audio_path = output_dir / audio_filename
             
-            # 如果音频文件已存在，直接返回
+            # ifENfilealready exists，ENreturn
             if audio_path.exists():
-                logger.info(f"音频文件已存在: {audio_path}")
+                logger.info(f"ENfilealready exists: {audio_path}")
                 return audio_path
             
-            logger.info(f"正在从视频提取音频: {video_path} -> {audio_path}")
+            logger.info(f"currentlyENvideoEN: {video_path} -> {audio_path}")
             
-            # 使用ffmpeg提取音频
+            # useffmpegEN
             cmd = [
                 ffmpeg_bin,
                 '-i', str(video_path),
-                '-vn',  # 不处理视频流
-                '-acodec', 'pcm_s16le',  # 使用PCM 16位编码
-                '-ar', '16000',  # 采样率16kHz
-                '-ac', '1',  # 单声道
-                '-y',  # 覆盖输出文件
+                '-vn',  # ENprocessingvideoEN
+                '-acodec', 'pcm_s16le',  # usePCM 16EN
+                '-ar', '16000',  # EN16kHz
+                '-ac', '1',  # EN
+                '-y',  # ENfile
                 str(audio_path)
             ]
             
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
             
             if result.returncode != 0:
-                raise SpeechRecognitionError(f"音频提取失败: {result.stderr}")
+                raise SpeechRecognitionError(f"ENfailed: {result.stderr}")
             
             if not audio_path.exists():
-                raise SpeechRecognitionError("音频提取失败，输出文件不存在")
+                raise SpeechRecognitionError("ENfailed，ENfiledoes not exist")
             
-            logger.info(f"音频提取成功: {audio_path}")
+            logger.info(f"ENsucceeded: {audio_path}")
             return audio_path
             
         except subprocess.TimeoutExpired:
-            raise SpeechRecognitionError("音频提取超时")
+            raise SpeechRecognitionError("ENtimeout")
         except Exception as e:
-            raise SpeechRecognitionError(f"音频提取失败: {e}")
+            raise SpeechRecognitionError(f"ENfailed: {e}")
     
     def generate_subtitle(self, video_path: Path, output_path: Optional[Path] = None, 
                          config: Optional[SpeechRecognitionConfig] = None) -> Path:
         """
-        生成字幕文件
+        generatesubtitlesfile
         
         Args:
-            video_path: 视频文件路径
-            output_path: 输出字幕文件路径
-            config: 语音识别配置
+            video_path: videofilepath
+            output_path: ENsubtitlesfilepath
+            config: ENconfig
             
         Returns:
-            生成的字幕文件路径
+            generateENsubtitlesfilepath
             
         Raises:
-            SpeechRecognitionError: 语音识别失败
+            SpeechRecognitionError: ENfailed
         """
         if not video_path.exists():
-            raise SpeechRecognitionError(f"视频文件不存在: {video_path}")
+            raise SpeechRecognitionError(f"videofiledoes not exist: {video_path}")
         
-        # 使用传入的配置或默认配置
+        # useENconfigENconfig
         config = config or self.config
         
-        # 确定输出路径
+        # ENpath
         if output_path is None:
             output_path = video_path.parent / f"{video_path.stem}.{config.output_format}"
         
-        # 根据配置的方法选择识别服务，支持回退机制
+        # ENconfigENservice，EN
         try:
             if config.method == SpeechRecognitionMethod.WHISPER_LOCAL:
                 return self._generate_subtitle_whisper_local(video_path, output_path, config)
@@ -290,17 +290,17 @@ class SpeechRecognizer:
             elif config.method == SpeechRecognitionMethod.CUSTOM_API:
                 return self._generate_subtitle_custom_api(video_path, output_path, config)
             else:
-                raise SpeechRecognitionError(f"不支持的语音识别方法: {config.method}")
+                raise SpeechRecognitionError(f"EN: {config.method}")
         except SpeechRecognitionError as e:
-            # 如果启用了回退机制且当前方法不是回退方法，则尝试回退
+            # ifENcurrentEN，thenEN
             if (config.enable_fallback and 
                 config.method != config.fallback_method and 
                 self.available_methods.get(config.fallback_method, False)):
                 
-                logger.warning(f"主方法 {config.method} 失败: {e}")
-                logger.info(f"尝试回退到 {config.fallback_method}")
+                logger.warning(f"EN {config.method} failed: {e}")
+                logger.info(f"EN {config.fallback_method}")
                 
-                # 创建回退配置
+                # createENconfig
                 fallback_config = SpeechRecognitionConfig(
                     method=config.fallback_method,
                     language=config.language,
@@ -310,7 +310,7 @@ class SpeechRecognizer:
                     enable_timestamps=config.enable_timestamps,
                     enable_punctuation=config.enable_punctuation,
                     enable_speaker_diarization=config.enable_speaker_diarization,
-                    enable_fallback=False  # 避免无限回退
+                    enable_fallback=False  # EN
                 )
                 
                 return self.generate_subtitle(video_path, output_path, fallback_config)
@@ -318,11 +318,11 @@ class SpeechRecognizer:
                 raise
     
     def _check_custom_api_availability(self) -> bool:
-        """检查自定义API是否可用"""
-        # 检查是否有配置自定义API
+        """checkENAPIEN"""
+        # checkENconfigENAPI
         if self.config.custom_api_url and self.config.custom_api_key:
             try:
-                # 简单的健康检查
+                # ENcheck
                 response = requests.get(f"{self.config.custom_api_url}/health", timeout=5)
                 return response.status_code == 200
             except Exception:
@@ -353,146 +353,146 @@ class SpeechRecognizer:
 
     def _generate_subtitle_whisper_local(self, video_path: Path, output_path: Path,
                                        config: SpeechRecognitionConfig) -> Path:
-        """使用本地 faster-whisper 生成字幕（桌面按需安装的运行时）。"""
+        """useEN faster-whisper generatesubtitles（ENrunEN）。"""
         from backend.services import whisper_runtime
 
         if not whisper_runtime.is_installed():
             raise SpeechRecognitionError(
-                "本地 Whisper 运行时未安装。请到「设置 → 语音识别」里点击安装 Whisper，"
-                "并下载一个模型后再试。"
+                "EN Whisper runEN。pleaseEN「settings → EN」EN Whisper，"
+                "ENdownloadEN。"
             )
 
         if not video_path.exists():
-            raise SpeechRecognitionError(f"视频文件不存在: {video_path}")
+            raise SpeechRecognitionError(f"videofiledoes not exist: {video_path}")
         if video_path.stat().st_size == 0:
-            raise SpeechRecognitionError(f"视频文件为空: {video_path}")
+            raise SpeechRecognitionError(f"videofileEN: {video_path}")
         if output_path.exists():
-            logger.info(f"字幕文件已存在，跳过Whisper处理: {output_path}")
+            logger.info(f"subtitlesfilealready exists，ENWhisperprocessing: {output_path}")
             return output_path
 
         try:
-            whisper_runtime.ensure_on_path()  # 让 faster_whisper 可导入
-            from faster_whisper import WhisperModel  # 延迟导入：运行时安装目录里的包
+            whisper_runtime.ensure_on_path()  # EN faster_whisper EN
+            from faster_whisper import WhisperModel  # EN：runENdirectoryEN
 
             language = None if config.language == LanguageCode.AUTO else str(config.language).split("-")[0]
             models_dir = str(whisper_runtime.get_models_dir() / "hub")
-            logger.info(f"使用 faster-whisper 生成字幕: model={config.model} lang={language or 'auto'}")
+            logger.info(f"use faster-whisper generatesubtitles: model={config.model} lang={language or 'auto'}")
 
-            # device=auto：Mac 上走 CPU（CTranslate2），int8 量化兼顾速度与体积
+            # device=auto：Mac EN CPU（CTranslate2），int8 EN
             model = WhisperModel(
                 config.model, device="auto", compute_type="int8", download_root=models_dir,
             )
             seg_iter, _info = model.transcribe(str(video_path), language=language, vad_filter=True)
             segments = [{"start": s.start, "end": s.end, "text": s.text} for s in seg_iter]
             if not segments:
-                raise SpeechRecognitionError("Whisper 未识别出任何语音内容")
+                raise SpeechRecognitionError("Whisper EN")
 
             output_path.parent.mkdir(parents=True, exist_ok=True)
             output_path.write_text(self._segments_to_srt(segments), encoding="utf-8")
-            logger.info(f"本地 faster-whisper 字幕生成成功: {output_path}")
+            logger.info(f"EN faster-whisper subtitlesgeneratesucceeded: {output_path}")
             return output_path
 
         except SpeechRecognitionError:
             raise
         except ModuleNotFoundError as e:
             raise SpeechRecognitionError(
-                f"Whisper 运行时缺少依赖（{e}）。请到「设置 → 语音识别」重新安装 Whisper。"
+                f"Whisper runEN（{e}）。pleaseEN「settings → EN」EN Whisper。"
             )
         except Exception as e:  # noqa: BLE001
-            logger.error(f"本地 faster-whisper 生成字幕失败: {e}", exc_info=True)
-            raise SpeechRecognitionError(f"本地 Whisper 生成字幕失败: {e}")
+            logger.error(f"EN faster-whisper generatesubtitlesfailed: {e}", exc_info=True)
+            raise SpeechRecognitionError(f"EN Whisper generatesubtitlesfailed: {e}")
     
     def _generate_subtitle_openai_api(self, video_path: Path, output_path: Path, 
                                     config: SpeechRecognitionConfig) -> Path:
-        """使用OpenAI API生成字幕"""
+        """useOpenAI APIgeneratesubtitles"""
         if not self.available_methods[SpeechRecognitionMethod.OPENAI_API]:
-            raise SpeechRecognitionError("OpenAI API不可用，请设置OPENAI_API_KEY环境变量")
+            raise SpeechRecognitionError("OpenAI APIEN，pleasesettingsOPENAI_API_KEYEN")
         
         try:
-            logger.info(f"开始使用OpenAI API生成字幕: {video_path}")
+            logger.info(f"startuseOpenAI APIgeneratesubtitles: {video_path}")
             
-            # 这里需要实现OpenAI API调用
-            # 由于需要额外的依赖，这里先抛出异常
-            raise SpeechRecognitionError("OpenAI API功能暂未实现，请使用本地Whisper")
+            # ENneedENOpenAI APIcall
+            # ENneedEN，ENexception
+            raise SpeechRecognitionError("OpenAI APIEN，pleaseuseENWhisper")
             
         except Exception as e:
-            error_msg = f"OpenAI API生成字幕时发生错误: {e}"
+            error_msg = f"OpenAI APIgeneratesubtitlesENerror: {e}"
             logger.error(error_msg)
             raise SpeechRecognitionError(error_msg)
     
     def _generate_subtitle_azure_speech(self, video_path: Path, output_path: Path, 
                                       config: SpeechRecognitionConfig) -> Path:
-        """使用Azure Speech Services生成字幕"""
+        """useAzure Speech Servicesgeneratesubtitles"""
         if not self.available_methods[SpeechRecognitionMethod.AZURE_SPEECH]:
-            raise SpeechRecognitionError("Azure Speech Services不可用，请设置AZURE_SPEECH_KEY和AZURE_SPEECH_REGION环境变量")
+            raise SpeechRecognitionError("Azure Speech ServicesEN，pleasesettingsAZURE_SPEECH_KEYENAZURE_SPEECH_REGIONEN")
         
         try:
-            logger.info(f"开始使用Azure Speech Services生成字幕: {video_path}")
+            logger.info(f"startuseAzure Speech Servicesgeneratesubtitles: {video_path}")
             
-            # 这里需要实现Azure Speech Services调用
-            raise SpeechRecognitionError("Azure Speech Services功能暂未实现，请使用本地Whisper")
+            # ENneedENAzure Speech Servicescall
+            raise SpeechRecognitionError("Azure Speech ServicesEN，pleaseuseENWhisper")
             
         except Exception as e:
-            error_msg = f"Azure Speech Services生成字幕时发生错误: {e}"
+            error_msg = f"Azure Speech ServicesgeneratesubtitlesENerror: {e}"
             logger.error(error_msg)
             raise SpeechRecognitionError(error_msg)
     
     def _generate_subtitle_google_speech(self, video_path: Path, output_path: Path, 
                                        config: SpeechRecognitionConfig) -> Path:
-        """使用Google Speech-to-Text生成字幕"""
+        """useGoogle Speech-to-Textgeneratesubtitles"""
         if not self.available_methods[SpeechRecognitionMethod.GOOGLE_SPEECH]:
-            raise SpeechRecognitionError("Google Speech-to-Text不可用，请设置GOOGLE_APPLICATION_CREDENTIALS或GOOGLE_SPEECH_API_KEY环境变量")
+            raise SpeechRecognitionError("Google Speech-to-TextEN，pleasesettingsGOOGLE_APPLICATION_CREDENTIALSENGOOGLE_SPEECH_API_KEYEN")
         
         try:
-            logger.info(f"开始使用Google Speech-to-Text生成字幕: {video_path}")
+            logger.info(f"startuseGoogle Speech-to-Textgeneratesubtitles: {video_path}")
             
-            # 这里需要实现Google Speech-to-Text调用
-            raise SpeechRecognitionError("Google Speech-to-Text功能暂未实现，请使用本地Whisper")
+            # ENneedENGoogle Speech-to-Textcall
+            raise SpeechRecognitionError("Google Speech-to-TextEN，pleaseuseENWhisper")
             
         except Exception as e:
-            error_msg = f"Google Speech-to-Text生成字幕时发生错误: {e}"
+            error_msg = f"Google Speech-to-TextgeneratesubtitlesENerror: {e}"
             logger.error(error_msg)
             raise SpeechRecognitionError(error_msg)
     
     def _generate_subtitle_aliyun_speech(self, video_path: Path, output_path: Path, 
                                        config: SpeechRecognitionConfig) -> Path:
-        """使用阿里云语音识别生成字幕"""
+        """useENgeneratesubtitles"""
         if not self.available_methods[SpeechRecognitionMethod.ALIYUN_SPEECH]:
-            raise SpeechRecognitionError("阿里云语音识别不可用，请配置API Key")
+            raise SpeechRecognitionError("EN，pleaseconfigAPI Key")
         
         try:
-            logger.info(f"开始使用阿里云语音识别生成字幕: {video_path}")
+            logger.info(f"startuseENgeneratesubtitles: {video_path}")
             
-            # 检查视频文件是否存在
+            # checkvideofileEN
             if not video_path.exists():
-                raise SpeechRecognitionError(f"视频文件不存在: {video_path}")
+                raise SpeechRecognitionError(f"videofiledoes not exist: {video_path}")
             
-            # 提取音频文件
+            # ENfile
             audio_path = self._extract_audio_from_video(video_path, output_path.parent)
             
-            # 使用阿里云语音识别API
-            # 注意：这里使用阿里云百炼的语音识别服务，默认使用qwen3-asr-flash模型
+            # useENAPI
+            # EN：ENuseENservice，ENuseqwen3-asr-flashEN
             import requests
             import base64
             
-            # 读取音频文件并编码
+            # readENfileEN
             with open(audio_path, 'rb') as audio_file:
                 audio_data = base64.b64encode(audio_file.read()).decode('utf-8')
             
-            # 准备请求数据
+            # ENrequestEN
             request_data = {
-                "model": "qwen3-asr-flash",  # 使用最新的ASR模型
+                "model": "qwen3-asr-flash",  # useENASREN
                 "input": {
                     "audio": f"data:audio/wav;base64,{audio_data}"
                 },
                 "parameters": {
-                    "format": "srt",  # 输出SRT格式
+                    "format": "srt",  # ENSRTEN
                     "enable_timestamps": config.enable_timestamps,
                     "enable_punctuation": config.enable_punctuation
                 }
             }
             
-            # 发送请求到阿里云百炼API
+            # sendrequestENAPI
             headers = {
                 'Authorization': f'Bearer {config.aliyun_access_key}',
                 'Content-Type': 'application/json'
@@ -508,49 +508,49 @@ class SpeechRecognizer:
             if response.status_code == 200:
                 result = response.json()
                 if result.get('output', {}).get('text'):
-                    # 保存字幕文件
+                    # savesubtitlesfile
                     subtitle_content = result['output']['text']
                     with open(output_path, 'w', encoding='utf-8') as f:
                         f.write(subtitle_content)
                     
-                    logger.info(f"阿里云语音识别字幕生成成功: {output_path}")
+                    logger.info(f"ENsubtitlesgeneratesucceeded: {output_path}")
                     return output_path
                 else:
-                    raise SpeechRecognitionError("阿里云语音识别返回结果为空")
+                    raise SpeechRecognitionError("ENreturnresultEN")
             else:
-                error_detail = response.json().get('message', '未知错误') if response.headers.get('content-type', '').startswith('application/json') else response.text
-                raise SpeechRecognitionError(f"阿里云语音识别API调用失败: {response.status_code} - {error_detail}")
+                error_detail = response.json().get('message', 'Unknown error') if response.headers.get('content-type', '').startswith('application/json') else response.text
+                raise SpeechRecognitionError(f"ENAPIcallfailed: {response.status_code} - {error_detail}")
             
         except Exception as e:
-            error_msg = f"阿里云语音识别生成字幕时发生错误: {e}"
+            error_msg = f"ENgeneratesubtitlesENerror: {e}"
             logger.error(error_msg)
             raise SpeechRecognitionError(error_msg)
     
     def _generate_subtitle_custom_api(self, video_path: Path, output_path: Path, 
                                      config: SpeechRecognitionConfig) -> Path:
-        """使用自定义API生成字幕"""
+        """useENAPIgeneratesubtitles"""
         if not config.custom_api_url or not config.custom_api_key:
             raise SpeechRecognitionError(
-                "自定义API配置不完整，请配置 custom_api_url 和 custom_api_key"
+                "ENAPIconfigEN，pleaseconfig custom_api_url EN custom_api_key"
             )
         
         try:
-            logger.info(f"开始使用自定义API生成字幕: {video_path}")
+            logger.info(f"startuseENAPIgeneratesubtitles: {video_path}")
             
-            # 检查视频文件是否存在
+            # checkvideofileEN
             if not video_path.exists():
-                raise SpeechRecognitionError(f"视频文件不存在: {video_path}")
+                raise SpeechRecognitionError(f"videofiledoes not exist: {video_path}")
             
-            # 提取音频文件
+            # ENfile
             audio_path = self._extract_audio_from_video(video_path, output_path.parent)
             
-            # 准备API请求
+            # ENAPIrequest
             headers = {
                 'Authorization': f'Bearer {config.custom_api_key}',
                 'Content-Type': 'audio/wav'
             }
             
-            # 发送音频文件到API
+            # sendENfileENAPI
             with open(audio_path, 'rb') as audio_file:
                 files = {'audio': audio_file}
                 data = {
@@ -567,31 +567,31 @@ class SpeechRecognizer:
                 )
             
             if response.status_code == 200:
-                # 保存字幕文件
+                # savesubtitlesfile
                 subtitle_content = response.text
                 with open(output_path, 'w', encoding='utf-8') as f:
                     f.write(subtitle_content)
                 
-                logger.info(f"自定义API字幕生成成功: {output_path}")
+                logger.info(f"ENAPIsubtitlesgeneratesucceeded: {output_path}")
                 return output_path
             else:
-                raise SpeechRecognitionError(f"自定义API调用失败: {response.status_code} - {response.text}")
+                raise SpeechRecognitionError(f"ENAPIcallfailed: {response.status_code} - {response.text}")
                 
         except Exception as e:
-            error_msg = f"自定义API生成字幕时发生错误: {e}"
+            error_msg = f"ENAPIgeneratesubtitlesENerror: {e}"
             logger.error(error_msg)
             raise SpeechRecognitionError(error_msg)
     
     def get_available_methods(self) -> Dict[SpeechRecognitionMethod, bool]:
-        """获取可用的语音识别方法"""
+        """fetchEN"""
         return self.available_methods.copy()
     
     def get_supported_languages(self) -> List[LanguageCode]:
-        """获取支持的语言列表"""
+        """fetchEN"""
         return list(LanguageCode)
     
     def get_whisper_models(self) -> List[str]:
-        """获取可用的Whisper模型列表"""
+        """fetchENWhisperEN"""
         return ["tiny", "base", "small", "medium", "large"]
 
 
@@ -599,23 +599,23 @@ def generate_subtitle_for_video(video_path: Path, output_path: Optional[Path] = 
                                method: str = "auto", language: str = "auto", 
                                model: str = "base", enable_fallback: bool = True) -> Path:
     """
-    为视频生成字幕文件的便捷函数
+    ENvideogeneratesubtitlesfileEN
     
     Args:
-        video_path: 视频文件路径
-        output_path: 输出字幕文件路径
-        method: 生成方法 ("auto", "whisper_local", "openai_api", "azure_speech", "google_speech", "aliyun_speech", "custom_api")
-        language: 语言代码
-        model: Whisper模型大小（仅对whisper_local有效）
-        enable_fallback: 是否启用回退机制
+        video_path: videofilepath
+        output_path: ENsubtitlesfilepath
+        method: generateEN ("auto", "whisper_local", "openai_api", "azure_speech", "google_speech", "aliyun_speech", "custom_api")
+        language: EN
+        model: WhisperEN（ENwhisper_localEN）
+        enable_fallback: EN
         
     Returns:
-        生成的字幕文件路径
+        generateENsubtitlesfilepath
         
     Raises:
-        SpeechRecognitionError: 语音识别失败
+        SpeechRecognitionError: ENfailed
     """
-    # 创建配置
+    # createconfig
     config = SpeechRecognitionConfig(
         method=SpeechRecognitionMethod(method) if method != "auto" else SpeechRecognitionMethod.WHISPER_LOCAL,
         language=LanguageCode(language),
@@ -626,10 +626,10 @@ def generate_subtitle_for_video(video_path: Path, output_path: Optional[Path] = 
     recognizer = SpeechRecognizer()
     
     if method == "auto":
-        # 自动选择最佳方法
+        # EN
         available_methods = recognizer.get_available_methods()
         
-        # 按优先级选择方法（Whisper本地优先，因为免费且离线）
+        # EN（WhisperEN，becauseEN）
         priority_methods = [
             SpeechRecognitionMethod.WHISPER_LOCAL,
             SpeechRecognitionMethod.OPENAI_API,
@@ -644,17 +644,17 @@ def generate_subtitle_for_video(video_path: Path, output_path: Optional[Path] = 
                 config.method = priority_method
                 break
         else:
-            raise SpeechRecognitionError("没有可用的语音识别服务，请安装whisper或配置API密钥")
+            raise SpeechRecognitionError("ENservice，pleaseENwhisperENconfigAPIEN")
     
     return recognizer.generate_subtitle(video_path, output_path, config)
 
 
 def get_available_speech_recognition_methods() -> Dict[str, bool]:
     """
-    获取可用的语音识别方法
+    fetchEN
     
     Returns:
-        可用方法字典
+        EN
     """
     recognizer = SpeechRecognizer()
     available_methods = recognizer.get_available_methods()
@@ -667,20 +667,20 @@ def get_available_speech_recognition_methods() -> Dict[str, bool]:
 
 def get_supported_languages() -> List[str]:
     """
-    获取支持的语言列表
+    fetchEN
     
     Returns:
-        支持的语言代码列表
+        EN
     """
     return [lang.value for lang in LanguageCode]
 
 
 def get_whisper_models() -> List[str]:
     """
-    获取可用的Whisper模型列表
+    fetchENWhisperEN
     
     Returns:
-        Whisper模型列表
+        WhisperEN
     """
     return ["tiny", "base", "small", "medium", "large"]
 

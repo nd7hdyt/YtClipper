@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-B站视频下载器 - 基于yt-dlp实现B站视频和字幕下载
-集成到自动切片工具项目中
+BENvideodownloadEN - ENyt-dlpENBENvideoENsubtitlesdownload
+ENclipENprojectEN
 """
 
 import os
@@ -16,7 +16,7 @@ import yt_dlp
 try:
     from .error_handler import FileIOError, ValidationError, ProcessingError
 except ImportError:
-    # 独立运行时的导入
+    # ENrunEN
     import sys
     sys.path.append(str(Path(__file__).parent.parent))
     from ..utils.error_handler import FileIOError, ValidationError, ProcessingError
@@ -24,7 +24,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 class BilibiliVideoInfo:
-    """B站视频信息类"""
+    """BENvideoEN"""
     def __init__(self, info_dict: Dict[str, Any]):
         self.bvid = info_dict.get('id', '')
         self.title = info_dict.get('title', 'unknown_video')
@@ -37,7 +37,7 @@ class BilibiliVideoInfo:
         self.webpage_url = info_dict.get('webpage_url', '')
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典格式"""
+        """EN"""
         return {
             'bvid': self.bvid,
             'title': self.title,
@@ -51,15 +51,15 @@ class BilibiliVideoInfo:
         }
 
 class BilibiliDownloader:
-    """B站视频下载器"""
+    """BENvideodownloadEN"""
     
     def __init__(self, download_dir: Optional[Path] = None, browser: Optional[str] = None):
         """
-        初始化下载器
+        initializedownloadEN
         
         Args:
-            download_dir: 下载目录，默认为当前目录
-            browser: 浏览器类型，用于获取cookies
+            download_dir: downloaddirectory，ENcurrentdirectory
+            browser: EN，ENfetchcookies
         """
         self.download_dir = download_dir or Path.cwd()
         self.browser = browser
@@ -67,13 +67,13 @@ class BilibiliDownloader:
         
     def validate_bilibili_url(self, url: str) -> bool:
         """
-        验证B站视频链接格式
+        validateBENvideoEN
         
         Args:
-            url: 视频链接
+            url: videoEN
             
         Returns:
-            是否为有效的B站链接
+            ENBEN
         """
         bilibili_patterns = [
             r'https?://www\.bilibili\.com/video/[Bb][Vv][0-9A-Za-z]+',
@@ -87,16 +87,16 @@ class BilibiliDownloader:
     
     async def get_video_info(self, url: str) -> BilibiliVideoInfo:
         """
-        获取视频信息（不下载）
+        fetchvideoEN（ENdownload）
         
         Args:
-            url: 视频链接
+            url: videoEN
             
         Returns:
-            视频信息对象
+            videoEN
         """
         if not self.validate_bilibili_url(url):
-            raise ValidationError(f"无效的B站视频链接: {url}")
+            raise ValidationError(f"ENBENvideoEN: {url}")
         
         ydl_opts = {
             'quiet': True,
@@ -116,10 +116,10 @@ class BilibiliDownloader:
             )
             return BilibiliVideoInfo(info_dict)
         except Exception as e:
-            raise ProcessingError(f"获取视频信息失败: {str(e)}")
+            raise ProcessingError(f"fetchvideoENfailed: {str(e)}")
     
     def _extract_info_sync(self, url: str, ydl_opts: Dict[str, Any]) -> Dict[str, Any]:
-        """同步方式提取视频信息"""
+        """ENvideoEN"""
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             return ydl.extract_info(url, download=False)
     
@@ -129,48 +129,48 @@ class BilibiliDownloader:
         progress_callback: Optional[Callable[[str, float], None]] = None
     ) -> Dict[str, str]:
         """
-        下载视频和字幕文件
+        downloadvideoENsubtitlesfile
         
         Args:
-            url: 视频链接
-            progress_callback: 进度回调函数，参数为(状态信息, 进度百分比)
+            url: videoEN
+            progress_callback: progressEN，parametersEN(statusEN, progressEN)
             
         Returns:
-            包含video_path和subtitle_path的字典
+            ENvideo_pathENsubtitle_pathEN
         """
         if not self.validate_bilibili_url(url):
-            raise ValidationError(f"无效的B站视频链接: {url}")
+            raise ValidationError(f"ENBENvideoEN: {url}")
         
-        # 获取视频信息
+        # fetchvideoEN
         video_info = await self.get_video_info(url)
         
-        # 清理文件名，移除特殊字符
+        # ENfileEN，EN
         safe_title = self._sanitize_filename(video_info.title)
         
-        # 设置下载选项 - 改进字幕下载策略
+        # settingsdownloadEN - ENsubtitlesdownloadEN
         ydl_opts = {
             'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
             'writesubtitles': True,
-            'writeautomaticsub': True,  # 同时尝试下载自动生成字幕
-            'subtitleslangs': ['ai-zh', 'zh-Hans', 'zh', 'en'],  # 多种字幕语言
-            'subtitlesformat': 'srt',  # 强制SRT格式
+            'writeautomaticsub': True,  # meanwhileENdownloadENgeneratesubtitles
+            'subtitleslangs': ['ai-zh', 'zh-Hans', 'zh', 'en'],  # ENsubtitlesEN
+            'subtitlesformat': 'srt',  # ENSRTEN
             'outtmpl': str(self.download_dir / f'{safe_title}.%(ext)s'),
             'noplaylist': True,
             'quiet': True,
             'progress': True,
-            'no_warnings': False,  # 显示警告信息以便调试
+            'no_warnings': False,  # ENwarningEN
         }
         
         if self.browser:
             ydl_opts['cookiesfrombrowser'] = (self.browser.lower(),)
         
-        # 添加进度钩子
+        # ENprogressEN
         if progress_callback:
             ydl_opts['progress_hooks'] = [self._create_progress_hook(progress_callback)]
         
         try:
             if progress_callback:
-                progress_callback("开始下载视频和字幕...", 0)
+                progress_callback("startdownloadvideoENsubtitles...", 0)
             
             loop = asyncio.get_event_loop()
             await loop.run_in_executor(
@@ -180,17 +180,17 @@ class BilibiliDownloader:
                 ydl_opts
             )
             
-            # 查找下载的文件
+            # ENdownloadENfile
             video_path = self._find_downloaded_video(safe_title)
             subtitle_path = self._find_downloaded_subtitle(safe_title)
             
-            # 如果第一次尝试没有找到字幕，尝试不同的字幕获取策略
+            # ifENsubtitles，ENsubtitlesfetchEN
             if not subtitle_path:
-                logger.info("第一次字幕下载失败，尝试备用策略...")
+                logger.info("ENsubtitlesdownloadfailed，EN...")
                 subtitle_path = await self._try_alternative_subtitle_strategies(url, safe_title)
             
             if progress_callback:
-                progress_callback("下载完成", 100)
+                progress_callback("downloadEN", 100)
             
             result = {
                 'video_path': str(video_path) if video_path else '',
@@ -198,17 +198,17 @@ class BilibiliDownloader:
                 'video_info': video_info.to_dict()
             }
             
-            logger.info(f"下载完成: {video_info.title}")
+            logger.info(f"downloadEN: {video_info.title}")
             return result
             
         except Exception as e:
-            error_msg = f"下载失败: {str(e)}"
+            error_msg = f"downloadfailed: {str(e)}"
             if progress_callback:
                 progress_callback(error_msg, 0)
             raise ProcessingError(error_msg)
     
     async def _try_alternative_subtitle_strategies(self, url: str, safe_title: str) -> Optional[Path]:
-        """尝试多种字幕获取策略"""
+        """ENsubtitlesfetchEN"""
         strategies = [
             self._try_download_with_different_langs,
             self._try_download_without_cookies,
@@ -219,31 +219,31 @@ class BilibiliDownloader:
             try:
                 subtitle_path = await strategy(url, safe_title)
                 if subtitle_path:
-                    logger.info(f"备用字幕策略成功: {strategy.__name__}")
+                    logger.info(f"ENsubtitlesENsucceeded: {strategy.__name__}")
                     return subtitle_path
             except Exception as e:
-                logger.warning(f"备用字幕策略失败 {strategy.__name__}: {e}")
+                logger.warning(f"ENsubtitlesENfailed {strategy.__name__}: {e}")
                 continue
         
-        logger.warning("所有字幕获取策略都失败了")
+        logger.warning("allsubtitlesfetchENfailedEN")
         return None
     
     async def _try_download_with_different_langs(self, url: str, safe_title: str) -> Optional[Path]:
-        """尝试下载不同语言的字幕"""
-        logger.info("尝试下载不同语言的字幕...")
+        """ENdownloadENsubtitles"""
+        logger.info("ENdownloadENsubtitles...")
         
-        # 尝试不同的字幕语言组合
+        # ENsubtitlesEN
         lang_combinations = [
-            ['zh-Hans', 'zh'],  # 简体中文
-            ['en', 'en-US'],    # 英文
-            ['ai-zh'],          # AI中文字幕
-            ['auto']            # 自动检测
+            ['zh-Hans', 'zh'],  # EN
+            ['en', 'en-US'],    # EN
+            ['ai-zh'],          # AIENsubtitles
+            ['auto']            # EN
         ]
         
         for langs in lang_combinations:
             try:
                 ydl_opts = {
-                    'skip_download': True,  # 只下载字幕，不下载视频
+                    'skip_download': True,  # ENdownloadsubtitles，ENdownloadvideo
                     'writesubtitles': True,
                     'writeautomaticsub': True,
                     'subtitleslangs': langs,
@@ -259,24 +259,24 @@ class BilibiliDownloader:
                 loop = asyncio.get_event_loop()
                 await loop.run_in_executor(None, self._download_sync, url, ydl_opts)
                 
-                # 查找字幕文件
+                # ENsubtitlesfile
                 subtitle_path = self._find_downloaded_subtitle(safe_title + "_sub")
                 if subtitle_path:
                     return subtitle_path
                     
             except Exception as e:
-                logger.debug(f"尝试语言 {langs} 失败: {e}")
+                logger.debug(f"EN {langs} failed: {e}")
                 continue
         
         return None
     
     async def _try_download_without_cookies(self, url: str, safe_title: str) -> Optional[Path]:
-        """尝试不使用cookies下载字幕（某些公开字幕可能不需要登录）"""
-        logger.info("尝试不使用cookies下载字幕...")
+        """ENusecookiesdownloadsubtitles（ENsubtitlesmayENneedlogin）"""
+        logger.info("ENusecookiesdownloadsubtitles...")
         
         try:
             ydl_opts = {
-                'skip_download': True,  # 只下载字幕，不下载视频
+                'skip_download': True,  # ENdownloadsubtitles，ENdownloadvideo
                 'writesubtitles': True,
                 'writeautomaticsub': True,
                 'subtitleslangs': ['zh-Hans', 'zh', 'en'],
@@ -293,15 +293,15 @@ class BilibiliDownloader:
             return subtitle_path
             
         except Exception as e:
-            logger.debug(f"不使用cookies下载失败: {e}")
+            logger.debug(f"ENusecookiesdownloadfailed: {e}")
             return None
     
     async def _try_extract_from_video_metadata(self, url: str, safe_title: str) -> Optional[Path]:
-        """尝试从视频元数据中提取字幕信息"""
-        logger.info("尝试从视频元数据提取字幕信息...")
+        """ENvideoENsubtitlesEN"""
+        logger.info("ENvideoENsubtitlesEN...")
         
         try:
-            # 获取视频详细信息
+            # fetchvideoEN
             ydl_opts = {
                 'quiet': True,
                 'no_warnings': True,
@@ -313,34 +313,34 @@ class BilibiliDownloader:
             loop = asyncio.get_event_loop()
             info_dict = await loop.run_in_executor(None, self._extract_info_sync, url, ydl_opts)
             
-            # 检查是否有字幕信息
+            # checkENsubtitlesEN
             subtitles = info_dict.get('subtitles', {})
             auto_subtitles = info_dict.get('automatic_captions', {})
             
             if subtitles or auto_subtitles:
-                logger.info(f"发现字幕信息: {list(subtitles.keys()) + list(auto_subtitles.keys())}")
-                # 这里可以进一步处理字幕信息
-                return None  # 暂时返回None，后续可以扩展
+                logger.info(f"ENsubtitlesEN: {list(subtitles.keys()) + list(auto_subtitles.keys())}")
+                # ENcanENprocessingsubtitlesEN
+                return None  # ENreturnNone，ENcanEN
             
             return None
             
         except Exception as e:
-            logger.debug(f"提取视频元数据失败: {e}")
+            logger.debug(f"ENvideoENfailed: {e}")
             return None
     
     def _download_sync(self, url: str, ydl_opts: Dict[str, Any]):
-        """同步方式下载"""
+        """ENdownload"""
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
     
     def _create_progress_hook(self, progress_callback: Callable[[str, float], None]):
-        """创建进度回调钩子"""
+        """createprogressEN"""
         def progress_hook(d):
             if d['status'] == 'downloading':
                 if 'total_bytes' in d and d['total_bytes']:
                     progress = (d['downloaded_bytes'] / d['total_bytes']) * 100
                 elif '_percent_str' in d:
-                    # 从百分比字符串中提取数字
+                    # EN
                     percent_str = d['_percent_str'].strip().rstrip('%')
                     try:
                         progress = float(percent_str)
@@ -351,28 +351,28 @@ class BilibiliDownloader:
                 
                 speed = d.get('_speed_str', '')
                 eta = d.get('_eta_str', '')
-                status = f"下载中... {speed} ETA: {eta}"
+                status = f"downloadEN... {speed} ETA: {eta}"
                 progress_callback(status, progress)
             elif d['status'] == 'finished':
-                progress_callback("下载完成，正在处理...", 95)
+                progress_callback("downloadEN，currentlyprocessing...", 95)
         
         return progress_hook
     
     def _sanitize_filename(self, filename: str) -> str:
-        """清理文件名，移除不安全字符"""
-        # 移除或替换不安全的字符
+        """ENfileEN，EN"""
+        # EN
         unsafe_chars = '<>:"/\\|?*'
         for char in unsafe_chars:
             filename = filename.replace(char, '_')
         
-        # 限制文件名长度
+        # ENfileEN
         if len(filename) > 100:
             filename = filename[:100]
         
         return filename.strip()
     
     def _find_downloaded_video(self, title: str) -> Optional[Path]:
-        """查找下载的视频文件"""
+        """ENdownloadENvideofile"""
         possible_extensions = ['.mp4', '.mkv', '.webm', '.flv']
         
         for ext in possible_extensions:
@@ -380,7 +380,7 @@ class BilibiliDownloader:
             if video_path.exists():
                 return video_path
         
-        # 如果精确匹配失败，尝试模糊匹配
+        # ifENfailed，EN
         for file_path in self.download_dir.glob(f"{title}*"):
             if file_path.suffix.lower() in possible_extensions:
                 return file_path
@@ -388,41 +388,41 @@ class BilibiliDownloader:
         return None
     
     def _find_downloaded_subtitle(self, title: str) -> Optional[Path]:
-        """查找下载的字幕文件 - 简化版本，专注AI字幕"""
-        logger.info(f"正在查找字幕文件，标题: {title}")
+        """ENdownloadENsubtitlesfile - EN，ENAIsubtitles"""
+        logger.info(f"currentlyENsubtitlesfile，title: {title}")
         
-        # 首先检查AI字幕文件
+        # ENcheckAIsubtitlesfile
         ai_subtitle_path = self.download_dir / f"{title}.ai-zh.srt"
         if ai_subtitle_path.exists():
-            # 重命名为标准格式
+            # EN
             standard_path = self.download_dir / f"{title}.srt"
             if not standard_path.exists():
                 ai_subtitle_path.rename(standard_path)
-                logger.info(f"重命名AI字幕文件: {title}.ai-zh.srt -> {title}.srt")
+                logger.info(f"ENAIsubtitlesfile: {title}.ai-zh.srt -> {title}.srt")
                 return standard_path
             return ai_subtitle_path
         
-        # 检查是否已经是标准格式
+        # checkENalreadyEN
         standard_path = self.download_dir / f"{title}.srt"
         if standard_path.exists():
-            logger.info(f"找到标准字幕文件: {title}.srt")
+            logger.info(f"ENsubtitlesfile: {title}.srt")
             return standard_path
         
-        # 模糊匹配字幕文件
+        # ENsubtitlesfile
         for file_path in self.download_dir.glob(f"{title}*.srt"):
-            logger.info(f"找到字幕文件: {file_path.name}")
+            logger.info(f"ENsubtitlesfile: {file_path.name}")
             return file_path
         
-        logger.warning(f"未找到字幕文件，标题: {title}")
+        logger.warning(f"not foundsubtitlesfile，title: {title}")
         return None
     
     def _convert_vtt_to_srt(self, vtt_path: Path, srt_path: Path):
-        """将VTT字幕文件转换为SRT格式"""
+        """ENVTTsubtitlesfileENSRTEN"""
         try:
             with open(vtt_path, 'r', encoding='utf-8') as vtt_file:
                 vtt_content = vtt_file.read()
             
-            # 简单的VTT到SRT转换
+            # ENVTTENSRTEN
             lines = vtt_content.split('\n')
             srt_lines = []
             subtitle_count = 1
@@ -431,19 +431,19 @@ class BilibiliDownloader:
             while i < len(lines):
                 line = lines[i].strip()
                 
-                # 跳过VTT头部信息
+                # ENVTTEN
                 if line.startswith('WEBVTT') or line.startswith('NOTE') or not line:
                     i += 1
                     continue
                 
-                # 查找时间戳行
+                # ENtimeEN
                 if '-->' in line:
-                    # 转换时间格式 (VTT使用点，SRT使用逗号)
+                    # ENtimeEN (VTTuseEN，SRTuseEN)
                     time_line = line.replace('.', ',')
                     srt_lines.append(str(subtitle_count))
                     srt_lines.append(time_line)
                     
-                    # 获取字幕文本
+                    # fetchsubtitlesEN
                     i += 1
                     subtitle_text = []
                     while i < len(lines) and lines[i].strip():
@@ -451,30 +451,30 @@ class BilibiliDownloader:
                         i += 1
                     
                     srt_lines.extend(subtitle_text)
-                    srt_lines.append('')  # 空行分隔
+                    srt_lines.append('')  # EN
                     subtitle_count += 1
                 
                 i += 1
             
-            # 写入SRT文件
+            # writeSRTfile
             with open(srt_path, 'w', encoding='utf-8') as srt_file:
                 srt_file.write('\n'.join(srt_lines))
                 
         except Exception as e:
-            logger.error(f"VTT转SRT转换失败: {e}")
+            logger.error(f"VTTENSRTENfailed: {e}")
             raise
     
     def cleanup_temp_files(self, title: str):
-        """清理临时文件"""
+        """ENfile"""
         try:
-            # 清理可能的临时文件
+            # ENmayENfile
             for pattern in [f"{title}*.part", f"{title}*.tmp", f"{title}*.ytdl"]:
                 for temp_file in self.download_dir.glob(pattern):
                     temp_file.unlink(missing_ok=True)
         except Exception as e:
-            logger.warning(f"清理临时文件失败: {e}")
+            logger.warning(f"ENfilefailed: {e}")
 
-# 便捷函数
+# EN
 async def download_bilibili_video(
     url: str, 
     download_dir: Optional[Path] = None,
@@ -482,30 +482,30 @@ async def download_bilibili_video(
     progress_callback: Optional[Callable[[str, float], None]] = None
 ) -> Dict[str, str]:
     """
-    便捷的B站视频下载函数
+    ENBENvideodownloadEN
     
     Args:
-        url: B站视频链接
-        download_dir: 下载目录
-        browser: 浏览器类型
-        progress_callback: 进度回调函数
+        url: BENvideoEN
+        download_dir: downloaddirectory
+        browser: EN
+        progress_callback: progressEN
         
     Returns:
-        包含video_path和subtitle_path的字典
+        ENvideo_pathENsubtitle_pathEN
     """
     downloader = BilibiliDownloader(download_dir, browser)
     return await downloader.download_video_and_subtitle(url, progress_callback)
 
 async def get_bilibili_video_info(url: str, browser: Optional[str] = None) -> BilibiliVideoInfo:
     """
-    便捷的B站视频信息获取函数
+    ENBENvideoENfetchEN
     
     Args:
-        url: B站视频链接
-        browser: 浏览器类型
+        url: BENvideoEN
+        browser: EN
         
     Returns:
-        视频信息对象
+        videoEN
     """
     downloader = BilibiliDownloader(browser=browser)
     return await downloader.get_video_info(url)

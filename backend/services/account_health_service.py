@@ -13,7 +13,7 @@ from ..core.celery_app import celery_app
 logger = logging.getLogger(__name__)
 
 class AccountHealthStatus:
-    """账号健康状态枚举"""
+    """accountENstatusEN"""
     HEALTHY = "healthy"
     WARNING = "warning"
     CRITICAL = "critical"
@@ -21,15 +21,15 @@ class AccountHealthStatus:
     UNKNOWN = "unknown"
 
 class AccountHealthService:
-    """账号健康检查服务"""
+    """accountENcheckservice"""
     
     def __init__(self):
-        self.check_interval = 300  # 5分钟检查一次
-        self.cookie_expire_days = 30  # Cookie过期天数
-        self.warning_days = 7  # 提前警告天数
+        self.check_interval = 300  # 5ENcheckEN
+        self.cookie_expire_days = 30  # CookieEN
+        self.warning_days = 7  # ENwarningEN
         
     async def check_account_health(self, account_id: int) -> Dict:
-        """检查单个账号健康状态"""
+        """checkENaccountENstatus"""
         try:
             db = next(get_db())
             account = db.query(BilibiliAccount).filter(BilibiliAccount.id == account_id).first()
@@ -38,25 +38,25 @@ class AccountHealthService:
                 return {
                     "account_id": account_id,
                     "status": AccountHealthStatus.UNKNOWN,
-                    "message": "账号不存在",
+                    "message": "accountdoes not exist",
                     "last_check": datetime.now()
                 }
             
-            # 检查Cookie有效性
+            # checkCookieEN
             cookie_status = await self._check_cookie_validity(account)
             
-            # 检查登录状态
+            # checkloginstatus
             login_status = await self._check_login_status(account)
             
-            # 检查上传权限
+            # checkuploadEN
             upload_status = await self._check_upload_permission(account)
             
-            # 综合评估健康状态
+            # ENstatus
             overall_status = self._evaluate_overall_status(
                 cookie_status, login_status, upload_status
             )
             
-            # 更新账号状态
+            # updateaccountstatus
             account.health_status = overall_status["status"]
             account.last_health_check = datetime.now()
             account.health_details = {
@@ -82,35 +82,35 @@ class AccountHealthService:
             }
             
         except Exception as e:
-            logger.error(f"检查账号 {account_id} 健康状态失败: {str(e)}")
+            logger.error(f"checkaccount {account_id} ENstatusfailed: {str(e)}")
             return {
                 "account_id": account_id,
                 "status": AccountHealthStatus.UNKNOWN,
-                "message": f"检查失败: {str(e)}",
+                "message": f"checkfailed: {str(e)}",
                 "last_check": datetime.now()
             }
     
     async def _check_cookie_validity(self, account: BilibiliAccount) -> Dict:
-        """检查Cookie有效性"""
+        """checkCookieEN"""
         try:
             if not account.cookies:
                 return {
                     "status": AccountHealthStatus.CRITICAL,
-                    "message": "Cookie为空",
+                    "message": "CookieEN",
                     "expires_in": None
                 }
             
-            # 解密Cookie
+            # ENCookie
             try:
                 cookies = decrypt_data(account.cookies)
             except Exception as e:
                 return {
                     "status": AccountHealthStatus.CRITICAL,
-                    "message": f"Cookie解密失败: {str(e)}",
+                    "message": f"CookieENfailed: {str(e)}",
                     "expires_in": None
                 }
             
-            # 检查Cookie格式和必要字段
+            # checkCookieEN
             required_fields = ['SESSDATA', 'bili_jct', 'DedeUserID']
             missing_fields = []
             
@@ -121,11 +121,11 @@ class AccountHealthService:
             if missing_fields:
                 return {
                     "status": AccountHealthStatus.CRITICAL,
-                    "message": f"Cookie缺少必要字段: {', '.join(missing_fields)}",
+                    "message": f"CookieEN: {', '.join(missing_fields)}",
                     "expires_in": None
                 }
             
-            # 检查Cookie是否过期
+            # checkCookieEN
             if account.cookie_expires_at:
                 now = datetime.now()
                 expires_in = (account.cookie_expires_at - now).days
@@ -133,51 +133,51 @@ class AccountHealthService:
                 if expires_in <= 0:
                     return {
                         "status": AccountHealthStatus.EXPIRED,
-                        "message": "Cookie已过期",
+                        "message": "CookieEN",
                         "expires_in": expires_in
                     }
                 elif expires_in <= self.warning_days:
                     return {
                         "status": AccountHealthStatus.WARNING,
-                        "message": f"Cookie将在 {expires_in} 天后过期",
+                        "message": f"CookieEN {expires_in} EN",
                         "expires_in": expires_in
                     }
                 else:
                     return {
                         "status": AccountHealthStatus.HEALTHY,
-                        "message": "Cookie有效",
+                        "message": "CookieEN",
                         "expires_in": expires_in
                     }
             
             return {
                 "status": AccountHealthStatus.HEALTHY,
-                "message": "Cookie格式正确",
+                "message": "CookieEN",
                 "expires_in": None
             }
             
         except Exception as e:
-            logger.error(f"检查Cookie有效性失败: {str(e)}")
+            logger.error(f"checkCookieENfailed: {str(e)}")
             return {
                 "status": AccountHealthStatus.UNKNOWN,
-                "message": f"检查失败: {str(e)}",
+                "message": f"checkfailed: {str(e)}",
                 "expires_in": None
             }
     
     async def _check_login_status(self, account: BilibiliAccount) -> Dict:
-        """检查登录状态"""
+        """checkloginstatus"""
         try:
             import aiohttp
             
             if not account.cookies:
                 return {
                     "status": AccountHealthStatus.CRITICAL,
-                    "message": "无Cookie信息"
+                    "message": "ENCookieEN"
                 }
             
-            # 解密Cookie
+            # ENCookie
             cookies = decrypt_data(account.cookies)
             
-            # 构建Cookie字符串
+            # ENCookieEN
             cookie_str = '; '.join([f"{k}={v}" for k, v in cookies.items()])
             
             headers = {
@@ -186,7 +186,7 @@ class AccountHealthService:
                 'Referer': 'https://www.bilibili.com/'
             }
             
-            # 检查登录状态
+            # checkloginstatus
             async with aiohttp.ClientSession() as session:
                 async with session.get('https://api.bilibili.com/x/web-interface/nav', headers=headers) as response:
                     if response.status == 200:
@@ -196,7 +196,7 @@ class AccountHealthService:
                             if user_info.get('isLogin'):
                                 return {
                                     "status": AccountHealthStatus.HEALTHY,
-                                    "message": "登录状态正常",
+                                    "message": "loginstatusEN",
                                     "user_info": {
                                         "uname": user_info.get('uname'),
                                         "mid": user_info.get('mid'),
@@ -206,41 +206,41 @@ class AccountHealthService:
                             else:
                                 return {
                                     "status": AccountHealthStatus.CRITICAL,
-                                    "message": "未登录状态"
+                                    "message": "ENloginstatus"
                                 }
                         else:
                             return {
                                 "status": AccountHealthStatus.CRITICAL,
-                                "message": f"API返回错误: {data.get('message')}"
+                                "message": f"APIreturnerror: {data.get('message')}"
                             }
                     else:
                         return {
                             "status": AccountHealthStatus.CRITICAL,
-                            "message": f"请求失败: HTTP {response.status}"
+                            "message": f"requestfailed: HTTP {response.status}"
                         }
             
         except Exception as e:
-            logger.error(f"检查登录状态失败: {str(e)}")
+            logger.error(f"checkloginstatusfailed: {str(e)}")
             return {
                 "status": AccountHealthStatus.UNKNOWN,
-                "message": f"检查失败: {str(e)}"
+                "message": f"checkfailed: {str(e)}"
             }
     
     async def _check_upload_permission(self, account: BilibiliAccount) -> Dict:
-        """检查上传权限"""
+        """checkuploadEN"""
         try:
             import aiohttp
             
             if not account.cookies:
                 return {
                     "status": AccountHealthStatus.CRITICAL,
-                    "message": "无Cookie信息"
+                    "message": "ENCookieEN"
                 }
             
-            # 解密Cookie
+            # ENCookie
             cookies = decrypt_data(account.cookies)
             
-            # 构建Cookie字符串
+            # ENCookieEN
             cookie_str = '; '.join([f"{k}={v}" for k, v in cookies.items()])
             
             headers = {
@@ -249,7 +249,7 @@ class AccountHealthService:
                 'Referer': 'https://member.bilibili.com/'
             }
             
-            # 检查上传权限
+            # checkuploadEN
             async with aiohttp.ClientSession() as session:
                 async with session.get('https://member.bilibili.com/x/web/archive/pre', headers=headers) as response:
                     if response.status == 200:
@@ -257,45 +257,45 @@ class AccountHealthService:
                         if data.get('code') == 0:
                             return {
                                 "status": AccountHealthStatus.HEALTHY,
-                                "message": "具有上传权限"
+                                "message": "ENuploadEN"
                             }
                         elif data.get('code') == -101:
                             return {
                                 "status": AccountHealthStatus.CRITICAL,
-                                "message": "账号未登录或Cookie失效"
+                                "message": "accountENloginENCookieEN"
                             }
                         else:
                             return {
                                 "status": AccountHealthStatus.WARNING,
-                                "message": f"上传权限受限: {data.get('message')}"
+                                "message": f"uploadEN: {data.get('message')}"
                             }
                     else:
                         return {
                             "status": AccountHealthStatus.WARNING,
-                            "message": f"无法检查上传权限: HTTP {response.status}"
+                            "message": f"cannotcheckuploadEN: HTTP {response.status}"
                         }
             
         except Exception as e:
-            logger.error(f"检查上传权限失败: {str(e)}")
+            logger.error(f"checkuploadENfailed: {str(e)}")
             return {
                 "status": AccountHealthStatus.UNKNOWN,
-                "message": f"检查失败: {str(e)}"
+                "message": f"checkfailed: {str(e)}"
             }
     
     def _evaluate_overall_status(self, cookie_status: Dict, login_status: Dict, upload_status: Dict) -> Dict:
-        """综合评估账号健康状态"""
+        """ENaccountENstatus"""
         statuses = [cookie_status["status"], login_status["status"], upload_status["status"]]
         messages = []
         
-        # 收集所有问题
+        # ENallEN
         if cookie_status["status"] != AccountHealthStatus.HEALTHY:
             messages.append(f"Cookie: {cookie_status['message']}")
         if login_status["status"] != AccountHealthStatus.HEALTHY:
-            messages.append(f"登录: {login_status['message']}")
+            messages.append(f"login: {login_status['message']}")
         if upload_status["status"] != AccountHealthStatus.HEALTHY:
-            messages.append(f"上传: {upload_status['message']}")
+            messages.append(f"upload: {upload_status['message']}")
         
-        # 确定整体状态
+        # ENstatus
         if AccountHealthStatus.CRITICAL in statuses or AccountHealthStatus.EXPIRED in statuses:
             overall_status = AccountHealthStatus.CRITICAL
         elif AccountHealthStatus.WARNING in statuses:
@@ -308,7 +308,7 @@ class AccountHealthService:
         if messages:
             message = "; ".join(messages)
         else:
-            message = "账号状态正常"
+            message = "accountstatusEN"
         
         return {
             "status": overall_status,
@@ -316,7 +316,7 @@ class AccountHealthService:
         }
     
     async def check_all_accounts(self) -> List[Dict]:
-        """检查所有账号健康状态"""
+        """checkallaccountENstatus"""
         try:
             db = next(get_db())
             accounts = db.query(BilibiliAccount).filter(BilibiliAccount.is_active == True).all()
@@ -329,11 +329,11 @@ class AccountHealthService:
             return results
             
         except Exception as e:
-            logger.error(f"批量检查账号健康状态失败: {str(e)}")
+            logger.error(f"ENcheckaccountENstatusfailed: {str(e)}")
             return []
     
     async def auto_refresh_cookies(self, account_id: int) -> Dict:
-        """自动刷新Cookie"""
+        """ENCookie"""
         try:
             db = next(get_db())
             account = db.query(BilibiliAccount).filter(BilibiliAccount.id == account_id).first()
@@ -341,34 +341,34 @@ class AccountHealthService:
             if not account:
                 return {
                     "success": False,
-                    "message": "账号不存在"
+                    "message": "accountdoes not exist"
                 }
             
-            # 这里可以实现自动刷新Cookie的逻辑
-            # 例如通过二维码登录、短信验证等方式
-            # 目前返回提示信息
+            # ENcanENCookieEN
+            # for examplethroughENlogin、ENvalidateEN
+            # ENreturnhintEN
             
             return {
                 "success": False,
-                "message": "自动刷新Cookie功能待实现，请手动更新Cookie",
+                "message": "ENCookieEN，pleaseENupdateCookie",
                 "account_id": account_id,
                 "username": account.username
             }
             
         except Exception as e:
-            logger.error(f"自动刷新Cookie失败: {str(e)}")
+            logger.error(f"ENCookiefailed: {str(e)}")
             return {
                 "success": False,
-                "message": f"刷新失败: {str(e)}"
+                "message": f"ENfailed: {str(e)}"
             }
 
-# 全局服务实例
+# ENserviceEN
 health_service = AccountHealthService()
 
-# Celery任务
+# Celerytask
 @celery_app.task(name="check_account_health")
 def check_account_health_task(account_id: int):
-    """检查账号健康状态的Celery任务"""
+    """checkaccountENstatusENCelerytask"""
     import asyncio
     
     async def run_check():
@@ -384,7 +384,7 @@ def check_account_health_task(account_id: int):
 
 @celery_app.task(name="check_all_accounts_health")
 def check_all_accounts_health_task():
-    """批量检查所有账号健康状态的Celery任务"""
+    """ENcheckallaccountENstatusENCelerytask"""
     import asyncio
     
     async def run_check():
@@ -400,7 +400,7 @@ def check_all_accounts_health_task():
 
 @celery_app.task(name="auto_refresh_cookies")
 def auto_refresh_cookies_task(account_id: int):
-    """自动刷新Cookie的Celery任务"""
+    """ENCookieENCelerytask"""
     import asyncio
     
     async def run_refresh():

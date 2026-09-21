@@ -6,7 +6,7 @@ use tauri_plugin_autostart::AutoLaunchManager;
 pub async fn start_backend_service(app_handle: AppHandle) -> Result<String, String> {
     let backend_manager = app_handle.state::<crate::BackendManager>();
     match backend_manager.start(app_handle.clone()) {
-        Ok(_) => Ok("后端服务启动成功".to_string()),
+        Ok(_) => Ok("EN".to_string()),
         Err(e) => Err(e),
     }
 }
@@ -15,7 +15,7 @@ pub async fn start_backend_service(app_handle: AppHandle) -> Result<String, Stri
 pub async fn stop_backend_service(app_handle: AppHandle) -> Result<String, String> {
     let backend_manager = app_handle.state::<crate::BackendManager>();
     match backend_manager.stop() {
-        Ok(_) => Ok("后端服务停止成功".to_string()),
+        Ok(_) => Ok("EN".to_string()),
         Err(e) => Err(e),
     }
 }
@@ -24,7 +24,7 @@ pub async fn stop_backend_service(app_handle: AppHandle) -> Result<String, Strin
 pub async fn restart_backend_service(app_handle: AppHandle) -> Result<String, String> {
     let backend_manager = app_handle.state::<crate::BackendManager>();
     match backend_manager.restart(app_handle.clone()) {
-        Ok(_) => Ok("后端服务重启成功".to_string()),
+        Ok(_) => Ok("EN".to_string()),
         Err(e) => Err(e),
     }
 }
@@ -42,17 +42,17 @@ pub async fn show_main_window(app_handle: AppHandle) -> Result<(), String> {
         window.set_focus().map_err(|e| e.to_string())?;
         Ok(())
     } else {
-        Err("主窗口不存在".to_string())
+        Err("EN".to_string())
     }
 }
 
 #[tauri::command]
 pub async fn quit_app(app_handle: AppHandle) -> Result<(), String> {
-    // 停止后端服务
+    // Stop backend service
     let backend_manager = app_handle.state::<crate::BackendManager>();
     let _ = backend_manager.stop();
 
-    // 退出应用
+    // EN
     app_handle.exit(0);
     Ok(())
 }
@@ -61,7 +61,7 @@ pub async fn quit_app(app_handle: AppHandle) -> Result<(), String> {
 pub async fn enable_autostart(manager: State<'_, AutoLaunchManager>) -> Result<bool, String> {
     match manager.enable() {
         Ok(_) => Ok(true),
-        Err(e) => Err(format!("启用自动启动失败: {}", e)),
+        Err(e) => Err(format!("EN: {}", e)),
     }
 }
 
@@ -69,7 +69,7 @@ pub async fn enable_autostart(manager: State<'_, AutoLaunchManager>) -> Result<b
 pub async fn disable_autostart(manager: State<'_, AutoLaunchManager>) -> Result<bool, String> {
     match manager.disable() {
         Ok(_) => Ok(false),
-        Err(e) => Err(format!("禁用自动启动失败: {}", e)),
+        Err(e) => Err(format!("EN: {}", e)),
     }
 }
 
@@ -77,6 +77,6 @@ pub async fn disable_autostart(manager: State<'_, AutoLaunchManager>) -> Result<
 pub async fn is_autostart_enabled(manager: State<'_, AutoLaunchManager>) -> Result<bool, String> {
     match manager.is_enabled() {
         Ok(enabled) => Ok(enabled),
-        Err(e) => Err(format!("检查自动启动状态失败: {}", e)),
+        Err(e) => Err(format!("EN: {}", e)),
     }
 }

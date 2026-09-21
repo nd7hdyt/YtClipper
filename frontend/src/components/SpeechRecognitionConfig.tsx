@@ -8,7 +8,7 @@ interface SpeechRecognitionConfigProps {
   onConfigChange?: (config: Record<string, unknown>) => void
 }
 
-// Whisper 运行时 + 模型管理 — Calm Premium 行式布局（见 DESIGN.md）
+// Whisper EN + ModelEN — Calm Premium EN（EN DESIGN.md）
 const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
   const [runtime, setRuntime] = useState<WhisperRuntimeStatus | null>(null)
   const [models, setModels] = useState<WhisperModel[]>([])
@@ -21,13 +21,13 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
       setRuntime(rt)
       setModels(Array.isArray(ms) ? ms : [])
     } catch {
-      // 后端可能尚未就绪，静默重试
+      // EN，ENRetry
     } finally {
       setLoading(false)
     }
   }, [])
 
-  // 安装中或有模型下载中时，加快轮询
+  // installENModeldownloadEN，EN
   const needsFastPoll = (rt: WhisperRuntimeStatus | null, ms: WhisperModel[]) =>
     rt?.status === 'installing' || ms.some((m) => m.status === 'downloading')
 
@@ -45,46 +45,46 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
   const handleInstall = async () => {
     try {
       const r = await speechApi.installRuntime()
-      message.info(r.message || '已开始安装')
+      message.info(r.message || 'ENinstall')
       setRuntime((p) => (p ? { ...p, status: 'installing', progress: 5 } : p))
       refresh()
     } catch (e: any) {
-      message.error(e?.response?.data?.detail || '安装失败')
+      message.error(e?.response?.data?.detail || 'installFailed')
     }
   }
 
   const handleUninstall = async () => {
     try {
       const r = await speechApi.uninstallRuntime()
-      message.success(r.message || '已卸载')
+      message.success(r.message || 'ENuninstall')
       refresh()
     } catch {
-      message.error('卸载失败')
+      message.error('uninstallFailed')
     }
   }
 
   const handleDownload = async (model: string) => {
     try {
       await speechApi.downloadModel(model)
-      message.info(`开始下载 ${model}`)
+      message.info(`ENdownload ${model}`)
       setModels((prev) => prev.map((m) => (m.name === model ? { ...m, status: 'downloading' } : m)))
       refresh()
     } catch (e: any) {
-      message.error(e?.response?.data?.detail || '下载失败')
+      message.error(e?.response?.data?.detail || 'Download failed')
     }
   }
 
   const handleDelete = async (model: string) => {
     try {
       await speechApi.deleteModel(model)
-      message.success(`已删除 ${model}`)
+      message.success(`ENDelete ${model}`)
       refresh()
     } catch {
-      message.error('删除失败')
+      message.error('Delete failed')
     }
   }
 
-  if (loading) return <div className="ac-hint">读取 Whisper 状态…</div>
+  if (loading) return <div className="ac-hint">EN Whisper Status…</div>
 
   const installed = runtime?.status === 'installed'
   const installing = runtime?.status === 'installing'
@@ -95,20 +95,20 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
       <div className="ac-rows">
         <Row
           top
-          label="Whisper 运行时"
+          label="Whisper EN"
           hint={
-            !supported ? '当前平台不支持本地转写。'
-              : installed ? `faster-whisper 已安装${runtime?.packages?.length ? `（${runtime.packages.join(', ')}）` : ''}。`
-              : installing ? (runtime?.message || '正在安装…')
-              : runtime?.status === 'error' ? `安装出错：${runtime?.message || ''}`
-              : '按需安装，约 200–400 MB（不含 PyTorch）。装好后再选一个模型下载即可。'
+            !supported ? 'EN。'
+              : installed ? `faster-whisper Installed${runtime?.packages?.length ? `（${runtime.packages.join(', ')}）` : ''}。`
+              : installing ? (runtime?.message || 'ENinstall…')
+              : runtime?.status === 'error' ? `installEN：${runtime?.message || ''}`
+              : 'ENinstall，EN 200–400 MB（EN PyTorch）。ENModeldownloadEN。'
           }
         >
           {installed && (
             <>
-              <StatusDot tone="ok" label="已安装" />
-              <Popconfirm title="卸载 Whisper 运行时？已下载的模型不会被删除。" onConfirm={handleUninstall} okText="卸载" cancelText="取消">
-                <Btn variant="danger" size="sm">卸载</Btn>
+              <StatusDot tone="ok" label="Installed" />
+              <Popconfirm title="uninstall Whisper EN？ENdownloadENModelENDelete。" onConfirm={handleUninstall} okText="uninstall" cancelText="Cancel">
+                <Btn variant="danger" size="sm">uninstall</Btn>
               </Popconfirm>
             </>
           )}
@@ -119,10 +119,10 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
             </div>
           )}
           {runtime?.status === 'not_installed' && (
-            <Btn variant="cta" size="sm" style={{ height: 32, fontSize: 13, padding: '0 16px' }} onClick={handleInstall} disabled={!supported}>安装</Btn>
+            <Btn variant="cta" size="sm" style={{ height: 32, fontSize: 13, padding: '0 16px' }} onClick={handleInstall} disabled={!supported}>install</Btn>
           )}
           {runtime?.status === 'error' && (
-            <Btn size="sm" onClick={handleInstall} disabled={!supported}>重试安装</Btn>
+            <Btn size="sm" onClick={handleInstall} disabled={!supported}>Retryinstall</Btn>
           )}
         </Row>
       </div>
@@ -133,9 +133,9 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
         </pre>
       )}
 
-      <div className="ac-eyebrow" style={{ marginTop: 40, marginBottom: 12 }}>模型</div>
+      <div className="ac-eyebrow" style={{ marginTop: 40, marginBottom: 12 }}>Model</div>
       {!installed ? (
-        <div className="ac-hint">先安装运行时，再在这里下载模型。</div>
+        <div className="ac-hint">ENinstallEN，ENdownloadModel。</div>
       ) : (
         <div className="ac-rows">
           {models.map((m) => {
@@ -148,29 +148,29 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
                   <span style={{ display: 'inline-flex', alignItems: 'baseline', gap: 10 }}>
                     <span className="ac-mono">{m.name}</span>
                     <span className="ac-mono" style={{ fontSize: 12, color: 'var(--ac-muted)', fontWeight: 400 }}>{m.size}</span>
-                    {downloaded && <StatusDot tone="ok" label="已下载" />}
+                    {downloaded && <StatusDot tone="ok" label="ENdownload" />}
                   </span>
                 }
                 hint={
                   <>
-                    {m.description} · 准确度{m.accuracy} · 速度{m.speed}
+                    {m.description} · EN{m.accuracy} · EN{m.speed}
                     {m.status === 'error' && m.errorMessage && <span style={{ color: 'var(--ac-error)' }}> · {m.errorMessage}</span>}
                   </>
                 }
               >
                 {downloaded ? (
-                  <Popconfirm title={`删除模型 ${m.name}？`} onConfirm={() => handleDelete(m.name)} okText="删除" cancelText="取消">
-                    <Btn variant="danger" size="sm">删除</Btn>
+                  <Popconfirm title={`DeleteModel ${m.name}？`} onConfirm={() => handleDelete(m.name)} okText="Delete" cancelText="Cancel">
+                    <Btn variant="danger" size="sm">Delete</Btn>
                   </Popconfirm>
                 ) : downloading ? (
                   <div style={{ width: 160 }}>
                     <ProgressLine percent={m.downloadProgress ?? 0} />
                     <div className="ac-hint" style={{ textAlign: 'right', fontFamily: 'var(--ac-font-mono)' }}>
-                      {m.downloadProgress != null ? `${Math.round(m.downloadProgress)}%` : '下载中'}
+                      {m.downloadProgress != null ? `${Math.round(m.downloadProgress)}%` : 'downloadEN'}
                     </div>
                   </div>
                 ) : (
-                  <Btn size="sm" onClick={() => handleDownload(m.name)}>下载</Btn>
+                  <Btn size="sm" onClick={() => handleDownload(m.name)}>download</Btn>
                 )}
               </Row>
             )

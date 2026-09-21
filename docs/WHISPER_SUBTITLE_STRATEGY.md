@@ -1,85 +1,85 @@
-# 🎤 Whisper优先字幕生成策略
+# 🎤 WhisperEN
 
-## 📋 概述
+## 📋 EN
 
-根据用户建议，我们已经重新设计了字幕生成策略，**优先使用Whisper模型自行生成字幕**，而不是依赖B站/YouTube平台的字幕。这一改变带来了更好的用户体验和更一致的字幕质量。
+EN，EN，**ENWhisperEN**，ENBEN/YouTubeEN。EN。
 
-## 🔄 新的字幕生成流程
+## 🔄 EN
 
-### 1. 优先级策略
+### 1. EN
 
 ```
-用户上传字幕文件 → Whisper生成字幕 → 平台字幕（备用）
+ENUploadEN → WhisperEN → EN（EN）
 ```
 
-**详细流程：**
-1. **用户提供字幕**：如果用户上传了SRT文件，直接使用
-2. **Whisper生成**：如果没有用户字幕，优先使用Whisper生成
-3. **平台字幕备用**：如果Whisper失败，才尝试下载平台字幕
+**EN：**
+1. **ENProvidesEN**：ENUploadENSRTEN，EN
+2. **WhisperEN**：EN，ENWhisperEN
+3. **EN**：ENWhisperEN，EN
 
-### 2. 智能模型选择
+### 2. EN
 
-根据视频内容类型自动选择合适的Whisper模型：
+ENWhisperEN：
 
-| 内容类型 | 模型 | 特点 | 适用场景 |
+| EN | EN | EN | EN |
 |----------|------|------|----------|
-| 商业/知识 | `small` | 准确率高 | 教程、教学、科普视频 |
-| 演讲/讲座 | `medium` | 高精度 | 演讲、讲座、分享会 |
-| 娱乐内容 | `base` | 平衡性能 | 娱乐、游戏、生活视频 |
-| 默认 | `base` | 通用 | 其他类型视频 |
+| EN/EN | `small` | EN | EN、EN、EN |
+| EN/EN | `medium` | EN | EN、EN、EN |
+| EN | `base` | EN | EN、EN、EN |
+| EN | `base` | EN | EN |
 
-### 3. 语言检测策略
+### 3. LanguageEN
 
-- **自动检测**：默认使用`auto`进行语言检测
-- **中文内容**：商业、知识、演讲类内容指定为`zh`
-- **多语言支持**：支持15种语言，包括中文、英文、日文等
+- **EN**：EN`auto`ENLanguageEN
+- **ChineseEN**：EN、EN、EN`zh`
+- **ENLanguageSupport**：Support15ENLanguage，ENChinese、English、EN
 
-## 🚀 技术优势
+## 🚀 EN
 
-### 1. 统一性和一致性
-- ✅ 所有视频使用相同的字幕生成方式
-- ✅ 格式统一，便于后续处理
-- ✅ 质量可控，不受平台限制
+### 1. EN
+- ✅ EN
+- ✅ EN，EN
+- ✅ EN，EN
 
-### 2. 更好的编辑体验
-- ✅ Whisper生成的SRT格式更适合编辑
-- ✅ 时间戳精度更高
-- ✅ 支持词级别的时间戳（word-level timestamps）
+### 2. EN
+- ✅ WhisperENSRTEN
+- ✅ EN
+- ✅ SupportEN（word-level timestamps）
 
-### 3. 多语言支持
-- ✅ 支持15种语言，包括中文、英文、日文等
-- ✅ 自动语言检测
-- ✅ 支持方言和口音
+### 3. ENLanguageSupport
+- ✅ Support15ENLanguage，ENChinese、English、EN
+- ✅ ENLanguageEN
+- ✅ SupportEN
 
-### 4. 技术优势
-- ✅ 本地运行，无需网络依赖
-- ✅ 免费使用，无API费用
-- ✅ 可配置模型大小（tiny到large）
-- ✅ 支持说话人分离
+### 4. EN
+- ✅ EN，EN
+- ✅ EN，ENAPIEN
+- ✅ EN（tinyENlarge）
+- ✅ SupportEN
 
-## 📊 性能对比
+## 📊 EN
 
-### Whisper vs 平台字幕
+### Whisper vs EN
 
-| 特性 | Whisper生成 | 平台字幕 |
+| EN | WhisperEN | EN |
 |------|-------------|----------|
-| 可用性 | 100% | 依赖平台 |
-| 格式一致性 | 高 | 低 |
-| 时间戳精度 | 高 | 中等 |
-| 多语言支持 | 15种语言 | 依赖平台 |
-| 编辑友好性 | 高 | 中等 |
-| 网络依赖 | 无 | 有 |
-| 费用 | 免费 | 免费 |
+| EN | 100% | EN |
+| EN | EN | EN |
+| EN | EN | EN |
+| ENLanguageSupport | 15ENLanguage | EN |
+| EN | EN | EN |
+| EN | EN | EN |
+| EN | EN | EN |
 
-## 🔧 配置说明
+## 🔧 Configuration
 
-### 环境要求
+### Requirements
 
 ```bash
-# 安装Whisper
+# ENWhisper
 pip install openai-whisper
 
-# 安装FFmpeg（必需）
+# ENFFmpeg（EN）
 # macOS
 brew install ffmpeg
 
@@ -87,87 +87,87 @@ brew install ffmpeg
 sudo apt update && sudo apt install ffmpeg
 
 # Windows
-# 下载FFmpeg并添加到PATH
+# ENFFmpegENPATH
 ```
 
-### 模型选择建议
+### EN
 
 ```python
-# 根据内容类型选择模型
+# EN
 if content_type == "business" or content_type == "knowledge":
-    model = "small"  # 更准确，适合重要内容
+    model = "small"  # EN，EN
 elif content_type == "speech":
-    model = "medium"  # 高精度，适合演讲
+    model = "medium"  # EN，EN
 else:
-    model = "base"  # 平衡性能和速度
+    model = "base"  # EN
 ```
 
-## 📈 使用效果
+## 📈 EN
 
-### 1. 字幕质量提升
-- 时间戳更精确
-- 文本识别更准确
-- 格式更规范
+### 1. EN
+- EN
+- EN
+- EN
 
-### 2. 编辑体验改善
-- 支持词级别编辑
-- 更好的时间轴对齐
-- 统一的SRT格式
+### 2. EN
+- SupportEN
+- EN
+- ENSRTEN
 
-### 3. 处理流程简化
-- 减少平台依赖
-- 降低失败率
-- 提高处理速度
+### 3. EN
+- EN
+- EN
+- EN
 
-## 🛠️ 故障排除
+## 🛠️ Troubleshooting
 
-### 常见问题
+### FAQ
 
-1. **Whisper未安装**
+1. **WhisperEN**
    ```bash
    pip install openai-whisper
    ```
 
-2. **FFmpeg未安装**
+2. **FFmpegEN**
    ```bash
-   # 检查FFmpeg
+   # ENFFmpeg
    ffmpeg -version
    ```
 
-3. **模型下载失败**
+3. **EN**
    ```bash
-   # 手动下载模型
+   # EN
    whisper --model base --help
    ```
 
-4. **内存不足**
-   - 使用更小的模型（tiny/base）
-   - 增加系统内存
-   - 分批处理长视频
+4. **EN**
+   - EN（tiny/base）
+   - EN
+   - EN
 
-### 性能优化
+### Performance
 
-1. **模型选择**
-   - 短视频：使用`tiny`或`base`
-   - 长视频：使用`base`或`small`
-   - 重要内容：使用`medium`或`large`
+1. **EN**
+   - EN：EN`tiny`EN`base`
+   - EN：EN`base`EN`small`
+   - EN：EN`medium`EN`large`
 
-2. **语言指定**
-   - 已知语言：直接指定语言代码
-   - 未知语言：使用`auto`自动检测
+2. **LanguageEN**
+   - ENLanguage：ENLanguageEN
+   - ENLanguage：EN`auto`EN
 
-3. **批处理**
-   - 多个视频可以并行处理
-   - 使用队列管理处理任务
+3. **EN**
+   - EN
+   - EN
 
-## 📝 总结
+## 📝 EN
 
-使用Whisper优先生成字幕的策略带来了显著的优势：
+ENWhisperEN：
 
-1. **更好的用户体验**：统一的字幕质量，更少的失败情况
-2. **更强的技术能力**：支持多语言，高精度时间戳
-3. **更简单的维护**：减少对第三方平台的依赖
-4. **更低的成本**：免费使用，无需API费用
+1. **EN**：EN，EN
+2. **EN**：SupportENLanguage，EN
+3. **EN**：EN
+4. **EN**：EN，ENAPIEN
 
-这一策略特别适合需要高质量字幕编辑的场景，为后续的视频处理流程提供了更好的基础。
+ENSubtitle EditingEN，ENProvidesEN。
 

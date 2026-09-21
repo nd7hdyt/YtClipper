@@ -1,59 +1,59 @@
 """
-统一的进度频道命名规范
-避免频道名称不一致导致的消息丢失问题
+ENprogressEN
+EN
 """
 
 def project_progress_channel(project_id: str) -> str:
     """
-    生成项目进度频道名称
+    generateprojectprogressEN
     
     Args:
-        project_id: 项目ID
+        project_id: projectID
         
     Returns:
-        统一的频道名称: progress:project:<project_id>
+        EN: progress:project:<project_id>
     """
-    # 统一用冒号分隔，去掉重复"project_"
+    # EN，EN"project_"
     return f"progress:project:{project_id}"
 
 def task_progress_channel(task_id: str) -> str:
     """
-    生成任务进度频道名称
+    generatetaskprogressEN
     
     Args:
-        task_id: 任务ID
+        task_id: taskID
         
     Returns:
-        统一的频道名称: progress:task:<task_id>
+        EN: progress:task:<task_id>
     """
     return f"progress:task:{task_id}"
 
 def normalize_channel(raw: str) -> str:
     """
-    规范化频道名称，统一格式
+    EN，EN
     
     Args:
-        raw: 原始频道名
+        raw: EN
         
     Returns:
-        规范化的频道名称
+        EN
     """
     if not raw:
         return ""
     
     s = raw.strip()
     
-    # 如果是项目ID格式，转换为项目进度频道
+    # ifENprojectIDEN，ENprojectprogressEN
     if s.startswith("progress:project:"):
         return s
     elif s.startswith("project_"):
-        # 去掉project_前缀，提取纯ID
-        project_id = s[8:]  # 去掉"project_"前缀
+        # ENproject_EN，ENID
+        project_id = s[8:]  # EN"project_"EN
         return project_progress_channel(project_id)
     elif s.startswith("progress:project_"):
-        # 处理progress:project_<id>格式
-        project_id = s[17:]  # 去掉"progress:project_"前缀
+        # processingprogress:project_<id>EN
+        project_id = s[17:]  # EN"progress:project_"EN
         return project_progress_channel(project_id)
     else:
-        # 假设是纯项目ID
+        # ENprojectID
         return project_progress_channel(s)

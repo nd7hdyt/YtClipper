@@ -1,6 +1,6 @@
 """
-调试API接口
-用于测试和调试功能
+ENAPIAPI
+EN
 """
 
 import json
@@ -15,25 +15,25 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 class PublishMessage(BaseModel):
-    """发布消息模型"""
+    """EN"""
     task_id: str
     progress: int
     step: int = 1
     total: int = 6
     phase: str = "test"
-    message: str = "调试消息"
+    message: str = "EN"
     status: str = "PROGRESS"
     seq: int = 1
     meta: Dict[str, Any] = {}
 
 @router.post("/debug/publish")
 async def debug_publish_message(message: PublishMessage):
-    """调试接口：发布进度消息到Redis"""
+    """ENAPI：ENprogressENRedis"""
     try:
-        # 连接Redis
+        # connectRedis
         redis_client = redis.from_url(get_redis_url(), decode_responses=True)
         
-        # 构建消息
+        # EN
         import time
         full_message = {
             "task_id": message.task_id,
@@ -48,13 +48,13 @@ async def debug_publish_message(message: PublishMessage):
             "meta": message.meta
         }
         
-        # 发布到Redis
+        # ENRedis
         channel = f"progress:{message.task_id}"
         result = await redis_client.publish(channel, json.dumps(full_message))
         
         await redis_client.aclose()
         
-        logger.info(f"调试发布消息: {channel} -> {result} 个订阅者")
+        logger.info(f"EN: {channel} -> {result} EN")
         
         return {
             "success": True,
@@ -64,12 +64,12 @@ async def debug_publish_message(message: PublishMessage):
         }
         
     except Exception as e:
-        logger.error(f"调试发布消息失败: {e}")
-        raise HTTPException(status_code=500, detail=f"发布失败: {str(e)}")
+        logger.error(f"ENfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"ENfailed: {str(e)}")
 
 @router.get("/debug/subscriptions")
 async def debug_get_subscriptions():
-    """调试接口：获取当前订阅状态"""
+    """ENAPI：fetchcurrentENstatus"""
     try:
         from ...services.websocket_gateway_service import websocket_gateway_service
         
@@ -82,20 +82,20 @@ async def debug_get_subscriptions():
             }
             
     except Exception as e:
-        logger.error(f"获取订阅状态失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取失败: {str(e)}")
+        logger.error(f"fetchENstatusfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchfailed: {str(e)}")
 
 @router.get("/debug/redis-info")
 async def debug_redis_info():
-    """调试接口：获取Redis连接信息"""
+    """ENAPI：fetchRedisconnectEN"""
     try:
         redis_url = get_redis_url()
         redis_client = redis.from_url(redis_url, decode_responses=True)
         
-        # 测试连接
+        # ENconnect
         await redis_client.ping()
         
-        # 获取信息
+        # fetchEN
         info = await redis_client.info()
         
         await redis_client.aclose()
@@ -109,6 +109,6 @@ async def debug_redis_info():
         }
         
     except Exception as e:
-        logger.error(f"获取Redis信息失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取失败: {str(e)}")
+        logger.error(f"fetchRedisENfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchfailed: {str(e)}")
 

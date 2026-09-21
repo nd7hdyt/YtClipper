@@ -1,5 +1,5 @@
 """
-大模型客户端 - 兼容性包装器，使用新的LLM管理器
+EN - EN，useENLLMEN
 """
 import json
 import logging
@@ -8,11 +8,11 @@ import re
 from typing import Dict, Any, List
 from collections.abc import Generator
 
-# 修复导入问题
+# EN
 try:
     from ..core.shared_config import MODEL_NAME
 except ImportError:
-    # 如果相对导入失败，尝试绝对导入
+    # ifENfailed，EN
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -20,11 +20,11 @@ except ImportError:
         sys.path.insert(0, str(backend_path))
     from core.shared_config import MODEL_NAME
 
-# 导入新的LLM管理器
+# ENLLMEN
 try:
     from ..core.llm_manager import get_llm_manager
 except ImportError:
-    # 如果相对导入失败，尝试绝对导入
+    # ifENfailed，EN
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -35,7 +35,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 class LLMClient:
-    """LLM客户端 - 兼容性包装器"""
+    """LLMEN - EN"""
     
     def __init__(self):
         self.model = MODEL_NAME
@@ -43,44 +43,44 @@ class LLMClient:
     
     def call(self, prompt: str, input_data: Any = None) -> str:
         """
-        调用大模型API - 使用新的LLM管理器
+        callENAPI - useENLLMEN
         
         Args:
-            prompt: 提示词
-            input_data: 输入数据
+            prompt: hintEN
+            input_data: EN
             
         Returns:
-            模型响应文本
+            ENresponseEN
         """
         try:
             return self.llm_manager.call(prompt, input_data)
         except Exception as e:
-            logger.error(f"LLM调用失败: {str(e)}")
+            logger.error(f"LLMcallfailed: {str(e)}")
             raise
     
     def call_with_retry(self, prompt: str, input_data: Any = None, max_retries: int = 3) -> str:
         """
-        带重试机制的API调用
+        ENretryENAPIcall
         
         Args:
-            prompt: 提示词
-            input_data: 输入数据
-            max_retries: 最大重试次数
+            prompt: hintEN
+            input_data: EN
+            max_retries: ENretryEN
             
         Returns:
-            模型响应文本
+            ENresponseEN
         """
         try:
             return self.llm_manager.call_with_retry(prompt, input_data, max_retries)
         except Exception as e:
-            logger.error(f"LLM重试调用失败: {str(e)}")
+            logger.error(f"LLMretrycallfailed: {str(e)}")
             raise
     
     def _preprocess_llm_response(self, response: str) -> str:
         """
-        预处理LLM响应，移除常见的非JSON内容
+        ENprocessingLLMresponse，ENJSONEN
         """
-        # 移除开头的标题和说明文字
+        # ENtitleEN
         lines = response.split('\n')
         json_start = -1
         
@@ -93,9 +93,9 @@ class LLMClient:
         if json_start >= 0:
             response = '\n'.join(lines[json_start:])
         
-        # 移除末尾的非JSON内容
+        # ENJSONEN
         if '```' in response:
-            # 如果有多个```，取第一个之前的内容
+            # ifEN```，ENbeforeEN
             parts = response.split('```')
             if len(parts) > 1:
                 response = parts[0]
@@ -104,168 +104,168 @@ class LLMClient:
     
     def _auto_fix_response(self, response: str) -> str:
         """
-        自动修复常见的响应问题
+        ENresponseEN
         """
-        # 移除BOM和特殊字符
+        # ENBOMEN
         response = response.lstrip('\ufeff')
         response = response.strip()
         
-        # 修复中文引号
+        # EN
         response = response.replace('"', '\"').replace('"', '\"')
         
         return response
     
     def _validate_json_structure(self, parsed_data: Any) -> bool:
         """
-        验证JSON结构的有效性
+        validateJSONEN
         """
         try:
             if not isinstance(parsed_data, list):
-                logger.error(f"响应不是数组格式，实际类型: {type(parsed_data)}")
+                logger.error(f"responseEN，EN: {type(parsed_data)}")
                 return False
             
             for i, item in enumerate(parsed_data):
                 if not isinstance(item, dict):
-                    logger.error(f"第{i}个元素不是对象格式，实际类型: {type(item)}")
+                    logger.error(f"EN{i}EN，EN: {type(item)}")
                     return False
                     
-                # 检查基本字段（可根据具体需求调整）
+                # checkEN（EN）
                 if 'outline' in item or 'start_time' in item or 'end_time' in item:
                     required_fields = ['outline', 'start_time', 'end_time']
                     for field in required_fields:
                         if field not in item:
-                            logger.error(f"第{i}个元素缺少必需字段: {field}")
+                            logger.error(f"EN{i}EN: {field}")
                             return False
         except Exception as e:
-            logger.error(f"验证JSON结构时出错: {e}")
+            logger.error(f"validateJSONEN: {e}")
             return False
         
         return True
     
     def parse_json_response(self, response: str) -> Any:
         """
-        从可能包含Markdown格式的文本中解析JSON对象。
-        该函数具有多层容错机制：
-        1. 预处理响应，移除非JSON内容
-        2. 优先从Markdown代码块提取。
-        3. 如果失败，则尝试直接解析整个响应（在净化后）。
-        4. 如果再次失败，则使用通用正则表达式寻找并解析JSON。
-        5. 最后尝试修复常见JSON错误后再解析。
+        ENmayENMarkdownENparseJSONEN。
+        EN：
+        1. ENprocessingresponse，ENJSONEN
+        2. ENMarkdownEN。
+        3. iffailed，thenENparseENresponse（EN）。
+        4. ifENfailed，thenuseENthenENparseJSON。
+        5. ENJSONerrorENparse。
         """
         
         def sanitize_string(s: str) -> str:
-            """增强的净化函数，移除可能导致JSON解析失败的字符"""
-            # 移除BOM标记
+            """EN，ENmayENJSONparsefailedEN"""
+            # ENBOMEN
             s = s.lstrip('\ufeff')
-            # 移除前后空白符
+            # EN
             s = s.strip()
-            # 移除可能的控制字符（保留必要的换行和制表符）
+            # ENmayEN（EN）
             s = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', s)
             return s
         
         def fix_common_json_errors(json_str: str) -> str:
-            """修复常见的JSON格式错误"""
-            # 记录原始字符串用于调试
+            """ENJSONENerror"""
+            # EN
             original_str = json_str
             
-            # 1. 修复缺少逗号的问题
+            # 1. EN
             json_str = re.sub(r'}\s*{', '},{', json_str)
             json_str = re.sub(r']\s*\[', '],[', json_str)
             
-            # 2. 修复对象之间缺少逗号的问题（更精确的模式）
+            # 2. EN（EN）
             json_str = re.sub(r'}\s*\n\s*{', '},\n{', json_str)
             
-            # 3. 修复多余的逗号
+            # 3. EN
             json_str = re.sub(r',\s*}', '}', json_str)
             json_str = re.sub(r',\s*]', ']', json_str)
             
-            # 4. 修复单引号为双引号
+            # 4. EN
             json_str = re.sub(r"'([^']*?)'\s*:", r'"\1":', json_str)
             json_str = re.sub(r":\s*'([^']*?)'", r': "\1"', json_str)
             
-            # 5. 修复字段名没有引号的问题
+            # 5. EN
             json_str = re.sub(r'([a-zA-Z_][a-zA-Z0-9_]*)\s*:', r'"\1":', json_str)
             
-            # 6. 修复可能的换行符问题
+            # 6. ENmayEN
             json_str = re.sub(r'\n\s*\n', '\n', json_str)
             
-            # 7. 确保数组和对象的正确闭合
-            # 统计括号和方括号的数量
+            # 7. EN
+            # EN
             open_braces = json_str.count('{')
             close_braces = json_str.count('}')
             open_brackets = json_str.count('[')
             close_brackets = json_str.count(']')
             
-            # 如果括号不匹配，尝试修复
+            # ifEN，EN
             if open_braces > close_braces:
                 json_str += '}' * (open_braces - close_braces)
             if open_brackets > close_brackets:
                 json_str += ']' * (open_brackets - close_brackets)
             
-            # 记录修复过程
+            # EN
             if json_str != original_str:
-                logger.debug(f"JSON修复前: {original_str[:100]}...")
-                logger.debug(f"JSON修复后: {json_str[:100]}...")
+                logger.debug(f"JSONEN: {original_str[:100]}...")
+                logger.debug(f"JSONEN: {json_str[:100]}...")
             
             return json_str
 
         response = response.strip()
         
-        # 0. 预处理响应，移除非JSON内容
+        # 0. ENprocessingresponse，ENJSONEN
         response = self._preprocess_llm_response(response)
-        logger.debug(f"预处理后的响应: {response[:200]}...")
+        logger.debug(f"ENprocessingENresponse: {response[:200]}...")
         
-        # 1. 优先尝试从Markdown代码块中提取
+        # 1. ENMarkdownEN
         match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response, re.DOTALL)
         if match:
             json_str = sanitize_string(match.group(1))
             try:
                 return json.loads(json_str)
             except json.JSONDecodeError as e:
-                # 记录具体的错误位置和上下文
+                # ENerrorEN
                 error_pos = e.pos if hasattr(e, 'pos') else 0
                 context_start = max(0, error_pos - 50)
                 context_end = min(len(json_str), error_pos + 50)
                 context = json_str[context_start:context_end]
-                logger.error(f"JSON解析失败在位置{error_pos}，上下文: ...{context}...")
-                logger.warning(f"从Markdown提取的内容解析失败: {e}。将尝试修复后解析。")
+                logger.error(f"JSONparsefailedEN{error_pos}，EN: ...{context}...")
+                logger.warning(f"ENMarkdownENparsefailed: {e}。ENparse。")
                 
-                # 尝试修复常见错误后再解析
+                # ENerrorENparse
                 try:
                     fixed_json = fix_common_json_errors(json_str)
                     return json.loads(fixed_json)
                 except json.JSONDecodeError:
-                    logger.warning("修复后仍然解析失败，将尝试解析整个响应。")
+                    logger.warning("ENparsefailed，ENparseENresponse。")
         
-        # 2. 如果没有Markdown，或Markdown解析失败，尝试整个响应
+        # 2. ifENMarkdown，ENMarkdownparsefailed，ENresponse
         try:
             sanitized_response = sanitize_string(response)
             return json.loads(sanitized_response)
         except json.JSONDecodeError:
-            # 3. 如果整个响应直接解析也失败，做最后一次尝试，用通用正则寻找
-            logger.warning("直接解析响应失败，尝试使用通用正则寻找JSON...")
+            # 3. ifENresponseENparseENfailed，EN，ENthenEN
+            logger.warning("ENparseresponsefailed，ENuseENthenENJSON...")
             json_match = re.search(r'\[[\s\S]*\]|\{[\s\S]*\}', response, re.DOTALL)
             if json_match:
                 json_str = sanitize_string(json_match.group())
                 try:
                     return json.loads(json_str)
                 except json.JSONDecodeError as e:
-                    # 4. 最后尝试修复常见错误
+                    # 4. ENerror
                     try:
                         fixed_json = fix_common_json_errors(json_str)
                         return json.loads(fixed_json)
                     except json.JSONDecodeError as final_e:
-                        logger.error(f"最终尝试解析失败: {final_e}")
-                        # 保存原始响应以便调试
+                        logger.error(f"ENparsefailed: {final_e}")
+                        # saveENresponseEN
                         import tempfile
                         with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False, encoding='utf-8') as f:
                             f.write(response)
-                            logger.error(f"原始响应已保存到 {f.name} 以便调试")
-                        raise ValueError(f"无法从响应中解析出有效的JSON: {response[:200]}...") from final_e
+                            logger.error(f"ENresponseENsaveEN {f.name} EN")
+                        raise ValueError(f"cannotENresponseENparseENJSON: {response[:200]}...") from final_e
             
-            # 如果连通用正则都找不到，就彻底失败
-            raise ValueError(f"无法从响应中解析出有效的JSON: {response[:200]}...")
+            # ifENthenEN，ENfailed
+            raise ValueError(f"cannotENresponseENparseENJSON: {response[:200]}...")
     
     def get_current_provider_info(self) -> Dict[str, Any]:
-        """获取当前提供商信息"""
+        """fetchcurrentEN"""
         return self.llm_manager.get_current_provider_info()

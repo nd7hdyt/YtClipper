@@ -1,74 +1,74 @@
-# 🎬 字幕下载故障排除指南
+# 🎬 ENTroubleshootingEN
 
-## 📋 概述
+## 📋 EN
 
-本指南帮助用户解决B站和YouTube视频字幕下载失败的问题。字幕下载失败是用户反馈最多的问题之一，主要涉及以下几个方面：
+ENBENYouTubeEN。EN，EN：
 
-1. **B站字幕需要登录**
-2. **YouTube字幕格式不兼容**
-3. **语音识别备用方案配置问题**
-4. **网络连接和权限问题**
+1. **BEN**
+2. **YouTubeEN**
+3. **EN**
+4. **EN**
 
-## 🔍 问题诊断
+## 🔍 EN
 
-### 使用诊断工具
+### EN
 
-我们提供了专门的诊断工具来帮助排查问题：
+ENProvidesEN：
 
 ```bash
-# 检查语音识别设置
+# EN
 python scripts/debug_subtitle_download.py --check-speech
 
-# 诊断B站字幕下载
+# ENBEN
 python scripts/debug_subtitle_download.py https://www.bilibili.com/video/BV1xx411c7mu chrome
 
-# 诊断YouTube字幕下载
+# ENYouTubeEN
 python scripts/debug_subtitle_download.py https://www.youtube.com/watch?v=dQw4w9WgXcQ chrome
 ```
 
-### 常见错误信息
+### EN
 
-#### B站相关错误
+#### BEN
 
 1. **"Subtitles are only available when logged in"**
-   - **原因**: B站的字幕（特别是AI字幕）需要登录才能下载
-   - **解决方案**: 
-     - 在浏览器中登录B站账号
-     - 选择对应的浏览器（Chrome、Firefox、Safari等）
-     - 确保浏览器中有B站的登录状态
+   - **EN**: BEN（ENAIEN）EN
+   - **EN**: 
+     - ENBENAccount
+     - EN（Chrome、Firefox、SafariEN）
+     - ENBEN
 
-2. **"未找到字幕文件"**
-   - **原因**: 视频可能没有字幕或字幕下载失败
-   - **解决方案**: 
-     - 检查视频是否有字幕（在B站网页上查看）
-     - 尝试不同的字幕语言
-     - 使用语音识别生成字幕
+2. **"EN"**
+   - **EN**: EN
+   - **EN**: 
+     - EN（ENBEN）
+     - ENLanguage
+     - EN
 
-#### YouTube相关错误
+#### YouTubeEN
 
 1. **"No subtitles available"**
-   - **原因**: 视频没有字幕或自动生成字幕
-   - **解决方案**: 
-     - 检查视频是否有字幕轨道
-     - 尝试下载自动生成的字幕
-     - 使用语音识别生成字幕
+   - **EN**: EN
+   - **EN**: 
+     - EN
+     - EN
+     - EN
 
 2. **"VTT format not supported"**
-   - **原因**: YouTube下载的是VTT格式字幕，需要转换为SRT
-   - **解决方案**: 系统会自动转换，如果失败请检查文件权限
+   - **EN**: YouTubeENVTTEN，ENSRT
+   - **EN**: EN，EN
 
-#### 语音识别相关错误
+#### EN
 
 1. **"whisper: command not found"**
-   - **原因**: 未安装Whisper语音识别工具
-   - **解决方案**: 
+   - **EN**: ENWhisperEN
+   - **EN**: 
      ```bash
      pip install openai-whisper
      ```
 
 2. **"ffmpeg: command not found"**
-   - **原因**: 未安装ffmpeg
-   - **解决方案**: 
+   - **EN**: ENffmpeg
+   - **EN**: 
      ```bash
      # macOS
      brew install ffmpeg
@@ -77,36 +77,36 @@ python scripts/debug_subtitle_download.py https://www.youtube.com/watch?v=dQw4w9
      sudo apt update && sudo apt install ffmpeg
      
      # Windows
-     # 下载ffmpeg并添加到PATH环境变量
+     # ENffmpegENPATHEN
      ```
 
-3. **"语音识别超时"**
-   - **原因**: 视频太长或系统性能不足
-   - **解决方案**: 
-     - 使用更小的Whisper模型（tiny、base）
-     - 增加超时时间
-     - 检查系统内存和CPU使用情况
+3. **"EN"**
+   - **EN**: EN
+   - **EN**: 
+     - ENWhisperEN（tiny、base）
+     - EN
+     - ENCPUEN
 
-## 🛠️ 解决方案
+## 🛠️ EN
 
-### 1. B站字幕下载优化
+### 1. BEN
 
-#### 登录配置
+#### EN
 ```python
-# 确保在浏览器中登录B站
-# 选择正确的浏览器
-browser = "chrome"  # 或 "firefox", "safari"
+# ENBEN
+# EN
+browser = "chrome"  # EN "firefox", "safari"
 ```
 
-#### 多种字幕策略
-系统会自动尝试以下策略：
-1. **AI字幕优先**: 尝试下载AI生成的中文字幕
-2. **多语言策略**: 尝试中文、英文等多种语言
-3. **无cookies策略**: 尝试不使用cookies下载公开字幕
+#### EN
+EN：
+1. **AIEN**: ENAIENChineseEN
+2. **ENLanguageEN**: ENChinese、EnglishENLanguage
+3. **ENcookiesEN**: ENcookiesEN
 
-#### 手动配置
+#### EN
 ```python
-# 在下载时指定字幕语言
+# ENLanguage
 ydl_opts = {
     'subtitleslangs': ['ai-zh', 'zh-Hans', 'zh', 'en'],
     'writeautomaticsub': True,
@@ -114,188 +114,188 @@ ydl_opts = {
 }
 ```
 
-### 2. YouTube字幕下载优化
+### 2. YouTubeEN
 
-#### 字幕格式支持
+#### ENSupport
 ```python
-# 支持多种字幕格式
+# SupportEN
 formats = ['srt', 'vtt', 'json3']
 languages = ['en', 'zh-Hans', 'zh', 'ja', 'ko']
 ```
 
-#### 自动格式转换
-系统会自动将VTT格式转换为SRT格式：
+#### EN
+ENVTTENSRTEN：
 ```python
-# VTT到SRT转换
+# VTTENSRTEN
 async def _convert_vtt_to_srt(vtt_path: str, srt_path: str):
-    # 自动转换时间格式和字幕结构
+    # EN
 ```
 
-### 3. 语音识别备用方案
+### 3. EN
 
-#### 安装Whisper
+#### ENWhisper
 ```bash
-# 安装Whisper
+# ENWhisper
 pip install openai-whisper
 
-# 验证安装
+# EN
 whisper --help
 ```
 
-#### 模型选择
+#### EN
 ```python
-# 根据需求选择模型
+# EN
 models = {
-    "tiny": "39MB, 最快，准确率较低",
-    "base": "74MB, 较快，准确率中等（推荐）",
-    "small": "244MB, 中等速度，准确率较高",
-    "medium": "769MB, 较慢，准确率很高",
-    "large": "1550MB, 最慢，准确率最高"
+    "tiny": "39MB, EN，EN",
+    "base": "74MB, EN，EN（EN）",
+    "small": "244MB, EN，EN",
+    "medium": "769MB, EN，EN",
+    "large": "1550MB, EN，EN"
 }
 ```
 
-#### 语言配置
+#### LanguageEN
 ```python
-# 指定语言提高准确率
+# ENLanguageEN
 languages = {
-    "zh": "中文",
-    "en": "英文",
-    "ja": "日文",
-    "ko": "韩文",
-    "auto": "自动检测"
+    "zh": "Chinese",
+    "en": "English",
+    "ja": "EN",
+    "ko": "EN",
+    "auto": "EN"
 }
 ```
 
-## 📊 性能优化建议
+## 📊 PerformanceEN
 
-### 1. 网络优化
-- 使用稳定的网络连接
-- 避免在高峰时段下载
-- 考虑使用代理或VPN
+### 1. EN
+- EN
+- EN
+- ENVPN
 
-### 2. 系统优化
-- 确保有足够的磁盘空间
-- 关闭不必要的应用程序
-- 使用SSD硬盘提高I/O性能
+### 2. EN
+- EN
+- EN
+- ENSSDENI/OEN
 
-### 3. 配置优化
+### 3. EN
 ```python
-# 优化下载配置
+# EN
 ydl_opts = {
-    'format': 'best[ext=mp4]/best',  # 选择最佳质量
+    'format': 'best[ext=mp4]/best',  # EN
     'writesubtitles': True,
     'writeautomaticsub': True,
     'subtitleslangs': ['ai-zh', 'zh-Hans', 'en'],
     'subtitlesformat': 'srt',
     'noplaylist': True,
     'quiet': True,
-    'no_warnings': False,  # 显示警告信息
+    'no_warnings': False,  # EN
 }
 ```
 
-## 🔧 高级故障排除
+## 🔧 ENTroubleshooting
 
-### 1. 检查yt-dlp版本
+### 1. ENyt-dlpEN
 ```bash
-# 更新到最新版本
+# EN
 pip install --upgrade yt-dlp
 
-# 检查版本
+# EN
 yt-dlp --version
 ```
 
-### 2. 检查浏览器cookies
+### 2. ENcookies
 ```bash
-# 确保浏览器中有正确的cookies
-# 在浏览器中访问B站/YouTube并登录
-# 检查cookies是否有效
+# ENcookies
+# ENBEN/YouTubeEN
+# ENcookiesEN
 ```
 
-### 3. 测试网络连接
+### 3. EN
 ```bash
-# 测试网络连接
+# EN
 ping www.bilibili.com
 ping www.youtube.com
 
-# 测试DNS解析
+# ENDNSEN
 nslookup www.bilibili.com
 nslookup www.youtube.com
 ```
 
-### 4. 检查文件权限
+### 4. EN
 ```bash
-# 检查下载目录权限
+# EN
 ls -la /path/to/download/directory
 
-# 确保有写入权限
+# EN
 chmod 755 /path/to/download/directory
 ```
 
-## 📞 获取帮助
+## 📞 EN
 
-### 1. 查看日志
+### 1. EN
 ```bash
-# 查看详细日志
+# EN
 tail -f backend.log
 
-# 查看错误日志
+# EN
 grep "ERROR" backend.log
 ```
 
-### 2. 使用诊断工具
+### 2. EN
 ```bash
-# 完整诊断
+# EN
 python scripts/debug_subtitle_download.py <url> <browser>
 
-# 检查语音识别
+# EN
 python scripts/debug_subtitle_download.py --check-speech
 ```
 
-### 3. 常见问题FAQ
+### 3. FAQFAQ
 
-**Q: 为什么B站字幕下载总是失败？**
-A: B站的字幕需要登录才能下载，请确保在浏览器中登录B站账号并选择正确的浏览器。
+**Q: ENBEN？**
+A: BEN，ENBENAccountEN。
 
-**Q: YouTube字幕下载失败怎么办？**
-A: 尝试以下步骤：
-1. 检查视频是否有字幕
-2. 尝试不同的字幕语言
-3. 使用语音识别生成字幕
+**Q: YouTubeEN？**
+A: EN：
+1. EN
+2. ENLanguage
+3. EN
 
-**Q: 语音识别很慢怎么办？**
-A: 可以：
-1. 使用更小的模型（tiny或base）
-2. 增加超时时间
-3. 检查系统性能
+**Q: EN？**
+A: EN：
+1. EN（tinyENbase）
+2. EN
+3. EN
 
-**Q: 如何提高字幕下载成功率？**
-A: 建议：
-1. 确保网络连接稳定
-2. 使用最新版本的yt-dlp
-3. 正确配置浏览器cookies
-4. 安装Whisper作为备用方案
+**Q: EN？**
+A: EN：
+1. EN
+2. ENyt-dlp
+3. ENcookies
+4. ENWhisperEN
 
-## 🎯 最佳实践
+## 🎯 EN
 
-### 1. 日常使用建议
-- 优先使用B站/YouTube原生字幕
-- 配置语音识别作为备用方案
-- 定期更新yt-dlp和Whisper
-- 保持浏览器登录状态
+### 1. EN
+- ENBEN/YouTubeEN
+- EN
+- ENyt-dlpENWhisper
+- EN
 
-### 2. 批量处理建议
-- 分批处理大量视频
-- 监控系统资源使用
-- 设置合理的超时时间
-- 保存诊断结果以便分析
+### 2. EN
+- EN
+- EN
+- EN
+- EN
 
-### 3. 错误处理建议
-- 记录详细的错误信息
-- 使用诊断工具分析问题
-- 尝试多种解决方案
-- 及时反馈问题给开发团队
+### 3. EN
+- EN
+- EN
+- EN
+- EN
 
 ---
 
-通过以上指南，您应该能够解决大部分字幕下载问题。如果问题仍然存在，请使用诊断工具生成详细报告，并联系技术支持团队。
+EN，EN。EN，EN，ENContactENSupportEN。
 

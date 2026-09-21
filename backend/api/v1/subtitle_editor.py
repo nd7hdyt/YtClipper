@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-# 请求和响应模型
+# requestENresponseEN
 class SubtitleEditRequest(BaseModel):
     project_id: str
     clip_id: str
@@ -39,12 +39,12 @@ class EditPreviewRequest(BaseModel):
     clip_id: str
     deleted_segments: List[str]
 
-# 依赖注入函数
+# EN
 def get_subtitle_processor() -> SubtitleProcessor:
     return SubtitleProcessor()
 
 def get_video_editor() -> VideoEditor:
-    # 字幕编辑器使用全局路径作为后备（不影响主流水线）
+    # subtitlesENuseENpathEN（EN）
     from ...core.shared_config import CLIPS_DIR, COLLECTIONS_DIR
     return VideoEditor(clips_dir=str(CLIPS_DIR), collections_dir=str(COLLECTIONS_DIR))
 
@@ -59,32 +59,32 @@ async def get_clip_subtitles(
     subtitle_processor: SubtitleProcessor = Depends(get_subtitle_processor),
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """获取片段的字粒度字幕数据"""
+    """fetchENsubtitlesEN"""
     try:
-        # 获取项目信息
+        # fetchprojectEN
         project = project_service.get(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 获取片段信息
+        # fetchEN
         from ...models.clip import Clip
         clip = project_service.db.query(Clip).filter(Clip.id == clip_id, Clip.project_id == project_id).first()
         if not clip:
-            raise HTTPException(status_code=404, detail="片段不存在")
+            raise HTTPException(status_code=404, detail="ENdoes not exist")
         
-        # 查找原始SRT文件
+        # ENSRTfile
         projects_dir = get_projects_directory()
         project_dir = projects_dir / project_id
         srt_file = project_dir / "raw" / "input.srt"
         
         if not srt_file.exists():
-            raise HTTPException(status_code=404, detail="字幕文件不存在")
+            raise HTTPException(status_code=404, detail="subtitlesfiledoes not exist")
         
-        # 解析字幕数据
+        # parsesubtitlesEN
         subtitle_data = subtitle_processor.parse_srt_to_word_level(srt_file)
         
-        # 过滤出属于当前片段的时间范围
-        # 如果start_time和end_time是整数（秒），直接使用
+        # ENcurrentENtimeEN
+        # ifstart_timeENend_timeEN（EN），ENuse
         if isinstance(clip.start_time, int):
             clip_start = clip.start_time
         else:
@@ -99,13 +99,13 @@ async def get_clip_subtitles(
                 subtitle_processor._seconds_to_srt_time_object(clip.end_time)
             )
         
-        # 过滤字幕段
+        # ENsubtitlesEN
         clip_subtitles = [
             seg for seg in subtitle_data 
             if seg['startTime'] >= clip_start and seg['endTime'] <= clip_end
         ]
         
-        # 调整时间戳为相对于片段的
+        # ENtimeEN
         for seg in clip_subtitles:
             seg['startTime'] -= clip_start
             seg['endTime'] -= clip_start
@@ -113,7 +113,7 @@ async def get_clip_subtitles(
                 word['startTime'] -= clip_start
                 word['endTime'] -= clip_start
         
-        # 获取统计信息
+        # fetchEN
         stats = subtitle_processor.get_subtitle_statistics(clip_subtitles)
         
         return SubtitleDataResponse(
@@ -125,9 +125,9 @@ async def get_clip_subtitles(
         
     except Exception as e:
         import traceback
-        logger.error(f"获取字幕数据失败: {e}")
-        logger.error(f"错误详情: {traceback.format_exc()}")
-        raise HTTPException(status_code=500, detail=f"获取字幕数据失败: {str(e)}")
+        logger.error(f"fetchsubtitlesENfailed: {e}")
+        logger.error(f"errorEN: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"fetchsubtitlesENfailed: {str(e)}")
 
 @router.post("/{project_id}/clips/{clip_id}/edit")
 async def edit_clip_by_subtitles(
@@ -138,39 +138,39 @@ async def edit_clip_by_subtitles(
     video_editor: VideoEditor = Depends(get_video_editor),
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """基于字幕删除编辑视频片段"""
+    """ENsubtitlesdeleteENvideoEN"""
     try:
-        # 获取项目信息
+        # fetchprojectEN
         project = project_service.get(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 获取片段信息
+        # fetchEN
         from ...models.clip import Clip
         clip = project_service.db.query(Clip).filter(Clip.id == clip_id, Clip.project_id == project_id).first()
         if not clip:
-            raise HTTPException(status_code=404, detail="片段不存在")
+            raise HTTPException(status_code=404, detail="ENdoes not exist")
         
-        # 获取原始视频和字幕文件路径
+        # fetchENvideoENsubtitlesfilepath
         projects_dir = get_projects_directory()
         project_dir = projects_dir / project_id
         
-        # 查找原始视频文件
+        # ENvideofile
         video_files = list(project_dir.glob("raw/*.mp4"))
         if not video_files:
-            raise HTTPException(status_code=404, detail="原始视频文件不存在")
+            raise HTTPException(status_code=404, detail="ENvideofiledoes not exist")
         original_video = video_files[0]
         
-        # 查找字幕文件
+        # ENsubtitlesfile
         srt_file = project_dir / "raw" / "input.srt"
         if not srt_file.exists():
-            raise HTTPException(status_code=404, detail="字幕文件不存在")
+            raise HTTPException(status_code=404, detail="subtitlesfiledoes not exist")
         
-        # 解析字幕数据
+        # parsesubtitlesEN
         subtitle_data = subtitle_processor.parse_srt_to_word_level(srt_file)
         
-        # 过滤出属于当前片段的时间范围
-        # 如果start_time和end_time是整数（秒），直接使用
+        # ENcurrentENtimeEN
+        # ifstart_timeENend_timeEN（EN），ENuse
         if isinstance(clip.start_time, int):
             clip_start = clip.start_time
         else:
@@ -190,7 +190,7 @@ async def edit_clip_by_subtitles(
             if seg['startTime'] >= clip_start and seg['endTime'] <= clip_end
         ]
         
-        # 验证编辑操作
+        # validateEN
         validation = video_editor.validate_edit_operations(
             clip_subtitles, request.deleted_segments
         )
@@ -198,15 +198,15 @@ async def edit_clip_by_subtitles(
         if not validation['valid']:
             raise HTTPException(status_code=400, detail=validation['error'])
         
-        # 创建输出目录
+        # createENdirectory
         output_dir = project_dir / "edited_clips"
         output_dir.mkdir(exist_ok=True)
         
-        # 生成编辑后的视频文件名
+        # generateENvideofileEN
         edited_video_name = f"{clip_id}_edited.mp4"
         edited_video_path = output_dir / edited_video_name
         
-        # 执行视频编辑
+        # executevideoEN
         edit_result = video_editor.edit_video_by_subtitle_deletion(
             original_video,
             clip_subtitles,
@@ -215,9 +215,9 @@ async def edit_clip_by_subtitles(
         )
         
         if not edit_result['success']:
-            raise HTTPException(status_code=500, detail=f"视频编辑失败: {edit_result['error']}")
+            raise HTTPException(status_code=500, detail=f"videoENfailed: {edit_result['error']}")
         
-        # 导出编辑后的字幕文件
+        # ENsubtitlesfile
         edited_srt_path = output_dir / f"{clip_id}_edited.srt"
         subtitle_processor.export_edited_srt(
             clip_subtitles,
@@ -227,7 +227,7 @@ async def edit_clip_by_subtitles(
         
         return SubtitleEditResponse(
             success=True,
-            message="视频编辑成功",
+            message="videoENsucceeded",
             edited_video_path=str(edited_video_path),
             deleted_duration=edit_result['totalDeletedDuration'],
             final_duration=edit_result['finalDuration']
@@ -236,8 +236,8 @@ async def edit_clip_by_subtitles(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"编辑视频片段失败: {e}")
-        raise HTTPException(status_code=500, detail=f"编辑视频片段失败: {str(e)}")
+        logger.error(f"ENvideoENfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"ENvideoENfailed: {str(e)}")
 
 @router.get("/{project_id}/clips/{clip_id}/edited-video")
 async def get_edited_video(
@@ -245,21 +245,21 @@ async def get_edited_video(
     clip_id: str,
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """获取编辑后的视频文件"""
+    """fetchENvideofile"""
     try:
-        # 检查项目是否存在
+        # checkprojectEN
         project = await project_service.get_project(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 查找编辑后的视频文件
+        # ENvideofile
         projects_dir = get_projects_directory()
         edited_video_path = projects_dir / project_id / "edited_clips" / f"{clip_id}_edited.mp4"
         
         if not edited_video_path.exists():
-            raise HTTPException(status_code=404, detail="编辑后的视频文件不存在")
+            raise HTTPException(status_code=404, detail="ENvideofiledoes not exist")
         
-        # 返回视频文件
+        # returnvideofile
         return FileResponse(
             path=str(edited_video_path),
             media_type="video/mp4",
@@ -269,8 +269,8 @@ async def get_edited_video(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"获取编辑后的视频失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取编辑后的视频失败: {str(e)}")
+        logger.error(f"fetchENvideofailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchENvideofailed: {str(e)}")
 
 @router.post("/{project_id}/clips/{clip_id}/preview")
 async def create_edit_preview(
@@ -281,37 +281,37 @@ async def create_edit_preview(
     video_editor: VideoEditor = Depends(get_video_editor),
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """创建编辑预览片段"""
+    """createEN"""
     try:
-        # 获取项目信息
+        # fetchprojectEN
         project = project_service.get(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 获取片段信息
+        # fetchEN
         from ...models.clip import Clip
         clip = project_service.db.query(Clip).filter(Clip.id == clip_id, Clip.project_id == project_id).first()
         if not clip:
-            raise HTTPException(status_code=404, detail="片段不存在")
+            raise HTTPException(status_code=404, detail="ENdoes not exist")
         
-        # 获取原始视频和字幕文件路径
+        # fetchENvideoENsubtitlesfilepath
         projects_dir = get_projects_directory()
         project_dir = projects_dir / project_id
         
         video_files = list(project_dir.glob("raw/*.mp4"))
         if not video_files:
-            raise HTTPException(status_code=404, detail="原始视频文件不存在")
+            raise HTTPException(status_code=404, detail="ENvideofiledoes not exist")
         original_video = video_files[0]
         
         srt_file = project_dir / "raw" / "input.srt"
         if not srt_file.exists():
-            raise HTTPException(status_code=404, detail="字幕文件不存在")
+            raise HTTPException(status_code=404, detail="subtitlesfiledoes not exist")
         
-        # 解析字幕数据
+        # parsesubtitlesEN
         subtitle_data = subtitle_processor.parse_srt_to_word_level(srt_file)
         
-        # 过滤出属于当前片段的时间范围
-        # 如果start_time和end_time是整数（秒），直接使用
+        # ENcurrentENtimeEN
+        # ifstart_timeENend_timeEN（EN），ENuse
         if isinstance(clip.start_time, int):
             clip_start = clip.start_time
         else:
@@ -331,11 +331,11 @@ async def create_edit_preview(
             if seg['startTime'] >= clip_start and seg['endTime'] <= clip_end
         ]
         
-        # 创建预览目录
+        # createENdirectory
         preview_dir = project_dir / "edit_previews" / clip_id
         preview_dir.mkdir(parents=True, exist_ok=True)
         
-        # 创建预览片段
+        # createEN
         preview_files = video_editor.create_preview_clips(
             original_video,
             clip_subtitles,
@@ -350,8 +350,8 @@ async def create_edit_preview(
         }
         
     except Exception as e:
-        logger.error(f"创建编辑预览失败: {e}")
-        raise HTTPException(status_code=500, detail=f"创建编辑预览失败: {str(e)}")
+        logger.error(f"createENfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"createENfailed: {str(e)}")
 
 @router.get("/{project_id}/clips/{clip_id}/preview/{segment_id}")
 async def get_preview_segment(
@@ -360,21 +360,21 @@ async def get_preview_segment(
     segment_id: str,
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """获取预览片段文件"""
+    """fetchENfile"""
     try:
-        # 检查项目是否存在
+        # checkprojectEN
         project = project_service.get(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 查找预览文件
+        # ENfile
         projects_dir = get_projects_directory()
         preview_file = projects_dir / project_id / "edit_previews" / clip_id / f"preview_{segment_id}.mp4"
         
         if not preview_file.exists():
-            raise HTTPException(status_code=404, detail="预览文件不存在")
+            raise HTTPException(status_code=404, detail="ENfiledoes not exist")
         
-        # 返回预览文件
+        # returnENfile
         return FileResponse(
             path=str(preview_file),
             media_type="video/mp4",
@@ -384,5 +384,5 @@ async def get_preview_segment(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"获取预览文件失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取预览文件失败: {str(e)}")
+        logger.error(f"fetchENfilefailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchENfilefailed: {str(e)}")

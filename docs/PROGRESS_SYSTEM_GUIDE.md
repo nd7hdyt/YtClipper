@@ -1,44 +1,44 @@
-# 增强进度系统使用指南
+# ENUsage Guide
 
-## 📋 概述
+## 📋 EN
 
-本项目已实现增强的进度系统，提供统一的进度跟踪、状态管理和错误处理功能。该系统整合了Redis缓存、数据库持久化和内存缓存，确保进度信息的可靠性和实时性。
+EN，ProvidesEN、EN。ENRedisEN、EN，EN。
 
-## 🏗️ 系统架构
+## 🏗️ System Architecture
 
-### 进度阶段
+### EN
 
 ```python
 class ProgressStage(Enum):
-    INGEST = "INGEST"          # 下载/就绪 (10%)
-    SUBTITLE = "SUBTITLE"      # 字幕/对齐 (15%)
-    ANALYZE = "ANALYZE"        # 语义分析/大纲 (20%)
-    HIGHLIGHT = "HIGHLIGHT"    # 片段定位/打分 (25%)
-    EXPORT = "EXPORT"          # 导出/封装 (20%)
-    DONE = "DONE"              # 校验/归档 (10%)
-    ERROR = "ERROR"            # 错误状态
+    INGEST = "INGEST"          # EN/EN (10%)
+    SUBTITLE = "SUBTITLE"      # EN/EN (15%)
+    ANALYZE = "ANALYZE"        # EN/EN (20%)
+    HIGHLIGHT = "HIGHLIGHT"    # EN/EN (25%)
+    EXPORT = "EXPORT"          # EN/EN (20%)
+    DONE = "DONE"              # EN/EN (10%)
+    ERROR = "ERROR"            # EN
 ```
 
-### 进度状态
+### EN
 
 ```python
 class ProgressStatus(Enum):
-    PENDING = "PENDING"        # 等待中
-    RUNNING = "RUNNING"        # 运行中
-    COMPLETED = "COMPLETED"    # 已完成
-    FAILED = "FAILED"          # 失败
-    CANCELLED = "CANCELLED"    # 已取消
+    PENDING = "PENDING"        # EN
+    RUNNING = "RUNNING"        # EN
+    COMPLETED = "COMPLETED"    # EN
+    FAILED = "FAILED"          # EN
+    CANCELLED = "CANCELLED"    # EN
 ```
 
-### 存储层次
+### EN
 
-1. **内存缓存**: 快速访问，存储当前活跃的进度信息
-2. **Redis缓存**: 分布式缓存，支持多实例共享
-3. **数据库持久化**: 长期存储，与项目状态同步
+1. **EN**: EN，EN
+2. **RedisEN**: EN，SupportEN
+3. **EN**: EN，EN
 
-## 🚀 使用方法
+## 🚀 EN
 
-### 1. 基本进度跟踪
+### 1. EN
 
 ```python
 from backend.services.enhanced_progress_service import (
@@ -46,35 +46,35 @@ from backend.services.enhanced_progress_service import (
     ProgressStage, ProgressStatus
 )
 
-# 开始进度跟踪
+# EN
 progress_info = start_progress(
     project_id="project_123",
     task_id="task_456",
-    initial_message="开始处理视频"
+    initial_message="EN"
 )
 
-# 更新进度
+# EN
 progress_info = update_progress(
     project_id="project_123",
     stage=ProgressStage.SUBTITLE,
-    message="正在生成字幕",
-    sub_progress=50.0  # 当前阶段50%完成
+    message="EN",
+    sub_progress=50.0  # Current Stage50%EN
 )
 
-# 完成进度
+# EN
 progress_info = complete_progress(
     project_id="project_123",
-    message="视频处理完成"
+    message="EN"
 )
 
-# 标记失败
+# EN
 progress_info = fail_progress(
     project_id="project_123",
-    error_message="视频文件损坏"
+    error_message="EN"
 )
 ```
 
-### 2. 在服务中使用
+### 2. EN
 
 ```python
 from backend.services.enhanced_progress_service import (
@@ -87,56 +87,56 @@ class VideoProcessingService:
     @handle_errors(ErrorCategory.PROCESSING)
     async def process_video(self, project_id: str, video_path: str):
         try:
-            # 开始进度跟踪
+            # EN
             progress_service.start_progress(
                 project_id=project_id,
-                initial_message="开始处理视频"
+                initial_message="EN"
             )
             
-            # 下载阶段
+            # EN
             progress_service.update_progress(
                 project_id=project_id,
                 stage=ProgressStage.INGEST,
-                message="下载视频文件",
+                message="EN",
                 sub_progress=100.0
             )
             
-            # 字幕生成阶段
+            # EN
             progress_service.update_progress(
                 project_id=project_id,
                 stage=ProgressStage.SUBTITLE,
-                message="生成字幕",
+                message="EN",
                 sub_progress=0.0
             )
             
-            # 模拟字幕生成过程
+            # EN
             for i in range(10):
-                await asyncio.sleep(1)  # 模拟处理时间
+                await asyncio.sleep(1)  # EN
                 progress_service.update_progress(
                     project_id=project_id,
                     stage=ProgressStage.SUBTITLE,
-                    message=f"字幕生成进度: {i*10}%",
+                    message=f"EN: {i*10}%",
                     sub_progress=i * 10.0
                 )
             
-            # 分析阶段
+            # EN
             progress_service.update_progress(
                 project_id=project_id,
                 stage=ProgressStage.ANALYZE,
-                message="分析视频内容",
+                message="EN",
                 sub_progress=0.0
             )
             
-            # 继续其他阶段...
+            # EN...
             
-            # 完成处理
+            # EN
             progress_service.complete_progress(
                 project_id=project_id,
-                message="视频处理完成"
+                message="EN"
             )
             
         except Exception as e:
-            # 标记失败
+            # EN
             progress_service.fail_progress(
                 project_id=project_id,
                 error_message=str(e)
@@ -144,7 +144,7 @@ class VideoProcessingService:
             raise
 ```
 
-### 3. 在API中使用
+### 3. ENAPIEN
 
 ```python
 from fastapi import APIRouter, HTTPException
@@ -154,11 +154,11 @@ router = APIRouter()
 
 @router.get("/projects/{project_id}/progress")
 async def get_project_progress(project_id: str):
-    """获取项目进度"""
+    """EN"""
     try:
         progress_info = get_progress(project_id)
         if not progress_info:
-            raise HTTPException(status_code=404, detail="项目进度不存在")
+            raise HTTPException(status_code=404, detail="EN")
         
         return {
             "project_id": project_id,
@@ -168,74 +168,74 @@ async def get_project_progress(project_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 ```
 
-### 4. 添加进度回调
+### 4. EN
 
 ```python
 from backend.services.enhanced_progress_service import progress_service
 
 def progress_callback(progress_info):
-    """进度回调函数"""
-    print(f"项目 {progress_info.project_id} 进度更新: {progress_info.progress}%")
+    """EN"""
+    print(f"EN {progress_info.project_id} EN: {progress_info.progress}%")
     
-    # 可以在这里添加其他逻辑，如：
-    # - 发送通知
-    # - 更新前端状态
-    # - 记录日志
-    # - 触发其他服务
+    # EN，EN：
+    # - EN
+    # - EN
+    # - EN
+    # - EN
 
-# 注册回调
+# EN
 progress_service.add_progress_callback(progress_callback)
 ```
 
-## 📊 进度信息结构
+## 📊 EN
 
 ```python
 @dataclass
 class ProgressInfo:
-    project_id: str                    # 项目ID
-    task_id: Optional[str]             # 任务ID
-    stage: ProgressStage               # 当前阶段
-    status: ProgressStatus             # 状态
-    progress: int                      # 总进度 (0-100)
-    message: str                       # 当前消息
-    error_message: Optional[str]       # 错误消息
-    start_time: Optional[datetime]     # 开始时间
-    end_time: Optional[datetime]       # 结束时间
-    estimated_remaining: Optional[int] # 预估剩余时间(秒)
-    metadata: Optional[Dict[str, Any]] # 元数据
+    project_id: str                    # ENID
+    task_id: Optional[str]             # ENID
+    stage: ProgressStage               # Current Stage
+    status: ProgressStatus             # EN
+    progress: int                      # EN (0-100)
+    message: str                       # EN
+    error_message: Optional[str]       # EN
+    start_time: Optional[datetime]     # EN
+    end_time: Optional[datetime]       # EN
+    estimated_remaining: Optional[int] # EN(EN)
+    metadata: Optional[Dict[str, Any]] # EN
 ```
 
-### 进度计算规则
+### EN
 
-- **INGEST阶段**: 0-10%
-- **SUBTITLE阶段**: 10-25%
-- **ANALYZE阶段**: 25-45%
-- **HIGHLIGHT阶段**: 45-70%
-- **EXPORT阶段**: 70-90%
-- **DONE阶段**: 100%
+- **INGESTEN**: 0-10%
+- **SUBTITLEEN**: 10-25%
+- **ANALYZEEN**: 25-45%
+- **HIGHLIGHTEN**: 45-70%
+- **EXPORTEN**: 70-90%
+- **DONEEN**: 100%
 
-每个阶段内部可以通过`sub_progress`参数(0-100)来细分进度。
+EN`sub_progress`EN(0-100)EN。
 
-## 🔧 配置和优化
+## 🔧 EN
 
-### 1. Redis配置
+### 1. RedisEN
 
 ```python
-# 在backend/core/unified_config.py中配置
+# ENbackend/core/unified_config.pyEN
 redis:
   url: "redis://localhost:6379/0"
   max_connections: 10
   socket_timeout: 5
 ```
 
-### 2. 清理配置
+### 2. EN
 
 ```python
-# 定期清理旧进度信息
+# EN
 progress_service.cleanup_old_progress(max_age_hours=24)
 ```
 
-### 3. 错误处理
+### 3. EN
 
 ```python
 from backend.utils.error_handler import AutoClipsException, ErrorCategory
@@ -244,83 +244,83 @@ try:
     progress_service.update_progress(project_id, stage, message)
 except AutoClipsException as e:
     if e.category == ErrorCategory.SYSTEM:
-        # 系统错误，记录日志但不中断处理
-        logger.error(f"进度更新失败: {e}")
+        # EN，EN
+        logger.error(f"EN: {e}")
     else:
-        # 其他错误，重新抛出
+        # EN，EN
         raise
 ```
 
-## 📝 最佳实践
+## 📝 EN
 
-### 1. 进度消息编写
+### 1. EN
 
 ```python
-# ✅ 好的进度消息
+# ✅ EN
 progress_service.update_progress(
     project_id=project_id,
     stage=ProgressStage.SUBTITLE,
-    message="正在生成字幕，预计还需2分钟",
+    message="EN，EN2EN",
     sub_progress=60.0
 )
 
-# ❌ 不好的进度消息
+# ❌ EN
 progress_service.update_progress(
     project_id=project_id,
     stage=ProgressStage.SUBTITLE,
-    message="处理中...",
+    message="EN...",
     sub_progress=60.0
 )
 ```
 
-### 2. 错误处理
+### 2. EN
 
 ```python
-# ✅ 完整的错误处理
+# ✅ EN
 try:
-    # 处理逻辑
+    # EN
     result = await process_video(video_path)
-    progress_service.complete_progress(project_id, "处理完成")
+    progress_service.complete_progress(project_id, "EN")
 except Exception as e:
-    # 记录详细错误信息
-    error_message = f"处理失败: {str(e)}"
+    # EN
+    error_message = f"EN: {str(e)}"
     progress_service.fail_progress(project_id, error_message)
     raise
 ```
 
-### 3. 元数据使用
+### 3. EN
 
 ```python
-# ✅ 使用元数据传递额外信息
+# ✅ EN
 progress_service.update_progress(
     project_id=project_id,
     stage=ProgressStage.ANALYZE,
-    message="分析视频内容",
+    message="EN",
     metadata={
-        "video_duration": 1200,  # 视频时长(秒)
-        "analysis_method": "ai",  # 分析方法
-        "estimated_clips": 5      # 预估切片数
+        "video_duration": 1200,  # EN(EN)
+        "analysis_method": "ai",  # EN
+        "estimated_clips": 5      # EN
     }
 )
 ```
 
-### 4. 性能优化
+### 4. Performance
 
 ```python
-# ✅ 批量更新进度
+# ✅ EN
 for i, item in enumerate(items):
-    if i % 10 == 0:  # 每10个项目更新一次进度
+    if i % 10 == 0:  # EN10EN
         progress_service.update_progress(
             project_id=project_id,
             stage=ProgressStage.PROCESSING,
-            message=f"处理进度: {i}/{len(items)}",
+            message=f"EN: {i}/{len(items)}",
             sub_progress=i / len(items) * 100
         )
 ```
 
-## 🧪 测试进度系统
+## 🧪 EN
 
-### 1. 单元测试
+### 1. EN
 
 ```python
 import pytest
@@ -332,128 +332,128 @@ from backend.services.enhanced_progress_service import (
 def test_progress_tracking():
     project_id = "test_project"
     
-    # 开始进度
-    progress = start_progress(project_id, initial_message="开始测试")
+    # EN
+    progress = start_progress(project_id, initial_message="EN")
     assert progress.project_id == project_id
     assert progress.status == ProgressStatus.RUNNING
     assert progress.progress == 0
     
-    # 更新进度
+    # EN
     progress = update_progress(
         project_id=project_id,
         stage=ProgressStage.SUBTITLE,
-        message="测试字幕生成",
+        message="EN",
         sub_progress=50.0
     )
     assert progress.stage == ProgressStage.SUBTITLE
     assert progress.progress > 0
     
-    # 完成进度
-    progress = complete_progress(project_id, "测试完成")
+    # EN
+    progress = complete_progress(project_id, "EN")
     assert progress.status == ProgressStatus.COMPLETED
     assert progress.progress == 100
 ```
 
-### 2. 集成测试
+### 2. EN
 
 ```python
 async def test_progress_integration():
     project_id = "integration_test"
     
-    # 模拟完整的处理流程
-    start_progress(project_id, "开始集成测试")
+    # EN
+    start_progress(project_id, "EN")
     
     for stage in [ProgressStage.INGEST, ProgressStage.SUBTITLE, 
                   ProgressStage.ANALYZE, ProgressStage.HIGHLIGHT, 
                   ProgressStage.EXPORT]:
-        update_progress(project_id, stage, f"测试{stage.value}阶段")
-        await asyncio.sleep(0.1)  # 模拟处理时间
+        update_progress(project_id, stage, f"EN{stage.value}EN")
+        await asyncio.sleep(0.1)  # EN
     
-    complete_progress(project_id, "集成测试完成")
+    complete_progress(project_id, "EN")
     
-    # 验证最终状态
+    # EN
     final_progress = get_progress(project_id)
     assert final_progress.status == ProgressStatus.COMPLETED
     assert final_progress.progress == 100
 ```
 
-## 🔍 监控和调试
+## 🔍 EN
 
-### 1. 进度监控
+### 1. EN
 
 ```python
-# 获取所有活跃进度
+# EN
 active_progress = progress_service.get_all_active_progress()
 for progress in active_progress:
-    print(f"项目 {progress.project_id}: {progress.progress}% - {progress.message}")
+    print(f"EN {progress.project_id}: {progress.progress}% - {progress.message}")
 ```
 
-### 2. 调试信息
+### 2. EN
 
 ```python
-# 获取详细进度信息
+# EN
 progress_info = get_progress(project_id)
 if progress_info:
-    print(f"项目ID: {progress_info.project_id}")
-    print(f"当前阶段: {progress_info.stage.value}")
-    print(f"总进度: {progress_info.progress}%")
-    print(f"状态: {progress_info.status.value}")
-    print(f"消息: {progress_info.message}")
-    print(f"开始时间: {progress_info.start_time}")
-    print(f"预估剩余: {progress_info.estimated_remaining}秒")
+    print(f"ENID: {progress_info.project_id}")
+    print(f"Current Stage: {progress_info.stage.value}")
+    print(f"EN: {progress_info.progress}%")
+    print(f"EN: {progress_info.status.value}")
+    print(f"EN: {progress_info.message}")
+    print(f"EN: {progress_info.start_time}")
+    print(f"EN: {progress_info.estimated_remaining}EN")
     if progress_info.metadata:
-        print(f"元数据: {progress_info.metadata}")
+        print(f"EN: {progress_info.metadata}")
 ```
 
-### 3. 日志记录
+### 3. EN
 
 ```python
 import logging
 
-# 配置进度日志
+# EN
 progress_logger = logging.getLogger('progress')
 progress_logger.setLevel(logging.INFO)
 
 def progress_log_callback(progress_info):
     progress_logger.info(
-        f"项目 {progress_info.project_id} 进度更新: "
+        f"EN {progress_info.project_id} EN: "
         f"{progress_info.progress}% - {progress_info.message}"
     )
 
 progress_service.add_progress_callback(progress_log_callback)
 ```
 
-## 🚨 常见问题
+## 🚨 FAQ
 
-### 1. Redis连接失败
+### 1. RedisEN
 
 ```python
-# 系统会自动降级到内存缓存
-# 检查Redis配置和连接
+# EN
+# ENRedisEN
 if not progress_service.redis_client:
-    logger.warning("Redis不可用，使用内存缓存")
+    logger.warning("RedisEN，EN")
 ```
 
-### 2. 进度信息丢失
+### 2. EN
 
 ```python
-# 定期清理可能导致进度信息丢失
-# 建议设置合理的清理时间
-progress_service.cleanup_old_progress(max_age_hours=48)  # 48小时
+# EN
+# EN
+progress_service.cleanup_old_progress(max_age_hours=48)  # 48EN
 ```
 
-### 3. 进度更新频率过高
+### 3. EN
 
 ```python
-# 系统内置了节流机制，避免频繁更新
-# 建议在循环中控制更新频率
+# ENBuilt-inEN，EN
+# EN
 for i, item in enumerate(items):
-    if i % 10 == 0:  # 每10次更新一次
+    if i % 10 == 0:  # EN10EN
         update_progress(project_id, stage, message, i/len(items)*100)
 ```
 
-## 📚 相关文档
+## 📚 EN
 
-- [错误处理指南](./ERROR_HANDLING_GUIDE.md)
-- [配置管理指南](./CONFIGURATION_GUIDE.md)
-- [API文档](./API_DOCUMENTATION.md)
+- [EN](./ERROR_HANDLING_GUIDE.md)
+- [EN](./CONFIGURATION_GUIDE.md)
+- [APIEN](./API_DOCUMENTATION.md)

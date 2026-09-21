@@ -1,6 +1,6 @@
 /**
- * API 配置管理器
- * 处理动态后端地址和端口配置
+ * API configEN
+ * ENportconfig
  */
 
 interface ApiConfig {
@@ -30,10 +30,10 @@ class ApiConfigManager {
   }
 
   private async initializeConfig() {
-    // 检查是否在 Tauri 环境中
+    // checkEN Tauri in environment
     if (typeof window !== 'undefined' && ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)) {
       try {
-        // 监听后端启动事件
+        // EN
         const { listen } = await import('@tauri-apps/api/event');
         const { invoke } = await import('@tauri-apps/api/core');
         
@@ -49,7 +49,7 @@ class ApiConfigManager {
           this.updateFromPort(backendStatus.port);
         }
 
-        // 尝试从全局变量获取配置
+        // ENfetchconfig
         if ((window as any).__BACKEND_BASE__) {
           this.updateConfig({
             baseUrl: (window as any).__BACKEND_BASE__,
@@ -58,7 +58,7 @@ class ApiConfigManager {
           });
         }
       } catch (error) {
-        console.warn('无法初始化 Tauri 事件监听:', error);
+        console.warn('EN Tauri EN:', error);
       }
     }
   }
@@ -82,34 +82,34 @@ class ApiConfigManager {
   }
 
   private notifyListeners() {
-    // waitForReady 的监听器会在回调里把自己移除；直接 forEach 原数组会跳过后一个监听器，
-    // 导致冷启动时排队的第 2、4… 个请求要等 30s 超时才发出（设置页打开慢就是这个原因）
+    // waitForReady ENremove；EN forEach EN，
+    // EN 2、4… ENrequestEN 30s EN（settingsEN）
     [...this.listeners].forEach(listener => listener(this.config));
   }
 
   /**
-   * 获取当前 API 配置
+   * fetchEN API config
    */
   getConfig(): ApiConfig {
     return { ...this.config };
   }
 
   /**
-   * 获取 API 基础 URL
+   * fetch API EN URL
    */
   getBaseUrl(): string {
     return this.config.baseUrl;
   }
 
   /**
-   * 检查 API 是否就绪
+   * check API EN
    */
   isReady(): boolean {
     return this.config.isReady;
   }
 
   /**
-   * 添加配置变化监听器
+   * addconfigChangeEN
    */
   addListener(listener: (config: ApiConfig) => void): () => void {
     this.listeners.push(listener);
@@ -122,7 +122,7 @@ class ApiConfigManager {
   }
 
   /**
-   * 等待 API 就绪
+   * waiting API EN
    */
   async waitForReady(timeout: number = 30000): Promise<boolean> {
     if (this.isReady()) {
@@ -145,7 +145,7 @@ class ApiConfigManager {
   }
 
   /**
-   * 构建完整的 API URL
+   * EN API URL
    */
   buildUrl(path: string): string {
     const normalizedPath = path.startsWith('/') ? path : `/${path}`;
@@ -153,7 +153,7 @@ class ApiConfigManager {
   }
 
   /**
-   * 健康检查
+   * Health check
    */
   async healthCheck(): Promise<boolean> {
     try {
@@ -163,16 +163,16 @@ class ApiConfigManager {
       } as any);
       return response.ok;
     } catch (error) {
-      console.warn('API 健康检查失败:', error);
+      console.warn('API Health checkFailed:', error);
       return false;
     }
   }
 }
 
-// 导出单例实例
+// EN
 export const apiConfigManager = ApiConfigManager.getInstance();
 
-// 导出便捷函数
+// EN
 export const getApiBaseUrl = () => apiConfigManager.getBaseUrl();
 export const isApiReady = () => apiConfigManager.isReady();
 export const waitForApiReady = (timeout?: number) => apiConfigManager.waitForReady(timeout);

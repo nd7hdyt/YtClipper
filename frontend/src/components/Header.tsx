@@ -48,13 +48,13 @@ const Header: React.FC = () => {
 
       {/* Right side */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        {/* 返回入口由各页面页头承担（见 DESIGN.md App Layer），顶栏只留全局动作 */}
+        {/* The back entry is owned by each page header (see DESIGN.md App Layer); the top bar only keeps global actions */}
         <Button
           type="text"
           icon={theme === 'dark' ? <BulbOutlined /> : <MoonOutlined />}
           onClick={toggleTheme}
-          aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
-          title={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
           style={{
             color: 'var(--ac-sub)',
             border: '1px solid var(--ac-line)',
@@ -79,7 +79,7 @@ const Header: React.FC = () => {
             background: isSettings ? 'var(--ac-line-2)' : 'var(--ac-card)',
           }}
         >
-          设置
+          Settings
         </Button>
       </div>
     </AntHeader>

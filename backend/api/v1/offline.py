@@ -1,6 +1,6 @@
 """
-离线模式支持API
-提供网络状态检测、离线模式管理和缓存功能
+ENAPI
+ENstatusEN、ENcacheEN
 """
 import os
 import time
@@ -15,13 +15,13 @@ from backend.core.desktop_config import is_desktop_mode
 
 router = APIRouter()
 
-# 检查桌面模式
+# checkEN
 def check_desktop_mode():
     if not is_desktop_mode():
-        raise HTTPException(status_code=400, detail="此端点仅在桌面模式下可用")
+        raise HTTPException(status_code=400, detail="EN")
 
 class NetworkStatus(BaseModel):
-    """网络状态模型"""
+    """ENstatusEN"""
     is_online: bool
     connection_quality: str  # excellent, good, poor, offline
     latency: Optional[float] = None
@@ -29,15 +29,15 @@ class NetworkStatus(BaseModel):
     error_message: Optional[str] = None
 
 class OfflineModeStatus(BaseModel):
-    """离线模式状态模型"""
+    """ENstatusEN"""
     is_offline_mode: bool
-    auto_offline_threshold: int  # 连续失败次数阈值
+    auto_offline_threshold: int  # ENfailedEN
     consecutive_failures: int
     last_successful_request: Optional[str] = None
     offline_since: Optional[str] = None
 
 class CacheItem(BaseModel):
-    """缓存项模型"""
+    """cacheEN"""
     key: str
     data: Any
     created_at: str
@@ -45,7 +45,7 @@ class CacheItem(BaseModel):
     size: int
 
 class SyncQueueItem(BaseModel):
-    """同步队列项模型"""
+    """ENqueueEN"""
     id: str
     action: str  # create, update, delete
     resource_type: str  # project, clip, collection
@@ -55,7 +55,7 @@ class SyncQueueItem(BaseModel):
     retry_count: int = 0
     max_retries: int = 3
 
-# 内存中的状态存储（生产环境应使用持久化存储）
+# ENstatusEN（ENuseEN）
 _network_status = NetworkStatus(
     is_online=True,
     connection_quality="good",
@@ -73,17 +73,17 @@ _sync_queue: List[SyncQueueItem] = []
 
 @router.get("/network/status", response_model=NetworkStatus)
 async def get_network_status():
-    """获取网络状态"""
+    """fetchENstatus"""
     check_desktop_mode()
     
     try:
-        # 测试网络连接
+        # ENconnect
         start_time = time.time()
         response = requests.get("https://www.google.com", timeout=5)
-        latency = (time.time() - start_time) * 1000  # 转换为毫秒
+        latency = (time.time() - start_time) * 1000  # EN
         
         if response.status_code == 200:
-            # 根据延迟判断连接质量
+            # ENconnectEN
             if latency < 100:
                 quality = "excellent"
             elif latency < 500:
@@ -97,7 +97,7 @@ async def get_network_status():
             _network_status.last_check = datetime.now().isoformat()
             _network_status.error_message = None
             
-            # 重置连续失败计数
+            # ENfailedEN
             _offline_mode_status.consecutive_failures = 0
             _offline_mode_status.last_successful_request = datetime.now().isoformat()
             
@@ -105,17 +105,17 @@ async def get_network_status():
             raise requests.RequestException(f"HTTP {response.status_code}")
             
     except Exception as e:
-        # 网络连接失败
+        # ENconnectfailed
         _network_status.is_online = False
         _network_status.connection_quality = "offline"
         _network_status.latency = None
         _network_status.last_check = datetime.now().isoformat()
         _network_status.error_message = str(e)
         
-        # 增加连续失败计数
+        # ENfailedEN
         _offline_mode_status.consecutive_failures += 1
         
-        # 检查是否应该自动进入离线模式
+        # checkENshouldEN
         if (_offline_mode_status.consecutive_failures >= _offline_mode_status.auto_offline_threshold 
             and not _offline_mode_status.is_offline_mode):
             _offline_mode_status.is_offline_mode = True
@@ -125,13 +125,13 @@ async def get_network_status():
 
 @router.get("/offline/status", response_model=OfflineModeStatus)
 async def get_offline_mode_status():
-    """获取离线模式状态"""
+    """fetchENstatus"""
     check_desktop_mode()
     return _offline_mode_status
 
 @router.post("/offline/toggle")
 async def toggle_offline_mode():
-    """切换离线模式"""
+    """EN"""
     check_desktop_mode()
     
     _offline_mode_status.is_offline_mode = not _offline_mode_status.is_offline_mode
@@ -144,30 +144,30 @@ async def toggle_offline_mode():
     
     return {
         "is_offline_mode": _offline_mode_status.is_offline_mode,
-        "message": "离线模式已开启" if _offline_mode_status.is_offline_mode else "离线模式已关闭"
+        "message": "EN" if _offline_mode_status.is_offline_mode else "EN"
     }
 
 @router.post("/offline/auto-threshold")
 async def set_auto_offline_threshold(threshold: int):
-    """设置自动离线阈值"""
+    """settingsEN"""
     check_desktop_mode()
     
     if threshold < 1 or threshold > 10:
-        raise HTTPException(status_code=400, detail="阈值必须在1-10之间")
+        raise HTTPException(status_code=400, detail="ENmustEN1-10EN")
     
     _offline_mode_status.auto_offline_threshold = threshold
     
     return {
         "auto_offline_threshold": threshold,
-        "message": f"自动离线阈值已设置为 {threshold}"
+        "message": f"ENsettingsEN {threshold}"
     }
 
 @router.get("/cache", response_model=List[CacheItem])
 async def get_cache_items():
-    """获取缓存项列表"""
+    """fetchcacheEN"""
     check_desktop_mode()
     
-    # 清理过期缓存
+    # ENcache
     current_time = datetime.now()
     expired_keys = []
     
@@ -184,7 +184,7 @@ async def get_cache_items():
 
 @router.post("/cache")
 async def add_cache_item(key: str, data: Any, expires_in_seconds: Optional[int] = None):
-    """添加缓存项"""
+    """ENcacheEN"""
     check_desktop_mode()
     
     created_at = datetime.now().isoformat()
@@ -193,7 +193,7 @@ async def add_cache_item(key: str, data: Any, expires_in_seconds: Optional[int] 
     if expires_in_seconds:
         expires_at = (datetime.now() + timedelta(seconds=expires_in_seconds)).isoformat()
     
-    # 计算数据大小（简单估算）
+    # EN（EN）
     size = len(str(data))
     
     _cache[key] = CacheItem(
@@ -206,24 +206,24 @@ async def add_cache_item(key: str, data: Any, expires_in_seconds: Optional[int] 
     
     return {
         "key": key,
-        "message": "缓存项已添加",
+        "message": "cacheEN",
         "expires_at": expires_at
     }
 
 @router.delete("/cache/{key}")
 async def remove_cache_item(key: str):
-    """删除缓存项"""
+    """deletecacheEN"""
     check_desktop_mode()
     
     if key in _cache:
         del _cache[key]
-        return {"message": f"缓存项 {key} 已删除"}
+        return {"message": f"cacheEN {key} deleted"}
     else:
-        raise HTTPException(status_code=404, detail="缓存项不存在")
+        raise HTTPException(status_code=404, detail="cacheENdoes not exist")
 
 @router.get("/sync-queue", response_model=List[SyncQueueItem])
 async def get_sync_queue():
-    """获取同步队列"""
+    """fetchENqueue"""
     check_desktop_mode()
     return _sync_queue
 
@@ -234,14 +234,14 @@ async def add_sync_queue_item(
     resource_id: str,
     data: Dict[str, Any]
 ):
-    """添加同步队列项"""
+    """ENqueueEN"""
     check_desktop_mode()
     
     if action not in ["create", "update", "delete"]:
-        raise HTTPException(status_code=400, detail="无效的操作类型")
+        raise HTTPException(status_code=400, detail="EN")
     
     if resource_type not in ["project", "clip", "collection"]:
-        raise HTTPException(status_code=400, detail="无效的资源类型")
+        raise HTTPException(status_code=400, detail="EN")
     
     item = SyncQueueItem(
         id=f"{resource_type}_{resource_id}_{int(time.time())}",
@@ -256,27 +256,27 @@ async def add_sync_queue_item(
     
     return {
         "id": item.id,
-        "message": "同步队列项已添加"
+        "message": "ENqueueEN"
     }
 
 @router.post("/sync-queue/process")
 async def process_sync_queue():
-    """处理同步队列"""
+    """processingENqueue"""
     check_desktop_mode()
     
     if _offline_mode_status.is_offline_mode:
         return {
-            "message": "当前处于离线模式，无法处理同步队列",
+            "message": "currentEN，cannotprocessingENqueue",
             "queue_size": len(_sync_queue)
         }
     
     processed = 0
     failed = 0
     
-    for item in _sync_queue[:]:  # 使用切片复制避免修改列表时的问题
+    for item in _sync_queue[:]:  # useclipEN
         try:
-            # 这里应该调用实际的API来同步数据
-            # 为了演示，我们模拟一个简单的处理过程
+            # ENshouldcallENAPIEN
+            # EN，weENprocessingEN
             await simulate_sync_operation(item)
             
             _sync_queue.remove(item)
@@ -288,42 +288,42 @@ async def process_sync_queue():
                 _sync_queue.remove(item)
                 failed += 1
             else:
-                # 保留在队列中等待重试
+                # ENqueueENretry
                 pass
     
     return {
         "processed": processed,
         "failed": failed,
         "remaining": len(_sync_queue),
-        "message": f"处理完成：成功 {processed} 个，失败 {failed} 个"
+        "message": f"processingEN：succeeded {processed} EN，failed {failed} EN"
     }
 
 async def simulate_sync_operation(item: SyncQueueItem):
-    """模拟同步操作"""
-    # 在实际实现中，这里应该调用相应的API端点
-    # 例如：创建项目、更新片段、删除合集等
-    await asyncio.sleep(0.1)  # 模拟网络延迟
+    """EN"""
+    # EN，ENshouldcallENAPIEN
+    # for example：createproject、updateEN、deletecollectionEN
+    await asyncio.sleep(0.1)  # EN
     
-    # 模拟偶尔的失败
+    # ENfailed
     import random
-    if random.random() < 0.1:  # 10% 的失败率
-        raise Exception("模拟网络错误")
+    if random.random() < 0.1:  # 10% ENfailedEN
+        raise Exception("ENerror")
 
 @router.delete("/sync-queue/clear")
 async def clear_sync_queue():
-    """清空同步队列"""
+    """ENqueue"""
     check_desktop_mode()
     
     count = len(_sync_queue)
     _sync_queue.clear()
     
     return {
-        "message": f"同步队列已清空，删除了 {count} 个项目"
+        "message": f"ENqueueEN，deleteEN {count} ENproject"
     }
 
 @router.get("/offline/summary")
 async def get_offline_summary():
-    """获取离线模式摘要信息"""
+    """fetchEN"""
     check_desktop_mode()
     
     return {

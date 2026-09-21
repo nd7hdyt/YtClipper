@@ -10,12 +10,12 @@ from .ffmpeg_utils import get_ffmpeg_path, get_ffprobe_path
 logger = logging.getLogger(__name__)
 
 class VideoEditor:
-    """视频编辑器 - 支持基于字幕删除的视频重新剪辑"""
+    """videoEN - ENsubtitlesdeleteENvideoEN"""
     
     def __init__(self, clips_dir: Optional[str] = None, collections_dir: Optional[str] = None):
-        # VideoEditor 也需要指定路径参数，防止使用全局路径
+        # VideoEditor ENneedENpathparameters，ENuseENpath
         if clips_dir is None or collections_dir is None:
-            # 如果没有提供路径，使用临时目录（不影响主流水线）
+            # ifENpath，useENdirectory（EN）
             from ..core.shared_config import CLIPS_DIR, COLLECTIONS_DIR
             clips_dir = str(CLIPS_DIR) if clips_dir is None else clips_dir
             collections_dir = str(COLLECTIONS_DIR) if collections_dir is None else collections_dir
@@ -29,44 +29,44 @@ class VideoEditor:
                                       deleted_segments: List[str],
                                       output_path: Path) -> Dict:
         """
-        基于字幕删除编辑视频
+        ENsubtitlesdeleteENvideo
         
         Args:
-            video_path: 原始视频路径
-            subtitle_data: 字幕数据
-            deleted_segments: 要删除的字幕段ID列表
-            output_path: 输出视频路径
+            video_path: ENvideopath
+            subtitle_data: subtitlesEN
+            deleted_segments: ENdeleteENsubtitlesENIDEN
+            output_path: ENvideopath
             
         Returns:
-            编辑结果信息
+            ENresultEN
         """
         try:
-            logger.info(f"开始基于字幕删除编辑视频: {video_path}")
+            logger.info(f"startENsubtitlesdeleteENvideo: {video_path}")
             
-            # 生成编辑后的时间轴
+            # generateENtimeEN
             timeline = self.subtitle_processor.generate_edited_video_timeline(
                 subtitle_data, deleted_segments
             )
             
             if not timeline:
-                logger.warning("没有保留的时间段，无法生成视频")
+                logger.warning("ENtimeEN，cannotgeneratevideo")
                 return {
                     'success': False,
-                    'error': '没有保留的时间段'
+                    'error': 'ENtimeEN'
                 }
             
-            # 计算删除的总时长
+            # ENdeleteENduration
             total_deleted_duration = self._calculate_deleted_duration(
                 subtitle_data, deleted_segments
             )
             
-            # 执行视频剪辑
+            # executevideoEN
             success = self._concatenate_video_segments(
                 video_path, timeline, output_path
             )
             
             if success:
-                # 获取最终视频时长
+                # fetchENvideoduration
                 final_duration = self._get_video_duration(output_path)
                 
                 result = {
@@ -79,17 +79,17 @@ class VideoEditor:
                     'deletedSegments': deleted_segments
                 }
                 
-                logger.info(f"视频编辑完成: 删除时长 {total_deleted_duration:.2f}秒，"
-                          f"最终时长 {final_duration:.2f}秒")
+                logger.info(f"videoEN: deleteduration {total_deleted_duration:.2f}EN，"
+                          f"ENduration {final_duration:.2f}EN")
                 return result
             else:
                 return {
                     'success': False,
-                    'error': '视频剪辑失败'
+                    'error': 'videoENfailed'
                 }
                 
         except Exception as e:
-            logger.error(f"视频编辑失败: {e}")
+            logger.error(f"videoENfailed: {e}")
             return {
                 'success': False,
                 'error': str(e)
@@ -98,14 +98,14 @@ class VideoEditor:
     def _calculate_deleted_duration(self, subtitle_data: List[Dict], 
                                   deleted_segments: List[str]) -> float:
         """
-        计算删除的总时长
+        ENdeleteENduration
         
         Args:
-            subtitle_data: 字幕数据
-            deleted_segments: 删除的字幕段ID列表
+            subtitle_data: subtitlesEN
+            deleted_segments: deleteENsubtitlesENIDEN
             
         Returns:
-            删除的总时长（秒）
+            deleteENduration（EN）
         """
         deleted_ids = set(deleted_segments)
         total_duration = 0.0
@@ -121,50 +121,50 @@ class VideoEditor:
                                   timeline: List[Tuple[float, float]], 
                                   output_path: Path) -> bool:
         """
-        拼接视频片段
+        ENvideoEN
         
         Args:
-            video_path: 原始视频路径
-            timeline: 时间轴 [(start, end), ...]
-            output_path: 输出路径
+            video_path: ENvideopath
+            timeline: timeEN [(start, end), ...]
+            output_path: ENpath
             
         Returns:
-            是否成功
+            ENsucceeded
         """
         try:
-            # 确保输出目录存在
+            # ENdirectoryEN
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
             if len(timeline) == 1:
-                # 只有一个片段，直接提取
+                # EN，EN
                 start_time, end_time = timeline[0]
                 return self._extract_single_segment(
                     video_path, start_time, end_time, output_path
                 )
             else:
-                # 多个片段，需要拼接
+                # EN，needEN
                 return self._concatenate_multiple_segments(
                     video_path, timeline, output_path
                 )
                 
         except Exception as e:
-            logger.error(f"拼接视频片段失败: {e}")
+            logger.error(f"ENvideoENfailed: {e}")
             return False
     
     def _extract_single_segment(self, video_path: Path, 
                               start_time: float, end_time: float, 
                               output_path: Path) -> bool:
         """
-        提取单个视频片段
+        ENvideoEN
         
         Args:
-            video_path: 原始视频路径
-            start_time: 开始时间（秒）
-            end_time: 结束时间（秒）
-            output_path: 输出路径
+            video_path: ENvideopath
+            start_time: starttime（EN）
+            end_time: endtime（EN）
+            output_path: ENpath
             
         Returns:
-            是否成功
+            ENsucceeded
         """
         try:
             duration = end_time - start_time
@@ -185,36 +185,36 @@ class VideoEditor:
             result = subprocess.run(cmd, capture_output=True, text=True)
             
             if result.returncode == 0:
-                logger.info(f"成功提取视频片段: {start_time:.2f}s - {end_time:.2f}s")
+                logger.info(f"succeededENvideoEN: {start_time:.2f}s - {end_time:.2f}s")
                 return True
             else:
-                logger.error(f"提取视频片段失败: {result.stderr}")
+                logger.error(f"ENvideoENfailed: {result.stderr}")
                 return False
                 
         except Exception as e:
-            logger.error(f"提取视频片段异常: {e}")
+            logger.error(f"ENvideoENexception: {e}")
             return False
     
     def _concatenate_multiple_segments(self, video_path: Path, 
                                      timeline: List[Tuple[float, float]], 
                                      output_path: Path) -> bool:
         """
-        拼接多个视频片段
+        ENvideoEN
         
         Args:
-            video_path: 原始视频路径
-            timeline: 时间轴 [(start, end), ...]
-            output_path: 输出路径
+            video_path: ENvideopath
+            timeline: timeEN [(start, end), ...]
+            output_path: ENpath
             
         Returns:
-            是否成功
+            ENsucceeded
         """
         try:
-            # 创建临时目录
+            # createENdirectory
             with tempfile.TemporaryDirectory() as temp_dir:
                 temp_path = Path(temp_dir)
                 
-                # 提取所有片段
+                # ENallEN
                 segment_files = []
                 for i, (start_time, end_time) in enumerate(timeline):
                     segment_file = temp_path / f"segment_{i:03d}.mp4"
@@ -226,16 +226,16 @@ class VideoEditor:
                     if success:
                         segment_files.append(segment_file)
                     else:
-                        logger.error(f"提取片段 {i} 失败")
+                        logger.error(f"EN {i} failed")
                         return False
                 
-                # 创建文件列表
+                # createfileEN
                 file_list_path = temp_path / "file_list.txt"
                 with open(file_list_path, 'w', encoding='utf-8') as f:
                     for segment_file in segment_files:
                         f.write(f"file '{segment_file}'\n")
                 
-                # 拼接所有片段
+                # ENallEN
                 ffmpeg_bin = get_ffmpeg_path()
                 cmd = [
                     ffmpeg_bin,
@@ -250,25 +250,25 @@ class VideoEditor:
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 
                 if result.returncode == 0:
-                    logger.info(f"成功拼接 {len(segment_files)} 个视频片段")
+                    logger.info(f"succeededEN {len(segment_files)} ENvideoEN")
                     return True
                 else:
-                    logger.error(f"拼接视频片段失败: {result.stderr}")
+                    logger.error(f"ENvideoENfailed: {result.stderr}")
                     return False
                     
         except Exception as e:
-            logger.error(f"拼接多个视频片段异常: {e}")
+            logger.error(f"ENvideoENexception: {e}")
             return False
     
     def _get_video_duration(self, video_path: Path) -> float:
         """
-        获取视频时长
+        fetchvideoduration
         
         Args:
-            video_path: 视频路径
+            video_path: videopath
             
         Returns:
-            视频时长（秒）
+            videoduration（EN）
         """
         try:
             ffprobe_bin = get_ffprobe_path()
@@ -286,11 +286,11 @@ class VideoEditor:
                 duration = float(result.stdout.strip())
                 return duration
             else:
-                logger.warning(f"获取视频时长失败: {result.stderr}")
+                logger.warning(f"fetchvideodurationfailed: {result.stderr}")
                 return 0.0
                 
         except Exception as e:
-            logger.error(f"获取视频时长异常: {e}")
+            logger.error(f"fetchvideodurationexception: {e}")
             return 0.0
     
     def create_preview_clips(self, video_path: Path, 
@@ -298,22 +298,22 @@ class VideoEditor:
                            deleted_segments: List[str],
                            output_dir: Path) -> List[Path]:
         """
-        创建预览片段，用于编辑前的预览
+        createEN，EN
         
         Args:
-            video_path: 原始视频路径
-            subtitle_data: 字幕数据
-            deleted_segments: 要删除的字幕段ID列表
-            output_dir: 输出目录
+            video_path: ENvideopath
+            subtitle_data: subtitlesEN
+            deleted_segments: ENdeleteENsubtitlesENIDEN
+            output_dir: ENdirectory
             
         Returns:
-            预览片段文件路径列表
+            ENfilepathEN
         """
         try:
             output_dir.mkdir(parents=True, exist_ok=True)
             preview_files = []
             
-            # 为每个要删除的片段创建预览
+            # ENeachENdeleteENcreateEN
             for segment_id in deleted_segments:
                 segment = next((s for s in subtitle_data if s['id'] == segment_id), None)
                 if segment:
@@ -329,27 +329,27 @@ class VideoEditor:
                     if success:
                         preview_files.append(preview_file)
             
-            logger.info(f"创建了 {len(preview_files)} 个预览片段")
+            logger.info(f"createEN {len(preview_files)} EN")
             return preview_files
             
         except Exception as e:
-            logger.error(f"创建预览片段失败: {e}")
+            logger.error(f"createENfailed: {e}")
             return []
     
     def validate_edit_operations(self, subtitle_data: List[Dict], 
                                deleted_segments: List[str]) -> Dict:
         """
-        验证编辑操作的有效性
+        validateEN
         
         Args:
-            subtitle_data: 字幕数据
-            deleted_segments: 要删除的字幕段ID列表
+            subtitle_data: subtitlesEN
+            deleted_segments: ENdeleteENsubtitlesENIDEN
             
         Returns:
-            验证结果
+            validateresult
         """
         try:
-            # 检查删除的字幕段是否存在
+            # checkdeleteENsubtitlesEN
             existing_ids = {seg['id'] for seg in subtitle_data}
             deleted_ids = set(deleted_segments)
             
@@ -357,24 +357,24 @@ class VideoEditor:
             if invalid_ids:
                 return {
                     'valid': False,
-                    'error': f'无效的字幕段ID: {list(invalid_ids)}'
+                    'error': f'ENsubtitlesENID: {list(invalid_ids)}'
                 }
             
-            # 检查删除后是否还有剩余内容
+            # checkdeleteEN
             remaining_segments = [seg for seg in subtitle_data if seg['id'] not in deleted_ids]
             
             if not remaining_segments:
                 return {
                     'valid': False,
-                    'error': '删除所有字幕段后没有剩余内容'
+                    'error': 'deleteallsubtitlesEN'
                 }
             
-            # 计算删除的时长
+            # ENdeleteENduration
             total_deleted_duration = self._calculate_deleted_duration(
                 subtitle_data, deleted_segments
             )
             
-            # 计算总时长
+            # ENduration
             total_duration = max(seg['endTime'] for seg in subtitle_data) - min(seg['startTime'] for seg in subtitle_data)
             
             return {
@@ -387,7 +387,7 @@ class VideoEditor:
             }
             
         except Exception as e:
-            logger.error(f"验证编辑操作失败: {e}")
+            logger.error(f"validateENfailed: {e}")
             return {
                 'valid': False,
                 'error': str(e)

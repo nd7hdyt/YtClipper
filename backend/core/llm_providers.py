@@ -1,6 +1,6 @@
 """
-多模型提供商统一接口
-支持OpenAI、Gemini、硅基流动、阿里DashScope等
+ENAPI
+ENOpenAI、Gemini、EN、ENDashScopeEN
 """
 import json
 import logging
@@ -14,15 +14,15 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 class ProviderType(Enum):
-    """模型提供商类型"""
-    DASHSCOPE = "dashscope"  # 阿里通义千问
+    """EN"""
+    DASHSCOPE = "dashscope"  # EN
     OPENAI = "openai"        # OpenAI
     GEMINI = "gemini"        # Google Gemini
-    SILICONFLOW = "siliconflow"  # 硅基流动
+    SILICONFLOW = "siliconflow"  # EN
 
 @dataclass
 class ModelInfo:
-    """模型信息"""
+    """EN"""
     name: str
     display_name: str
     provider: ProviderType
@@ -32,14 +32,14 @@ class ModelInfo:
 
 @dataclass
 class LLMResponse:
-    """LLM响应"""
+    """LLMresponse"""
     content: str
     usage: Optional[Dict[str, Any]] = None
     model: Optional[str] = None
     finish_reason: Optional[str] = None
 
 class LLMProvider(ABC):
-    """LLM提供商抽象基类"""
+    """LLMEN"""
     
     def __init__(self, api_key: str, model_name: str, **kwargs):
         self.api_key = api_key
@@ -49,77 +49,77 @@ class LLMProvider(ABC):
     @abstractmethod
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
         """
-        调用模型API
+        callENAPI
         
         Args:
-            prompt: 提示词
-            input_data: 输入数据
-            **kwargs: 其他参数
+            prompt: hintEN
+            input_data: EN
+            **kwargs: ENparameters
             
         Returns:
-            LLMResponse: 模型响应
+            LLMResponse: ENresponse
         """
         pass
     
     @abstractmethod
     def test_connection(self) -> bool:
         """
-        测试API连接
+        ENAPIconnect
         
         Returns:
-            bool: 连接是否成功
+            bool: connectENsucceeded
         """
         pass
     
     @abstractmethod
     def get_available_models(self) -> List[ModelInfo]:
         """
-        获取可用模型列表
+        fetchEN
         
         Returns:
-            List[ModelInfo]: 可用模型列表
+            List[ModelInfo]: EN
         """
         pass
     
     def _build_full_input(self, prompt: str, input_data: Any = None) -> str:
-        """构建完整的输入"""
+        """EN"""
         if input_data:
             if isinstance(input_data, (dict, list, tuple)):
-                return f"{prompt}\n\n输入内容：\n{json.dumps(input_data, ensure_ascii=False, indent=2, default=str)}"
+                return f"{prompt}\n\nEN：\n{json.dumps(input_data, ensure_ascii=False, indent=2, default=str)}"
             else:
-                return f"{prompt}\n\n输入内容：\n{input_data}"
+                return f"{prompt}\n\nEN：\n{input_data}"
         return prompt
 
 class DashScopeProvider(LLMProvider):
-    """阿里DashScope提供商"""
+    """ENDashScopeEN"""
     
     def __init__(self, api_key: str, model_name: str = "qwen-plus", **kwargs):
         super().__init__(api_key, model_name, **kwargs)
-        # 国际站（alibabacloud.com，#45）的 key 只能打 dashscope-intl 域名；native SDK 的地址是进程级全局变量，
-        # 所以有自定义 base_url 时一律走 OpenAI 兼容模式，按实例隔离
+        # EN（alibabacloud.com，#45）EN key EN dashscope-intl EN；native SDK EN，
+        # soEN base_url EN OpenAI EN，EN
         custom_base_url = normalize_base_url(kwargs.get("base_url") or os.getenv("DASHSCOPE_BASE_URL", ""))
-        # 模式切换: native (SDK Generation.call) | compatible (OpenAI兼容)
+        # EN: native (SDK Generation.call) | compatible (OpenAIEN)
         self.mode = (kwargs.get("mode") or os.getenv("DASHSCOPE_MODE") or ("compatible" if custom_base_url else "native")).lower()
-        # 兼容模式 base_url
+        # EN base_url
         self.base_url = custom_base_url or DASHSCOPE_CN_COMPATIBLE_BASE_URL
         self.is_international = self.base_url == DASHSCOPE_INTL_COMPATIBLE_BASE_URL
-        # 原生模式 SDK
+        # EN SDK
         self._ds_generation = None
         if self.mode == "native":
             try:
                 from dashscope import Generation
                 self._ds_generation = Generation
             except ImportError:
-                raise ImportError("请安装dashscope: pip install dashscope")
+                raise ImportError("pleaseENdashscope: pip install dashscope")
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        """调用DashScope API（mode: native|compatible）"""
+        """callDashScope API（mode: native|compatible）"""
         masked_key = self.api_key[:3] + "***" + self.api_key[-2:] if self.api_key else ""
         logger.info(f"[DashScope] mode={self.mode} model={self.model_name} base_url={self.base_url if self.mode=='compatible' else 'sdk-generation'} key={masked_key}")
-        logger.debug(f"[DashScope] 传入的kwargs: {kwargs}")
+        logger.debug(f"[DashScope] ENkwargs: {kwargs}")
         if self.mode == "native":
             try:
-                # 确保使用传入的API key，临时设置环境变量
+                # ENuseENAPI key，ENsettingsEN
                 old_api_key = os.getenv("DASHSCOPE_API_KEY")
                 os.environ["DASHSCOPE_API_KEY"] = self.api_key
                 
@@ -132,7 +132,7 @@ class DashScopeProvider(LLMProvider):
                     **kwargs
                 )
                 
-                # 恢复原来的环境变量
+                # EN
                 if old_api_key is not None:
                     os.environ["DASHSCOPE_API_KEY"] = old_api_key
                 elif "DASHSCOPE_API_KEY" in os.environ:
@@ -145,13 +145,13 @@ class DashScopeProvider(LLMProvider):
                             finish_reason=getattr(resp.output, 'finish_reason', None)
                         )
                     finish_reason = getattr(resp.output, 'finish_reason', 'unknown') if getattr(resp, 'output', None) else 'unknown'
-                    logger.warning(f"API请求成功，但输出为空。结束原因: {finish_reason}")
+                    logger.warning(f"APIrequestsucceeded，EN。endEN: {finish_reason}")
                     return LLMResponse(content="")
                 code = getattr(resp, 'code', 'N/A')
-                message = getattr(resp, 'message', '未知API错误')
-                raise Exception(f"API调用失败 - Status: {getattr(resp,'status_code', 'N/A')}, Code: {code}, Message: {message}")
+                message = getattr(resp, 'message', 'ENAPIerror')
+                raise Exception(f"APIcallfailed - Status: {getattr(resp,'status_code', 'N/A')}, Code: {code}, Message: {message}")
             except Exception as e:
-                logger.error(f"DashScope(native)调用失败: {str(e)}")
+                logger.error(f"DashScope(native)callfailed: {str(e)}")
                 raise
         else:
             # compatible
@@ -175,92 +175,92 @@ class DashScopeProvider(LLMProvider):
                         err = resp.json()
                     except Exception:
                         err = {"message": resp.text}
-                    raise Exception(f"API调用失败 - Status: {resp.status_code}, Message: {err}")
+                    raise Exception(f"APIcallfailed - Status: {resp.status_code}, Message: {err}")
                 data = resp.json()
                 content = data["choices"][0]["message"]["content"]
                 usage = data.get("usage")
                 finish_reason = data["choices"][0].get("finish_reason")
                 return LLMResponse(content=content, usage=usage, model=self.model_name, finish_reason=finish_reason)
             except Exception as e:
-                logger.error(f"DashScope(compatible)调用失败: {str(e)}")
+                logger.error(f"DashScope(compatible)callfailed: {str(e)}")
                 raise
     
     def test_connection(self) -> bool:
-        """测试DashScope连接"""
+        """ENDashScopeconnect"""
         try:
-            # 首先验证API Key格式
+            # ENvalidateAPI KeyEN
             if not self.api_key or len(self.api_key.strip()) < 10:
-                logger.error("API Key为空或过短")
+                logger.error("API KeyEN")
                 return False
             
-            # 检查API Key格式（DashScope API Key通常是sk-开头）
+            # checkAPI KeyEN（DashScope API KeyENsk-EN）
             if not self.api_key.startswith("sk-"):
-                logger.warning(f"API Key格式可能不正确，期望以'sk-'开头，实际: {self.api_key[:10]}...")
-                # 不直接返回False，因为有些API Key可能格式不同
+                logger.warning(f"API KeyENmayEN，EN'sk-'EN，EN: {self.api_key[:10]}...")
+                # ENreturnFalse，becauseENAPI KeymayEN
             
-            # 使用简单的测试调用，避免复杂的API验证
+            # useENcall，ENAPIvalidate
             try:
-                # 直接调用call方法进行测试
-                response = self.call("测试", max_tokens=1)
+                # ENcallcallEN
+                response = self.call("EN", max_tokens=1)
                 if response and response.content:
-                    logger.info("DashScope API连接测试成功")
+                    logger.info("DashScope APIconnectENsucceeded")
                     return True
                 else:
-                    logger.error("DashScope API测试返回空响应")
+                    logger.error("DashScope APIENreturnENresponse")
                     return False
                     
             except Exception as e:
-                logger.error(f"DashScope API测试失败: {str(e)}")
+                logger.error(f"DashScope APIENfailed: {str(e)}")
                 return False
                 
         except Exception as e:
-            logger.error(f"DashScope连接测试失败: {e}")
+            logger.error(f"DashScopeconnectENfailed: {e}")
             return False
     
     def get_available_models(self) -> List[ModelInfo]:
-        """获取DashScope可用模型"""
+        """fetchDashScopeEN"""
         return [
             ModelInfo(
                 name="qwen-plus",
-                display_name="通义千问Plus",
+                display_name="ENPlus",
                 provider=ProviderType.DASHSCOPE,
                 max_tokens=8192,
-                description="阿里云通义千问Plus模型"
+                description="ENPlusEN"
             ),
             ModelInfo(
                 name="qwen-max",
-                display_name="通义千问Max",
+                display_name="ENMax",
                 provider=ProviderType.DASHSCOPE,
                 max_tokens=8192,
-                description="阿里云通义千问Max模型"
+                description="ENMaxEN"
             ),
             ModelInfo(
                 name="qwen-turbo",
-                display_name="通义千问Turbo",
+                display_name="ENTurbo",
                 provider=ProviderType.DASHSCOPE,
                 max_tokens=8192,
-                description="阿里云通义千问Turbo模型"
+                description="ENTurboEN"
             )
         ]
 
 OPENAI_OFFICIAL_BASE_URL = "https://api.openai.com/v1"
-# 本地/自建 OpenAI 兼容服务（Ollama、vLLM、LM Studio 等）通常不校验 key，但 SDK 要求非空
+# EN/EN OpenAI ENservice（Ollama、vLLM、LM Studio EN）EN key，EN SDK EN
 OPENAI_COMPATIBLE_PLACEHOLDER_KEY = "EMPTY"
-# 通义千问 OpenAI 兼容接口：中国站 / 国际站（alibabacloud.com 开通的 key 只能打国际站，#45）
+# EN OpenAI ENAPI：EN / EN（alibabacloud.com EN key EN，#45）
 DASHSCOPE_CN_COMPATIBLE_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 DASHSCOPE_INTL_COMPATIBLE_BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
 
 
 def normalize_base_url(base_url: Optional[str]) -> str:
-    """去掉空白与结尾的 `/`，空值返回空串（表示使用官方地址）"""
+    """EN `/`，ENreturnEN（ENuseEN）"""
     return (base_url or "").strip().rstrip("/")
 
 
 def is_local_url(url: Optional[str]) -> bool:
     """
-    是否指向本机 / 局域网（Ollama、LM Studio、vLLM 常见部署位置）。
-    这类地址绝不该走系统代理：macOS 上 httpx 会读系统代理设置（Clash / Surge 等），
-    把 localhost 请求也送进代理，结果就是 502 / 超时，用户完全摸不着头脑。
+    EN / EN（Ollama、LM Studio、vLLM EN）。
+    ENsystemEN：macOS EN httpx ENsystemENsettings（Clash / Surge EN），
+    EN localhost requestEN，resultEN 502 / timeout，userEN。
     """
     if not url:
         return False
@@ -280,7 +280,7 @@ def is_local_url(url: Optional[str]) -> bool:
 
 
 def make_openai_http_client(base_url: Optional[str]):
-    """本地地址 → 不信任环境 / 系统代理的 httpx.Client；其它返回 None（用 SDK 默认）。"""
+    """EN → EN / systemEN httpx.Client；ENreturn None（EN SDK EN）。"""
     if not is_local_url(base_url):
         return None
     try:
@@ -291,9 +291,9 @@ def make_openai_http_client(base_url: Optional[str]):
 
 
 class OpenAIProvider(LLMProvider):
-    """OpenAI 及一切 OpenAI 兼容接口（智谱、DeepSeek、OpenRouter、Ollama、vLLM、LM Studio 等）
+    """OpenAI EN OpenAI ENAPI（EN、DeepSeek、OpenRouter、Ollama、vLLM、LM Studio EN）
 
-    通过 `base_url` 指向兼容服务即可复用；为空时走 OpenAI 官方地址。
+    through `base_url` ENserviceEN；EN OpenAI EN。
     """
     
     def __init__(self, api_key: str, model_name: str = "gpt-4o-mini", **kwargs):
@@ -313,10 +313,10 @@ class OpenAIProvider(LLMProvider):
                     client_kwargs["http_client"] = http_client
             self.client = openai.OpenAI(**client_kwargs)
         except ImportError:
-            raise ImportError("请安装openai: pip install openai")
+            raise ImportError("pleaseENopenai: pip install openai")
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        """调用OpenAI API"""
+        """callOpenAI API"""
         try:
             full_input = self._build_full_input(prompt, input_data)
             
@@ -341,36 +341,36 @@ class OpenAIProvider(LLMProvider):
             )
             
         except Exception as e:
-            logger.error(f"OpenAI调用失败: {str(e)}")
+            logger.error(f"OpenAIcallfailed: {str(e)}")
             raise
     
     def test_connection(self) -> bool:
-        """测试OpenAI / 兼容接口连接"""
+        """ENOpenAI / ENAPIconnect"""
         try:
-            # 官方 OpenAI 才校验 key 格式；兼容服务的 key 五花八门（甚至不需要）
+            # EN OpenAI EN key EN；ENserviceEN key EN（ENneed）
             if not self.is_custom_endpoint:
                 if not self.api_key or len(self.api_key.strip()) < 10:
-                    logger.error("OpenAI API Key为空或过短")
+                    logger.error("OpenAI API KeyEN")
                     return False
                 if not self.api_key.startswith("sk-"):
-                    logger.warning(f"OpenAI API Key格式可能不正确，期望以'sk-'开头，实际: {self.api_key[:10]}...")
+                    logger.warning(f"OpenAI API KeyENmayEN，EN'sk-'EN，EN: {self.api_key[:10]}...")
             
-            # 使用最简单的测试
-            response = self.call("测试", max_tokens=1)
+            # useEN
+            response = self.call("EN", max_tokens=1)
             return response and response.content is not None
         except Exception as e:
-            logger.error(f"OpenAI连接测试失败 (base_url={self.base_url or OPENAI_OFFICIAL_BASE_URL}): {e}")
+            logger.error(f"OpenAIconnectENfailed (base_url={self.base_url or OPENAI_OFFICIAL_BASE_URL}): {e}")
             return False
     
     def get_available_models(self) -> List[ModelInfo]:
-        """获取OpenAI可用模型（兼容接口的模型名由用户自行填写，这里只列官方常用型号）"""
+        """fetchOpenAIEN（ENAPIENuserEN，EN）"""
         return [
             ModelInfo(
                 name="gpt-4o-mini",
                 display_name="GPT-4o mini",
                 provider=ProviderType.OPENAI,
                 max_tokens=128000,
-                description="OpenAI GPT-4o mini（性价比）"
+                description="OpenAI GPT-4o mini（EN）"
             ),
             ModelInfo(
                 name="gpt-4o",
@@ -384,12 +384,12 @@ class OpenAIProvider(LLMProvider):
                 display_name="GPT-4 Turbo",
                 provider=ProviderType.OPENAI,
                 max_tokens=128000,
-                description="OpenAI GPT-4 Turbo模型"
+                description="OpenAI GPT-4 TurboEN"
             )
         ]
 
 class GeminiProvider(LLMProvider):
-    """Google Gemini提供商"""
+    """Google GeminiEN"""
     
     def __init__(self, api_key: str, model_name: str = "gemini-2.5-flash", **kwargs):
         super().__init__(api_key, model_name, **kwargs)
@@ -399,10 +399,10 @@ class GeminiProvider(LLMProvider):
             from google import genai
             self.client = genai.Client(api_key=api_key)
         except ImportError:
-            raise ImportError("请安装google-genai: pip install google-genai")
+            raise ImportError("pleaseENgoogle-genai: pip install google-genai")
 
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        """调用Gemini API"""
+        """callGemini API"""
         try:
             full_input = self._build_full_input(prompt, input_data)
 
@@ -426,57 +426,57 @@ class GeminiProvider(LLMProvider):
             )
 
         except Exception as e:
-            logger.error(f"Gemini调用失败: {str(e)}")
+            logger.error(f"Geminicallfailed: {str(e)}")
             raise
     
     def test_connection(self) -> bool:
-        """测试Gemini连接"""
+        """ENGeminiconnect"""
         try:
-            # 使用简单的测试提示
-            response = self.call("测试", max_tokens=10)
-            # 检查响应是否有效
+            # useENhint
+            response = self.call("EN", max_tokens=10)
+            # checkresponseEN
             if response and response.content:
                 return True
             return False
         except Exception as e:
-            logger.error(f"Gemini连接测试失败: {e}")
+            logger.error(f"GeminiconnectENfailed: {e}")
             return False
     
     def get_available_models(self) -> List[ModelInfo]:
-        """获取Gemini可用模型"""
+        """fetchGeminiEN"""
         return [
             ModelInfo(
                 name="gemini-2.5-flash",
                 display_name="Gemini 2.5 Flash",
                 provider=ProviderType.GEMINI,
                 max_tokens=1000000,
-                description="Google Gemini 2.5 Flash模型"
+                description="Google Gemini 2.5 FlashEN"
             ),
             ModelInfo(
                 name="gemini-1.5-pro",
                 display_name="Gemini 1.5 Pro",
                 provider=ProviderType.GEMINI,
                 max_tokens=2000000,
-                description="Google Gemini 1.5 Pro模型"
+                description="Google Gemini 1.5 ProEN"
             ),
             ModelInfo(
                 name="gemini-1.5-flash",
                 display_name="Gemini 1.5 Flash",
                 provider=ProviderType.GEMINI,
                 max_tokens=1000000,
-                description="Google Gemini 1.5 Flash模型"
+                description="Google Gemini 1.5 FlashEN"
             )
         ]
 
 class SiliconFlowProvider(LLMProvider):
-    """硅基流动提供商"""
+    """EN"""
     
     def __init__(self, api_key: str, model_name: str = "Qwen/Qwen2.5-7B-Instruct", **kwargs):
         super().__init__(api_key, model_name, **kwargs)
         self.base_url = "https://api.siliconflow.cn/v1"
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        """调用硅基流动API"""
+        """callENAPI"""
         try:
             import requests
             
@@ -515,57 +515,57 @@ class SiliconFlowProvider(LLMProvider):
             )
             
         except Exception as e:
-            logger.error(f"硅基流动调用失败: {str(e)}")
+            logger.error(f"ENcallfailed: {str(e)}")
             raise
     
     def test_connection(self) -> bool:
-        """测试硅基流动连接"""
+        """ENconnect"""
         try:
-            # 使用简单的测试提示
-            response = self.call("测试", max_tokens=10)
-            # 检查响应是否有效
+            # useENhint
+            response = self.call("EN", max_tokens=10)
+            # checkresponseEN
             if response and response.content:
                 return True
             return False
         except Exception as e:
-            logger.error(f"硅基流动连接测试失败: {e}")
+            logger.error(f"ENconnectENfailed: {e}")
             return False
     
     def get_available_models(self) -> List[ModelInfo]:
-        """获取硅基流动可用模型"""
+        """fetchEN"""
         return [
             ModelInfo(
                 name="Qwen/Qwen2.5-7B-Instruct",
                 display_name="Qwen2.5-7B",
                 provider=ProviderType.SILICONFLOW,
                 max_tokens=32768,
-                description="硅基流动Qwen2.5-7B模型"
+                description="ENQwen2.5-7BEN"
             ),
             ModelInfo(
                 name="Qwen/Qwen2.5-14B-Instruct",
                 display_name="Qwen2.5-14B",
                 provider=ProviderType.SILICONFLOW,
                 max_tokens=32768,
-                description="硅基流动Qwen2.5-14B模型"
+                description="ENQwen2.5-14BEN"
             ),
             ModelInfo(
                 name="Qwen/Qwen2.5-32B-Instruct",
                 display_name="Qwen2.5-32B",
                 provider=ProviderType.SILICONFLOW,
                 max_tokens=32768,
-                description="硅基流动Qwen2.5-32B模型"
+                description="ENQwen2.5-32BEN"
             ),
             ModelInfo(
                 name="deepseek-ai/DeepSeek-V2.5",
                 display_name="DeepSeek-V2.5",
                 provider=ProviderType.SILICONFLOW,
                 max_tokens=65536,
-                description="硅基流动DeepSeek-V2.5模型"
+                description="ENDeepSeek-V2.5EN"
             )
         ]
 
 class LLMProviderFactory:
-    """LLM提供商工厂"""
+    """LLMEN"""
     
     _providers = {
         ProviderType.DASHSCOPE: DashScopeProvider,
@@ -576,23 +576,23 @@ class LLMProviderFactory:
     
     @classmethod
     def create_provider(cls, provider_type: ProviderType, api_key: str, model_name: str, **kwargs) -> LLMProvider:
-        """创建提供商实例"""
+        """createEN"""
         if provider_type not in cls._providers:
-            raise ValueError(f"不支持的提供商类型: {provider_type}")
+            raise ValueError(f"EN: {provider_type}")
         
         provider_class = cls._providers[provider_type]
         return provider_class(api_key, model_name, **kwargs)
     
     @classmethod
     def get_all_available_models(cls) -> Dict[ProviderType, List[ModelInfo]]:
-        """获取所有提供商的可用模型"""
+        """fetchallEN"""
         models = {}
         for provider_type, provider_class in cls._providers.items():
             try:
-                # 创建临时实例来获取模型列表
+                # createENfetchEN
                 temp_provider = provider_class("dummy_key", "dummy_model")
                 models[provider_type] = temp_provider.get_available_models()
             except Exception as e:
-                logger.warning(f"无法获取{provider_type.value}的模型列表: {e}")
+                logger.warning(f"cannotfetch{provider_type.value}EN: {e}")
                 models[provider_type] = []
         return models

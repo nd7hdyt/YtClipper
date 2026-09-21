@@ -1,31 +1,31 @@
 /**
- * 关键业务事件（见 ROADMAP.md Phase 0：导入 / 出片 / 失败 / 设置 key）。
+ * EN（EN ROADMAP.md Phase 0：Import / Export / Failed / settings key）。
  *
- * 统一在这里定义事件名与载荷类型，避免裸字符串散落各处。
- * 所有 capture 都通过 trackEvent，未初始化 / 已关闭时自动 no-op。
+ * EN，EN。
+ * All capture EN trackEvent，EN / ENCloseEN no-op。
  */
 import { posthog } from './posthog'
 
 export const AnalyticsEvent = {
-  /** 导入素材（上传/选择视频开始一个项目） */
+  /** ImportEN（Upload/ENvideoENproject） */
   VideoImported: 'video_imported',
-  /** 出片：成功生成切片 */
+  /** Export：SucceededgenerateClip */
   ClipsExported: 'clips_exported',
-  /** 关键流程失败（导入/转写/切片/导出任一环节） */
+  /** ENFailed（Import/EN/Clip/EN） */
   ProcessingFailed: 'processing_failed',
-  /** 设置/更新 LLM API key */
+  /** settings/update LLM API key */
   ApiKeyConfigured: 'api_key_configured',
 } as const
 
 export type AnalyticsEventName =
   (typeof AnalyticsEvent)[keyof typeof AnalyticsEvent]
 
-/** 通用埋点入口。posthog 未初始化或已 opt-out 时为 no-op（内部已处理）。 */
+/** EN。posthog EN opt-out EN no-op（EN）。 */
 function trackEvent(
   name: AnalyticsEventName,
   properties?: Record<string, unknown>,
 ): void {
-  // posthog.capture 在未 init 时不会抛错；保险起见仍做判断
+  // posthog.capture EN init EN；EN
   if (typeof posthog?.capture !== 'function') return
   posthog.capture(name, properties)
 }
@@ -58,7 +58,7 @@ export function trackProcessingFailed(props: {
 
 export function trackApiKeyConfigured(props: {
   provider: string
-  /** 不要传 key 明文，仅标记是否填写 */
+  /** EN key EN，EN */
   hasKey: boolean
 }): void {
   trackEvent(AnalyticsEvent.ApiKeyConfigured, props)

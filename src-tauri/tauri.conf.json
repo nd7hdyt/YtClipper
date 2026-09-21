@@ -40,8 +40,8 @@
       "icons/icon.ico"
     ],
     "category": "DeveloperTool",
-    "shortDescription": "AI视频切片工具桌面版",
-    "longDescription": "AutoClip是一款基于AI的智能视频切片工具，支持自动识别精彩片段并生成合集。",
+    "shortDescription": "AI video clipping tool for desktop",
+    "longDescription": "AutoClip is an AI-powered video clipping tool that automatically detects highlights and generates collections.",
     "copyright": "© 2024 AutoClip Team",
     "resources": [],
     "externalBin": [],

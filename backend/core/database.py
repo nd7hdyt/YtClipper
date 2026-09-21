@@ -1,6 +1,6 @@
 """
-数据库配置
-包含数据库连接、会话管理和依赖注入
+databaseconfig
+ENdatabaseconnect、EN
 """
 
 import os
@@ -10,29 +10,29 @@ from sqlalchemy.pool import StaticPool
 from typing import Generator
 from backend.models.base import Base
 
-# 数据库配置
+# databaseconfig
 DATABASE_URL = os.getenv(
     "DATABASE_URL", 
     "sqlite:///autoclip.db"
 )
 
-# 如果没有设置环境变量，使用配置函数获取数据库URL
+# ifENsettingsEN，useconfigENfetchdatabaseURL
 if DATABASE_URL == "sqlite:///autoclip.db":
     try:
         from .config import get_database_url
         DATABASE_URL = get_database_url()
     except ImportError:
-        # 如果导入失败，保持默认值
+        # ifENfailed，EN
         pass
 
-# 创建数据库引擎
+# createdatabaseEN
 if "sqlite" in DATABASE_URL:
-    # SQLite配置。
-    # StaticPool = 整个进程共享一条连接，只适合 :memory:。文件库上用它，桌面模式里 API 请求线程、
-    # 导入任务线程、流水线线程的 Session 会在同一条连接上交错 BEGIN / COMMIT / ROLLBACK：
-    # 一个线程 close() 触发的 ROLLBACK 会把另一个线程刚 INSERT 还没 COMMIT 的 Task 行抹掉
-    # （表现为 ObjectDeletedError、任务凭空消失、进度卡住）。文件库改用默认连接池，每个 Session 一条连接，
-    # 并开 WAL 让读写不互相阻塞。
+    # SQLiteconfig。
+    # StaticPool = ENconnect，EN :memory:。fileEN，EN API requestEN、
+    # ENtaskEN、EN Session ENconnectEN BEGIN / COMMIT / ROLLBACK：
+    # EN close() EN ROLLBACK EN INSERT EN COMMIT EN Task EN
+    # （EN ObjectDeletedError、taskEN、progressEN）。fileENconnectEN，each Session ENconnect，
+    # EN WAL EN。
     _is_memory_db = DATABASE_URL.rstrip("/") in ("sqlite://", "sqlite:///:memory:") or ":memory:" in DATABASE_URL
     _sqlite_kwargs = {"poolclass": StaticPool} if _is_memory_db else {}
     engine = create_engine(
@@ -42,7 +42,7 @@ if "sqlite" in DATABASE_URL:
             "timeout": 30
         },
         pool_pre_ping=True,
-        echo=False,  # 设置为True可以看到SQL语句
+        echo=False,  # settingsENTruecanENSQLEN
         **_sqlite_kwargs,
     )
     if not _is_memory_db:
@@ -57,7 +57,7 @@ if "sqlite" in DATABASE_URL:
             finally:
                 cursor.close()
 else:
-    # PostgreSQL配置
+    # PostgreSQLconfig
     engine = create_engine(
         DATABASE_URL,
         pool_pre_ping=True,
@@ -65,7 +65,7 @@ else:
         echo=False
     )
 
-# 创建会话工厂
+# createEN
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
@@ -74,8 +74,8 @@ SessionLocal = sessionmaker(
 
 def get_db() -> Generator[Session, None, None]:
     """
-    数据库会话依赖注入
-    用于FastAPI的依赖注入系统
+    databaseEN
+    ENFastAPIENsystem
     """
     db = SessionLocal()
     try:
@@ -84,49 +84,49 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 def create_tables():
-    """创建所有数据库表"""
+    """createalldatabaseEN"""
     Base.metadata.create_all(bind=engine)
 
 def drop_tables():
-    """删除所有数据库表"""
+    """deletealldatabaseEN"""
     Base.metadata.drop_all(bind=engine)
 
 def reset_database():
-    """重置数据库"""
+    """ENdatabase"""
     drop_tables()
     create_tables()
 
 from sqlalchemy import text
 
 def test_connection() -> bool:
-    """测试数据库连接"""
+    """ENdatabaseconnect"""
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1")).fetchone()
         return True
     except Exception as e:
-        print(f"数据库连接测试失败: {e}")
+        print(f"databaseconnectENfailed: {e}")
         return False
 
-# 数据库初始化
+# databaseinitialize
 def init_database():
-    """初始化数据库"""
-    print("正在初始化数据库...")
+    """initializedatabase"""
+    print("currentlyinitializedatabase...")
     
-    # 测试连接
+    # ENconnect
     if not test_connection():
-        print("❌ 数据库连接失败")
+        print("❌ databaseconnectfailed")
         return False
     
-    # 创建表
+    # createEN
     try:
         create_tables()
-        print("✅ 数据库表创建成功")
+        print("✅ databaseENcreatesucceeded")
         return True
     except Exception as e:
-        print(f"❌ 数据库表创建失败: {e}")
+        print(f"❌ databaseENcreatefailed: {e}")
         return False
 
 if __name__ == "__main__":
-    # 直接运行此文件时初始化数据库
+    # ENrunENfileENinitializedatabase
     init_database()

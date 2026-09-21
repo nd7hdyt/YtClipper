@@ -1,6 +1,6 @@
 """
-示例项目API
-用于首次运行向导创建示例项目
+ENprojectAPI
+ENrunENcreateENproject
 """
 
 import json
@@ -24,38 +24,38 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 def check_desktop_mode():
-    """检查是否在桌面模式下运行"""
+    """checkENrun"""
     if not os.getenv("AUTOCLIP_DESKTOP_MODE"):
-        raise HTTPException(status_code=403, detail="此功能仅在桌面模式下可用")
+        raise HTTPException(status_code=403, detail="EN")
 
 @router.post("/example-project/create")
 async def create_example_project(
     db: Session = Depends(get_db),
     config: DesktopConfig = Depends(get_desktop_config)
 ):
-    """创建示例项目"""
+    """createENproject"""
     check_desktop_mode()
     
     try:
-        # 检查是否已存在示例项目
+        # checkENalready existsENproject
         project_repo = ProjectRepository(db)
-        existing_project = project_repo.get_by_name("AutoClip 示例项目")
+        existing_project = project_repo.get_by_name("AutoClip ENproject")
         if existing_project:
             return {
                 "success": True,
-                "message": "示例项目已存在",
+                "message": "ENprojectalready exists",
                 "project_id": existing_project.id
             }
         
-        # 读取示例项目数据
+        # readENprojectEN
         example_data_path = Path(__file__).parent.parent.parent.parent / "data" / "example_project.json"
         if not example_data_path.exists():
-            raise HTTPException(status_code=404, detail="示例项目数据文件不存在")
+            raise HTTPException(status_code=404, detail="ENprojectENfiledoes not exist")
         
         with open(example_data_path, 'r', encoding='utf-8') as f:
             example_data = json.load(f)
         
-        # 创建示例项目
+        # createENproject
         project_data = example_data["project"]
         project = Project(
             id=project_data["id"],
@@ -74,7 +74,7 @@ async def create_example_project(
         
         created_project = project_repo.create(project)
         
-        # 创建示例片段
+        # createEN
         clip_repo = ClipRepository(db)
         for clip_data in example_data["clips"]:
             clip = Clip(
@@ -90,7 +90,7 @@ async def create_example_project(
             )
             clip_repo.create(clip)
         
-        # 创建示例合集
+        # createENcollection
         collection_repo = CollectionRepository(db)
         for collection_data in example_data["collections"]:
             collection = Collection(
@@ -104,11 +104,11 @@ async def create_example_project(
             )
             collection_repo.create(collection)
         
-        logger.info(f"示例项目创建成功: {created_project.id}")
+        logger.info(f"ENprojectcreatesucceeded: {created_project.id}")
         
         return {
             "success": True,
-            "message": "示例项目创建成功",
+            "message": "ENprojectcreatesucceeded",
             "project_id": created_project.id,
             "project": {
                 "id": created_project.id,
@@ -121,19 +121,19 @@ async def create_example_project(
         }
         
     except Exception as e:
-        logger.error(f"创建示例项目失败: {e}")
-        raise HTTPException(status_code=500, detail=f"创建示例项目失败: {str(e)}")
+        logger.error(f"createENprojectfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"createENprojectfailed: {str(e)}")
 
 @router.get("/example-project/info")
 async def get_example_project_info():
-    """获取示例项目信息"""
+    """fetchENprojectEN"""
     check_desktop_mode()
     
     try:
-        # 读取示例项目数据
+        # readENprojectEN
         example_data_path = Path(__file__).parent.parent.parent.parent / "data" / "example_project.json"
         if not example_data_path.exists():
-            raise HTTPException(status_code=404, detail="示例项目数据文件不存在")
+            raise HTTPException(status_code=404, detail="ENprojectENfiledoes not exist")
         
         with open(example_data_path, 'r', encoding='utf-8') as f:
             example_data = json.load(f)
@@ -150,50 +150,50 @@ async def get_example_project_info():
         }
         
     except Exception as e:
-        logger.error(f"获取示例项目信息失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取示例项目信息失败: {str(e)}")
+        logger.error(f"fetchENprojectENfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchENprojectENfailed: {str(e)}")
 
 @router.delete("/example-project")
 async def delete_example_project(
     db: Session = Depends(get_db)
 ):
-    """删除示例项目"""
+    """deleteENproject"""
     check_desktop_mode()
     
     try:
         project_repo = ProjectRepository(db)
-        example_project = project_repo.get_by_name("AutoClip 示例项目")
+        example_project = project_repo.get_by_name("AutoClip ENproject")
         
         if not example_project:
             return {
                 "success": True,
-                "message": "示例项目不存在"
+                "message": "ENprojectdoes not exist"
             }
         
-        # 删除相关数据
+        # deleteEN
         clip_repo = ClipRepository(db)
         collection_repo = CollectionRepository(db)
         
-        # 删除片段
+        # deleteEN
         clips = clip_repo.get_by_project_id(example_project.id)
         for clip in clips:
             clip_repo.delete(clip.id)
         
-        # 删除合集
+        # deletecollection
         collections = collection_repo.get_by_project_id(example_project.id)
         for collection in collections:
             collection_repo.delete(collection.id)
         
-        # 删除项目
+        # deleteproject
         project_repo.delete(example_project.id)
         
-        logger.info(f"示例项目删除成功: {example_project.id}")
+        logger.info(f"ENprojectdeletesucceeded: {example_project.id}")
         
         return {
             "success": True,
-            "message": "示例项目删除成功"
+            "message": "ENprojectdeletesucceeded"
         }
         
     except Exception as e:
-        logger.error(f"删除示例项目失败: {e}")
-        raise HTTPException(status_code=500, detail=f"删除示例项目失败: {str(e)}")
+        logger.error(f"deleteENprojectfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"deleteENprojectfailed: {str(e)}")

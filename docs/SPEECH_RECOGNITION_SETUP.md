@@ -1,104 +1,104 @@
-# 🎤 语音识别设置指南
+# 🎤 EN
 
-## 📋 概述
+## 📋 EN
 
-AutoClip支持多种语音识别方式来生成字幕文件，当视频没有字幕时，系统会自动生成字幕以确保流水线处理能够正常进行。
+AutoClipSupportEN，EN，EN。
 
-## 🔧 支持的语音识别方式
+## 🔧 SupportEN
 
-### 1. 本地Whisper（推荐）
+### 1. ENWhisper（EN）
 
-**特点：**
-- ✅ 完全本地运行，无需网络
-- ✅ 无需API密钥
-- ✅ 免费使用
-- ✅ 支持多种语言
-- ✅ 准确率较高
+**EN：**
+- ✅ EN，EN
+- ✅ ENAPIEN
+- ✅ EN
+- ✅ SupportENLanguage
+- ✅ EN
 
-**安装方法：**
+**EN：**
 
 ```bash
-# 方法1：使用pip安装
+# EN1：ENpipEN
 pip install openai-whisper
 
-# 方法2：使用conda安装
+# EN2：ENcondaEN
 conda install -c conda-forge openai-whisper
 
-# 方法3：从源码安装
+# EN3：EN
 git clone https://github.com/openai/whisper.git
 cd whisper
 pip install -e .
 ```
 
-**验证安装：**
+**EN：**
 ```bash
 whisper --help
 ```
 
-**模型选择：**
-- `tiny`: 39MB，最快，准确率较低
-- `base`: 74MB，较快，准确率中等（默认）
-- `small`: 244MB，中等速度，准确率较高
-- `medium`: 769MB，较慢，准确率很高
-- `large`: 1550MB，最慢，准确率最高
+**EN：**
+- `tiny`: 39MB，EN，EN
+- `base`: 74MB，EN，EN（EN）
+- `small`: 244MB，EN，EN
+- `medium`: 769MB，EN，EN
+- `large`: 1550MB，EN，EN
 
-### 2. OpenAI API（计划中）
+### 2. OpenAI API（EN）
 
-**特点：**
-- ✅ 准确率最高
-- ✅ 支持多种语言
-- ❌ 需要API密钥
-- ❌ 需要网络连接
-- ❌ 有使用费用
+**EN：**
+- ✅ EN
+- ✅ SupportENLanguage
+- ❌ ENAPIEN
+- ❌ EN
+- ❌ EN
 
-**设置方法：**
+**EN：**
 ```bash
-# 设置环境变量
+# EN
 export OPENAI_API_KEY="your-api-key-here"
 ```
 
-### 3. 测试字幕（备选方案）
+### 3. EN（EN）
 
-**特点：**
-- ✅ 无需安装任何依赖
-- ✅ 立即可用
-- ❌ 只是测试内容，不是真实字幕
-- ❌ 流水线处理效果有限
+**EN：**
+- ✅ EN
+- ✅ EN
+- ❌ EN，EN
+- ❌ EN
 
-## 🚀 使用方式
+## 🚀 EN
 
-### 自动模式（默认）
+### EN（EN）
 
-系统会自动选择最佳的可用方法：
+EN：
 
 ```python
 from shared.utils.speech_recognizer import generate_subtitle_for_video
 
-# 自动选择最佳方法
+# EN
 result = generate_subtitle_for_video(video_path, method="auto")
 ```
 
-### 手动指定方法
+### EN
 
 ```python
-# 强制使用本地Whisper
+# ENWhisper
 result = generate_subtitle_for_video(video_path, method="whisper_local")
 
-# 强制使用OpenAI API
+# ENOpenAI API
 result = generate_subtitle_for_video(video_path, method="openai_api")
 
-# 强制使用测试字幕
+# EN
 result = generate_subtitle_for_video(video_path, method="simple")
 ```
 
-### 检查可用方法
+### EN
 
 ```python
 from shared.utils.speech_recognizer import get_available_speech_recognition_methods
 
 methods = get_available_speech_recognition_methods()
 print(methods)
-# 输出示例：
+# EN：
 # {
 #     "whisper_local": True,
 #     "openai_api": False,
@@ -106,11 +106,11 @@ print(methods)
 # }
 ```
 
-## 📝 配置选项
+## 📝 EN
 
-### 修改Whisper参数
+### ENWhisperEN
 
-在 `shared/utils/speech_recognizer.py` 中可以修改Whisper的参数：
+EN `shared/utils/speech_recognizer.py` ENWhisperEN：
 
 ```python
 cmd = [
@@ -118,109 +118,109 @@ cmd = [
     str(video_path),
     '--output_dir', str(output_path.parent),
     '--output_format', 'srt',
-    '--language', 'zh',  # 语言：zh(中文), en(英文), auto(自动检测)
-    '--model', 'base'    # 模型：tiny, base, small, medium, large
+    '--language', 'zh',  # Language：zh(Chinese), en(English), auto(EN)
+    '--model', 'base'    # EN：tiny, base, small, medium, large
 ]
 ```
 
-### 常用参数说明
+### EN
 
-- `--language`: 指定语言，提高识别准确率
-- `--model`: 选择模型大小，影响速度和准确率
-- `--output_format`: 输出格式，支持srt, vtt, txt等
-- `--task`: 任务类型，transcribe(转录)或translate(翻译)
+- `--language`: ENLanguage，EN
+- `--model`: EN，EN
+- `--output_format`: EN，Supportsrt, vtt, txtEN
+- `--task`: EN，transcribe(EN)ENtranslate(EN)
 
-## 🔍 故障排除
+## 🔍 Troubleshooting
 
-### Whisper安装问题
+### WhisperEN
 
-**问题：** `whisper: command not found`
+**EN：** `whisper: command not found`
 
-**解决方案：**
+**EN：**
 ```bash
-# 检查是否安装成功
+# EN
 pip list | grep whisper
 
-# 重新安装
+# EN
 pip uninstall openai-whisper
 pip install openai-whisper
 
-# 检查PATH
+# ENPATH
 which whisper
 ```
 
-**问题：** 依赖缺失
+**EN：** EN
 
-**解决方案：**
+**EN：**
 ```bash
-# 安装系统依赖（Ubuntu/Debian）
+# EN（Ubuntu/Debian）
 sudo apt update
 sudo apt install ffmpeg
 
-# 安装系统依赖（macOS）
+# EN（macOS）
 brew install ffmpeg
 
-# 安装Python依赖
+# ENPythonEN
 pip install torch torchvision torchaudio
 ```
 
-### 性能优化
+### Performance
 
-**问题：** Whisper运行太慢
+**EN：** WhisperEN
 
-**解决方案：**
-1. 使用更小的模型：`--model tiny`
-2. 使用GPU加速（如果可用）
-3. 分段处理长视频
+**EN：**
+1. EN：`--model tiny`
+2. ENGPUEN（EN）
+3. EN
 
-**问题：** 内存不足
+**EN：** EN
 
-**解决方案：**
-1. 使用更小的模型
-2. 增加系统内存
-3. 使用CPU模式
+**EN：**
+1. EN
+2. EN
+3. ENCPUEN
 
-## 📊 性能对比
+## 📊 EN
 
-| 方法 | 速度 | 准确率 | 成本 | 网络依赖 | 安装难度 |
+| EN | EN | EN | EN | EN | EN |
 |------|------|--------|------|----------|----------|
-| Whisper tiny | ⭐⭐⭐⭐⭐ | ⭐⭐ | 免费 | 无 | 简单 |
-| Whisper base | ⭐⭐⭐⭐ | ⭐⭐⭐ | 免费 | 无 | 简单 |
-| Whisper small | ⭐⭐⭐ | ⭐⭐⭐⭐ | 免费 | 无 | 简单 |
-| Whisper medium | ⭐⭐ | ⭐⭐⭐⭐⭐ | 免费 | 无 | 简单 |
-| OpenAI API | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 付费 | 需要 | 简单 |
-| 测试字幕 | ⭐⭐⭐⭐⭐ | ⭐ | 免费 | 无 | 无需安装 |
+| Whisper tiny | ⭐⭐⭐⭐⭐ | ⭐⭐ | EN | EN | EN |
+| Whisper base | ⭐⭐⭐⭐ | ⭐⭐⭐ | EN | EN | EN |
+| Whisper small | ⭐⭐⭐ | ⭐⭐⭐⭐ | EN | EN | EN |
+| Whisper medium | ⭐⭐ | ⭐⭐⭐⭐⭐ | EN | EN | EN |
+| OpenAI API | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | EN | EN | EN |
+| EN | ⭐⭐⭐⭐⭐ | ⭐ | EN | EN | EN |
 
-## 🎯 推荐配置
+## 🎯 EN
 
-### 开发环境
+### EN
 ```bash
-# 安装base模型（平衡速度和准确率）
+# ENbaseEN（EN）
 pip install openai-whisper
 ```
 
-### 生产环境
+### EN
 ```bash
-# 安装small或medium模型（更高准确率）
+# ENsmallENmediumEN（EN）
 pip install openai-whisper
-# 考虑使用GPU加速
+# ENGPUEN
 ```
 
-### 测试环境
+### EN
 ```bash
-# 无需安装，使用测试字幕
-# 系统会自动生成测试字幕文件
+# EN，EN
+# EN
 ```
 
-## 📞 技术支持
+## 📞 ENSupport
 
-如果遇到问题，请：
+EN，EN：
 
-1. 检查日志文件中的错误信息
-2. 验证Whisper是否正确安装
-3. 确认视频文件格式是否支持
-4. 查看系统资源是否充足
+1. EN
+2. ENWhisperEN
+3. ENSupport
+4. EN
 
-更多帮助请参考：
-- [Whisper官方文档](https://github.com/openai/whisper)
-- [OpenAI API文档](https://platform.openai.com/docs/api-reference)
+ENReference：
+- [WhisperEN](https://github.com/openai/whisper)
+- [OpenAI APIEN](https://platform.openai.com/docs/api-reference)

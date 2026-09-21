@@ -1,5 +1,5 @@
 services:
-  # Redis服务
+  # RedisService
   redis:
     image: redis:7-alpine
     container_name: autoclip-redis-dev
@@ -10,7 +10,7 @@ services:
       - redis_dev_data:/data
     command: redis-server --appendonly yes
 
-  # 主应用服务（开发模式）
+  # ENService（EN）
   autoclip-dev:
     build:
       context: .
@@ -18,23 +18,23 @@ services:
     container_name: autoclip-app-dev
     restart: unless-stopped
     ports:
-      - "8000:8000"  # 后端API
-      - "3000:3000"  # 前端界面
+      - "8000:8000"  # ENAPI
+      - "3000:3000"  # EN
     volumes:
       - ./backend:/app/backend
       - ./frontend:/app/frontend
       - ./data:/app/data
       - ./logs:/app/logs
       - ./uploads:/app/uploads
-      - /app/venv  # 排除虚拟环境
+      - /app/venv  # ENEnvironment
     environment:
       - REDIS_URL=redis://redis:6379/0
       - DATABASE_URL=sqlite:///./data/autoclip.db
       - ENVIRONMENT=development
       - DEBUG=true
       - LOG_LEVEL=DEBUG
-      # LLM 配置从宿主机 .env / shell 透传（compose 会自动读项目根目录的 .env 做变量替换）。
-      # 没有这一段时 DOCKER.md 里让用户填的 API_DASHSCOPE_API_KEY 根本进不了容器。
+      # LLM ConfigEN .env / shell EN（compose ENAutoENProjectEN .env EN）。
+      # EN DOCKER.md EN API_DASHSCOPE_API_KEY EN。
       - LLM_PROVIDER=${LLM_PROVIDER:-dashscope}
       - API_MODEL_NAME=${API_MODEL_NAME:-qwen-plus}
       - API_DASHSCOPE_API_KEY=${API_DASHSCOPE_API_KEY:-}
@@ -56,7 +56,7 @@ services:
         wait
       "
 
-  # Celery Worker服务（开发模式）
+  # Celery WorkerService（EN）
   celery-worker-dev:
     build:
       context: .
@@ -75,8 +75,8 @@ services:
       - ENVIRONMENT=development
       - DEBUG=true
       - LOG_LEVEL=DEBUG
-      # LLM 配置从宿主机 .env / shell 透传（compose 会自动读项目根目录的 .env 做变量替换）。
-      # 没有这一段时 DOCKER.md 里让用户填的 API_DASHSCOPE_API_KEY 根本进不了容器。
+      # LLM ConfigEN .env / shell EN（compose ENAutoENProjectEN .env EN）。
+      # EN DOCKER.md EN API_DASHSCOPE_API_KEY EN。
       - LLM_PROVIDER=${LLM_PROVIDER:-dashscope}
       - API_MODEL_NAME=${API_MODEL_NAME:-qwen-plus}
       - API_DASHSCOPE_API_KEY=${API_DASHSCOPE_API_KEY:-}

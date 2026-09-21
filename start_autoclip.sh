@@ -1,38 +1,38 @@
 #!/bin/bash
 
-# AutoClip 一键启动脚本
-# 版本: 2.0
-# 功能: 启动完整的AutoClip系统（后端API + Celery Worker + 前端界面）
+# AutoClip ENStartScript
+# Version: 2.0
+# EN: StartENAutoClipSystem（ENAPI + Celery Worker + EN）
 
 set -euo pipefail
 
 # =============================================================================
-# 配置区域
+# ConfigEN
 # =============================================================================
 
-# 服务端口配置
+# ServiceENConfig
 BACKEND_PORT=8000
 FRONTEND_PORT=3000
 REDIS_PORT=6379
 
-# 服务超时配置
+# ServiceENConfig
 BACKEND_STARTUP_TIMEOUT=60
 FRONTEND_STARTUP_TIMEOUT=90
 HEALTH_CHECK_TIMEOUT=10
 
-# 日志配置
+# ENConfig
 LOG_DIR="logs"
 BACKEND_LOG="$LOG_DIR/backend.log"
 FRONTEND_LOG="$LOG_DIR/frontend.log"
 CELERY_LOG="$LOG_DIR/celery.log"
 
-# PID文件
+# PIDEN
 BACKEND_PID_FILE="backend.pid"
 FRONTEND_PID_FILE="frontend.pid"
 CELERY_PID_FILE="celery.pid"
 
 # =============================================================================
-# 颜色和样式定义
+# EN
 # =============================================================================
 
 RED='\033[0;31m'
@@ -44,7 +44,7 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# 图标定义
+# EN
 ICON_SUCCESS="✅"
 ICON_ERROR="❌"
 ICON_WARNING="⚠️"
@@ -57,7 +57,7 @@ ICON_WEB="🌐"
 ICON_HEALTH="💚"
 
 # =============================================================================
-# 工具函数
+# ToolEN
 # =============================================================================
 
 log_info() {
@@ -85,37 +85,37 @@ log_step() {
     echo -e "\n${CYAN}${ICON_GEAR} $1${NC}"
 }
 
-# 检查命令是否存在
+# CheckEN
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# 检查端口是否被占用
+# CheckEN
 port_in_use() {
     lsof -i ":$1" >/dev/null 2>&1
 }
 
-# 等待服务启动
+# ENServiceStart
 wait_for_service() {
     local url="$1"
     local timeout="$2"
     local service_name="$3"
     
-    log_info "等待 $service_name 启动..."
+    log_info "EN $service_name Start..."
     
     for i in $(seq 1 "$timeout"); do
         if curl -fsS "$url" >/dev/null 2>&1; then
-            log_success "$service_name 已启动"
+            log_success "$service_name ENStart"
             return 0
         fi
         sleep 1
     done
     
-    log_error "$service_name 启动超时"
+    log_error "$service_name StartEN"
     return 1
 }
 
-# 检查进程是否运行
+# CheckEN
 process_running() {
     local pid_file="$1"
     if [[ -f "$pid_file" ]]; then
@@ -129,7 +129,7 @@ process_running() {
     return 1
 }
 
-# 停止进程
+# StopEN
 stop_process() {
     local pid_file="$1"
     local service_name="$2"
@@ -137,11 +137,11 @@ stop_process() {
     if [[ -f "$pid_file" ]]; then
         local pid=$(cat "$pid_file")
         if kill -0 "$pid" 2>/dev/null; then
-            log_info "停止 $service_name (PID: $pid)..."
+            log_info "Stop $service_name (PID: $pid)..."
             kill "$pid" 2>/dev/null || true
             sleep 2
             if kill -0 "$pid" 2>/dev/null; then
-                log_warning "强制停止 $service_name..."
+                log_warning "ENStop $service_name..."
                 kill -9 "$pid" 2>/dev/null || true
             fi
         fi
@@ -150,139 +150,139 @@ stop_process() {
 }
 
 # =============================================================================
-# 环境检查函数
+# EnvironmentCheckEN
 # =============================================================================
 
 check_environment() {
-    log_header "环境检查"
+    log_header "EnvironmentCheck"
     
-    # 检查操作系统
+    # CheckENSystem
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        log_success "检测到 macOS 系统"
+        log_success "EN macOS System"
     elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-        log_success "检测到 Linux 系统"
+        log_success "EN Linux System"
     else
-        log_warning "未识别的操作系统: $OSTYPE"
+        log_warning "ENSystem: $OSTYPE"
     fi
     
-    # 检查必要的命令（在Docker环境中跳过node检查）
+    # CheckEN（ENDockerEnvironmentENnodeCheck）
     if [[ "${ENVIRONMENT:-}" != "production" ]] || [[ ! -f "/.dockerenv" ]]; then
         local required_commands=("python3" "node" "npm" "redis-cli")
         for cmd in "${required_commands[@]}"; do
             if command_exists "$cmd"; then
-                log_success "$cmd 已安装"
+                log_success "$cmd ENInstall"
             else
-                log_error "$cmd 未安装，请先安装"
+                log_error "$cmd ENInstall，PleaseENInstall"
                 exit 1
             fi
         done
     else
-        log_info "Docker环境检测到，跳过node环境检查"
+        log_info "DockerEnvironmentEN，ENnodeEnvironmentCheck"
         local required_commands=("python3" "redis-cli")
         for cmd in "${required_commands[@]}"; do
             if command_exists "$cmd"; then
-                log_success "$cmd 已安装"
+                log_success "$cmd ENInstall"
             else
-                log_error "$cmd 未安装，请先安装"
+                log_error "$cmd ENInstall，PleaseENInstall"
                 exit 1
             fi
         done
     fi
     
-    # 检查Python版本
+    # CheckPythonVersion
     local python_version=$(python3 --version 2>&1 | cut -d' ' -f2)
-    log_info "Python 版本: $python_version"
+    log_info "Python Version: $python_version"
     
-    # 检查Node.js版本
+    # CheckNode.jsVersion
     local node_version=$(node --version)
-    log_info "Node.js 版本: $node_version"
+    log_info "Node.js Version: $node_version"
     
-    # 检查虚拟环境
+    # CheckENEnvironment
     if [[ ! -d "venv" ]]; then
-        log_error "虚拟环境不存在，请先创建: python3 -m venv venv"
+        log_error "ENEnvironmentEN，PleaseEN: python3 -m venv venv"
         exit 1
     fi
-    log_success "虚拟环境存在"
+    log_success "ENEnvironmentEN"
     
-    # 检查项目结构
+    # CheckProjectEN
     local required_dirs=("backend" "frontend" "data")
     for dir in "${required_dirs[@]}"; do
         if [[ -d "$dir" ]]; then
-            log_success "目录 $dir 存在"
+            log_success "EN $dir EN"
         else
-            log_error "目录 $dir 不存在"
+            log_error "EN $dir EN"
             exit 1
         fi
     done
 }
 
 # =============================================================================
-# 服务启动函数
+# ServiceStartEN
 # =============================================================================
 
 start_redis() {
-    log_step "启动 Redis 服务"
+    log_step "Start Redis Service"
     
     if redis-cli ping >/dev/null 2>&1; then
-        log_success "Redis 服务已运行"
+        log_success "Redis ServiceEN"
         return 0
     fi
     
-    log_info "启动 Redis 服务..."
+    log_info "Start Redis Service..."
     
     if [[ "$OSTYPE" == "darwin"* ]]; then
         if command_exists brew; then
             brew services start redis
             sleep 3
         else
-            log_error "请手动启动 Redis 服务"
+            log_error "PleaseManualStart Redis Service"
             exit 1
         fi
     else
         systemctl start redis-server 2>/dev/null || service redis-server start 2>/dev/null || {
-            log_error "无法启动 Redis 服务，请手动启动"
+            log_error "ENStart Redis Service，PleaseManualStart"
             exit 1
         }
     fi
     
     if redis-cli ping >/dev/null 2>&1; then
-        log_success "Redis 服务启动成功"
+        log_success "Redis ServiceStartSuccess"
     else
-        log_error "Redis 服务启动失败"
+        log_error "Redis ServiceStartFailed"
         exit 1
     fi
 }
 
 setup_environment() {
-    log_step "设置环境"
+    log_step "ENEnvironment"
     
-    # 创建日志目录
+    # EN
     mkdir -p "$LOG_DIR"
     
-    # 激活虚拟环境
-    log_info "激活虚拟环境..."
+    # ENEnvironment
+    log_info "ENEnvironment..."
     source venv/bin/activate
     
-    # 设置Python路径
+    # ENPythonEN
     : "${PYTHONPATH:=}"
     export PYTHONPATH="${PWD}:${PYTHONPATH}"
-    log_info "设置 Python 路径: $PYTHONPATH"
+    log_info "EN Python EN: $PYTHONPATH"
     
-    # 加载环境变量
+    # ENEnvironmentEN
     if [[ -f ".env" ]]; then
-        log_info "加载环境变量..."
+        log_info "ENEnvironmentEN..."
         set -a
         source .env
         set +a
-        log_success "环境变量加载成功"
+        log_success "EnvironmentENSuccess"
     else
-        log_warning ".env 文件不存在，使用默认配置"
-        # 创建默认环境变量文件
+        log_warning ".env EN，ENConfig"
+        # ENEnvironmentEN
         if [[ ! -f ".env" ]]; then
-            log_info "创建默认 .env 文件..."
+            log_info "EN .env EN..."
             cp env.example .env 2>/dev/null || {
                 cat > .env << EOF
-# AutoClip 环境配置
+# AutoClip EnvironmentConfig
 DATABASE_URL=sqlite:///./data/autoclip.db
 REDIS_URL=redis://localhost:6379/0
 API_DASHSCOPE_API_KEY=
@@ -291,28 +291,28 @@ LOG_LEVEL=INFO
 ENVIRONMENT=development
 DEBUG=true
 EOF
-                log_success "已创建默认 .env 文件"
+                log_success "EN .env EN"
             }
         fi
     fi
     
-    # 检查Python依赖
-    log_info "检查 Python 依赖..."
+    # CheckPythonDependencies
+    log_info "Check Python Dependencies..."
     if ! python -c "import fastapi, celery, sqlalchemy" 2>/dev/null; then
-        log_warning "缺少依赖，正在安装..."
+        log_warning "ENDependencies，CurrentlyInstall..."
         pip install -r requirements.txt
     fi
-    log_success "Python 依赖检查完成"
+    log_success "Python DependenciesCheckCompleted"
 }
 
 init_database() {
-    log_step "初始化数据库"
+    log_step "EN"
     
-    # 确保数据目录存在
+    # EN
     mkdir -p data
     
-    # 初始化数据库
-    log_info "创建数据库表..."
+    # EN
+    log_info "EN..."
     if python -c "
 import sys
 sys.path.insert(0, '.')
@@ -320,30 +320,30 @@ from backend.core.database import engine, Base
 from backend.models import project, task, clip, collection, bilibili
 try:
     Base.metadata.create_all(bind=engine)
-    print('数据库表创建成功')
+    print('ENSuccess')
 except Exception as e:
-    print(f'数据库初始化失败: {e}')
+    print(f'ENFailed: {e}')
     sys.exit(1)
 " 2>/dev/null; then
-        log_success "数据库初始化成功"
+        log_success "ENSuccess"
     else
-        log_error "数据库初始化失败"
+        log_error "ENFailed"
         exit 1
     fi
 }
 
 start_celery() {
-    log_step "启动 Celery Worker"
+    log_step "Start Celery Worker"
     
-    # 停止现有的Celery进程
+    # StopENCeleryEN
     pkill -f "celery.*worker" 2>/dev/null || true
     sleep 2
     
-    # 清理可能存在的重复Whisper进程
-    log_info "检查并清理重复的Whisper进程..."
+    # ENWhisperEN
+    log_info "CheckENWhisperEN..."
     python scripts/monitor_whisper.py --kill-duplicates 2>/dev/null || true
     
-    log_info "启动 Celery Worker..."
+    log_info "Start Celery Worker..."
     nohup celery -A backend.core.celery_app worker \
         --loglevel=info \
         --concurrency=1 \
@@ -355,28 +355,28 @@ start_celery() {
     local celery_pid=$!
     echo "$celery_pid" > "$CELERY_PID_FILE"
     
-    # 等待Worker启动
+    # ENWorkerStart
     sleep 5
     
     if pgrep -f "celery.*worker" >/dev/null; then
-        log_success "Celery Worker 已启动 (PID: $celery_pid)"
+        log_success "Celery Worker ENStart (PID: $celery_pid)"
     else
-        log_error "Celery Worker 启动失败"
-        log_info "查看日志: tail -f $CELERY_LOG"
+        log_error "Celery Worker StartFailed"
+        log_info "EN: tail -f $CELERY_LOG"
         exit 1
     fi
 }
 
 start_backend() {
-    log_step "启动后端 API 服务"
+    log_step "StartEN API Service"
     
-    # 检查端口是否被占用
+    # CheckEN
     if port_in_use "$BACKEND_PORT"; then
-        log_warning "端口 $BACKEND_PORT 已被占用，尝试停止现有服务..."
-        stop_process "$BACKEND_PID_FILE" "后端服务"
+        log_warning "EN $BACKEND_PORT EN，ENStopENService..."
+        stop_process "$BACKEND_PID_FILE" "ENService"
     fi
     
-    log_info "启动后端服务 (端口: $BACKEND_PORT)..."
+    log_info "StartENService (EN: $BACKEND_PORT)..."
     nohup python -m uvicorn backend.main:app \
         --host 0.0.0.0 \
         --port "$BACKEND_PORT" \
@@ -392,178 +392,178 @@ start_backend() {
     local backend_pid=$!
     echo "$backend_pid" > "$BACKEND_PID_FILE"
     
-    # 等待后端启动
-    if wait_for_service "http://localhost:$BACKEND_PORT/api/v1/health/" "$BACKEND_STARTUP_TIMEOUT" "后端服务"; then
-        log_success "后端服务已启动 (PID: $backend_pid)"
+    # ENStart
+    if wait_for_service "http://localhost:$BACKEND_PORT/api/v1/health/" "$BACKEND_STARTUP_TIMEOUT" "ENService"; then
+        log_success "ENServiceENStart (PID: $backend_pid)"
     else
-        log_error "后端服务启动失败"
-        log_info "查看日志: tail -f $BACKEND_LOG"
+        log_error "ENServiceStartFailed"
+        log_info "EN: tail -f $BACKEND_LOG"
         exit 1
     fi
 }
 
 start_frontend() {
-    log_step "启动前端服务"
+    log_step "StartENService"
     
-    # 检查端口是否被占用
+    # CheckEN
     if port_in_use "$FRONTEND_PORT"; then
-        log_warning "端口 $FRONTEND_PORT 已被占用，尝试停止现有服务..."
-        stop_process "$FRONTEND_PID_FILE" "前端服务"
+        log_warning "EN $FRONTEND_PORT EN，ENStopENService..."
+        stop_process "$FRONTEND_PID_FILE" "ENService"
     fi
     
-    # 进入前端目录
+    # EN
     cd frontend || {
-        log_error "无法进入前端目录"
+        log_error "EN"
         exit 1
     }
     
-    # 检查前端依赖
+    # CheckENDependencies
     if [[ ! -d "node_modules" ]]; then
-        log_info "安装前端依赖..."
+        log_info "InstallENDependencies..."
         npm install
     fi
     
-    log_info "启动前端服务 (端口: $FRONTEND_PORT)..."
+    log_info "StartENService (EN: $FRONTEND_PORT)..."
     nohup npm run dev -- --host 0.0.0.0 --port "$FRONTEND_PORT" \
         > "../$FRONTEND_LOG" 2>&1 &
     
     local frontend_pid=$!
     echo "$frontend_pid" > "../$FRONTEND_PID_FILE"
     
-    # 返回项目根目录
+    # ENProjectEN
     cd ..
     
-    # 等待前端启动
-    if wait_for_service "http://localhost:$FRONTEND_PORT/" "$FRONTEND_STARTUP_TIMEOUT" "前端服务"; then
-        log_success "前端服务已启动 (PID: $frontend_pid)"
+    # ENStart
+    if wait_for_service "http://localhost:$FRONTEND_PORT/" "$FRONTEND_STARTUP_TIMEOUT" "ENService"; then
+        log_success "ENServiceENStart (PID: $frontend_pid)"
     else
-        log_error "前端服务启动失败"
-        log_info "查看日志: tail -f $FRONTEND_LOG"
+        log_error "ENServiceStartFailed"
+        log_info "EN: tail -f $FRONTEND_LOG"
         exit 1
     fi
 }
 
 # =============================================================================
-# 健康检查函数
+# ENCheckEN
 # =============================================================================
 
 health_check() {
-    log_header "系统健康检查"
+    log_header "SystemENCheck"
     
     local all_healthy=true
     
-    # 检查后端
-    log_info "检查后端服务..."
+    # CheckEN
+    log_info "CheckENService..."
     if curl -fsS "http://localhost:$BACKEND_PORT/api/v1/health/" >/dev/null 2>&1; then
-        log_success "后端服务健康"
+        log_success "ENServiceEN"
     else
-        log_error "后端服务不健康"
+        log_error "ENServiceEN"
         all_healthy=false
     fi
     
-    # 检查前端
-    log_info "检查前端服务..."
+    # CheckEN
+    log_info "CheckENService..."
     if curl -fsS "http://localhost:$FRONTEND_PORT/" >/dev/null 2>&1; then
-        log_success "前端服务健康"
+        log_success "ENServiceEN"
     else
-        log_error "前端服务不健康"
+        log_error "ENServiceEN"
         all_healthy=false
     fi
     
-    # 检查Redis
-    log_info "检查 Redis 服务..."
+    # CheckRedis
+    log_info "Check Redis Service..."
     if redis-cli ping >/dev/null 2>&1; then
-        log_success "Redis 服务健康"
+        log_success "Redis ServiceEN"
     else
-        log_error "Redis 服务不健康"
+        log_error "Redis ServiceEN"
         all_healthy=false
     fi
     
-    # 检查Celery Worker
-    log_info "检查 Celery Worker..."
+    # CheckCelery Worker
+    log_info "Check Celery Worker..."
     if pgrep -f "celery.*worker" >/dev/null; then
-        log_success "Celery Worker 健康"
+        log_success "Celery Worker EN"
     else
-        log_error "Celery Worker 不健康"
+        log_error "Celery Worker EN"
         all_healthy=false
     fi
     
     if [[ "$all_healthy" == true ]]; then
-        log_success "所有服务健康检查通过"
+        log_success "AllServiceENCheckEN"
         return 0
     else
-        log_error "部分服务健康检查失败"
+        log_error "ENServiceENCheckFailed"
         return 1
     fi
 }
 
 # =============================================================================
-# 清理函数
+# EN
 # =============================================================================
 
 cleanup() {
-    log_header "清理服务"
+    log_header "ENService"
     
-    stop_process "$BACKEND_PID_FILE" "后端服务"
-    stop_process "$FRONTEND_PID_FILE" "前端服务"
+    stop_process "$BACKEND_PID_FILE" "ENService"
+    stop_process "$FRONTEND_PID_FILE" "ENService"
     stop_process "$CELERY_PID_FILE" "Celery Worker"
     
-    # 停止所有相关进程
+    # StopAllEN
     pkill -f "celery.*worker" 2>/dev/null || true
     pkill -f "uvicorn.*backend.main:app" 2>/dev/null || true
     pkill -f "npm.*dev" 2>/dev/null || true
     
-    log_success "清理完成"
+    log_success "ENCompleted"
 }
 
 # =============================================================================
-# 显示系统信息
+# ENSystemEN
 # =============================================================================
 
 show_system_info() {
-    log_header "系统启动完成"
+    log_header "SystemStartCompleted"
     
-    echo -e "${WHITE}🎉 AutoClip 系统已成功启动！${NC}"
+    echo -e "${WHITE}🎉 AutoClip SystemENSuccessStart！${NC}"
     echo ""
-    echo -e "${CYAN}📊 服务状态:${NC}"
-    echo -e "  ${ICON_WEB} 后端 API:     http://localhost:$BACKEND_PORT"
-    echo -e "  ${ICON_WEB} 前端界面:     http://localhost:$FRONTEND_PORT"
-    echo -e "  ${ICON_WEB} API 文档:     http://localhost:$BACKEND_PORT/docs"
-    echo -e "  ${ICON_HEALTH} 健康检查:   http://localhost:$BACKEND_PORT/api/v1/health/"
+    echo -e "${CYAN}📊 ServiceStatus:${NC}"
+    echo -e "  ${ICON_WEB} EN API:     http://localhost:$BACKEND_PORT"
+    echo -e "  ${ICON_WEB} EN:     http://localhost:$FRONTEND_PORT"
+    echo -e "  ${ICON_WEB} API EN:     http://localhost:$BACKEND_PORT/docs"
+    echo -e "  ${ICON_HEALTH} ENCheck:   http://localhost:$BACKEND_PORT/api/v1/health/"
     echo ""
-    echo -e "${CYAN}📝 日志文件:${NC}"
-    echo -e "  后端日志: tail -f $BACKEND_LOG"
-    echo -e "  前端日志: tail -f $FRONTEND_LOG"
-    echo -e "  Celery日志: tail -f $CELERY_LOG"
+    echo -e "${CYAN}📝 EN:${NC}"
+    echo -e "  EN: tail -f $BACKEND_LOG"
+    echo -e "  EN: tail -f $FRONTEND_LOG"
+    echo -e "  CeleryEN: tail -f $CELERY_LOG"
     echo ""
-    echo -e "${CYAN}🛑 停止系统:${NC}"
-    echo -e "  ./stop_autoclip.sh 或按 Ctrl+C"
+    echo -e "${CYAN}🛑 StopSystem:${NC}"
+    echo -e "  ./stop_autoclip.sh EN Ctrl+C"
     echo ""
-    echo -e "${YELLOW}💡 使用说明:${NC}"
-    echo -e "  1. 访问 http://localhost:$FRONTEND_PORT 使用前端界面"
-    echo -e "  2. 上传视频文件或输入B站链接"
-    echo -e "  3. 系统将自动启动AI处理流水线"
-    echo -e "  4. 实时查看处理进度和结果"
+    echo -e "${YELLOW}💡 EN:${NC}"
+    echo -e "  1. EN http://localhost:$FRONTEND_PORT EN"
+    echo -e "  2. UploadENBEN"
+    echo -e "  3. SystemENAutoStartAIProcessingEN"
+    echo -e "  4. ENProcessingEN"
     echo ""
 }
 
 # =============================================================================
-# 信号处理
+# ENProcessing
 # =============================================================================
 
 trap cleanup EXIT INT TERM
 
 # =============================================================================
-# 主函数
+# EN
 # =============================================================================
 
 main() {
-    log_header "AutoClip 系统启动器 v2.0"
+    log_header "AutoClip SystemStartEN v2.0"
     
-    # 环境检查
+    # EnvironmentCheck
     check_environment
     
-    # 启动服务
+    # StartService
     start_redis
     setup_environment
     init_database
@@ -571,21 +571,21 @@ main() {
     start_backend
     start_frontend
     
-    # 健康检查
+    # ENCheck
     if health_check; then
         show_system_info
         
-        # 保持脚本运行（不进行循环检查）
-        log_info "系统运行中... 按 Ctrl+C 停止"
-        log_info "如需检查系统状态，请运行: ./status_autoclip.sh"
+        # ENScriptEN（ENCheck）
+        log_info "SystemEN... EN Ctrl+C Stop"
+        log_info "ENCheckSystemStatus，PleaseEN: ./status_autoclip.sh"
         while true; do
-            sleep 3600  # 每小时检查一次，减少频率
+            sleep 3600  # ENCheckEN，EN
         done
     else
-        log_error "系统启动失败，请检查日志"
+        log_error "SystemStartFailed，PleaseCheckEN"
         exit 1
     fi
 }
 
-# 运行主函数
+# EN
 main "$@"

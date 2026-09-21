@@ -1,4 +1,4 @@
-"""本地模型预设（ollama / lmstudio）：provider 解析、LLMManager 还原、test-api 接受预设、本地地址不走代理"""
+"""EN（ollama / lmstudio）：provider EN、LLMManager EN、test-api EN、EN"""
 import asyncio
 import json
 import sys
@@ -47,9 +47,9 @@ def test_resolve_provider_maps_presets_to_openai_compatible():
 
     assert resolve_provider("ollama") == ("openai", "http://localhost:11434/v1", "ollama")
     assert resolve_provider("LM-Studio") == ("openai", "http://localhost:1234/v1", "lmstudio")
-    # 用户改了端口：保留自定义地址
+    # EN：EN
     assert resolve_provider("ollama", "http://192.168.1.8:11434/v1") == ("openai", "http://192.168.1.8:11434/v1", "ollama")
-    # 非预设原样返回
+    # EN
     assert resolve_provider("dashscope") == ("dashscope", "", None)
     assert resolve_provider("openai", "https://api.deepseek.com/v1") == ("openai", "https://api.deepseek.com/v1", None)
 
@@ -98,8 +98,8 @@ def test_manager_restores_ollama_preset(fake_openai, tmp_path):
     assert info["base_url"] == "http://localhost:11434/v1"
     assert info["model"] == "qwen2.5:7b"
     assert info["available"] is True
-    assert "本地" in info["display_name"]
-    # 不把用户的 OpenAI key 发给本地服务
+    assert "EN" in info["display_name"]
+    # EN OpenAI key EN
     assert fake_openai.created[-1]["api_key"] == "EMPTY"
 
 
@@ -107,13 +107,13 @@ def test_manager_preset_uses_default_model_when_unset(fake_openai, tmp_path):
     from backend.core.llm_manager import LLMManager
 
     settings = tmp_path / "settings.json"
-    _write(settings, api_provider="ollama")  # api_model 仍是 dashscope 的默认 qwen-plus
+    _write(settings, api_provider="ollama")  # api_model EN dashscope EN qwen-plus
     info = LLMManager(settings_file=settings).get_current_provider_info()
     assert info["model"] == "qwen2.5:7b"
 
 
 def test_manager_env_provider_ollama(fake_openai, tmp_path, monkeypatch):
-    """Docker / CLI：LLM_PROVIDER=ollama 也能用"""
+    """Docker / CLI：LLM_PROVIDER=ollama EN"""
     from backend.core.llm_manager import LLMManager
 
     monkeypatch.setenv("LLM_PROVIDER", "ollama")

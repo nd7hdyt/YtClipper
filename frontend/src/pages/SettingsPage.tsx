@@ -16,7 +16,7 @@ import { Btn, Icon, Row, Section, Segmented, StatusDot } from '../ui'
 const normalizeBaseUrl = (value: unknown): string =>
   typeof value === 'string' ? value.trim().replace(/\/+$/, '') : ''
 
-// 模型选择框是 mode="tags" 的 Select，用户手动输入后拿到的是数组；后端只接受字符串
+// The model Select uses mode="tags"; manual input yields an array, but the backend only accepts a string
 const normalizeModelName = (value: unknown): string => {
   if (Array.isArray(value)) return String(value[value.length - 1] ?? '').trim()
   return typeof value === 'string' ? value.trim() : ''
@@ -29,25 +29,25 @@ const toNumber = (v: unknown, fallback: number): number => {
 type ProviderKey = 'dashscope' | 'openai' | 'gemini' | 'siliconflow' | 'ollama' | 'lmstudio'
 type LocalPreset = { baseUrl: string; defaultModel: string; docsUrl: string; app: string }
 const PROVIDERS: Record<ProviderKey, { name: string; short: string; hint: string; apiKeyField: string; placeholder: string; keyUrl: string; local?: LocalPreset }> = {
-  dashscope: { name: '阿里通义千问', short: '通义千问', hint: '阿里云 DashScope。国内直连，qwen-plus 性价比高。', apiKeyField: 'dashscope_api_key', placeholder: 'sk-…', keyUrl: 'https://dashscope.console.aliyun.com/apiKey' },
-  openai: { name: 'OpenAI / 兼容接口', short: 'OpenAI 兼容', hint: 'OpenAI，或任何兼容接口：智谱、DeepSeek、OpenRouter、vLLM。', apiKeyField: 'openai_api_key', placeholder: 'sk-…（自建服务可留空）', keyUrl: 'https://platform.openai.com/api-keys' },
-  gemini: { name: 'Google Gemini', short: 'Gemini', hint: 'Google AI Studio 的 Gemini 系列。', apiKeyField: 'gemini_api_key', placeholder: 'AIza…', keyUrl: 'https://aistudio.google.com/apikey' },
-  siliconflow: { name: '硅基流动', short: '硅基流动', hint: 'SiliconFlow 聚合平台，DeepSeek / Qwen 等开源模型。', apiKeyField: 'siliconflow_api_key', placeholder: 'sk-…', keyUrl: 'https://cloud.siliconflow.cn/account/ak' },
-  // 本地预设：底层是 openai 兼容 + base_url，后端 core/local_presets.py 负责还原；无需密钥、不花钱、离线可用
-  ollama: { name: 'Ollama', short: 'Ollama', hint: '本机运行的 Ollama，免费、离线。推荐 ollama pull qwen2.5:7b。', apiKeyField: 'openai_api_key', placeholder: '', keyUrl: 'https://ollama.com/download', local: { baseUrl: 'http://localhost:11434/v1', defaultModel: 'qwen2.5:7b', docsUrl: 'https://ollama.com/download', app: 'Ollama' } },
-  lmstudio: { name: 'LM Studio', short: 'LM Studio', hint: '本机 LM Studio 的 Local Server，免费、离线。在 LM Studio 里加载模型并启动服务。', apiKeyField: 'openai_api_key', placeholder: '', keyUrl: 'https://lmstudio.ai', local: { baseUrl: 'http://localhost:1234/v1', defaultModel: '', docsUrl: 'https://lmstudio.ai', app: 'LM Studio' } },
+  dashscope: { name: 'Alibaba Qwen', short: 'Qwen', hint: 'Alibaba Cloud DashScope. Direct connection in China; qwen-plus is the best value.', apiKeyField: 'dashscope_api_key', placeholder: 'sk-...', keyUrl: 'https://dashscope.console.aliyun.com/apiKey' },
+  openai: { name: 'OpenAI / Compatible API', short: 'OpenAI Compatible', hint: 'OpenAI, or any compatible API: Zhipu, DeepSeek, OpenRouter, vLLM.', apiKeyField: 'openai_api_key', placeholder: 'sk-... (leave empty for self-hosted)', keyUrl: 'https://platform.openai.com/api-keys' },
+  gemini: { name: 'Google Gemini', short: 'Gemini', hint: 'Gemini family from Google AI Studio.', apiKeyField: 'gemini_api_key', placeholder: 'AIza...', keyUrl: 'https://aistudio.google.com/apikey' },
+  siliconflow: { name: 'SiliconFlow', short: 'SiliconFlow', hint: 'SiliconFlow hub with open models like DeepSeek / Qwen.', apiKeyField: 'siliconflow_api_key', placeholder: 'sk-...', keyUrl: 'https://cloud.siliconflow.cn/account/ak' },
+  // Local presets: OpenAI-compatible + base_url under the hood, resolved by backend core/local_presets.py; no key, free, offline
+  ollama: { name: 'Ollama', short: 'Ollama', hint: 'Local Ollama, free and offline. Recommended: ollama pull qwen2.5:7b.', apiKeyField: 'openai_api_key', placeholder: '', keyUrl: 'https://ollama.com/download', local: { baseUrl: 'http://localhost:11434/v1', defaultModel: 'qwen2.5:7b', docsUrl: 'https://ollama.com/download', app: 'Ollama' } },
+  lmstudio: { name: 'LM Studio', short: 'LM Studio', hint: 'Local LM Studio server, free and offline. Load a model and start the server in LM Studio.', apiKeyField: 'openai_api_key', placeholder: '', keyUrl: 'https://lmstudio.ai', local: { baseUrl: 'http://localhost:1234/v1', defaultModel: '', docsUrl: 'https://lmstudio.ai', app: 'LM Studio' } },
 }
 const isLocalProvider = (p: ProviderKey) => !!PROVIDERS[p]?.local
 
-// 通义千问国际站（alibabacloud.com 开通的 key 只能打这个域名，#45）；后端据 base_url 自动走兼容模式
+// Qwen international endpoint (keys from alibabacloud.com only work here, #45); backend picks compat mode from base_url
 const DASHSCOPE_INTL_BASE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1'
 type DashscopeRegion = 'cn' | 'intl'
 
 const MODEL_GROUPS: Array<{ label: string; models: string[] }> = [
-  { label: '通义千问', models: ['qwen-plus', 'qwen-turbo', 'qwen-max', 'qwen-long'] },
+  { label: 'Qwen', models: ['qwen-plus', 'qwen-turbo', 'qwen-max', 'qwen-long'] },
   { label: 'OpenAI', models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4.1', 'gpt-4.1-mini'] },
   { label: 'Gemini', models: ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-1.5-pro', 'gemini-1.5-flash'] },
-  { label: '硅基流动 / 开源', models: ['deepseek-ai/DeepSeek-V3', 'deepseek-chat', 'Qwen/Qwen2.5-72B-Instruct'] },
+  { label: 'SiliconFlow / Open', models: ['deepseek-ai/DeepSeek-V3', 'deepseek-chat', 'Qwen/Qwen2.5-72B-Instruct'] },
 ]
 
 const CLOUD_DEFAULT_MODEL: Partial<Record<ProviderKey, string>> = {
@@ -56,10 +56,10 @@ const CLOUD_DEFAULT_MODEL: Partial<Record<ProviderKey, string>> = {
 
 type SectionKey = 'model' | 'speech' | 'app' | 'feedback'
 const NAV: Array<{ key: SectionKey; label: string }> = [
-  { key: 'model', label: '模型' },
-  { key: 'speech', label: '转写' },
-  { key: 'app', label: '应用' },
-  { key: 'feedback', label: '反馈' },
+  { key: 'model', label: 'Model' },
+  { key: 'speech', label: 'Transcription' },
+  { key: 'app', label: 'App' },
+  { key: 'feedback', label: 'Feedback' },
 ]
 
 // Calm Premium settings — left nav + setting rows (see DESIGN.md → App Layer)
@@ -75,7 +75,7 @@ const SettingsPage: React.FC = () => {
   const [testing, setTesting] = useState(false)
   const [currentProvider, setCurrentProvider] = useState<any>({})
   const [selectedProvider, setSelectedProvider] = useState<ProviderKey>('dashscope')
-  // 本地预设的模型探测：{ reachable, models } —— 让用户从下拉里选，而不是手敲 qwen2.5:7b
+  // Local preset model probing: { reachable, models } — pick from dropdown instead of typing qwen2.5:7b
   const [localModels, setLocalModels] = useState<{ loading: boolean; reachable: boolean | null; models: string[] }>({ loading: false, reachable: null, models: [] })
   const [dashscopeRegion, setDashscopeRegion] = useState<DashscopeRegion>('cn')
   const [analyticsOn, setAnalyticsOn] = useState(isAnalyticsEnabled())
@@ -85,20 +85,20 @@ const SettingsPage: React.FC = () => {
   useEffect(() => { loadData() }, [])
   useEffect(() => { setActive(initialSection) }, [initialSection])
 
-  // 桌面 / Docker / 本地脚本三种形态都走同一组 /settings 接口：settings.json 落在后端数据目录，
-  // API 进程与 worker 按 mtime 热重载。Docker 用户以前只能改 .env（#100）。
+  // Desktop / Docker / local script all use the same /settings API: settings.json lives in the backend data dir,
+  // API process and worker hot-reload by mtime. Docker users previously could only edit .env (#100).
   const loadData = async () => {
     try {
       const [settings, provider] = await Promise.allSettled([
         settingsApi.getSettings(),
         settingsApi.getCurrentProvider()
       ])
-      if (settings.status === 'rejected') console.warn('读取设置失败:', settings.reason)
+      if (settings.status === 'rejected') console.warn('Failed to load settings:', settings.reason)
       const settingsData = settings.status === 'fulfilled' ? settings.value : {}
       const providerData = provider.status === 'fulfilled'
         ? provider.value
-        : { available: false, provider: 'dashscope', display_name: '阿里通义千问', model: 'qwen-plus' }
-      // 以 settings.json 里保存的提供商为准；旧配置没有该字段时退回后端上报的当前提供商
+        : { available: false, provider: 'dashscope', display_name: 'Alibaba Qwen', model: 'qwen-plus' }
+      // The provider saved in settings.json wins; fall back to the backend-reported provider for legacy configs
       const providerName = (settingsData.api?.api_provider || providerData.provider || 'dashscope') as ProviderKey
       setCurrentProvider(providerData)
       const savedBaseUrl = settingsData.api?.api_base_url || ''
@@ -109,7 +109,7 @@ const SettingsPage: React.FC = () => {
         dashscope_api_key: settingsData.api?.api_keys?.dashscope || '',
         openai_api_key: settingsData.api?.api_keys?.openai || '',
         openai_base_url: localPreset || providerName === 'dashscope' ? '' : savedBaseUrl,
-        // 本地预设只在改过默认地址时才把地址填进表单
+        // Only fill the local preset address into the form when it differs from the default
         local_base_url: localPreset && savedBaseUrl && savedBaseUrl !== localPreset.baseUrl ? savedBaseUrl : '',
         gemini_api_key: settingsData.api?.api_keys?.gemini || '',
         siliconflow_api_key: settingsData.api?.api_keys?.siliconflow || '',
@@ -122,16 +122,16 @@ const SettingsPage: React.FC = () => {
       })
       setSelectedProvider(PROVIDERS[providerName] ? providerName : 'dashscope')
     } catch (err) {
-      console.error('加载数据失败:', err)
+      console.error('Failed to load data:', err)
     }
   }
 
   const handleSave = async (values: any) => {
     try {
       setLoading(true)
-      // 先读现有配置，避免清空其它 provider 已保存的 key
+      // Read existing config first so we don't wipe keys saved for other providers
       let existing: any = null
-      try { existing = await settingsApi.getSettings() } catch (err) { console.warn('获取现有配置失败:', err) }
+      try { existing = await settingsApi.getSettings() } catch (err) { console.warn('Failed to fetch existing config:', err) }
       const keys = existing?.api?.api_keys || {}
       const provider = (values.llm_provider || selectedProvider) as ProviderKey
 
@@ -163,13 +163,13 @@ const SettingsPage: React.FC = () => {
           processing_max_retries: 3
         },
         logs: { log_level: 'INFO', log_retention_days: 7 }
-        // paths 由后端根据实际数据目录决定，前端不下发
+        // paths are decided by the backend data dir; the frontend does not send them
       })
-      message.success('已保存')
+      message.success('Saved')
       trackApiKeyConfigured({ provider, hasKey: isLocalProvider(provider) || !!values[PROVIDERS[provider].apiKeyField] })
       await loadData()
     } catch (err: any) {
-      message.error('保存失败: ' + (err.message || '未知错误'))
+      message.error('Save failed: ' + (err.message || 'Unknown error'))
     } finally {
       setLoading(false)
     }
@@ -185,21 +185,21 @@ const SettingsPage: React.FC = () => {
       : selectedProvider === 'dashscope' && dashscopeRegion === 'intl' ? DASHSCOPE_INTL_BASE_URL : ''
     const modelName = normalizeModelName(form.getFieldValue('model_name'))
     if (local && !modelName) {
-      message.error('请先选择一个模型')
+      message.error('Please select a model first')
       return
     }
-    // 自建兼容服务（Ollama / vLLM 等）通常不需要 key，有地址就能测
+    // Self-hosted compatible services (Ollama / vLLM etc.) usually need no key; an address is enough to test
     if (!apiKey.trim() && !baseUrl) {
-      message.error('请先填写 API Key')
+      message.error('Please enter an API key first')
       return
     }
     try {
       setTesting(true)
       const r = await settingsApi.testApiKey(selectedProvider, apiKey, { baseUrl: baseUrl || undefined, model: modelName || undefined })
-      if (r.success) message.success('连接正常')
-      else message.error('连接失败: ' + (r.error || '未知错误'))
+      if (r.success) message.success('Connection OK')
+      else message.error('Connection failed: ' + (r.error || 'Unknown error'))
     } catch (err: any) {
-      message.error('测试失败: ' + (err.message || '未知错误'))
+      message.error('Test failed: ' + (err.message || 'Unknown error'))
     } finally {
       setTesting(false)
     }
@@ -212,7 +212,7 @@ const SettingsPage: React.FC = () => {
     try {
       const r = await settingsApi.listCompatibleModels({ provider: p, baseUrl: normalizeBaseUrl(baseUrl) || undefined })
       setLocalModels({ loading: false, reachable: r.reachable, models: r.models || [] })
-      // 探测到模型且当前没选 / 选的不在列表里 → 帮用户选一个（优先预设默认）
+      // If models are detected and nothing is selected (or selection is stale), pick one (preset default first)
       const current = normalizeModelName(form.getFieldValue('model_name'))
       if (r.reachable && r.models.length && (!current || !r.models.includes(current))) {
         form.setFieldsValue({ model_name: r.models.includes(preset.defaultModel) ? preset.defaultModel : r.models[0] })
@@ -229,18 +229,18 @@ const SettingsPage: React.FC = () => {
     const preset = PROVIDERS[p]?.local
     const current = normalizeModelName(form.getFieldValue('model_name'))
     if (preset) {
-      // 从云端切到本地时，qwen-plus 这类云端模型名对本地服务没意义
+      // Switching cloud -> local: cloud names like qwen-plus mean nothing locally
       if (!current || MODEL_GROUPS.some((g) => g.models.includes(current))) {
         form.setFieldsValue({ model_name: preset.defaultModel || undefined })
       }
       void detectLocalModels(p, form.getFieldValue('local_base_url'))
     } else if (isLocalProvider(prev) || !current) {
-      // 从本地切回云端：qwen2.5:7b 这类本地模型名对云端没意义，给该提供商一个常用默认
+      // Switching local -> cloud: local names like qwen2.5:7b mean nothing in the cloud, use a common default
       form.setFieldsValue({ model_name: CLOUD_DEFAULT_MODEL[p] })
     }
   }
 
-  // 打开设置页时若已是本地预设，顺手探测一次
+  // Probe once when opening Settings on a local preset
   useEffect(() => {
     if (isLocalProvider(selectedProvider)) void detectLocalModels(selectedProvider, form.getFieldValue('local_base_url'))
   }, [selectedProvider])
@@ -256,7 +256,7 @@ const SettingsPage: React.FC = () => {
   return (
     <div className="ac-page">
       <header>
-        <h1 className="ac-title" style={{ marginTop: 0 }}>设置</h1>
+        <h1 className="ac-title" style={{ marginTop: 0 }}>Settings</h1>
         <div className="ac-meta">
           <span className="ac-mono">{runtime.version !== 'unknown' ? `v${runtime.version}` : 'dev'}</span>
           <span className="dot" />
@@ -264,23 +264,23 @@ const SettingsPage: React.FC = () => {
           {currentProvider?.available && (
             <>
               <span className="dot" />
-              <span>当前模型 <span className="ac-mono">{currentProvider.provider} · {currentProvider.model}</span></span>
+              <span>Current model <span className="ac-mono">{currentProvider.provider} · {currentProvider.model}</span></span>
             </>
           )}
         </div>
       </header>
 
       <div className="ac-settings" style={{ marginTop: 36 }}>
-        <nav className="ac-settings-nav" aria-label="设置分类">
+        <nav className="ac-settings-nav" aria-label="Settings sections">
           {NAV.map((n) => (
             <button key={n.key} aria-current={active === n.key} onClick={() => setActive(n.key)}>{n.label}</button>
           ))}
         </nav>
 
         <div className="ac-settings-body">
-          {/* ---------------- 模型 ---------------- */}
+          {/* ---------------- Model ---------------- */}
           {active === 'model' && (
-            <Section title="模型" description="切片分析用哪个大模型。密钥只保存在运行 AutoClip 的这台机器上，不会上传。">
+            <Section title="Model" description="Which LLM analyzes your clips. Keys stay on this machine and are never uploaded.">
               <Form
                 form={form}
                 layout="vertical"
@@ -290,10 +290,10 @@ const SettingsPage: React.FC = () => {
               >
                 <Form.Item name="llm_provider" hidden><Input /></Form.Item>
                 <div className="ac-rows">
-                  <Row label="提供商" hint={cfg.hint} stack>
+                  <Row label="Provider" hint={cfg.hint} stack>
                     <Segmented
                       size="sm"
-                      ariaLabel="提供商"
+                      ariaLabel="Provider"
                       value={selectedProvider}
                       onChange={handleProviderChange}
                       options={(Object.keys(PROVIDERS) as ProviderKey[]).map((k) => ({ value: k, label: PROVIDERS[k].short }))}
@@ -303,8 +303,8 @@ const SettingsPage: React.FC = () => {
                   {localCfg && (
                     <Row
                       wide
-                      label="服务地址"
-                      hint={<>默认 <span className="ac-mono">{localCfg.baseUrl}</span>，改过端口才需要填。没装的话去 <a href={localCfg.docsUrl} onClick={(e) => { e.preventDefault(); openExternalLink(localCfg.docsUrl) }} style={{ color: 'var(--ac-accent)' }}>{localCfg.app} 官网</a> 下载。</>}
+                      label="Server address"
+                      hint={<>Default <span className="ac-mono">{localCfg.baseUrl}</span>; only change it if you customized the port. If not installed, download it from the <a href={localCfg.docsUrl} onClick={(e) => { e.preventDefault(); openExternalLink(localCfg.docsUrl) }} style={{ color: 'var(--ac-accent)' }}>{localCfg.app} website</a>.</>}
                     >
                       <Form.Item
                         name="local_base_url"
@@ -313,7 +313,7 @@ const SettingsPage: React.FC = () => {
                           validator: (_, value) => {
                             const url = normalizeBaseUrl(value)
                             if (!url || /^https?:\/\/\S+$/.test(url)) return Promise.resolve()
-                            return Promise.reject(new Error('请输入以 http:// 或 https:// 开头的地址'))
+                            return Promise.reject(new Error('Enter an address starting with http:// or https://'))
                           },
                         }]}
                       >
@@ -329,17 +329,17 @@ const SettingsPage: React.FC = () => {
 
                   {selectedProvider === 'dashscope' && (
                     <Row
-                      label="站点"
+                      label="Region"
                       hint={dashscopeRegion === 'intl'
-                        ? <>国际站（alibabacloud.com）的 Key，请求发往 <span className="ac-mono">dashscope-intl.aliyuncs.com</span>。</>
-                        : '在阿里云中国站（aliyun.com）开通的 Key 选这个；海外账号选国际站。'}
+                        ? <>Keys from the international site (alibabacloud.com) go to <span className="ac-mono">dashscope-intl.aliyuncs.com</span>.</>
+                        : 'Pick this for keys from Alibaba Cloud China (aliyun.com); overseas accounts pick International.'}
                     >
                       <Segmented
                         size="sm"
-                        ariaLabel="通义千问站点"
+                        ariaLabel="Qwen region"
                         value={dashscopeRegion}
                         onChange={setDashscopeRegion}
-                        options={[{ value: 'cn', label: '中国站' }, { value: 'intl', label: '国际站' }]}
+                        options={[{ value: 'cn', label: 'China' }, { value: 'intl', label: 'International' }]}
                       />
                     </Row>
                   )}
@@ -347,8 +347,8 @@ const SettingsPage: React.FC = () => {
                   {selectedProvider === 'openai' && (
                     <Row
                       wide
-                      label="接口地址"
-                      hint={<>留空用 OpenAI 官方地址。兼容服务填自己的，例如 <span className="ac-mono">https://api.deepseek.com/v1</span>、<span className="ac-mono">http://localhost:11434/v1</span>（Ollama）。</>}
+                      label="API base URL"
+                      hint={<>Leave empty for the official OpenAI endpoint. For compatible services use your own, e.g. <span className="ac-mono">https://api.deepseek.com/v1</span>, <span className="ac-mono">http://localhost:11434/v1</span> (Ollama).</>}
                     >
                       <Form.Item
                         name="openai_base_url"
@@ -357,7 +357,7 @@ const SettingsPage: React.FC = () => {
                           validator: (_, value) => {
                             const url = normalizeBaseUrl(value)
                             if (!url || /^https?:\/\/\S+$/.test(url)) return Promise.resolve()
-                            return Promise.reject(new Error('请输入以 http:// 或 https:// 开头的地址'))
+                            return Promise.reject(new Error('Enter an address starting with http:// or https://'))
                           },
                         }]}
                       >
@@ -370,15 +370,15 @@ const SettingsPage: React.FC = () => {
                     wide
                     label="API Key"
                     hint={usingCustomEndpoint
-                      ? '自建 / 本地兼容服务不校验密钥时可留空。'
-                      : <>在 <a href={keyUrl} onClick={(e) => { e.preventDefault(); openExternalLink(keyUrl) }} style={{ color: 'var(--ac-accent)' }}>{cfg.name}{selectedProvider === 'dashscope' && dashscopeRegion === 'intl' ? '国际站' : ''} 控制台</a> 获取。</>}
+                      ? 'Can be left empty for self-hosted / local services that skip key validation.'
+                      : <>Get it from the <a href={keyUrl} onClick={(e) => { e.preventDefault(); openExternalLink(keyUrl) }} style={{ color: 'var(--ac-accent)' }}>{cfg.name}{selectedProvider === 'dashscope' && dashscopeRegion === 'intl' ? ' International' : ''} console</a>.</>}
                   >
                     <Form.Item
                       name={cfg.apiKeyField}
                       style={{ width: '100%' }}
                       rules={usingCustomEndpoint ? [] : [
-                        { required: true, message: '请输入 API Key' },
-                        { min: 10, message: 'API Key 长度不能少于 10 位' }
+                        { required: true, message: 'Please enter an API key' },
+                        { min: 10, message: 'API key must be at least 10 characters' }
                       ]}
                     >
                       <Input.Password placeholder={cfg.placeholder} className="ac-mono" />
@@ -387,22 +387,22 @@ const SettingsPage: React.FC = () => {
 
                   <Row
                     wide
-                    label="模型"
+                    label="Model"
                     hint={localCfg
                       ? (localModels.loading
-                          ? '正在检测本地服务…'
+                          ? 'Detecting local service…'
                           : localModels.reachable
-                            ? <>已连接，检测到 {localModels.models.length} 个模型。<a onClick={() => void detectLocalModels(selectedProvider, form.getFieldValue('local_base_url'))} style={{ color: 'var(--ac-accent)', cursor: 'pointer' }}>刷新</a></>
+                            ? <>Connected, found {localModels.models.length} models. <a onClick={() => void detectLocalModels(selectedProvider, form.getFieldValue('local_base_url'))} style={{ color: 'var(--ac-accent)', cursor: 'pointer' }}>Refresh</a></>
                             : localModels.reachable === false
-                              ? <>没连上 {localCfg.app}。先启动它{localCfg.defaultModel ? <>并 <span className="ac-mono">ollama pull {localCfg.defaultModel}</span></> : ''}，再 <a onClick={() => void detectLocalModels(selectedProvider, form.getFieldValue('local_base_url'))} style={{ color: 'var(--ac-accent)', cursor: 'pointer' }}>重新检测</a>。也可以直接输入模型名。</>
-                              : '从本地服务已加载的模型中选择。')
+                              ? <>{localCfg.app} is unreachable. Start it first{localCfg.defaultModel ? <> and run <span className="ac-mono">ollama pull {localCfg.defaultModel}</span></> : ''}, then <a onClick={() => void detectLocalModels(selectedProvider, form.getFieldValue('local_base_url'))} style={{ color: 'var(--ac-accent)', cursor: 'pointer' }}>retry detection</a>. You can also type a model name directly.</>
+                              : 'Choose from models loaded in the local service.')
                       : usingCustomEndpoint
-                        ? '填该服务实际提供的模型名（如 glm-4-flash、deepseek-chat、qwen2.5:7b），回车确认。'
-                        : '可直接输入模型名，回车确认。'}
+                        ? 'Enter the exact model name served there (e.g. glm-4-flash, deepseek-chat, qwen2.5:7b), press Enter to confirm.'
+                        : 'You can type a model name directly, press Enter to confirm.'}
                   >
-                    <Form.Item name="model_name" style={{ width: '100%' }} rules={[{ required: true, message: '请输入或选择模型' }]}>
+                    <Form.Item name="model_name" style={{ width: '100%' }} rules={[{ required: true, message: 'Please enter or select a model' }]}>
                       <Select
-                        placeholder={localCfg ? (localCfg.defaultModel || '选择或输入模型名') : 'qwen-plus'}
+                        placeholder={localCfg ? (localCfg.defaultModel || 'Select or type a model name') : 'qwen-plus'}
                         showSearch
                         allowClear
                         mode="tags"
@@ -416,75 +416,75 @@ const SettingsPage: React.FC = () => {
                     </Form.Item>
                   </Row>
 
-                  <Row label="连接测试" hint={localCfg ? '保存前先测一下本地服务和模型是否可用。' : '保存前先测一下密钥和模型是否可用。'}>
-                    <Btn size="sm" loading={testing} onClick={handleTest}>测试连接</Btn>
+                  <Row label="Connection test" hint={localCfg ? 'Test the local service and model before saving.' : 'Test the key and model before saving.'}>
+                    <Btn size="sm" loading={testing} onClick={handleTest}>Test connection</Btn>
                   </Row>
                 </div>
 
-                <div className="ac-eyebrow" style={{ marginTop: 40, marginBottom: 12 }}>切片参数</div>
+                <div className="ac-eyebrow" style={{ marginTop: 40, marginBottom: 12 }}>Clipping parameters</div>
                 <div className="ac-rows">
-                  <Row label="文本分块大小" hint="每次送给模型分析的字幕长度。越大越连贯、越慢，建议 5000。">
+                  <Row label="Text chunk size" hint="Subtitle length sent to the model per call. Larger is more coherent but slower; 5000 recommended.">
                     <Form.Item name="chunk_size">
                       <input className="ac-input ac-input--mono" type="number" min={1000} step={500} style={{ width: 120, textAlign: 'right' }} />
                     </Form.Item>
-                    <span className="ac-unit">字符</span>
+                    <span className="ac-unit">chars</span>
                   </Row>
-                  <Row label="最低评分阈值" hint="低于此分的片段会被丢掉。切片为 0 时可以调低。">
+                  <Row label="Minimum score" hint="Clips below this score are dropped. Lower it if you get zero clips.">
                     <Form.Item name="min_score_threshold">
                       <input className="ac-input ac-input--mono" type="number" min={0} max={1} step={0.05} style={{ width: 120, textAlign: 'right' }} />
                     </Form.Item>
                     <span className="ac-unit" />
                   </Row>
-                  <Row label="每个合集最多切片" hint="AI 推荐合集时，一个主题最多串几条。">
+                  <Row label="Max clips per collection" hint="How many clips one topic strings together in AI-recommended collections.">
                     <Form.Item name="max_clips_per_collection">
                       <input className="ac-input ac-input--mono" type="number" min={1} max={20} style={{ width: 120, textAlign: 'right' }} />
                     </Form.Item>
-                    <span className="ac-unit">条</span>
+                    <span className="ac-unit">clips</span>
                   </Row>
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12, marginTop: 28 }}>
                   {currentProvider?.available && (
-                    <StatusDot tone="ok" label={<>已配置 <span className="ac-mono">{currentProvider.display_name} · {currentProvider.model}</span></>} />
+                    <StatusDot tone="ok" label={<>Configured <span className="ac-mono">{currentProvider.display_name} · {currentProvider.model}</span></>} />
                   )}
-                  <Btn variant="cta" loading={loading} onClick={() => form.submit()}>保存</Btn>
+                  <Btn variant="cta" loading={loading} onClick={() => form.submit()}>Save</Btn>
                 </div>
               </Form>
             </Section>
           )}
 
-          {/* ---------------- 转写 ---------------- */}
+          {/* ---------------- Transcription ---------------- */}
           {active === 'speech' && (
             <Section
-              title="转写"
-              description="视频没有字幕时，用本地 Whisper 生成字幕再分析。B 站等自带字幕的视频不需要，装不装、装哪个模型由你决定。"
+              title="Transcription"
+              description="When a video has no subtitles, generate them locally with Whisper before analysis. Videos with built-in subtitles (e.g. Bilibili) don't need this; installing and which model is up to you."
             >
               <SpeechRecognitionConfig />
             </Section>
           )}
 
-          {/* ---------------- 应用 ---------------- */}
+          {/* ---------------- App ---------------- */}
           {active === 'app' && (
             <AppSection analyticsOn={analyticsOn} onAnalyticsChange={(on) => { setAnalyticsEnabled(on); setAnalyticsOn(on) }} />
           )}
 
-          {/* ---------------- 反馈 ---------------- */}
+          {/* ---------------- Feedback ---------------- */}
           {active === 'feedback' && (
-            <Section title="反馈" description="哪里不对、想要什么，直接说。运行环境会自动附上，不含视频内容与 API 密钥。">
+            <Section title="Feedback" description="Tell us what's wrong or what you want. Runtime info is attached automatically; no video content or API keys.">
               <div className="ac-rows">
-                <Row label="发送反馈" hint="在应用内写一句话即可，我们每周统一看。">
+                <Row label="Send feedback" hint="One sentence in the app is enough; we review weekly.">
                   <Btn variant="cta" size="sm" style={{ height: 32, fontSize: 13, padding: '0 16px' }} onClick={() => setFeedbackOpen(true)}>
-                    <Icon.Chat size={13} /> 写反馈
+                    <Icon.Chat size={13} /> Write feedback
                   </Btn>
                 </Row>
-                <Row label="反馈表单" hint="不想在应用里写、或想附截图 / 日志时用。">
-                  <Btn size="sm" onClick={() => openExternalLink(FEEDBACK_FORM_URL)}>打开表单 <Icon.External size={12} /></Btn>
+                <Row label="Feedback form" hint="Use when you prefer not to write in-app, or want to attach screenshots / logs.">
+                  <Btn size="sm" onClick={() => openExternalLink(FEEDBACK_FORM_URL)}>Open form <Icon.External size={12} /></Btn>
                 </Row>
-                <Row label="GitHub" hint="开发者可直接提 Issue（有模板），或去 Discussions 讨论。">
-                  <Btn size="sm" onClick={() => openExternalLink(FEEDBACK_ISSUES_URL)}>新建 Issue <Icon.External size={12} /></Btn>
+                <Row label="GitHub" hint="Developers can file an issue (templated) or discuss in Discussions.">
+                  <Btn size="sm" onClick={() => openExternalLink(FEEDBACK_ISSUES_URL)}>New issue <Icon.External size={12} /></Btn>
                 </Row>
-                <Row label="当前状态与已知问题" hint="发版节奏、已知 bug 与解决办法都在这条置顶 Issue 里。">
-                  <Btn variant="text" size="sm" onClick={() => openExternalLink('https://github.com/zhouxiaoka/autoclip/issues/96')}>#96 <Icon.External size={12} /></Btn>
+                <Row label="Status & known issues" hint="Release cadence, known bugs and workarounds live in this pinned issue.">
+                  <Btn variant="text" size="sm" onClick={() => openExternalLink('https://github.com/nd7hdyt/YtClipper/issues/96')}>#96 <Icon.External size={12} /></Btn>
                 </Row>
               </div>
             </Section>
@@ -497,7 +497,7 @@ const SettingsPage: React.FC = () => {
   )
 }
 
-/* ---------------- 应用 ---------------- */
+/* ---------------- App ---------------- */
 const AppSection: React.FC<{ analyticsOn: boolean; onAnalyticsChange: (on: boolean) => void }> = ({ analyticsOn, onAnalyticsChange }) => {
   const { theme, setTheme } = useTheme()
   const [autostart, setAutostart] = useState(false)
@@ -514,40 +514,40 @@ const AppSection: React.FC<{ analyticsOn: boolean; onAnalyticsChange: (on: boole
           setAutostart(Boolean(await invoke('is_autostart_enabled')))
         }
       } catch (err) {
-        console.error('检查自动启动状态失败:', err)
+        console.error('Failed to check autostart status:', err)
       }
     })()
   }, [])
 
   const toggleAutostart = async (enabled: boolean) => {
-    if (!desktop) { message.error('此功能仅在桌面应用中可用'); return }
+    if (!desktop) { message.error('Available in the desktop app only'); return }
     setBusy(true)
     try {
       const { invoke } = await import('@tauri-apps/api/core')
       await invoke(enabled ? 'enable_autostart' : 'disable_autostart')
       setAutostart(enabled)
     } catch (err) {
-      console.error('切换自动启动状态失败:', err)
-      message.error(`操作失败: ${err}`)
+      console.error('Failed to toggle autostart:', err)
+      message.error(`Operation failed: ${err}`)
     } finally {
       setBusy(false)
     }
   }
 
   return (
-    <Section title="应用" description="外观、启动与隐私。">
+    <Section title="App" description="Appearance, startup & privacy.">
       <div className="ac-rows">
-        <Row label="外观" hint="首次启动跟随系统。">
-          <Segmented size="sm" ariaLabel="外观" value={theme} onChange={setTheme} options={[{ value: 'light', label: '浅色' }, { value: 'dark', label: '深色' }]} />
+        <Row label="Appearance" hint="Follows the system on first launch.">
+          <Segmented size="sm" ariaLabel="Appearance" value={theme} onChange={setTheme} options={[{ value: 'light', label: 'Light' }, { value: 'dark', label: 'Dark' }]} />
         </Row>
-        <Row label="开机自动启动" hint="启用后随系统启动，可从托盘打开。仅桌面应用可用。">
+        <Row label="Launch at login" hint="Starts with the system; open from the tray. Desktop app only.">
           <Switch checked={autostart} onChange={toggleAutostart} loading={busy} disabled={!desktop} />
         </Row>
-        <Row label="匿名使用统计" hint="只采集功能使用、出片成功 / 失败等匿名事件，不含视频内容、字幕文本或 API 密钥。关闭后应用内反馈将改用表单。">
+        <Row label="Anonymous usage stats" hint="Only anonymous events (feature use, export success / failure). No video content, subtitles, or API keys. In-app feedback falls back to the form when off.">
           <Switch checked={analyticsOn} onChange={onAnalyticsChange} />
         </Row>
-        <Row label="B 站账号" hint="多账号管理与一键投稿，开发中。">
-          <span className="ac-hint" style={{ margin: 0 }}>即将推出</span>
+        <Row label="Bilibili accounts" hint="Multi-account management and one-click publishing, in development.">
+          <span className="ac-hint" style={{ margin: 0 }}>Coming soon</span>
         </Row>
       </div>
     </Section>

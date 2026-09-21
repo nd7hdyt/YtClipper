@@ -1,5 +1,5 @@
 """
-回归测试：docker-compose 路径上的任务提交与 LLM 输入构建（issue #88 / #53）
+EN：docker-compose EN LLM EN（issue #88 / #53）
 """
 
 import json
@@ -13,7 +13,7 @@ from backend.utils import task_submission_utils
 
 
 class _RedisDown:
-    """模拟 Redis 不可达的 redis 模块。"""
+    """EN Redis EN redis EN。"""
 
     class Redis:
         @staticmethod
@@ -28,7 +28,7 @@ def server_mode(monkeypatch):
 
 
 def test_submit_pipeline_succeeds_even_if_queue_depth_probe_fails(server_mode, monkeypatch):
-    """诊断用的队列深度读取失败，不能让已经 send_task 成功的项目被标记为失败。"""
+    """EN，EN send_task EN。"""
     monkeypatch.setitem(__import__("sys").modules, "redis", _RedisDown)
 
     with patch.object(
@@ -44,7 +44,7 @@ def test_submit_pipeline_succeeds_even_if_queue_depth_probe_fails(server_mode, m
 
 
 def test_queue_depth_probe_uses_redis_url(server_mode, monkeypatch):
-    """队列深度探测必须走 REDIS_URL，而不是硬编码 localhost。"""
+    """EN REDIS_URL，EN localhost。"""
     seen = {}
 
     class _FakeRedis:
@@ -86,8 +86,8 @@ class _StubProvider(LLMProvider):
 @pytest.mark.parametrize(
     "input_data",
     [
-        {"a": 1, "b": "中文"},
-        [{"id": 1, "text": "第一段"}, {"id": 2, "text": "第二段"}],
+        {"a": 1, "b": "EN"},
+        [{"id": 1, "text": "EN"}, {"id": 2, "text": "EN"}],
         ("x", "y"),
     ],
 )
@@ -95,13 +95,13 @@ def test_build_full_input_serialises_containers_as_json(input_data):
     provider = _StubProvider(api_key="k", model_name="m")
     full = provider._build_full_input("PROMPT", input_data)
 
-    assert full.startswith("PROMPT\n\n输入内容：\n")
-    payload = full.split("输入内容：\n", 1)[1]
+    assert full.startswith("PROMPT\n\nEN：\n")
+    payload = full.split("EN：\n", 1)[1]
     assert json.loads(payload) == json.loads(json.dumps(input_data))
-    assert "中文" in full or "第一段" in full or "x" in full
+    assert "EN" in full or "EN" in full or "x" in full
 
 
 def test_build_full_input_passes_strings_through():
     provider = _StubProvider(api_key="k", model_name="m")
-    assert provider._build_full_input("PROMPT", "raw text") == "PROMPT\n\n输入内容：\nraw text"
+    assert provider._build_full_input("PROMPT", "raw text") == "PROMPT\n\nEN：\nraw text"
     assert provider._build_full_input("PROMPT", None) == "PROMPT"

@@ -1,5 +1,5 @@
 """
-WebSocket API路由
+WebSocket APIEN
 """
 
 import json
@@ -20,199 +20,199 @@ router = APIRouter()
 
 @router.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: str):
-    """WebSocket连接端点"""
+    """WebSocketconnectEN"""
     await manager.connect(websocket, user_id)
     
     try:
-        # 发送连接确认消息
+        # sendconnectEN
         welcome_message = WebSocketMessage.create_system_notification(
             "connection",
-            "连接成功",
-            f"用户 {user_id} 已成功连接到WebSocket服务",
+            "connectsucceeded",
+            f"user {user_id} ENsucceededconnectENWebSocketservice",
             "success"
         )
         await manager.send_personal_message(welcome_message, user_id)
         
-        # 处理客户端消息 - 保持保活循环
+        # processingEN - EN
         while True:
             try:
-                # 接收客户端消息
+                # receiveEN
                 data = await websocket.receive_text()
                 message = json.loads(data)
                 
-                # 处理不同类型的消息
+                # processingEN
                 await handle_client_message(user_id, message)
                 
             except WebSocketDisconnect:
-                logger.info(f"用户 {user_id} 主动断开连接")
+                logger.info(f"user {user_id} ENdisconnectconnect")
                 break
             except json.JSONDecodeError:
-                logger.error(f"用户 {user_id} 发送的消息格式错误")
+                logger.error(f"user {user_id} sendENerror")
                 try:
                     error_message = WebSocketMessage.create_error_notification(
                         "message_format_error",
-                        "消息格式错误",
-                        {"message": "请发送有效的JSON格式消息"}
+                        "ENerror",
+                        {"message": "pleasesendENJSONEN"}
                     )
                     await manager.send_personal_message(error_message, user_id)
                 except:
-                    # 如果发送失败，说明连接已断开，直接退出
+                    # ifsendfailed，ENconnectENdisconnect，ENlogout
                     break
             except Exception as e:
-                logger.error(f"处理用户 {user_id} 消息时出错: {e}")
+                logger.error(f"processinguser {user_id} EN: {e}")
                 try:
                     error_message = WebSocketMessage.create_error_notification(
                         "processing_error",
-                        "消息处理错误",
+                        "ENprocessingerror",
                         {"error": str(e)}
                     )
                     await manager.send_personal_message(error_message, user_id)
                 except:
-                    # 如果发送失败，说明连接已断开，直接退出
+                    # ifsendfailed，ENconnectENdisconnect，ENlogout
                     break
     
     except WebSocketDisconnect:
-        logger.info(f"用户 {user_id} 断开连接")
+        logger.info(f"user {user_id} disconnectconnect")
     except Exception as e:
-        logger.error(f"WebSocket连接异常: {e}")
+        logger.error(f"WebSocketconnectexception: {e}")
     finally:
-        # 按顺序清理：先取消订阅，再断开连接
+        # EN：ENcancelEN，ENdisconnectconnect
         try:
             await websocket_gateway_service.unsubscribe_user_from_all_tasks(user_id)
         except Exception as e:
-            logger.error(f"清理用户订阅失败: {e}")
+            logger.error(f"ENuserENfailed: {e}")
         
         try:
             await manager.disconnect(user_id)
         except Exception as e:
-            logger.error(f"断开用户连接失败: {e}")
+            logger.error(f"disconnectuserconnectfailed: {e}")
 
 async def handle_client_message(user_id: str, message: Dict[str, Any]):
-    """处理客户端消息"""
+    """processingEN"""
     message_type = message.get("type")
     
     if message_type == "sync_subscriptions":
-        # 新的幂等订阅方式
+        # EN
         project_ids = message.get("project_ids", [])
-        # 直接传入项目ID，让网关服务内部进行规范化
+        # ENprojectID，ENserviceEN
         channels = set(project_ids)
         
         stats = await websocket_gateway_service.sync_user_subscriptions(user_id, channels)
         
         response = WebSocketMessage.create_system_notification(
             "subscription_sync",
-            "订阅同步完成",
-            f"新增 {stats['added']} / 移除 {stats['removed']} / 未变 {stats['unchanged']}",
+            "EN",
+            f"EN {stats['added']} / EN {stats['removed']} / EN {stats['unchanged']}",
             "success"
         )
         await manager.send_personal_message(response, user_id)
         
     elif message_type == "subscribe":
-        # 订阅主题（兼容旧版本）
+        # EN（EN）
         topic = message.get("topic")
         if topic:
             manager.subscribe_to_topic(user_id, topic)
             response = WebSocketMessage.create_system_notification(
                 "subscription",
-                "订阅成功",
-                f"已成功订阅主题: {topic}",
+                "ENsucceeded",
+                f"ENsucceededEN: {topic}",
                 "success"
             )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "subscribe_task":
-        # 订阅任务进度（新版本）
+        # ENtaskprogress（EN）
         task_id = message.get("task_id")
         if task_id:
             success = await websocket_gateway_service.subscribe_user_to_task(user_id, task_id)
             if success:
                 response = WebSocketMessage.create_system_notification(
                     "task_subscription",
-                    "任务订阅成功",
-                    f"已成功订阅任务 {task_id} 的进度更新",
+                    "taskENsucceeded",
+                    f"ENsucceededENtask {task_id} ENprogressupdate",
                     "success"
                 )
             else:
                 response = WebSocketMessage.create_error_notification(
                     "task_subscription_failed",
-                    "任务订阅失败",
+                    "taskENfailed",
                     {"task_id": task_id}
                 )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "unsubscribe":
-        # 取消订阅主题（兼容旧版本）
+        # cancelEN（EN）
         topic = message.get("topic")
         if topic:
             manager.unsubscribe_from_topic(user_id, topic)
             response = WebSocketMessage.create_system_notification(
                 "unsubscription",
-                "取消订阅成功",
-                f"已取消订阅主题: {topic}",
+                "cancelENsucceeded",
+                f"ENcancelEN: {topic}",
                 "info"
             )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "unsubscribe_task":
-        # 取消订阅任务进度（新版本）
+        # cancelENtaskprogress（EN）
         task_id = message.get("task_id")
         if task_id:
             success = await websocket_gateway_service.unsubscribe_user_from_task(user_id, task_id)
             if success:
                 response = WebSocketMessage.create_system_notification(
                     "task_unsubscription",
-                    "任务取消订阅成功",
-                    f"已取消订阅任务 {task_id} 的进度更新",
+                    "taskcancelENsucceeded",
+                    f"ENcancelENtask {task_id} ENprogressupdate",
                     "info"
                 )
             else:
                 response = WebSocketMessage.create_error_notification(
                     "task_unsubscription_failed",
-                    "任务取消订阅失败",
+                    "taskcancelENfailed",
                     {"task_id": task_id}
                 )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "subscribe_many":
-        # 批量订阅任务
+        # ENtask
         task_ids = message.get("channels", [])
         if task_ids:
             results = await websocket_gateway_service.subscribe_user_to_many_tasks(user_id, task_ids)
             response = WebSocketMessage.create_system_notification(
                 "batch_subscription",
-                "批量订阅完成",
-                f"新增订阅: {len(results['added'])}, 已存在: {len(results['already_subscribed'])}",
+                "EN",
+                f"EN: {len(results['added'])}, already exists: {len(results['already_subscribed'])}",
                 "success"
             )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "unsubscribe_many":
-        # 批量取消订阅任务
+        # ENcancelENtask
         task_ids = message.get("channels", [])
         if task_ids:
             results = await websocket_gateway_service.unsubscribe_user_from_many_tasks(user_id, task_ids)
             response = WebSocketMessage.create_system_notification(
                 "batch_unsubscription",
-                "批量取消订阅完成",
-                f"移除订阅: {len(results['removed'])}, 未订阅: {len(results['not_subscribed'])}",
+                "ENcancelEN",
+                f"EN: {len(results['removed'])}, EN: {len(results['not_subscribed'])}",
                 "success"
             )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "sync_subscriptions":
-        # 同步订阅集对齐
+        # EN
         task_ids = message.get("channels", [])
         results = await websocket_gateway_service.sync_user_subscriptions(user_id, task_ids)
         response = WebSocketMessage.create_system_notification(
             "subscription_sync",
-            "订阅集同步完成",
-            f"新增: {len(results['added'])}, 移除: {len(results['removed'])}, 未变: {len(results['unchanged'])}",
+            "EN",
+            f"EN: {len(results['added'])}, EN: {len(results['removed'])}, EN: {len(results['unchanged'])}",
             "success"
         )
         await manager.send_personal_message(response, user_id)
     
     elif message_type == "ping":
-        # 心跳检测
+        # EN
         response = {
             "type": "pong",
             "timestamp": WebSocketMessage.create_system_notification(
@@ -220,10 +220,10 @@ async def handle_client_message(user_id: str, message: Dict[str, Any]):
             )["timestamp"]
         }
         await manager.send_personal_message(response, user_id)
-        logger.debug(f"用户 {user_id} 心跳检测 - 已回复pong")
+        logger.debug(f"user {user_id} EN - ENpong")
     
     elif message_type == "get_status":
-        # 获取连接状态
+        # fetchconnectstatus
         gateway_status = await websocket_gateway_service.get_subscription_status(user_id)
         status = {
             "type": "status",
@@ -239,17 +239,17 @@ async def handle_client_message(user_id: str, message: Dict[str, Any]):
         await manager.send_personal_message(status, user_id)
     
     else:
-        # 未知消息类型
+        # EN
         error_message = WebSocketMessage.create_error_notification(
             "unknown_message_type",
-            "未知消息类型",
+            "EN",
             {"message_type": message_type, "supported_types": ["subscribe", "subscribe_task", "unsubscribe", "unsubscribe_task", "ping", "get_status"]}
         )
         await manager.send_personal_message(error_message, user_id)
 
 @router.get("/ws/status")
 async def get_websocket_status():
-    """获取WebSocket服务状态"""
+    """fetchWebSocketservicestatus"""
     return {
         "status": "running",
         "total_connections": manager.get_connection_count(),
@@ -261,30 +261,30 @@ async def get_websocket_status():
 
 @router.post("/ws/broadcast")
 async def broadcast_message(message: Dict[str, Any]):
-    """广播消息给所有连接的用户"""
+    """ENallconnectENuser"""
     try:
         await manager.broadcast(message)
-        return {"status": "success", "message": "消息广播成功"}
+        return {"status": "success", "message": "ENsucceeded"}
     except Exception as e:
-        logger.error(f"广播消息失败: {e}")
-        raise HTTPException(status_code=500, detail=f"广播消息失败: {e}")
+        logger.error(f"ENfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"ENfailed: {e}")
 
 @router.post("/ws/broadcast/{topic}")
 async def broadcast_to_topic(topic: str, message: Dict[str, Any]):
-    """广播消息给特定主题的订阅者"""
+    """EN"""
     try:
         await manager.broadcast_to_topic(message, topic)
-        return {"status": "success", "message": f"消息已广播给主题 {topic} 的订阅者"}
+        return {"status": "success", "message": f"EN {topic} EN"}
     except Exception as e:
-        logger.error(f"广播消息给主题 {topic} 失败: {e}")
-        raise HTTPException(status_code=500, detail=f"广播消息失败: {e}")
+        logger.error(f"EN {topic} failed: {e}")
+        raise HTTPException(status_code=500, detail=f"ENfailed: {e}")
 
 @router.post("/ws/send/{user_id}")
 async def send_to_user(user_id: str, message: Dict[str, Any]):
-    """发送消息给特定用户"""
+    """sendENuser"""
     try:
         await manager.send_personal_message(message, user_id)
-        return {"status": "success", "message": f"消息已发送给用户 {user_id}"}
+        return {"status": "success", "message": f"ENsendENuser {user_id}"}
     except Exception as e:
-        logger.error(f"发送消息给用户 {user_id} 失败: {e}")
-        raise HTTPException(status_code=500, detail=f"发送消息失败: {e}")
+        logger.error(f"sendENuser {user_id} failed: {e}")
+        raise HTTPException(status_code=500, detail=f"sendENfailed: {e}")

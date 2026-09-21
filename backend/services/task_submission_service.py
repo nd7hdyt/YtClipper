@@ -1,6 +1,6 @@
 """
-任务提交服务
-避免循环导入问题
+taskENservice
+EN
 """
 
 import logging
@@ -10,84 +10,84 @@ from ..core.celery_app import celery_app
 logger = logging.getLogger(__name__)
 
 class TaskSubmissionService:
-    """任务提交服务"""
+    """taskENservice"""
     
     @staticmethod
     def submit_video_pipeline_task(project_id: str, input_video_path: str, input_srt_path: str) -> Dict[str, Any]:
         """
-        提交视频流水线任务
+        ENvideoENtask
         
         Args:
-            project_id: 项目ID
-            input_video_path: 输入视频路径
-            input_srt_path: 输入SRT路径
+            project_id: projectID
+            input_video_path: ENvideopath
+            input_srt_path: ENSRTpath
             
         Returns:
-            任务提交结果
+            taskENresult
         """
         try:
-            logger.info(f"提交视频流水线任务: {project_id}")
+            logger.info(f"ENvideoENtask: {project_id}")
             
-            # 直接使用celery_app提交任务
+            # ENusecelery_appENtask
             celery_task = celery_app.send_task(
                 'tasks.processing.process_video_pipeline',
                 args=[project_id, input_video_path, input_srt_path]
             )
             
-            logger.info(f"视频流水线任务已提交: {celery_task.id}")
+            logger.info(f"videoENtaskEN: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': celery_task.id,
                 'status': 'PENDING',
-                'message': '视频流水线任务已提交'
+                'message': 'videoENtaskEN'
             }
             
         except Exception as e:
-            logger.error(f"提交视频流水线任务失败: {project_id}, 错误: {e}")
+            logger.error(f"ENvideoENtaskfailed: {project_id}, error: {e}")
             return {
                 'success': False,
                 'error': str(e),
-                'message': '任务提交失败'
+                'message': 'taskENfailed'
             }
     
     @staticmethod
     def submit_single_step_task(project_id: str, step: str, config: Dict[str, Any]) -> Dict[str, Any]:
         """
-        提交单个步骤任务
+        ENtask
         
         Args:
-            project_id: 项目ID
-            step: 步骤名称
-            config: 处理配置
+            project_id: projectID
+            step: EN
+            config: processingconfig
             
         Returns:
-            任务提交结果
+            taskENresult
         """
         try:
-            logger.info(f"提交单个步骤任务: {project_id}, {step}")
+            logger.info(f"ENtask: {project_id}, {step}")
             
-            # 直接使用celery_app提交任务
+            # ENusecelery_appENtask
             celery_task = celery_app.send_task(
                 'tasks.processing.process_single_step',
                 args=[project_id, step, config]
             )
             
-            logger.info(f"单个步骤任务已提交: {celery_task.id}")
+            logger.info(f"ENtaskEN: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': celery_task.id,
                 'step': step,
                 'status': 'PENDING',
-                'message': f'步骤 {step} 任务已提交'
+                'message': f'EN {step} taskEN'
             }
             
         except Exception as e:
-            logger.error(f"提交单个步骤任务失败: {project_id}, {step}, 错误: {e}")
+            logger.error(f"ENtaskfailed: {project_id}, {step}, error: {e}")
             return {
                 'success': False,
                 'error': str(e),
-                'message': '任务提交失败'
+                'message': 'taskENfailed'
             }
 

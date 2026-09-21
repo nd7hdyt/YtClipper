@@ -1,6 +1,6 @@
 """
-增强的重试机制
-支持从下载到处理的完整重试流程
+ENretryEN
+ENdownloadENprocessingENretryEN
 """
 
 import logging
@@ -24,20 +24,20 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/retry", tags=["Enhanced Retry"])
 
 class RetryStrategy(str, Enum):
-    """重试策略枚举"""
-    DOWNLOAD_ONLY = "download_only"      # 仅重试下载
-    PROCESSING_ONLY = "processing_only"  # 仅重试处理
-    FULL_RETRY = "full_retry"           # 完整重试（下载+处理）
-    SMART_RETRY = "smart_retry"         # 智能重试（自动判断）
+    """retryEN"""
+    DOWNLOAD_ONLY = "download_only"      # ENretrydownload
+    PROCESSING_ONLY = "processing_only"  # ENretryprocessing
+    FULL_RETRY = "full_retry"           # ENretry（download+processing）
+    SMART_RETRY = "smart_retry"         # ENretry（EN）
 
 class RetryRequest(BaseModel):
-    """重试请求"""
+    """retryrequest"""
     strategy: Optional[RetryStrategy] = RetryStrategy.SMART_RETRY
-    force_redownload: bool = False  # 是否强制重新下载
-    browser: Optional[str] = None   # 浏览器设置（用于下载）
+    force_redownload: bool = False  # ENdownload
+    browser: Optional[str] = None   # ENsettings（ENdownload）
 
 class RetryResponse(BaseModel):
-    """重试响应"""
+    """retryresponse"""
     success: bool
     message: str
     strategy_used: RetryStrategy
@@ -46,21 +46,21 @@ class RetryResponse(BaseModel):
     download_task_id: Optional[str] = None
 
 def determine_retry_strategy(project: Project, force_redownload: bool = False) -> RetryStrategy:
-    """智能判断重试策略"""
+    """ENretryEN"""
     if force_redownload:
         return RetryStrategy.FULL_RETRY
     
-    # 检查视频文件是否存在
+    # checkvideofileEN
     video_exists = project.video_path and Path(project.video_path).exists()
     
     if not video_exists:
-        return RetryStrategy.FULL_RETRY  # 没有视频文件，完整重试
+        return RetryStrategy.FULL_RETRY  # ENvideofile，ENretry
     
-    # 检查项目状态
+    # checkprojectstatus
     if project.status == ProjectStatus.FAILED:
-        return RetryStrategy.PROCESSING_ONLY  # 有视频文件但处理失败，仅重试处理
+        return RetryStrategy.PROCESSING_ONLY  # ENvideofileENprocessingfailed，ENretryprocessing
     elif project.status == ProjectStatus.PENDING:
-        return RetryStrategy.PROCESSING_ONLY  # 有视频文件但未处理，仅重试处理
+        return RetryStrategy.PROCESSING_ONLY  # ENvideofileENprocessing，ENretryprocessing
     else:
         return RetryStrategy.SMART_RETRY
 
@@ -69,29 +69,29 @@ async def retry_download_only(
     browser: Optional[str] = None,
     db: Session = Depends(get_db)
 ) -> Dict[str, Any]:
-    """仅重试下载"""
+    """ENretrydownload"""
     try:
-        # 获取项目信息
+        # fetchprojectEN
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 获取原始下载信息（从项目描述中提取）
+        # fetchENdownloadEN（ENprojectdescriptionEN）
         description = project.description or ""
-        if "从B站下载:" in description:
-            # B站项目
-            url = description.replace("从B站下载:", "").strip()
+        if "ENBENdownload:" in description:
+            # BENproject
+            url = description.replace("ENBENdownload:", "").strip()
             return await retry_bilibili_download(project_id, url, browser, db)
-        elif "从YouTube下载:" in description:
-            # YouTube项目
-            url = description.replace("从YouTube下载:", "").strip()
+        elif "ENYouTubedownload:" in description:
+            # YouTubeproject
+            url = description.replace("ENYouTubedownload:", "").strip()
             return await retry_youtube_download(project_id, url, browser, db)
         else:
-            raise HTTPException(status_code=400, detail="无法确定下载源")
+            raise HTTPException(status_code=400, detail="cannotENdownloadEN")
     
     except Exception as e:
-        logger.error(f"重试下载失败: {e}")
-        raise HTTPException(status_code=500, detail=f"重试下载失败: {str(e)}")
+        logger.error(f"retrydownloadfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"retrydownloadfailed: {str(e)}")
 
 async def retry_bilibili_download(
     project_id: str, 
@@ -99,13 +99,13 @@ async def retry_bilibili_download(
     browser: Optional[str] = None,
     db: Session = Depends(get_db)
 ) -> Dict[str, Any]:
-    """重试B站下载"""
+    """retryBENdownload"""
     try:
-        # 导入B站下载相关模块
+        # ENBENdownloadEN
         from .bilibili import process_download_task, BilibiliDownloadRequest
         from .async_task_manager import task_manager
         
-        # 创建下载请求
+        # createdownloadrequest
         request = BilibiliDownloadRequest(
             url=url,
             project_name=db.query(Project).filter(Project.id == project_id).first().name,
@@ -113,10 +113,10 @@ async def retry_bilibili_download(
             browser=browser
         )
         
-        # 生成新的下载任务ID
+        # generateENdownloadtaskID
         task_id = str(uuid.uuid4())
         
-        # 启动下载任务
+        # startdownloadtask
         await task_manager.create_safe_task(
             f"bilibili_retry_{task_id}",
             process_download_task,
@@ -127,13 +127,13 @@ async def retry_bilibili_download(
         
         return {
             "success": True,
-            "message": "B站下载重试已启动",
+            "message": "BENdownloadretryENstart",
             "task_id": task_id
         }
     
     except Exception as e:
-        logger.error(f"重试B站下载失败: {e}")
-        raise HTTPException(status_code=500, detail=f"重试B站下载失败: {str(e)}")
+        logger.error(f"retryBENdownloadfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"retryBENdownloadfailed: {str(e)}")
 
 async def retry_youtube_download(
     project_id: str, 
@@ -141,13 +141,13 @@ async def retry_youtube_download(
     browser: Optional[str] = None,
     db: Session = Depends(get_db)
 ) -> Dict[str, Any]:
-    """重试YouTube下载"""
+    """retryYouTubedownload"""
     try:
-        # 导入YouTube下载相关模块
+        # ENYouTubedownloadEN
         from .youtube import process_youtube_download_task, YouTubeDownloadRequest
         from .async_task_manager import task_manager
         
-        # 创建下载请求
+        # createdownloadrequest
         request = YouTubeDownloadRequest(
             url=url,
             project_name=db.query(Project).filter(Project.id == project_id).first().name,
@@ -155,10 +155,10 @@ async def retry_youtube_download(
             browser=browser
         )
         
-        # 生成新的下载任务ID
+        # generateENdownloadtaskID
         task_id = str(uuid.uuid4())
         
-        # 启动下载任务
+        # startdownloadtask
         await task_manager.create_safe_task(
             f"youtube_retry_{task_id}",
             process_youtube_download_task,
@@ -169,37 +169,37 @@ async def retry_youtube_download(
         
         return {
             "success": True,
-            "message": "YouTube下载重试已启动",
+            "message": "YouTubedownloadretryENstart",
             "task_id": task_id
         }
     
     except Exception as e:
-        logger.error(f"重试YouTube下载失败: {e}")
-        raise HTTPException(status_code=500, detail=f"重试YouTube下载失败: {str(e)}")
+        logger.error(f"retryYouTubedownloadfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"retryYouTubedownloadfailed: {str(e)}")
 
 async def retry_processing_only(
     project_id: str,
     db: Session = Depends(get_db)
 ) -> Dict[str, Any]:
-    """仅重试处理"""
+    """ENretryprocessing"""
     try:
-        # 使用现有的处理服务
+        # useENprocessingservice
         processing_service = ProcessingService(db)
         
-        # 获取项目信息
+        # fetchprojectEN
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 检查视频文件
+        # checkvideofile
         if not project.video_path or not Path(project.video_path).exists():
-            raise HTTPException(status_code=400, detail="视频文件不存在，请先重试下载")
+            raise HTTPException(status_code=400, detail="videofiledoes not exist，pleaseENretrydownload")
         
-        # 重置项目状态
+        # ENprojectstatus
         project.status = ProjectStatus.PENDING
         db.commit()
         
-        # 启动处理任务
+        # startprocessingtask
         result = processing_service.start_processing(
             project_id=project_id,
             srt_path=Path(project.video_path).parent / "input.srt" if (project.video_path and Path(project.video_path).parent / "input.srt").exists() else None
@@ -207,13 +207,13 @@ async def retry_processing_only(
         
         return {
             "success": True,
-            "message": "处理重试已启动",
+            "message": "processingretryENstart",
             "task_id": result.get("task_id")
         }
     
     except Exception as e:
-        logger.error(f"重试处理失败: {e}")
-        raise HTTPException(status_code=500, detail=f"重试处理失败: {str(e)}")
+        logger.error(f"retryprocessingfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"retryprocessingfailed: {str(e)}")
 
 @router.post("/projects/{project_id}/smart-retry", response_model=RetryResponse)
 async def smart_retry_project(
@@ -221,63 +221,63 @@ async def smart_retry_project(
     request: RetryRequest,
     db: Session = Depends(get_db)
 ):
-    """智能重试项目"""
+    """ENretryproject"""
     try:
-        # 获取项目信息
+        # fetchprojectEN
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
-        # 确定重试策略
+        # ENretryEN
         if request.strategy == RetryStrategy.SMART_RETRY:
             strategy = determine_retry_strategy(project, request.force_redownload)
         else:
             strategy = request.strategy
         
-        logger.info(f"项目 {project_id} 使用重试策略: {strategy}")
+        logger.info(f"project {project_id} useretryEN: {strategy}")
         
-        # 执行重试
+        # executeretry
         if strategy == RetryStrategy.FULL_RETRY:
-            # 完整重试：先重试下载，下载完成后自动开始处理
+            # ENretry：ENretrydownload，downloadENstartprocessing
             download_result = await retry_download_only(project_id, request.browser, db)
             return RetryResponse(
                 success=True,
-                message="完整重试已启动（下载+处理）",
+                message="ENretryENstart（download+processing）",
                 strategy_used=strategy,
                 project_id=project_id,
                 download_task_id=download_result.get("task_id")
             )
         
         elif strategy == RetryStrategy.DOWNLOAD_ONLY:
-            # 仅重试下载
+            # ENretrydownload
             download_result = await retry_download_only(project_id, request.browser, db)
             return RetryResponse(
                 success=True,
-                message="下载重试已启动",
+                message="downloadretryENstart",
                 strategy_used=strategy,
                 project_id=project_id,
                 download_task_id=download_result.get("task_id")
             )
         
         elif strategy == RetryStrategy.PROCESSING_ONLY:
-            # 仅重试处理
+            # ENretryprocessing
             processing_result = await retry_processing_only(project_id, db)
             return RetryResponse(
                 success=True,
-                message="处理重试已启动",
+                message="processingretryENstart",
                 strategy_used=strategy,
                 project_id=project_id,
                 task_id=processing_result.get("task_id")
             )
         
         else:
-            raise HTTPException(status_code=400, detail=f"不支持的重试策略: {strategy}")
+            raise HTTPException(status_code=400, detail=f"ENretryEN: {strategy}")
     
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"智能重试失败: {e}")
-        raise HTTPException(status_code=500, detail=f"智能重试失败: {str(e)}")
+        logger.error(f"ENretryfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"ENretryfailed: {str(e)}")
 
 @router.get("/projects/{project_id}/retry-strategy")
 async def get_retry_strategy(
@@ -285,11 +285,11 @@ async def get_retry_strategy(
     force_redownload: bool = False,
     db: Session = Depends(get_db)
 ):
-    """获取建议的重试策略"""
+    """fetchsuggestionENretryEN"""
     try:
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail="项目不存在")
+            raise HTTPException(status_code=404, detail="projectdoes not exist")
         
         strategy = determine_retry_strategy(project, force_redownload)
         
@@ -302,16 +302,16 @@ async def get_retry_strategy(
         }
     
     except Exception as e:
-        logger.error(f"获取重试策略失败: {e}")
-        raise HTTPException(status_code=500, detail=f"获取重试策略失败: {str(e)}")
+        logger.error(f"fetchretryENfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchretryENfailed: {str(e)}")
 
 def _get_strategy_reason(project: Project, strategy: RetryStrategy) -> str:
-    """获取策略选择原因"""
+    """fetchEN"""
     if strategy == RetryStrategy.FULL_RETRY:
-        return "没有视频文件或强制重新下载"
+        return "ENvideofileENdownload"
     elif strategy == RetryStrategy.PROCESSING_ONLY:
-        return "视频文件存在但处理失败或未开始"
+        return "videofileENprocessingfailedENstart"
     elif strategy == RetryStrategy.DOWNLOAD_ONLY:
-        return "仅重试下载阶段"
+        return "ENretrydownloadEN"
     else:
-        return "智能判断"
+        return "EN"

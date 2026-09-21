@@ -1,198 +1,198 @@
-# B站登录替代方案指南
+# BEN
 
-## 问题背景
+## EN
 
-扫码登录方式容易触发B站的风控机制，导致登录失败或账号被限制。为了解决这个问题，我们提供了多种替代的登录方式。
+ENBEN，ENAccountEN。EN，ENProvidesEN。
 
-## 支持的登录方式
+## SupportEN
 
-### 1. Cookie导入登录 ⭐⭐⭐⭐⭐ (推荐)
+### 1. CookieEN ⭐⭐⭐⭐⭐ (EN)
 
-**优点：**
-- 不会触发B站风控
-- 登录成功率高
-- 操作简单
-- 安全性好（本地加密存储）
+**EN：**
+- ENBEN
+- EN
+- EN
+- EN（EN）
 
-**缺点：**
-- 需要手动获取Cookie
-- Cookie有时效性，需要定期更新
+**EN：**
+- ENCookie
+- CookieEN，EN
 
-**适用场景：**
-- 日常使用
-- 批量账号管理
-- 避免风控需求
+**EN：**
+- EN
+- ENAccount Management
+- EN
 
-**使用方法：**
-1. 在浏览器中登录B站
-2. 按F12打开开发者工具
-3. 切换到Network标签页
-4. 刷新页面，找到任意请求
-5. 在请求头中复制Cookie字段的值
-6. 粘贴到AutoClip的Cookie输入框中
+**EN：**
+1. ENBEN
+2. ENF12EN
+3. ENNetworkEN
+4. EN，EN
+5. ENCookieEN
+6. ENAutoClipENCookieEN
 
-### 2. 账号密码登录 ⭐⭐⭐
+### 2. AccountEN ⭐⭐⭐
 
-**优点：**
-- 操作直观
-- 不需要额外工具
+**EN：**
+- ENIntuitive
+- EN
 
-**缺点：**
-- 可能需要处理验证码
-- 有触发风控的风险
-- 需要输入敏感信息
+**EN：**
+- EN
+- EN
+- EN
 
-**适用场景：**
-- 新用户首次登录
-- 无法获取Cookie的情况
+**EN：**
+- EN
+- ENCookieEN
 
-**使用方法：**
-1. 输入B站用户名/手机号
-2. 输入密码
-3. 设置昵称
-4. 点击登录
+**EN：**
+1. ENBEN/EN
+2. EN
+3. EN
+4. EN
 
-### 3. 扫码登录 ⭐⭐
+### 3. EN ⭐⭐
 
-**优点：**
-- 操作简单
-- 不需要输入密码
+**EN：**
+- EN
+- EN
 
-**缺点：**
-- 容易触发B站风控
-- 成功率较低
-- 需要手机B站APP
+**EN：**
+- ENBEN
+- EN
+- ENBENAPP
 
-**适用场景：**
-- 临时测试
-- 其他方式都不可用的情况
+**EN：**
+- EN
+- EN
 
-**使用方法：**
-1. 点击"开始扫码登录"
-2. 使用B站APP扫描二维码
-3. 在APP中确认登录
+**EN：**
+1. EN"EN"
+2. ENBENAPPEN
+3. ENAPPEN
 
-### 4. 第三方登录 ⭐⭐
+### 4. EN ⭐⭐
 
-**优点：**
-- 不需要B站账号密码
-- 相对安全
+**EN：**
+- ENBENAccountEN
+- EN
 
-**缺点：**
-- 需要第三方账号
-- 流程复杂
-- 支持有限
+**EN：**
+- ENAccount
+- EN
+- SupportEN
 
-**适用场景：**
-- 有微信/QQ账号的用户
-- 不想使用B站账号密码的情况
+**EN：**
+- EN/QQAccountEN
+- ENBENAccountEN
 
-## 推荐使用策略
+## EN
 
-### 日常使用推荐
-1. **首选：Cookie导入**
-   - 最稳定可靠的方式
-   - 不会触发风控
-   - 建议定期更新Cookie
+### EN
+1. **EN：CookieEN**
+   - EN
+   - EN
+   - ENCookie
 
-2. **备选：账号密码登录**
-   - 当Cookie失效时使用
-   - 注意验证码处理
+2. **EN：AccountEN**
+   - ENCookieEN
+   - EN
 
-### 批量账号管理
-- 统一使用Cookie导入方式
-- 建立Cookie更新机制
-- 定期检查账号状态
+### ENAccount Management
+- ENCookieEN
+- ENCookieEN
+- ENAccountEN
 
-### 新用户引导
-1. 提供详细的Cookie获取教程
-2. 制作可视化操作指南
-3. 提供一键复制功能
+### EN
+1. ProvidesENCookieEN
+2. ENVisualEN
+3. ProvidesEN
 
-## 安全注意事项
+## EN
 
-### Cookie安全
-- Cookie包含登录凭证，请妥善保管
-- 不要分享给他人
-- 定期更换Cookie
-- 使用完毕后及时清除
+### CookieEN
+- CookieEN，EN
+- Do notEN
+- ENCookie
+- EN
 
-### 账号安全
-- 不要在公共设备上登录
-- 定期检查账号状态
-- 发现异常及时处理
+### AccountEN
+- Do notEN
+- ENAccountEN
+- EN
 
-## 技术实现
+## EN
 
-### 后端API
+### ENAPI
 ```python
-# Cookie验证
+# CookieEN
 async def validate_bilibili_cookies(cookies: dict) -> dict:
-    """验证B站Cookie有效性"""
-    # 使用Cookie访问用户信息API
-    # 返回验证结果和用户信息
+    """ENBENCookieEN"""
+    # ENCookieENAPI
+    # EN
 
-# 账号密码登录
+# AccountEN
 async def bilibili_password_login(username: str, password: str) -> dict:
-    """B站账号密码登录"""
-    # 处理验证码和登录流程
-    # 返回登录结果
+    """BENAccountEN"""
+    # EN
+    # EN
 ```
 
-### 前端组件
+### EN
 ```typescript
-// 多种登录方式支持
+// ENSupport
 const loginMethods = [
-  { id: 'cookie', name: 'Cookie导入', recommended: true },
-  { id: 'password', name: '账号密码', recommended: true },
-  { id: 'qr', name: '扫码登录', recommended: false },
-  { id: 'wechat', name: '微信登录', recommended: false },
-  { id: 'qq', name: 'QQ登录', recommended: false }
+  { id: 'cookie', name: 'CookieEN', recommended: true },
+  { id: 'password', name: 'AccountEN', recommended: true },
+  { id: 'qr', name: 'EN', recommended: false },
+  { id: 'wechat', name: 'EN', recommended: false },
+  { id: 'qq', name: 'QQEN', recommended: false }
 ]
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 常见问题
+### FAQ
 
-1. **Cookie无效**
-   - 检查Cookie是否过期
-   - 确认Cookie格式正确
-   - 重新获取Cookie
+1. **CookieEN**
+   - ENCookieEN
+   - ENCookieEN
+   - ENCookie
 
-2. **账号密码登录失败**
-   - 检查用户名密码是否正确
-   - 确认是否需要验证码
-   - 尝试使用Cookie导入
+2. **AccountEN**
+   - EN
+   - EN
+   - ENCookieEN
 
-3. **扫码登录超时**
-   - 检查网络连接
-   - 确认B站APP版本
-   - 尝试其他登录方式
+3. **EN**
+   - EN
+   - ENBENAPPEN
+   - EN
 
-### 调试方法
-1. 查看浏览器控制台错误信息
-2. 检查网络请求状态
-3. 查看后端日志
-4. 使用开发者工具分析
+### EN
+1. EN
+2. EN
+3. EN
+4. EN
 
-## 更新日志
+## EN
 
 ### v1.0.0
-- 添加Cookie导入登录
-- 添加账号密码登录
-- 优化扫码登录流程
-- 添加登录方式选择界面
+- ENCookieEN
+- ENAccountEN
+- EN
+- ENInterface
 
-### 后续计划
-- 添加Cookie自动更新功能
-- 支持更多第三方登录
-- 优化用户体验
-- 增强安全性
+### EN
+- ENCookieEN
+- SupportEN
+- EN
+- EN
 
-## 相关文档
+## EN
 
-- [Cookie获取详细教程](./COOKIE_GETTING_GUIDE.md)
-- [B站API接口文档](./BILIBILI_API_DOCS.md)
-- [安全最佳实践](./SECURITY_BEST_PRACTICES.md)
+- [CookieEN](./COOKIE_GETTING_GUIDE.md)
+- [BENAPIEN](./BILIBILI_API_DOCS.md)
+- [EN](./SECURITY_BEST_PRACTICES.md)
 

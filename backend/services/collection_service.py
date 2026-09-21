@@ -1,6 +1,6 @@
 """
-合集服务
-提供合集相关的业务逻辑操作
+collectionservice
+ENcollectionEN
 """
 
 from typing import List, Optional, Dict, Any
@@ -27,25 +27,25 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
     
     def update_collection(self, collection_id: str, collection_data: CollectionUpdate) -> Optional[Collection]:
         """Update a collection with business logic."""
-        # 获取所有字段，包括None值
+        # fetchallEN，includeNoneEN
         all_data = collection_data.model_dump()
         
-        # 过滤掉None值，但保留metadata字段
+        # ENNoneEN，ENmetadataEN
         update_data = {k: v for k, v in all_data.items() if v is not None or k == 'metadata'}
         
-        # 如果metadata字段存在，需要合并而不是覆盖
+        # ifmetadataEN，needEN
         if 'metadata' in all_data:
-            # 获取当前合集的metadata
+            # fetchcurrentcollectionENmetadata
             current_collection = self.get(collection_id)
             if current_collection:
                 current_metadata = getattr(current_collection, 'collection_metadata', {}) or {}
                 new_metadata = collection_data.metadata or {}
                 
-                # 合并metadata，新值覆盖旧值
+                # ENmetadata，EN
                 merged_metadata = {**current_metadata, **new_metadata}
-                # 使用正确的字段名 collection_metadata
+                # useEN collection_metadata
                 update_data['collection_metadata'] = merged_metadata
-                # 移除错误的字段名
+                # ENerrorEN
                 if 'metadata' in update_data:
                     del update_data['metadata']
         
@@ -55,7 +55,7 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
         return self.update(collection_id, **update_data)
     
     def delete_collection_with_filesystem_update(self, collection_id: str) -> bool:
-        """删除合集并更新文件系统的删除记录"""
+        """deletecollectionENupdatefilesystemENdeleteEN"""
         import logging
         import json
         from pathlib import Path
@@ -64,24 +64,24 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
         
         logger = logging.getLogger(__name__)
         
-        # 获取合集信息
+        # fetchcollectionEN
         collection = self.get(collection_id)
         if not collection:
             return False
         
         project_id = collection.project_id
         
-        # 删除数据库记录
+        # deletedatabaseEN
         success = self.delete(collection_id)
         if not success:
             return False
         
-        # 更新文件系统的删除记录
+        # updatefilesystemENdeleteEN
         try:
             project_dir = get_project_directory(project_id)
             deleted_collections_file = project_dir / "deleted_collections.json"
             
-            # 读取现有的删除记录
+            # readENdeleteEN
             deleted_collections = []
             if deleted_collections_file.exists():
                 try:
@@ -89,13 +89,13 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
                         data = json.load(f)
                         deleted_collections = data.get('deleted_collection_ids', [])
                 except Exception as e:
-                    logger.warning(f"读取删除记录文件失败: {e}")
+                    logger.warning(f"readdeleteENfilefailed: {e}")
             
-            # 添加新的删除记录
+            # ENdeleteEN
             if collection_id not in deleted_collections:
                 deleted_collections.append(collection_id)
                 
-                # 保存更新后的删除记录
+                # saveupdateENdeleteEN
                 deleted_data = {
                     'deleted_collection_ids': deleted_collections,
                     'last_updated': datetime.now().isoformat()
@@ -104,11 +104,11 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
                 with open(deleted_collections_file, 'w', encoding='utf-8') as f:
                     json.dump(deleted_data, f, ensure_ascii=False, indent=2)
                 
-                logger.info(f"已更新删除记录文件: {deleted_collections_file}")
+                logger.info(f"updateddeleteENfile: {deleted_collections_file}")
             
         except Exception as e:
-            logger.error(f"更新删除记录文件失败: {e}")
-            # 即使文件更新失败，数据库删除已经成功，所以返回True
+            logger.error(f"updatedeleteENfilefailed: {e}")
+            # ENfileupdatefailed，databasedeletealreadysucceeded，soreturnTrue
         
         return True
     
@@ -133,11 +133,11 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
         # Convert to response schemas
         collection_responses = []
         for collection in items:
-            # 获取clip_ids
+            # fetchclip_ids
             clip_ids = []
             metadata = getattr(collection, 'collection_metadata', {}) or {}
             if metadata and 'clip_ids' in metadata:
-                # 直接使用metadata中的clip_ids，它们已经是UUID格式
+                # ENusemetadataENclip_ids，ENalreadyENUUIDEN
                 clip_ids = metadata['clip_ids']
             
             collection_responses.append(CollectionResponse(

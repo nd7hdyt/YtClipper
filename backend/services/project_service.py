@@ -1,6 +1,6 @@
 """
-项目服务
-提供项目相关的业务逻辑操作
+projectservice
+ENprojectEN
 """
 
 from typing import Optional, List, Dict, Any
@@ -41,7 +41,7 @@ class ProjectService(BaseService[Project, ProjectCreate, ProjectUpdate, ProjectR
             "name": project_dict["name"],
             "description": project_dict.get("description"),
             "project_type": project_dict.get("project_type", "default").value if hasattr(project_dict.get("project_type", "default"), 'value') else project_dict.get("project_type", "default"),  # Map project_type to project_type
-            "status": "pending",  # 默认状态为 pending
+            "status": "pending",  # ENstatusEN pending
             "video_path": project_dict.get("source_file"),  # Map source_file to video_path
             "processing_config": project_dict.get("settings", {}),  # Map settings to processing_config
             "project_metadata": {"source_url": project_dict.get("source_url")}  # Map source_url to metadata
@@ -69,8 +69,8 @@ class ProjectService(BaseService[Project, ProjectCreate, ProjectUpdate, ProjectR
         return self.update(project_id, **orm_data)
     
     def latest_error_message(self, project, status=None) -> Optional[str]:
-        """项目失败时的错误文本：最近一条任务的 Task.error_message，其次 project_metadata.last_error（CLI 路径）。
-        Project 表没有 error_message 列。"""
+        """projectfailedENerrorEN：ENtaskEN Task.error_message，EN project_metadata.last_error（CLI path）。
+        Project EN error_message EN。"""
         status = status if status is not None else getattr(project, 'status', None)
         status_value = getattr(status, "value", status)
         if str(status_value).lower() != "failed":
@@ -113,8 +113,8 @@ class ProjectService(BaseService[Project, ProjectCreate, ProjectUpdate, ProjectR
             status=getattr(project, 'status', ProjectStatus.PENDING),
             source_url=project.project_metadata.get("source_url") if getattr(project, 'project_metadata', None) else None,
             source_file=str(getattr(project, 'video_path', '')) if getattr(project, 'video_path', None) is not None else None,
-            video_path=str(getattr(project, 'video_path', '')) if getattr(project, 'video_path', None) is not None else None,  # 添加video_path字段供前端使用
-            thumbnail=getattr(project, 'thumbnail', None),  # 从数据库获取缩略图
+            video_path=str(getattr(project, 'video_path', '')) if getattr(project, 'video_path', None) is not None else None,  # ENvideo_pathENuse
+            thumbnail=getattr(project, 'thumbnail', None),  # ENdatabasefetchEN
             settings=getattr(project, 'processing_config', {}) or {},
             created_at=self._convert_utc_to_local(getattr(project, 'created_at', None)),
             updated_at=self._convert_utc_to_local(getattr(project, 'updated_at', None)),
@@ -160,8 +160,8 @@ class ProjectService(BaseService[Project, ProjectCreate, ProjectUpdate, ProjectR
                 status=ProjectStatus(getattr(project, 'status').value) if hasattr(project, 'status') and hasattr(getattr(project, 'status'), 'value') else ProjectStatus.PENDING,
                 source_url=project.project_metadata.get("source_url") if getattr(project, 'project_metadata', None) else None,
                 source_file=str(getattr(project, 'video_path', '')) if getattr(project, 'video_path', None) is not None else None,
-                video_path=str(getattr(project, 'video_path', '')) if getattr(project, 'video_path', None) is not None else None,  # 添加video_path字段供前端使用
-                thumbnail=getattr(project, 'thumbnail', None),  # 从数据库获取缩略图
+                video_path=str(getattr(project, 'video_path', '')) if getattr(project, 'video_path', None) is not None else None,  # ENvideo_pathENuse
+                thumbnail=getattr(project, 'thumbnail', None),  # ENdatabasefetchEN
                 settings=getattr(project, 'processing_config', {}) or {},
                 created_at=self._convert_utc_to_local(getattr(project, 'created_at', None)),
                 updated_at=self._convert_utc_to_local(getattr(project, 'updated_at', None)),
@@ -222,15 +222,15 @@ class ProjectService(BaseService[Project, ProjectCreate, ProjectUpdate, ProjectR
         return True
     
     def _convert_utc_to_local(self, dt):
-        """将UTC时间转换为本地时间（SQLite存储时丢失了时区信息）"""
+        """ENUTCtimeENtime（SQLiteEN）"""
         if dt is None:
             return None
         
         from datetime import datetime, timezone
         import pytz
         
-        # 由于SQLite存储时丢失了时区信息，我们假设这些时间是UTC时间
-        # 将其转换为本地时间
+        # ENSQLiteEN，weENthesetimeENUTCtime
+        # ENtime
         local_tz = pytz.timezone('Asia/Shanghai')
         utc_time = dt.replace(tzinfo=timezone.utc)
         local_time = utc_time.astimezone(local_tz)
@@ -239,24 +239,24 @@ class ProjectService(BaseService[Project, ProjectCreate, ProjectUpdate, ProjectR
     
     def delete_project_with_files(self, project_id: str) -> bool:
         """
-        删除项目及其所有相关数据
+        deleteprojectENallEN
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
             
         Returns:
-            是否删除成功
+            ENdeletesucceeded
         """
         try:
-            # 获取项目信息
+            # fetchprojectEN
             project = self.get(project_id)
             if not project:
-                logger.warning(f"项目 {project_id} 不存在")
+                logger.warning(f"project {project_id} does not exist")
                 return False
             
-            logger.info(f"开始删除项目 {project_id}: {project.name}")
+            logger.info(f"startdeleteproject {project_id}: {project.name}")
             
-            # 检查是否有正在运行的任务（只对非完成状态的项目进行检查）
+            # checkENcurrentlyrunENtask（ENstatusENprojectENcheck）
             if project.status not in ["completed", "failed"]:
                 running_tasks = self.db.query(Task).filter(
                     Task.project_id == project_id,
@@ -264,138 +264,138 @@ class ProjectService(BaseService[Project, ProjectCreate, ProjectUpdate, ProjectR
                 ).count()
                 
                 if running_tasks > 0:
-                    logger.warning(f"项目 {project_id} 有 {running_tasks} 个正在运行的任务，无法删除")
+                    logger.warning(f"project {project_id} EN {running_tasks} ENcurrentlyrunENtask，cannotdelete")
                     return False
             else:
-                # 对于已完成或失败的项目，记录任务状态但不阻止删除
+                # ENcompletedENfailedENproject，ENtaskstatusENdelete
                 running_tasks = self.db.query(Task).filter(
                     Task.project_id == project_id,
                     Task.status == TaskStatus.RUNNING
                 ).count()
                 
                 if running_tasks > 0:
-                    logger.info(f"项目 {project_id} 已完成，但仍有 {running_tasks} 个标记为运行中的任务，将一并删除")
+                    logger.info(f"project {project_id} completed，EN {running_tasks} ENrunENtask，ENdelete")
             
-            # 开始事务（如果还没有开始的话）
+            # startEN（ifENstartEN）
             if not self.db.in_transaction():
                 self.db.begin()
             
             try:
-                # 1. 删除相关任务
+                # 1. deleteENtask
                 task_count = self.db.query(Task).filter(Task.project_id == project_id).count()
                 if task_count > 0:
                     self.db.query(Task).filter(Task.project_id == project_id).delete()
-                    logger.info(f"删除项目 {project_id} 的 {task_count} 个任务")
+                    logger.info(f"deleteproject {project_id} EN {task_count} ENtask")
                 
-                # 2. 删除相关切片
+                # 2. deleteENclip
                 clip_count = self.db.query(Clip).filter(Clip.project_id == project_id).count()
                 if clip_count > 0:
                     self.db.query(Clip).filter(Clip.project_id == project_id).delete()
-                    logger.info(f"删除项目 {project_id} 的 {clip_count} 个切片")
+                    logger.info(f"deleteproject {project_id} EN {clip_count} ENclip")
                 
-                # 3. 删除相关合集
+                # 3. deleteENcollection
                 collection_count = self.db.query(Collection).filter(Collection.project_id == project_id).count()
                 if collection_count > 0:
                     self.db.query(Collection).filter(Collection.project_id == project_id).delete()
-                    logger.info(f"删除项目 {project_id} 的 {collection_count} 个合集")
+                    logger.info(f"deleteproject {project_id} EN {collection_count} ENcollection")
                 
-                # 4. 删除项目记录
+                # 4. deleteprojectEN
                 self.db.query(Project).filter(Project.id == project_id).delete()
-                logger.info(f"删除项目 {project_id} 记录")
+                logger.info(f"deleteproject {project_id} EN")
                 
-                # 5. 提交事务
+                # 5. EN
                 self.db.commit()
                 
-                # 6. 删除项目文件
+                # 6. deleteprojectfile
                 self._delete_project_files(project_id)
                 
-                # 7. 清理进度数据
+                # 7. ENprogressEN
                 self._cleanup_project_progress(project_id)
                 
-                logger.info(f"项目 {project_id} 删除成功")
+                logger.info(f"project {project_id} deletesucceeded")
                 return True
                 
             except Exception as e:
                 self.db.rollback()
-                logger.error(f"删除项目 {project_id} 数据库操作失败: {str(e)}")
+                logger.error(f"deleteproject {project_id} databaseENfailed: {str(e)}")
                 return False
             
         except Exception as e:
-            logger.error(f"删除项目 {project_id} 时发生错误: {str(e)}")
+            logger.error(f"deleteproject {project_id} ENerror: {str(e)}")
             return False
     
     def _delete_project_files(self, project_id: str):
         """
-        删除项目相关的文件
+        deleteprojectENfile
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
         """
         try:
-            # 项目目录路径
+            # projectdirectorypath
             project_dir = Path(f"data/projects/{project_id}")
             
             if project_dir.exists():
-                logger.info(f"删除项目目录: {project_dir}")
+                logger.info(f"deleteprojectdirectory: {project_dir}")
                 shutil.rmtree(project_dir)
             else:
-                logger.info(f"项目目录不存在: {project_dir}")
+                logger.info(f"projectdirectorydoes not exist: {project_dir}")
             
-            # 删除全局输出目录中的相关文件（如果存在）
-            # 注意：现在主要使用项目内目录，但保留对全局目录的清理以防遗留文件
+            # deleteENdirectoryENfile（ifEN）
+            # EN：ENuseprojectENdirectory，ENdirectoryENfile
             from ..core.path_utils import get_data_directory
             data_dir = get_data_directory()
             global_clips_dir = data_dir / "output" / "clips"
             global_collections_dir = data_dir / "output" / "collections"
             
-            # 删除全局输出目录中属于该项目的切片文件
+            # deleteENdirectoryENprojectENclipfile
             if global_clips_dir.exists():
                 for clip_file in global_clips_dir.glob(f"*_{project_id}*"):
                     try:
                         clip_file.unlink()
-                        logger.info(f"删除全局切片文件: {clip_file}")
+                        logger.info(f"deleteENclipfile: {clip_file}")
                     except Exception as e:
-                        logger.warning(f"删除全局切片文件失败 {clip_file}: {e}")
+                        logger.warning(f"deleteENclipfilefailed {clip_file}: {e}")
             
-            # 删除全局输出目录中属于该项目的合集文件
+            # deleteENdirectoryENprojectENcollectionfile
             if global_collections_dir.exists():
                 for collection_file in global_collections_dir.glob(f"*_{project_id}*"):
                     try:
                         collection_file.unlink()
-                        logger.info(f"删除全局合集文件: {collection_file}")
+                        logger.info(f"deleteENcollectionfile: {collection_file}")
                     except Exception as e:
-                        logger.warning(f"删除全局合集文件失败 {collection_file}: {e}")
+                        logger.warning(f"deleteENcollectionfilefailed {collection_file}: {e}")
             
         except Exception as e:
-            logger.error(f"删除项目文件时发生错误: {str(e)}")
-            # 不抛出异常，让数据库删除继续进行
+            logger.error(f"deleteprojectfileENerror: {str(e)}")
+            # ENexception，ENdatabasedeleteEN
     
     def _cleanup_project_progress(self, project_id: str):
         """
-        清理项目相关的进度数据
+        ENprojectENprogressEN
         
         Args:
-            project_id: 项目ID
+            project_id: projectID
         """
         try:
-            # 清理Redis中的进度数据
+            # ENRedisENprogressEN
             try:
                 from ..services.simple_progress import clear_progress
                 clear_progress(project_id)
-                logger.info(f"清理项目 {project_id} 的Redis进度数据")
+                logger.info(f"ENproject {project_id} ENRedisprogressEN")
             except Exception as e:
-                logger.warning(f"清理Redis进度数据失败: {e}")
+                logger.warning(f"ENRedisprogressENfailed: {e}")
             
-            # 清理增强进度服务中的缓存
+            # ENprogressserviceENcache
             try:
                 from ..services.enhanced_progress_service import progress_service
                 if project_id in progress_service.progress_cache:
                     del progress_service.progress_cache[project_id]
-                    logger.info(f"清理项目 {project_id} 的内存进度缓存")
+                    logger.info(f"ENproject {project_id} ENprogresscache")
             except Exception as e:
-                logger.warning(f"清理内存进度缓存失败: {e}")
+                logger.warning(f"ENprogresscachefailed: {e}")
             
         except Exception as e:
-            logger.error(f"清理项目进度数据失败: {str(e)}")
+            logger.error(f"ENprojectprogressENfailed: {str(e)}")
     
  

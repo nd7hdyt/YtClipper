@@ -1,13 +1,13 @@
 <svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- 主背景渐变 -->
+    <!-- EN -->
     <radialGradient id="mainGradient" cx="50%" cy="50%" r="70%">
       <stop offset="0%" stop-color="#1a1a2e" stop-opacity="1"/>
       <stop offset="50%" stop-color="#16213e" stop-opacity="1"/>
       <stop offset="100%" stop-color="#0f0f23" stop-opacity="1"/>
     </radialGradient>
     
-    <!-- 光效渐变 -->
+    <!-- EN -->
     <radialGradient id="lightGradient1" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#4facfe" stop-opacity="0.8"/>
       <stop offset="50%" stop-color="#00f2fe" stop-opacity="0.4"/>
@@ -20,14 +20,14 @@
       <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
     </radialGradient>
     
-    <!-- 文字渐变 -->
+    <!-- EN -->
     <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#4facfe"/>
       <stop offset="50%" stop-color="#00f2fe"/>
       <stop offset="100%" stop-color="#667eea"/>
     </linearGradient>
     
-    <!-- 发光滤镜 -->
+    <!-- EN -->
     <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
       <feMerge> 
@@ -36,7 +36,7 @@
       </feMerge>
     </filter>
     
-    <!-- 文字发光滤镜 -->
+    <!-- EN -->
     <filter id="textGlow" x="-50%" y="-50%" width="200%" height="200%">
       <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
       <feMerge> 
@@ -45,19 +45,19 @@
       </feMerge>
     </filter>
     
-    <!-- 网格图案 -->
+    <!-- EN -->
     <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
       <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#4facfe" stroke-width="0.5" opacity="0.1"/>
     </pattern>
   </defs>
   
-  <!-- 主背景 -->
+  <!-- EN -->
   <rect width="1920" height="1080" fill="url(#mainGradient)"/>
   
-  <!-- 网格背景层 -->
+  <!-- EN -->
   <rect width="1920" height="1080" fill="url(#grid)" opacity="0.3"/>
   
-  <!-- 动态光效层 -->
+  <!-- EN -->
   <ellipse cx="400" cy="300" rx="600" ry="300" fill="url(#lightGradient1)" opacity="0.6">
     <animateTransform attributeName="transform" type="translate" values="0,0; 80,50; 0,0" dur="15s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0.4;0.8;0.4" dur="10s" repeatCount="indefinite"/>
@@ -68,13 +68,13 @@
     <animate attributeName="opacity" values="0.3;0.7;0.3" dur="12s" repeatCount="indefinite"/>
   </ellipse>
   
-  <!-- 中央光效 -->
+  <!-- EN -->
   <ellipse cx="960" cy="540" rx="800" ry="400" fill="url(#lightGradient1)" opacity="0.3">
     <animateTransform attributeName="transform" type="translate" values="0,0; 30,-30; 0,0" dur="20s" repeatCount="indefinite"/>
     <animate attributeName="opacity" values="0.2;0.5;0.2" dur="14s" repeatCount="indefinite"/>
   </ellipse>
   
-  <!-- 浮动粒子 -->
+  <!-- EN -->
   <g filter="url(#glow)">
     <circle cx="200" cy="200" r="3" fill="#4facfe" opacity="0.8">
       <animate attributeName="opacity" values="0.4;0.8;0.4" dur="4s" repeatCount="indefinite"/>
@@ -97,14 +97,14 @@
     </circle>
   </g>
   
-  <!-- AutoClip 主标题 -->
+  <!-- AutoClip EN -->
   <text x="960" y="540" text-anchor="middle" dominant-baseline="middle" 
         font-family="Arial, sans-serif" font-size="180" font-weight="bold" 
         fill="url(#textGradient)" filter="url(#textGlow)">
     AutoClip
   </text>
   
-  <!-- 装饰线条 -->
+  <!-- EN -->
   <g opacity="0.4">
     <line x1="200" y1="540" x2="720" y2="540" stroke="url(#textGradient)" stroke-width="2" opacity="0.6">
       <animate attributeName="opacity" values="0.3;0.6;0.3" dur="8s" repeatCount="indefinite"/>
@@ -115,7 +115,7 @@
     </line>
   </g>
   
-  <!-- 装饰圆环 -->
+  <!-- EN -->
   <g opacity="0.3">
     <circle cx="960" cy="540" r="300" fill="none" stroke="#4facfe" stroke-width="1" opacity="0.3">
       <animate attributeName="stroke-opacity" values="0.1;0.3;0.1" dur="10s" repeatCount="indefinite"/>
@@ -128,7 +128,7 @@
     </circle>
   </g>
   
-  <!-- 底部渐变遮罩 -->
+  <!-- EN -->
   <defs>
     <linearGradient id="bottomMask" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stop-color="transparent" stop-opacity="0"/>

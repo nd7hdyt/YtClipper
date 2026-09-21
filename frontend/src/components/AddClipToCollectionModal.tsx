@@ -25,14 +25,14 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
   const [selectedClipIds, setSelectedClipIds] = useState<string[]>([])
   const [searchText, setSearchText] = useState('')
 
-  // 过滤出不在当前合集中的切片
+  // ENCollectionENClip
   const availableClips = useMemo(() => {
     const safeClips = Array.isArray(clips) ? clips : []
     const safeExistingIds = Array.isArray(existingClipIds) ? existingClipIds : []
     return safeClips.filter(clip => !safeExistingIds.includes(clip.id))
   }, [clips, existingClipIds])
 
-  // 根据搜索文本过滤切片
+  // ENSearchTextENClip
   const filteredClips = useMemo(() => {
     if (!searchText.trim()) {
       return availableClips
@@ -93,14 +93,14 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
 
   return (
     <Modal
-      title="添加切片到合集"
+      title="addCliptoCollection"
       open={visible}
       onCancel={handleCancel}
       width={800}
       className="add-clip-modal"
       footer={[
         <Button key="cancel" onClick={handleCancel}>
-          取消
+          Cancel
         </Button>,
         <Button 
           key="confirm" 
@@ -108,15 +108,15 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
           onClick={handleConfirm}
           disabled={selectedClipIds.length === 0}
         >
-          添加 {selectedClipIds.length > 0 && `(${selectedClipIds.length})`}
+          add {selectedClipIds.length > 0 && `(${selectedClipIds.length})`}
         </Button>
       ]}
     >
       <div className="add-clip-modal-content">
-        {/* 搜索和操作栏 */}
+        {/* SearchENActionsEN */}
         <div className="search-section">
           <Search
-            placeholder="搜索切片标题、内容或推荐理由..."
+            placeholder="SearchClipTitle、EN..."
             prefix={<SearchOutlined />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -127,7 +127,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
           <div className="action-bar">
             <Space>
               <Text type="secondary">
-                可添加 {filteredClips.length} 个切片
+                ENadd {filteredClips.length} ENClip
               </Text>
               {filteredClips.length > 0 && (
                 <Button 
@@ -135,14 +135,14 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                   size="small"
                   onClick={handleSelectAll}
                 >
-                  {selectedClipIds.length === filteredClips.length ? '取消全选' : '全选'}
+                  {selectedClipIds.length === filteredClips.length ? 'CancelSelect all' : 'Select all'}
                 </Button>
               )}
             </Space>
           </div>
         </div>
 
-        {/* 切片列表 */}
+        {/* Cliplist */}
         <div className="clips-list-container">
           {filteredClips.length > 0 ? (
             <List
@@ -180,7 +180,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                                 border: 'none'
                               }}
                             >
-                              分数: {(clip.final_score * 100).toFixed(0)}
+                              score: {(clip.final_score * 100).toFixed(0)}
                             </Tag>
                           </Space>
                         </div>
@@ -213,8 +213,8 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                 image={<PlayCircleOutlined style={{ fontSize: '48px', color: '#d9d9d9' }} />}
                 description={
                   availableClips.length === 0 
-                    ? "所有切片都已在合集中" 
-                    : "没有找到匹配的切片"
+                    ? "AllClipENCollectionEN" 
+                    : "ENtoENClip"
                 }
               />
             </div>

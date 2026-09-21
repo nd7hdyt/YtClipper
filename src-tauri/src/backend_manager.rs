@@ -13,7 +13,7 @@ pub struct BackendStatus {
     pub is_running: bool,
     pub port: u16,
     pub pid: Option<u32>,
-    pub start_time: Option<u64>, // 改为u64以支持序列化
+    pub start_time: Option<u64>, // changed to u64 for serialization
 }
 
 impl Default for BackendStatus {
@@ -49,10 +49,10 @@ impl BackendManager {
     pub fn start(&self, app_handle: AppHandle) -> Result<(), String> {
         let mut status = self.status.lock().unwrap();
         if status.is_running {
-            return Err("后端服务已在运行".to_string());
+            return Err("Backend service already running".to_string());
         }
 
-        // 启动后端服务
+        // Start backend service
         let launch = self.get_backend_launch(&app_handle)?;
 
         let mut cmd = Command::new(&launch.program);
@@ -117,10 +117,10 @@ impl BackendManager {
                     .map(|duration| duration.as_secs())
                     .unwrap_or(0);
 
-                // 启动时先设置为运行状态，但端口未知
+                // Set to running at start, port unknown
                 *status = BackendStatus {
                     is_running: true,
-                    port: 0, // 端口将在读取stdout后更新
+                    port: 0, // port will be updated after reading stdout
                     pid: Some(pid),
                     start_time: Some(start_time),
                 };
@@ -128,7 +128,7 @@ impl BackendManager {
                 let mut process = self.process.lock().unwrap();
                 *process = Some(child);
 
-                // 启动端口读取和健康检查
+                // Start port reading and health check
                 let status_clone = self.status.clone();
                 let process_clone = self.process.clone();
                 let app_handle_clone = app_handle.clone();
@@ -139,20 +139,20 @@ impl BackendManager {
 
                 Ok(())
             }
-            Err(e) => Err(format!("启动后端服务失败: {}", e)),
+            Err(e) => Err(format!("Failed to start backend service: {}", e)),
         }
     }
 
     pub fn stop(&self) -> Result<(), String> {
         let mut status = self.status.lock().unwrap();
         if !status.is_running {
-            return Err("后端服务未运行".to_string());
+            return Err("Backend service not running".to_string());
         }
 
         let mut process = self.process.lock().unwrap();
         if let Some(mut child) = process.take() {
             if let Err(e) = child.kill() {
-                return Err(format!("停止后端服务失败: {}", e));
+                return Err(format!("Failed to stop backend service: {}", e));
             }
             let _ = child.wait();
         }
@@ -162,15 +162,15 @@ impl BackendManager {
     }
 
     pub fn restart(&self, app_handle: AppHandle) -> Result<(), String> {
-        // 先停止
+        // Stop first
         if let Err(e) = self.stop() {
-            return Err(format!("停止后端服务失败: {}", e));
+            return Err(format!("Failed to stop backend service: {}", e));
         }
 
-        // 等待一秒
+        // Wait one second
         std::thread::sleep(Duration::from_secs(1));
 
-        // 再启动
+        // then start
         self.start(app_handle)
     }
 
@@ -230,7 +230,7 @@ impl BackendManager {
             }
         }
 
-        // 开发模式回退到仓库根目录
+        // EN
         if let Ok(current_dir) = std::env::current_dir() {
             if let Some(project_root) = current_dir.parent() {
                 let backend_dir = project_root.join("backend");
@@ -268,7 +268,7 @@ impl BackendManager {
             }
         }
 
-        Err("找不到可用的 Python 环境或后端代码".to_string())
+        Err("No available Python environment or backend code found".to_string())
     }
 
     fn exe_name(base: &str) -> String {
@@ -390,7 +390,7 @@ impl BackendManager {
         loop {
             thread::sleep(Duration::from_secs(5));
 
-            // 检查状态
+            // Check status
             let should_continue = {
                 let status_guard = status.lock().unwrap();
                 status_guard.is_running
@@ -400,19 +400,19 @@ impl BackendManager {
                 break;
             }
 
-            // 检查进程是否还在运行
+            // Check if process still running
             let process_exited = {
                 let mut process_guard = process.lock().unwrap();
                 if let Some(ref mut child) = process_guard.as_mut() {
                     match child.try_wait() {
                         Ok(Some(_)) => {
-                            // 进程已退出
+                            // Process exited
                             *process_guard = None;
                             true
                         }
-                        Ok(None) => false, // 进程仍在运行
+                        Ok(None) => false, // Process still running
                         Err(_) => {
-                            // 检查进程状态失败
+                            // Failed to check process status
                             *process_guard = None;
                             true
                         }
@@ -423,13 +423,13 @@ impl BackendManager {
             };
 
             if process_exited {
-                // 更新状态
+                // Update status
                 let mut status_guard = status.lock().unwrap();
                 *status_guard = BackendStatus::default();
                 break;
             }
 
-            // 健康检查
+            // Health check
             let port = {
                 let status_guard = status.lock().unwrap();
                 status_guard.port
@@ -438,7 +438,7 @@ impl BackendManager {
             if port > 0 {
                 let addr = SocketAddr::from(([127, 0, 0, 1], port));
                 if TcpStream::connect_timeout(&addr, Duration::from_secs(2)).is_err() {
-                    eprintln!("后端健康检查失败: 端口 {} 不可连接", port);
+                    eprintln!("Backend health check failed: port {} unreachable", port);
                 }
             }
         }

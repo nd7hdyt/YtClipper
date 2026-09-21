@@ -1,11 +1,11 @@
-# 日志文件
+# EN
 logs/
 *.log
 backend.log
 celery.log
 frontend/frontend.log
 
-# Python缓存
+# PythonEN
 __pycache__/
 *.pyc
 *.pyo
@@ -17,13 +17,13 @@ __pycache__/
 htmlcov/
 coverage.xml
 
-# 虚拟环境
+# ENEnvironment
 venv/
 env/
 .venv/
 venv_*/
 
-# 视频和媒体文件
+# EN
 *.mp4
 *.mkv
 *.avi
@@ -40,13 +40,13 @@ venv_*/
 *.ogg
 *.wma
 
-# 压缩文件
+# EN
 *.zip
 *.tar.gz
 *.rar
 *.7z
 
-# 模型文件
+# EN
 *.pt
 *.ckpt
 *.pth
@@ -54,7 +54,7 @@ venv_*/
 *.pkl
 *.joblib
 
-# 数据库文件
+# EN
 *.db
 *.sqlite
 *.sqlite3
@@ -63,7 +63,7 @@ data/progress.db
 data/*.json
 data/*.port
 
-# 项目数据目录（包含用户上传的视频和生成的文件）
+# ProjectEN（ENUploadENGenerateEN）
 data/projects/
 data/uploads/
 data/temp/
@@ -72,18 +72,18 @@ data/backups/
 data/cache/
 backend/data/
 
-# 前端依赖与构建产物
+# ENDependenciesEN
 node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 
-# Rust / Tauri 构建产物
+# Rust / Tauri EN
 target/
 src-tauri/target/
 src-tauri/gen/
 
-# Python / 打包产物
+# Python / EN
 build/
 dist/
 releases/
@@ -98,7 +98,7 @@ src-tauri/resources/ffmpeg-unified/
 src-tauri/resources/requirements.txt
 src-tauri/resources/autoclip-backend/
 
-# 系统文件
+# SystemEN
 .DS_Store
 .DS_Store?
 ._*
@@ -107,14 +107,14 @@ src-tauri/resources/autoclip-backend/
 ehthumbs.db
 Thumbs.db
 
-# IDE文件
+# IDEEN
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# 环境变量文件
+# EnvironmentEN
 .env
 .env.local
 .env.development.local
@@ -123,23 +123,23 @@ Thumbs.db
 .env.backup
 .env.*.backup
 
-# 本地归档与备份（仅本地保留，不入仓）
+# EN（EN，EN）
 cleanup_backup/
 archive_local/
 local_backups/
 
-# 进程ID文件
+# ENIDEN
 *.pid
 
-# Redis数据文件
+# RedisEN
 dump.rdb
 control/
 
-# 临时文件
+# EN
 *.tmp
 *.temp
 *.bak
 .gstack/
 
-# Python 打包产物
+# Python EN
 *.egg-info/

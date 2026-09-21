@@ -813,30 +813,10 @@ A:
 
 ## 📞 Support & Feedback
 
-### Get Help
-
-- **Issue Reports**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
-- **Feature Suggestions**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions)
-- **Bug Reports**: Please use GitHub Issues template
-- **Documentation**: [Project Documentation](docs/)
-
-### Contact
-
-For questions or suggestions, please contact us through:
-
-#### 💬 QQ
-
-<img src="./qq_qr.jpg" alt="QQEN" width="150">
-
-#### 📱 Feishu
-
-<img src="./feishu_qr.jpg" alt="EN" width="150">
-
-#### 📧 Other Contact Methods
-
-- Submit a [GitHub Issue](https://github.com/nd7hdyt/YtClipper/issues)
-- Send email to: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
-- Add the above QQ or Feishu contact
+- **Issues**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions) (available after Discussions is enabled)
+- **Bug Reports**: Please use [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues) template
+- **Docs**: [Project Documentation](docs/)
 
 ## 📄 License
 
@@ -886,3 +866,7 @@ Thanks to the following open source projects and services:
 Made with ❤️ by AutoClip Team
 
 ⭐ If you find it useful, please give us a Star!
+
+
+---
+**Credits:** Original project by [zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip).

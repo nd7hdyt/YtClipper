@@ -1,6 +1,7 @@
-# AutoClip - videocontentclipcontenttool
+# AutoClip - AutoClip: AI-Powered Video Highlight Tool
 
-supportYouTube/Bsitevideodownload、Auto Clipping、Smart Collectionscontent
+Supporting YouTube/Bilibili video download, automatic clipping, and smart collection
+generation
 
 [![Python](https://img.shields.io/badge/Python-3.8+-green?style=flat&logo=python)](https://python.org)
 [![React](https://img.shields.io/badge/React-18+-blue?style=flat&logo=react)](https://reactjs.org)
@@ -9,152 +10,166 @@ supportYouTube/Bsitevideodownload、Auto Clipping、Smart Collectionscontent
 [![Celery](https://img.shields.io/badge/Celery-Latest-green?style=flat&logo=celery)](https://celeryproject.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
-[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
-[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
-[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/zhouxiaoka/autoclip/issues)
+[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
+[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
+[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/nd7hdyt/YtClipper/issues)
 
-**Language**: [English](README-EN.md) | [content](README.md)  
+**Language**: [English](README-EN.md) | [Chinese](README.md)
 
 </div>
 
 ## 🎯 Project Overview
 
-AutoClipIsone Based onAI'sIntelligent Video ClippingProcessing System，contentfromYouTube、Bsiteetc.Platform Downloadvideo，contentAIcontent，contentcollection。SystemAdoptscontent'sFrontend-Backend Separationcontent，ProvidesIntuitive'sWebInterfaceAndPowerfulbackendProcessing Capability。
+AutoClip is an AI-powered intelligent video clipping system that can automatically
+download videos from YouTube, Bilibili, and other platforms, extract exciting clips
+through AI analysis, and intelligently generate collections. The system adopts a
+modern frontend-backend separation architecture, providing an intuitive web
+interface and powerful backend processing capabilities.
 
 ### ✨ Core Features
 
-- 🎬 **Multi-Platform Support**: YouTube、BsitevideoOne-Click Download，supportLocal File Upload
-- 🤖 **AIIntelligent Analysis**: Based oncontentLanguagemodel'svideocontent
-- ✂️ **Auto Clipping**: content，supportmulticontentvideocontent
-- 📚 **Smart Collections**: AIrecommendAndcontentcreatevideocollection，supportcontent
-- 🚀 **Real-time Processing**: contentTask Queue，contentProgress Feedback，WebSocketCommunication
-- 🎨 **Modern UI**: React + TypeScript + Ant Design，Responsive Design
-- 📱 **Mobile Support**【In Development】: Responsive Design，In Progresscontent
-- 🔐 **Account Management**【In Development】: supportBsiteMulti-Account Management，contentHealth Check
-- 📊 **Analytics**: content'sProject ManagementAndAnalyticsfeature
-- 🛠️ **Easy Deployment**: One-Click Startcontent，Dockersupport，contentdocs
-- 📤 **BsiteUpload**【In Development】: Auto UploadclipvideocontentBsite
-- ✏️ **Subtitle Editing**【In Development】: VisualSubtitle EditingAndcontentfeature
+- 🎬 **Multi-platform Support**: One-click download from YouTube, Bilibili, and local
+  file upload
+- 🤖 **AI Intelligent Analysis**: Video content understanding based on Qwen large
+  language model
+- ✂️ **Automatic Clipping**: Intelligent recognition of exciting clips with automatic
+  cutting, supporting multiple video categories
+- 📚 **Smart Collections**: AI-recommended and manually created video collections
+  with drag-and-drop sorting
+- 🚀 **Real-time Processing**: Asynchronous task queue with real-time progress feedback
+  and WebSocket communication
+- 🎨 **Modern Interface**: React + TypeScript + Ant Design with responsive design
+- 📱 **Mobile Support** **[In Development]**: Responsive design, improving mobile
+  experience
+- 🔐 **Account Management** **[In Development]**: Support for multiple Bilibili account
+  management with automatic health checks
+- 📊 **Data Statistics**: Complete project management and data statistics functionality
+- 🛠️ **Easy Deployment**: One-click startup scripts, Docker support, and detailed
+  documentation
+- 📤 **Bilibili Upload** **[In Development]**: Automatic upload of clipped videos
+  to Bilibili
+- ✏️ **Subtitle Editing** **[In Development]**: Visual subtitle editing and
+  synchronization functionality
 
 ## 🏗️ System Architecture
 
 ```mermaid
 graph TB
-    A[userInterface] --> B[FastAPIbackend]
-    B --> C[CeleryTask Queue]
-    B --> D[Rediscache]
-    B --> E[SQLitedatabase]
-    C --> F[AIprocesscontent]
-    F --> G[videoprocess]
-    F --> H[subtitlescontent]
-    F --> I[content]
-    B --> J[filecontent]
+    A[User Interface] --> B[FastAPI Backend]
+    B --> C[Celery Task Queue]
+    B --> D[Redis Cache]
+    B --> E[SQLite Database]
+    C --> F[AI Processing Engine]
+    F --> G[Video Processing]
+    F --> H[Subtitle Analysis]
+    F --> I[Content Understanding]
+    B --> J[File Storage]
     K[YouTube API] --> B
-    L[BsiteAPI] --> B
+    L[Bilibili API] --> B
 ```
 
-### Tech Stack
+### Technology Stack
 
-#### Backend
+#### Backend Technologies
 
-- **FastAPI**: contentPython Webcontent，contentAPIdocscontent
-- **Celery**: contentTask Queue，supportcontentprocess
-- **Redis**: contentAndcache，taskstatuscontent
-- **SQLite**: contentdatabase，supportcontentPostgreSQL
-- **yt-dlp**: YouTubevideodownload，supportmulticontentformat
-- **content**: AIcontent，supportmulticontentmodel
-- **WebSocket**: contentCommunication，progresscontent
-- **Pydantic**: contentverifyAndcontent
+- **FastAPI**: Modern Python web framework with automatic API documentation generation
+- **Celery**: Distributed task queue supporting asynchronous processing
+- **Redis**: Message broker and cache for task status management
+- **SQLite**: Lightweight database with PostgreSQL upgrade support
+- **yt-dlp**: YouTube video download supporting multiple formats
+- **Qwen**: AI content analysis supporting multiple models
+- **WebSocket**: Real-time communication and progress push
+- **Pydantic**: Data validation and serialization
 
-#### Frontend
+#### Frontend Technologies
 
-- **React 18**: userInterfacecontent，HooksAndcontent
-- **TypeScript**: content，content'scontent
-- **Ant Design**: contentUIcontent
-- **Vite**: contenttool，content
-- **Zustand**: contentstatuscontent
-- **React Router**: content
-- **Axios**: HTTPcontent
-- **React Player**: videocontent
+- **React 18**: User interface framework with Hooks and functional components
+- **TypeScript**: Type safety for better development experience
+- **Ant Design**: Enterprise-grade UI component library
+- **Vite**: Fast build tool with hot reload
+- **Zustand**: Lightweight state management
+- **React Router**: Route management
+- **Axios**: HTTP client
+- **React Player**: Video player
 
 ## 🚀 Quick Start
 
-### Requirements
+### Environment Requirements
 
-#### Dockercontent（recommend）
+#### Docker Deployment (Recommended)
 
 - **Docker**: 20.10+
 - **Docker Compose**: 2.0+
-- **content**: content 4GB，recommend 8GB+
-- **content**: content 10GB canusecontent
+- **Memory**: Minimum 4GB, recommended 8GB+
+- **Storage**: Minimum 10GB available space
 
-#### localcontent
+#### Local Deployment
 
-- **contentSystem**: macOS / Linux / Windows (WSL)
-- **Python**: 3.8+ (recommend 3.9+)
-- **Node.js**: 16+ (recommend 18+)
-- **Redis**: 6.0+ (recommend 7.0+)
-- **FFmpeg**: videoprocessdependencies
-- **content**: content 4GB，recommend 8GB+
-- **content**: content 10GB canusecontent
+- **Operating System**: macOS / Linux / Windows (WSL)
+- **Python**: 3.8+ (recommended 3.9+)
+- **Node.js**: 16+ (recommended 18+)
+- **Redis**: 6.0+ (recommended 7.0+)
+- **FFmpeg**: Video processing dependency
+- **Memory**: Minimum 4GB, recommended 8GB+
+- **Storage**: Minimum 10GB available space
 
-### One-Click Start
+### One-Click Startup
 
-#### contentone：Dockercontent（recommend）
+#### Method 1: Docker Deployment (Recommended)
 
 ```bash
-# contentproject
-git clone https://github.com/zhouxiaoka/autoclip.git
+# Clone the project
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# DockerOne-Click Start
+# Docker one-click startup
 ./docker-start.sh
 
-# contentstart
+# Development environment startup
 ./docker-start.sh dev
 
-# contentservice
+# Stop services
 ./docker-stop.sh
 
-# checkservicestatus
+# Check service status
 ./docker-status.sh
 ```
 
-#### content：localcontent
+#### Method 2: Local Deployment
 
 ```bash
-# contentproject
-git clone https://github.com/zhouxiaoka/autoclip.git
+# Clone the project
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# One-Click Start（recommend，PackageincludecontentcheckAndmonitor）
+# One-click startup (recommended, includes complete checks and monitoring)
 ./start_autoclip.sh
 
-# contentstart（content，skipcontentcheck）
+# Quick startup (development environment, skips detailed checks)
 ./quick_start.sh
 
-# checkSystemstatus
+# Check system status
 ./status_autoclip.sh
 
-# contentSystem
+# Stop system
 ./stop_autoclip.sh
 ```
 
 ### Manual Installation
 
 ```bash
-# 1. createcontent
+# 1. Create virtual environment
 python3 -m venv venv
 source venv/bin/activate  # Linux/macOS
 # or venv\Scripts\activate  # Windows
 
-# 2. installPythondependencies
+# 2. Install Python dependencies
 pip install -r requirements.txt
 
-# 3. installfrontenddependencies
+# 3. Install frontend dependencies
 cd frontend && npm install && cd ..
 
-# 4. installRedis
+# 4. Install Redis
 # macOS
 brew install redis
 brew services start redis
@@ -168,7 +183,7 @@ sudo systemctl start redis-server
 sudo yum install redis
 sudo systemctl start redis
 
-# 5. installFFmpeg
+# 5. Install FFmpeg
 # macOS
 brew install ffmpeg
 
@@ -178,417 +193,417 @@ sudo apt install ffmpeg
 # CentOS/RHEL
 sudo yum install ffmpeg
 
-# 6. configcontent
+# 6. Configure environment variables
 cp env.example .env
-# content .env file，contentAPIkeyetc.config
+# Edit .env file and fill in necessary configurations
 ```
 
 ## 🎬 Feature Demo
 
-### contentfeaturecontent
+### Main Feature Showcase
 
-1. **videodownloadandprocess**
-   - supportYouTube、Bsitevideocontent
-   - contentdownloadvideoAndsubtitlesfile
-   - supportLocal File Upload
+1. **Video Download and Processing**
+   - Support for YouTube, Bilibili video link parsing
+   - Automatic video and subtitle file download
+   - Support for local file upload
 
-2. **AIIntelligent Analysis**
-   - contentvideocontent
-   - content
-   - content
+2. **AI Intelligent Analysis**
+   - Automatic video outline extraction
+   - Intelligent topic timeline identification
+   - Exciting clip scoring
 
-3. **videoclipandcollection**
-   - content
-   - contentrecommendcollectioncontent
-   - supportcontentAndcontent
+3. **Video Clipping and Collections**
+   - Automatic exciting clip generation
+   - Smart collection recommendations
+   - Support for manual editing and sorting
 
-4. **contentprogressmonitor**
-   - WebSocketcontentprogresscontent
-   - content'staskstatuscontent
-   - errorprocessAndcontent
+4. **Real-time Progress Monitoring**
+   - WebSocket real-time progress push
+   - Detailed task status display
+   - Error handling and retry mechanisms
 
-5. **BsiteUploadfeature**【In Development】
-   - Auto UploadclipvideocontentBsite
-   - supportMulti-Account Management
-   - contentUploadAndcontent
+5. **Bilibili Upload Feature** **[In Development]**
+   - Automatic upload of clipped videos to Bilibili
+   - Support for multiple account management
+   - Batch upload and queue management
 
-6. **Subtitle Editingfeature**【In Development】
-   - VisualSubtitle Editingcontent
-   - subtitlescontentAndcontent
-   - multiLanguagesubtitlessupport
+6. **Subtitle Editing Feature** **[In Development]**
+   - Visual subtitle editor
+   - Subtitle synchronization and adjustment
+   - Multi-language subtitle support
 
-## 📖 Usage Guide
+## 📖 User Guide
 
-### 1. videodownload
+### 1. Video Download
 
-#### YouTubevideo
+#### YouTube Videos
 
-1. incontentclick"contentproject"
-2. Selectselect"YouTubecontent"
-3. contentvideoURL
-4. SelectselectcontentCookie（canSelect）
-5. click"contentdownload"
+1. Click "New Project" on the homepage
+2. Select "YouTube Link"
+3. Paste the video URL
+4. Choose browser cookies (optional)
+5. Click "Start Download"
 
-#### Bsitevideo
+#### Bilibili Videos
 
-1. incontentclick"contentproject"
-2. Selectselect"Bsitecontent"
-3. contentvideoURL
-4. SelectselectcontentAccount
-5. click"contentdownload"
+1. Click "New Project" on the homepage
+2. Select "Bilibili Link"
+3. Paste the video URL
+4. Choose login account
+5. Click "Start Download"
 
-#### localfile
+#### Local Files
 
-1. incontentclick"contentproject"
-2. Selectselect"fileUpload"
-3. contentorSelectselectvideofile
-4. Uploadsubtitlesfile（canSelect）
-5. click"contentprocess"
+1. Click "New Project" on the homepage
+2. Select "File Upload"
+3. Drag and drop or select video files
+4. Upload subtitle files (optional)
+5. Click "Start Processing"
 
-### 2. contentprocess
+### 2. Intelligent Processing
 
-Systemcontentstep：
+The system will automatically execute the following steps:
 
-1. **content**: downloadvideoAndsubtitlesfile
-2. **content**: AIcontentvideocontentAndcontentinfo
-3. **content**: content
-4. **content**: contentper contentAIcontent
-5. **content**: content
-6. **collectionrecommend**: AIrecommendvideocollection
-7. **videocontent**: contentclipvideoAndcollectionvideo
+1. **Material Preparation**: Download video and subtitle files
+2. **Content Analysis**: AI extracts video outline and key information
+3. **Timeline Extraction**: Identify topic time intervals
+4. **Exciting Scoring**: AI scoring for each clip
+5. **Title Generation**: Generate attractive titles for exciting clips
+6. **Collection Recommendation**: AI-recommended video collections
+7. **Video Generation**: Generate clipped videos and collection videos
 
-### 3. content
+### 3. Result Management
 
-- **contentclip**: inprojectcontent'svideocontent
-- **contentinfo**: content、contentetc.info
-- **createcollection**: contentcreateoruseAIrecommend'scollection
-- **downloadexport**: downloadcontent contentorcontentcollection
-- **BsiteUpload**【In Development】: onecontentUploadclipvideocontentBsite
-- **Subtitle Editing**【In Development】: VisualcontentAndcontentsubtitlesfile
+- **View Clips**: View all generated video clips on the project detail page
+- **Edit Information**: Modify clip titles, descriptions, etc.
+- **Create Collections**: Manually create or use AI-recommended collections
+- **Download Export**: Download individual clips or complete collections
+- **Bilibili Upload** **[In Development]**: One-click upload of clipped videos to
+  Bilibili
+- **Subtitle Editing** **[In Development]**: Visual editing and synchronization of
+  subtitle files
 
 ## 🔧 Configuration
 
-### contentconfig
+### Environment Variable Configuration
 
-create `.env` file：
+Create `.env` file:
 
 ```bash
-# databaseconfig
+# Database configuration
 DATABASE_URL=sqlite:///./data/autoclip.db
 
-# Redisconfig
+# Redis configuration
 REDIS_URL=redis://localhost:6379/0
 
-# AI APIconfig
+# AI API configuration
 API_DASHSCOPE_API_KEY=your_dashscope_api_key
 API_MODEL_NAME=qwen-plus
 
-# logsconfig
+# Logging configuration
 LOG_LEVEL=INFO
 ENVIRONMENT=development
 DEBUG=true
 
-# filecontent
+# File storage
 UPLOAD_DIR=./data/uploads
 PROJECT_DIR=./data/projects
 ```
 
-### BsiteAccountconfig【In Development】
+### Bilibili Account Configuration **[In Development]**
 
-1. inSettings pagecontentclick"BsiteAccount Management"
-2. Selectselectcontent：
-   - **Cookieimport**（recommend）：fromcontentexportCookie
-   - **Accountcontent**：contentAccountcontent
-   - **content**：content
-3. addsucceededcontentSystemcontentAccountcontentstatus
+1. Click "Bilibili Account Management" on the settings page
+2. Choose login method:
+   - **Cookie Import** (recommended): Export cookies from browser
+   - **Account Password**: Directly input account and password
+   - **QR Code Login**: Scan QR code to login
+3. After successful addition, the system will automatically manage account health
+  status
 
 ## 📁 Project Structure
 
 ```text
 autoclip/
-├── backend/                 # backendcontent
-│   ├── api/                # APIcontent
-│   │   ├── v1/            # API v1version
-│   │   │   ├── youtube.py # YouTubedownloadAPI
-│   │   │   ├── bilibili.py # BsitedownloadAPI
-│   │   │   ├── projects.py # Project ManagementAPI
-│   │   │   ├── clips.py   # videocontentAPI
-│   │   │   ├── collections.py # collectioncontentAPI
-│   │   │   └── settings.py # SystemsettingsAPI
-│   │   └── upload_queue.py # Uploadcontent
-│   ├── core/              # contentconfig
-│   │   ├── database.py    # databaseconfig
-│   │   ├── celery_app.py  # Celeryconfig
-│   │   ├── config.py      # Systemconfig
-│   │   └── llm_manager.py # AImodelcontent
-│   ├── models/            # contentmodel
-│   │   ├── project.py     # projectmodel
-│   │   ├── clip.py        # contentmodel
-│   │   ├── collection.py  # collectionmodel
-│   │   └── bilibili.py    # BsiteAccountmodel
-│   ├── services/          # content
-│   │   ├── video_service.py # videoprocessservice
-│   │   ├── ai_service.py  # AIcontentservice
-│   │   └── upload_service.py # Uploadservice
-│   ├── tasks/             # Celerytask
-│   │   ├── processing.py  # processtask
-│   │   ├── upload.py      # Uploadtask
-│   │   └── maintenance.py # contenttask
-│   ├── pipeline/          # processcontent
-│   │   ├── step1_outline.py # content
-│   │   ├── step2_timeline.py # content
-│   │   ├── step3_scoring.py # content
-│   │   └── step6_video.py # videocontent
-│   └── utils/             # toolcontent
-├── frontend/              # frontendcontent
+├── backend/                 # Backend code
+│   ├── api/                # API routes
+│   │   ├── v1/            # API v1 version
+│   │   │   ├── youtube.py # YouTube download API
+│   │   │   ├── bilibili.py # Bilibili download API
+│   │   │   ├── projects.py # Project management API
+│   │   │   ├── clips.py   # Video clip API
+│   │   │   ├── collections.py # Collection management API
+│   │   │   └── settings.py # System settings API
+│   │   └── upload_queue.py # Upload queue management
+│   ├── core/              # Core configuration
+│   │   ├── database.py    # Database configuration
+│   │   ├── celery_app.py  # Celery configuration
+│   │   ├── config.py      # System configuration
+│   │   └── llm_manager.py # AI model management
+│   ├── models/            # Data models
+│   │   ├── project.py     # Project model
+│   │   ├── clip.py        # Clip model
+│   │   ├── collection.py  # Collection model
+│   │   └── bilibili.py    # Bilibili account model
+│   ├── services/          # Business logic
+│   │   ├── video_service.py # Video processing service
+│   │   ├── ai_service.py  # AI analysis service
+│   │   └── upload_service.py # Upload service
+│   ├── tasks/             # Celery tasks
+│   │   ├── processing.py  # Processing tasks
+│   │   ├── upload.py      # Upload tasks
+│   │   └── maintenance.py # Maintenance tasks
+│   ├── pipeline/          # Processing pipeline
+│   │   ├── step1_outline.py # Outline extraction
+│   │   ├── step2_timeline.py # Timeline analysis
+│   │   ├── step3_scoring.py # Exciting scoring
+│   │   └── step6_video.py # Video generation
+│   └── utils/             # Utility functions
+├── frontend/              # Frontend code
 │   ├── src/
-│   │   ├── components/    # Reactcontent
-│   │   │   ├── UploadModal.tsx # Uploadcontent
-│   │   │   ├── ClipCard.tsx # content
-│   │   │   ├── CollectionCard.tsx # collectioncontent
-│   │   │   └── BilibiliManager.tsx # Bsitecontent
-│   │   ├── pages/         # content
-│   │   │   ├── HomePage.tsx # content
-│   │   │   ├── ProjectDetailPage.tsx # projectcontent
-│   │   │   └── SettingsPage.tsx # Settings pagecontent
-│   │   ├── services/      # APIservice
-│   │   │   └── api.ts     # APIcontent
-│   │   └── stores/        # statuscontent
+│   │   ├── components/    # React components
+│   │   │   ├── UploadModal.tsx # Upload modal
+│   │   │   ├── ClipCard.tsx # Clip card
+│   │   │   ├── CollectionCard.tsx # Collection card
+│   │   │   └── BilibiliManager.tsx # Bilibili management
+│   │   ├── pages/         # Page components
+│   │   │   ├── HomePage.tsx # Home page
+│   │   │   ├── ProjectDetailPage.tsx # Project detail
+│   │   │   └── SettingsPage.tsx # Settings page
+│   │   ├── services/      # API services
+│   │   │   └── api.ts     # API client
+│   │   └── stores/        # State management
 │   └── package.json
-├── data/                  # content
-│   ├── projects/          # projectcontent
-│   ├── uploads/           # Uploadfile
-│   ├── temp/              # contentfile
-│   ├── output/            # contentfile
-│   └── autoclip.db        # databasefile
-├── scripts/               # toolcontent
-│   ├── start_autoclip.sh  # startcontent
-│   ├── stop_autoclip.sh   # content
-│   └── status_autoclip.sh # statuscheck
-├── docs/                  # docs
-│   ├── README.md          # docscontent
-│   ├── i18n.md           # contentconfig
-│   └── *.md              # contentdocs
-├── logs/                  # logsfile
-├── Dockerfile             # Dockercontentfile
-├── Dockerfile.dev         # contentDockerfile
-├── docker-compose.yml     # contentDockercontent
-├── docker-compose.dev.yml # contentDockercontent
-├── docker-start.sh        # Dockerstartcontent
-├── docker-stop.sh         # Dockercontent
-├── docker-status.sh       # Dockerstatuscheckcontent
-├── .dockerignore          # Dockercontentfile
-├── DOCKER.md              # Dockercontentdocs
-└── *.sh                   # startcontent
+├── data/                  # Data storage
+│   ├── projects/          # Project data
+│   ├── uploads/           # Upload files
+│   ├── temp/              # Temporary files
+│   ├── output/            # Output files
+│   └── autoclip.db        # Database file
+├── scripts/               # Utility scripts
+│   ├── start_autoclip.sh  # Startup script
+│   ├── stop_autoclip.sh   # Stop script
+│   └── status_autoclip.sh # Status check
+├── docs/                  # Documentation
+├── logs/                  # Log files
+├── Dockerfile             # Docker image build file
+├── Dockerfile.dev         # Development environment Docker file
+├── docker-compose.yml     # Production environment Docker orchestration
+├── docker-compose.dev.yml # Development environment Docker orchestration
+├── docker-start.sh        # Docker startup script
+├── docker-stop.sh         # Docker stop script
+├── docker-status.sh       # Docker status check script
+├── .dockerignore          # Docker ignore file
+├── DOCKER.md              # Docker deployment documentation
+└── *.sh                   # Startup scripts
 ```
 
-## 🌐 APIdocs
+## 🌐 API Documentation
 
-startSystemcontentAPIdocs：
+After starting the system, visit the following addresses to view API documentation:
 
-- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) (localcontent)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) (localcontent)
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
-### contentAPIcontent
+### Main API Endpoints
 
-| content | content | content |
-|------|------|------|
-| `/api/v1/projects` | GET | fetchprojectlist |
-| `/api/v1/projects` | POST | createcontentproject |
-| `/api/v1/projects/{id}` | GET | fetchprojectcontent |
-| `/api/v1/youtube/parse` | POST | contentYouTubevideoinfo |
-| `/api/v1/youtube/download` | POST | downloadYouTubevideo |
-| `/api/v1/bilibili/download` | POST | downloadBsitevideo |
-| `/api/v1/projects/{id}/process` | POST | contentprocessproject |
-| `/api/v1/projects/{id}/status` | GET | fetchprocessstatus |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/projects` | GET | Get project list |
+| `/api/v1/projects` | POST | Create new project |
+| `/api/v1/projects/{id}` | GET | Get project details |
+| `/api/v1/youtube/parse` | POST | Parse YouTube video information |
+| `/api/v1/youtube/download` | POST | Download YouTube video |
+| `/api/v1/bilibili/download` | POST | Download Bilibili video |
+| `/api/v1/projects/{id}/process` | POST | Start project processing |
+| `/api/v1/projects/{id}/status` | GET | Get processing status |
 
 ## 🔍 Troubleshooting
 
-### FAQ
+### Common Issues
 
-#### 1. contentuse
+#### 1. Port Occupied
 
 ```bash
-# checkcontentuse
-lsof -i :8000  # backendcontent
-lsof -i :3000  # frontendcontent
+# Check port usage
+lsof -i :8000  # Backend port
+lsof -i :3000  # Frontend port
 
-# contentuseprocess
+# Stop occupying processes
 kill -9 <PID>
 ```
 
-#### 2. Redisconnectfailed
+#### 2. Redis Connection Failed
 
 ```bash
-# checkRedisstatus
+# Check Redis status
 redis-cli ping
 
-# startRedisservice
+# Start Redis service
 brew services start redis  # macOS
-systemctl start redis      # Linux
+systemctl start redis-server  # Linux
 ```
 
-#### 3. YouTubedownloadfailed
+#### 3. YouTube Download Failed
 
-- checkcontentconnect
-- updateyt-dlpversion：`pip install --upgrade yt-dlp`
-- contentusecontentCookie
-- checkvideoIscontentcanuse
+- Check network connection
+- Update yt-dlp: `pip install --upgrade yt-dlp`
+- Try using browser cookies
+- Check if video is available
 
-#### 4. Bsitedownloadfailed
+#### 4. Bilibili Download Failed
 
-- checkAccountcontentstatus
-- updateAccountCookie
-- checkvideocontentsettings
+- Check account login status
+- Update account cookies
+- Check video permission settings
 
-### logscontent
+### Log Viewing
 
 ```bash
-# contentlogs
+# View all logs
 tail -f logs/*.log
 
-# contentservicelogs
-tail -f logs/backend.log    # backendlogs
-tail -f logs/frontend.log   # frontendlogs
-tail -f logs/celery.log     # Task Queuelogs
+# View specific service logs
+tail -f logs/backend.log    # Backend logs
+tail -f logs/frontend.log   # Frontend logs
+tail -f logs/celery.log     # Task queue logs
 ```
 
-### Systemstatuscheck
+### System Status Check
 
 ```bash
-# contentstatuscheck
+# Detailed status check
 ./status_autoclip.sh
 
-# contentcheckservice
-curl http://localhost:8000/api/v1/health/  # backendHealth Check
-curl http://localhost:3000/                # frontendcontenttest
-redis-cli ping                             # Redisconnecttest
+# Manual service check
+curl http://localhost:8000/api/v1/health/  # Backend health check
+curl http://localhost:3000/                # Frontend access test
+redis-cli ping                             # Redis connection test
 ```
 
 ## 🛠️ Development Guide
 
-### backendcontent
+### Backend Development
 
 ```bash
-# content
+# Activate virtual environment
 source venv/bin/activate
 
-# settingsPythonpath
+# Set Python path
 export PYTHONPATH="${PWD}:${PYTHONPATH}"
 
-# startbackendcontentservicecontent
+# Start backend development server
 python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### frontendcontent
+### Frontend Development
 
 ```bash
-# contentfrontenddirectory
+# Enter frontend directory
 cd frontend
 
-# startcontentservicecontent
+# Start development server
 npm run dev
 ```
 
 ### Celery Worker
 
 ```bash
-# startWorker（content -Q：taskby celery_app.task_routes contentusecontent，
-# content -Q 's worker contentdefault `celery` content，contenttaskcontentonecontentin `processing` content）
+# Start Worker (must include -Q: tasks are routed to dedicated queues via celery_app.task_routes;
+# a worker without -Q only consumes the default `celery` queue, so pipeline tasks pile up in `processing` and never run)
 celery -A backend.core.celery_app worker --loglevel=info -Q celery,processing,video,notification,upload
 
-# startBeatcontent
+# Start Beat scheduler
 celery -A backend.core.celery_app beat --loglevel=info
 
-# startFlowermonitor
+# Start Flower monitoring
 celery -A backend.core.celery_app flower --port=5555
 ```
 
-## 📊 Performance
+## 📊 Performance Optimization
 
-### contentconfig
+### Production Environment Configuration
 
-1. **databasecontent**
-   - usePostgreSQLcontentSQLite
-   - configconnectcontent
-   - contentusecontentcache
+1. **Database Optimization**
+   - Use PostgreSQL instead of SQLite
+   - Configure connection pooling
+   - Enable query caching
 
-2. **Rediscontent**
-   - configcontent
-   - contentusecontent
-   - settingscontent
+2. **Redis Optimization**
+   - Configure memory limits
+   - Enable persistence
+   - Set expiration policies
 
-3. **Celerycontent**
-   - content
-   - configtaskcontent
-   - contentusecontentbackend
+3. **Celery Optimization**
+   - Adjust concurrency
+   - Configure task routing
+   - Enable result backend
 
-## 🔒 Security
+## 🔒 Security Configuration
 
-### content
+### Production Environment Security
 
-1. **content**
-   - usecontent
-   - contentkey
-   - contentAPIcontent
+1. **Environment Variables**
+   - Use strong passwords
+   - Regularly rotate keys
+   - Limit API access
 
-2. **content**
-   - configcontent
-   - useHTTPS
-   - contentCORS
+2. **Network Security**
+   - Configure firewall
+   - Use HTTPS
+   - Limit CORS
 
-3. **content**
-   - content
-   - content
-   - content
+3. **Data Security**
+   - Regular backups
+   - Encrypt sensitive data
+   - Access control
 
-## 🚀 Deployment
+## 🚀 Deployment Guide
 
-### Dockercontent
+### Docker Deployment
 
-#### contentstart
+#### Quick Start
 
 ```bash
-# contentproject
-git clone https://github.com/zhouxiaoka/autoclip.git
+# Clone the project
+git clone https://github.com/nd7hdyt/YtClipper.git
 cd autoclip
 
-# configcontent
+# Configure environment variables
 cp env.example .env
-# content .env file，content'sconfig
+# Edit .env file and fill in necessary configurations
 
-# startcontentservice
+# Start all services
 docker-compose up -d
 
-# contentservicestatus
+# Check service status
 docker-compose ps
 ```
 
-#### contentservice
+#### Access Services
 
-- **frontendInterface**: [http://localhost:3000](http://localhost:3000) (localcontent)
-- **backendAPI**: [http://localhost:8000](http://localhost:8000) (localcontent)
-- **APIdocs**: [http://localhost:8000/docs](http://localhost:8000/docs) (localcontent)
-- **Flowermonitor**: [http://localhost:5555](http://localhost:5555) (localcontent)
+- **Frontend Interface**: [http://localhost:3000](http://localhost:3000)
+- **Backend API**: [http://localhost:8000](http://localhost:8000)
+- **API Documentation**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Flower Monitoring**: [http://localhost:5555](http://localhost:5555)
 
-#### content
+#### Development Environment
 
 ```bash
-# usecontentconfig
+# Use development environment configuration
 docker-compose -f docker-compose.dev.yml up -d
 
-# contentlogs
+# View logs in real-time
 docker-compose -f docker-compose.dev.yml logs -f
 ```
 
-#### content
+#### Detailed Instructions
 
-content'sDockerDeploymentcontentReference [DOCKER.md](DOCKER.md) docs。
+Complete Docker deployment guide please refer to [DOCKER.md](DOCKER.md) documentation.
 
-### Systemservice
+### System Service
 
 ```bash
-# createsystemdservicefile
+# Create systemd service file
 sudo nano /etc/systemd/system/autoclip.service
 
 [Unit]
@@ -609,75 +624,78 @@ WantedBy=multi-user.target
 
 ## 📈 Roadmap
 
-### content
+### Coming Soon
 
-- [ ] **BsiteUploadfeature**: Auto UploadclipvideocontentBsite，supportMulti-Account Management
-- [ ] **Subtitle Editingfeature**: VisualSubtitle EditingcontentAndcontentfeature
-- [ ] **multiLanguagesupport**: supportcontentmultiLanguage'svideoprocess
-- [ ] **content**: contentservice
-- [ ] **contentprocess**: supportcontentvideoprocess
-- [ ] **APIcontent**: ProvidescontentAPIcontent
-- [ ] **contentuse**: contentuse
+- [ ] **Bilibili Upload Feature**: Automatic upload of clipped videos to Bilibili
+  with multi-account management
+- [ ] **Subtitle Editing Feature**: Visual subtitle editor and synchronization functionality
+- [ ] **Multi-language Support**: Support for more language video processing
+- [ ] **Cloud Storage**: Integrate cloud storage services
+- [ ] **Batch Processing**: Support for batch video processing
+- [ ] **API Open**: Provide public API interface
+- [ ] **Mobile App**: Develop mobile application
 
-### Long-term Plan
+### Long-term Planning
 
-- [ ] **AImodelcontent**: contentmultiAImodel
-- [ ] **content**: supportmultiusercontent
-- [ ] **contentSystem**: supportNo.content
-- [ ] **content**: contentfeatureAndservice
+- [ ] **AI Model Optimization**: Integrate more AI models
+- [ ] **Real-time Collaboration**: Support multi-user collaboration
+- [ ] **Plugin System**: Support third-party plugins
+- [ ] **Enterprise Edition**: Enterprise-level features and services
 
 ## 🤝 Contributing
 
-content'scontent！contentIscontent、docscontent、issuecontentIsfeaturecontent。
+We welcome all forms of contributions! Whether it's code contributions,
+documentation improvements, issue reports, or feature suggestions.
 
-### ifcontent
+### How to Contribute
 
-1. **Fork** projectcontent'sGitHubcontent
-2. content'sForkcontentlocal：
+1. **Fork** the project to your GitHub account
+2. Clone your Fork to local:
 
    ```bash
-   git clone https://github.com/zhouxiaoka/autoclip.git
+   git clone https://github.com/nd7hdyt/YtClipper.git
    cd autoclip
    ```
 
-3. createfeaturecontent：
+3. Create feature branch:
 
    ```bash
    git checkout -b feature/amazing-feature
    ```
 
-4. contentAndtest
-5. content：
+4. Develop and test
+5. Commit changes:
 
    ```bash
    git add .
    git commit -m 'feat: add amazing feature'
    ```
 
-6. content：
+6. Push branch:
 
    ```bash
    git push origin feature/amazing-feature
    ```
 
-7. inGitHubcontentcreate **Pull Request**
+7. Create **Pull Request** on GitHub
 
-### content
+### Development Standards
 
-#### content
+#### Code Standards
 
-- backend：contentPEP 8 Pythoncontent
-- frontend：useTypeScript，contentESLintcontent
-- contentinfo：usecontentformat（feat, fix, docs, style, refactor, test, chore）
+- Backend: Follow PEP 8 Python code standards
+- Frontend: Use TypeScript, follow ESLint rules
+- Commit messages: Use conventional commit format (feat, fix, docs, style, refactor,
+  test, chore)
 
-#### content
+#### Development Process
 
-1. ensurecontenttestcontent
-2. addcontent'stestusecontent
-3. updatecontentdocs
-4. ensurecontentcheckcontent
+1. Ensure all tests pass
+2. Add necessary test cases
+3. Update related documentation
+4. Ensure code quality checks pass
 
-#### contentinfoformat
+#### Commit Message Format
 
 ```text
 <type>(<scope>): <description>
@@ -687,46 +705,42 @@ content'scontent！contentIscontent、docscontent、issuecontentIsfeaturecontent
 [optional footer(s)]
 ```
 
-content：
+Examples:
 
 - `feat(api): add video download endpoint`
 - `fix(ui): resolve upload modal display issue`
 - `docs(readme): update installation instructions`
 
-## 📄 License
-
-contentprojectAdopts [MIT License](LICENSE) License。
-
 ## ❓ FAQ
 
-### installAndstartissue
+### Installation and Startup Issues
 
-**Q: startcontentusecontent？**
-A: usecontentcheckcontentusecontent'sprocess：
+**Q: What to do when ports are occupied during startup?**
+A: Use the following commands to check and stop processes occupying ports:
 
 ```bash
-# checkcontentuse
-lsof -i :8000  # backendcontent
-lsof -i :3000  # frontendcontent
+# Check port usage
+lsof -i :8000  # Backend port
+lsof -i :3000  # Frontend port
 
-# contentprocess
+# Stop processes
 kill -9 <PID>
 ```
 
-**Q: Redisconnectfailedcontent？**
-A: ensureRedisservicecontentincontent：
+**Q: What to do when Redis connection fails?**
+A: Ensure Redis service is running:
 
 ```bash
-# checkRedisstatus
+# Check Redis status
 redis-cli ping
 
-# startRedisservice
+# Start Redis service
 brew services start redis  # macOS
 sudo systemctl start redis-server  # Linux
 ```
 
-**Q: frontenddependenciesinstallfailedcontent？**
-A: contentcleancachecontentinstall：
+**Q: What to do when frontend dependency installation fails?**
+A: Try clearing cache and reinstalling:
 
 ```bash
 cd frontend
@@ -735,135 +749,124 @@ npm cache clean --force
 npm install
 ```
 
-### featureuseissue
+### Feature Usage Issues
 
-**Q: YouTubevideodownloadfailedcontent？**
+**Q: What to do when YouTube video download fails?**
 A:
 
-1. checkcontentconnect
-2. updateyt-dlp：`pip install --upgrade yt-dlp`
-3. contentusecontentCookie
-4. checkvideoIscontentcanuseorcontent
+1. Check network connection
+2. Update yt-dlp: `pip install --upgrade yt-dlp`
+3. Try using browser cookies
+4. Check if video is available or requires login
 
-**Q: Bsitevideodownloadfailedcontent？**
+**Q: What to do when Bilibili video download fails?**
 A:
 
-1. checkAccountcontentstatus
-2. updateAccountCookie
-3. checkvideocontentsettings
-4. contentusecontentAccount
+1. Check account login status
+2. Update account cookies
+3. Check video permission settings
+4. Try using other accounts
 
-**Q: AIprocesscontent？**
+**Q: What to do when AI processing is slow?**
 A:
 
-1. checkAPIkeyconfig
-2. contentprocesscontent（contentchunk_size）
-3. checkcontentconnect
-4. contentusecontent'sAImodel
+1. Check API key configuration
+2. Adjust processing parameters (reduce chunk_size)
+3. Check network connection
+4. Consider using faster AI models
 
-**Q: BsiteUploadfeaturecontentcancontentuse？**
-A: BsiteUploadfeaturecontentinIn Development，contentincontentone versioncontentRelease。contentfeaturecontentsupport：
+**Q: When will Bilibili upload feature be available?**
+A: Bilibili upload feature is currently in development and is expected to be
+released in the next version. This feature will support:
 
-- Auto UploadclipvideocontentBsite
-- Multi-Account ManagementAndcontent
-- contentUploadAndcontent
-- Uploadprogressmonitor
+- Automatic upload of clipped videos to Bilibili
+- Multi-account management and switching
+- Batch upload and queue management
+- Upload progress monitoring
 
-**Q: Subtitle Editingfeaturecontentcancontentuse？**
-A: Subtitle EditingfeaturecontentinIn Development，contentincontentone versioncontentRelease。contentfeaturecontentsupport：
+**Q: When will subtitle editing feature be available?**
+A: Subtitle editing feature is currently in development and is expected to be
+released in the next version. This feature will support:
 
-- VisualSubtitle Editingcontent
-- subtitlescontent
-- multiLanguagesubtitlessupport
-- subtitlesformatcontent
+- Visual subtitle editor
+- Subtitle timeline synchronization
+- Multi-language subtitle support
+- Subtitle format conversion
 
-### Performance
+### Performance Optimization
 
-**Q: ifcontentprocesscontent？**
+**Q: How to improve processing speed?**
 A:
 
-1. contentCelery Workercontent
-2. useSSDcontent
-3. contentSystemcontent
-4. contentvideocontentsettings
+1. Increase Celery Worker concurrency
+2. Use SSD storage
+3. Increase system memory
+4. Optimize video quality settings
 
-**Q: ifcontentuse？**
+**Q: How to reduce storage space usage?**
 A:
 
-1. contentclean temp files
-2. contentvideo
-3. deleteNo need'sproject
-4. usecontent
+1. Regularly clean temporary files
+2. Compress output videos
+3. Delete unnecessary projects
+4. Use external storage
 
 ## 📞 Support & Feedback
 
-### fetchcontent
+- **Issues**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions) (available after Discussions is enabled)
+- **Bug Reports**: Please use [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues) template
+- **Docs**: [Project Documentation](docs/)
 
-- **issuecontent**: [GitHub Issues](https://github.com/zhouxiaoka/autoclip/issues)
-- **featurecontent**: [GitHub Discussions](https://github.com/zhouxiaoka/autoclip/discussions)
-  (contentcreatecontentcanuse)
-- **Bugcontent**: contentuseGitHub Issuescontent
-- **docs**: [projectdocs](docs/)
+## 📄 License
 
-### Contactcontent
-
-ifcontentissueorcontent，contentContact：
-
-### 💬 QQ
-
-<img src="./qq_qr.jpg" alt="QQcontent" width="150">
-
-### 📱 content
-
-<img src="./feishu_qr.jpg" alt="content" width="150">
-
-### 📧 contentContactcontent
-
-- content [GitHub Issue](https://github.com/zhouxiaoka/autoclip/issues)
-- content：[christine_zhouye@163.com](mailto:christine_zhouye@163.com)
-- addcontentQQorcontentContact
+This project is licensed under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgments
 
-contentprojectAndservice'ssupport：
+Thanks to the following open source projects and services:
 
-### contentTech Stack
+### Core Technology Stack
 
-- [FastAPI](https://fastapi.tiangolo.com/) - contentPython Webcontent
-- [React](https://reactjs.org/) - userInterfacecontent
-- [Ant Design](https://ant.design/) - contentUIcontentLanguage
-- [TypeScript](https://typescriptlang.org/) - JavaScript'scontent
-- [Celery](https://docs.celeryproject.org/) - contentTask Queue
-- [Redis](https://redis.io/) - content
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
+- [React](https://reactjs.org/) - User interface library
+- [Ant Design](https://ant.design/) - Enterprise-grade UI design language
+- [TypeScript](https://typescriptlang.org/) - JavaScript superset
+- [Celery](https://docs.celeryproject.org/) - Distributed task queue
+- [Redis](https://redis.io/) - In-memory data structure store
 
-### videoprocess
+### Video Processing
 
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTubevideodownloadtool
-- [FFmpeg](https://ffmpeg.org/) - contentvideoprocesscontent
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTube video download tool
+- [FFmpeg](https://ffmpeg.org/) - Audio and video processing framework
 
-### AIservice
+### AI Services
 
-- [content](https://tongyi.aliyun.com/) - contentLanguagemodelservice
-- [DashScope](https://dashscope.aliyun.com/) - contentAIservicecontent
+- [Qwen](https://tongyi.aliyun.com/) - Alibaba Cloud large language model service
+- [DashScope](https://dashscope.aliyun.com/) - Alibaba Cloud AI service platform
 
-### contenttool
+### Development Tools
 
-- [Vite](https://vitejs.dev/) - frontendcontenttool
-- [Zustand](https://github.com/pmndrs/zustand) - statuscontent
-- [Pydantic](https://pydantic-docs.helpmanual.io/) - contentverifycontent
+- [Vite](https://vitejs.dev/) - Frontend build tool
+- [Zustand](https://github.com/pmndrs/zustand) - State management library
+- [Pydantic](https://pydantic-docs.helpmanual.io/) - Data validation library
 
-### content
+### Special Thanks
 
-- content'scontent
-- ProvidescontentAndcontent'suser
-- contentandtestAndcontent'scontent
+- All developers contributing to the open source community
+- Users providing feedback and suggestions
+- Community members participating in testing and code contributions
 
 ---
 
-## ifcontentthis projectcontent，contentone  ⭐ Star
+## If this project helps you, please give us a ⭐ Star
 
-[![Star History Chart](https://api.star-history.com/svg?repos=zhouxiaoka/autoclip&type=Date)](https://star-history.com/#zhouxiaoka/autoclip&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=nd7hdyt/YtClipper&type=Date)](https://star-history.com/#nd7hdyt/YtClipper&Date)
 
 Made with ❤️ by AutoClip Team
 
-⭐ ifcontentuse，content Starsupportonecontent！
+⭐ If you find it useful, please give us a Star!
+
+
+---
+**Credits:** Original project by [zhouxiaoka/autoclip](https://github.com/zhouxiaoka/autoclip).

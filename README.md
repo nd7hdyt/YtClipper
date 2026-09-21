@@ -833,30 +833,10 @@ A:
 
 ## 📞 Support & Feedback
 
-### Get Help
-
-- **Issue Reports**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
-- **Feature Suggestions**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions)
-- **Bug Reports**: Please use GitHub Issues template
-- **Documentation**: [Project Documentation](docs/)
-
-### Contact
-
-For questions or suggestions, please contact us through:
-
-#### 💬 QQ
-
-![QQ QR Code](./qq_qr.jpg)
-
-#### 📱 Feishu
-
-![Feishu QR Code](./feishu_qr.jpg)
-
-#### 📧 Other Contact Methods
-
-- Submit a [GitHub Issue](https://github.com/nd7hdyt/YtClipper/issues)
-- Send email to: [christine_zhouye@163.com](mailto:christine_zhouye@163.com)
-- Add the above QQ or Feishu contact
+- **Issues**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions) (available after Discussions is enabled)
+- **Bug Reports**: Please use [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues) template
+- **Docs**: [Project Documentation](docs/)
 
 ## 📄 License
 

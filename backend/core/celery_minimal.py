@@ -1,6 +1,6 @@
 """
-ENCeleryENconfig
-ENallEN，ENtaskprocessingEN
+translatedCelerytranslateduseconfig
+translatedimportissue，translatedProvidestranslated'staskprocessfeature
 """
 
 import os
@@ -8,12 +8,12 @@ import sys
 from pathlib import Path
 from celery import Celery
 
-# createCeleryEN
+# createCelerytranslateduse
 celery_app = Celery('autoclip')
 
-# ENconfig
+# translatedconfig
 celery_app.conf.update(
-    # EN
+    # translatedformat
     task_serializer='json',
     accept_content=['json'],
     result_serializer='json',
@@ -22,7 +22,7 @@ celery_app.conf.update(
     broker_url='redis://localhost:6379/0',
     result_backend='redis://localhost:6379/0',
     
-    # EN
+    # translated
     timezone='Asia/Shanghai',
     enable_utc=True,
     
@@ -30,41 +30,41 @@ celery_app.conf.update(
     task_always_eager=False,
     task_eager_propagates=True,
     
-    # ENconfig
+    # translatedprocessconfig
     worker_prefetch_multiplier=1,
     worker_max_tasks_per_child=1000,
     worker_disable_rate_limits=True,
     
-    # resultconfig
+    # translatedconfig
     result_expires=3600,
     task_ignore_result=False,
     
-    # EN
+    # translatedusetranslated
     autodiscover_tasks=False,
 )
 
-# ENregistertask
+# translatedtask
 @celery_app.task(bind=True, name='tasks.processing.process_video_pipeline')
 def process_video_pipeline(self, project_id: str, input_video_path: str, input_srt_path: str):
-    """videoprocessingENtask"""
-    print(f"🎬 startprocessingproject: {project_id}")
+    """videoprocesstranslatedtask"""
+    print(f"🎬 translatedprocessproject: {project_id}")
     print(f"📹 videopath: {input_video_path}")
     print(f"📝 subtitlespath: {input_srt_path}")
     
-    # ENprocessingEN
+    # translatedprocesstranslated
     import time
     steps = [
-        "EN",
-        "timeEN", 
-        "ENscoring",
-        "titlegenerate",
-        "EN",
-        "videoEN"
+        "translated",
+        "translated", 
+        "translated",
+        "translated",
+        "translated",
+        "videotranslated"
     ]
     
     for i, step in enumerate(steps):
-        progress = (i + 1) * 16  # EN16%
-        print(f"📊 EN {i+1}/6: {step} - {progress}%")
+        progress = (i + 1) * 16  # pertranslated16%
+        print(f"📊 step {i+1}/6: {step} - {progress}%")
         
         # updatetaskstatus
         self.update_state(
@@ -72,47 +72,47 @@ def process_video_pipeline(self, project_id: str, input_video_path: str, input_s
             meta={
                 'current': i + 1,
                 'total': 6,
-                'status': f'currentlyexecute: {step}',
+                'status': f'translatedintranslated: {step}',
                 'progress': progress
             }
         )
         
-        time.sleep(2)  # ENprocessingtime
+        time.sleep(2)  # translatedprocesstranslated
     
-    print(f"✅ project {project_id} processingEN")
+    print(f"✅ project {project_id} processing completed")
     return {
         "success": True,
         "project_id": project_id,
-        "message": "videoprocessingEN",
+        "message": "videoprocessing completed",
         "steps": steps
     }
 
 @celery_app.task(bind=True, name='tasks.processing.process_single_step')
 def process_single_step(self, project_id: str, step: str, config: dict):
-    """ENprocessingtask"""
-    print(f"🔧 startprocessingproject {project_id} EN: {step}")
+    """translated stepprocesstask"""
+    print(f"🔧 translatedprocessproject {project_id} 'sstep: {step}")
     
-    # ENprocessingEN
+    # translatedprocesstranslated
     import time
     time.sleep(3)
     
-    print(f"✅ EN {step} processingEN")
+    print(f"✅ step {step} processing completed")
     return {
         "success": True,
         "project_id": project_id,
         "step": step,
-        "message": f"EN {step} processingEN"
+        "message": f"step {step} processing completed"
     }
 
-# ENtaskEN
+# translatedtasktranslated
 @celery_app.task(bind=True, name='backend.tasks.processing.process_video_pipeline')
 def backend_process_video_pipeline(self, project_id: str, input_video_path: str, input_srt_path: str):
-    """ENvideoprocessingENtask（EN）"""
+    """backendvideoprocesstranslatedtask（translated）"""
     return process_video_pipeline(self, project_id, input_video_path, input_srt_path)
 
 @celery_app.task(bind=True, name='backend.tasks.processing.process_single_step')
 def backend_process_single_step(self, project_id: str, step: str, config: dict):
-    """ENprocessingtask（EN）"""
+    """backendtranslated stepprocesstask（translated）"""
     return process_single_step(self, project_id, step, config)
 
 if __name__ == '__main__':

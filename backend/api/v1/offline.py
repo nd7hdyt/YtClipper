@@ -1,6 +1,6 @@
 """
-ENAPI
-ENstatusEN、ENcacheEN
+translatedsupportAPI
+Providestranslatedstatustranslated、translatedAndcachefeature
 """
 import os
 import time
@@ -15,13 +15,13 @@ from backend.core.desktop_config import is_desktop_mode
 
 router = APIRouter()
 
-# checkEN
+# checktranslated
 def check_desktop_mode():
     if not is_desktop_mode():
-        raise HTTPException(status_code=400, detail="EN")
+        raise HTTPException(status_code=400, detail="translatedOnlyintranslatedcanuse")
 
 class NetworkStatus(BaseModel):
-    """ENstatusEN"""
+    """translatedstatusmodel"""
     is_online: bool
     connection_quality: str  # excellent, good, poor, offline
     latency: Optional[float] = None
@@ -29,15 +29,15 @@ class NetworkStatus(BaseModel):
     error_message: Optional[str] = None
 
 class OfflineModeStatus(BaseModel):
-    """ENstatusEN"""
+    """translatedstatusmodel"""
     is_offline_mode: bool
-    auto_offline_threshold: int  # ENfailedEN
+    auto_offline_threshold: int  # translatedfailedtranslated
     consecutive_failures: int
     last_successful_request: Optional[str] = None
     offline_since: Optional[str] = None
 
 class CacheItem(BaseModel):
-    """cacheEN"""
+    """cachetranslatedmodel"""
     key: str
     data: Any
     created_at: str
@@ -45,7 +45,7 @@ class CacheItem(BaseModel):
     size: int
 
 class SyncQueueItem(BaseModel):
-    """ENqueueEN"""
+    """translatedmodel"""
     id: str
     action: str  # create, update, delete
     resource_type: str  # project, clip, collection
@@ -55,7 +55,7 @@ class SyncQueueItem(BaseModel):
     retry_count: int = 0
     max_retries: int = 3
 
-# ENstatusEN（ENuseEN）
+# translated'sstatustranslated（translatedusetranslated）
 _network_status = NetworkStatus(
     is_online=True,
     connection_quality="good",
@@ -73,17 +73,17 @@ _sync_queue: List[SyncQueueItem] = []
 
 @router.get("/network/status", response_model=NetworkStatus)
 async def get_network_status():
-    """fetchENstatus"""
+    """fetchtranslatedstatus"""
     check_desktop_mode()
     
     try:
-        # ENconnect
+        # testtranslatedconnect
         start_time = time.time()
         response = requests.get("https://www.google.com", timeout=5)
-        latency = (time.time() - start_time) * 1000  # EN
+        latency = (time.time() - start_time) * 1000  # translatedseconds
         
         if response.status_code == 200:
-            # ENconnectEN
+            # translatedconnecttranslated
             if latency < 100:
                 quality = "excellent"
             elif latency < 500:
@@ -97,7 +97,7 @@ async def get_network_status():
             _network_status.last_check = datetime.now().isoformat()
             _network_status.error_message = None
             
-            # ENfailedEN
+            # translatedfailedtranslated
             _offline_mode_status.consecutive_failures = 0
             _offline_mode_status.last_successful_request = datetime.now().isoformat()
             
@@ -105,17 +105,17 @@ async def get_network_status():
             raise requests.RequestException(f"HTTP {response.status_code}")
             
     except Exception as e:
-        # ENconnectfailed
+        # translatedconnectfailed
         _network_status.is_online = False
         _network_status.connection_quality = "offline"
         _network_status.latency = None
         _network_status.last_check = datetime.now().isoformat()
         _network_status.error_message = str(e)
         
-        # ENfailedEN
+        # translatedfailedtranslated
         _offline_mode_status.consecutive_failures += 1
         
-        # checkENshouldEN
+        # checkIstranslated
         if (_offline_mode_status.consecutive_failures >= _offline_mode_status.auto_offline_threshold 
             and not _offline_mode_status.is_offline_mode):
             _offline_mode_status.is_offline_mode = True
@@ -125,13 +125,13 @@ async def get_network_status():
 
 @router.get("/offline/status", response_model=OfflineModeStatus)
 async def get_offline_mode_status():
-    """fetchENstatus"""
+    """fetchtranslatedstatus"""
     check_desktop_mode()
     return _offline_mode_status
 
 @router.post("/offline/toggle")
 async def toggle_offline_mode():
-    """EN"""
+    """translated"""
     check_desktop_mode()
     
     _offline_mode_status.is_offline_mode = not _offline_mode_status.is_offline_mode
@@ -144,30 +144,30 @@ async def toggle_offline_mode():
     
     return {
         "is_offline_mode": _offline_mode_status.is_offline_mode,
-        "message": "EN" if _offline_mode_status.is_offline_mode else "EN"
+        "message": "translated" if _offline_mode_status.is_offline_mode else "translated"
     }
 
 @router.post("/offline/auto-threshold")
 async def set_auto_offline_threshold(threshold: int):
-    """settingsEN"""
+    """settingstranslated"""
     check_desktop_mode()
     
     if threshold < 1 or threshold > 10:
-        raise HTTPException(status_code=400, detail="ENmustEN1-10EN")
+        raise HTTPException(status_code=400, detail="translatedin1-10translated")
     
     _offline_mode_status.auto_offline_threshold = threshold
     
     return {
         "auto_offline_threshold": threshold,
-        "message": f"ENsettingsEN {threshold}"
+        "message": f"translatedsettingstranslated {threshold}"
     }
 
 @router.get("/cache", response_model=List[CacheItem])
 async def get_cache_items():
-    """fetchcacheEN"""
+    """fetchcachetranslatedlist"""
     check_desktop_mode()
     
-    # ENcache
+    # cleantranslatedcache
     current_time = datetime.now()
     expired_keys = []
     
@@ -184,7 +184,7 @@ async def get_cache_items():
 
 @router.post("/cache")
 async def add_cache_item(key: str, data: Any, expires_in_seconds: Optional[int] = None):
-    """ENcacheEN"""
+    """addcachetranslated"""
     check_desktop_mode()
     
     created_at = datetime.now().isoformat()
@@ -193,7 +193,7 @@ async def add_cache_item(key: str, data: Any, expires_in_seconds: Optional[int] 
     if expires_in_seconds:
         expires_at = (datetime.now() + timedelta(seconds=expires_in_seconds)).isoformat()
     
-    # EN（EN）
+    # translated（translated）
     size = len(str(data))
     
     _cache[key] = CacheItem(
@@ -206,24 +206,24 @@ async def add_cache_item(key: str, data: Any, expires_in_seconds: Optional[int] 
     
     return {
         "key": key,
-        "message": "cacheEN",
+        "message": "cachetranslatedadd",
         "expires_at": expires_at
     }
 
 @router.delete("/cache/{key}")
 async def remove_cache_item(key: str):
-    """deletecacheEN"""
+    """deletecachetranslated"""
     check_desktop_mode()
     
     if key in _cache:
         del _cache[key]
-        return {"message": f"cacheEN {key} deleted"}
+        return {"message": f"cachetranslated {key} translateddelete"}
     else:
-        raise HTTPException(status_code=404, detail="cacheENdoes not exist")
+        raise HTTPException(status_code=404, detail="cachetranslatednot found")
 
 @router.get("/sync-queue", response_model=List[SyncQueueItem])
 async def get_sync_queue():
-    """fetchENqueue"""
+    """fetchtranslated"""
     check_desktop_mode()
     return _sync_queue
 
@@ -234,14 +234,14 @@ async def add_sync_queue_item(
     resource_id: str,
     data: Dict[str, Any]
 ):
-    """ENqueueEN"""
+    """addtranslated"""
     check_desktop_mode()
     
     if action not in ["create", "update", "delete"]:
-        raise HTTPException(status_code=400, detail="EN")
+        raise HTTPException(status_code=400, detail="translated'stranslated")
     
     if resource_type not in ["project", "clip", "collection"]:
-        raise HTTPException(status_code=400, detail="EN")
+        raise HTTPException(status_code=400, detail="translated'stranslated")
     
     item = SyncQueueItem(
         id=f"{resource_type}_{resource_id}_{int(time.time())}",
@@ -256,27 +256,27 @@ async def add_sync_queue_item(
     
     return {
         "id": item.id,
-        "message": "ENqueueEN"
+        "message": "translatedadd"
     }
 
 @router.post("/sync-queue/process")
 async def process_sync_queue():
-    """processingENqueue"""
+    """processtranslated"""
     check_desktop_mode()
     
     if _offline_mode_status.is_offline_mode:
         return {
-            "message": "currentEN，cannotprocessingENqueue",
+            "message": "translated，translatedprocesstranslated",
             "queue_size": len(_sync_queue)
         }
     
     processed = 0
     failed = 0
     
-    for item in _sync_queue[:]:  # useclipEN
+    for item in _sync_queue[:]:  # usecliptranslatedlisttranslated'sissue
         try:
-            # ENshouldcallENAPIEN
-            # EN，weENprocessingEN
+            # thistranslatedcalltranslated'sAPItranslated
+            # translated，translatedone translated'sprocesstranslated
             await simulate_sync_operation(item)
             
             _sync_queue.remove(item)
@@ -288,42 +288,42 @@ async def process_sync_queue():
                 _sync_queue.remove(item)
                 failed += 1
             else:
-                # ENqueueENretry
+                # translatedintranslatedetc.translated
                 pass
     
     return {
         "processed": processed,
         "failed": failed,
         "remaining": len(_sync_queue),
-        "message": f"processingEN：succeeded {processed} EN，failed {failed} EN"
+        "message": f"processing completed：succeeded {processed}  ，failed {failed}  "
     }
 
 async def simulate_sync_operation(item: SyncQueueItem):
-    """EN"""
-    # EN，ENshouldcallENAPIEN
-    # for example：createproject、updateEN、deletecollectionEN
-    await asyncio.sleep(0.1)  # EN
+    """translated"""
+    # intranslated，thistranslatedcalltranslated'sAPItranslated
+    # translatedif：createproject、updatetranslated、deletecollectionetc.
+    await asyncio.sleep(0.1)  # translated
     
-    # ENfailed
+    # translated'sfailed
     import random
-    if random.random() < 0.1:  # 10% ENfailedEN
-        raise Exception("ENerror")
+    if random.random() < 0.1:  # 10% 'sfailedtranslated
+        raise Exception("translatederror")
 
 @router.delete("/sync-queue/clear")
 async def clear_sync_queue():
-    """ENqueue"""
+    """translated"""
     check_desktop_mode()
     
     count = len(_sync_queue)
     _sync_queue.clear()
     
     return {
-        "message": f"ENqueueEN，deleteEN {count} ENproject"
+        "message": f"translated，deletetranslated {count}  project"
     }
 
 @router.get("/offline/summary")
 async def get_offline_summary():
-    """fetchEN"""
+    """fetchtranslatedinfo"""
     check_desktop_mode()
     
     return {

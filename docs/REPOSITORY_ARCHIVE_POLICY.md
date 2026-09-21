@@ -1,22 +1,22 @@
-# EN（Repository Archive Policy）
+# archive（Repository Archive Policy）
 
-## EN
+## target
 
-EN“EN/EN/EN”EN AutoClip EN，EN：
+“/archive/” AutoClip ，：
 
-- EN（EN `.env.backup`）
-- EN（EN `cleanup_backup/`）
-- EN“EN”EN“EN”
+- （ `.env.backup`）
+- （ `cleanup_backup/`）
+- “”“localfile”
 
-## EN
+## 
 
-- EN**EN、EN、EN**EN。
-- EN“EN”EN Git。
-- EN；EN，EN `.gitignore` EN。
+- **、、test**docs。
+- “local”file Git。
+- archive；，use `.gitignore` 。
 
-## EN
+## file
 
-EN，EN：
+defaultlocal，：
 
 - `cleanup_backup/`
 - `archive_local/`
@@ -24,45 +24,45 @@ EN，EN：
 - `.env.backup`
 - `.env.*.backup`
 
-EN：EN `.gitignore`。EN，EN，Do not `git add`。
+notes： `.gitignore`。localfile，， `git add`。
 
-## EN“EN”EN
+## “archive”
 
-EN“EN”EN：
+“”：
 
-- EN（EN `scripts/`，EN）
-- ENDecisionsEN（EN `docs/`，EN、ENDecisionsEN）
+- （ `scripts/`，notes）
+- docs（ `docs/`，notes、）
 
-EN：
+：
 
-- EN（EN `*_backup_2025xxxx`）
-- EN/EN/AccountEN
-- EN `_fixed` EN（EN）
+- （ `*_backup_2025xxxx`）
+- key//accountconfig
+- integrate `_fixed` （）
 
-## EN
+## check
 
-EN：
+check：
 
-1. `git status --short` EN `cleanup_backup/`、`.env.backup`、`*.backup`
-2. EN（API Key、Cookie、Token）
-3. EN“EN”EN（EN `_fixed` EN）
+1. `git status --short`  `cleanup_backup/`、`.env.backup`、`*.backup`
+2. configfile（API Key、Cookie、Token）
+3. “fix”（ `_fixed` file）
 
-## EN（EN）
+## （）
 
-EN PR EN：
+ PR completed：
 
-- EN（EN `cleanup_backup/`）
-- EN `.env.backup` EN
-- EN `_fixed` EN，EN
+- （ `cleanup_backup/`）
+-  `.env.backup` file
+-  `_fixed` file，
 
-## EN
+## 
 
-EN（EN）：
+archivefile（）：
 
-1. EN `archive_local/`（EN）
-2. EN PR EN（Do notEN）
-3. EN，EN
+1.  `archive_local/`（）
+2.  PR notesfetch（integrate）
+3. ，local
 
 ---
 
-EN：EN“EN”EN，EN。
+：“archive”，。

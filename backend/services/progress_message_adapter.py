@@ -1,6 +1,6 @@
 """
-progressEN
-EN，EN
+progresstranslated
+translated，translated
 """
 
 import json
@@ -11,41 +11,41 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 class ProgressMessageAdapter:
-    """progressEN"""
+    """progresstranslated"""
     
     @staticmethod
     def to_simple(msg: dict) -> dict:
         """
-        EN
+        translated
         
         Args:
-            msg: EN
+            msg: translated
             
         Returns:
-            EN
+            translated
         """
-        # statusEN
+        # statustranslated
         status_map = {
             "PROGRESS": "running", 
             "RUNNING": "running",
             "COMPLETED": "completed", 
             "FAILED": "failed", 
             "ERROR": "failed",
-            "PENDING": "running",
+            "PtranslatedDING": "running",
             "CANCELLED": "failed"
         }
         
-        # ENprojectID
+        # translatedprojectID
         project_id = msg.get("project_id") or msg.get("projectId")
         
-        # ENprogressEN - EN
+        # translatedprogresstranslated - supporttranslated'stranslatedoneformat
         progress = msg.get("progress", 0) or msg.get("percent", 0)
         if isinstance(progress, (int, float)):
             progress = int(round(float(progress)))
         else:
             progress = 0
         
-        # EN
+        # translatedsteptranslated
         step_name = (
             msg.get("step_name") or 
             msg.get("phase") or 
@@ -54,12 +54,12 @@ class ProgressMessageAdapter:
             "processing"
         )
         
-        # ENstatus
+        # translatedstatus
         status = msg.get("status", "running")
         if isinstance(status, str):
             status = status_map.get(status.upper(), "running")
         
-        # EN
+        # translated
         simple_msg = {
             "type": "task_progress_update",
             "project_id": project_id,
@@ -69,33 +69,33 @@ class ProgressMessageAdapter:
             "timestamp": datetime.utcnow().isoformat()
         }
         
-        # EN
+        # canSelecttranslated
         if "task_id" in msg:
             simple_msg["task_id"] = msg["task_id"]
         
         if "message" in msg:
             simple_msg["message"] = msg["message"]
         
-        logger.debug(f"EN: EN -> EN: {simple_msg}")
+        logger.debug(f"translated: translated -> translated: {simple_msg}")
         return simple_msg
     
     @staticmethod
     def is_progress_message(msg: dict) -> bool:
         """
-        ENprogressEN
+        translatedIstranslatedprogresstranslated
         
         Args:
-            msg: EN
+            msg: translated
             
         Returns:
-            ENprogressEN
+            Istranslatedprogresstranslated
         """
         progress_types = [
             "task_progress_update",
             "task_update", 
             "project_update",
             "progress_update",
-            "project_progress"  # EN
+            "project_progress"  # addedtranslatedoneformat
         ]
         
         msg_type = msg.get("type", "")
@@ -104,13 +104,13 @@ class ProgressMessageAdapter:
     @staticmethod
     def extract_project_id(msg: dict) -> Optional[str]:
         """
-        ENprojectID
+        fromtranslatedprojectID
         
         Args:
-            msg: EN
+            msg: translated
             
         Returns:
-            projectIDENNone
+            projectIDorNone
         """
         return msg.get("project_id") or msg.get("projectId")
     
@@ -119,28 +119,28 @@ class ProgressMessageAdapter:
                        last_timestamp: float, current_timestamp: float,
                        min_interval: float = 0.2) -> bool:
         """
-        ENshouldENsend
+        translatedIstranslated
         
         Args:
-            last_progress: ENprogress
-            current_progress: currentprogress
-            last_timestamp: ENtimeEN
-            current_timestamp: currenttimeEN
-            min_interval: EN(EN)
+            last_progress: translatedprogress
+            current_progress: translatedprogress
+            last_timestamp: translated
+            current_timestamp: translated
+            min_interval: translated(seconds)
             
         Returns:
-            ENshouldEN
+            Istranslated
         """
-        # timeENcheck
+        # translatedcheck
         if current_timestamp - last_timestamp < min_interval:
             return True
         
-        # progressENcheck - ENUIEN
+        # progresstranslatedcheck - translatedUItranslated
         if current_progress < last_progress:
-            logger.debug(f"progressEN，useENprogress: {current_progress} -> {last_progress}")
+            logger.debug(f"progresstranslated，usetranslatedprogress: {current_progress} -> {last_progress}")
             return True
         
         return False
 
-# EN
+# translated
 progress_adapter = ProgressMessageAdapter()

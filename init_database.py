@@ -1,56 +1,56 @@
 #!/usr/bin/env python3
 """
-ENScript
+databasetranslated
 """
 
 import sys
 from pathlib import Path
 
-# ENProjectEN
+# addprojecttranslateddirectorytranslatedpath
 current_dir = Path(__file__).parent
 sys.path.insert(0, str(current_dir))
 sys.path.insert(0, str(current_dir / "backend"))
 
-# EN
+# settingstranslateddirectory
 import os
 os.chdir(current_dir)
 
 def init_database():
-    """EN"""
-    print("🚀 EN...")
+    """translateddatabase"""
+    print("🚀 translateddatabase...")
     
     try:
-        # ENAllEN
+        # importtranslatedmodelensuretranslatedcreate
         from backend.models import Base, BilibiliAccount, UploadRecord
         from backend.core.database import init_database, create_tables
         
-        print("✅ AllENSuccess")
+        print("✅ translatedmodelimportsucceeded")
         
-        # EN
+        # translateddatabase
         if init_database():
-            print("✅ ENSuccess")
+            print("✅ databasetranslatedsucceeded")
         else:
-            print("❌ ENFailed")
+            print("❌ databasetranslatedfailed")
             return False
         
-        # EN
+        # createtranslated
         create_tables()
-        print("✅ ENSuccess")
+        print("✅ databasetranslatedcreatesucceeded")
         
         return True
         
     except Exception as e:
-        print(f"❌ ENFailed: {e}")
+        print(f"❌ databasetranslatedfailed: {e}")
         return False
 
 if __name__ == "__main__":
     success = init_database()
     if success:
-        print("\n🎉 ENCompleted！")
-        print("ENStartSystemEN：")
+        print("\n🎉 databasetranslated！")
+        print("translatedincantranslatedstartSystemtranslated：")
         print("1. ./start_autoclip_with_upload.sh")
-        print("2. ENManualStartENService")
+        print("2. ortranslatedstarttranslated service")
     else:
-        print("\n❌ ENFailed，PleaseCheckErrorEN")
+        print("\n❌ databasetranslatedfailed，translatedcheckerrorinfo")
         sys.exit(1)
 

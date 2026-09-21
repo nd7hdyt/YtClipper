@@ -35,7 +35,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
 
   const formatTime = (timeStr: string) => {
     if (!timeStr) return '00:00:00'
-    // removeEN，EN
+    // translated'stranslatedsecondstranslated，translatedseconds
     return timeStr.replace(',', '.').substring(0, 8)
   }
 
@@ -47,12 +47,12 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
   }
 
   const getScoreColor = (score: number) => {
-    // ENscoreENsettingsEN
-    if (score >= 0.9) return '#52c41a' // green - EN
-    if (score >= 0.8) return '#1890ff' // blue - EN
-    if (score >= 0.7) return '#faad14' // orange - EN
-    if (score >= 0.6) return '#ff7a45' // ENorange - EN
-    return '#ff4d4f' // EN - EN
+    // translatedsettingstranslated'stranslated
+    if (score >= 0.9) return '#52c41a' // translated - translated
+    if (score >= 0.8) return '#1890ff' // translated - translated
+    if (score >= 0.7) return '#faad14' // translated - onetranslated
+    if (score >= 0.6) return '#ff7a45' // translated - translated
+    return '#ff4d4f' // translated - translated
   }
 
   const handleDownload = async () => {
@@ -91,7 +91,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
         }}
       >
         <div style={{ padding: '24px' }}>
-          {/* EN */}
+          {/* translated */}
           <div style={{ 
             display: 'flex', 
             justifyContent: 'space-between', 
@@ -99,7 +99,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
             marginBottom: '20px'
           }}>
             <Title level={4} style={{ margin: 0, color: '#ffffff' }}>
-              ClipDetails
+              cliptranslated
             </Title>
             <Button 
               type="text" 
@@ -110,7 +110,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
           </div>
 
           <Row gutter={24}>
-            {/* left video player */}
+            {/* translatedvideotranslated */}
             <Col span={14}>
               <div style={{ 
                 background: '#000', 
@@ -146,7 +146,7 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                         border: 'none'
                       }}
                     >
-                      Score: {(clip.final_score * 100).toFixed(0)}EN
+                      translated: {(clip.final_score * 100).toFixed(0)}translated
                     </Tag>
                   )}
                   {clip.outline && (
@@ -155,14 +155,14 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                 </Space>
               </div>
 
-              {/* Actions */}
+              {/* translatedbytranslated */}
               <Space>
                 <Button 
                   type="primary" 
                   icon={<PlayCircleOutlined />}
                   onClick={() => setPlaying(!playing)}
                 >
-                  {playing ? 'EN' : 'EN'}
+                  {playing ? 'translated' : 'translated'}
                 </Button>
                 <Button 
                   type="default" 
@@ -170,24 +170,24 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                   loading={downloading}
                   onClick={handleDownload}
                 >
-                  downloadClip
+                  downloadclip
                 </Button>
               </Space>
             </Col>
 
-            {/* Right sideENinfo */}
+            {/* translatedinfo */}
             <Col span={10}>
               <div style={{ color: '#ffffff' }}>
-                {/* Title */}
+                {/* translated */}
                 <div style={{ marginBottom: '16px' }}>
                   <div style={{ marginBottom: '8px' }}>
                     <EditableTitle
-                      title={clip.generated_title || clip.title || 'Unnamed clip'}
+                      title={clip.generated_title || clip.title || 'translated'}
                       clipId={clip.id}
                       onTitleUpdate={(newTitle) => {
-                        // updateclipENTitle
-                        console.log('TitleUpdated:', newTitle)
-                        // ENupdateEN
+                        // updateclip'stranslated
+                        console.log('translatedupdate:', newTitle)
+                        // thistranslatedcantranslated'supdatetranslated
                       }}
                       style={{ color: '#ffffff', fontSize: '18px', fontWeight: '600' }}
                     />
@@ -199,11 +199,11 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
 
                 <Divider style={{ borderColor: 'rgba(255,255,255,0.1)' }} />
 
-                {/* Key points */}
+                {/* translated */}
                 {clip.content && clip.content.length > 0 && (
                   <div style={{ marginBottom: '16px' }}>
                     <Text strong style={{ color: '#ffffff', display: 'block', marginBottom: '8px' }}>
-                      Key points:
+                      translated:
                     </Text>
                     <div>
                       {clip.content.map((point, index) => (
@@ -222,14 +222,14 @@ const ClipDetailModal: React.FC<ClipDetailModalProps> = ({
                   </div>
                 )}
 
-                {/* ENinfo */}
+                {/* translatedinfo */}
                 <div style={{ marginBottom: '16px' }}>
                   <Text strong style={{ color: '#ffffff', display: 'block', marginBottom: '8px' }}>
-                    ENinfo:
+                    translatedinfo:
                   </Text>
                   <div style={{ color: '#cccccc', fontSize: '14px' }}>
-                    <div>Start time: {formatTime(clip.start_time)}</div>
-                    <div>EN: {formatTime(clip.end_time)}</div>
+                    <div>translated: {formatTime(clip.start_time)}</div>
+                    <div>translated: {formatTime(clip.end_time)}</div>
                   </div>
                 </div>
 

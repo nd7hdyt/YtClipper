@@ -1,185 +1,185 @@
-# 🎤 WhisperEN
+# 🎤 Whispersubtitlesgeneratesummary
 
-## 📋 EN
+## 📋 overview
 
-EN，EN**WhisperEN**，ENBEN/YouTubeENWhisperEN。EN。
+，succeeded**Whispersubtitlesgenerate**，dependenciesB/YouTubesubtitlespreferWhispermodelgeneratesubtitles。subtitles。
 
-## ✅ EN
+## ✅ completedimprove
 
-### 1. EN
+### 1. 
 
-#### ENUploadEN (`backend/api/v1/projects.py`)
-- **EN**：EN，WhisperEN
-- **EN**：ENWhisperEN，EN
-- **EN**：
-  - EN/EN：EN`small`EN（EN）
-  - EN/EN：EN`medium`EN（EN）
-  - EN：EN`base`EN（EN）
+#### projectAPI (`backend/api/v1/projects.py`)
+- ****：dependenciessubtitles，Whisper
+- ****：preferWhispergeneratesubtitles，selectmodel
+- **model selection**：
+  - business/：use`small`model（）
+  - /：use`medium`model（）
+  - ：use`base`model（）
 
-#### BEN (`backend/api/v1/bilibili.py`)
-- **EN**：EN，WhisperEN
-- **EN**：ENWhisperEN，EN
-- **EN**：EN
+#### BdownloadAPI (`backend/api/v1/bilibili.py`)
+- ****：downloadsubtitles，Whisper
+- ****：preferWhispergeneratesubtitles，subtitles
+- ****：selectmodel
 
-#### YouTubeEN (`backend/api/v1/youtube.py`)
-- **EN**：EN
-- **EN**：ENWhisper，EN
-- **EN**：EN
+#### YouTubedownloadAPI (`backend/api/v1/youtube.py`)
+- ****：subtitlesdownload
+- ****：preferWhisper，subtitles
+- ****：
 
-### 2. EN
+### 2. 
 
-#### EN
+#### model selection
 ```python
-# EN
+# selectmodel
 if category == "business" or category == "knowledge":
-    model = "small"  # EN，EN
+    model = "small"  # ，
 elif category == "speech":
-    model = "medium"  # EN，EN
+    model = "medium"  # ，
 else:
-    model = "base"  # EN
+    model = "base"  # 
 ```
 
-#### LanguageEN
+#### 
 ```python
-# ENLanguage
+# select
 if category in ["business", "knowledge", "speech"]:
-    language = "zh"  # ChineseEN
+    language = "zh"  # Chinese
 else:
-    language = "auto"  # EN
+    language = "auto"  # auto-detect
 ```
 
-### 3. EN
+### 3. testverify
 
-#### EN (`scripts/test_whisper_subtitle_strategy.py`)
-- ✅ WhisperEN
-- ✅ EN
-- ✅ EN
-- ✅ EN
+#### test (`scripts/test_whisper_subtitle_strategy.py`)
+- ✅ Whisperavailabletest
+- ✅ model selectiontest
+- ✅ subtitlesgeneratetest
+- ✅ generatetest
 
-#### EN
-- **WhisperEN**: ✅ EN
-- **FFmpegEN**: ✅ EN
-- **EN**: tiny, base, small, medium, large
-- **EN**: ✅ 100% EN
+#### test
+- **Whisperinstallstatus**: ✅ install
+- **FFmpeginstallstatus**: ✅ install
+- **availablemodel**: tiny, base, small, medium, large
+- **model selection**: ✅ 100% 
 
-## 🚀 EN
+## 🚀 tech advantages
 
-### 1. EN
-- **EN**：ENSRTEN
-- **EN**：EN
-- **EN**：EN
+### 1. 
+- **format**：useSRTformat
+- ****：subtitlesimpact
+- ****：
 
-### 2. EN
-- **EN**：WhisperProvidesEN
-- **EN**：Supportword-level timestamps
-- **EN**：ENSRTEN，EN
+### 2. edit
+- ****：Whisper
+- **edit**：supportword-level timestamps
+- **format**：SRTformat，edit
 
-### 3. ENLanguageSupport
-- **15ENLanguage**：SupportChinese、English、EN、EN
-- **EN**：ENLanguageEN
-- **ENSupport**：SupportEN
+### 3. multi-language support
+- **15**：supportChinese、English、Japanese、
+- **auto-detect**：
+- **support**：support
 
-### 4. EN
-- **EN**：EN
-- **EN**：ENAPIEN
-- **EN**：SupportEN
-- **EN**：100%EN，EN
+### 4. tech advantages
+- **local**：no needdependencies
+- **free use**：APIcost
+- **config**：supportmodel
+- **available**：100%available，dependencies
 
-## 📊 EN
+## 📊 
 
-### Whisper vs EN
+### Whisper vs subtitles
 
-| EN | WhisperEN | EN |
+|  | Whispergenerate | subtitles |
 |------|-------------|----------|
-| EN | 100% | EN |
-| EN | EN | EN |
-| EN | EN | EN |
-| ENLanguageSupport | 15ENLanguage | EN |
-| EN | EN | EN |
-| EN | EN | EN |
-| EN | EN | EN |
-| EN | EN | EN |
-| EN | EN | EN |
+| available | 100% | dependencies |
+| format |  |  |
+|  |  | medium |
+| multi-language support | 15 | dependencies |
+| edit |  | medium |
+| dependencies |  |  |
+| cost | free | free |
+|  | medium |  |
+|  |  | medium |
 
-## 🔧 EN
+## 🔧 config
 
-### EN
+### dependencies
 ```bash
-# EN
+# dependencies
 pip install openai-whisper
 brew install ffmpeg  # macOS
-# EN
+# 
 sudo apt install ffmpeg  # Ubuntu
 ```
 
-### EN
-- **EN** (< 10EN): `tiny` EN `base`
-- **EN** (10-30EN): `base` EN `small`
-- **EN** (> 30EN): `small` EN `medium`
-- **EN**: `medium` EN `large`
+### model selection
+- **** (< 10minutes): `tiny`  `base`
+- **medium** (10-30minutes): `base`  `small`
+- **** (> 30minutes): `small`  `medium`
+- ****: `medium`  `large`
 
-## 📈 EN
+## 📈 use
 
-### 1. EN
-- **EN**：EN
-- **EN**：EN
-- **EN**：ENSRTEN
+### 1. subtitles
+- ****：
+- ****：
+- **format**：SRTformat
 
-### 2. EN
-- **EN**：SupportEN
-- **EN**：EN
-- **EN**：EN
+### 2. edit
+- **edit**：supportedit
+- ****：
+- **format**：edit
 
-### 3. EN
-- **EN**：EN
-- **EN**：100%EN
-- **EN**：EN
+### 3. 
+- **dependencies**：dependenciessubtitles
+- **failed**：100%available
+- ****：
 
-## 🛠️ Troubleshooting
+## 🛠️ troubleshooting
 
-### FAQEN
+### FAQsolution
 
-1. **WhisperEN**
+1. **Whispernot installed**
    ```bash
    pip install openai-whisper
    ```
 
-2. **FFmpegEN**
+2. **FFmpegnot installed**
    ```bash
-   ffmpeg -version  # EN
-   brew install ffmpeg  # macOSEN
+   ffmpeg -version  # checkinstall
+   brew install ffmpeg  # macOSinstall
    ```
 
-3. **EN**
-   - EN（tiny/base）
-   - EN
-   - EN
+3. **out of memory**
+   - use a smaller model（tiny/base）
+   - 
+   - memory
 
-4. **EN**
-   - EN
-   - ENGPUEN（EN）
-   - EN
+4. ****
+   - use a smaller model
+   - useGPU（available）
+   - 
 
-## 📝 EN
+## 📝 summary
 
-### EN
-1. **EN**：ENWhisperEN
-2. **EN**：EN
-3. **EN**：EN
-4. **EN**：EN
+### 
+1. **succeeded**：subtitlesgeneratedependenciesWhisper
+2. **select**：selectmodel
+3. ****：subtitlesedit
+4. ****：failed
 
-### EN
-1. **EN**：EN，EN
-2. **EN**：SupportENLanguage，EN
-3. **EN**：EN
-4. **EN**：EN，ENAPIEN
+### 
+1. ****：subtitles，failed
+2. ****：support，
+3. ****：dependencies
+4. ****：free use，no needAPIcost
 
-### EN
-EN：
-- ENSubtitle EditingEN
-- ENLanguageEN
-- EN
-- EN
+### use cases
+：
+- needsubtitlesedit
+- 
+- project
+- dependencies
 
-EN，AutoClipENProcessing CapabilityEN，ENProvidesEN。
+improve，AutoClipsubtitles，edit。
 

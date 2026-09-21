@@ -1,19 +1,19 @@
-# ENVersionEN / DownloadEN / InstallEN EN Release AutoEN。EN，EN：
-#   1. repository_dispatch  —— EN desktop-build.yml ENSuccessEN（EN WEBSITE_DISPATCH_TOKEN）
-#   2. schedule             —— EN，EN token EN
-#   3. workflow_dispatch    —— Manual，EN tag
-# EN main，GitHub Pages EN。
+# translatedversiontranslated / downloadtranslated / installPackagetranslated translated Release translated。translated translated，translatedonetranslatedcan：
+#   1. repository_dispatch  —— translated desktop-build.yml translatedsucceededtranslated（translatedintranslated WEBSITE_DISPATCH_TOKEN）
+#   2. schedule             —— pertranslatedonetranslated，translated token translated
+#   3. workflow_dispatch    —— translated，cantranslated tag
+# translated main，GitHub Pages translatedoneminutestranslated。
 name: Sync release info
 
 on:
   repository_dispatch:
     types: [autoclip-release]
   schedule:
-    - cron: "17 3 * * *"   # EN 03:17 UTC（11:17 EN）
+    - cron: "17 3 * * *"   # pertranslated 03:17 UTC（11:17 translated）
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag（EN v1.3.0）；EN latest"
+        description: "Release tag（if v1.3.0）；translated latest"
         required: false
         default: ""
 
@@ -39,7 +39,7 @@ jobs:
       - name: Commit and push if changed
         run: |
           if git diff --quiet; then
-            echo "EN"; exit 0
+            echo "translatedIstranslated"; exit 0
           fi
           VER=$(grep -oE 'releases/download/v[0-9]+\.[0-9]+\.[0-9]+/' index.html | head -1 | grep -oE 'v[0-9.]+')
           git config user.name "github-actions[bot]"

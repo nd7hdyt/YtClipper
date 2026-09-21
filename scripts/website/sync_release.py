@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-EN index.html ENVersionEN / DownloadEN / InstallEN（EN）Release。
+ translated index.html translated'sversiontranslated / downloadtranslated / installPackagetranslated（ortranslated）Release。
 
-    python scripts/sync_release.py            # EN zhouxiaoka/autoclip EN latest release
-    python scripts/sync_release.py v1.3.0     # EN tag
-    python scripts/sync_release.py --check    # EN，EN（EN 1 = EN）
+    python scripts/sync_release.py            # translated zhouxiaoka/autoclip 's latest release
+    python scripts/sync_release.py v1.3.0     # translated tag
+    python scripts/sync_release.py --check    # translatedIstranslated，translatedfile（translated 1 = translated）
 
-EN README EN「ENVersionEN」EN：
-  1. hero ENDownloadENVersionEN、DownloadEN（EN）
-  2. DownloadENInstallEN
-  3. hero.note ENVersionEN
+translated README translated「translatedversiontranslated'stranslated」translatedstep：
+  1. hero anddownloadtranslated'sversiontranslated、downloadtranslated（translatedonetranslated）
+  2. downloadtranslated'sinstallPackagetranslated
+  3. hero.note translated'sversiontranslated
 
-EN；EN .github/workflows/sync-release.yml EN（repository_dispatch / EN cron / Manual）。
+translatedusetranslated；translated .github/workflows/sync-release.yml call（repository_dispatch / pertranslated cron / translated）。
 """
 
 from __future__ import annotations
@@ -36,7 +36,7 @@ ASSETS = {
 def fetch_release(tag: str | None) -> dict:
     url = f"https://api.github.com/repos/{REPO}/releases/" + (f"tags/{tag}" if tag else "latest")
     req = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "autoclip-intro-sync"})
-    token = os.getenv("GITHUB_TOKEN")
+    token = os.getenv("GITHUB_TOKtranslated")
     if token:
         req.add_header("Authorization", f"Bearer {token}")
     with urllib.request.urlopen(req, timeout=30) as resp:
@@ -51,24 +51,24 @@ def pick_assets(release: dict) -> dict[str, dict]:
                 found[key] = {"name": asset["name"], "size_mb": round(asset["size"] / 1024 / 1024)}
     missing = [k for k in ASSETS if k not in found]
     if missing:
-        raise SystemExit(f"Release {release.get('tag_name')} EN：{missing}（ENFailed，EN Release ENUpload）")
+        raise SystemExit(f"Release {release.get('tag_name')} translatedArtifacts：{missing}（cantranslatedfailed，or Release translatedinUpload）")
     return found
 
 
 def current_version(html: str) -> str:
     m = re.search(r"releases/download/v(\d+\.\d+\.\d+)/", html)
     if not m:
-        raise SystemExit("index.html EN releases/download/vX.Y.Z/ ENDownloadEN")
+        raise SystemExit("index.html translated releases/download/vX.Y.Z/ translated'sdownloadtranslated")
     return m.group(1)
 
 
 def rewrite(html: str, old: str, new: str, assets: dict[str, dict]) -> str:
     old_re = re.escape(old)
-    # 1. DownloadEN、JS EN REL / MAC / WIN、hero.note ENAllVersionEN（EN v EN Desktop_ EN，EN）
+    # 1. downloadtranslated、JS translated's REL / MAC / WIN、hero.note etc.translatedversiontranslated（translated v or Desktop_ translated，translated'stranslated）
     html = re.sub(rf"(?<=/v){old_re}(?=/)", new, html)                 # releases/download/v1.2.1/
     html = re.sub(rf"(?<=Desktop_){old_re}(?=_)", new, html)           # AutoClip.Desktop_1.2.1_...
-    html = re.sub(rf"\bv{old_re}\b", f"v{new}", html)                  # EN v1.2.1
-    # 2. DownloadEN：<span class="ver">vX.Y.Z · NNN MB</span>，EN macOS EN，EN Windows EN
+    html = re.sub(rf"\bv{old_re}\b", f"v{new}", html)                  # translated's v1.2.1
+    # 2. downloadtranslated：<span class="ver">vX.Y.Z · NNN MB</span>，No.one Is macOS translated，No.translated Is Windows translated
     sizes = iter([assets["mac"]["size_mb"], assets["win"]["size_mb"]])
 
     def _size(m: re.Match) -> str:
@@ -76,14 +76,14 @@ def rewrite(html: str, old: str, new: str, assets: dict[str, dict]) -> str:
 
     html, n = re.subn(rf'(<span class="ver">v{re.escape(new)} · )\d+ MB', _size, html, count=2)
     if n != 2:
-        print(f"EN：EN {n}/2 ENInstallEN", file=sys.stderr)
+        print(f"translated：translated {n}/2 translatedinstallPackagetranslated", file=sys.stderr)
     return html
 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("tag", nargs="?", help="EN v1.3.0；ENThenEN latest")
-    ap.add_argument("--check", action="store_true", help="EN，EN")
+    ap.add_argument("tag", nargs="?", help="if v1.3.0；translated latest")
+    ap.add_argument("--check", action="store_true", help="translated，translatedfile")
     args = ap.parse_args(argv)
 
     release = fetch_release(args.tag)
@@ -93,18 +93,18 @@ def main(argv: list[str] | None = None) -> int:
 
     html = INDEX.read_text(encoding="utf-8")
     old = current_version(html)
-    print(f"ENCurrent v{old} → Release {tag}（mac {assets['mac']['size_mb']} MB / win {assets['win']['size_mb']} MB）")
+    print(f"translated v{old} → Release {tag}（mac {assets['mac']['size_mb']} MB / win {assets['win']['size_mb']} MB）")
 
     updated = rewrite(html, old, new, assets)
     if updated == html:
-        print("EN，EN")
+        print("translatedIstranslated，translated")
         return 0
     if args.check:
-        print("EN Release")
+        print("translated Release")
         return 1
     INDEX.write_text(updated, encoding="utf-8")
     changed = sum(1 for a, b in zip(html.splitlines(), updated.splitlines()) if a != b)
-    print(f"index.html EN（{changed} EN）")
+    print(f"index.html translatedupdate（{changed} translated）")
     return 0
 
 

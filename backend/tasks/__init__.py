@@ -1,12 +1,12 @@
 """
-taskEN
-ENallENtaskEN
+tasktranslated
+Packageincludetranslatedtasktranslated
 """
 
-# EN，ENcelery_appEN
+# translatedimport，translatedcelery_appimporttranslated
 
 __all__ = [
-    # processingtask
+    # processtask
     'process_video_pipeline',
     'process_single_step',
     'retry_processing_step',
@@ -16,22 +16,22 @@ __all__ = [
     'generate_video_collections',
     'optimize_video_quality',
     
-    # ENtask
+    # translatedtask
     'send_processing_notification',
     'send_error_notification',
     'send_completion_notification',
     
-    # ENtask
+    # translatedtask
     'cleanup_expired_tasks',
     'health_check',
     'backup_project_data',
     
-    # ENtask
+    # translatedcleantask
     'cleanup_expired_data',
     'check_data_consistency',
     'cleanup_orphaned_data',
     
-    # ENtask
+    # translatedtask
     'upload_clip_task',
     'batch_upload_task'
 ] 

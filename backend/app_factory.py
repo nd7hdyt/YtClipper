@@ -1,6 +1,6 @@
 """
-EN
-EN web EN desktop EN
+translatedone'sbackendtranslatedusetranslated
+support web And desktop translated
 """
 import logging
 import os
@@ -19,15 +19,15 @@ logger = logging.getLogger(__name__)
 
 def create_app(mode: str = "web") -> FastAPI:
     """
-    create FastAPI EN
+    create FastAPI translatedusetranslated
     
     Args:
-        mode: runEN，EN "web" EN "desktop"
+        mode: translated，support "web" or "desktop"
     """
-    # settingsEN
+    # settingstranslated
     os.environ["AUTOCLIP_MODE"] = mode
     
-    # configlog
+    # configlogs
     logging_config = get_logging_config()
     logging.basicConfig(
         level=getattr(logging, logging_config["level"]),
@@ -38,118 +38,118 @@ def create_app(mode: str = "web") -> FastAPI:
         ]
     )
     
-    # create FastAPI EN
+    # create FastAPI translateduse
     app = FastAPI(
         title="AutoClip API",
-        description="AIvideoclipprocessingAPI",
+        description="AIvideoclipprocessAPI",
         version="1.0.0",
         docs_url="/docs",
         redoc_url="/redoc"
     )
     
-    # settingsENstatus
+    # settingstranslatedusestatus
     app.state.mode = mode
     
     # config CORS
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # ENneedconfigEN
+        allow_origins=["*"],  # translatedconfigtranslated
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
     
-    # registerENexceptionprocessingEN
+    # translatedprocesstranslated
     app.add_exception_handler(Exception, global_exception_handler)
     
-    # startEN
+    # starttranslated
     @app.on_event("startup")
     async def startup_event():
-        logger.info(f"start AutoClip API service (EN: {mode})...")
+        logger.info(f"start AutoClip API service (translated: {mode})...")
         
-        # ENallENcreate
+        # importtranslatedmodeltranslatedensuretranslatedcreate
         from backend.models.bilibili import BilibiliAccount, UploadRecord
         Base.metadata.create_all(bind=engine)
-        logger.info("databaseENcreateEN")
+        logger.info("databasetranslatedcreatetranslated")
         
-        # load API EN
+        # translated API keytranslated
         api_key = get_api_key()
         if api_key:
             os.environ["DASHSCOPE_API_KEY"] = api_key
-            logger.info("API ENloadEN")
+            logger.info("API keytranslated")
         else:
-            logger.warning("not found API ENconfig")
+            logger.warning("translated API keyconfig")
         
-        # ENinitialize
+        # translated'stranslated
         if mode == "desktop":
-            logger.info("EN：useENqueueEN SQLite")
+            logger.info("translated：uselocaltranslatedAnd SQLite")
         else:
-            logger.info("Web EN：use Redis/Celery")
+            logger.info("Web translated：use Redis/Celery")
         
-        logger.info("WebSocket ENserviceEN，useENprogresssystem")
+        logger.info("WebSocket translatedservicetranslateduse，usetranslated'stranslatedprogressSystem")
     
-    # EN
+    # translated
     @app.on_event("shutdown")
     async def shutdown_event():
-        logger.info("currentlyEN AutoClip API service...")
-        logger.info("WebSocket ENserviceEN")
+        logger.info("translatedintranslated AutoClip API service...")
+        logger.info("WebSocket translatedservicetranslateduse")
     
-    # registerEN
+    # translated
     app.include_router(health_router, prefix="/api/health", tags=["health"])
     app.include_router(api_router, prefix="/api/v1")
     
-    # EN video-categories EN（EN api_router EN）
+    # add video-categories translated（translatedonetranslated api_router translated）
     @app.get("/api/v1/video-categories")
     async def get_video_categories():
-        """fetchvideocategoryconfig."""
+        """fetchvideotranslatedconfig."""
         return {
             "categories": [
                 {
                     "value": "default",
-                    "name": "EN",
-                    "description": "ENvideoENprocessing",
+                    "name": "default",
+                    "description": "translatedusevideotranslatedprocess",
                     "icon": "🎬",
                     "color": "#4facfe"
                 },
                 {
                     "value": "knowledge",
-                    "name": "EN",
-                    "description": "EN、EN、EN、EN",
+                    "name": "translated",
+                    "description": "translated、translated、translated、translatedetc.translated",
                     "icon": "📚",
                     "color": "#52c41a"
                 },
                 {
                     "value": "entertainment",
-                    "name": "EN",
-                    "description": "EN、EN、EN",
+                    "name": "translated",
+                    "description": "translated、translated、translatedetc.translated",
                     "icon": "🎮",
                     "color": "#722ed1"
                 },
                 {
                     "value": "business",
-                    "name": "EN",
-                    "description": "EN、EN、EN",
+                    "name": "providertranslated",
+                    "description": "providertranslated、translated、translatedetc.providertranslated",
                     "icon": "💼",
                     "color": "#fa8c16"
                 },
                 {
                     "value": "experience",
-                    "name": "EN",
-                    "description": "EN、EN",
+                    "name": "translated",
+                    "description": " translated、translatedetc.translated",
                     "icon": "🌟",
                     "color": "#eb2f96"
                 },
                 {
                     "value": "opinion",
-                    "name": "EN",
-                    "description": "EN、ENanalysisEN",
+                    "name": "translated",
+                    "description": "translated、translatedetc.translated",
                     "icon": "💭",
                     "color": "#13c2c2"
                 },
                 {
                     "value": "speech",
-                    "name": "EN",
-                    "description": "EN、EN",
+                    "name": "translated",
+                    "description": "translated、translatedetc.translated",
                     "icon": "🎤",
                     "color": "#f5222d"
                 }
@@ -157,7 +157,7 @@ def create_app(mode: str = "web") -> FastAPI:
             "default_category": "default"
         }
     
-    # ENcheck
+    # translatedHealth Check
     @app.get("/health")
     async def root_health():
         try:

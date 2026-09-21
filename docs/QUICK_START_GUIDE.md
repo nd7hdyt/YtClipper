@@ -1,68 +1,68 @@
-# 🚀 AIEN - Quick StartEN
+# 🚀 AIclipproject - quick start
 
-## 📋 Project Overview
+## 📋 project
 
-AIENBased onAIENAuto ClippingEN，EN。EN，EN。
+AIcliptoolbased onAIcliptool，。project，targetbackend。
 
-## 🎯 EN
+## 🎯 target
 
-1. **EN**: ENSQLite + SQLAlchemyEN
-2. **EN**: ENFastAPI，EN
-3. **EN**: EN
+1. ****: SQLite + SQLAlchemy
+2. **service**: FastAPI，service
+3. ****: backend
 
-## 🏗️ Project Structure
+## 🏗️ project
 
 ```
 autoclip/
-├── backend/                    # EN
-│   ├── app/                   # FastAPIEN
-│   ├── api/                   # APIEN
-│   ├── core/                  # EN
-│   ├── models/                # EN
-│   ├── services/              # EN
-│   └── tasks/                 # Task Queue
-├── frontend/                   # EN
-├── shared/                     # EN
-├── docs/                       # EN
-└── data/                       # EN
+├── backend/                    # backendservice
+│   ├── app/                   # FastAPI
+│   ├── api/                   # APIroute
+│   ├── core/                  # core modules
+│   ├── models/                # model
+│   ├── services/              # service
+│   └── tasks/                 # 
+├── frontend/                   # frontend
+├── shared/                     # 
+├── docs/                       # docs
+└── data/                       # file
 ```
 
-## 🛠️ EN
+## 🛠️ dev environment
 
-### EN
-- Python 3.10+（EN 3.11）
+### tool
+- Python 3.10+（recommend 3.11）
 - Node.js 16+
 - Redis
 - Git
 
-### EN
+### installstep
 
-1. **EN**
+1. **project**
 ```bash
 git clone <repository-url>
 cd autoclip
 ```
 
-2. **EN**
+2. **backendsettings**
 ```bash
 cd backend
-# ENPoetry (EN)
+# installPoetry (not installed)
 curl -sSL https://install.python-poetry.org | python3 -
 
-# EN
+# installdependencies
 poetry install
 
-# EN
+# 
 poetry shell
 ```
 
-3. **EN**
+3. **frontendsettings**
 ```bash
 cd frontend
 npm install
 ```
 
-4. **ENRedis**
+4. **startRedis**
 ```bash
 # macOS
 brew install redis
@@ -73,33 +73,33 @@ sudo apt-get install redis-server
 sudo systemctl start redis
 ```
 
-## 🚀 Quick Start
+## 🚀 quick start
 
-### 1. EN
+### 1. startbackendservice
 ```bash
 cd backend
 poetry run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### 2. EN
+### 2. startfrontendservice
 ```bash
 cd frontend
 npm run dev
 ```
 
-### 3. EN
-- EN: http://localhost:3000
-- ENAPI: http://localhost:8000
-- APIEN: http://localhost:8000/docs
+### 3. access
+- frontend: http://localhost:3000
+- backendAPI: http://localhost:8000
+- APIdocs: http://localhost:8000/docs
 
-## 📚 Development Guide
+## 📚 
 
-### EN
+### backend dev
 
-#### ENAPIEN
-1. EN `backend/api/v1/` EN
-2. EN `backend/app/main.py` EN
-3. EN `backend/services/` EN
+#### APIroute
+1.  `backend/api/v1/` createroutefile
+2.  `backend/app/main.py` route
+3.  `backend/services/` service
 
 ```python
 # backend/api/v1/example.py
@@ -116,10 +116,10 @@ async def get_example(db: Session = Depends(get_db)):
     return service.get_examples()
 ```
 
-#### EN
-1. EN `backend/models/` EN
-2. EN `Base` EN
-3. EN
+#### model
+1.  `backend/models/` createmodelfile
+2.  `Base` 
+3. database
 
 ```python
 # backend/models/example.py
@@ -134,10 +134,10 @@ class Example(Base, TimestampMixin):
     description = Column(String(500))
 ```
 
-#### EN
-1. EN `backend/services/` EN
-2. EN
-3. EN
+#### service
+1.  `backend/services/` createservicefile
+2. 
+3. error handling
 
 ```python
 # backend/services/example_service.py
@@ -157,12 +157,12 @@ class ExampleService:
         return example
 ```
 
-### EN
+### frontend dev
 
-#### EN
-1. EN `frontend/src/pages/` EN
-2. EN
-3. EN
+#### page
+1.  `frontend/src/pages/` createpage
+2. routeconfigpage
+3. 
 
 ```typescript
 // frontend/src/pages/ExamplePage.tsx
@@ -171,7 +171,7 @@ import { Card, Table } from 'antd';
 
 const ExamplePage: React.FC = () => {
   return (
-    <Card title="EN">
+    <Card title="page">
       <Table />
     </Card>
   );
@@ -180,10 +180,10 @@ const ExamplePage: React.FC = () => {
 export default ExamplePage;
 ```
 
-#### ENAPIEN
-1. EN `frontend/src/services/` ENAPIEN
-2. ENAPIEN
-3. EN
+#### APIcall
+1.  `frontend/src/services/` APImethod
+2. useAPIcall
+3. error handlingstatus
 
 ```typescript
 // frontend/src/services/api.ts
@@ -200,139 +200,139 @@ export const exampleApi = {
 };
 ```
 
-## 🧪 EN
+## 🧪 test
 
-### EN
+### backendtest
 ```bash
 cd backend
 poetry run pytest
 ```
 
-### EN
+### frontendtest
 ```bash
 cd frontend
 npm test
 ```
 
-### EN
+### test
 ```bash
-# EN
+# startservice
 npm run test:e2e
 ```
 
-## 📊 EN
+## 📊 database
 
-### EN
+### create
 ```bash
 cd backend
-alembic revision --autogenerate -m "EN"
+alembic revision --autogenerate -m ""
 ```
 
-### EN
+### 
 ```bash
 alembic upgrade head
 ```
 
-### EN
+### 
 ```bash
 alembic downgrade -1
 ```
 
-## 🔧 EN
+## 🔧 
 
-### EN
+### 
 ```bash
-# EN
+# startbackend devserver
 poetry run uvicorn app.main:app --reload
 
-# EN
+# startfrontend devserver
 npm run dev
 
-# EN
+# buildfrontend
 npm run build
 
-# EN
+# test
 poetry run pytest
 npm test
 ```
 
-### EN
+### database
 ```bash
-# EN
-alembic revision --autogenerate -m "EN"
+# create
+alembic revision --autogenerate -m ""
 
-# EN
+# 
 alembic upgrade head
 
-# EN
+# view
 alembic history
 ```
 
-### EN
+### deploy
 ```bash
-# ENDockerEN
+# buildDocker
 docker build -t autoclip .
 
-# ENDockerEN
+# Docker
 docker run -p 8000:8000 autoclip
 ```
 
 ## 🐛 FAQ
 
-### 1. EN
-**EN**: EN
-**EN**:
-- EN
-- EN
-- EN
+### 1. databaseconnection failed
+**issue**: database
+**solution**:
+- checkdatabasefile
+- confirmdatabasesettings
+- checkdatabase
 
-### 2. RedisEN
-**EN**: CeleryENRedis
-**EN**:
-- ENRedisEN
-- ENRedisEN
-- ENRedisEN
+### 2. Redisconnection failed
+**issue**: CeleryRedis
+**solution**:
+- confirmRedisservice
+- checkRedisconfig
+- confirmRedisport
 
-### 3. EN
-**EN**: npm run build EN
-**EN**:
-- ENnode_modulesEN
-- ENTypeScriptEN
-- EN
+### 3. frontendbuildfailed
+**issue**: npm run build failed
+**solution**:
+- node_modulesinstall
+- checkTypeScripterror
+- confirmdependenciesinstall
 
-### 4. APIEN
-**EN**: ENAPI
-**EN**:
-- EN
-- ENCORSEN
-- ENAPIEN
+### 4. APIcallfailed
+**issue**: frontendcallbackendAPI
+**solution**:
+- confirmbackendservice
+- checkCORSconfig
+- verifyAPI
 
-## 📞 EN
+## 📞 get help
 
-### EN
-- [Project Management](./PROJECT_MANAGEMENT.md)
+### docs
+- [project management](./PROJECT_MANAGEMENT.md)
 
-### Tech StackEN
-- [FastAPIEN](https://fastapi.tiangolo.com/)
-- [SQLAlchemyEN](https://docs.sqlalchemy.org/)
-- [CeleryEN](https://docs.celeryproject.org/)
-- [ReactEN](https://reactjs.org/docs/)
+### docs
+- [FastAPIdocs](https://fastapi.tiangolo.com/)
+- [SQLAlchemydocs](https://docs.sqlalchemy.org/)
+- [Celerydocs](https://docs.celeryproject.org/)
+- [Reactdocs](https://reactjs.org/docs/)
 
-### EN
-- ENGitHub Issue
-- ContactEN
-- ENWiki
+### issue
+- createGitHub Issue
+- project
+- viewprojectWiki
 
-## 🎉 EN
+## 🎉 
 
-1. **ENProject Structure**: EN
-2. **EN**: EN
-3. **EN**: EN
-4. **EN**: EN
-5. **EN**: EN
+1. **project**: docs
+2. **settingsdev environment**: stepconfig
+3. ****: startservicetest
+4. ****: select
+5. ****: followproject
 
 ---
 
-**EN**: 1.0  
-**EN**: 2024EN12EN  
-**EN**: 2024EN12EN 
+**docsversion**: 1.0  
+**createdate**: 202412  
+**last updated**: 202412 

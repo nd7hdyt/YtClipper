@@ -1,6 +1,6 @@
 """
-projectconfigEN
-ENeachprojectENconfigEN，includepromptfile、APIEN、processingparametersEN
+projectconfigtranslated
+translatedper project'sconfiginfo，Packagetranslatedpromptfile、APIkey、processtranslatedetc.
 """
 
 import os
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProcessingStep(str, Enum):
-    """processingEN"""
+    """processsteptranslated"""
     STEP1_OUTLINE = "step1_outline"
     STEP2_TIMELINE = "step2_timeline"
     STEP3_SCORING = "step3_scoring"
@@ -39,7 +39,7 @@ class LLMConfig:
 
 @dataclass
 class ProcessingParams:
-    """processingparameters"""
+    """processtranslated"""
     chunk_size: int = 5000
     min_score_threshold: float = 0.7
     max_clips_per_collection: int = 5
@@ -51,99 +51,99 @@ class ProcessingParams:
 
 
 class ProjectConfigManager:
-    """projectconfigEN"""
+    """projectconfigtranslated"""
     
     def __init__(self, project_id: str):
         self.project_id = project_id
         self.project_dir = Path(f"data/projects/{project_id}")
         self.config_path = self.project_dir / "config.yaml"
-        # useENpathENprojectENdirectoryENpromptfileEN
+        # usetranslatedpathtranslatedprojecttranslateddirectory'spromptfiletranslated
         project_root = Path(__file__).parent.parent.parent
         self.prompt_dir = Path(__file__).parent.parent / "prompt"
         
-        # ENprojectdirectoryEN
+        # ensureprojectdirectorytranslatedin
         self.project_dir.mkdir(parents=True, exist_ok=True)
         
-        # loadconfig
+        # translatedconfig
         self.config = self._load_config()
     
     def _load_config(self) -> Dict[str, Any]:
-        """loadprojectconfig"""
+        """translatedprojectconfig"""
         if self.config_path.exists():
             try:
                 with open(self.config_path, 'r', encoding='utf-8') as f:
                     config = yaml.safe_load(f)
                     if config is None:
-                        logger.warning(f"configfileEN: {self.config_path}")
+                        logger.warning(f"configfiletranslated: {self.config_path}")
                         return {}
                     return config
             except yaml.YAMLError as e:
-                logger.error(f"YAMLparseerror: {self.config_path}, error: {e}")
+                logger.error(f"YAMLtranslatederror: {self.config_path}, error: {e}")
                 return {}
             except FileNotFoundError as e:
-                logger.error(f"configfiledoes not exist: {self.config_path}, error: {e}")
+                logger.error(f"configfile not found: {self.config_path}, error: {e}")
                 return {}
             except Exception as e:
-                logger.error(f"loadprojectconfigfailed: {self.config_path}, error: {e}")
+                logger.error(f"translatedprojectconfigfailed: {self.config_path}, error: {e}")
                 return {}
         return {}
     
     def _save_config(self):
-        """saveprojectconfig"""
+        """translatedprojectconfig"""
         try:
-            # ENdirectoryEN
+            # ensuredirectorytranslatedin
             self.config_path.parent.mkdir(parents=True, exist_ok=True)
             
             with open(self.config_path, 'w', encoding='utf-8') as f:
                 yaml.dump(self.config, f, default_flow_style=False, allow_unicode=True)
             
-            logger.info(f"configENsave: {self.config_path}")
+            logger.info(f"configtranslated: {self.config_path}")
         except Exception as e:
-            logger.error(f"saveprojectconfigfailed: {self.config_path}, error: {e}")
+            logger.error(f"translatedprojectconfigfailed: {self.config_path}, error: {e}")
             raise
     
     def get_prompt_files(self, project_type: str = "default", language: str = "zh") -> Dict[str, Path]:
         """
-        fetchprojectENpromptfilepath
+        fetchprojecttranslated'spromptfile path
         
         Args:
-            project_type: projectEN，ENpromptEN
-            language: EN，ENprompt
+            project_type: projecttranslated，translated'sprompttranslated
+            language: Languageversion，supportmultiLanguageprompt
             
         Returns:
-            promptfilepathEN
+            promptfile pathtranslated
         """
-        # ENconfigENfetchpromptsettings
+        # fromconfigtranslatedfetchpromptsettings
         prompt_config = self.config.get("prompts", {})
         
-        # ENpromptfile
+        # translatedpromptfile
         base_prompts = {
-            "outline": self.prompt_dir / "EN.txt",
-            "timeline": self.prompt_dir / "timeEN.txt",
-            "recommendation": self.prompt_dir / "EN.txt",
-            "title": self.prompt_dir / "titlegenerate.txt",
-            "clustering": self.prompt_dir / "EN.txt"
+            "outline": self.prompt_dir / "translated.txt",
+            "timeline": self.prompt_dir / "translated.txt",
+            "recommendation": self.prompt_dir / "recommendtranslated.txt",
+            "title": self.prompt_dir / "translated.txt",
+            "clustering": self.prompt_dir / "translated.txt"
         }
         
-        # ifconfigENpromptpath，useconfigENpath
+        # iftranslatedconfigtranslatedpromptpath，useconfig'spath
         if "custom_paths" in prompt_config:
             for key, custom_path in prompt_config["custom_paths"].items():
                 if key in base_prompts:
                     custom_file = Path(custom_path)
                     if custom_file.exists():
                         base_prompts[key] = custom_file
-                        logger.info(f"useENprompt: {key} -> {custom_path}")
+                        logger.info(f"usetranslatedprompt: {key} -> {custom_path}")
         
-        # checkprojectENpromptfile
+        # checkprojecttranslated'spromptfile
         type_prompt_dir = self.prompt_dir / project_type
         if type_prompt_dir.exists():
             for key in base_prompts:
                 type_specific_prompt = type_prompt_dir / f"{key}.txt"
                 if type_specific_prompt.exists():
                     base_prompts[key] = type_specific_prompt
-                    logger.info(f"useprojectENprompt: {key} -> {type_specific_prompt}")
+                    logger.info(f"useprojecttranslatedprompt: {key} -> {type_specific_prompt}")
         
-        # checkENpromptfile
+        # checkmultiLanguagepromptfile
         if language != "zh":
             lang_prompt_dir = self.prompt_dir / "languages" / language
             if lang_prompt_dir.exists():
@@ -151,28 +151,28 @@ class ProjectConfigManager:
                     lang_specific_prompt = lang_prompt_dir / f"{key}.txt"
                     if lang_specific_prompt.exists():
                         base_prompts[key] = lang_specific_prompt
-                        logger.info(f"useENprompt: {key} -> {lang_specific_prompt}")
+                        logger.info(f"usemultiLanguageprompt: {key} -> {lang_specific_prompt}")
         
-        # validateallpromptfileEN
+        # verifytranslatedpromptfileIstranslatedin
         missing_prompts = []
         for key, path in base_prompts.items():
             if not path.exists():
                 missing_prompts.append(f"{key}: {path}")
         
         if missing_prompts:
-            logger.warning(f"ENpromptfile: {missing_prompts}")
+            logger.warning(f"translatedpromptfile: {missing_prompts}")
         
         return base_prompts
     
     def get_llm_config(self) -> LLMConfig:
         """fetchLLMconfig"""
-        # ENprojectconfigfetch
+        # translatedfromprojectconfigfetch
         llm_config = self.config.get("llm", {})
         
-        # APIEN：projectconfig > EN > EN
+        # APIkeytranslated：projectconfig > translated > defaulttranslated
         api_key = llm_config.get("api_key") or os.getenv("DASHSCOPE_API_KEY", "")
         if not api_key:
-            raise ValueError("DASHSCOPE_API_KEY ENprojectconfigENsettings")
+            raise ValueError("DASHSCOPE_API_KEY translatedinprojectconfigortranslatedsettings")
         
         return LLMConfig(
             api_key=api_key,
@@ -182,7 +182,7 @@ class ProjectConfigManager:
         )
     
     def get_processing_params(self) -> ProcessingParams:
-        """fetchprocessingparameters"""
+        """fetchprocesstranslated"""
         params = self.config.get("processing_params", {})
         return ProcessingParams(
             chunk_size=params.get("chunk_size", 5000),
@@ -196,7 +196,7 @@ class ProjectConfigManager:
         )
     
     def update_processing_params(self, **kwargs):
-        """updateprocessingparameters"""
+        """updateprocesstranslated"""
         if "processing_params" not in self.config:
             self.config["processing_params"] = {}
         
@@ -212,7 +212,7 @@ class ProjectConfigManager:
         self._save_config()
     
     def get_project_paths(self) -> Dict[str, Path]:
-        """fetchprojectENpath"""
+        """fetchprojecttranslatedpath"""
         return {
             "project_dir": self.project_dir,
             "metadata_dir": self.project_dir / "metadata",
@@ -222,18 +222,18 @@ class ProjectConfigManager:
         }
     
     def ensure_project_directories(self):
-        """ENprojectdirectoryEN"""
+        """ensureprojectdirectorytranslatedin"""
         paths = self.get_project_paths()
         for path in paths.values():
             path.mkdir(parents=True, exist_ok=True)
     
     def get_step_config(self, step_name: str) -> Dict[str, Any]:
-        """fetchENconfig"""
+        """fetchtranslatedstep'sconfig"""
         step_configs = self.config.get("steps", {})
         return step_configs.get(step_name, {})
     
     def update_step_config(self, step_name: str, **kwargs):
-        """updateENconfig"""
+        """updatetranslatedstep'sconfig"""
         if "steps" not in self.config:
             self.config["steps"] = {}
         
@@ -244,7 +244,7 @@ class ProjectConfigManager:
         self._save_config()
     
     def backup_config(self, backup_path: Optional[Path] = None) -> Path:
-        """ENcurrentconfig"""
+        """translatedconfig"""
         if backup_path is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_path = self.project_dir / f"config_backup_{timestamp}.yaml"
@@ -254,36 +254,36 @@ class ProjectConfigManager:
             with open(backup_path, 'w', encoding='utf-8') as f:
                 yaml.dump(self.config, f, default_flow_style=False, allow_unicode=True)
             
-            logger.info(f"configEN: {backup_path}")
+            logger.info(f"configtranslated: {backup_path}")
             return backup_path
         except Exception as e:
-            logger.error(f"configENfailed: {e}")
+            logger.error(f"configtranslatedfailed: {e}")
             raise
     
     def restore_config(self, backup_path: Path) -> bool:
-        """ENconfig"""
+        """fromtranslatedconfig"""
         try:
             with open(backup_path, 'r', encoding='utf-8') as f:
                 backup_config = yaml.safe_load(f)
             
             if backup_config is None:
-                raise ValueError("ENfileEN")
+                raise ValueError("translatedfiletranslated")
             
-            # ENcurrentconfig
+            # translatedconfig
             self.backup_config()
             
-            # ENconfig
+            # translatedconfig
             self.config = backup_config
             self._save_config()
             
-            logger.info(f"configEN: {backup_path}")
+            logger.info(f"configtranslatedfromtranslated: {backup_path}")
             return True
         except Exception as e:
-            logger.error(f"configENfailed: {e}")
+            logger.error(f"configtranslatedfailed: {e}")
             return False
     
     def export_config(self) -> Dict[str, Any]:
-        """ENconfig"""
+        """exportconfig"""
         return {
             "project_id": self.project_id,
             "llm_config": {
@@ -308,7 +308,7 @@ class ProjectConfigManager:
     
     def get_project_config(self) -> Dict[str, Any]:
         """fetchprojectconfig"""
-        # ENdatabasefetchprojectconfig
+        # translatedfromdatabasefetchprojectconfig
         try:
             from sqlalchemy.orm import Session
             from ..core.database import SessionLocal
@@ -322,13 +322,13 @@ class ProjectConfigManager:
             finally:
                 db.close()
         except Exception as e:
-            logger.warning(f"cannotENdatabasefetchprojectconfig: {e}")
+            logger.warning(f"translatedfromdatabasefetchprojectconfig: {e}")
         
-        # ENconfigfile
+        # translatedlocalconfigfile
         return self.config
     
     def validate_config(self) -> Dict[str, Any]:
-        """validateconfigEN"""
+        """verifyconfig'stranslatedAndtranslated"""
         validation_result = {
             "valid": True,
             "errors": [],
@@ -336,36 +336,36 @@ class ProjectConfigManager:
             "missing_files": []
         }
         
-        # validateLLMconfig
+        # verifyLLMconfig
         try:
             self.get_llm_config()
         except ValueError as e:
             validation_result["valid"] = False
             validation_result["errors"].append(f"LLMconfigerror: {e}")
         
-        # validatepromptfile
+        # verifypromptfile
         prompt_files = self.get_prompt_files()
         for key, path in prompt_files.items():
             if not path.exists():
-                validation_result["warnings"].append(f"Promptfiledoes not exist: {key} -> {path}")
+                validation_result["warnings"].append(f"Promptfile not found: {key} -> {path}")
                 validation_result["missing_files"].append(str(path))
         
-        # validateprojectdirectory
+        # verifyprojectdirectory
         project_paths = self.get_project_paths()
         for key, path in project_paths.items():
             if not path.exists():
-                validation_result["warnings"].append(f"projectdirectorydoes not exist: {key} -> {path}")
+                validation_result["warnings"].append(f"projectdirectorynot found: {key} -> {path}")
         
-        # validateprocessingparameters
+        # verifyprocesstranslated
         try:
             params = self.get_processing_params()
             if params.chunk_size <= 0:
-                validation_result["errors"].append("chunk_sizemustEN0")
+                validation_result["errors"].append("chunk_sizetranslated0")
             if params.min_score_threshold < 0 or params.min_score_threshold > 1:
-                validation_result["errors"].append("min_score_thresholdmustEN0-1EN")
+                validation_result["errors"].append("min_score_thresholdtranslatedin0-1translated")
         except Exception as e:
             validation_result["valid"] = False
-            validation_result["errors"].append(f"processingInvalid parameters: {e}")
+            validation_result["errors"].append(f"processtranslatederror: {e}")
         
         if validation_result["errors"]:
             validation_result["valid"] = False

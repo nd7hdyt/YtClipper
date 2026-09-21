@@ -1,6 +1,6 @@
 """
-EN
-ENpytestEN
+processtranslatedtest
+usepytesttranslated
 """
 
 import pytest
@@ -11,7 +11,7 @@ from unittest.mock import Mock, patch, MagicMock
 import sys
 import os
 
-# ENPythonEN
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
@@ -24,37 +24,37 @@ from backend.services.exceptions import ServiceError, ConfigurationError, FileOp
 
 
 class TestProjectConfigManager:
-    """EN"""
+    """projectconfigtranslatedtest"""
     
     @pytest.fixture
     def temp_project_dir(self, tmp_path):
-        """EN"""
+        """createtranslatedprojectdirectory"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         return project_dir
     
     @pytest.fixture
     def config_manager(self, temp_project_dir):
-        """EN"""
+        """createconfigtranslated"""
         return ProjectConfigManager(str(temp_project_dir))
     
     def test_config_manager_initialization(self, config_manager):
-        """EN"""
+        """testconfigtranslated"""
         assert config_manager.project_id is not None
         assert config_manager.config_path.parent.exists()
     
     def test_load_default_config(self, config_manager):
-        """EN"""
-        # EN
+        """testtranslateddefaultconfig"""
+        # settingstesttranslated
         import os
         os.environ['DASHSCOPE_API_KEY'] = 'test_api_key'
         
         config = config_manager.config
-        # EN，EN
+        # translatedprojectconfigtranslated，thisIstranslated's
         assert isinstance(config, dict)
     
     def test_update_processing_params(self, config_manager):
-        """EN"""
+        """testupdateprocesstranslated"""
         new_params = {
             "max_clips": 50,
             "min_duration": 10.0,
@@ -68,8 +68,8 @@ class TestProjectConfigManager:
             assert config["processing_params"][key] == value
     
     def test_update_llm_config(self, config_manager):
-        """ENLLMEN"""
-        # EN
+        """testupdateLLMconfig"""
+        # settingstesttranslated
         import os
         os.environ['DASHSCOPE_API_KEY'] = 'test_api_key'
         
@@ -83,74 +83,74 @@ class TestProjectConfigManager:
         config_manager.update_llm_config(**llm_config)
         config = config_manager.config
         
-        # EN
+        # checkconfigIstranslatedupdate
         assert "llm" in config
     
     def test_export_config(self, config_manager):
-        """EN"""
-        # EN
+        """testexportconfig"""
+        # settingstesttranslated
         import os
         os.environ['DASHSCOPE_API_KEY'] = 'test_api_key'
         
         exported = config_manager.export_config()
-        # EN
+        # checkexport'sconfigPackageincludetranslated
         assert isinstance(exported, dict)
     
     def test_config_validation(self, config_manager):
-        """EN"""
-        # EN
+        """testconfigverify"""
+        # settingstesttranslated
         import os
         os.environ['DASHSCOPE_API_KEY'] = 'test_api_key'
         
-        # EN
+        # testconfigverify
         validation_result = config_manager.validate_config()
         assert isinstance(validation_result, dict)
 
 
 class TestPipelineAdapter:
-    """EN"""
+    """translatedtest"""
     
     @pytest.fixture
     def temp_project_dir(self, tmp_path):
-        """EN"""
+        """createtranslatedprojectdirectory"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         return project_dir
     
     @pytest.fixture
     def mock_srt_file(self, tmp_path):
-        """ENSRTEN"""
+        """createtranslatedSRTfile"""
         srt_file = tmp_path / "test.srt"
         srt_content = """1
 00:00:01,000 --> 00:00:05,000
-EN
+thisIsNo.onetranslatedsubtitles
 
 2
 00:00:05,000 --> 00:00:10,000
-EN
+thisIsNo.translatedsubtitles
 """
         srt_file.write_text(srt_content, encoding='utf-8')
         return srt_file
     
     @pytest.fixture
     def adapter(self, temp_project_dir):
-        """EN"""
+        """createtranslated"""
         return PipelineAdapter(str(temp_project_dir))
     
     def test_adapter_initialization(self, adapter):
-        """EN"""
+        """testtranslated"""
         assert adapter.project_id is not None
     
     def test_validate_pipeline_prerequisites_success(self, adapter, mock_srt_file):
-        """EN"""
-        # EN
+        """testtranslatedverifysucceeded"""
+        # settingstesttranslated
         import os
         os.environ['DASHSCOPE_API_KEY'] = 'test_api_key'
         
-        # EN
+        # ensuredirectorytranslatedin
         adapter.path_manager.ensure_directories()
         
-        # ENSRTEN
+        # translatedSRTfiletranslated
         srt_target_path = adapter.path_manager.get_srt_path()
         srt_target_path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(mock_srt_file, srt_target_path)
@@ -159,83 +159,83 @@ EN
         assert len(errors) == 0
     
     def test_validate_pipeline_prerequisites_missing_srt(self, adapter):
-        """EN - ENSRTEN"""
-        # ENSRTEN
+        """testtranslatedverifyfailed - translatedSRTfile"""
+        # ensuredirectorytranslatedintranslatedcreateSRTfile
         adapter.path_manager.ensure_directories()
         
         errors = adapter.validate_pipeline_prerequisites()
         assert len(errors) > 0
-        assert any("SRTEN" in error for error in errors)
+        assert any("SRTfile" in error for error in errors)
     
     def test_validate_pipeline_prerequisites_invalid_srt(self, adapter, tmp_path):
-        """EN - SRTEN"""
-        # EN
+        """testtranslatedverify - SRTfiletranslatedintranslatedformattranslated"""
+        # settingstesttranslated
         import os
         os.environ['DASHSCOPE_API_KEY'] = 'test_api_key'
         
-        # EN
+        # ensuredirectorytranslatedin
         adapter.path_manager.ensure_directories()
         
-        # ENSRTEN（EN）
+        # createtranslated'sSRTfile（translatedfiletranslatedin）
         srt_target_path = adapter.path_manager.get_srt_path()
-        srt_target_path.write_text("ENSRTEN")
+        srt_target_path.write_text("thistranslatedIstranslated'sSRTformat")
         
-        # validate_pipeline_prerequisitesEN，EN
-        # EN（EN）
+        # validate_pipeline_prerequisitestranslatedcheckfileIstranslatedin，translatedverifyformat
+        # Sothis testtranslated（translatederror）
         errors = adapter.validate_pipeline_prerequisites()
-        assert len(errors) == 0  # EN，EN
+        assert len(errors) == 0  # filetranslatedin，Sotranslatederror
     
     def test_execute_step_success(self, adapter, mock_srt_file):
-        """EN"""
-        # ENadapt_stepEN
+        """teststeptranslatedsucceeded"""
+        # testadapt_steptranslated
         result = adapter.adapt_step("step1_outline", srt_path=mock_srt_file)
         assert isinstance(result, dict)
         assert "srt_path" in result or "input_srt" in result
     
     def test_execute_step_failure(self, adapter, mock_srt_file):
-        """EN"""
-        # EN
+        """teststeptranslatedfailed"""
+        # testtranslatedsteptranslated
         with pytest.raises(ValueError):
             adapter.adapt_step("invalid_step", srt_path=mock_srt_file)
 
 
 class TestProcessingOrchestrator:
-    """EN"""
+    """processtranslatedtest"""
     
     @pytest.fixture
     def temp_project_dir(self, tmp_path):
-        """EN"""
+        """createtranslatedprojectdirectory"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         return project_dir
     
     @pytest.fixture
     def mock_db_session(self):
-        """EN"""
+        """createtranslateddatabasetranslated"""
         return Mock()
     
     @pytest.fixture
     def orchestrator(self, temp_project_dir, mock_db_session):
-        """EN"""
+        """createtranslated"""
         return ProcessingOrchestrator(str(temp_project_dir), "test_task", mock_db_session)
     
     def test_orchestrator_initialization(self, orchestrator):
-        """EN"""
+        """testtranslated"""
         assert orchestrator.project_id is not None
         assert orchestrator.task_id == "test_task"
     
     def test_get_pipeline_status(self, orchestrator):
-        """EN"""
+        """testfetchtranslatedstatus"""
         status = orchestrator.get_pipeline_status()
         assert "project_id" in status
         assert "task_id" in status
         assert "pipeline_status" in status
     
     def test_execute_step_success(self, orchestrator, tmp_path):
-        """EN"""
-        # ENSRTEN
+        """testtranslatedstepsucceeded"""
+        # createtranslatedSRTfile
         srt_file = tmp_path / "test.srt"
-        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\nEN")
+        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\ntestsubtitles")
         
         with patch('backend.services.processing_orchestrator.PipelineAdapter') as mock_adapter_class:
             mock_adapter = Mock()
@@ -246,29 +246,29 @@ class TestProcessingOrchestrator:
             assert result["status"] == "completed"
     
     def test_execute_step_failure(self, orchestrator, tmp_path):
-        """EN"""
+        """testtranslatedstepfailed"""
         srt_file = tmp_path / "test.srt"
-        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\nEN")
+        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\ntestsubtitles")
         
-        # EN
+        # translatedsteptranslated
         with patch.object(orchestrator, 'step_functions') as mock_step_functions:
-            mock_step_functions.__getitem__.return_value = Mock(side_effect=Exception("EN"))
+            mock_step_functions.__getitem__.return_value = Mock(side_effect=Exception("translatedfailed"))
             
             with pytest.raises(Exception):
                 orchestrator.execute_step(ProcessingStep.STEP1_OUTLINE, srt_path=srt_file)
 
 
 class TestProcessingService:
-    """EN"""
+    """processservicetest"""
     
     @pytest.fixture
     def mock_db_session(self):
-        """EN"""
+        """createtranslateddatabasetranslated"""
         return Mock()
     
     @pytest.fixture
     def mock_task_repository(self):
-        """EN"""
+        """createtranslatedtasktranslated"""
         mock_repo = Mock()
         mock_task = Mock()
         mock_task.id = "test_task_001"
@@ -277,20 +277,20 @@ class TestProcessingService:
     
     @pytest.fixture
     def service(self, mock_db_session, mock_task_repository):
-        """EN"""
+        """createservicetranslated"""
         service = ProcessingService(mock_db_session)
         service.task_repo = mock_task_repository
         return service
     
     def test_service_initialization(self, service):
-        """EN"""
+        """testservicetranslated"""
         assert service.db is not None
         assert service.task_repo is not None
     
     def test_start_processing_success(self, service, tmp_path):
-        """EN"""
+        """testtranslatedprocesssucceeded"""
         srt_file = tmp_path / "test.srt"
-        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\nEN")
+        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\ntestsubtitles")
         
         with patch('backend.services.processing_service.ProcessingOrchestrator') as mock_orchestrator_class:
             mock_orchestrator = Mock()
@@ -302,22 +302,22 @@ class TestProcessingService:
             assert "task_id" in result
     
     def test_start_processing_failure(self, service, tmp_path):
-        """EN"""
+        """testtranslatedprocessing failed"""
         srt_file = tmp_path / "test.srt"
-        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\nEN")
+        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\ntestsubtitles")
         
         with patch('backend.services.processing_service.ProcessingOrchestrator') as mock_orchestrator_class:
             mock_orchestrator = Mock()
-            mock_orchestrator.execute_pipeline.side_effect = ServiceError("EN")
+            mock_orchestrator.execute_pipeline.side_effect = ServiceError("processing failed")
             mock_orchestrator_class.return_value = mock_orchestrator
             
             with pytest.raises(ServiceError):
                 service.start_processing("test_project", srt_file)
     
     def test_execute_single_step_success(self, service, tmp_path):
-        """EN"""
+        """testtranslated stepsucceeded"""
         srt_file = tmp_path / "test.srt"
-        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\nEN")
+        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\ntestsubtitles")
         
         with patch('backend.services.processing_service.ProcessingOrchestrator') as mock_orchestrator_class:
             mock_orchestrator = Mock()
@@ -329,7 +329,7 @@ class TestProcessingService:
             assert "step" in result
     
     def test_get_processing_status(self, service):
-        """EN"""
+        """testfetchprocessstatus"""
         with patch('backend.services.processing_service.ProcessingOrchestrator') as mock_orchestrator_class:
             mock_orchestrator = Mock()
             mock_orchestrator.get_pipeline_status.return_value = {"pipeline_status": {"step1_outline": {"completed": True}}}
@@ -340,80 +340,80 @@ class TestProcessingService:
 
 
 class TestProcessingContext:
-    """EN"""
+    """processtranslatedtest"""
     
     @pytest.fixture
     def mock_db_session(self):
-        """EN"""
+        """createtranslateddatabasetranslated"""
         return Mock()
     
     @pytest.fixture
     def context(self, mock_db_session):
-        """EN"""
+        """createtranslated"""
         return ProcessingContext("test_project", "test_task", mock_db_session)
     
     def test_context_initialization(self, context):
-        """EN"""
+        """testtranslated"""
         assert context.project_id == "test_project"
         assert context.task_id == "test_task"
         assert context.is_initialized is False
         assert context.is_completed is False
     
     def test_context_validation(self, context):
-        """EN"""
-        # EN
-        assert context.is_valid_for_execution() is False  # EN
+        """testtranslatedverify"""
+        # testtranslated
+        assert context.is_valid_for_execution() is False  # translated
         
         context.mark_initialized()
         assert context.is_valid_for_execution() is True
     
     def test_context_with_invalid_project_id(self, mock_db_session):
-        """ENID"""
+        """testtranslatedprojectID"""
         with pytest.raises(ValueError):
             ProcessingContext("", "test_task", mock_db_session)
     
     def test_context_with_invalid_task_id(self, mock_db_session):
-        """ENID"""
+        """testtranslatedtaskID"""
         with pytest.raises(ValueError):
             ProcessingContext("test_project", "", mock_db_session)
     
     def test_set_srt_path(self, context, tmp_path):
-        """ENSRTEN"""
+        """testsettingsSRTpath"""
         srt_file = tmp_path / "test.srt"
-        srt_file.write_text("EN")
+        srt_file.write_text("testtranslated")
         
         context.set_srt_path(srt_file)
         assert context.srt_path == srt_file
     
     def test_set_srt_path_nonexistent(self, context):
-        """ENSRTEN"""
+        """testsettingsnot found'sSRTpath"""
         with pytest.raises(FileNotFoundError):
             context.set_srt_path(Path("nonexistent.srt"))
     
     def test_context_state_management(self, context):
-        """EN"""
-        # EN
+        """testtranslatedstatustranslated"""
+        # translatedstatus
         assert context.is_initialized is False
         assert context.is_completed is False
         assert context.error_message is None
         
-        # EN
+        # translated
         context.mark_initialized()
         assert context.is_initialized is True
         assert context.is_valid_for_execution() is True
         
-        # EN
-        context.set_error("EN")
-        assert context.error_message == "EN"
+        # settingserror
+        context.set_error("testerror")
+        assert context.error_message == "testerror"
         assert context.is_valid_for_execution() is False
         
-        # EN
+        # translated
         context.mark_completed()
         assert context.is_completed is True
         assert context.is_valid_for_execution() is False
     
     def test_context_summary(self, context):
-        """EN"""
+        """testtranslated"""
         context.mark_initialized()
         context.set_debug_mode(True)
         
@@ -424,9 +424,9 @@ class TestProcessingContext:
         assert "is_initialized" in summary
     
     def test_context_clone(self, context, tmp_path):
-        """EN"""
+        """testtranslated"""
         srt_file = tmp_path / "test.srt"
-        srt_file.write_text("EN")
+        srt_file.write_text("testtranslated")
         context.set_srt_path(srt_file)
         context.set_debug_mode(True)
         context.mark_initialized()
@@ -440,29 +440,29 @@ class TestProcessingContext:
 
 
 class TestErrorScenarios:
-    """EN"""
+    """errortranslatedtest"""
     
     def test_configuration_error(self):
-        """EN"""
-        error = ConfigurationError("EN", details={"field": "api_key"})
+        """testconfigerror"""
+        error = ConfigurationError("configtranslated", details={"field": "api_key"})
         assert error.error_code.value == "CONFIG_INVALID"
         assert "api_key" in error.details["field"]
     
     def test_file_operation_error(self):
-        """EN"""
-        error = FileOperationError("EN", file_path="/invalid/path")
+        """testfiletranslatederror"""
+        error = FileOperationError("file not found", file_path="/invalid/path")
         assert error.error_code.value == "FILE_NOT_FOUND"
         assert error.details["file_path"] == "/invalid/path"
     
     def test_processing_error(self):
-        """EN"""
-        error = ProcessingError("EN", step_name="step1_outline")
+        """testprocesserror"""
+        error = ProcessingError("steptranslatedfailed", step_name="step1_outline")
         assert error.error_code.value == "PROCESSING_FAILED"
         assert error.details["step_name"] == "step1_outline"
     
     def test_error_to_dict(self):
-        """EN"""
-        error = ServiceError("EN", details={"key": "value"})
+        """testerrortranslated"""
+        error = ServiceError("testerror", details={"key": "value"})
         error_dict = error.to_dict()
         assert "error_code" in error_dict
         assert "message" in error_dict
@@ -471,70 +471,70 @@ class TestErrorScenarios:
 
 @pytest.fixture(scope="session")
 def test_data_dir(tmp_path_factory):
-    """EN"""
+    """createtesttranslateddirectory"""
     return tmp_path_factory.mktemp("test_data")
 
 
 @pytest.fixture
 def sample_srt_file(test_data_dir):
-    """ENSRTEN"""
+    """createtranslatedSRTfile"""
     srt_file = test_data_dir / "sample.srt"
     srt_content = """1
 00:00:01,000 --> 00:00:05,000
-EN
+thisIsNo.onetranslatedsubtitlestranslated
 
 2
 00:00:05,000 --> 00:00:10,000
-EN
+thisIsNo.translatedsubtitlestranslated
 
 3
 00:00:10,000 --> 00:00:15,000
-EN
+thisIsNo.translatedsubtitlestranslated
 """
     srt_file.write_text(srt_content, encoding='utf-8')
     return srt_file
 
 
 def test_integration_basic_flow(test_data_dir, sample_srt_file):
-    """EN"""
-    # EN
+    """testtranslated"""
+    # settingstesttranslated
     import os
     os.environ['DASHSCOPE_API_KEY'] = 'test_api_key'
     
-    # EN
+    # createprojectdirectory
     project_dir = test_data_dir / "integration_project"
     project_dir.mkdir()
     
-    # EN
+    # testconfigtranslated
     config_manager = ProjectConfigManager(str(project_dir))
     config = config_manager.config
     assert isinstance(config, dict)
     
-    # EN
+    # testtranslated
     adapter = PipelineAdapter(str(project_dir))
-    # ENSRTEN
+    # translatedSRTfiletranslatedprojectdirectory
     project_raw_dir = project_dir / "raw"
     project_raw_dir.mkdir(parents=True, exist_ok=True)
     shutil.copy(sample_srt_file, project_raw_dir / "transcript.srt")
     
-    # EN
+    # verifytranslated
     errors = adapter.validate_pipeline_prerequisites()
     assert len(errors) == 0
 
 
 def test_error_handling_scenarios():
-    """EN"""
-    # EN
+    """testerrorprocesstranslated"""
+    # testconfigerror
     with pytest.raises(ConfigurationError):
-        raise ConfigurationError("EN")
+        raise ConfigurationError("configerror")
     
-    # EN
+    # testfiletranslatederror
     with pytest.raises(FileOperationError):
-        raise FileOperationError("EN", file_path="/invalid/path")
+        raise FileOperationError("file not found", file_path="/invalid/path")
     
-    # EN
+    # testprocesserror
     with pytest.raises(ProcessingError):
-        raise ProcessingError("EN", step_name="step1")
+        raise ProcessingError("processing failed", step_name="step1")
 
 
 if __name__ == "__main__":

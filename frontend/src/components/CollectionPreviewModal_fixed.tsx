@@ -45,7 +45,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   const playerRef = useRef<ReactPlayer>(null)
   const { setDragging } = useProjectStore()
 
-  // Bycollection.clip_ids orderclips
+  // bytranslatedcollection.clip_ids'stranslatedclips
   const collectionClips = collection ? 
     (Array.isArray(collection.clip_ids) ? collection.clip_ids : [])
       .map(clipId => (Array.isArray(clips) ? clips : []).find(clip => clip.id === clipId))
@@ -95,24 +95,24 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   }
 
   const handleDragStart = () => {
-    console.log('Drag start')
+    console.log('translated')
     setDragging(true)
   }
 
   const handleDragEnd = async (result: DropResult) => {
-    console.log('Drag end:', result)
+    console.log('translated:', result)
     
-    // ENDragStatus
+    // translatediftranslatedstatus
     setDragging(false)
     
     if (!result.destination || !collection) {
-      console.log('DragCancelEN')
+      console.log('translatedcancelortranslated')
       return
     }
 
-    // checkENChange
+    // checkIstranslated'stranslated
     if (result.source.index === result.destination.index) {
-      console.log('Position unchanged，Skip update')
+      console.log('translated，skipupdate')
       return
     }
 
@@ -120,17 +120,17 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     const [reorderedItem] = newClipIds.splice(result.source.index, 1)
     newClipIds.splice(result.destination.index, 0, reorderedItem)
 
-    console.log('Original order:', collection.clip_ids)
-    console.log('New order:', newClipIds)
+    console.log('translated:', collection.clip_ids)
+    console.log('translated:', newClipIds)
     
-    // Show loadingStatus
-    const hideLoading = message.loading('UpdatingClipOrder...', 0)
+    // translatedstatus
+    const hideLoading = message.loading('translatedinupdatecliptranslated...', 0)
     setIsUpdating(true)
     
     try {
       await onReorderClips(collection.id, newClipIds)
       
-      // Update current play index
+      // updatetranslated
       const currentClipId = collectionClips[currentClipIndex]?.id
       if (currentClipId) {
         const newIndex = newClipIds.indexOf(currentClipId)
@@ -138,11 +138,11 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
       }
       
       hideLoading()
-      message.success('ClipOrderupdateSucceeded')
+      message.success('cliptranslatedupdatesucceeded')
     } catch (error) {
       console.error('Failed to reorder clips:', error)
       hideLoading()
-      message.error('ClipOrder changedFailed')
+      message.error('cliptranslatedfailed')
     } finally {
       setIsUpdating(false)
     }
@@ -151,13 +151,13 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   const handleRemoveClip = async (clipId: string) => {
     if (!collection) return
     
-    const hideLoading = message.loading('RemovingClip...', 0)
+    const hideLoading = message.loading('translatedintranslatedclip...', 0)
     setIsUpdating(true)
     
     try {
       await onRemoveClip(collection.id, clipId)
       
-      // Adjust current play index
+      // translated
       const removedIndex = collection.clip_ids.indexOf(clipId)
       if (removedIndex <= currentClipIndex && currentClipIndex > 0) {
         setCurrentClipIndex(currentClipIndex - 1)
@@ -166,11 +166,11 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
       }
       
       hideLoading()
-      message.success('ClipremoveSucceeded')
+      message.success('cliptranslatedsucceeded')
     } catch (error) {
       console.error('Failed to remove clip:', error)
       hideLoading()
-      message.error('removeClipFailed')
+      message.error('translatedclipfailed')
     } finally {
       setIsUpdating(false)
     }
@@ -180,10 +180,10 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     setDownloadingClip(clipId)
     try {
       await projectApi.downloadVideo(projectId, clipId)
-      message.success('ClipdownloadSucceeded')
+      message.success('clipdownloadsucceeded')
     } catch (error) {
       console.error('Download clip failed:', error)
-      message.error('ClipDownload failed')
+      message.error('clipdownloadfailed')
     } finally {
       setDownloadingClip(null)
     }
@@ -195,10 +195,10 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     setDownloadingCollection(true)
     try {
       await projectApi.downloadVideo(projectId, undefined, collection.id)
-      message.success('CollectiondownloadSucceeded')
+      message.success('collectiondownloadsucceeded')
     } catch (error) {
       console.error('Download collection failed:', error)
-      message.error('CollectionDownload failed')
+      message.error('collectiondownloadfailed')
     } finally {
       setDownloadingCollection(false)
     }
@@ -210,9 +210,9 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
     try {
       setGeneratingVideo(true)
       await projectApi.generateCollectionVideo(projectId, collection.id)
-      message.success('Start generatingCollectionvideo，ENViewdownload')
+      message.success('translatedcollectionvideo，translateddownload')
     } catch (error) {
-      message.error('generateCollectionvideoFailed')
+      message.error('translatedcollectionvideofailed')
     } finally {
       setGeneratingVideo(false)
     }
@@ -221,18 +221,18 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
   const handleAddClips = async (selectedClipIds: string[]) => {
     if (!collection || !onAddClip) return
     
-    const hideLoading = message.loading('AddingClip...', 0)
+    const hideLoading = message.loading('translatedinaddclip...', 0)
     setIsUpdating(true)
     
     try {
       await onAddClip(collection.id, selectedClipIds)
       setShowAddClipModal(false)
       hideLoading()
-      message.success(`Succeededadd ${selectedClipIds.length} ENCliptoCollection`)
+      message.success(`succeededadd ${selectedClipIds.length}  cliptranslatedcollection`)
     } catch (error) {
       console.error('Failed to add clips:', error)
       hideLoading()
-      message.error('addClipFailed')
+      message.error('addclipfailed')
     } finally {
       setIsUpdating(false)
     }
@@ -267,14 +267,14 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
       getContainer={false}
     >
       <div className="collection-preview-container">
-        {/* ENTitleEN */}
+        {/* translated */}
         <div className="preview-header">
           <div className="header-left">
             <Title level={4} style={{ margin: 0, color: 'white', display: 'inline-block', marginRight: '12px' }}>
               {collection.collection_title}
             </Title>
             <Text style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px' }}>
-              ({collectionClips.length} ENClip)
+              ({collectionClips.length}  clip)
             </Text>
           </div>
           <div className="header-right">
@@ -285,29 +285,29 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                 loading={downloadingCollection}
                 onClick={handleDownloadCollection}
               >
-                downloadCollection
+                downloadcollection
               </Button>
               <Button 
                 type="primary" 
                 loading={generatingVideo}
                 onClick={handleGenerateVideo}
               >
-                generateCollectionvideo
+                translatedcollectionvideo
               </Button>
               {onDelete && (
                 <Popconfirm
-                  title="DeleteCollection"
-                  description="DeleteENDeleteENCollectionEN？ENActionsIrreversible。"
+                  title="deletecollection"
+                  description="translateddeletethis collectiontranslated？translatedcantranslated。"
                   onConfirm={() => onDelete(collection.id)}
-                  okText="Delete"
-                  cancelText="Cancel"
+                  okText="translated"
+                  cancelText="cancel"
                 >
                   <Button 
                     type="text" 
                     icon={<DeleteOutlined />}
                     style={{ color: 'white' }}
                   >
-                    Delete
+                    delete
                   </Button>
                 </Popconfirm>
               )}
@@ -321,10 +321,10 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
           </div>
         </div>
 
-        {/* Main content */}
+        {/* translated */}
         <div className="preview-content">
           <Row style={{ height: '100%' }}>
-            {/* left video player */}
+            {/* translatedvideotranslated */}
             <Col span={16} className="video-section">
               <div className="video-player-wrapper">
                 <div className="video-container">
@@ -343,12 +343,12 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                   ) : (
                     <div className="empty-video">
                       <PlayCircleOutlined style={{ fontSize: '64px', color: '#d9d9d9' }} />
-                      <Text style={{ color: '#999', marginTop: 16 }}>No video content yet</Text>
+                      <Text style={{ color: '#999', marginTop: 16 }}>Not yetvideotranslated</Text>
                     </div>
                   )}
                 </div>
                 
-                {/* Video info bar - Move below video */}
+                {/* videoinfotranslated - translatedvideotranslated */}
                 {currentClip && (
                   <div className="video-info-bar">
                     <div className="video-info-content">
@@ -358,7 +358,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                         </div>
                         <div className="video-meta">
                           <Tag color="blue">{formatDuration(currentClip)}</Tag>
-                          <Tag color="green">score: {(currentClip.final_score * 100).toFixed(0)}</Tag>
+                          <Tag color="green">translated: {(currentClip.final_score * 100).toFixed(0)}</Tag>
                           <Text style={{ color: '#999', marginLeft: 8 }}>
                             {currentClipIndex + 1} / {collectionClips.length}
                           </Text>
@@ -371,7 +371,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                           icon={<LeftOutlined />}
                           disabled={currentClipIndex === 0}
                           onClick={handlePlayPrevious}
-                          title="PreviousClip"
+                          title="translatedone clip"
                           className="control-btn"
                         />
                         <Button 
@@ -379,7 +379,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                           icon={<RightOutlined />}
                           disabled={currentClipIndex === collectionClips.length - 1}
                           onClick={handlePlayNext}
-                          title="NextClip"
+                          title="translatedone clip"
                           className="control-btn"
                         />
                       </div>
@@ -389,13 +389,13 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
               </div>
             </Col>
 
-            {/* Right sideCliplist */}
+            {/* translatedcliplist */}
             <Col span={8} className="playlist-section">
               <div className="playlist-container">
                 <div className="playlist-header">
                   <div>
-                    <Title level={5} style={{ margin: 0 }}>Playlist</Title>
-                    <Text type="secondary">Drag to reorder</Text>
+                    <Title level={5} style={{ margin: 0 }}>translatedlist</Title>
+                    <Text type="secondary">translated</Text>
                   </div>
                   {onAddClip && (
                     <Button 
@@ -411,7 +411,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                         fontWeight: 500
                       }}
                     >
-                      addClip
+                      addclip
                     </Button>
                   )}
                 </div>
@@ -450,7 +450,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                                   </div>
                                   <div className="clip-meta">
                                     <Text type="secondary" style={{ fontSize: '12px' }}>
-                                      {formatDuration(clip)} • score: {(clip.final_score * 100).toFixed(0)}
+                                      {formatDuration(clip)} • translated: {(clip.final_score * 100).toFixed(0)}
                                     </Text>
                                   </div>
                                   {clip.recommend_reason && (
@@ -463,7 +463,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                                 </div>
 
                                 <div className="clip-actions">
-                                  <Tooltip title="downloadClip">
+                                  <Tooltip title="downloadclip">
                                     <Button
                                       type="text"
                                       size="small"
@@ -477,13 +477,13 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
                                     />
                                   </Tooltip>
                                   <Popconfirm
-                                    title="DeleteENCollectionENremoveENClipEN？"
+                                    title="translatedfromcollectiontranslatedthis cliptranslated？"
                                     onConfirm={(e) => {
                                       e?.stopPropagation()
                                       handleRemoveClip(clip.id)
                                     }}
-                                    okText="Delete"
-                                    cancelText="Cancel"
+                                    okText="translated"
+                                    cancelText="cancel"
                                     disabled={isUpdating}
                                   >
                                     <Button
@@ -511,7 +511,7 @@ const CollectionPreviewModal: React.FC<CollectionPreviewModalProps> = ({
         </div>
       </div>
       
-      {/* addClipmodal */}
+      {/* addcliptranslated */}
       <AddClipToCollectionModal
         visible={showAddClipModal}
         clips={clips}

@@ -1,5 +1,5 @@
 """
-EN：docker-compose EN LLM EN（issue #88 / #53）
+translatedtest：docker-compose pathtranslated'stasktranslatedand LLM translated（issue #88 / #53）
 """
 
 import json
@@ -13,7 +13,7 @@ from backend.utils import task_submission_utils
 
 
 class _RedisDown:
-    """EN Redis EN redis EN。"""
+    """translated Redis translatedcantranslated's redis translated。"""
 
     class Redis:
         @staticmethod
@@ -28,13 +28,13 @@ def server_mode(monkeypatch):
 
 
 def test_submit_pipeline_succeeds_even_if_queue_depth_probe_fails(server_mode, monkeypatch):
-    """EN，EN send_task EN。"""
+    """translateduse'stranslatedfailed，translated send_task succeeded'sprojecttranslatedfailed。"""
     monkeypatch.setitem(__import__("sys").modules, "redis", _RedisDown)
 
     with patch.object(
         task_submission_utils.celery_app,
         "send_task",
-        return_value=SimpleNamespace(id="task-123", state="PENDING"),
+        return_value=SimpleNamespace(id="task-123", state="PtranslatedDING"),
     ) as send_task:
         result = task_submission_utils.submit_video_pipeline_task("proj", "/v.mp4", "/v.srt")
 
@@ -44,7 +44,7 @@ def test_submit_pipeline_succeeds_even_if_queue_depth_probe_fails(server_mode, m
 
 
 def test_queue_depth_probe_uses_redis_url(server_mode, monkeypatch):
-    """EN REDIS_URL，EN localhost。"""
+    """translated REDIS_URL，translatedIstranslated localhost。"""
     seen = {}
 
     class _FakeRedis:
@@ -86,8 +86,8 @@ class _StubProvider(LLMProvider):
 @pytest.mark.parametrize(
     "input_data",
     [
-        {"a": 1, "b": "EN"},
-        [{"id": 1, "text": "EN"}, {"id": 2, "text": "EN"}],
+        {"a": 1, "b": "translated"},
+        [{"id": 1, "text": "No.onetranslated"}, {"id": 2, "text": "No.translated"}],
         ("x", "y"),
     ],
 )
@@ -95,13 +95,13 @@ def test_build_full_input_serialises_containers_as_json(input_data):
     provider = _StubProvider(api_key="k", model_name="m")
     full = provider._build_full_input("PROMPT", input_data)
 
-    assert full.startswith("PROMPT\n\nEN：\n")
-    payload = full.split("EN：\n", 1)[1]
+    assert full.startswith("PROMPT\n\ntranslated：\n")
+    payload = full.split("translated：\n", 1)[1]
     assert json.loads(payload) == json.loads(json.dumps(input_data))
-    assert "EN" in full or "EN" in full or "x" in full
+    assert "translated" in full or "No.onetranslated" in full or "x" in full
 
 
 def test_build_full_input_passes_strings_through():
     provider = _StubProvider(api_key="k", model_name="m")
-    assert provider._build_full_input("PROMPT", "raw text") == "PROMPT\n\nEN：\nraw text"
+    assert provider._build_full_input("PROMPT", "raw text") == "PROMPT\n\ntranslated：\nraw text"
     assert provider._build_full_input("PROMPT", None) == "PROMPT"

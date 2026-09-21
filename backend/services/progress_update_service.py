@@ -1,6 +1,6 @@
 """
 taskprogressupdateservice
-ENprogressupdateEN
+Providestranslatedprogressupdatefeature
 """
 
 import asyncio
@@ -29,7 +29,7 @@ class ProgressUpdateService:
     ):
         """updatetaskprogress"""
         try:
-            # updatedatabaseENtaskprogress
+            # updatedatabasetranslated'staskprogress
             db = SessionLocal()
             try:
                 task = db.query(Task).filter(Task.id == task_id).first()
@@ -40,7 +40,7 @@ class ProgressUpdateService:
                     task.updated_at = datetime.utcnow()
                     db.commit()
                     
-                    # ENtaskEN
+                    # translatedtasktranslated
                     self.active_tasks[task_id] = {
                         'progress': progress,
                         'current_step': current_step,
@@ -50,10 +50,10 @@ class ProgressUpdateService:
                     
                     logger.info(f"task {task_id} progressupdate: {progress}% - {current_step}")
                     
-                    # throughWebSocketsendprogressupdate
+                    # translatedWebSockettranslatedprogressupdate
                     await self.broadcast_progress_update(task)
                 else:
-                    logger.warning(f"task {task_id} does not exist")
+                    logger.warning(f"task {task_id} not found")
             finally:
                 db.close()
                 
@@ -61,9 +61,9 @@ class ProgressUpdateService:
             logger.error(f"updatetaskprogressfailed: {e}")
     
     async def broadcast_progress_update(self, task: Task):
-        """ENprogressupdateEN"""
+        """translatedprogressupdatetranslatedfrontend"""
         try:
-            # ENprogressupdateEN
+            # translatedprogressupdatetranslated
             progress_message = {
                 'type': 'task_progress_update',
                 'task_id': task.id,
@@ -74,47 +74,47 @@ class ProgressUpdateService:
                 'updated_at': task.updated_at.isoformat() if task.updated_at else None
             }
             
-            # sendENallconnectEN
+            # translatedconnect'stranslated
             await websocket_manager.broadcast(progress_message)
-            logger.debug(f"progressupdateEN: {progress_message}")
+            logger.debug(f"progressupdatetranslated: {progress_message}")
             
         except Exception as e:
-            logger.error(f"ENprogressupdatefailed: {e}")
+            logger.error(f"translatedprogressupdatefailed: {e}")
     
     async def start_progress_monitoring(self, task_id: str):
-        """startENtaskprogress"""
+        """translatedmonitortaskprogress"""
         try:
             db = SessionLocal()
             try:
                 task = db.query(Task).filter(Task.id == task_id).first()
                 if task:
-                    # ENtaskENrunEN
+                    # translatedtasktranslated
                     task.status = TaskStatus.RUNNING
                     task.started_at = datetime.utcnow()
                     db.commit()
                     
-                    # ENtaskEN
+                    # addtranslatedtasklist
                     self.active_tasks[task_id] = {
                         'progress': 0.0,
-                        'current_step': 'initialize',
-                        'step_details': 'startprocessingtask',
+                        'current_step': 'translated',
+                        'step_details': 'translatedprocesstask',
                         'started_at': datetime.utcnow(),
                         'updated_at': datetime.utcnow()
                     }
                     
-                    logger.info(f"startENtaskprogress: {task_id}")
+                    logger.info(f"translatedmonitortaskprogress: {task_id}")
                     
-                    # sendtaskstartEN
+                    # translatedtasktranslated
                     await self.broadcast_progress_update(task)
                     
             finally:
                 db.close()
                 
         except Exception as e:
-            logger.error(f"startprogressENfailed: {e}")
+            logger.error(f"translatedprogressmonitorfailed: {e}")
     
     async def complete_task(self, task_id: str, result: Dict[str, Any] = None, error: str = None):
-        """ENtask"""
+        """translatedtask"""
         try:
             db = SessionLocal()
             try:
@@ -126,34 +126,34 @@ class ProgressUpdateService:
                     else:
                         task.status = TaskStatus.COMPLETED
                         task.progress = 100.0
-                        task.current_step = 'EN'
+                        task.current_step = 'translated'
                     
                     task.completed_at = datetime.utcnow()
                     task.updated_at = datetime.utcnow()
                     db.commit()
                     
-                    # ENtaskEN
+                    # fromtranslatedtasklisttranslated
                     if task_id in self.active_tasks:
                         del self.active_tasks[task_id]
                     
-                    logger.info(f"taskEN: {task_id}, status: {task.status}")
+                    logger.info(f"tasktranslated: {task_id}, status: {task.status}")
                     
-                    # sendtaskEN
+                    # translatedtasktranslated
                     await self.broadcast_progress_update(task)
                     
             finally:
                 db.close()
                 
         except Exception as e:
-            logger.error(f"ENtaskfailed: {e}")
+            logger.error(f"translatedtaskfailed: {e}")
     
     def get_task_progress(self, task_id: str) -> Optional[Dict[str, Any]]:
         """fetchtaskprogress"""
         return self.active_tasks.get(task_id)
     
     def get_all_active_tasks(self) -> Dict[str, Dict[str, Any]]:
-        """fetchallENtask"""
+        """fetchtranslatedtask"""
         return self.active_tasks.copy()
 
-# EN
+# translated
 progress_update_service = ProgressUpdateService()

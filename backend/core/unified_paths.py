@@ -1,6 +1,6 @@
 """
-ENpathconfigEN
-ENallpathconfigENfetch，ENpathEN
+translatedonepathconfigtranslated
+ensuretranslatedpathconfigtranslatedfromtranslatedone translatedfetch，translatedpathtranslated
 """
 
 from pathlib import Path
@@ -9,22 +9,22 @@ from typing import Dict, Any
 from . import path_utils
 
 class UnifiedPathManager:
-    """ENpathEN"""
+    """translatedone'spathtranslated"""
     
     def __init__(self):
         self._project_root = self._get_project_root()
         self._data_dir = path_utils.get_data_directory()
         self._output_dir = path_utils.get_output_directory()
         
-        # ENdirectoryEN
+        # ensuretranslateddirectorytranslatedin
         self._ensure_directories()
     
     def _get_project_root(self) -> Path:
-        """fetchprojectENdirectory"""
+        """fetchprojecttranslateddirectory"""
         return path_utils.get_project_root()
     
     def _ensure_directories(self):
-        """ENdirectoryEN"""
+        """ensuretranslateddirectorytranslatedin"""
         directories = [
             self._data_dir,
             self._output_dir,
@@ -42,17 +42,17 @@ class UnifiedPathManager:
     
     @property
     def project_root(self) -> Path:
-        """projectENdirectory"""
+        """projecttranslateddirectory"""
         return self._project_root
     
     @property
     def data_directory(self) -> Path:
-        """ENdirectory"""
+        """translateddirectory"""
         return self._data_dir
     
     @property
     def output_directory(self) -> Path:
-        """ENdirectory"""
+        """translateddirectory"""
         return self._output_dir
     
     @property
@@ -67,7 +67,7 @@ class UnifiedPathManager:
     
     @property
     def metadata_directory(self) -> Path:
-        """ENdirectory"""
+        """translateddirectory"""
         return self._output_dir / "metadata"
     
     @property
@@ -77,17 +77,17 @@ class UnifiedPathManager:
     
     @property
     def uploads_directory(self) -> Path:
-        """uploaddirectory"""
+        """Uploaddirectory"""
         return self._data_dir / "uploads"
     
     @property
     def temp_directory(self) -> Path:
-        """ENdirectory"""
+        """translateddirectory"""
         return self._data_dir / "temp"
     
     @property
     def backups_directory(self) -> Path:
-        """ENdirectory"""
+        """translateddirectory"""
         return self._data_dir / "backups"
     
     def get_project_directory(self, project_id: str) -> Path:
@@ -97,13 +97,13 @@ class UnifiedPathManager:
         return project_dir
     
     def get_project_raw_directory(self, project_id: str) -> Path:
-        """fetchprojectENfiledirectory"""
+        """fetchprojecttranslatedfiledirectory"""
         raw_dir = self.get_project_directory(project_id) / "raw"
         raw_dir.mkdir(exist_ok=True)
         return raw_dir
     
     def get_project_output_directory(self, project_id: str) -> Path:
-        """fetchprojectENdirectory"""
+        """fetchprojecttranslateddirectory"""
         output_dir = self.get_project_directory(project_id) / "output"
         output_dir.mkdir(exist_ok=True)
         return output_dir
@@ -125,31 +125,31 @@ class UnifiedPathManager:
         return self.data_directory / "autoclip.db"
     
     def get_settings_file_path(self) -> Path:
-        """fetchsettingsfilepath"""
+        """fetchsettingsfile path"""
         return self.data_directory / "settings.json"
     
     def get_clip_file_path(self, project_id: str, clip_title: str, extension: str = "mp4") -> Path:
-        """fetchclipfilepath"""
+        """fetchclipfile path"""
         clips_dir = self.get_project_clips_directory(project_id)
-        # ENfileEN，EN
+        # cleanfiletranslated，translated
         safe_title = "".join(c for c in clip_title if c.isalnum() or c in (' ', '-', '_')).rstrip()
         return clips_dir / f"{safe_title}.{extension}"
     
     def get_collection_file_path(self, project_id: str, collection_title: str, extension: str = "mp4") -> Path:
-        """fetchcollectionfilepath"""
+        """fetchcollectionfile path"""
         collections_dir = self.get_project_collections_directory(project_id)
-        # ENfileEN，EN
+        # cleanfiletranslated，translated
         safe_title = "".join(c for c in collection_title if c.isalnum() or c in (' ', '-', '_')).rstrip()
         return collections_dir / f"{safe_title}.{extension}"
     
     def get_metadata_file_path(self, project_id: str, step_name: str, filename: str) -> Path:
-        """fetchENfilepath"""
+        """fetchtranslatedfile path"""
         metadata_dir = self.get_project_directory(project_id) / step_name
         metadata_dir.mkdir(exist_ok=True)
         return metadata_dir / filename
     
     def validate_paths(self) -> Dict[str, Any]:
-        """validateallpathconfig"""
+        """verifytranslatedpathconfig"""
         validation_result = {
             "valid": True,
             "errors": [],
@@ -158,7 +158,7 @@ class UnifiedPathManager:
         }
         
         try:
-            # checkENdirectory
+            # checktranslateddirectory
             key_paths = {
                 "project_root": self.project_root,
                 "data_directory": self.data_directory,
@@ -173,25 +173,25 @@ class UnifiedPathManager:
                 validation_result["paths"][name] = str(path)
                 
                 if not path.exists():
-                    validation_result["warnings"].append(f"directorydoes not exist: {name} = {path}")
+                    validation_result["warnings"].append(f"directorynot found: {name} = {path}")
                 elif not path.is_dir():
-                    validation_result["errors"].append(f"pathENdirectory: {name} = {path}")
+                    validation_result["errors"].append(f"pathtranslatedIsdirectory: {name} = {path}")
                     validation_result["valid"] = False
             
-            # checkENpath
+            # checkIstranslatedortranslated'spath
             all_paths = list(validation_result["paths"].values())
             if len(all_paths) != len(set(all_paths)):
-                validation_result["errors"].append("ENpathconfig")
+                validation_result["errors"].append("translatedintranslated'spathconfig")
                 validation_result["valid"] = False
             
         except Exception as e:
-            validation_result["errors"].append(f"pathvalidatefailed: {str(e)}")
+            validation_result["errors"].append(f"pathverifyfailed: {str(e)}")
             validation_result["valid"] = False
         
         return validation_result
     
     def get_path_summary(self) -> Dict[str, str]:
-        """fetchpathconfigEN"""
+        """fetchpathconfigtranslated"""
         return {
             "project_root": str(self.project_root),
             "data_directory": str(self.data_directory),
@@ -205,10 +205,10 @@ class UnifiedPathManager:
             "backups_directory": str(self.backups_directory)
         }
 
-# ENpathEN
+# translatedpathtranslated
 path_manager = UnifiedPathManager()
 
-# ENpathEN
+# translated'spathtranslated
 PROJECT_ROOT = path_manager.project_root
 DATA_DIR = path_manager.data_directory
 OUTPUT_DIR = path_manager.output_directory
@@ -220,23 +220,23 @@ UPLOADS_DIR = path_manager.uploads_directory
 TEMP_DIR = path_manager.temp_directory
 BACKUPS_DIR = path_manager.backups_directory
 
-# EN
+# translated
 def get_project_directory(project_id: str) -> Path:
     """fetchprojectdirectory"""
     return path_manager.get_project_directory(project_id)
 
 def get_clip_file_path(project_id: str, clip_title: str, extension: str = "mp4") -> Path:
-    """fetchclipfilepath"""
+    """fetchclipfile path"""
     return path_manager.get_clip_file_path(project_id, clip_title, extension)
 
 def get_collection_file_path(project_id: str, collection_title: str, extension: str = "mp4") -> Path:
-    """fetchcollectionfilepath"""
+    """fetchcollectionfile path"""
     return path_manager.get_collection_file_path(project_id, collection_title, extension)
 
 def validate_paths() -> Dict[str, Any]:
-    """validateallpathconfig"""
+    """verifytranslatedpathconfig"""
     return path_manager.validate_paths()
 
 def get_path_summary() -> Dict[str, str]:
-    """fetchpathconfigEN"""
+    """fetchpathconfigtranslated"""
     return path_manager.get_path_summary()

@@ -1,40 +1,40 @@
-# EN（autoclip_intro）ENAutoEN
+# official site（autoclip_intro）auto-update
 
-EN GitHub Pages EN `index.html`，VersionEN、DownloadEN、InstallEN（EN）。
-EN；EN：
+official site GitHub Pages file `index.html`，version、download、install（）。
+；now：
 
 ```
-git tag vX.Y.0 ─▶ desktop-build.yml ─▶ Release EN
+git tag vX.Y.0 ─▶ desktop-build.yml ─▶ Release 
                         │
                         └─▶ repository_dispatch(autoclip-release, {tag}) ─▶ autoclip_intro/sync-release.yml
                                                                                │  python scripts/sync_release.py vX.Y.0
-                                                                               │  （EN GitHub Release API，EN index.html）
-                                                                               └▶ EN main ─▶ Pages EN 1 EN
+                                                                               │  （ GitHub Release API， index.html）
+                                                                               └▶  main ─▶ Pages  1 minutes
 ```
 
-EN：EN workflow EN 03:17 UTC EN latest release，EN token，EN。
+：official site workflow  03:17 UTC  latest release， token，official site。
 
-## ENInstall（EN）
+## install（official site）
 
-EN token EN，EN，EN：
+ token official site，file，：
 
 ```bash
 bash scripts/website/install.sh ../autoclip_intro
 cd ../autoclip_intro && git add -A && git commit -m "build: sync release info automatically" && git push
 ```
 
-## EN（EN）
+## （optional）
 
-1. GitHub → Settings → Developer settings → Fine-grained tokens → EN：Repository access EN `autoclip_intro`，Permissions → Contents: **Read and write**。
-2. EN `autoclip` → Settings → Secrets and variables → Actions → EN `WEBSITE_DISPATCH_TOKEN`。
-3. EN `desktop-build.yml` EN `release` job SuccessEN `autoclip-release` EN；EN token EN，EN。
+1. GitHub → Settings → Developer settings → Fine-grained tokens → ：Repository access  `autoclip_intro`，Permissions → Contents: **Read and write**。
+2.  `autoclip` → Settings → Secrets and variables → Actions →  `WEBSITE_DISPATCH_TOKEN`。
+3.  `desktop-build.yml`  `release` job succeeded `autoclip-release` event； token step，impact。
 
-## EN
+## file
 
-| EN | EN | EN |
+| file |  |  |
 |---|---|---|
-| `sync_release.py` | `autoclip_intro/scripts/` | EN Release → EN `index.html`（`--check` EN） |
-| `sync-release.yml` | `autoclip_intro/.github/workflows/` | EN（dispatch / cron / Manual）→ ENScript → EN |
-| `install.sh` | EN | EN |
+| `sync_release.py` | `autoclip_intro/scripts/` |  Release →  `index.html`（`--check` ） |
+| `sync-release.yml` | `autoclip_intro/.github/workflows/` | （dispatch / cron / ）→  →  |
+| `install.sh` |  | file |
 
-EN：`.github/workflows/desktop-build.yml` → `release` job → "Notify website" EN。
+：`.github/workflows/desktop-build.yml` → `release` job → "Notify website" step。

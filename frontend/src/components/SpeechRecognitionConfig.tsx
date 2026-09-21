@@ -8,7 +8,7 @@ interface SpeechRecognitionConfigProps {
   onConfigChange?: (config: Record<string, unknown>) => void
 }
 
-// Whisper EN + ModelEN — Calm Premium EN（EN DESIGN.md）
+// Whisper Runtime + modeltranslated — Calm Premium translated（translated DESIGN.md）
 const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
   const [runtime, setRuntime] = useState<WhisperRuntimeStatus | null>(null)
   const [models, setModels] = useState<WhisperModel[]>([])
@@ -21,13 +21,13 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
       setRuntime(rt)
       setModels(Array.isArray(ms) ? ms : [])
     } catch {
-      // EN，ENRetry
+      // backendcantranslated，translated
     } finally {
       setLoading(false)
     }
   }, [])
 
-  // installENModeldownloadEN，EN
+  // installtranslatedortranslatedmodeldownloadtranslated，translated
   const needsFastPoll = (rt: WhisperRuntimeStatus | null, ms: WhisperModel[]) =>
     rt?.status === 'installing' || ms.some((m) => m.status === 'downloading')
 
@@ -45,46 +45,46 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
   const handleInstall = async () => {
     try {
       const r = await speechApi.installRuntime()
-      message.info(r.message || 'ENinstall')
+      message.info(r.message || 'translatedinstall')
       setRuntime((p) => (p ? { ...p, status: 'installing', progress: 5 } : p))
       refresh()
     } catch (e: any) {
-      message.error(e?.response?.data?.detail || 'installFailed')
+      message.error(e?.response?.data?.detail || 'installfailed')
     }
   }
 
   const handleUninstall = async () => {
     try {
       const r = await speechApi.uninstallRuntime()
-      message.success(r.message || 'ENuninstall')
+      message.success(r.message || 'translated')
       refresh()
     } catch {
-      message.error('uninstallFailed')
+      message.error('translatedfailed')
     }
   }
 
   const handleDownload = async (model: string) => {
     try {
       await speechApi.downloadModel(model)
-      message.info(`ENdownload ${model}`)
+      message.info(`translateddownload ${model}`)
       setModels((prev) => prev.map((m) => (m.name === model ? { ...m, status: 'downloading' } : m)))
       refresh()
     } catch (e: any) {
-      message.error(e?.response?.data?.detail || 'Download failed')
+      message.error(e?.response?.data?.detail || 'downloadfailed')
     }
   }
 
   const handleDelete = async (model: string) => {
     try {
       await speechApi.deleteModel(model)
-      message.success(`ENDelete ${model}`)
+      message.success(`translateddelete ${model}`)
       refresh()
     } catch {
-      message.error('Delete failed')
+      message.error('deletefailed')
     }
   }
 
-  if (loading) return <div className="ac-hint">EN Whisper Status…</div>
+  if (loading) return <div className="ac-hint">translated Whisper status…</div>
 
   const installed = runtime?.status === 'installed'
   const installing = runtime?.status === 'installing'
@@ -95,20 +95,20 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
       <div className="ac-rows">
         <Row
           top
-          label="Whisper EN"
+          label="Whisper Runtime"
           hint={
-            !supported ? 'EN。'
-              : installed ? `faster-whisper Installed${runtime?.packages?.length ? `（${runtime.packages.join(', ')}）` : ''}。`
-              : installing ? (runtime?.message || 'ENinstall…')
-              : runtime?.status === 'error' ? `installEN：${runtime?.message || ''}`
-              : 'ENinstall，EN 200–400 MB（EN PyTorch）。ENModeldownloadEN。'
+            !supported ? 'translatedsupportlocaltranslated。'
+              : installed ? `faster-whisper translatedinstall${runtime?.packages?.length ? `（${runtime.packages.join(', ')}）` : ''}。`
+              : installing ? (runtime?.message || 'translatedininstall…')
+              : runtime?.status === 'error' ? `installtranslated：${runtime?.message || ''}`
+              : 'bytranslatedinstall，translated 200–400 MB（translatedinclude PyTorch）。translatedSelectone modeldownloadtranslatedcan。'
           }
         >
           {installed && (
             <>
-              <StatusDot tone="ok" label="Installed" />
-              <Popconfirm title="uninstall Whisper EN？ENdownloadENModelENDelete。" onConfirm={handleUninstall} okText="uninstall" cancelText="Cancel">
-                <Btn variant="danger" size="sm">uninstall</Btn>
+              <StatusDot tone="ok" label="translatedinstall" />
+              <Popconfirm title="translated Whisper Runtime？translateddownload'smodeltranslateddelete。" onConfirm={handleUninstall} okText="translated" cancelText="cancel">
+                <Btn variant="danger" size="sm">translated</Btn>
               </Popconfirm>
             </>
           )}
@@ -122,7 +122,7 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
             <Btn variant="cta" size="sm" style={{ height: 32, fontSize: 13, padding: '0 16px' }} onClick={handleInstall} disabled={!supported}>install</Btn>
           )}
           {runtime?.status === 'error' && (
-            <Btn size="sm" onClick={handleInstall} disabled={!supported}>Retryinstall</Btn>
+            <Btn size="sm" onClick={handleInstall} disabled={!supported}>translatedinstall</Btn>
           )}
         </Row>
       </div>
@@ -133,9 +133,9 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
         </pre>
       )}
 
-      <div className="ac-eyebrow" style={{ marginTop: 40, marginBottom: 12 }}>Model</div>
+      <div className="ac-eyebrow" style={{ marginTop: 40, marginBottom: 12 }}>model</div>
       {!installed ? (
-        <div className="ac-hint">ENinstallEN，ENdownloadModel。</div>
+        <div className="ac-hint">translatedinstallRuntime，translatedinthistranslateddownloadmodel。</div>
       ) : (
         <div className="ac-rows">
           {models.map((m) => {
@@ -148,25 +148,25 @@ const SpeechRecognitionConfig: React.FC<SpeechRecognitionConfigProps> = () => {
                   <span style={{ display: 'inline-flex', alignItems: 'baseline', gap: 10 }}>
                     <span className="ac-mono">{m.name}</span>
                     <span className="ac-mono" style={{ fontSize: 12, color: 'var(--ac-muted)', fontWeight: 400 }}>{m.size}</span>
-                    {downloaded && <StatusDot tone="ok" label="ENdownload" />}
+                    {downloaded && <StatusDot tone="ok" label="translateddownload" />}
                   </span>
                 }
                 hint={
                   <>
-                    {m.description} · EN{m.accuracy} · EN{m.speed}
+                    {m.description} · translated{m.accuracy} · translated{m.speed}
                     {m.status === 'error' && m.errorMessage && <span style={{ color: 'var(--ac-error)' }}> · {m.errorMessage}</span>}
                   </>
                 }
               >
                 {downloaded ? (
-                  <Popconfirm title={`DeleteModel ${m.name}？`} onConfirm={() => handleDelete(m.name)} okText="Delete" cancelText="Cancel">
-                    <Btn variant="danger" size="sm">Delete</Btn>
+                  <Popconfirm title={`deletemodel ${m.name}？`} onConfirm={() => handleDelete(m.name)} okText="delete" cancelText="cancel">
+                    <Btn variant="danger" size="sm">delete</Btn>
                   </Popconfirm>
                 ) : downloading ? (
                   <div style={{ width: 160 }}>
                     <ProgressLine percent={m.downloadProgress ?? 0} />
                     <div className="ac-hint" style={{ textAlign: 'right', fontFamily: 'var(--ac-font-mono)' }}>
-                      {m.downloadProgress != null ? `${Math.round(m.downloadProgress)}%` : 'downloadEN'}
+                      {m.downloadProgress != null ? `${Math.round(m.downloadProgress)}%` : 'downloadtranslated'}
                     </div>
                   </div>
                 ) : (

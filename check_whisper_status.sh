@@ -1,22 +1,22 @@
 #!/bin/bash
 
-# WhisperENStatusCheckScript
-# ENCheckSystemStatus
+# Whisperprocessstatuschecktranslated
+# usetranslatedcheckSystemstatus
 
-echo "🔍 AutoClip WhisperENStatusCheck"
+echo "🔍 AutoClip Whisperprocessstatuscheck"
 echo "=================================="
 
-# CheckWhisperEN
-echo "📊 WhisperENStatus:"
+# checkWhisperprocess
+echo "📊 Whisperprocessstatus:"
 python scripts/monitor_whisper.py
 
 echo ""
-echo "📈 SystemEN:"
-echo "CPUEN: $(top -l 1 | grep "CPU usage" | awk '{print $3}' | sed 's/%//')"
-echo "EN: $(ps -A -o %mem | awk '{s+=$1} END {print s "%"}')"
+echo "📈 Systemtranslatedusetranslated:"
+echo "CPUusetranslated: $(top -l 1 | grep "CPU usage" | awk '{print $3}' | sed 's/%//')"
+echo "translateduse: $(ps -A -o %mem | awk '{s+=$1} translatedD {print s "%"}')"
 
 echo ""
-echo "🛠️ EN:"
-echo "  CheckStatus: python scripts/monitor_whisper.py"
-echo "  EN: python scripts/monitor_whisper.py --kill-duplicates"
-echo "  StopSystem: ./stop_autoclip.sh"
+echo "🛠️ canusetranslated:"
+echo "  checkstatus: python scripts/monitor_whisper.py"
+echo "  cleantranslated: python scripts/monitor_whisper.py --kill-duplicates"
+echo "  translatedSystem: ./stop_autoclip.sh"

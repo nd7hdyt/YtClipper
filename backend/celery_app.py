@@ -1,6 +1,6 @@
 """
-ENCeleryENconfig
-ENserviceENconfig
+translatedone'sCelerytranslateduseconfig
+translatedSelectselecttranslatedorservicetranslatedconfig
 """
 
 import os
@@ -8,14 +8,14 @@ import os
 IS_DESKTOP = os.getenv("AUTOCLIP_DESKTOP_MODE") == "1"
 
 if IS_DESKTOP:
-    # ENusefilesystem broker / sqlite backend EN Celery
+    # OnlytranslatedusefileSystem broker / sqlite backend 'stranslated Celery
     from .desktop_celery import celery_app  # noqa: F401
 else:
-    # serviceEN/EN：Redis ENconfigEN broker/backend
+    # servicetranslated/translated：Redis ortranslatedconfig's broker/backend
     from celery import Celery
 
     broker_url = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
-    backend_url = os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/1")
+    backend_url = os.getenv("CELERY_RESULT_BACKtranslatedD", "redis://localhost:6379/1")
 
     celery_app = Celery(__name__, broker=broker_url, backend=backend_url)
     celery_app.conf.update(
@@ -24,7 +24,7 @@ else:
         result_serializer='json',
         timezone='Asia/Shanghai',
         enable_utc=True,
-        task_always_eager=False,  # serviceENexecute
+        task_always_eager=False,  # servicetranslated
         task_eager_propagates=True,
         result_expires=3600,
         task_ignore_result=False,
@@ -37,7 +37,7 @@ else:
         },
     )
 
-# ENtask
+# translatedtask
 celery_app.autodiscover_tasks([
     'backend.tasks.processing',
     'backend.tasks.video', 

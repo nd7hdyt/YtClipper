@@ -1,17 +1,17 @@
 """
-Whisper runEN（EN，EN）
+Whisper Runtimetranslated（translated，bytranslatedinstall）
 
-EN Whisper（runEN + EN，ENalluserEN）。userENsettingsEN
-ENcanEN、ENdownloadEN。EN faster-whisper（CTranslate2，EN
-PyTorch，runEN ~200-400MB，EN whisper EN，EN）。
+translatedinstallPackagedefaulttranslated Whisper（Runtime + modeltranslated，translatedusertranslated）。userinSettings page
+translatedcantranslatedIstranslatedinstall、translateddownloadtranslated model。backenduse faster-whisper（CTranslate2，translateddependencies
+PyTorch，Runtime ~200-400MB，translated whisper translated，translated）。
 
-EN：
-- EN「userENdirectory」`<data_dir>/whisper-runtime`，EN .app EN
-  （/Applications EN，ENwriteEN）。
-- EN「currentcurrentlyEN Python」(sys.executable) EN pip EN，EN。
-- ENcacheEN `<data_dir>/whisper-models`（through HF_HOME EN）。
-- allEN mlx_whisper / huggingface_hub EN import EN，EN
-  ENwhenENfailed。
+translated：
+- installtranslated「usercantranslateddirectory」`<data_dir>/whisper-runtime`，translatedIs .app Packagetranslated
+  （/Applications translated，translatedSignature）。
+- use「translatedintranslatedbackend'stranslated Python」(sys.executable) 's pip install，translatedonetranslated。
+- modelcachetranslated `<data_dir>/whisper-models`（translated HF_HOME translated）。
+- translated mlx_whisper / huggingface_hub 's import translated，translated
+  dependenciestranslated translateddependenciestranslatedPackagefailed。
 """
 
 import os
@@ -25,10 +25,10 @@ from typing import Dict, Any, Optional
 
 logger = logging.getLogger(__name__)
 
-# ENrunEN（faster-whisper EN ctranslate2、onnxruntime、av、huggingface_hub EN，
-# EN PyTorch）
+# translatedinstall'sRuntimePackage（faster-whisper translated ctranslate2、onnxruntime、av、huggingface_hub etc.，
+# translatedinclude PyTorch）
 WHISPER_PACKAGES = ["faster-whisper"]
-# runEN（EN）
+# Runtimetranslated（usetranslatedIstranslated）
 WHISPER_IMPORT_NAME = "faster_whisper"
 
 
@@ -53,13 +53,13 @@ def get_models_dir() -> Path:
 
 
 def ensure_on_path() -> None:
-    """ENrunENdirectoryEN sys.path，ENcachedirectoryEN HF_HOME。"""
+    """ Runtimedirectorytranslated sys.path，translated modelcachedirectorytranslated HF_HOME。"""
     install_dir = str(get_install_dir())
     if install_dir not in sys.path:
         sys.path.insert(0, install_dir)
-    # ENcacheENdirectory，EN/EN
+    # modeltranslatedonecachetranslateddirectory，translated/translated
     os.environ.setdefault("HF_HOME", str(get_models_dir()))
-    # mlx-whisper EN ffmpeg：EN ffmpeg ENdirectoryEN PATH
+    # mlx-whisper translateduse ffmpeg： Built-in ffmpeg translatedindirectorytranslated PATH
     ffmpeg_path = os.getenv("AUTOCLIP_FFMPEG_PATH")
     if ffmpeg_path:
         ffmpeg_dir = str(Path(ffmpeg_path).parent)
@@ -68,7 +68,7 @@ def ensure_on_path() -> None:
 
 
 def is_installed() -> bool:
-    """runEN（mlx_whisper EN）。"""
+    """RuntimeIstranslated（mlx_whisper cantranslatedimport）。"""
     ensure_on_path()
     try:
         import importlib.util
@@ -77,11 +77,11 @@ def is_installed() -> bool:
         return False
 
 
-# ---- ENstatus（EN）----
+# ---- installstatus（translatedfrontendtranslated）----
 _state_lock = threading.Lock()
 _state: Dict[str, Any] = {
     "status": "unknown",   # not_installed | installing | installed | error
-    "progress": 0,         # EN
+    "progress": 0,         # translated
     "message": "",
     "log_tail": "",
 }
@@ -95,12 +95,12 @@ def _set_state(**kw) -> None:
 def get_status() -> Dict[str, Any]:
     with _state_lock:
         st = dict(_state)
-    # EN，ENresultEN
+    # translatedininstalltranslated，usetranslated
     if st["status"] not in ("installing",):
         st["status"] = "installed" if is_installed() else "not_installed"
         if st["status"] == "installed":
             st["progress"] = 100
-    st["platform_supported"] = True  # faster-whisper EN
+    st["platform_supported"] = True  # faster-whisper translated
     st["packages"] = WHISPER_PACKAGES
     return st
 
@@ -115,8 +115,8 @@ def _do_install(index_url: Optional[str]) -> None:
     ]
     if index_url:
         cmd += ["--index-url", index_url]
-    logger.info(f"startEN Whisper runEN: {' '.join(cmd)}")
-    _set_state(status="installing", progress=5, message="currentlyEN…", log_tail="")
+    logger.info(f"translatedinstall Whisper Runtime: {' '.join(cmd)}")
+    _set_state(status="installing", progress=5, message="translatedintranslatedinstall…", log_tail="")
     try:
         proc = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -129,23 +129,23 @@ def _do_install(index_url: Optional[str]) -> None:
                 continue
             lines.append(line)
             lines[:] = lines[-40:]
-            # ENprogress：EN pip EN，EN
+            # translatedprogress：translated pip 'stranslated，translated
             low = line.lower()
             if low.startswith("collecting") or "downloading" in low:
                 _bump_progress(min_v=10, max_v=70, message=line)
             elif "installing collected packages" in low or "building" in low:
-                _bump_progress(min_v=70, max_v=95, message="currentlyEN…")
+                _bump_progress(min_v=70, max_v=95, message="translatedininstalldependencies…")
             _set_state(log_tail="\n".join(lines[-12:]))
         proc.wait()
         if proc.returncode == 0 and is_installed():
-            _set_state(status="installed", progress=100, message="EN")
-            logger.info("Whisper runEN")
+            _set_state(status="installed", progress=100, message="installtranslated")
+            logger.info("Whisper Runtimeinstalltranslated")
         else:
-            _set_state(status="error", message=f"ENfailed（pip logoutEN {proc.returncode}）")
-            logger.error(f"Whisper runENfailed，pip logoutEN {proc.returncode}")
+            _set_state(status="error", message=f"installfailed（pip translated {proc.returncode}）")
+            logger.error(f"Whisper Runtimeinstallfailed，pip translated {proc.returncode}")
     except Exception as e:  # noqa: BLE001
-        logger.error(f"EN Whisper runENexception: {e}", exc_info=True)
-        _set_state(status="error", message=f"ENexception: {e}")
+        logger.error(f"install Whisper Runtimetranslated: {e}", exc_info=True)
+        _set_state(status="error", message=f"installtranslated: {e}")
 
 
 def _bump_progress(min_v: int, max_v: int, message: str) -> None:
@@ -158,31 +158,31 @@ def _bump_progress(min_v: int, max_v: int, message: str) -> None:
 def start_install(index_url: Optional[str] = None) -> Dict[str, Any]:
     with _state_lock:
         if _state["status"] == "installing":
-            return {"started": False, "message": "currentlyEN"}
+            return {"started": False, "message": "translatedininstalltranslated"}
     if is_installed():
-        _set_state(status="installed", progress=100, message="EN")
-        return {"started": False, "message": "EN"}
-    # EN pip EN（EN/EN），else PyPI
+        _set_state(status="installed", progress=100, message="translatedinstall")
+        return {"started": False, "message": "translatedinstall"}
+    # defaulttranslated's pip translated（translated/translateddefaulttranslated），translated PyPI
     idx = index_url or os.getenv("PIP_INDEX_URL")
     threading.Thread(target=_do_install, args=(idx,), name="whisper-install", daemon=True).start()
-    return {"started": True, "message": "ENstartEN"}
+    return {"started": True, "message": "translatedinstall"}
 
 
 def uninstall() -> Dict[str, Any]:
     with _state_lock:
         if _state["status"] == "installing":
-            return {"success": False, "message": "currentlyEN，cannotEN"}
+            return {"success": False, "message": "translatedininstalltranslated，translated"}
     install_dir = get_install_dir()
     try:
         shutil.rmtree(install_dir, ignore_errors=True)
-        # EN sys.modules EN，EN import
+        # from sys.modules translated，translatedprocesstranslated import
         for mod in [m for m in list(sys.modules) if m.startswith("faster_whisper") or m.startswith("ctranslate2")]:
             sys.modules.pop(mod, None)
         p = str(install_dir)
         if p in sys.path:
             sys.path.remove(p)
-        _set_state(status="not_installed", progress=0, message="EN")
-        return {"success": True, "message": "EN Whisper runEN"}
+        _set_state(status="not_installed", progress=0, message="translated")
+        return {"success": True, "message": "translated Whisper Runtime"}
     except Exception as e:  # noqa: BLE001
-        logger.error(f"EN Whisper runENfailed: {e}")
+        logger.error(f"translated Whisper Runtimefailed: {e}")
         return {"success": False, "message": str(e)}

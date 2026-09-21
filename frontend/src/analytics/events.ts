@@ -1,17 +1,17 @@
 /**
- * EN（EN ROADMAP.md Phase 0：Import / Export / Failed / settings key）。
+ * translated（translated ROADMAP.md Phase 0：import / translated / failed / settings key）。
  *
- * EN，EN。
- * All capture EN trackEvent，EN / ENCloseEN no-op。
+ * translatedoneinthistranslatedandtranslated，translated。
+ * translated capture translated trackEvent，translated / translated no-op。
  */
 import { posthog } from './posthog'
 
 export const AnalyticsEvent = {
-  /** ImportEN（Upload/ENvideoENproject） */
+  /** importtranslated（Upload/Selectselectvideotranslatedone project） */
   VideoImported: 'video_imported',
-  /** Export：SucceededgenerateClip */
+  /** translated：succeededtranslatedclip */
   ClipsExported: 'clips_exported',
-  /** ENFailed（Import/EN/Clip/EN） */
+  /** translatedfailed（import/translated/clip/exporttranslatedonetranslated） */
   ProcessingFailed: 'processing_failed',
   /** settings/update LLM API key */
   ApiKeyConfigured: 'api_key_configured',
@@ -20,12 +20,12 @@ export const AnalyticsEvent = {
 export type AnalyticsEventName =
   (typeof AnalyticsEvent)[keyof typeof AnalyticsEvent]
 
-/** EN。posthog EN opt-out EN no-op（EN）。 */
+/** translateduseAnalyticstranslated。posthog translatedortranslated opt-out translated no-op（translatedprocess）。 */
 function trackEvent(
   name: AnalyticsEventName,
   properties?: Record<string, unknown>,
 ): void {
-  // posthog.capture EN init EN；EN
+  // posthog.capture intranslated init translated；translated
   if (typeof posthog?.capture !== 'function') return
   posthog.capture(name, properties)
 }
@@ -58,7 +58,7 @@ export function trackProcessingFailed(props: {
 
 export function trackApiKeyConfigured(props: {
   provider: string
-  /** EN key EN，EN */
+  /** Do nottranslated key translated，OnlytranslatedIstranslated */
   hasKey: boolean
 }): void {
   trackEvent(AnalyticsEvent.ApiKeyConfigured, props)

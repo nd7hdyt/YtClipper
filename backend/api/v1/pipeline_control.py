@@ -1,6 +1,6 @@
 """
-ENAPI
-ENstart、stopENstatusEN
+translatedAPI
+Providestranslatedstart、translatedAndtranslatedstatus'sfeature
 """
 
 from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
@@ -25,30 +25,30 @@ async def start_pipeline(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """ENstartprojectEN"""
+    """translatedstartprojecttranslated"""
     try:
-        # checkprojectEN
+        # checkprojectIstranslatedin
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
             raise HTTPException(status_code=404, detail="Project not found")
         
         # checkprojectstatus
         if project.status == ProjectStatus.PROCESSING:
-            return {"status": "skipped", "message": "projectENprocessing"}
+            return {"status": "skipped", "message": "projecttranslatedinprocessing"}
         
         if project.status == ProjectStatus.COMPLETED:
             return {"status": "skipped", "message": "projectcompleted"}
         
-        # checkENrunENtask
+        # checkIstranslated'stask
         running_task = db.query(Task).filter(
             Task.project_id == project_id,
-            Task.status.in_([TaskStatus.PENDING, TaskStatus.RUNNING])
+            Task.status.in_([TaskStatus.PtranslatedDING, TaskStatus.RUNNING])
         ).first()
         
         if running_task and running_task.status == TaskStatus.RUNNING:
-            return {"status": "skipped", "message": "projectENrunENtask"}
+            return {"status": "skipped", "message": "projecttranslated'stask"}
         
-        # ENstartEN
+        # intranslatedstarttranslated
         background_tasks.add_task(
             auto_pipeline_service.auto_start_pipeline,
             project_id
@@ -56,59 +56,59 @@ async def start_pipeline(
         
         return {
             "status": "started",
-            "message": "ENstarttaskEN",
+            "message": "translatedstarttasktranslated",
             "project_id": project_id
         }
         
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"startENfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"starttranslatedfailed: {str(e)}")
 
 @router.post("/stop/{project_id}")
 async def stop_pipeline(project_id: str, db: Session = Depends(get_db)):
-    """stopprojectEN"""
+    """translatedprojecttranslated"""
     try:
-        # checkprojectEN
+        # checkprojectIstranslatedin
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
             raise HTTPException(status_code=404, detail="Project not found")
         
-        # ENrunENtask
+        # translated'stask
         running_tasks = db.query(Task).filter(
             Task.project_id == project_id,
-            Task.status.in_([TaskStatus.PENDING, TaskStatus.RUNNING])
+            Task.status.in_([TaskStatus.PtranslatedDING, TaskStatus.RUNNING])
         ).all()
         
         if not running_tasks:
-            return {"status": "skipped", "message": "ENrunENtask"}
+            return {"status": "skipped", "message": "translated'stask"}
         
-        # stopallrunENtask
+        # translated'stask
         stopped_count = 0
         for task in running_tasks:
             task.status = TaskStatus.CANCELLED
             task.updated_at = datetime.utcnow()
             
-            # throughprogressupdateserviceENtaskstop
+            # translatedprogressupdateservicetranslatedtasktranslated
             try:
                 await progress_update_service.complete_task(
                     task_id=task.id,
-                    error="taskENstop"
+                    error="tasktranslated"
                 )
             except Exception as e:
-                logger.warning(f"ENtaskstopfailed: {e}")
+                logger.warning(f"translatedtasktranslatedfailed: {e}")
             
             stopped_count += 1
         
         # updateprojectstatus
-        project.status = ProjectStatus.PENDING
+        project.status = ProjectStatus.PtranslatedDING
         project.updated_at = datetime.utcnow()
         
         db.commit()
         
         return {
             "status": "stopped",
-            "message": f"ENstop {stopped_count} ENtask",
+            "message": f"translated {stopped_count}  task",
             "project_id": project_id,
             "stopped_tasks": stopped_count
         }
@@ -116,7 +116,7 @@ async def stop_pipeline(project_id: str, db: Session = Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"stopENfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedfailed: {str(e)}")
 
 @router.post("/restart/{project_id}")
 async def restart_pipeline(
@@ -124,34 +124,34 @@ async def restart_pipeline(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """restartprojectEN"""
+    """translatedprojecttranslated"""
     try:
-        # ENstopEN
+        # translated
         stop_result = await stop_pipeline(project_id, db)
         
-        # ENstopEN
+        # etc.translatedonetranslatedensuretranslated
         import time
         time.sleep(2)
         
-        # ENstartEN
+        # translatedstarttranslated
         start_result = await start_pipeline(project_id, background_tasks, db)
         
         return {
             "status": "restarted",
-            "message": "ENrestart",
+            "message": "translated",
             "project_id": project_id,
             "stop_result": stop_result,
             "start_result": start_result
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"restartENfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedfailed: {str(e)}")
 
 @router.get("/status/{project_id}")
 async def get_pipeline_status(project_id: str, db: Session = Depends(get_db)):
-    """fetchprojectENstatus"""
+    """fetchprojecttranslatedstatus"""
     try:
-        # checkprojectEN
+        # checkprojectIstranslatedin
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
             raise HTTPException(status_code=404, detail="Project not found")
@@ -159,7 +159,7 @@ async def get_pipeline_status(project_id: str, db: Session = Depends(get_db)):
         # fetchprojecttask
         tasks = db.query(Task).filter(Task.project_id == project_id).all()
         
-        # fetchENprogressEN
+        # fetchtranslatedprogressinfo
         task_statuses = []
         for task in tasks:
             realtime_progress = progress_update_service.get_task_progress(task.id)
@@ -190,7 +190,7 @@ async def get_pipeline_status(project_id: str, db: Session = Depends(get_db)):
             'project_status': project.status,
             'tasks': task_statuses,
             'total_tasks': len(tasks),
-            'running_tasks': len([t for t in tasks if t.status in [TaskStatus.PENDING, TaskStatus.RUNNING]]),
+            'running_tasks': len([t for t in tasks if t.status in [TaskStatus.PtranslatedDING, TaskStatus.RUNNING]]),
             'completed_tasks': len([t for t in tasks if t.status == TaskStatus.COMPLETED]),
             'failed_tasks': len([t for t in tasks if t.status == TaskStatus.FAILED])
         }
@@ -198,13 +198,13 @@ async def get_pipeline_status(project_id: str, db: Session = Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"fetchENstatusfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchtranslatedstatusfailed: {str(e)}")
 
 @router.get("/overview")
 async def get_pipeline_overview(db: Session = Depends(get_db)):
-    """fetchallEN"""
+    """fetchtranslated"""
     try:
-        # fetchallproject
+        # fetchtranslatedproject
         projects = db.query(Project).all()
         
         overview = {
@@ -217,7 +217,7 @@ async def get_pipeline_overview(db: Session = Depends(get_db)):
         }
         
         for project in projects:
-            # fetchprojecttaskEN
+            # fetchprojecttasktranslated
             tasks = db.query(Task).filter(Task.project_id == project.id).all()
             
             project_info = {
@@ -225,45 +225,45 @@ async def get_pipeline_overview(db: Session = Depends(get_db)):
                 'name': project.name,
                 'status': project.status,
                 'total_tasks': len(tasks),
-                'running_tasks': len([t for t in tasks if t.status in [TaskStatus.PENDING, TaskStatus.RUNNING]]),
+                'running_tasks': len([t for t in tasks if t.status in [TaskStatus.PtranslatedDING, TaskStatus.RUNNING]]),
                 'completed_tasks': len([t for t in tasks if t.status == TaskStatus.COMPLETED]),
                 'failed_tasks': len([t for t in tasks if t.status == TaskStatus.FAILED])
             }
             
             overview['project_details'].append(project_info)
             
-            # ENprojectstatus
+            # translatedprojectstatus
             if project.status == ProjectStatus.PROCESSING:
                 overview['processing_projects'] += 1
             elif project.status == ProjectStatus.COMPLETED:
                 overview['completed_projects'] += 1
             elif project.status == ProjectStatus.FAILED:
                 overview['failed_projects'] += 1
-            elif project.status == ProjectStatus.PENDING:
+            elif project.status == ProjectStatus.PtranslatedDING:
                 overview['pending_projects'] += 1
         
-        # fetchENservicestatus
+        # fetchtranslatedservicestatus
         auto_service_status = auto_pipeline_service.get_processing_status()
         overview['auto_service'] = auto_service_status
         
         return overview
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"fetchENfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchtranslatedfailed: {str(e)}")
 
 @router.post("/auto-start-all")
 async def auto_start_all_pending_pipelines(background_tasks: BackgroundTasks):
-    """ENstartallEN"""
+    """translatedstarttranslatedetc.translated'stranslated"""
     try:
-        # ENstartallENproject
+        # intranslatedstarttranslatedetc.translated'sproject
         background_tasks.add_task(
             auto_pipeline_service.auto_start_all_pending_pipelines
         )
         
         return {
             "status": "started",
-            "message": "ENstartallENtaskEN"
+            "message": "translatedstarttranslatedetc.translated'stasktranslated"
         }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"ENstartfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedstartfailed: {str(e)}")

@@ -1,59 +1,59 @@
 #!/bin/bash
 
-# DockerENEnvironmentStartScript
-# ENEnvironmentEN，ENviteEN
+# Dockertranslatedstarttranslated
+# translated，translatedfrontendviteissue
 
 set -euo pipefail
 
-echo "🚀 StartAutoClipENEnvironment..."
+echo "🚀 startAutoCliptranslated..."
 
-# ENEnvironmentEN
+# settingstranslated
 export PYTHONPATH=/app
 export PYTHONUNBUFFERED=1
 
-# EN
+# ensuretranslateddirectorytranslatedin
 mkdir -p /app/data/projects /app/data/uploads /app/data/temp /app/data/output /app/logs
 
-# ENEnvironment
+# translated
 source /app/venv/bin/activate
 
-# CheckENInstallENDependencies
-echo "📦 CheckENDependencies..."
+# checktranslatedinstallfrontenddependencies
+echo "📦 checkfrontenddependencies..."
 cd /app/frontend
 if [ ! -d node_modules ] || [ ! -f node_modules/.bin/vite ]; then
-    echo "InstallENDependencies..."
+    echo "installfrontenddependencies..."
     npm install
 fi
 
-# CheckviteENInstall
+# checkviteIstranslatedinstall
 if [ ! -f node_modules/.bin/vite ]; then
-    echo "❌ viteENInstall，ENInstall..."
+    echo "❌ vitetranslatedinstall，translatedinstall..."
     npm install vite
 fi
 
-# EN
+# returntranslateddirectory
 cd /app
 
-# StartENService
-echo "🔧 StartENService..."
+# startbackendservice
+echo "🔧 startbackendservice..."
 python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload &
-BACKEND_PID=$!
+BACKtranslatedD_PID=$!
 
-# ENStart
+# etc.translatedbackendstart
 sleep 3
 
-# StartENService
-echo "🌐 StartENService..."
+# startfrontendservice
+echo "🌐 startfrontendservice..."
 cd /app/frontend
 npx vite --host 0.0.0.0 --port 3000 &
-FRONTEND_PID=$!
+FRONTtranslatedD_PID=$!
 
-# EN
+# returntranslateddirectory
 cd /app
 
-echo "✅ ServiceStartCompleted"
-echo "  ENAPI: http://localhost:8000"
-echo "  EN: http://localhost:3000"
+echo "✅ servicestarttranslated"
+echo "  backendAPI: http://localhost:8000"
+echo "  frontendInterface: http://localhost:3000"
 
-# ENAllEN
+# etc.translatedprocess
 wait

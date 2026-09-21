@@ -1,85 +1,85 @@
-# 🎤 WhisperEN
+# 🎤 Whispersubtitlesgenerate
 
-## 📋 EN
+## 📋 overview
 
-EN，EN，**ENWhisperEN**，ENBEN/YouTubeEN。EN。
+，subtitlesgenerate，**preferWhispermodelgeneratesubtitles**，dependenciesB/YouTubesubtitles。subtitles。
 
-## 🔄 EN
+## 🔄 subtitlesgenerate
 
-### 1. EN
+### 1. 
 
 ```
-ENUploadEN → WhisperEN → EN（EN）
+subtitlesfile → Whispergeneratesubtitles → subtitles（）
 ```
 
-**EN：**
-1. **ENProvidesEN**：ENUploadENSRTEN，EN
-2. **WhisperEN**：EN，ENWhisperEN
-3. **EN**：ENWhisperEN，EN
+**：**
+1. **subtitles**：SRTfile，use
+2. **Whispergenerate**：subtitles，preferWhispergenerate
+3. **subtitles**：Whisperfailed，downloadsubtitles
 
-### 2. EN
+### 2. model selection
 
-ENWhisperEN：
+selectWhispermodel：
 
-| EN | EN | EN | EN |
+|  | model | features | use cases |
 |----------|------|------|----------|
-| EN/EN | `small` | EN | EN、EN、EN |
-| EN/EN | `medium` | EN | EN、EN、EN |
-| EN | `base` | EN | EN、EN、EN |
-| EN | `base` | EN | EN |
+| business/ | `small` |  | 、、 |
+| / | `medium` |  | 、、 |
+|  | `base` |  | 、、 |
+| default | `base` |  |  |
 
-### 3. LanguageEN
+### 3. 
 
-- **EN**：EN`auto`ENLanguageEN
-- **ChineseEN**：EN、EN、EN`zh`
-- **ENLanguageSupport**：Support15ENLanguage，ENChinese、English、EN
+- **auto-detect**：defaultuse`auto`
+- **Chinese**：business、、`zh`
+- **multi-language support**：support15，Chinese、English、Japanese
 
-## 🚀 EN
+## 🚀 tech advantages
 
-### 1. EN
-- ✅ EN
-- ✅ EN，EN
-- ✅ EN，EN
+### 1. 
+- ✅ usesubtitlesgenerate
+- ✅ format，
+- ✅ ，limit
 
-### 2. EN
-- ✅ WhisperENSRTEN
-- ✅ EN
-- ✅ SupportEN（word-level timestamps）
+### 2. edit
+- ✅ WhispergenerateSRTformatedit
+- ✅ 
+- ✅ support（word-level timestamps）
 
-### 3. ENLanguageSupport
-- ✅ Support15ENLanguage，ENChinese、English、EN
-- ✅ ENLanguageEN
-- ✅ SupportEN
+### 3. multi-language support
+- ✅ support15，Chinese、English、Japanese
+- ✅ 
+- ✅ support
 
-### 4. EN
-- ✅ EN，EN
-- ✅ EN，ENAPIEN
-- ✅ EN（tinyENlarge）
-- ✅ SupportEN
+### 4. tech advantages
+- ✅ local，no needdependencies
+- ✅ free use，APIcost
+- ✅ configmodel（tinylarge）
+- ✅ support
 
-## 📊 EN
+## 📊 
 
-### Whisper vs EN
+### Whisper vs subtitles
 
-| EN | WhisperEN | EN |
+|  | Whispergenerate | subtitles |
 |------|-------------|----------|
-| EN | 100% | EN |
-| EN | EN | EN |
-| EN | EN | EN |
-| ENLanguageSupport | 15ENLanguage | EN |
-| EN | EN | EN |
-| EN | EN | EN |
-| EN | EN | EN |
+| available | 100% | dependencies |
+| format |  |  |
+|  |  | medium |
+| multi-language support | 15 | dependencies |
+| edit |  | medium |
+| dependencies |  |  |
+| cost | free | free |
 
-## 🔧 Configuration
+## 🔧 config notes
 
-### Requirements
+### 
 
 ```bash
-# ENWhisper
+# installWhisper
 pip install openai-whisper
 
-# ENFFmpeg（EN）
+# installFFmpeg（）
 # macOS
 brew install ffmpeg
 
@@ -87,87 +87,87 @@ brew install ffmpeg
 sudo apt update && sudo apt install ffmpeg
 
 # Windows
-# ENFFmpegENPATH
+# downloadFFmpegPATH
 ```
 
-### EN
+### model selection
 
 ```python
-# EN
+# selectmodel
 if content_type == "business" or content_type == "knowledge":
-    model = "small"  # EN，EN
+    model = "small"  # ，
 elif content_type == "speech":
-    model = "medium"  # EN，EN
+    model = "medium"  # ，
 else:
-    model = "base"  # EN
+    model = "base"  # 
 ```
 
-## 📈 EN
+## 📈 use
 
-### 1. EN
-- EN
-- EN
-- EN
+### 1. subtitles
+- 
+- 
+- format
 
-### 2. EN
-- SupportEN
-- EN
-- ENSRTEN
+### 2. edit
+- supportedit
+- 
+- SRTformat
 
-### 3. EN
-- EN
-- EN
-- EN
+### 3. 
+- dependencies
+- failed
+- 
 
-## 🛠️ Troubleshooting
+## 🛠️ troubleshooting
 
 ### FAQ
 
-1. **WhisperEN**
+1. **Whispernot installed**
    ```bash
    pip install openai-whisper
    ```
 
-2. **FFmpegEN**
+2. **FFmpegnot installed**
    ```bash
-   # ENFFmpeg
+   # checkFFmpeg
    ffmpeg -version
    ```
 
-3. **EN**
+3. **modeldownloadfailed**
    ```bash
-   # EN
+   # downloadmodel
    whisper --model base --help
    ```
 
-4. **EN**
-   - EN（tiny/base）
-   - EN
-   - EN
+4. **out of memory**
+   - use a smaller model（tiny/base）
+   - memory
+   - 
 
-### Performance
+### performance
 
-1. **EN**
-   - EN：EN`tiny`EN`base`
-   - EN：EN`base`EN`small`
-   - EN：EN`medium`EN`large`
+1. **model selection**
+   - ：use`tiny``base`
+   - ：use`base``small`
+   - ：use`medium``large`
 
-2. **LanguageEN**
-   - ENLanguage：ENLanguageEN
-   - ENLanguage：EN`auto`EN
+2. ****
+   - ：
+   - ：use`auto`auto-detect
 
-3. **EN**
-   - EN
-   - EN
+3. ****
+   - can
+   - use
 
-## 📝 EN
+## 📝 summary
 
-ENWhisperEN：
+useWhispergeneratesubtitles：
 
-1. **EN**：EN，EN
-2. **EN**：SupportENLanguage，EN
-3. **EN**：EN
-4. **EN**：EN，ENAPIEN
+1. ****：subtitles，failed
+2. ****：support，
+3. ****：dependencies
+4. ****：free use，no needAPIcost
 
-ENSubtitle EditingEN，ENProvidesEN。
+needsubtitlesedit，。
 

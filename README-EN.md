@@ -18,7 +18,7 @@ generation
 [![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
 [![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/nd7hdyt/YtClipper/issues)
 
-**Language**: [English](README-EN.md) | [中文](README.md)
+**Language**: [English](README-EN.md) | [Chinese](README.md)
 
 </div>
 

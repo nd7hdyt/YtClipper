@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# AutoClip Docker StartScript
-# Version: 1.0
-# EN: ENDockerENStartAutoClipSystem
+# AutoClip Docker starttranslated
+# version: 1.0
+# feature: useDockertranslatedstartAutoClipSystem
 
 set -euo pipefail
 
 # =============================================================================
-# ConfigEN
+# configtranslated
 # =============================================================================
 
-# EN
+# translated
 RED='\033[0;31m'
-GREEN='\033[0;32m'
+GREtranslated='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
@@ -20,7 +20,7 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# EN
+# translated
 ICON_SUCCESS="✅"
 ICON_ERROR="❌"
 ICON_WARNING="⚠️"
@@ -29,7 +29,7 @@ ICON_ROCKET="🚀"
 ICON_DOCKER="🐳"
 
 # =============================================================================
-# ToolEN
+# tooltranslated
 # =============================================================================
 
 log_info() {
@@ -37,7 +37,7 @@ log_info() {
 }
 
 log_success() {
-    echo -e "${GREEN}${ICON_SUCCESS} $1${NC}"
+    echo -e "${GREtranslated}${ICON_SUCCESS} $1${NC}"
 }
 
 log_warning() {
@@ -54,56 +54,56 @@ log_header() {
 }
 
 # =============================================================================
-# CheckEN
+# checktranslated
 # =============================================================================
 
 check_docker() {
-    log_header "CheckDockerEnvironment"
+    log_header "checkDockertranslated"
     
     if ! command -v docker >/dev/null 2>&1; then
-        log_error "DockerENInstall，PleaseENInstallDocker"
+        log_error "Dockertranslatedinstall，translatedinstallDocker"
         exit 1
     fi
-    log_success "DockerENInstall"
+    log_success "Dockertranslatedinstall"
     
     if ! command -v docker-compose >/dev/null 2>&1; then
-        log_error "Docker ComposeENInstall，PleaseENInstallDocker Compose"
+        log_error "Docker Composetranslatedinstall，translatedinstallDocker Compose"
         exit 1
     fi
-    log_success "Docker ComposeENInstall"
+    log_success "Docker Composetranslatedinstall"
     
     if ! docker info >/dev/null 2>&1; then
-        log_error "DockerServiceEN，PleaseStartDockerService"
+        log_error "Dockerservicetranslated，translatedstartDockerservice"
         exit 1
     fi
-    log_success "DockerServiceEN"
+    log_success "Dockerservicetranslated"
 }
 
 check_environment() {
-    log_header "CheckEnvironmentConfig"
+    log_header "checktranslatedconfig"
     
     if [[ ! -f ".env" ]]; then
-        log_warning ".envEN，ENConfig..."
+        log_warning ".envfile not found，createdefaultconfig..."
         if [[ -f "env.example" ]]; then
             cp env.example .env
-            log_success "EN.envEN"
-            log_warning "PleaseEN.envEN，ENConfig（ENAPIEN）"
+            log_success "translatedcreatedefault.envfile"
+            log_warning "translated.envfile，translated'sconfig（translatedIsAPIkey）"
         else
-            log_error "env.exampleEN"
+            log_error "env.examplefile not found"
             exit 1
         fi
     else
-        log_success ".envEN"
+        log_success ".envfiletranslatedin"
     fi
     
-    # CheckENConfig
+    # checktranslated'sconfig
     if ! grep -q "API_DASHSCOPE_API_KEY" .env || grep -q "API_DASHSCOPE_API_KEY=$" .env; then
-        log_warning "API_DASHSCOPE_API_KEYENConfig，AIEN"
+        log_warning "API_DASHSCOPE_API_KEYtranslatedconfig，AIfeaturetranslatedcanuse"
     fi
 }
 
 check_ports() {
-    log_header "CheckEN"
+    log_header "checktranslateduse"
     
     local ports=(8000 3000 6379 5555)
     local occupied_ports=()
@@ -115,112 +115,112 @@ check_ports() {
     done
     
     if [[ ${#occupied_ports[@]} -gt 0 ]]; then
-        log_warning "EN: ${occupied_ports[*]}"
-        log_info "DockerENAutoProcessingEN，ENStopENService"
+        log_warning "translateduse: ${occupied_ports[*]}"
+        log_info "Dockertranslatedprocesstranslated，translatedusethistranslated'sservice"
     else
-        log_success "AllEN"
+        log_success "translatedcanuse"
     fi
 }
 
 # =============================================================================
-# StartEN
+# starttranslated
 # =============================================================================
 
 start_services() {
-    log_header "StartAutoClipService"
+    log_header "startAutoClipservice"
     
-    # ENStartEN
+    # Selectselectstarttranslated
     if [[ "${1:-}" == "dev" ]]; then
-        log_info "StartENEnvironment..."
+        log_info "starttranslated..."
         docker-compose -f docker-compose.dev.yml up -d
         COMPOSE_FILE="docker-compose.dev.yml"
     else
-        log_info "StartENEnvironment..."
+        log_info "starttranslated..."
         docker-compose up -d
         COMPOSE_FILE="docker-compose.yml"
     fi
     
-    # ENServiceStart
-    log_info "ENServiceStart..."
+    # etc.translatedservicestart
+    log_info "etc.translatedservicestart..."
     sleep 10
     
-    # CheckServiceStatus
+    # checkservicestatus
     if docker-compose -f "$COMPOSE_FILE" ps | grep -q "Up"; then
-        log_success "ServiceStartSuccess"
+        log_success "servicestartsucceeded"
     else
-        log_error "ServiceStartFailed"
-        log_info "EN: docker-compose -f $COMPOSE_FILE logs"
+        log_error "servicestartfailed"
+        log_info "translatedlogs: docker-compose -f $COMPOSE_FILE logs"
         exit 1
     fi
 }
 
 show_status() {
-    log_header "ServiceStatus"
+    log_header "servicestatus"
     
-    echo -e "${CYAN}📊 ENStatus:${NC}"
+    echo -e "${CYAN}📊 translatedstatus:${NC}"
     docker-compose ps
     
-    echo -e "\n${CYAN}🌐 EN:${NC}"
-    echo -e "  EN: http://localhost:3000"
-    echo -e "  ENAPI:  http://localhost:8000"
-    echo -e "  APIEN:  http://localhost:8000/docs"
-    echo -e "  FlowerEN: http://localhost:5555"
+    echo -e "\n${CYAN}🌐 translated:${NC}"
+    echo -e "  frontendInterface: http://localhost:3000"
+    echo -e "  backendAPI:  http://localhost:8000"
+    echo -e "  APIdocs:  http://localhost:8000/docs"
+    echo -e "  Flowermonitor: http://localhost:5555"
     
-    echo -e "\n${CYAN}📝 EN:${NC}"
-    echo -e "  EN: docker-compose logs -f"
-    echo -e "  StopService: docker-compose down"
-    echo -e "  ENService: docker-compose restart"
-    echo -e "  EN: docker-compose exec autoclip bash"
+    echo -e "\n${CYAN}📝 translatedusetranslated:${NC}"
+    echo -e "  translatedlogs: docker-compose logs -f"
+    echo -e "  translatedservice: docker-compose down"
+    echo -e "  translatedservice: docker-compose restart"
+    echo -e "  translated: docker-compose exec autoclip bash"
 }
 
 # =============================================================================
-# EN
+# translated
 # =============================================================================
 
 main() {
-    log_header "AutoClip Docker StartEN v1.0"
+    log_header "AutoClip Docker starttranslated v1.0"
     
-    # EN
+    # translated
     local mode="production"
     if [[ "${1:-}" == "dev" ]]; then
         mode="development"
     fi
     
-    log_info "StartEN: $mode"
+    log_info "starttranslated: $mode"
     
-    # ENCheck
+    # translatedcheck
     check_docker
     check_environment
     check_ports
     
-    # StartService
+    # startservice
     start_services "$mode"
     
-    # ENStatus
+    # translatedstatus
     show_status
     
-    echo -e "\n${WHITE}🎉 AutoClip Docker ENCompleted！${NC}"
-    echo -e "${YELLOW}💡 EN: ENStartENNeedENDownloadEN${NC}"
+    echo -e "\n${WHITE}🎉 AutoClip Docker translated！${NC}"
+    echo -e "${YELLOW}💡 translated: translatedstartcantranslatedminutestranslateddownloadAndtranslated${NC}"
 }
 
-# EN
+# translatedinfo
 show_help() {
-    echo "AutoClip Docker StartScript"
+    echo "AutoClip Docker starttranslated"
     echo ""
-    echo "EN:"
-    echo "  $0 [EN]"
+    echo "usetranslated:"
+    echo "  $0 [Selecttranslated]"
     echo ""
-    echo "EN:"
-    echo "  dev     StartENEnvironment"
-    echo "  help    EN"
+    echo "Selecttranslated:"
+    echo "  dev     starttranslated"
+    echo "  help    translatedinfo"
     echo ""
-    echo "EN:"
-    echo "  $0          # StartENEnvironment"
-    echo "  $0 dev      # StartENEnvironment"
-    echo "  $0 help     # EN"
+    echo "translated:"
+    echo "  $0          # starttranslated"
+    echo "  $0 dev      # starttranslated"
+    echo "  $0 help     # translated"
 }
 
-# ProcessingEN
+# processtranslated
 case "${1:-}" in
     "help"|"-h"|"--help")
         show_help

@@ -1,14 +1,14 @@
-# Issue ENAutoEN：
-# 1. EN issue AutoEN（EN + ENStatus），ENManualEN。
-# 2. EN needs-info EN 14 EN → EN stale，EN 7 EN。
-# 3. EN issue 60 EN → EN stale，EN 14 EN。feature / pinned ENAutoEN。
+# Issue translated：
+# 1. translated issue translatedonetranslated（translated + translatedstatus），translatedusetranslated。
+# 2. translated needs-info translated 14 translatedinfo → translated stale，translated 7 translated。
+# 3. translated issue 60 translated → translated stale，translated 14 translated。feature / pinned translated。
 name: Issue hygiene
 
 on:
   issues:
     types: [opened]
   schedule:
-    - cron: "0 2 * * *"   # EN 10:00 EN
+    - cron: "0 2 * * *"   # pertranslated 10:00 translated
   workflow_dispatch:
 
 permissions:
@@ -24,11 +24,11 @@ jobs:
         with:
           script: |
             const body = [
-              'EN，EN。ENProject，issue EN **EN** EN triage，EN。',
+              'translated，translated。thisIsone translated'stranslatedproject，issue translatedin **onetranslated** translatedone triage，translated。',
               '',
-              '- CurrentStatusEN：#96',
-              '- IfEN bug EN **Version / EN / EN** EN，EN `needs-info`，14 ENAutoEN（EN）。',
-              '- EN [Discussions](https://github.com/nd7hdyt/YtClipper/discussions)。',
+              '- translatedstatusandtranslatedissue：#96',
+              '- iftranslatedIs bug translated **version / translated / model** info，translated `needs-info`，14 translated（translatedcan）。',
+              '- usetranslatedissuetranslated [Discussions](https://github.com/zhouxiaoka/autoclip/discussions)。',
               '',
               '_This project is maintained in spare time; issues are triaged weekly. Bugs missing version / platform / model get `needs-info` and auto-close after 14 days without a reply._'
             ].join('\n');
@@ -51,8 +51,8 @@ jobs:
           days-before-pr-stale: -1
           days-before-pr-close: -1
           stale-issue-label: stale
-          stale-issue-message: "EN（Version / EN / EN / EN），7 ENAutoEN。ENAutoENProcessing。"
-          close-issue-message: "EN。EN。"
+          stale-issue-message: "translated'sinfo（version / translated / model / logs），7 translated。translatedprocess。"
+          close-issue-message: "translatedinfotranslated。translatedinfotranslatedcantranslated。"
           remove-stale-when-updated: true
           operations-per-run: 100
 
@@ -70,9 +70,9 @@ jobs:
           days-before-pr-close: 14
           stale-issue-label: stale
           stale-pr-label: stale
-          stale-issue-message: "60 EN，EN stale；IfENPleaseEN，Else 14 ENAutoEN。"
-          stale-pr-message: "45 EN，EN stale；ENPleaseEN，Else 14 ENAutoEN。"
-          close-issue-message: "ENAutoEN。EN issue。"
-          close-pr-message: "ENAutoEN。"
+          stale-issue-message: "60 translated，translated stale；iftranslatedissuetranslatedintranslatedonetranslated，translated 14 translated。"
+          stale-pr-message: "45 translated，translated stale；iftranslatedintranslated，translated 14 translated。"
+          close-issue-message: "translated。issuetranslatedin'stranslatedortranslated issue。"
+          close-pr-message: "translated。"
           remove-stale-when-updated: true
           operations-per-run: 100

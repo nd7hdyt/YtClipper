@@ -1,200 +1,200 @@
-# 👨‍💻 AutoClip Desktop EN
+# 👨‍💻 AutoClip Desktop 
 
-## 📋 EN
+## 📋 
 
-- [EN](#EN)
-- [EN](#EN)
-- [EN](#EN)
-- [EN](#EN)
-- [APIEN](#apiEN)
-- [EN](#EN)
-- [EN](#EN)
-- [TauriEN](#tauriEN)
-- [EN](#EN)
-- [EN](#EN)
-- [Contributing](#Contributing)
+- [project](#project)
+- [dev environmentsettings](#dev environmentsettings)
+- [](#)
+- [core modules](#core modules)
+- [APIAPI](#apiAPI)
+- [frontend dev](#frontend dev)
+- [backend dev](#backend dev)
+- [Tauriintegration](#tauriintegration)
+- [builddeploy](#builddeploy)
+- [test](#test)
+- [contributing guide](#contributing guide)
 
-## 🏗️ EN
+## 🏗️ project
 
-### EN
+### 
 
 ```
 AutoClip Desktop
 ├── Frontend (React + TypeScript + Ant Design)
 ├── Backend (Python + FastAPI + Celery)
 ├── Tauri (Rust + WebView)
-└── Resources (FFmpeg + EN)
+└── Resources (FFmpeg + modelfile)
 ```
 
-### Tech Stack
+### 
 
-- **EN**: React 18, TypeScript, Ant Design, Vite
-- **EN**: Python 3.10+, FastAPI, Celery, SQLAlchemy
-- **EN**: Tauri 2.0, Rust
-- **EN**: SQLite (EN)
-- **Task Queue**: Celery with SQLite transport
-- **AIEN**: OpenAI, DashScope, Google Gemini
-- **EN**: Whisper, ENAPI
+- **frontend**: React 18, TypeScript, Ant Design, Vite
+- **backend**: Python 3.10+, FastAPI, Celery, SQLAlchemy
+- ****: Tauri 2.0, Rust
+- **database**: SQLite ()
+- ****: Celery with SQLite transport
+- **AIservice**: OpenAI, DashScope, Google Gemini
+- **speech recognition**: Whisper, cloudAPI
 
-## 🛠️ EN
+## 🛠️ dev environmentsettings
 
-### EN
+### 
 
 - **Node.js**: 18.0+
-- **Python**: 3.10+（EN 3.11）
+- **Python**: 3.10+（recommend 3.11）
 - **Rust**: 1.70+
 - **Git**: 2.0+
 
-### EN
+### installstep
 
-1. **EN**
+1. **project**
 ```bash
 git clone https://github.com/your-org/autoclip-desktop.git
 cd autoclip-desktop
 ```
 
-2. **EN**
+2. **installfrontenddependencies**
 ```bash
 cd frontend
 npm install
 ```
 
-3. **EN**
+3. **installbackenddependencies**
 ```bash
 cd ../backend
 pip install -r requirements.txt
 ```
 
-4. **ENTauriEN**
+4. **installTauridependencies**
 ```bash
 cd ../src-tauri
 cargo install tauri-cli
 ```
 
-5. **EN**
+5. **settingsenv var**
 ```bash
-# EN
+# env var
 cp .env.example .env
 
-# EN
+# editenv var
 nano .env
 ```
 
-### EN
+### dev environmentconfig
 
 ```bash
-# EN
+# startdev environment
 npm run dev
 
-# EN
+# startbackendservice
 python backend/desktop_main.py
 
-# ENTauriEN
+# buildTauri
 npm run tauri build
 ```
 
-## 📁 EN
+## 📁 
 
-### EN
+### frontend
 
 ```
 frontend/
 ├── src/
-│   ├── components/          # EN
+│   ├── components/          # 
 │   │   ├── ErrorBoundary.tsx
 │   │   ├── OfflineIndicator.tsx
 │   │   └── ...
-│   ├── pages/              # EN
+│   ├── pages/              # page
 │   │   ├── HomePage.tsx
 │   │   ├── SettingsPage.tsx
 │   │   ├── OnboardingPage.tsx
 │   │   └── ...
-│   ├── hooks/              # ENHooks
+│   ├── hooks/              # Hooks
 │   │   ├── useFirstRun.ts
 │   │   ├── useDesktopConfig.ts
 │   │   └── ...
-│   ├── services/           # APIEN
+│   ├── services/           # APIservice
 │   │   ├── api.ts
 │   │   ├── projectApi.ts
 │   │   └── ...
-│   ├── store/              # EN
+│   ├── store/              # state management
 │   │   ├── useProjectStore.ts
 │   │   ├── useConfigStore.ts
 │   │   └── ...
-│   ├── utils/              # EN
+│   ├── utils/              # tool
 │   │   ├── apiUtils.ts
 │   │   ├── errorHandler.ts
 │   │   └── ...
-│   └── types/              # EN
+│   └── types/              # 
 │       ├── api.ts
 │       ├── project.ts
 │       └── ...
-├── public/                 # EN
+├── public/                 # 
 └── package.json
 ```
 
-### EN
+### backend
 
 ```
 backend/
-├── api/                    # APIEN
+├── api/                    # APIroute
 │   └── v1/
 │       ├── projects.py
 │       ├── settings.py
 │       ├── health.py
 │       └── ...
-├── core/                   # EN
+├── core/                   # core modules
 │   ├── desktop_config.py
 │   ├── llm_providers.py
 │   ├── speech_recognition.py
 │   └── ...
-├── services/               # EN
+├── services/               # service
 │   ├── project_service.py
 │   ├── video_service.py
 │   ├── ai_service.py
 │   └── ...
-├── models/                 # EN
+├── models/                 # model
 │   ├── project.py
 │   ├── clip.py
 │   └── ...
-├── utils/                  # EN
+├── utils/                  # tool
 │   ├── error_handler.py
 │   ├── performance_config.py
 │   ├── chunked_upload.py
 │   └── ...
-├── tasks/                  # CeleryEN
+├── tasks/                  # Celery
 │   ├── __init__.py
 │   ├── video_tasks.py
 │   └── ...
-├── desktop_main.py         # EN
-├── desktop_celery.py       # ENCeleryEN
+├── desktop_main.py         # 
+├── desktop_celery.py       # Celeryconfig
 └── requirements.txt
 ```
 
-### TauriEN
+### Tauri
 
 ```
 src-tauri/
 ├── src/
-│   ├── lib.rs              # EN
-│   ├── commands.rs         # TauriEN
-│   ├── backend_manager.rs  # EN
-│   └── tray.rs             # EN
-├── Cargo.toml              # RustEN
-├── tauri.conf.json         # TauriEN
-└── resources/              # EN
-    └── ffmpeg/             # FFmpegEN
+│   ├── lib.rs              # 
+│   ├── commands.rs         # Tauri
+│   ├── backend_manager.rs  # backend
+│   └── tray.rs             # 
+├── Cargo.toml              # Rustdependencies
+├── tauri.conf.json         # Tauriconfig
+└── resources/              # file
+    └── ffmpeg/             # FFmpeg
 ```
 
-## 🔧 EN
+## 🔧 core modules
 
-### 1. EN
+### 1. config
 
-**EN**: `backend/core/desktop_config.py`
+**file**: `backend/core/desktop_config.py`
 
 ```python
 class DesktopConfig:
-    """EN"""
+    """config"""
     
     def __init__(self):
         self.data_dir = self._get_desktop_data_dir()
@@ -202,10 +202,10 @@ class DesktopConfig:
         self.settings_file = self.data_dir / "settings.json"
     
     def save_desktop_config(self, config: 'DesktopConfig') -> bool:
-        """EN"""
+        """config"""
         try:
             config_dict = config.dict()
-            # ENPathEN
+            # Path
             config_dict = self._convert_paths_to_strings(config_dict)
             
             with open(self.config_file, 'w', encoding='utf-8') as f:
@@ -213,45 +213,45 @@ class DesktopConfig:
             
             return True
         except Exception as e:
-            logger.error(f"EN: {e}")
+            logger.error(f"configfailed: {e}")
             return False
 ```
 
-### 2. EN
+### 2. speech recognitionservice
 
-**EN**: `backend/core/speech_recognition.py`
+**file**: `backend/core/speech_recognition.py`
 
 ```python
 class SpeechRecognizer:
-    """EN"""
+    """speech recognitionservice"""
     
     def __init__(self, config: SpeechRecognitionConfig):
         self.config = config
         self.recognizer = self._create_recognizer()
     
     def transcribe_audio(self, audio_path: str) -> str:
-        """EN"""
+        """file"""
         if self.config.provider == "whisper_local":
             return self._transcribe_with_whisper(audio_path)
         elif self.config.provider == "openai":
             return self._transcribe_with_openai(audio_path)
-        # ... EN
+        # ... service
 ```
 
-### 3. Performance
+### 3. performance
 
-**EN**: `backend/utils/performance_config.py`
+**file**: `backend/utils/performance_config.py`
 
 ```python
 class PerformanceConfig:
-    """EN"""
+    """config"""
     
     def __init__(self, level: str = "medium"):
         self.level = level
         self.settings = self._get_settings_for_level(level)
     
     def _get_settings_for_level(self, level: str) -> PerformanceSettings:
-        """EN"""
+        """fetchsettings"""
         levels = {
             "low": PerformanceSettings(
                 max_concurrent_tasks=1,
@@ -272,56 +272,56 @@ class PerformanceConfig:
         return levels.get(level, levels["medium"])
 ```
 
-## 🔌 APIEN
+## 🔌 APIAPI
 
-### Project ManagementAPI
+### project managementAPI
 
 ```python
-# EN
+# createproject
 @router.post("/projects", response_model=ProjectResponse)
 async def create_project(project: ProjectCreate):
-    """EN"""
+    """createproject"""
     return await project_service.create_project(project)
 
-# EN
+# fetchproject
 @router.get("/projects", response_model=List[ProjectResponse])
 async def get_projects():
-    """EN"""
+    """fetchproject"""
     return await project_service.get_projects()
 
-# EN
+# fetchproject
 @router.get("/projects/{project_id}", response_model=ProjectDetailResponse)
 async def get_project(project_id: int):
-    """EN"""
+    """fetchproject"""
     return await project_service.get_project(project_id)
 ```
 
-### ENAPI
+### settingsAPI
 
 ```python
-# EN
+# updatesettings
 @router.put("/settings", response_model=SettingsResponse)
 async def update_settings(settings: DesktopSettings):
-    """EN"""
+    """updatesettings"""
     config = get_desktop_config()
     config.settings = settings
     save_desktop_config(config)
     return SettingsResponse(success=True)
 
-# ENAPIEN
+# testAPI
 @router.post("/settings/test-api", response_model=ApiTestResponse)
 async def test_api_connection(request: TestApiRequest):
-    """ENAPIEN"""
+    """testAPI"""
     provider = create_llm_provider(request.provider, request.api_key)
     success = provider.test_connection()
     return ApiTestResponse(success=success)
 ```
 
-## 🎨 EN
+## 🎨 frontend dev
 
-### EN
+### state management
 
-**EN**: `frontend/src/store/useProjectStore.ts`
+**file**: `frontend/src/store/useProjectStore.ts`
 
 ```typescript
 interface ProjectStore {
@@ -353,13 +353,13 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     }
   },
   
-  // ... ENactions
+  // ... actions
 }))
 ```
 
-### ENHooks
+### Hooks
 
-**EN**: `frontend/src/hooks/useFirstRun.ts`
+**file**: `frontend/src/hooks/useFirstRun.ts`
 
 ```typescript
 export const useFirstRun = () => {
@@ -372,7 +372,7 @@ export const useFirstRun = () => {
       const hasApiKey = !!(config.settings?.llm?.api_key)
       setIsFirstRun(!hasApiKey)
     } catch (error) {
-      console.error('EN:', error)
+      console.error('checkstatusfailed:', error)
       setIsFirstRun(true)
     } finally {
       setLoading(false)
@@ -387,9 +387,9 @@ export const useFirstRun = () => {
 }
 ```
 
-### EN
+### error handling
 
-**EN**: `frontend/src/utils/errorHandler.ts`
+**file**: `frontend/src/utils/errorHandler.ts`
 
 ```typescript
 class ErrorHandler {
@@ -403,21 +403,21 @@ class ErrorHandler {
   }
   
   public handleError(error: any, category: ErrorCategory = 'SYSTEM', context?: string) {
-    let errorMessage = 'EN，EN'
+    let errorMessage = 'error，'
     let errorLevel: 'error' | 'warning' | 'info' = 'error'
     
     if (error.response) {
-      // ENHTTPEN
-      errorMessage = error.response.data?.message || `EN: ${error.response.status}`
+      // HTTPerror
+      errorMessage = error.response.data?.message || `servererror: ${error.response.status}`
       if (error.response.status === 429) {
-        errorMessage = 'EN，EN'
+        errorMessage = 'project，'
         errorLevel = 'warning'
       }
     } else if (error.request) {
-      // EN
-      errorMessage = 'EN，EN'
+      // error
+      errorMessage = 'connection failed，checkbackendservice'
     } else if (error.message) {
-      // EN
+      // error
       errorMessage = error.message
     }
     
@@ -433,15 +433,15 @@ class ErrorHandler {
 }
 ```
 
-## 🐍 EN
+## 🐍 backend dev
 
-### EN
+### service
 
-**EN**: `backend/desktop_main.py`
+**file**: `backend/desktop_main.py`
 
 ```python
 class DesktopServiceManager:
-    """EN"""
+    """service"""
     
     def __init__(self, config: DesktopConfig):
         self.config = config
@@ -450,89 +450,89 @@ class DesktopServiceManager:
         self.celery_worker_process = None
     
     def start(self):
-        """EN"""
+        """startservice"""
         if self.is_running:
             return
         
         try:
-            # ENFastAPIEN
+            # startFastAPIserver
             self._start_fastapi_server()
             
-            # ENCelery Worker
+            # startCelery Worker
             self._start_celery_worker()
             
             self.is_running = True
             self.start_time = time.time()
-            logger.info("✅ EN")
+            logger.info("✅ servicestartsucceeded")
             
         except Exception as e:
-            logger.error(f"❌ EN: {e}")
+            logger.error(f"❌ servicestartfailed: {e}")
             self.stop()
             raise
     
     def stop(self):
-        """EN"""
+        """service"""
         if not self.is_running:
             return
         
         try:
-            # ENCelery WorkerEN
+            # Celery Worker
             if hasattr(self, 'celery_worker_process') and self.celery_worker_process:
                 self.celery_worker_process.terminate()
                 self.celery_worker_process.wait(timeout=5)
             
-            # ENFastAPIEN
+            # FastAPIserver
             if self.server_thread and self.server_thread.is_alive():
                 self.server_thread.join(timeout=5)
             
             self.is_running = False
-            logger.info("✅ EN")
+            logger.info("✅ service")
             
         except Exception as e:
-            logger.error(f"❌ EN: {e}")
+            logger.error(f"❌ servicefailed: {e}")
 ```
 
-### EN
+### 
 
-**EN**: `backend/tasks/video_tasks.py`
+**file**: `backend/tasks/video_tasks.py`
 
 ```python
 @celery_app.task(bind=True)
 def process_video_task(self, project_id: int, video_path: str):
-    """EN"""
+    """"""
     try:
-        # EN
-        self.update_state(state='PROGRESS', meta={'status': 'EN'})
+        # updatestatus
+        self.update_state(state='PROGRESS', meta={'status': ''})
         
-        # EN
+        # 
         audio_path = extract_audio(video_path)
-        self.update_state(state='PROGRESS', meta={'status': 'EN'})
+        self.update_state(state='PROGRESS', meta={'status': 'completed'})
         
-        # EN
+        # speech recognition
         transcript = transcribe_audio(audio_path)
-        self.update_state(state='PROGRESS', meta={'status': 'EN'})
+        self.update_state(state='PROGRESS', meta={'status': 'speech recognitioncompleted'})
         
-        # EN
+        # generateclip
         clips = generate_clips(transcript, video_path)
-        self.update_state(state='PROGRESS', meta={'status': 'EN'})
+        self.update_state(state='PROGRESS', meta={'status': 'clipgeneratecompleted'})
         
-        # EN
+        # 
         save_project_results(project_id, clips)
         
-        return {'status': 'EN', 'clips_count': len(clips)}
+        return {'status': 'completed', 'clips_count': len(clips)}
         
     except Exception as e:
-        logger.error(f"EN: {e}")
+        logger.error(f"failed: {e}")
         raise self.retry(exc=e, countdown=60, max_retries=3)
 ```
 
-### EN
+### error handling
 
-**EN**: `backend/utils/error_handler.py`
+**file**: `backend/utils/error_handler.py`
 
 ```python
 class AutoClipsException(Exception):
-    """AutoClipEN"""
+    """AutoClip"""
     
     def __init__(self, 
                  message: str, 
@@ -546,7 +546,7 @@ class AutoClipsException(Exception):
         super().__init__(self.message)
 
 def handle_autoclips_exception(exc: AutoClipsException, request_id: str = None) -> JSONResponse:
-    """ENAutoClipEN"""
+    """AutoClip"""
     status_code = 500
     if exc.category == ErrorCategory.VALIDATION:
         status_code = 422
@@ -568,11 +568,11 @@ def handle_autoclips_exception(exc: AutoClipsException, request_id: str = None) 
     )
 ```
 
-## 🦀 TauriEN
+## 🦀 Tauriintegration
 
-### EN
+### 
 
-**EN**: `src-tauri/src/commands.rs`
+**file**: `src-tauri/src/commands.rs`
 
 ```rust
 #[tauri::command]
@@ -581,7 +581,7 @@ pub async fn start_backend_service(
 ) -> Result<BackendStatus, String> {
     match manager.start().await {
         Ok(_) => Ok(BackendStatus::Running),
-        Err(e) => Err(format!("EN: {}", e)),
+        Err(e) => Err(format!("startbackendservicefailed: {}", e)),
     }
 }
 
@@ -591,7 +591,7 @@ pub async fn stop_backend_service(
 ) -> Result<BackendStatus, String> {
     match manager.stop().await {
         Ok(_) => Ok(BackendStatus::Stopped),
-        Err(e) => Err(format!("EN: {}", e)),
+        Err(e) => Err(format!("backendservicefailed: {}", e)),
     }
 }
 
@@ -603,9 +603,9 @@ pub async fn get_service_status(
 }
 ```
 
-### EN
+### backend
 
-**EN**: `src-tauri/src/backend_manager.rs`
+**file**: `src-tauri/src/backend_manager.rs`
 
 ```rust
 pub struct BackendManager {
@@ -626,12 +626,12 @@ impl BackendManager {
             return Ok(());
         }
         
-        // EN
+        // startbackend
         let mut cmd = Command::new("python")
             .arg("backend/desktop_main.py")
             .current_dir(std::env::current_dir().unwrap())
             .spawn()
-            .map_err(|e| format!("EN: {}", e))?;
+            .map_err(|e| format!("startbackendfailed: {}", e))?;
         
         self.process = Some(cmd);
         self.status = BackendStatus::Running;
@@ -641,7 +641,7 @@ impl BackendManager {
     
     pub async fn stop(&mut self) -> Result<(), String> {
         if let Some(mut process) = self.process.take() {
-            process.kill().map_err(|e| format!("EN: {}", e))?;
+            process.kill().map_err(|e| format!("backendfailed: {}", e))?;
         }
         
         self.status = BackendStatus::Stopped;
@@ -650,19 +650,19 @@ impl BackendManager {
 }
 ```
 
-### EN
+### 
 
-**EN**: `src-tauri/src/tray.rs`
+**file**: `src-tauri/src/tray.rs`
 
 ```rust
 pub fn setup_system_tray(app_handle: &AppHandle) -> Result<(), Box<dyn std::error::Error>> {
     let tray_menu = MenuBuilder::new()
-        .item(&MenuItem::new("EN", "show_main_window"))
+        .item(&MenuItem::new("", "show_main_window"))
         .separator()
-        .item(&MenuItem::new("EN", "start_service"))
-        .item(&MenuItem::new("EN", "stop_service"))
+        .item(&MenuItem::new("startservice", "start_service"))
+        .item(&MenuItem::new("service", "stop_service"))
         .separator()
-        .item(&MenuItem::new("EN", "quit_app"))
+        .item(&MenuItem::new("", "quit_app"))
         .build()?;
     
     let _tray = TrayIconBuilder::new()
@@ -677,10 +677,10 @@ pub fn setup_system_tray(app_handle: &AppHandle) -> Result<(), Box<dyn std::erro
                     }
                 }
                 "start_service" => {
-                    // EN
+                    // startservice
                 }
                 "stop_service" => {
-                    // EN
+                    // service
                 }
                 "quit_app" => {
                     app.exit(0);
@@ -694,166 +694,166 @@ pub fn setup_system_tray(app_handle: &AppHandle) -> Result<(), Box<dyn std::erro
 }
 ```
 
-## 🏗️ EN
+## 🏗️ builddeploy
 
-### EN
+### frontendbuild
 
 ```bash
-# EN
+# dev environment
 npm run dev
 
-# EN
+# build
 npm run build
 
-# EN
+# build
 npm run preview
 ```
 
-### EN
+### backendbuild
 
 ```bash
-# EN
+# installdependencies
 pip install -r requirements.txt
 
-# EN
+# test
 pytest
 
-# EN
+# check
 flake8 backend/
 black backend/
 ```
 
-### TauriEN
+### Tauribuild
 
 ```bash
-# EN
+# dev mode
 npm run tauri dev
 
-# EN
+# build
 npm run tauri build
 
-# EN
+# build
 npm run tauri build -- --target x86_64-apple-darwin  # macOS Intel
 npm run tauri build -- --target aarch64-apple-darwin # macOS ARM
 npm run tauri build -- --target x86_64-pc-windows-msvc # Windows
 npm run tauri build -- --target x86_64-unknown-linux-gnu # Linux
 ```
 
-### EN
+### build
 
 ```bash
-# EN
+# build
 npm run build:all
 
-# EN
+# build
 npm run build:macos
 npm run build:windows
 npm run build:linux
 ```
 
-## 🧪 EN
+## 🧪 test
 
-### EN
+### frontendtest
 
 ```bash
-# EN
+# test
 npm test
 
-# EN
+# testgenerate
 npm run test:coverage
 
-# ENE2EEN
+# E2Etest
 npm run test:e2e
 ```
 
-### EN
+### backendtest
 
 ```bash
-# EN
+# test
 pytest
 
-# EN
+# test
 pytest tests/test_project_service.py
 
-# EN
+# testgenerate
 pytest --cov=backend tests/
 
-# EN
+# test
 pytest tests/performance/
 ```
 
-### EN
+### integration test
 
 ```bash
-# EN
+# starttest
 docker-compose -f docker-compose.test.yml up -d
 
-# EN
+# integration test
 pytest tests/integration/
 
-# EN
+# test
 docker-compose -f docker-compose.test.yml down
 ```
 
-## 🤝 Contributing
+## 🤝 contributing guide
 
-### EN
+### 
 
-1. **ForkEN**
+1. **Forkproject**
    ```bash
    git clone https://github.com/your-username/autoclip-desktop.git
    cd autoclip-desktop
    ```
 
-2. **EN**
+2. **create**
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
-3. **EN**
-   - EN
-   - EN
-   - EN
+3. ****
+   - 
+   - test
+   - updatedocs
 
-4. **EN**
+4. ****
    ```bash
    git add .
    git commit -m "feat: add your feature"
    git push origin feature/your-feature-name
    ```
 
-5. **ENPull Request**
-   - ENGitHubENPR
-   - EN
-   - ENCode Review
+5. **createPull Request**
+   - GitHubcreatePR
+   - 
+   - 
 
-### EN
+### 
 
-#### EN
+#### frontend
 
-- ENTypeScript
-- ENESLintEN
-- ENPrettierEN
-- EN
-- ENHooksEN
+- useTypeScript
+- followESLint
+- usePrettierformat
+- use
+- useHooksstate management
 
-#### EN
+#### backend
 
-- ENPython 3.10+
-- ENPEP 8EN
-- EN
-- EN
-- ENPydanticEN
+- usePython 3.10+
+- followPEP 8
+- use
+- docs
+- usePydanticverify
 
-#### RustEN
+#### Rust
 
-- ENRust 1.70+
-- ENClippyEN
-- ENrustfmtEN
-- EN
-- ENResultEN
+- useRust 1.70+
+- followClippy
+- userustfmtformat
+- docs
+- useResulterror
 
-### EN
+### 
 
 ```
 <type>(<scope>): <subject>
@@ -863,16 +863,16 @@ docker-compose -f docker-compose.test.yml down
 <footer>
 ```
 
-**EN**:
-- `feat`: EN
-- `fix`: ENbug
-- `docs`: EN
-- `style`: EN
-- `refactor`: EN
-- `test`: EN
-- `chore`: EN/EN
+****:
+- `feat`: 
+- `fix`: fixbug
+- `docs`: docsupdate
+- `style`: format
+- `refactor`: 
+- `test`: test
+- `chore`: build/tool
 
-**EN**:
+****:
 ```
 feat(api): add project creation endpoint
 
@@ -882,35 +882,35 @@ and error handling.
 Closes #123
 ```
 
-### EN
+### test
 
-- EN
-- EN80%
-- EN
-- EN
+- test
+- test80%
+- test
+- testintegration test
 
-### EN
+### docs
 
-- EN
-- ENAPIEN
-- EN
-- EN
+- updaterelated docs
+- APIdocs
+- update
+- 
 
-## 📚 EN
+## 📚 
 
-- [TauriEN](https://tauri.app/)
-- [FastAPIEN](https://fastapi.tiangolo.com/)
-- [ReactEN](https://react.dev/)
-- [Ant DesignEN](https://ant.design/)
-- [RustEN](https://doc.rust-lang.org/)
+- [Tauridocs](https://tauri.app/)
+- [FastAPIdocs](https://fastapi.tiangolo.com/)
+- [Reactdocs](https://react.dev/)
+- [Ant Designdocs](https://ant.design/)
+- [Rustdocs](https://doc.rust-lang.org/)
 
-## 🆘 EN
+## 🆘 get help
 
-- **GitHub Issues**: ENbugEN
-- **Discussions**: EN
-- **Discord**: EN
-- **EN**: ContactEN
+- **GitHub Issues**: bug
+- **Discussions**: issue
+- **Discord**: 
+- ****: 
 
 ---
 
-🎉 **EN！**
+🎉 **！**

@@ -1,102 +1,102 @@
-# AutoClip ENRoadmap
+# AutoClip 
 
-> EN"EN"EN"ENAccount、EN、EN"EN。
-> EN：**EN credits EN · EN · EN（EN）· EN + AI**。
-
----
-
-## 0. EN
-
-| EN | EN | EN |
-|------|------|------|
-| EN | EN credits | EN LLM EN，EN/EN credits |
-| EN | EN | EN/ffmpeg/Whisper EN，EN |
-| EN | EN | **EN，EN Phase 3 EN**（EN）|
-| EN | EN + AI | EN：**EN > EN**，EN，EN |
-
-## 1. EN
-
-- EN。**Account、Analytics、EN**——EN，EN"EN，EN"。
-- **credits EN = EN LLM EN**：EN LLM EN（EN/EN/OpenAI/Gemini，EN token EN credits）。**EN**，EN"LLM token + EN API/DB"，EN。
-- EN，EN/EN：
-  - **EN**：BYO-key（EN key，EN）EN credits。
-  - **Pro**：credits EN + EN（EN、EN、EN、EN）。
-
-## 2. EN（EN，EN > EN）
-
-| EN | EN | EN |
-|------|------|------|
-| EN + EN + DB | **Supabase**（Postgres + Auth + Edge Functions）| ENAccount/EN/EN，solo EN |
-| LLM EN + EN | **LiteLLM**（EN）EN | EN provider + EN token EN，credits EN |
-| EN + Analytics + EN + A/B | **PostHog** | EN、EN、EN，EN |
-| EN/EN | **Sentry** | EN + EN |
-| EN（EN）| EN / EN（EN Ping++ EN）| Phase 2 |
-| EN（EN）| **Stripe** | Phase 3 |
-| EN/EN | EN（EN Supabase，EN + EN）| EN |
-
-## 3. EN
-
-### Phase 0 · EN（EN 2–4 EN，EN）
-**EN**：EN v1.1 EN"EN、EN、EN"EN。
-- EN（Apple Developer ID + notarize），EN"EN"
-- EN（Intel / Windows / Linux；PBS EN faster-whisper EN）
-- EN CI EN（`desktop-build.yml` EN）
-- EN **Sentry** EN/EN
-- EN **PostHog**：EN、EN、ENAnalytics（EN：EN、EN、EN、EN key）
-- **EN + AnalyticsEN**（AnalyticsEN）
-- EN**EN / EN**（Tauri updater）
-
-**EN**：EN、EN、EN。
-
-### Phase 1 · Account + EN（EN 4–8 EN）
-**EN**：EN，AccountEN。
-- EN **Supabase** EN（Auth + Postgres）
-- EN（**EN**：EN，EN/EN）
-- EN / EN / EN；PostHog EN
-- EN（API key EN，EN）
-- EN credits EN、EN
-
-**EN**：EN/EN、EN"EN、EN"，EN。
-
-### Phase 2 · LLM EN + credits + EN（EN，EN 6–10 EN）
-**EN**：EN"EN → EN"EN。
-- **LiteLLM EN**：EN LLM EN"EN"（EN），EN token EN credits；EN BYO-key EN
-- **credits EN**：EN、EN、EN、EN（EN/EN）
-- **EN / Pro EN** + EN（EN、EN、EN）
-- **EN（EN）**：EN/EN，credits EN + EN
-- EN Phase 1 EN；EN **A/B EN**（PostHog EN）
-
-**EN**：EN、EN、EN Pro；EN。
-
-### Phase 3 · EN / EN / EN（EN）
-- **EN**：Stripe EN + EN + GDPR EN（EN）
-- EN：EN/EN、EN、EN（EN）
-- EN：EN PostHog EN，EN
-- EN：EN（EN）、Web EN、EN
-
-## 4. EN（EN）
-
-- **EN / EN**：credits EN，EN/EN LLM EN = EN → EN、EN；EN《EN》EN，Analytics/AccountEN。
-- **EN**：EN。EN `/cso`（EN skill）EN：EN、EN、EN、EN。
-- **EN**：LLM EN + EN/EN + EN，EN。
-
-## 5. UI EN（EN，EN）
-
-Status：EN + Ant Design EN，EN"EN"，EN。
-EN：
-1. **EN**：`/design-shotgun` ENVisualEN，EN `/design-consultation` ENDesign System `DESIGN.md`（EN/Typography/Colors/Spacing/EN）。
-2. **EN**：EN `DESIGN.md` EN（EN / EN / EN / EN），EN。
-3. **EN**：`/design-review` ENInterfaceEN"EN"EN。
-
-EN：EN（EN）> EN > EN > EN/EN。
-
-## 6. EN（EN）
-
-1. **EN Phase 0 + UI EN**——EN、EN、EN"EN、EN"，EN ROI EN。
-2. EN Phase 1 EN（Account/Analytics），ENDo not、EN。
-3. Phase 2 **EN**，EN（Phase 3）。
-4. EN，EN。
+> "localtool""account、、business"。
+> ：** credits  · local · （）·  + AI**。
 
 ---
 
-> EN，EN。ENStatusEN `HANDOFF.md`。
+## 0. 
+
+|  | select |  |
+|------|------|------|
+| business |  credits |  LLM call，/ credits |
+| location | local | download/ffmpeg/Whisper ， |
+|  |  | **， Phase 3 **（）|
+|  |  + AI | ：** > **，dependenciesservice， |
+
+## 1. 
+
+- nowserver。**account、、needcloudbackend**——max，"，"。
+- **credits  =  LLM proxy**： LLM call（proxy//OpenAI/Gemini， token  credits）。**local**，"LLM token +  API/DB"，。
+- ，free/：
+  - **free**：BYO-key（ key，） credits。
+  - **Pro**：credits  + （model、、、）。
+
+## 2. （， > ）
+
+|  |  |  |
+|------|------|------|
+| backend +  + DB | **Supabase**（Postgres + Auth + Edge Functions）| account//，solo  |
+| LLM proxy +  | **LiteLLM**（proxy）backend |  provider +  token ，credits  |
+|  +  +  + A/B | **PostHog** | 、、， |
+| /error | **Sentry** |  + backend |
+| （）|  / （ Ping++ ）| Phase 2 |
+| （）| **Stripe** | Phase 3 |
+| / | （status Supabase，startvalidate + ）|  |
+
+## 3. stage
+
+### Phase 0 · （ 2–4 ，）
+**target**： v1.1 "、update、"。
+- （Apple Developer ID + notarize），"open"
+- （Intel / Windows / Linux；PBS  faster-whisper ）
+- cloud CI build（`desktop-build.yml` verify）
+- integrate **Sentry** /error
+- integrate **PostHog**：、、local（event：import、、failed、settings key）
+- ** + **（）
+- **updatecheck / auto-update**（Tauri updater）
+
+****：、update、use。
+
+### Phase 1 · account + （ 4–8 ）
+**target**：cloud，account。
+-  **Supabase** project（Auth + Postgres）
+- sign in（****：，sign in/）
+-  /  / model；PostHog sign in
+- settingscloud（API key local，）
+- model credits 、status
+
+****：/sign in、"、"，。
+
+### Phase 2 · LLM proxy + credits + （， 6–10 ）
+**target**：" → "。
+- **LiteLLM proxy**： LLM call"backendproxy"（）， token  credits； BYO-key free
+- **credits **：、、、（/）
+- **free / Pro ** + （model、、）
+- **（）**：/，credits  + 
+-  Phase 1 ； **A/B **（PostHog ）
+
+****：、、 Pro；。
+
+### Phase 3 ·  /  / （）
+- ****：Stripe  + deploy + GDPR （）
+- ：/recommend、、clip（）
+- ： PostHog ，
+- ：cloud（）、Web 、
+
+## 4. （stage）
+
+- ** / **：credits model，subtitles/ LLM proxy =  → 、；《Personal Info Protection Law》，/account。
+- **security**：backend。stage `/cso`（security skill）：、proxy、、key。
+- ****：LLM proxy + / + ，。
+
+## 5. UI （，dependenciescloud）
+
+： + Ant Design default，"default"，。
+：
+1. ****：`/design-shotgun` ， `/design-consultation`  `DESIGN.md`（////）。
+2. ****： `DESIGN.md` （ / project / settings / progress），。
+3. **validate**：`/design-review` ""。
+
+：（）> projectprogress > Settings page > /clip。
+
+## 6. （）
+
+1. ** Phase 0 + UI **——need、、"、"， ROI 。
+2.  Phase 1 （account/），、。
+3. Phase 2 ****，verify（Phase 3）。
+4. stage，service。
+
+---
+
+> docs，stageupdate。 `HANDOFF.md`。

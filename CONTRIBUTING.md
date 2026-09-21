@@ -1,111 +1,111 @@
-# Contributing
+# 
 
-ENAutoClipEN！EN，EN：
+AutoClip！，Package：
 
-- 🐛 BugEN
-- ✨ EN
-- 📚 EN
-- 🧪 EN
-- 💡 EN
-- 🎨 UI/UXEN
+- 🐛 Bug
+- ✨ 
+- 📚 
+- 🧪 
+- 💡 
+- 🎨 UI/UX
 
-## EN
+## 
 
-### 1. ForkEN
+### 1. Fork
 
 ```bash
-# ForkENGitHubEN，EN
+# ForkToGitHub，
 git clone https://github.com/your-username/autoclip.git
 cd autoclip
 
-# EN
+# 
 git remote add upstream https://github.com/original-username/autoclip.git
 ```
 
-### 2. EN
+### 2. 
 
 ```bash
-# EN
+# 
 python3 -m venv venv
 source venv/bin/activate  # Linux/macOS
-# EN venv\Scripts\activate  # Windows
+#  venv\Scripts\activate  # Windows
 
-# EN
+# Installation
 pip install -r requirements.txt
 cd frontend && npm install && cd ..
 
-# EN
+# 
 cp env.example .env
-# EN.envEN，EN
+# .env，
 ```
 
-### 3. EN
+### 3. 
 
 ```bash
-# ENRedis
+# Redis
 brew services start redis  # macOS
-# EN sudo systemctl start redis-server  # Linux
+#  sudo systemctl start redis-server  # Linux
 
-# EN
+# Backend
 python -m uvicorn backend.main:app --reload --port 8000
 
-# ENCelery Worker（EN -Q，EN `celery` EN，EN）
+# Celery Worker（ -Q， `celery` ，）
 celery -A backend.core.celery_app worker --loglevel=info -Q celery,processing,video,notification,upload
 
-# EN
+# 
 cd frontend && npm run dev
 ```
 
-## EN
+## 
 
-### 1. EN
+### 1. 
 
 ```bash
-# ENmainEN
+# Frommain
 git checkout main
 git pull upstream main
 git checkout -b feature/your-feature-name
 ```
 
-### 2. EN
+### 2. 
 
-#### EN
+#### 
 
-**Python (EN)**
-- ENPEP 8EN
-- ENBlackEN
-- ENisortEN
-- ENdocstring
+**Python (Backend)**
+- PEP 8
+- Black
+- isort
+- docstring
 
 ```python
 def example_function(param1: str, param2: int) -> bool:
     """
-    EN
+    
     
     Args:
-        param1: EN1EN
-        param2: EN2EN
+        param1: 1
+        param2: 2
         
     Returns:
-        EN
+        
     """
     pass
 ```
 
-**TypeScript (EN)**
-- ENESLintENPrettier
-- ENJSDocEN
-- ENHooks
-- ENAnt DesignEN
+**TypeScript ()**
+- ESLintPrettier
+- JSDoc
+- Hooks
+- Ant Design
 
 ```typescript
 /**
- * EN
+ * 
  */
 interface ExampleProps {
-  /** EN */
+  /**  */
   title: string;
-  /** EN */
+  /** Select */
   optional?: boolean;
 }
 
@@ -114,9 +114,9 @@ const ExampleComponent: React.FC<ExampleProps> = ({ title, optional = false }) =
 };
 ```
 
-#### EN
+#### 
 
-EN：
+：
 
 ```
 <type>(<scope>): <description>
@@ -126,182 +126,182 @@ EN：
 [optional footer(s)]
 ```
 
-**EN (type):**
-- `feat`: EN
-- `fix`: BugEN
-- `docs`: EN
-- `style`: EN
-- `refactor`: EN
-- `test`: EN
-- `chore`: EN
+** (type):**
+- `feat`: 
+- `fix`: Bug
+- `docs`: 
+- `style`: 
+- `refactor`: 
+- `test`: 
+- `chore`: 
 
-**EN:**
+**:**
 ```
 feat(api): add video download endpoint
 fix(ui): resolve upload modal display issue
 docs(readme): update installation instructions
 ```
 
-### 3. EN
+### 3. 
 
-#### EN
+#### Backend
 
 ```bash
-# EN
+# 
 pytest
 
-# EN
+# 
 pytest tests/test_api.py
 
-# EN
+# 
 pytest --cov=backend --cov-report=html
 ```
 
-#### EN
+#### 
 
 ```bash
 cd frontend
 
-# EN
+# 
 npm test
 
-# ENlintEN
+# lint
 npm run lint
 
-# EN
+# 
 npm run type-check
 ```
 
-### 4. EN
+### 4. 
 
 ```bash
-# EN
+# 
 git add .
 
-# EN
+# 
 git commit -m "feat(api): add video download endpoint"
 
-# EN
+# 
 git push origin feature/your-feature-name
 ```
 
-### 5. ENPull Request
+### 5. Pull Request
 
-1. ENGitHubENPull Request
-2. ENPREN
-3. EN
-4. ENCode Review
+1. GitHubPull Request
+2. PR
+3. 
+4. 
 
-## Code ReviewEN
+## 
 
-### EN
+### 
 
-- ✅ EN
-- ✅ EN
-- ✅ EN
-- ✅ EN
-- ✅ EN
-- ✅ EN
+- ✅ 
+- ✅ 
+- ✅ 
+- ✅ 
+- ✅ 
+- ✅ 
 
-### EN
+### 
 
-- EN
-- EN
-- ENPREN
-- EN
+- 
+- 
+- PR
+- 
 
-## EN
+## 
 
-### BugEN
+### Bug
 
-ENGitHub IssuesENBugEN，EN：
+GitHub IssuesBug，Package：
 
-1. **EN**
-   - EN
-   - PythonEN
-   - Node.jsEN
-   - EN
+1. ****
+   - System
+   - Python
+   - Node.js
+   - 
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. ****
+   - 
+   - 
+   - 
 
-3. **EN**
-   - EN
-   - EN
+3. ****
+   - 
+   - 
 
-4. **EN**
-   - EN
-   - EN
-   - EN
+4. ****
+   - 
+   - 
+   - 
 
-### EN
+### 
 
-EN，EN：
+，：
 
-1. **EN**
-   - EN
-   - EN
-   - EN
+1. ****
+   - 
+   - 
+   - 
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. ****
+   - 
+   - 
+   - 
 
-3. **EN**
-   - EN
-   - EN
-   - EN
+3. ****
+   - 
+   - 
+   - 
 
-## EN
+## 
 
-### EN
+### 
 
-- 📖 EN
-- 🔧 EN
-- 🚀 Deployment
-- ❓ FAQ
-- 📝 APIEN
+- 📖 
+- 🔧 
+- 🚀 
+- ❓ 
+- 📝 API
 
-### EN
+### 
 
-- ENMarkdownEN
-- EN
-- EN
-- EN
-- EN
+- Markdown
+- 
+- Package
+- 
+- 
 
-## ENAs StandardEN
+## 
 
-### EN
+### 
 
-EN，EN：
+，：
 
-- EN
-- EN
-- EN
-- EN
+- 
+- 
+- 
+- 
 
-### EN
+### 
 
-- ENLanguageEN
-- EN
-- EN
-- EN
-- EN
+- 
+- 
+- 
+- Release
+- 
 
-## ContactEN
+## 
 
-- **GitHub Issues**: [ENIssues](https://github.com/your-username/autoclip/issues)
-- **GitHub Discussions**: [EN](https://github.com/your-username/autoclip/discussions)
-- **EN**: support@autoclip.com
+- **GitHub Issues**: [Issues](https://github.com/your-username/autoclip/issues)
+- **GitHub Discussions**: [](https://github.com/your-username/autoclip/discussions)
+- ****: support@autoclip.com
 
-## Acknowledgments
+## 
 
-ENAutoClipEN！EN。
+AutoClip！ 。
 
 ---
 
-**EN！** 🎉
+**！** 🎉

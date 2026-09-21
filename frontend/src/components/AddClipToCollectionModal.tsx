@@ -25,14 +25,14 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
   const [selectedClipIds, setSelectedClipIds] = useState<string[]>([])
   const [searchText, setSearchText] = useState('')
 
-  // ENCollectionENClip
+  // translatedintranslatedcollectiontranslated'sclip
   const availableClips = useMemo(() => {
     const safeClips = Array.isArray(clips) ? clips : []
     const safeExistingIds = Array.isArray(existingClipIds) ? existingClipIds : []
     return safeClips.filter(clip => !safeExistingIds.includes(clip.id))
   }, [clips, existingClipIds])
 
-  // ENSearchTextENClip
+  // translatedclip
   const filteredClips = useMemo(() => {
     if (!searchText.trim()) {
       return availableClips
@@ -93,14 +93,14 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
 
   return (
     <Modal
-      title="addCliptoCollection"
+      title="addcliptranslatedcollection"
       open={visible}
       onCancel={handleCancel}
       width={800}
       className="add-clip-modal"
       footer={[
         <Button key="cancel" onClick={handleCancel}>
-          Cancel
+          cancel
         </Button>,
         <Button 
           key="confirm" 
@@ -113,10 +113,10 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
       ]}
     >
       <div className="add-clip-modal-content">
-        {/* SearchENActionsEN */}
+        {/* translatedAndtranslated */}
         <div className="search-section">
           <Search
-            placeholder="SearchClipTitle、EN..."
+            placeholder="translatedcliptranslated、translatedorrecommendtranslated..."
             prefix={<SearchOutlined />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
@@ -127,7 +127,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
           <div className="action-bar">
             <Space>
               <Text type="secondary">
-                ENadd {filteredClips.length} ENClip
+                canadd {filteredClips.length}  clip
               </Text>
               {filteredClips.length > 0 && (
                 <Button 
@@ -135,14 +135,14 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                   size="small"
                   onClick={handleSelectAll}
                 >
-                  {selectedClipIds.length === filteredClips.length ? 'CancelSelect all' : 'Select all'}
+                  {selectedClipIds.length === filteredClips.length ? 'canceltranslatedSelect' : 'translatedSelect'}
                 </Button>
               )}
             </Space>
           </div>
         </div>
 
-        {/* Cliplist */}
+        {/* cliplist */}
         <div className="clips-list-container">
           {filteredClips.length > 0 ? (
             <List
@@ -180,7 +180,7 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                                 border: 'none'
                               }}
                             >
-                              score: {(clip.final_score * 100).toFixed(0)}
+                              translated: {(clip.final_score * 100).toFixed(0)}
                             </Tag>
                           </Space>
                         </div>
@@ -213,8 +213,8 @@ const AddClipToCollectionModal: React.FC<AddClipToCollectionModalProps> = ({
                 image={<PlayCircleOutlined style={{ fontSize: '48px', color: '#d9d9d9' }} />}
                 description={
                   availableClips.length === 0 
-                    ? "AllClipENCollectionEN" 
-                    : "ENtoENClip"
+                    ? "translatedcliptranslatedincollectiontranslated" 
+                    : "translated'sclip"
                 }
               />
             </div>

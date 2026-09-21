@@ -9,26 +9,26 @@ from pysrt import SubRipItem, SubRipTime
 logger = logging.getLogger(__name__)
 
 class SubtitleProcessor:
-    """subtitlesprocessingEN - ENsubtitlesparseENprocessing"""
+    """subtitlesprocesstranslated - supporttranslated'ssubtitlestranslatedAndprocess"""
     
     def __init__(self):
-        # EN：EN（，。！？；：“”‘’（）【】、）EN。
-        # useEN，EN/EN，
-        # meanwhileEN \s EN、EN SyntaxWarning。
+        # translated：translated（，。！？；：“”‘’（）【】、）translated。
+        # usetranslated，translated/translated，
+        # translated \s translated、translated SyntaxWarning。
         self.word_separators = r"[，。！？；：“”‘’（）【】、\s]+"
     
     def parse_srt_to_word_level(self, srt_path: Path) -> List[Dict]:
         """
-        ENSRTsubtitlesparseEN
+        translatedSRTsubtitlestranslated'stranslated
         
         Args:
-            srt_path: SRTfilepath
+            srt_path: SRTfile path
             
         Returns:
-            ENsubtitlesEN
+            translatedsubtitlestranslatedlist
         """
         if not srt_path.exists():
-            logger.error(f"SRTfiledoes not exist: {srt_path}")
+            logger.error(f"SRTfile not found: {srt_path}")
             return []
         
         try:
@@ -39,28 +39,28 @@ class SubtitleProcessor:
                 segment_data = self._process_subtitle_segment(sub)
                 word_level_data.append(segment_data)
             
-            logger.info(f"succeededparseSRTfile，EN {len(word_level_data)} ENsubtitlesEN")
+            logger.info(f"succeededtranslatedSRTfile，translated {len(word_level_data)}  subtitlestranslated")
             return word_level_data
             
         except Exception as e:
-            logger.error(f"parseSRTfilefailed: {e}")
+            logger.error(f"translatedSRTfilefailed: {e}")
             return []
     
     def _process_subtitle_segment(self, sub: SubRipItem) -> Dict:
         """
-        processingENsubtitlesEN，EN
+        processtranslated subtitlestranslated，translated
         
         Args:
-            sub: pysrtsubtitlesEN
+            sub: pysrtsubtitlestranslated
             
         Returns:
-            ENsubtitlesEN
+            translatedsubtitlestranslated
         """
-        # ENtimeEN
+        # translatedformat
         start_seconds = self._srt_time_to_seconds(sub.start)
         end_seconds = self._srt_time_to_seconds(sub.end)
         
-        # EN
+        # translated
         words = self._split_text_to_words(sub.text, start_seconds, end_seconds)
         
         return {
@@ -74,33 +74,33 @@ class SubtitleProcessor:
     
     def _split_text_to_words(self, text: str, start_time: float, end_time: float) -> List[Dict]:
         """
-        EN，ENtimeEN
+        translated，translated
         
         Args:
-            text: subtitlesEN
-            start_time: starttime（EN）
-            end_time: endtime（EN）
+            text: subtitlestranslated
+            start_time: translated（seconds）
+            end_time: translated（seconds）
             
         Returns:
-            EN，eachENtimeEN
+            translatedlist，per translatedPackageincludetranslated
         """
-        # EN
+        # cleantranslated
         clean_text = text.strip()
         if not clean_text:
             return []
         
-        # EN
+        # bytranslatedAndtranslated
         word_parts = re.split(self.word_separators, clean_text)
         word_parts = [part.strip() for part in word_parts if part.strip()]
         
         if not word_parts:
             return []
         
-        # ENeachENtimeEN
+        # translatedper translated'stranslated
         total_duration = end_time - start_time
         words_count = len(word_parts)
         
-        # ENtimeEN：EN
+        # translated'stranslated：translated
         word_duration = total_duration / words_count
         
         words = []
@@ -119,40 +119,40 @@ class SubtitleProcessor:
     
     def _srt_time_to_seconds(self, srt_time: SubRipTime) -> float:
         """
-        ENSRTtimeEN
+        translatedSRTtranslatedformattranslatedsecondstranslated
         
         Args:
-            srt_time: pysrttimeEN
+            srt_time: pysrttranslated
             
         Returns:
-            EN
+            secondstranslated
         """
         return srt_time.hours * 3600 + srt_time.minutes * 60 + srt_time.seconds + srt_time.milliseconds / 1000
     
     def _seconds_to_srt_time_object(self, time_str: str) -> SubRipTime:
         """
-        ENtimeENpysrttimeEN
+        translatedpysrttranslated
         
         Args:
-            time_str: timeEN (EN "00:01:25,140")
+            time_str: translated (if "00:01:25,140")
             
         Returns:
-            pysrttimeEN
+            pysrttranslated
         """
-        # processingEN
+        # processtranslatedAndtranslated'sformat
         time_str = time_str.replace(',', '.')
         
-        # parsetime
+        # translated
         time_parts = time_str.split(':')
         hours = int(time_parts[0])
         minutes = int(time_parts[1])
         
-        # processingEN
+        # processsecondsAndtranslatedseconds
         seconds_part = time_parts[2]
         if '.' in seconds_part:
             seconds, milliseconds = seconds_part.split('.')
             seconds = int(seconds)
-            milliseconds = int(milliseconds.ljust(3, '0')[:3])  # EN3EN
+            milliseconds = int(milliseconds.ljust(3, '0')[:3])  # ensure3translatedseconds
         else:
             seconds = int(seconds_part)
             milliseconds = 0
@@ -162,14 +162,14 @@ class SubtitleProcessor:
     def create_edit_operations(self, deleted_segments: List[str], 
                              original_data: List[Dict]) -> List[Dict]:
         """
-        ENdeleteENsubtitlesENcreateEN
+        translateddelete'ssubtitlestranslatedcreatetranslated
         
         Args:
-            deleted_segments: ENdeleteENsubtitlesENIDEN
-            original_data: ENsubtitlesEN
+            deleted_segments: translateddelete'ssubtitlestranslatedIDlist
+            original_data: translatedsubtitlestranslated
             
         Returns:
-            EN
+            translatedlist
         """
         operations = []
         
@@ -195,14 +195,14 @@ class SubtitleProcessor:
     def generate_edited_video_timeline(self, original_data: List[Dict], 
                                      deleted_segments: List[str]) -> List[Tuple[float, float]]:
         """
-        generateENvideotimeEN
+        translated'svideotranslated
         
         Args:
-            original_data: ENsubtitlesEN
-            deleted_segments: ENdeleteENsubtitlesENIDEN
+            original_data: translatedsubtitlestranslated
+            deleted_segments: translateddelete'ssubtitlestranslatedIDlist
             
         Returns:
-            ENtimeEN [(start, end), ...]
+            translated'stranslatedlist [(start, end), ...]
         """
         deleted_ids = set(deleted_segments)
         timeline = []
@@ -211,14 +211,14 @@ class SubtitleProcessor:
             if segment['id'] not in deleted_ids:
                 timeline.append((segment['startTime'], segment['endTime']))
         
-        # ENtimeEN
+        # translated'stranslated
         if timeline:
             merged_timeline = [timeline[0]]
             for current_start, current_end in timeline[1:]:
                 last_start, last_end = merged_timeline[-1]
                 
-                # ifcurrentEN，thenEN
-                if current_start <= last_end + 0.1:  # EN0.1EN
+                # iftranslatedandtranslatedonetranslatedortranslated，translated
+                if current_start <= last_end + 0.1:  # translated0.1seconds'stranslated
                     merged_timeline[-1] = (last_start, max(last_end, current_end))
                 else:
                     merged_timeline.append((current_start, current_end))
@@ -231,15 +231,15 @@ class SubtitleProcessor:
                          deleted_segments: List[str], 
                          output_path: Path) -> bool:
         """
-        ENSRTfile
+        exporttranslated'sSRTfile
         
         Args:
-            original_data: ENsubtitlesEN
-            deleted_segments: ENdeleteENsubtitlesENIDEN
-            output_path: ENfilepath
+            original_data: translatedsubtitlestranslated
+            deleted_segments: translateddelete'ssubtitlestranslatedIDlist
+            output_path: translatedfile path
             
         Returns:
-            ENsucceeded
+            Istranslatedsucceeded
         """
         try:
             deleted_ids = set(deleted_segments)
@@ -249,11 +249,11 @@ class SubtitleProcessor:
                 if segment['id'] not in deleted_ids:
                     edited_segments.append(segment)
             
-            # EN
+            # translated
             for i, segment in enumerate(edited_segments, 1):
                 segment['index'] = i
             
-            # writeSRTfile
+            # translatedSRTfile
             with open(output_path, 'w', encoding='utf-8') as f:
                 for segment in edited_segments:
                     start_time = self._seconds_to_srt_time(segment['startTime'])
@@ -263,22 +263,22 @@ class SubtitleProcessor:
                     f.write(f"{start_time} --> {end_time}\n")
                     f.write(f"{segment['text']}\n\n")
             
-            logger.info(f"ENSRTfileENsave: {output_path}")
+            logger.info(f"translated'sSRTfiletranslated: {output_path}")
             return True
             
         except Exception as e:
-            logger.error(f"ENSRTfilefailed: {e}")
+            logger.error(f"exporttranslated'sSRTfilefailed: {e}")
             return False
     
     def _seconds_to_srt_time(self, seconds: float) -> str:
         """
-        ENSRTtimeEN
+        translatedsecondstranslatedSRTtranslatedformat
         
         Args:
-            seconds: EN
+            seconds: secondstranslated
             
         Returns:
-            SRTtimeEN
+            SRTtranslatedformattranslated
         """
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)
@@ -289,13 +289,13 @@ class SubtitleProcessor:
     
     def get_subtitle_statistics(self, data: List[Dict]) -> Dict:
         """
-        fetchsubtitlesEN
+        fetchsubtitlestranslatedinfo
         
         Args:
-            data: subtitlesEN
+            data: subtitlestranslated
             
         Returns:
-            EN
+            translatedinfo
         """
         if not data:
             return {

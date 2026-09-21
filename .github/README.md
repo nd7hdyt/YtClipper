@@ -1,6 +1,6 @@
-# AutoClip - EN
+# AutoClip - videocontentclipcontenttool
 
-SupportYouTube/BEN、Auto Clipping、Smart CollectionsEN
+supportYouTube/Bsitevideodownload、Auto Clipping、Smart Collectionscontent
 
 [![Python](https://img.shields.io/badge/Python-3.8+-green?style=flat&logo=python)](https://python.org)
 [![React](https://img.shields.io/badge/React-18+-blue?style=flat&logo=react)](https://reactjs.org)
@@ -9,152 +9,152 @@ SupportYouTube/BEN、Auto Clipping、Smart CollectionsEN
 [![Celery](https://img.shields.io/badge/Celery-Latest-green?style=flat&logo=celery)](https://celeryproject.org)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
-[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
-[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/nd7hdyt/YtClipper)
-[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/nd7hdyt/YtClipper/issues)
+[![GitHub stars](https://img.shields.io/badge/Stars-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
+[![GitHub forks](https://img.shields.io/badge/Forks-0-blue?style=social)](https://github.com/zhouxiaoka/autoclip)
+[![GitHub issues](https://img.shields.io/badge/Issues-0-blue)](https://github.com/zhouxiaoka/autoclip/issues)
 
-**Language**: [English](README-EN.md) | [Chinese](README.md)  
+**Language**: [English](README-EN.md) | [content](README.md)  
 
 </div>
 
 ## 🎯 Project Overview
 
-AutoClipENBased onAIENIntelligent Video ClippingProcessing System，ENYouTube、BENPlatform DownloadEN，ENAIEN，EN。ENAdoptsENFrontend-Backend SeparationEN，ProvidesIntuitiveENWebInterfaceENPowerfulENProcessing Capability。
+AutoClipIsone Based onAI'sIntelligent Video ClippingProcessing System，contentfromYouTube、Bsiteetc.Platform Downloadvideo，contentAIcontent，contentcollection。SystemAdoptscontent'sFrontend-Backend Separationcontent，ProvidesIntuitive'sWebInterfaceAndPowerfulbackendProcessing Capability。
 
 ### ✨ Core Features
 
-- 🎬 **Multi-Platform Support**: YouTube、BENOne-Click Download，SupportLocal File Upload
-- 🤖 **AIIntelligent Analysis**: Based onENLanguageEN
-- ✂️ **Auto Clipping**: EN，SupportEN
-- 📚 **Smart Collections**: AIEN，SupportEN
-- 🚀 **Real-time Processing**: ENTask Queue，ENProgress Feedback，WebSocketCommunication
+- 🎬 **Multi-Platform Support**: YouTube、BsitevideoOne-Click Download，supportLocal File Upload
+- 🤖 **AIIntelligent Analysis**: Based oncontentLanguagemodel'svideocontent
+- ✂️ **Auto Clipping**: content，supportmulticontentvideocontent
+- 📚 **Smart Collections**: AIrecommendAndcontentcreatevideocollection，supportcontent
+- 🚀 **Real-time Processing**: contentTask Queue，contentProgress Feedback，WebSocketCommunication
 - 🎨 **Modern UI**: React + TypeScript + Ant Design，Responsive Design
-- 📱 **Mobile Support**【In Development】: Responsive Design，In ProgressEN
-- 🔐 **Account Management**【In Development】: SupportBENMulti-Account Management，ENHealth Check
-- 📊 **Analytics**: ENProject ManagementENAnalyticsEN
-- 🛠️ **Easy Deployment**: One-Click Start Script，DockerSupport，Detailed Docs
-- 📤 **BENUpload**【In Development】: Auto UploadENBEN
-- ✏️ **Subtitle Editing**【In Development】: VisualSubtitle EditingENSync
+- 📱 **Mobile Support**【In Development】: Responsive Design，In Progresscontent
+- 🔐 **Account Management**【In Development】: supportBsiteMulti-Account Management，contentHealth Check
+- 📊 **Analytics**: content'sProject ManagementAndAnalyticsfeature
+- 🛠️ **Easy Deployment**: One-Click Startcontent，Dockersupport，contentdocs
+- 📤 **BsiteUpload**【In Development】: Auto UploadclipvideocontentBsite
+- ✏️ **Subtitle Editing**【In Development】: VisualSubtitle EditingAndcontentfeature
 
 ## 🏗️ System Architecture
 
 ```mermaid
 graph TB
-    A[ENInterface] --> B[FastAPIEN]
+    A[userInterface] --> B[FastAPIbackend]
     B --> C[CeleryTask Queue]
-    B --> D[RedisEN]
-    B --> E[SQLiteEN]
-    C --> F[AIEN]
-    F --> G[EN]
-    F --> H[EN]
-    F --> I[EN]
-    B --> J[EN]
+    B --> D[Rediscache]
+    B --> E[SQLitedatabase]
+    C --> F[AIprocesscontent]
+    F --> G[videoprocess]
+    F --> H[subtitlescontent]
+    F --> I[content]
+    B --> J[filecontent]
     K[YouTube API] --> B
-    L[BENAPI] --> B
+    L[BsiteAPI] --> B
 ```
 
 ### Tech Stack
 
 #### Backend
 
-- **FastAPI**: ENPython WebEN，ENAPIEN
-- **Celery**: ENTask Queue，SupportEN
-- **Redis**: EN，EN
-- **SQLite**: EN，SupportENPostgreSQL
-- **yt-dlp**: YouTubeEN，SupportEN
-- **EN**: AIEN，SupportEN
-- **WebSocket**: ENCommunication，EN
-- **Pydantic**: EN
+- **FastAPI**: contentPython Webcontent，contentAPIdocscontent
+- **Celery**: contentTask Queue，supportcontentprocess
+- **Redis**: contentAndcache，taskstatuscontent
+- **SQLite**: contentdatabase，supportcontentPostgreSQL
+- **yt-dlp**: YouTubevideodownload，supportmulticontentformat
+- **content**: AIcontent，supportmulticontentmodel
+- **WebSocket**: contentCommunication，progresscontent
+- **Pydantic**: contentverifyAndcontent
 
 #### Frontend
 
-- **React 18**: ENInterfaceEN，HooksEN
-- **TypeScript**: EN，EN
-- **Ant Design**: ENUIEN
-- **Vite**: EN，EN
-- **Zustand**: EN
-- **React Router**: EN
-- **Axios**: HTTPEN
-- **React Player**: EN
+- **React 18**: userInterfacecontent，HooksAndcontent
+- **TypeScript**: content，content'scontent
+- **Ant Design**: contentUIcontent
+- **Vite**: contenttool，content
+- **Zustand**: contentstatuscontent
+- **React Router**: content
+- **Axios**: HTTPcontent
+- **React Player**: videocontent
 
 ## 🚀 Quick Start
 
 ### Requirements
 
-#### DockerEN（EN）
+#### Dockercontent（recommend）
 
 - **Docker**: 20.10+
 - **Docker Compose**: 2.0+
-- **EN**: EN 4GB，EN 8GB+
-- **EN**: EN 10GB EN
+- **content**: content 4GB，recommend 8GB+
+- **content**: content 10GB canusecontent
 
-#### EN
+#### localcontent
 
-- **EN**: macOS / Linux / Windows (WSL)
-- **Python**: 3.8+ (EN 3.9+)
-- **Node.js**: 16+ (EN 18+)
-- **Redis**: 6.0+ (EN 7.0+)
-- **FFmpeg**: EN
-- **EN**: EN 4GB，EN 8GB+
-- **EN**: EN 10GB EN
+- **contentSystem**: macOS / Linux / Windows (WSL)
+- **Python**: 3.8+ (recommend 3.9+)
+- **Node.js**: 16+ (recommend 18+)
+- **Redis**: 6.0+ (recommend 7.0+)
+- **FFmpeg**: videoprocessdependencies
+- **content**: content 4GB，recommend 8GB+
+- **content**: content 10GB canusecontent
 
 ### One-Click Start
 
-#### EN：DockerEN（EN）
+#### contentone：Dockercontent（recommend）
 
 ```bash
-# EN
-git clone https://github.com/nd7hdyt/YtClipper.git
+# contentproject
+git clone https://github.com/zhouxiaoka/autoclip.git
 cd autoclip
 
 # DockerOne-Click Start
 ./docker-start.sh
 
-# EN
+# contentstart
 ./docker-start.sh dev
 
-# EN
+# contentservice
 ./docker-stop.sh
 
-# EN
+# checkservicestatus
 ./docker-status.sh
 ```
 
-#### EN：EN
+#### content：localcontent
 
 ```bash
-# EN
-git clone https://github.com/nd7hdyt/YtClipper.git
+# contentproject
+git clone https://github.com/zhouxiaoka/autoclip.git
 cd autoclip
 
-# One-Click Start（EN，EN）
+# One-Click Start（recommend，PackageincludecontentcheckAndmonitor）
 ./start_autoclip.sh
 
-# EN（EN，EN）
+# contentstart（content，skipcontentcheck）
 ./quick_start.sh
 
-# EN
+# checkSystemstatus
 ./status_autoclip.sh
 
-# EN
+# contentSystem
 ./stop_autoclip.sh
 ```
 
 ### Manual Installation
 
 ```bash
-# 1. EN
+# 1. createcontent
 python3 -m venv venv
 source venv/bin/activate  # Linux/macOS
-# EN venv\Scripts\activate  # Windows
+# or venv\Scripts\activate  # Windows
 
-# 2. ENPythonEN
+# 2. installPythondependencies
 pip install -r requirements.txt
 
-# 3. EN
+# 3. installfrontenddependencies
 cd frontend && npm install && cd ..
 
-# 4. ENRedis
+# 4. installRedis
 # macOS
 brew install redis
 brew services start redis
@@ -168,7 +168,7 @@ sudo systemctl start redis-server
 sudo yum install redis
 sudo systemctl start redis
 
-# 5. ENFFmpeg
+# 5. installFFmpeg
 # macOS
 brew install ffmpeg
 
@@ -178,417 +178,417 @@ sudo apt install ffmpeg
 # CentOS/RHEL
 sudo yum install ffmpeg
 
-# 6. EN
+# 6. configcontent
 cp env.example .env
-# EN .env EN，ENAPIEN
+# content .env file，contentAPIkeyetc.config
 ```
 
 ## 🎬 Feature Demo
 
-### EN
+### contentfeaturecontent
 
-1. **EN**
-   - SupportYouTube、BEN
-   - EN
-   - SupportLocal File Upload
+1. **videodownloadandprocess**
+   - supportYouTube、Bsitevideocontent
+   - contentdownloadvideoAndsubtitlesfile
+   - supportLocal File Upload
 
 2. **AIIntelligent Analysis**
-   - EN
-   - EN
-   - EN
+   - contentvideocontent
+   - content
+   - content
 
-3. **EN**
-   - EN
-   - EN
-   - SupportEN
+3. **videoclipandcollection**
+   - content
+   - contentrecommendcollectioncontent
+   - supportcontentAndcontent
 
-4. **EN**
-   - WebSocketEN
-   - EN
-   - EN
+4. **contentprogressmonitor**
+   - WebSocketcontentprogresscontent
+   - content'staskstatuscontent
+   - errorprocessAndcontent
 
-5. **BENUploadEN**【In Development】
-   - Auto UploadENBEN
-   - SupportMulti-Account Management
-   - ENUploadEN
+5. **BsiteUploadfeature**【In Development】
+   - Auto UploadclipvideocontentBsite
+   - supportMulti-Account Management
+   - contentUploadAndcontent
 
-6. **Subtitle EditingEN**【In Development】
-   - VisualSubtitle EditingEN
-   - EN
-   - ENLanguageENSupport
+6. **Subtitle Editingfeature**【In Development】
+   - VisualSubtitle Editingcontent
+   - subtitlescontentAndcontent
+   - multiLanguagesubtitlessupport
 
 ## 📖 Usage Guide
 
-### 1. EN
+### 1. videodownload
 
-#### YouTubeEN
+#### YouTubevideo
 
-1. EN"EN"
-2. EN"YouTubeEN"
-3. ENURL
-4. ENCookie（EN）
-5. EN"EN"
+1. incontentclick"contentproject"
+2. Selectselect"YouTubecontent"
+3. contentvideoURL
+4. SelectselectcontentCookie（canSelect）
+5. click"contentdownload"
 
-#### BEN
+#### Bsitevideo
 
-1. EN"EN"
-2. EN"BEN"
-3. ENURL
-4. ENAccount
-5. EN"EN"
+1. incontentclick"contentproject"
+2. Selectselect"Bsitecontent"
+3. contentvideoURL
+4. SelectselectcontentAccount
+5. click"contentdownload"
 
-#### EN
+#### localfile
 
-1. EN"EN"
-2. EN"ENUpload"
-3. EN
-4. UploadEN（EN）
-5. EN"EN"
+1. incontentclick"contentproject"
+2. Selectselect"fileUpload"
+3. contentorSelectselectvideofile
+4. Uploadsubtitlesfile（canSelect）
+5. click"contentprocess"
 
-### 2. EN
+### 2. contentprocess
 
-EN：
+Systemcontentstep：
 
-1. **EN**: EN
-2. **EN**: AIEN
-3. **EN**: EN
-4. **EN**: ENAIEN
-5. **EN**: EN
-6. **EN**: AIEN
-7. **EN**: EN
+1. **content**: downloadvideoAndsubtitlesfile
+2. **content**: AIcontentvideocontentAndcontentinfo
+3. **content**: content
+4. **content**: contentper contentAIcontent
+5. **content**: content
+6. **collectionrecommend**: AIrecommendvideocollection
+7. **videocontent**: contentclipvideoAndcollectionvideo
 
-### 3. EN
+### 3. content
 
-- **EN**: EN
-- **EN**: EN、EN
-- **EN**: ENAIEN
-- **EN**: EN
-- **BENUpload**【In Development】: ENUploadENBEN
-- **Subtitle Editing**【In Development】: VisualEN
+- **contentclip**: inprojectcontent'svideocontent
+- **contentinfo**: content、contentetc.info
+- **createcollection**: contentcreateoruseAIrecommend'scollection
+- **downloadexport**: downloadcontent contentorcontentcollection
+- **BsiteUpload**【In Development】: onecontentUploadclipvideocontentBsite
+- **Subtitle Editing**【In Development】: VisualcontentAndcontentsubtitlesfile
 
 ## 🔧 Configuration
 
-### EN
+### contentconfig
 
-EN `.env` EN：
+create `.env` file：
 
 ```bash
-# EN
+# databaseconfig
 DATABASE_URL=sqlite:///./data/autoclip.db
 
-# RedisEN
+# Redisconfig
 REDIS_URL=redis://localhost:6379/0
 
-# AI APIEN
+# AI APIconfig
 API_DASHSCOPE_API_KEY=your_dashscope_api_key
 API_MODEL_NAME=qwen-plus
 
-# EN
+# logsconfig
 LOG_LEVEL=INFO
 ENVIRONMENT=development
 DEBUG=true
 
-# EN
+# filecontent
 UPLOAD_DIR=./data/uploads
 PROJECT_DIR=./data/projects
 ```
 
-### BENAccountEN【In Development】
+### BsiteAccountconfig【In Development】
 
-1. EN"BENAccount Management"
-2. EN：
-   - **CookieEN**（EN）：ENCookie
-   - **AccountEN**：ENAccountEN
-   - **EN**：EN
-3. ENAccountEN
+1. inSettings pagecontentclick"BsiteAccount Management"
+2. Selectselectcontent：
+   - **Cookieimport**（recommend）：fromcontentexportCookie
+   - **Accountcontent**：contentAccountcontent
+   - **content**：content
+3. addsucceededcontentSystemcontentAccountcontentstatus
 
 ## 📁 Project Structure
 
 ```text
 autoclip/
-├── backend/                 # EN
-│   ├── api/                # APIEN
-│   │   ├── v1/            # API v1EN
-│   │   │   ├── youtube.py # YouTubeENAPI
-│   │   │   ├── bilibili.py # BENAPI
+├── backend/                 # backendcontent
+│   ├── api/                # APIcontent
+│   │   ├── v1/            # API v1version
+│   │   │   ├── youtube.py # YouTubedownloadAPI
+│   │   │   ├── bilibili.py # BsitedownloadAPI
 │   │   │   ├── projects.py # Project ManagementAPI
-│   │   │   ├── clips.py   # ENAPI
-│   │   │   ├── collections.py # ENAPI
-│   │   │   └── settings.py # ENAPI
-│   │   └── upload_queue.py # UploadEN
-│   ├── core/              # EN
-│   │   ├── database.py    # EN
-│   │   ├── celery_app.py  # CeleryEN
-│   │   ├── config.py      # EN
-│   │   └── llm_manager.py # AIEN
-│   ├── models/            # EN
-│   │   ├── project.py     # EN
-│   │   ├── clip.py        # EN
-│   │   ├── collection.py  # EN
-│   │   └── bilibili.py    # BENAccountEN
-│   ├── services/          # EN
-│   │   ├── video_service.py # EN
-│   │   ├── ai_service.py  # AIEN
-│   │   └── upload_service.py # UploadEN
-│   ├── tasks/             # CeleryEN
-│   │   ├── processing.py  # EN
-│   │   ├── upload.py      # UploadEN
-│   │   └── maintenance.py # EN
-│   ├── pipeline/          # EN
-│   │   ├── step1_outline.py # EN
-│   │   ├── step2_timeline.py # EN
-│   │   ├── step3_scoring.py # EN
-│   │   └── step6_video.py # EN
-│   └── utils/             # EN
-├── frontend/              # EN
+│   │   │   ├── clips.py   # videocontentAPI
+│   │   │   ├── collections.py # collectioncontentAPI
+│   │   │   └── settings.py # SystemsettingsAPI
+│   │   └── upload_queue.py # Uploadcontent
+│   ├── core/              # contentconfig
+│   │   ├── database.py    # databaseconfig
+│   │   ├── celery_app.py  # Celeryconfig
+│   │   ├── config.py      # Systemconfig
+│   │   └── llm_manager.py # AImodelcontent
+│   ├── models/            # contentmodel
+│   │   ├── project.py     # projectmodel
+│   │   ├── clip.py        # contentmodel
+│   │   ├── collection.py  # collectionmodel
+│   │   └── bilibili.py    # BsiteAccountmodel
+│   ├── services/          # content
+│   │   ├── video_service.py # videoprocessservice
+│   │   ├── ai_service.py  # AIcontentservice
+│   │   └── upload_service.py # Uploadservice
+│   ├── tasks/             # Celerytask
+│   │   ├── processing.py  # processtask
+│   │   ├── upload.py      # Uploadtask
+│   │   └── maintenance.py # contenttask
+│   ├── pipeline/          # processcontent
+│   │   ├── step1_outline.py # content
+│   │   ├── step2_timeline.py # content
+│   │   ├── step3_scoring.py # content
+│   │   └── step6_video.py # videocontent
+│   └── utils/             # toolcontent
+├── frontend/              # frontendcontent
 │   ├── src/
-│   │   ├── components/    # ReactEN
-│   │   │   ├── UploadModal.tsx # UploadEN
-│   │   │   ├── ClipCard.tsx # EN
-│   │   │   ├── CollectionCard.tsx # EN
-│   │   │   └── BilibiliManager.tsx # BEN
-│   │   ├── pages/         # EN
-│   │   │   ├── HomePage.tsx # EN
-│   │   │   ├── ProjectDetailPage.tsx # EN
-│   │   │   └── SettingsPage.tsx # EN
-│   │   ├── services/      # APIEN
-│   │   │   └── api.ts     # APIEN
-│   │   └── stores/        # EN
+│   │   ├── components/    # Reactcontent
+│   │   │   ├── UploadModal.tsx # Uploadcontent
+│   │   │   ├── ClipCard.tsx # content
+│   │   │   ├── CollectionCard.tsx # collectioncontent
+│   │   │   └── BilibiliManager.tsx # Bsitecontent
+│   │   ├── pages/         # content
+│   │   │   ├── HomePage.tsx # content
+│   │   │   ├── ProjectDetailPage.tsx # projectcontent
+│   │   │   └── SettingsPage.tsx # Settings pagecontent
+│   │   ├── services/      # APIservice
+│   │   │   └── api.ts     # APIcontent
+│   │   └── stores/        # statuscontent
 │   └── package.json
-├── data/                  # EN
-│   ├── projects/          # EN
-│   ├── uploads/           # UploadEN
-│   ├── temp/              # EN
-│   ├── output/            # EN
-│   └── autoclip.db        # EN
-├── scripts/               # EN
-│   ├── start_autoclip.sh  # EN
-│   ├── stop_autoclip.sh   # EN
-│   └── status_autoclip.sh # EN
-├── docs/                  # EN
-│   ├── README.md          # EN
-│   ├── i18n.md           # EN
-│   └── *.md              # EN
-├── logs/                  # EN
-├── Dockerfile             # DockerEN
-├── Dockerfile.dev         # ENDockerEN
-├── docker-compose.yml     # ENDockerEN
-├── docker-compose.dev.yml # ENDockerEN
-├── docker-start.sh        # DockerEN
-├── docker-stop.sh         # DockerEN
-├── docker-status.sh       # DockerEN
-├── .dockerignore          # DockerEN
-├── DOCKER.md              # DockerEN
-└── *.sh                   # EN
+├── data/                  # content
+│   ├── projects/          # projectcontent
+│   ├── uploads/           # Uploadfile
+│   ├── temp/              # contentfile
+│   ├── output/            # contentfile
+│   └── autoclip.db        # databasefile
+├── scripts/               # toolcontent
+│   ├── start_autoclip.sh  # startcontent
+│   ├── stop_autoclip.sh   # content
+│   └── status_autoclip.sh # statuscheck
+├── docs/                  # docs
+│   ├── README.md          # docscontent
+│   ├── i18n.md           # contentconfig
+│   └── *.md              # contentdocs
+├── logs/                  # logsfile
+├── Dockerfile             # Dockercontentfile
+├── Dockerfile.dev         # contentDockerfile
+├── docker-compose.yml     # contentDockercontent
+├── docker-compose.dev.yml # contentDockercontent
+├── docker-start.sh        # Dockerstartcontent
+├── docker-stop.sh         # Dockercontent
+├── docker-status.sh       # Dockerstatuscheckcontent
+├── .dockerignore          # Dockercontentfile
+├── DOCKER.md              # Dockercontentdocs
+└── *.sh                   # startcontent
 ```
 
-## 🌐 APIEN
+## 🌐 APIdocs
 
-ENAPIEN：
+startSystemcontentAPIdocs：
 
-- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) (EN)
-- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) (EN)
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs) (localcontent)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc) (localcontent)
 
-### ENAPIEN
+### contentAPIcontent
 
-| EN | EN | EN |
+| content | content | content |
 |------|------|------|
-| `/api/v1/projects` | GET | EN |
-| `/api/v1/projects` | POST | EN |
-| `/api/v1/projects/{id}` | GET | EN |
-| `/api/v1/youtube/parse` | POST | ENYouTubeEN |
-| `/api/v1/youtube/download` | POST | ENYouTubeEN |
-| `/api/v1/bilibili/download` | POST | ENBEN |
-| `/api/v1/projects/{id}/process` | POST | EN |
-| `/api/v1/projects/{id}/status` | GET | EN |
+| `/api/v1/projects` | GET | fetchprojectlist |
+| `/api/v1/projects` | POST | createcontentproject |
+| `/api/v1/projects/{id}` | GET | fetchprojectcontent |
+| `/api/v1/youtube/parse` | POST | contentYouTubevideoinfo |
+| `/api/v1/youtube/download` | POST | downloadYouTubevideo |
+| `/api/v1/bilibili/download` | POST | downloadBsitevideo |
+| `/api/v1/projects/{id}/process` | POST | contentprocessproject |
+| `/api/v1/projects/{id}/status` | GET | fetchprocessstatus |
 
 ## 🔍 Troubleshooting
 
 ### FAQ
 
-#### 1. EN
+#### 1. contentuse
 
 ```bash
-# EN
-lsof -i :8000  # EN
-lsof -i :3000  # EN
+# checkcontentuse
+lsof -i :8000  # backendcontent
+lsof -i :3000  # frontendcontent
 
-# EN
+# contentuseprocess
 kill -9 <PID>
 ```
 
-#### 2. RedisEN
+#### 2. Redisconnectfailed
 
 ```bash
-# ENRedisEN
+# checkRedisstatus
 redis-cli ping
 
-# ENRedisEN
+# startRedisservice
 brew services start redis  # macOS
 systemctl start redis      # Linux
 ```
 
-#### 3. YouTubeEN
+#### 3. YouTubedownloadfailed
 
-- EN
-- ENyt-dlpEN：`pip install --upgrade yt-dlp`
-- ENCookie
-- EN
+- checkcontentconnect
+- updateyt-dlpversion：`pip install --upgrade yt-dlp`
+- contentusecontentCookie
+- checkvideoIscontentcanuse
 
-#### 4. BEN
+#### 4. Bsitedownloadfailed
 
-- ENAccountEN
-- ENAccountCookie
-- EN
+- checkAccountcontentstatus
+- updateAccountCookie
+- checkvideocontentsettings
 
-### EN
+### logscontent
 
 ```bash
-# EN
+# contentlogs
 tail -f logs/*.log
 
-# EN
-tail -f logs/backend.log    # EN
-tail -f logs/frontend.log   # EN
-tail -f logs/celery.log     # Task QueueEN
+# contentservicelogs
+tail -f logs/backend.log    # backendlogs
+tail -f logs/frontend.log   # frontendlogs
+tail -f logs/celery.log     # Task Queuelogs
 ```
 
-### EN
+### Systemstatuscheck
 
 ```bash
-# EN
+# contentstatuscheck
 ./status_autoclip.sh
 
-# EN
-curl http://localhost:8000/api/v1/health/  # ENHealth Check
-curl http://localhost:3000/                # EN
-redis-cli ping                             # RedisEN
+# contentcheckservice
+curl http://localhost:8000/api/v1/health/  # backendHealth Check
+curl http://localhost:3000/                # frontendcontenttest
+redis-cli ping                             # Redisconnecttest
 ```
 
 ## 🛠️ Development Guide
 
-### EN
+### backendcontent
 
 ```bash
-# EN
+# content
 source venv/bin/activate
 
-# ENPythonEN
+# settingsPythonpath
 export PYTHONPATH="${PWD}:${PYTHONPATH}"
 
-# EN
+# startbackendcontentservicecontent
 python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### EN
+### frontendcontent
 
 ```bash
-# EN
+# contentfrontenddirectory
 cd frontend
 
-# EN
+# startcontentservicecontent
 npm run dev
 ```
 
 ### Celery Worker
 
 ```bash
-# ENWorker（EN -Q：EN celery_app.task_routes EN，
-# EN -Q EN worker EN `celery` EN，EN `processing` EN）
+# startWorker（content -Q：taskby celery_app.task_routes contentusecontent，
+# content -Q 's worker contentdefault `celery` content，contenttaskcontentonecontentin `processing` content）
 celery -A backend.core.celery_app worker --loglevel=info -Q celery,processing,video,notification,upload
 
-# ENBeatEN
+# startBeatcontent
 celery -A backend.core.celery_app beat --loglevel=info
 
-# ENFlowerEN
+# startFlowermonitor
 celery -A backend.core.celery_app flower --port=5555
 ```
 
 ## 📊 Performance
 
-### EN
+### contentconfig
 
-1. **EN**
-   - ENPostgreSQLENSQLite
-   - EN
-   - EN
+1. **databasecontent**
+   - usePostgreSQLcontentSQLite
+   - configconnectcontent
+   - contentusecontentcache
 
-2. **RedisEN**
-   - EN
-   - EN
-   - EN
+2. **Rediscontent**
+   - configcontent
+   - contentusecontent
+   - settingscontent
 
-3. **CeleryEN**
-   - EN
-   - EN
-   - EN
+3. **Celerycontent**
+   - content
+   - configtaskcontent
+   - contentusecontentbackend
 
 ## 🔒 Security
 
-### EN
+### content
 
-1. **EN**
-   - EN
-   - EN
-   - ENAPIEN
+1. **content**
+   - usecontent
+   - contentkey
+   - contentAPIcontent
 
-2. **EN**
-   - EN
-   - ENHTTPS
-   - ENCORS
+2. **content**
+   - configcontent
+   - useHTTPS
+   - contentCORS
 
-3. **EN**
-   - EN
-   - EN
-   - EN
+3. **content**
+   - content
+   - content
+   - content
 
 ## 🚀 Deployment
 
-### DockerEN
+### Dockercontent
 
-#### EN
+#### contentstart
 
 ```bash
-# EN
-git clone https://github.com/nd7hdyt/YtClipper.git
+# contentproject
+git clone https://github.com/zhouxiaoka/autoclip.git
 cd autoclip
 
-# EN
+# configcontent
 cp env.example .env
-# EN .env EN，EN
+# content .env file，content'sconfig
 
-# EN
+# startcontentservice
 docker-compose up -d
 
-# EN
+# contentservicestatus
 docker-compose ps
 ```
 
-#### EN
+#### contentservice
 
-- **ENInterface**: [http://localhost:3000](http://localhost:3000) (EN)
-- **ENAPI**: [http://localhost:8000](http://localhost:8000) (EN)
-- **APIEN**: [http://localhost:8000/docs](http://localhost:8000/docs) (EN)
-- **FlowerEN**: [http://localhost:5555](http://localhost:5555) (EN)
+- **frontendInterface**: [http://localhost:3000](http://localhost:3000) (localcontent)
+- **backendAPI**: [http://localhost:8000](http://localhost:8000) (localcontent)
+- **APIdocs**: [http://localhost:8000/docs](http://localhost:8000/docs) (localcontent)
+- **Flowermonitor**: [http://localhost:5555](http://localhost:5555) (localcontent)
 
-#### EN
+#### content
 
 ```bash
-# EN
+# usecontentconfig
 docker-compose -f docker-compose.dev.yml up -d
 
-# EN
+# contentlogs
 docker-compose -f docker-compose.dev.yml logs -f
 ```
 
-#### EN
+#### content
 
-ENDockerDeploymentENReference [DOCKER.md](DOCKER.md) EN。
+content'sDockerDeploymentcontentReference [DOCKER.md](DOCKER.md) docs。
 
-### EN
+### Systemservice
 
 ```bash
-# ENsystemdEN
+# createsystemdservicefile
 sudo nano /etc/systemd/system/autoclip.service
 
 [Unit]
@@ -609,75 +609,75 @@ WantedBy=multi-user.target
 
 ## 📈 Roadmap
 
-### EN
+### content
 
-- [ ] **BENUploadEN**: Auto UploadENBEN，SupportMulti-Account Management
-- [ ] **Subtitle EditingEN**: VisualSubtitle EditingENSync
-- [ ] **ENLanguageSupport**: SupportENLanguageEN
-- [ ] **EN**: EN
-- [ ] **EN**: SupportEN
-- [ ] **APIEN**: ProvidesENAPIEN
-- [ ] **EN**: EN
+- [ ] **BsiteUploadfeature**: Auto UploadclipvideocontentBsite，supportMulti-Account Management
+- [ ] **Subtitle Editingfeature**: VisualSubtitle EditingcontentAndcontentfeature
+- [ ] **multiLanguagesupport**: supportcontentmultiLanguage'svideoprocess
+- [ ] **content**: contentservice
+- [ ] **contentprocess**: supportcontentvideoprocess
+- [ ] **APIcontent**: ProvidescontentAPIcontent
+- [ ] **contentuse**: contentuse
 
 ### Long-term Plan
 
-- [ ] **AIEN**: ENAIEN
-- [ ] **EN**: SupportEN
-- [ ] **EN**: SupportEN
-- [ ] **EN**: EN
+- [ ] **AImodelcontent**: contentmultiAImodel
+- [ ] **content**: supportmultiusercontent
+- [ ] **contentSystem**: supportNo.content
+- [ ] **content**: contentfeatureAndservice
 
 ## 🤝 Contributing
 
-EN！EN、EN、EN。
+content'scontent！contentIscontent、docscontent、issuecontentIsfeaturecontent。
 
-### EN
+### ifcontent
 
-1. **Fork** ENGitHubEN
-2. ENForkEN：
+1. **Fork** projectcontent'sGitHubcontent
+2. content'sForkcontentlocal：
 
    ```bash
-   git clone https://github.com/nd7hdyt/YtClipper.git
+   git clone https://github.com/zhouxiaoka/autoclip.git
    cd autoclip
    ```
 
-3. EN：
+3. createfeaturecontent：
 
    ```bash
    git checkout -b feature/amazing-feature
    ```
 
-4. EN
-5. EN：
+4. contentAndtest
+5. content：
 
    ```bash
    git add .
    git commit -m 'feat: add amazing feature'
    ```
 
-6. EN：
+6. content：
 
    ```bash
    git push origin feature/amazing-feature
    ```
 
-7. ENGitHubEN **Pull Request**
+7. inGitHubcontentcreate **Pull Request**
 
-### EN
+### content
 
-#### EN
+#### content
 
-- EN：ENPEP 8 PythonEN
-- EN：ENTypeScript，ENESLintEN
-- EN：EN（feat, fix, docs, style, refactor, test, chore）
+- backend：contentPEP 8 Pythoncontent
+- frontend：useTypeScript，contentESLintcontent
+- contentinfo：usecontentformat（feat, fix, docs, style, refactor, test, chore）
 
-#### EN
+#### content
 
-1. EN
-2. EN
-3. EN
-4. EN
+1. ensurecontenttestcontent
+2. addcontent'stestusecontent
+3. updatecontentdocs
+4. ensurecontentcheckcontent
 
-#### EN
+#### contentinfoformat
 
 ```text
 <type>(<scope>): <description>
@@ -687,7 +687,7 @@ EN！EN、EN、EN。
 [optional footer(s)]
 ```
 
-EN：
+content：
 
 - `feat(api): add video download endpoint`
 - `fix(ui): resolve upload modal display issue`
@@ -695,38 +695,38 @@ EN：
 
 ## 📄 License
 
-ENAdopts [MIT License](LICENSE) License。
+contentprojectAdopts [MIT License](LICENSE) License。
 
 ## ❓ FAQ
 
-### EN
+### installAndstartissue
 
-**Q: EN？**
-A: EN：
+**Q: startcontentusecontent？**
+A: usecontentcheckcontentusecontent'sprocess：
 
 ```bash
-# EN
-lsof -i :8000  # EN
-lsof -i :3000  # EN
+# checkcontentuse
+lsof -i :8000  # backendcontent
+lsof -i :3000  # frontendcontent
 
-# EN
+# contentprocess
 kill -9 <PID>
 ```
 
-**Q: RedisEN？**
-A: ENRedisEN：
+**Q: Redisconnectfailedcontent？**
+A: ensureRedisservicecontentincontent：
 
 ```bash
-# ENRedisEN
+# checkRedisstatus
 redis-cli ping
 
-# ENRedisEN
+# startRedisservice
 brew services start redis  # macOS
 sudo systemctl start redis-server  # Linux
 ```
 
-**Q: EN？**
-A: EN：
+**Q: frontenddependenciesinstallfailedcontent？**
+A: contentcleancachecontentinstall：
 
 ```bash
 cd frontend
@@ -735,135 +735,135 @@ npm cache clean --force
 npm install
 ```
 
-### EN
+### featureuseissue
 
-**Q: YouTubeEN？**
+**Q: YouTubevideodownloadfailedcontent？**
 A:
 
-1. EN
-2. ENyt-dlp：`pip install --upgrade yt-dlp`
-3. ENCookie
-4. EN
+1. checkcontentconnect
+2. updateyt-dlp：`pip install --upgrade yt-dlp`
+3. contentusecontentCookie
+4. checkvideoIscontentcanuseorcontent
 
-**Q: BEN？**
+**Q: Bsitevideodownloadfailedcontent？**
 A:
 
-1. ENAccountEN
-2. ENAccountCookie
-3. EN
-4. ENAccount
+1. checkAccountcontentstatus
+2. updateAccountCookie
+3. checkvideocontentsettings
+4. contentusecontentAccount
 
-**Q: AIEN？**
+**Q: AIprocesscontent？**
 A:
 
-1. ENAPIEN
-2. EN（ENchunk_size）
-3. EN
-4. ENAIEN
+1. checkAPIkeyconfig
+2. contentprocesscontent（contentchunk_size）
+3. checkcontentconnect
+4. contentusecontent'sAImodel
 
-**Q: BENUploadEN？**
-A: BENUploadENIn Development，EN。ENSupport：
+**Q: BsiteUploadfeaturecontentcancontentuse？**
+A: BsiteUploadfeaturecontentinIn Development，contentincontentone versioncontentRelease。contentfeaturecontentsupport：
 
-- Auto UploadENBEN
-- Multi-Account ManagementEN
-- ENUploadEN
-- UploadEN
+- Auto UploadclipvideocontentBsite
+- Multi-Account ManagementAndcontent
+- contentUploadAndcontent
+- Uploadprogressmonitor
 
-**Q: Subtitle EditingEN？**
-A: Subtitle EditingENIn Development，EN。ENSupport：
+**Q: Subtitle Editingfeaturecontentcancontentuse？**
+A: Subtitle EditingfeaturecontentinIn Development，contentincontentone versioncontentRelease。contentfeaturecontentsupport：
 
-- VisualSubtitle EditingEN
-- EN
-- ENLanguageENSupport
-- EN
+- VisualSubtitle Editingcontent
+- subtitlescontent
+- multiLanguagesubtitlessupport
+- subtitlesformatcontent
 
 ### Performance
 
-**Q: EN？**
+**Q: ifcontentprocesscontent？**
 A:
 
-1. ENCelery WorkerEN
-2. ENSSDEN
-3. EN
-4. EN
+1. contentCelery Workercontent
+2. useSSDcontent
+3. contentSystemcontent
+4. contentvideocontentsettings
 
-**Q: EN？**
+**Q: ifcontentuse？**
 A:
 
-1. EN
-2. EN
-3. EN
-4. EN
+1. contentclean temp files
+2. contentvideo
+3. deleteNo need'sproject
+4. usecontent
 
 ## 📞 Support & Feedback
 
-### EN
+### fetchcontent
 
-- **EN**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
-- **EN**: [GitHub Discussions](https://github.com/nd7hdyt/YtClipper/discussions)
-  (EN)
-- **BugEN**: ENGitHub IssuesEN
-- **EN**: [EN](docs/)
+- **issuecontent**: [GitHub Issues](https://github.com/zhouxiaoka/autoclip/issues)
+- **featurecontent**: [GitHub Discussions](https://github.com/zhouxiaoka/autoclip/discussions)
+  (contentcreatecontentcanuse)
+- **Bugcontent**: contentuseGitHub Issuescontent
+- **docs**: [projectdocs](docs/)
 
-### ContactEN
+### Contactcontent
 
-EN，ENContact：
+ifcontentissueorcontent，contentContact：
 
 ### 💬 QQ
 
-<img src="./qq_qr.jpg" alt="QQEN" width="150">
+<img src="./qq_qr.jpg" alt="QQcontent" width="150">
 
-### 📱 EN
+### 📱 content
 
-<img src="./feishu_qr.jpg" alt="EN" width="150">
+<img src="./feishu_qr.jpg" alt="content" width="150">
 
-### 📧 ENContactEN
+### 📧 contentContactcontent
 
-- EN [GitHub Issue](https://github.com/nd7hdyt/YtClipper/issues)
-- EN：[christine_zhouye@163.com](mailto:christine_zhouye@163.com)
-- ENQQENContact
+- content [GitHub Issue](https://github.com/zhouxiaoka/autoclip/issues)
+- content：[christine_zhouye@163.com](mailto:christine_zhouye@163.com)
+- addcontentQQorcontentContact
 
 ## 🙏 Acknowledgments
 
-ENSupport：
+contentprojectAndservice'ssupport：
 
-### ENTech Stack
+### contentTech Stack
 
-- [FastAPI](https://fastapi.tiangolo.com/) - ENPython WebEN
-- [React](https://reactjs.org/) - ENInterfaceEN
-- [Ant Design](https://ant.design/) - ENUIENLanguage
-- [TypeScript](https://typescriptlang.org/) - JavaScriptEN
-- [Celery](https://docs.celeryproject.org/) - ENTask Queue
-- [Redis](https://redis.io/) - EN
+- [FastAPI](https://fastapi.tiangolo.com/) - contentPython Webcontent
+- [React](https://reactjs.org/) - userInterfacecontent
+- [Ant Design](https://ant.design/) - contentUIcontentLanguage
+- [TypeScript](https://typescriptlang.org/) - JavaScript'scontent
+- [Celery](https://docs.celeryproject.org/) - contentTask Queue
+- [Redis](https://redis.io/) - content
 
-### EN
+### videoprocess
 
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTubeEN
-- [FFmpeg](https://ffmpeg.org/) - EN
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - YouTubevideodownloadtool
+- [FFmpeg](https://ffmpeg.org/) - contentvideoprocesscontent
 
-### AIEN
+### AIservice
 
-- [EN](https://tongyi.aliyun.com/) - ENLanguageEN
-- [DashScope](https://dashscope.aliyun.com/) - ENAIEN
+- [content](https://tongyi.aliyun.com/) - contentLanguagemodelservice
+- [DashScope](https://dashscope.aliyun.com/) - contentAIservicecontent
 
-### EN
+### contenttool
 
-- [Vite](https://vitejs.dev/) - EN
-- [Zustand](https://github.com/pmndrs/zustand) - EN
-- [Pydantic](https://pydantic-docs.helpmanual.io/) - EN
+- [Vite](https://vitejs.dev/) - frontendcontenttool
+- [Zustand](https://github.com/pmndrs/zustand) - statuscontent
+- [Pydantic](https://pydantic-docs.helpmanual.io/) - contentverifycontent
 
-### EN
+### content
 
-- EN
-- ProvidesEN
-- EN
+- content'scontent
+- ProvidescontentAndcontent'suser
+- contentandtestAndcontent'scontent
 
 ---
 
-## EN，EN ⭐ Star
+## ifcontentthis projectcontent，contentone  ⭐ Star
 
-[![Star History Chart](https://api.star-history.com/svg?repos=nd7hdyt/YtClipper&type=Date)](https://star-history.com/#nd7hdyt/YtClipper&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=zhouxiaoka/autoclip&type=Date)](https://star-history.com/#zhouxiaoka/autoclip&Date)
 
 Made with ❤️ by AutoClip Team
 
-⭐ EN，ENStarSupportEN！
+⭐ ifcontentuse，content Starsupportonecontent！

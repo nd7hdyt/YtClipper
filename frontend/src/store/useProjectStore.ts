@@ -3,15 +3,15 @@ import { projectApi } from '../services/api'
 
 export interface Clip {
   id: string
-  title?: string  // ENtitle
+  title?: string  // cantranslatedtitle
   start_time: string
   end_time: string
-  final_score: number  // EN
-  recommend_reason: string  // EN
+  final_score: number  // translatedbackendtranslated
+  recommend_reason: string  // translatedbackendtranslated
   generated_title?: string
   outline: string
   content: string[]
-  chunk_index?: number  // addEN
+  chunk_index?: number  // addtranslated
 }
 
 export interface Collection {
@@ -25,7 +25,7 @@ export interface Collection {
   thumbnail_path?: string
 }
 
-// projectStatusType definitions，EN
+// projectstatustranslated，andbackendtranslatedonetranslated
 type ProjectStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'error'
 
 export interface Project {
@@ -49,7 +49,7 @@ export interface Project {
   total_clips?: number
   total_collections?: number
   total_tasks?: number
-  // EN
+  // frontendtranslated
   video_path?: string
   video_category?: string
   thumbnail?: string
@@ -98,7 +98,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   setProjects: (projects) => {
     const state = get()
     
-    // ensureprojectsEN
+    // ensureprojectstranslatedIstranslated
     const safeProjects = Array.isArray(projects) ? projects : []
     
     console.log('setProjects called:', {
@@ -107,7 +107,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       projects: safeProjects
     })
     
-    // ENDrag，ENSkip updateEN
+    // iftranslatedintranslated，translatedskipupdatetranslated
     if (state.isDragging) {
       console.log('Skipping update: dragging in progress')
       return
@@ -148,7 +148,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   })),
   
   deleteProject: (id) => {
-    // EN
+    // cleantranslatedcache
     const thumbnailCacheKey = `thumbnail_${id}`
     localStorage.removeItem(thumbnailCacheKey)
     
@@ -240,13 +240,13 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     const originalClipIds = [...collection.clip_ids]
     const updatedClipIds = collection.clip_ids.filter(id => id !== clipId)
     
-    // Check if really changed
+    // checkIstranslated'stranslated
     if (originalClipIds.length === updatedClipIds.length) {
       console.log('Clip not found in collection, skipping update')
       return
     }
     
-    // Optimistic update：Update frontend immediatelyStatus
+    // translatedupdate：translatedupdatefrontendstatus
     const updateState = (clipIds: string[]) => {
       set((state) => ({
         projects: state.projects.map(project => 
@@ -281,10 +281,10 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       }))
     }
     
-    // ENupdate
+    // translateduseupdate
     updateState(updatedClipIds)
     
-    // Call backendAPI
+    // callbackendAPI
     try {
       console.log('Removing clip from collection:', { projectId, collectionId, clipId })
       await projectApi.updateCollection(projectId, collectionId, { clip_ids: updatedClipIds })
@@ -297,7 +297,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         statusText: (error as any)?.response?.statusText,
         data: (error as any)?.response?.data
       })
-      // Rollback to originalStatus
+      // translatedstatus
       updateState(originalClipIds)
       throw error
     }
@@ -308,16 +308,16 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   reorderCollectionClips: async (projectId: string, collectionId: string, newClipIds: string[]) => {
     console.log('Starting reorderCollectionClips:', { projectId, collectionId, newClipIds })
     
-    // fetchENStatus
+    // fetchtranslatedstatus
     const state = get()
     console.log('Current state projects:', state.projects.map(p => ({ id: p.id, collectionsCount: p.collections?.length || 0 })))
     console.log('Current state currentProject:', state.currentProject ? { id: state.currentProject.id, collectionsCount: state.currentProject.collections?.length || 0 } : null)
     
-    // ENcurrentProjectEN，ENtoENprojectsfind in array
+    // translatedfromcurrentProjecttranslated，iftranslatedfromprojectstranslated
     let originalProject = state.currentProject?.id === projectId ? state.currentProject : null
     let originalCollection = originalProject?.collections?.find(c => c.id === collectionId)
     
-    // ENcurrentProjectENto，ENprojectsfind in array
+    // iftranslatedcurrentProjecttranslated，translatedfromprojectstranslated
     if (!originalCollection) {
       const projectFromArray = state.projects.find(p => p.id === projectId)
       if (projectFromArray) {
@@ -342,16 +342,16 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     
     const originalClipIds = [...originalCollection.clip_ids]
     
-    // Check if really changed
+    // checkIstranslated'stranslated
     if (JSON.stringify(originalClipIds) === JSON.stringify(newClipIds)) {
       console.log('No changes detected, skipping update')
       return
     }
     
-    // ENEditEN
+    // translated
     const now = Date.now()
     
-    // Optimistic update：Update frontend immediatelyStatus
+    // translatedupdate：translatedupdatefrontendstatus
     const updateState = (clipIds: string[]) => {
       set((state) => ({
         projects: state.projects.map(project => 
@@ -380,17 +380,17 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       }))
     }
     
-    // ENNew order
+    // translatedusetranslated
     updateState(newClipIds)
     
-    // Call backendAPI
+    // callbackendAPI
     try {
       console.log('Calling backend API for reorder...')
       await projectApi.reorderCollectionClips(projectId, collectionId, newClipIds)
       console.log('Backend API call successful')
     } catch (error) {
       console.error('Backend API call failed:', error)
-      // Rollback to originalStatus
+      // translatedstatus
       updateState(originalClipIds)
       throw error
     }
@@ -399,14 +399,14 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   addClipToCollection: async (projectId: string, collectionId: string, clipIds: string[]) => {
     console.log('Starting addClipToCollection:', { projectId, collectionId, clipIds })
     
-    // fetchENStatus
+    // fetchtranslatedstatus
     const state = get()
     
-    // ENcurrentProjectEN，ENtoENprojectsfind in array
+    // translatedfromcurrentProjecttranslated，iftranslatedfromprojectstranslated
     let originalProject = state.currentProject?.id === projectId ? state.currentProject : null
     let originalCollection = originalProject?.collections?.find(c => c.id === collectionId)
     
-    // ENcurrentProjectENto，ENprojectsfind in array
+    // iftranslatedcurrentProjecttranslated，translatedfromprojectstranslated
     if (!originalCollection) {
       const projectFromArray = state.projects.find(p => p.id === projectId)
       if (projectFromArray) {
@@ -422,13 +422,13 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
     const originalClipIds = [...originalCollection.clip_ids]
     const updatedClipIds = [...originalClipIds, ...clipIds.filter(id => !originalClipIds.includes(id))]
     
-    // Check if really changed
+    // checkIstranslated'stranslated
     if (originalClipIds.length === updatedClipIds.length) {
       console.log('No new clips to add, skipping update')
       return
     }
     
-    // Optimistic update：Update frontend immediatelyStatus
+    // translatedupdate：translatedupdatefrontendstatus
     const updateState = (clipIds: string[]) => {
       set((state) => ({
         projects: state.projects.map(project => 
@@ -457,17 +457,17 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       }))
     }
     
-    // ENupdate
+    // translateduseupdate
     updateState(updatedClipIds)
     
-    // Call backendAPI
+    // callbackendAPI
     try {
       console.log('Adding clips to collection:', { projectId, collectionId, clipIds })
       await projectApi.updateCollection(projectId, collectionId, { clip_ids: updatedClipIds })
       console.log('Clips added to collection successfully')
     } catch (error) {
       console.error('Failed to add clips to collection, rolling back:', error)
-      // Rollback to originalStatus
+      // translatedstatus
       updateState(originalClipIds)
       throw error
     }

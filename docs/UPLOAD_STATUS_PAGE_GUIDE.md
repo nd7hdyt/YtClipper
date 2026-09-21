@@ -1,145 +1,145 @@
-# ENUsage Guide
+# statuspageuse
 
-## EN
+## overview
 
-ENBENInterface，ProvidesEN。
+statuspageviewB，monitor。
 
-## EN
+## pageaccess
 
 - **URL**: `http://localhost:3000/upload-status`
-- **EN**: EN"EN"EN
+- ****: click"status"button
 
-## EN
+## 
 
-### 1. EN
+### 1. 
 
-EN，EN：
+page，：
 
-- **ENID**: EN
-- **EN**: EN
-- **ENAccount**: ENBENAccount（EN）
-- **EN**: EN
-- **EN**: EN（EN/EN/EN/EN/EN）
-- **EN**: UploadEN（0-100%）
-- **EN**: EN
-- **EN**: EN
+- **ID**: 
+- ****: 
+- **account**: useBsite account（）
+- ****: 
+- **status**: status（/processing/succeeded/failed/）
+- **progress**: progress（0-100%）
+- **file**: file
+- **create**: create
 
-### 2. EN
+### 2. 
 
-EN：
+page：
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- ****: 
+- **succeeded**: succeededcompleted
+- **failed**: failed
+- ****: 
 
-### 3. EN
+### 3. 
 
-ENSupportEN：
+support：
 
-#### EN
-- EN"EN"EN
-- ENID、EN、AccountEN、EN、EN、EN、BVEN/AVEN
-- EN（EN）
+#### view details
+- click""buttonview
+- ID、status、account、project、progress、file、BV/AV
+- error（）
 
-#### EN
-- EN"EN"EN
-- EN
-- EN
+#### 
+- failedstatus""button
+- click
+- needconfirm
 
-#### EN
-- EN"EN"EN
-- EN
-- EN
+#### 
+- processingstatus""button
+- click
+- needconfirm
 
-### 4. EN
+### 4. 
 
-- EN30EN
-- EN"EN"EN
-- EN
+- page30
+- click""buttonupdate
+- status
 
-## EN
+## statusnotes
 
-### EN
+### status
 
-| EN | EN | EN | EN |
+| status |  | notes |  |
 |------|------|------|------------|
-| EN | ⏰ | EN，EN | EN、EN |
-| EN | ▶️ | EN | EN、EN |
-| EN | ✅ | EN | EN |
-| EN | ✅ | EN（EN） | EN |
-| EN | ❌ | EN | EN、EN |
-| EN | ⏹️ | EN | EN |
+|  | ⏰ | create， | view details、 |
+| processing | ▶️ |  | view details、 |
+| succeeded | ✅ | succeededcompleted | view details |
+| completed | ✅ | completed（succeeded） | view details |
+| failed | ❌ | failed | view details、 |
+|  | ⏹️ |  | view details |
 
-### EN
+### progress
 
-- **0%**: EN
-- **1-99%**: EN，EN
-- **100%**: EN
-- **EN**: EN
+- **0%**: 
+- **1-99%**: ，progress
+- **100%**: completed
+- ****: failedstatusprogress
 
-## EN
+## 
 
-### Responsive Design
-- SupportEN
-- ENSupportEN
-- EN
+### responsive design
+- support
+- support
+- 
 
-### Performance
-- EN，EN20EN
-- SupportEN
-- EN
+### performance
+- ，default20
+- supportpage
+- 
 
-### EN
-- EN
-- EN
-- EN
-- EN
+### 
+- status
+- confirm
+- error
+- statusupdate
 
-## EN
+## use
 
-### 1. EN
-- EN
-- EN
-- EN
+### 1. monitorprogress
+- viewstatus
+- progress
+- 
 
-### 2. EN
-- EN
-- EN
-- EN
+### 2. 
+- failed
+- need
+- view
 
-### 3. EN
-- EN
-- EN
-- EN
+### 3. issue
+- viewerrorissue
+- 
+- 
 
-## EN
+## 
 
-1. **EN**: EN
-2. **EN**: EN
-3. **EN**: EN，EN
-4. **EN**: EN，EN
+1. ****: backendservice
+2. ****: can
+3. ****: page，no need
+4. **status**: status，
 
-## Troubleshooting
+## troubleshooting
 
-### EN
-- EN3000EN
-- EN
+### pageaccess
+- checkfrontendservice3000port
+- confirmrouteconfig
 
-### EN
-- ENAPIEN
-- EN
-- EN
+### 
+- checkbackendAPIservice
+- confirmdatabase
+- viewerror
 
-### EN
-- EN
-- EN
-- EN
+### failed
+- check network connection
+- confirmbackendservicestatus
+- viewerror
 
-## EN
+## changelog
 
-- **v1.0.0** (2025-09-11): EN
-  - EN
-  - EN
-  - EN
-  - Responsive Design
+- **v1.0.0** (2025-09-11): version
+  - 
+  - state management
+  - 
+  - responsive design

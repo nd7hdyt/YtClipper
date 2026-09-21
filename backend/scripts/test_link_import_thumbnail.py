@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-ENprojectEN
+testtranslatedimportprojecttranslatedfeature
 """
 
 import sys
 import asyncio
 from pathlib import Path
 
-# ENprojectENdirectoryENPythonpath
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
@@ -17,54 +17,54 @@ import requests
 import base64
 
 async def test_bilibili_thumbnail_extraction():
-    """ENBEN"""
-    print("🧪 ENBEN...")
+    """testBsitetranslatedfeature"""
+    print("🧪 testBsitetranslatedfeature...")
     
-    # useENBENvideoEN
+    # useone translated'sBsitevideotranslatedtest
     test_url = "https://www.bilibili.com/video/BV1LSegzbEp9/"
     
     try:
-        # createdownloadEN
+        # createdownloadtranslated
         downloader = BilibiliDownloader()
         
-        # fetchvideoEN
+        # fetchvideoinfo
         video_info = await downloader.get_video_info(test_url)
         
-        print(f"✅ videoENfetchsucceeded:")
-        print(f"   title: {video_info.title}")
-        print(f"   uploadEN: {video_info.uploader}")
-        print(f"   ENURL: {video_info.thumbnail_url}")
+        print(f"✅ videoinfofetchsucceeded:")
+        print(f"   translated: {video_info.title}")
+        print(f"   Uploadtranslated: {video_info.uploader}")
+        print(f"   translatedURL: {video_info.thumbnail_url}")
         
-        # ENdownload
+        # testtranslateddownload
         if video_info.thumbnail_url:
-            print("🖼️  ENdownload...")
+            print("🖼️  testtranslateddownload...")
             response = requests.get(video_info.thumbnail_url, timeout=10)
             if response.status_code == 200:
-                # ENbase64
+                # translatedbase64
                 thumbnail_base64 = base64.b64encode(response.content).decode('utf-8')
                 thumbnail_data = f"data:image/jpeg;base64,{thumbnail_base64}"
                 
-                print(f"✅ ENdownloadsucceeded，EN: {len(response.content)} bytes")
-                print(f"   Base64EN: {len(thumbnail_base64)} EN")
-                print(f"   ENURIEN: {thumbnail_data[:50]}...")
+                print(f"✅ translateddownloadsucceeded，translated: {len(response.content)} bytes")
+                print(f"   Base64translated: {len(thumbnail_base64)} translated")
+                print(f"   translatedURItranslated: {thumbnail_data[:50]}...")
                 
                 return True
             else:
-                print(f"❌ ENdownloadfailed: HTTP {response.status_code}")
+                print(f"❌ translateddownloadfailed: HTTP {response.status_code}")
                 return False
         else:
-            print("⚠️  ENURL")
+            print("⚠️  translatedURL")
             return False
             
     except Exception as e:
-        print(f"❌ ENfailed: {e}")
+        print(f"❌ testfailed: {e}")
         return False
 
 async def test_youtube_thumbnail_extraction():
-    """ENYouTubeEN"""
-    print("\n🧪 ENYouTubeEN...")
+    """testYouTubetranslatedfeature"""
+    print("\n🧪 testYouTubetranslatedfeature...")
     
-    # useENYouTubevideoEN
+    # useone translated'sYouTubevideotranslatedtest
     test_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     
     try:
@@ -82,56 +82,56 @@ async def test_youtube_thumbnail_extraction():
         loop = asyncio.get_event_loop()
         video_info = await loop.run_in_executor(None, extract_info_sync, test_url, ydl_opts)
         
-        print(f"✅ videoENfetchsucceeded:")
-        print(f"   title: {video_info.get('title', 'Unknown')}")
-        print(f"   uploadEN: {video_info.get('uploader', 'Unknown')}")
-        print(f"   ENURL: {video_info.get('thumbnail', '')}")
+        print(f"✅ videoinfofetchsucceeded:")
+        print(f"   translated: {video_info.get('title', 'Unknown')}")
+        print(f"   Uploadtranslated: {video_info.get('uploader', 'Unknown')}")
+        print(f"   translatedURL: {video_info.get('thumbnail', '')}")
         
-        # ENdownload
+        # testtranslateddownload
         thumbnail_url = video_info.get('thumbnail', '')
         if thumbnail_url:
-            print("🖼️  ENdownload...")
+            print("🖼️  testtranslateddownload...")
             response = requests.get(thumbnail_url, timeout=10)
             if response.status_code == 200:
-                # ENbase64
+                # translatedbase64
                 thumbnail_base64 = base64.b64encode(response.content).decode('utf-8')
                 thumbnail_data = f"data:image/jpeg;base64,{thumbnail_base64}"
                 
-                print(f"✅ ENdownloadsucceeded，EN: {len(response.content)} bytes")
-                print(f"   Base64EN: {len(thumbnail_base64)} EN")
-                print(f"   ENURIEN: {thumbnail_data[:50]}...")
+                print(f"✅ translateddownloadsucceeded，translated: {len(response.content)} bytes")
+                print(f"   Base64translated: {len(thumbnail_base64)} translated")
+                print(f"   translatedURItranslated: {thumbnail_data[:50]}...")
                 
                 return True
             else:
-                print(f"❌ ENdownloadfailed: HTTP {response.status_code}")
+                print(f"❌ translateddownloadfailed: HTTP {response.status_code}")
                 return False
         else:
-            print("⚠️  ENURL")
+            print("⚠️  translatedURL")
             return False
             
     except Exception as e:
-        print(f"❌ ENfailed: {e}")
+        print(f"❌ testfailed: {e}")
         return False
 
 async def main():
-    """EN"""
-    print("🚀 startENprojectEN...\n")
+    """translated"""
+    print("🚀 translatedtesttranslatedimportprojecttranslatedfeature...\n")
     
-    # ENBEN
+    # testBsitetranslated
     bilibili_success = await test_bilibili_thumbnail_extraction()
     
-    # ENYouTubeEN
+    # testYouTubetranslated
     youtube_success = await test_youtube_thumbnail_extraction()
     
-    print(f"\n📊 ENresult:")
-    print(f"   BEN: {'✅ succeeded' if bilibili_success else '❌ failed'}")
-    print(f"   YouTubeEN: {'✅ succeeded' if youtube_success else '❌ failed'}")
+    print(f"\n📊 testtranslated:")
+    print(f"   Bsitetranslated: {'✅ succeeded' if bilibili_success else '❌ failed'}")
+    print(f"   YouTubetranslated: {'✅ succeeded' if youtube_success else '❌ failed'}")
     
     if bilibili_success and youtube_success:
-        print("\n🎉 allENthrough！ENprojectEN")
+        print("\n🎉 translatedtesttranslated！translatedimportprojecttranslatedfeaturetranslated")
         return True
     else:
-        print("\n⚠️  ENfailed，pleasecheckEN")
+        print("\n⚠️  translatedtestfailed，translatedchecktranslatedfeature")
         return False
 
 if __name__ == "__main__":

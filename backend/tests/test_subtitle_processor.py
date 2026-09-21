@@ -1,4 +1,4 @@
-"""EN - EN"""
+"""subtitlesprocesstranslatedtest - translatedverifytranslated'stranslated"""
 
 import re
 
@@ -6,51 +6,51 @@ from backend.utils.subtitle_processor import SubtitleProcessor
 
 
 def _split(text: str):
-    """EN，EN（EN）"""
+    """useprocesstranslated'stranslated，translated（andtranslatedonetranslated）"""
     sp = SubtitleProcessor()
     parts = re.split(sp.word_separators, text)
     return [p for p in parts if p.strip()]
 
 
 def test_word_separators_is_single_clean_character_class():
-    """EN、EN，EN。
+    """translatedone、translated'stranslated，translatedPackageincludetranslated'stranslatedandtranslated。
 
-    EN bug：EN ASCII EN，
-    EN，EN `\\s` EN SyntaxWarning。
+    translated bug：translated's ASCII translated translated，
+    translatedfromtranslated，translated `\\s` 's SyntaxWarning。
     """
     separators = SubtitleProcessor().word_separators
 
-    # EN [....]+
+    # translatedIsone translated'stranslated [....]+
     assert separators.startswith("[")
     assert separators.endswith("]+")
 
-    # EN（EN “”‘’ EN \s）
+    # translatedintranslated（includetranslated “”‘’ andtranslated \s）
     for ch in "，。！？；：“”‘’（）【】、":
-        assert ch in separators, f"EN: {ch!r}"
+        assert ch in separators, f"translated: {ch!r}"
     assert r"\s" in separators
 
-    # EN（EN）
+    # translatedcantranslated（translatederror）
     assert re.compile(separators)
 
 
 def test_splits_cjk_string_on_punctuation_and_whitespace():
-    """EN，EN。"""
-    sample = "EN，EN！EN“EN”‘EN’；（EN）【EN】、EN EN\tEN。"
+    """translatedPackageincludetranslatedAndtranslated'stranslated，translatedbytranslated'stranslated。"""
+    sample = "translated，translated！thisIs“test”‘translated’；（translated）【translated】、translated translated\ttranslated。"
     assert _split(sample) == [
-        "EN",
-        "EN",
-        "EN",
-        "EN",
-        "EN",
-        "EN",
-        "EN",
-        "EN",
-        "EN",
-        "EN",
+        "translated",
+        "translated",
+        "thisIs",
+        "test",
+        "translated",
+        "translated",
+        "translated",
+        "translated",
+        "translated",
+        "translated",
     ]
 
 
 def test_curly_quotes_act_as_separators():
-    """EN：EN/EN（EN）。"""
-    assert _split("EN“EN”EN") == ["EN", "EN", "EN"]
-    assert _split("EN‘EN’EN") == ["EN", "EN", "EN"]
+    """translatedtest：translated/translated（translated）。"""
+    assert _split("translated“translateduse”translated") == ["translated", "translateduse", "translated"]
+    assert _split("translated‘translateduse’translated") == ["translated", "translateduse", "translated"]

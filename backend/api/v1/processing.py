@@ -1,5 +1,5 @@
 """
-processingAPIEN
+processAPItranslated
 """
 
 from typing import List, Optional
@@ -21,20 +21,20 @@ async def process_project(
     project_id: str,
     processing_service: ProcessingService = Depends(get_processing_service)
 ):
-    """startprocessingproject"""
+    """translatedprocessproject"""
     try:
         result = processing_service.process_project(project_id)
         return {
-            "message": "projectprocessingENstart",
+            "message": "projectprocesstranslated",
             "project_id": project_id,
             "result": result
         }
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except FileNotFoundError as e:
-        raise HTTPException(status_code=400, detail=f"ENfile: {str(e)}")
+        raise HTTPException(status_code=400, detail=f"translatedfile: {str(e)}")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"processingfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"processing failed: {str(e)}")
 
 
 @router.get("/projects/{project_id}/processing-status")
@@ -42,7 +42,7 @@ async def get_processing_status(
     project_id: str,
     processing_service: ProcessingService = Depends(get_processing_service)
 ):
-    """fetchprojectprocessingstatus"""
+    """fetchprojectprocessstatus"""
     try:
         status = processing_service.get_processing_status(project_id)
         return status
@@ -56,18 +56,18 @@ async def process_step(
     step_number: int,
     processing_service: ProcessingService = Depends(get_processing_service)
 ):
-    """processingEN"""
+    """processtranslated step"""
     if step_number < 1 or step_number > 6:
-        raise HTTPException(status_code=400, detail="ENmustEN1-6EN")
+        raise HTTPException(status_code=400, detail="steptranslatedin1-6translated")
     
     try:
-        # ENcanENprocessingEN
+        # thistranslatedcantranslatedprocesstranslated step
         result = processing_service.process_project(project_id)
         return {
-            "message": f"EN {step_number} processingEN",
+            "message": f"step {step_number} processing completed",
             "project_id": project_id,
             "step": step_number,
             "result": result
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"ENprocessingfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"stepprocessing failed: {str(e)}")

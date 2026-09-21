@@ -55,7 +55,7 @@ const mapRecordToTask = (record: UploadRecord): UploadTask => ({
   project_id: record.project_id ? String(record.project_id) : '',
   account_id: String(record.account_id),
   clip_id: record.clip_id || '',
-  title: record.title || 'ENtask',
+  title: record.title || 'translatedtask',
   description: record.description || '',
   tags: record.tags || '[]',
   partition_id: record.partition_id,
@@ -84,7 +84,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
     keyword: ''
   })
 
-  // fetchsubmissionTask list
+  // fetchtranslatedtasklist
   const fetchTasks = async () => {
     try {
       setLoading(true)
@@ -93,7 +93,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
       setTasks(safeRecords)
       setFilteredTasks(safeRecords)
     } catch (error: any) {
-      message.error('fetchsubmissiontaskFailed: ' + (error.message || 'Unknown error'))
+      message.error('fetchtranslatedtaskfailed: ' + (error.message || 'translatederror'))
       setTasks([])
       setFilteredTasks([])
     } finally {
@@ -101,43 +101,43 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
     }
   }
 
-  // Retry failed tasks
+  // translatedfailed'stask
   const retryTask = async (_taskId: string) => {
-    message.info('Bsite upload is in progressIn development — coming soon！', 3);
+    message.info('BsiteUploadfeaturetranslatedinIn Development，translated！', 3);
     return;
     
-    // Legacy code disabled
+    // translateduse
     try {
-      // ENRetryAPI
-      message.success('taskRetryEN')
-      fetchTasks() // Refreshlist
+      // thistranslatedcalltranslatedAPI
+      message.success('tasktranslatedstart')
+      fetchTasks() // translatedlist
     } catch (error: any) {
-      message.error('Retry taskFailed: ' + (error.message || 'Unknown error'))
+      message.error('translatedtaskfailed: ' + (error.message || 'translatederror'))
     }
   }
 
-  // CancelIn progress tasks
+  // canceltranslated'stask
   const cancelTask = async (_taskId: string) => {
-    message.info('Bsite upload is in progressIn development — coming soon！', 3);
+    message.info('BsiteUploadfeaturetranslatedinIn Development，translated！', 3);
     return;
     
-    // Legacy code disabled
+    // translateduse
     try {
-      // ENCancelAPI
-      message.success('Task cancelled')
-      fetchTasks() // Refreshlist
+      // thistranslatedcallcancelAPI
+      message.success('tasktranslatedcancel')
+      fetchTasks() // translatedlist
     } catch (error: any) {
-      message.error('Cancel taskFailed: ' + (error.message || 'Unknown error'))
+      message.error('canceltaskfailed: ' + (error.message || 'translatederror'))
     }
   }
 
-  // View tasksDetails
+  // translatedtasktranslated
   const showTaskDetail = (task: UploadTask) => {
     setSelectedTask(task)
     setDetailModalVisible(true)
   }
 
-  // EN
+  // translatedusetranslatedSelecttranslated
   const applyFilters = () => {
     const safeTasks = Array.isArray(tasks) ? tasks : []
     let filtered = safeTasks
@@ -169,7 +169,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
     setFilteredTasks(filtered)
   }
 
-  // EN
+  // translatedSelecttranslated
   const resetFilters = () => {
     setFilters({
       status: '',
@@ -180,7 +180,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
     setFilteredTasks(Array.isArray(tasks) ? tasks : [])
   }
 
-  // Get status tagsEN
+  // fetchstatustranslated
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
@@ -196,7 +196,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
     }
   }
 
-  // fetchStatusIcon
+  // fetchstatustranslated
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'pending':
@@ -212,23 +212,23 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
     }
   }
 
-  // fetchStatusText
+  // fetchstatustranslated
   const getStatusText = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'pending'
+        return 'translatedprocess'
       case 'processing':
-        return 'Processing'
+        return 'processing'
       case 'success':
-        return 'Succeeded'
+        return 'succeeded'
       case 'failed':
-        return 'Failed'
+        return 'failed'
       default:
         return status
     }
   }
 
-  // EN
+  // translated
   const getStatistics = () => {
     const safeTasks = Array.isArray(tasks) ? tasks : []
     const total = safeTasks.length
@@ -262,23 +262,23 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
       )
     },
     {
-      title: 'ClipEN',
+      title: 'cliptranslated',
       key: 'clip_count',
       render: (record: UploadTask) => {
         const clipCount = record.clip_id.split(',').filter(id => id.trim()).length
-        return <Tag>{clipCount} ENClip</Tag>
+        return <Tag>{clipCount}  clip</Tag>
       }
     },
     {
-      title: 'Partition',
+      title: 'translated',
       key: 'partition',
       render: (record: UploadTask) => {
         const partition = BILIBILI_PARTITIONS.find(p => p.id === record.partition_id)
-        return partition ? partition.name : `Partition${record.partition_id}`
+        return partition ? partition.name : `translated${record.partition_id}`
       }
     },
     {
-      title: 'Status',
+      title: 'status',
       key: 'status',
       render: (record: UploadTask) => (
         <Tag color={getStatusColor(record.status)} icon={getStatusIcon(record.status)}>
@@ -287,7 +287,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
       )
     },
     {
-      title: 'Progress',
+      title: 'progress',
       key: 'progress',
       render: (record: UploadTask) => {
         if (record.status === 'processing' && record.progress !== undefined) {
@@ -301,12 +301,12 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
       }
     },
     {
-      title: 'Created',
+      title: 'createtranslated',
       key: 'created_at',
       render: (record: UploadTask) => dayjs(record.created_at).format('YYYY-MM-DD HH:mm')
     },
     {
-      title: 'Actions',
+      title: 'translated',
       key: 'actions',
       render: (record: UploadTask) => (
         <Space>
@@ -316,7 +316,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
             icon={<EyeOutlined />}
             onClick={() => showTaskDetail(record)}
           >
-            Details
+            translated
           </Button>
           
           {record.status === 'failed' && (
@@ -326,16 +326,16 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
               icon={<ReloadOutlined />}
               onClick={() => retryTask(record.id)}
             >
-              Retry
+              translated
             </Button>
           )}
           
           {record.status === 'processing' && (
             <Popconfirm
-              title="DeleteENCancelEN tasksEN？"
+              title="translatedcancelthis tasktranslated？"
               onConfirm={() => cancelTask(record.id)}
-              okText="Delete"
-              cancelText="Cancel"
+              okText="translated"
+              cancelText="cancel"
             >
               <Button
                 type="link"
@@ -343,7 +343,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
                 danger
                 icon={<StopOutlined />}
               >
-                Cancel
+                cancel
               </Button>
             </Popconfirm>
           )}
@@ -356,37 +356,37 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
 
   return (
     <div style={{ padding: '24px' }}>
-      {/* Stats card */}
+      {/* translated */}
       <Row gutter={16} style={{ marginBottom: '24px' }}>
         <Col span={4}>
           <Card>
-            <Statistic title="Total tasks" value={stats.total} />
+            <Statistic title="translatedtasktranslated" value={stats.total} />
           </Card>
         </Col>
         <Col span={4}>
           <Card>
-            <Statistic title="pending" value={stats.pending} valueStyle={{ color: '#faad14' }} />
+            <Statistic title="translatedprocess" value={stats.pending} valueStyle={{ color: '#faad14' }} />
           </Card>
         </Col>
         <Col span={4}>
           <Card>
-            <Statistic title="Processing" value={stats.processing} valueStyle={{ color: '#1890ff' }} />
+            <Statistic title="processing" value={stats.processing} valueStyle={{ color: '#1890ff' }} />
           </Card>
         </Col>
         <Col span={4}>
           <Card>
-            <Statistic title="Succeeded" value={stats.success} valueStyle={{ color: '#52c41a' }} />
+            <Statistic title="succeeded" value={stats.success} valueStyle={{ color: '#52c41a' }} />
           </Card>
         </Col>
         <Col span={4}>
           <Card>
-            <Statistic title="Failed" value={stats.failed} valueStyle={{ color: '#ff4d4f' }} />
+            <Statistic title="failed" value={stats.failed} valueStyle={{ color: '#ff4d4f' }} />
           </Card>
         </Col>
         <Col span={4}>
           <Card>
             <Statistic 
-              title="SucceededEN" 
+              title="succeededtranslated" 
               value={stats.total > 0 ? Math.round((stats.success / stats.total) * 100) : 0}
               suffix="%" 
               valueStyle={{ color: '#52c41a' }}
@@ -395,37 +395,37 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
         </Col>
       </Row>
 
-      {/* EN */}
+      {/* translatedSelecttranslated */}
       <Card style={{ marginBottom: '16px' }}>
         <Row gutter={16} align="middle">
           <Col span={6}>
-            <Form.Item label="Status" style={{ marginBottom: 0 }}>
+            <Form.Item label="status" style={{ marginBottom: 0 }}>
               <Select
-                placeholder="ENStatus"
+                placeholder="Selectselectstatus"
                 value={filters.status}
                 onChange={(value) => setFilters({ ...filters, status: value })}
                 allowClear
               >
-                <Option value="pending">pending</Option>
-                <Option value="processing">Processing</Option>
-                <Option value="success">Succeeded</Option>
-                <Option value="failed">Failed</Option>
+                <Option value="pending">translatedprocess</Option>
+                <Option value="processing">processing</Option>
+                <Option value="success">succeeded</Option>
+                <Option value="failed">failed</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="EN" style={{ marginBottom: 0 }}>
+            <Form.Item label="translated" style={{ marginBottom: 0 }}>
               <RangePicker
                 value={filters.dateRange}
                 onChange={(dates) => setFilters({ ...filters, dateRange: dates })}
-                placeholder={['EN', 'EN']}
+                placeholder={['translated', 'translated']}
               />
             </Form.Item>
           </Col>
           <Col span={6}>
-            <Form.Item label="EN" style={{ marginBottom: 0 }}>
+            <Form.Item label="translated" style={{ marginBottom: 0 }}>
               <Input
-                placeholder="SearchTitleENDescription"
+                placeholder="translatedortranslated"
                 value={filters.keyword}
                 onChange={(e) => setFilters({ ...filters, keyword: e.target.value })}
               />
@@ -434,21 +434,21 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
           <Col span={6}>
             <Space>
               <Button type="primary" onClick={applyFilters}>
-                EN
+                translatedSelect
               </Button>
               <Button onClick={resetFilters}>
-                EN
+                translated
               </Button>
               <Button icon={<ReloadOutlined />} onClick={fetchTasks}>
-                Refresh
+                translated
               </Button>
             </Space>
           </Col>
         </Row>
       </Card>
 
-      {/* Task list */}
-      <Card title={`submissionTask list (${filteredTasks.length})`}>
+      {/* tasklist */}
+      <Card title={`translatedtasklist (${filteredTasks.length})`}>
         <Table
           columns={columns}
           dataSource={filteredTasks}
@@ -458,19 +458,19 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
             pageSize: 10,
             showSizeChanger: true,
             showQuickJumper: true,
-            showTotal: (total, range) => `EN ${range[0]}-${range[1]} EN，Total ${total} EN`
+            showTotal: (total, range) => `No. ${range[0]}-${range[1]} translated，translated ${total} translated`
           }}
         />
       </Card>
 
-      {/* taskDetailsdialog */}
+      {/* tasktranslated */}
       <Modal
-        title="taskDetails"
+        title="tasktranslated"
         open={detailModalVisible}
         onCancel={() => setDetailModalVisible(false)}
         footer={[
           <Button key="close" onClick={() => setDetailModalVisible(false)}>
-            Close
+            translated
           </Button>
         ]}
         width={800}
@@ -479,32 +479,32 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
           <div>
             <Row gutter={16}>
               <Col span={12}>
-                <div><strong>Task ID:</strong> {selectedTask.id}</div>
+                <div><strong>taskID:</strong> {selectedTask.id}</div>
                 <div><strong>projectID:</strong> {selectedTask.project_id}</div>
-                <div><strong>Title:</strong> {selectedTask.title}</div>
-                <div><strong>Description:</strong> {selectedTask.description}</div>
+                <div><strong>translated:</strong> {selectedTask.title}</div>
+                <div><strong>translated:</strong> {selectedTask.description}</div>
               </Col>
               <Col span={12}>
-                <div><strong>Status:</strong> 
+                <div><strong>status:</strong> 
                   <Tag color={getStatusColor(selectedTask.status)} style={{ marginLeft: 8 }}>
                     {getStatusText(selectedTask.status)}
                   </Tag>
                 </div>
-                <div><strong>Partition:</strong> 
+                <div><strong>translated:</strong> 
                   {(() => {
                     const partition = BILIBILI_PARTITIONS.find(p => p.id === selectedTask.partition_id)
-                    return partition ? partition.name : `Partition${selectedTask.partition_id}`
+                    return partition ? partition.name : `translated${selectedTask.partition_id}`
                   })()}
                 </div>
-                <div><strong>Created:</strong> {dayjs(selectedTask.created_at).format('YYYY-MM-DD HH:mm:ss')}</div>
-                <div><strong>Updated:</strong> {dayjs(selectedTask.updated_at).format('YYYY-MM-DD HH:mm:ss')}</div>
+                <div><strong>createtranslated:</strong> {dayjs(selectedTask.created_at).format('YYYY-MM-DD HH:mm:ss')}</div>
+                <div><strong>updatetranslated:</strong> {dayjs(selectedTask.updated_at).format('YYYY-MM-DD HH:mm:ss')}</div>
               </Col>
             </Row>
             
             <Divider />
             
             <div>
-              <strong>Clipinfo:</strong>
+              <strong>clipinfo:</strong>
               <div style={{ marginTop: 8 }}>
                 {selectedTask.clip_id.split(',').filter(id => id.trim()).map((clipId, index) => (
                   <Tag key={index} style={{ marginBottom: 4 }}>{clipId.trim()}</Tag>
@@ -516,7 +516,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
               <>
                 <Divider />
                 <div>
-                  <strong>Tags:</strong>
+                  <strong>translated:</strong>
                   <div style={{ marginTop: 8 }}>
                     {JSON.parse(selectedTask.tags).map((tag: string, index: number) => (
                       <Tag key={index} color="blue">{tag}</Tag>
@@ -530,7 +530,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
               <>
                 <Divider />
                 <div>
-                  <strong>BV ID:</strong> {selectedTask.bvid}
+                  <strong>BVtranslated:</strong> {selectedTask.bvid}
                 </div>
               </>
             )}
@@ -539,7 +539,7 @@ const UploadTaskManager: React.FC<UploadTaskManagerProps> = ({ projectId }) => {
               <>
                 <Divider />
                 <div>
-                  <strong>Errorinfo:</strong>
+                  <strong>errorinfo:</strong>
                   <div style={{ marginTop: 8, color: '#ff4d4f', backgroundColor: '#fff2f0', padding: 8, borderRadius: 4 }}>
                     {selectedTask.error_message}
                   </div>

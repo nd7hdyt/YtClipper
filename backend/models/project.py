@@ -1,6 +1,6 @@
 """
-projectEN
-ENprojectENstatus
+projectmodel
+translatedproject'stranslatedinfoAndstatus
 """
 
 import enum
@@ -10,116 +10,116 @@ from sqlalchemy.orm import relationship
 from .base import BaseModel
 
 class ProjectStatus(str, enum.Enum):
-    """projectstatusEN"""
-    PENDING = "pending"           # EN
+    """projectstatustranslated"""
+    PtranslatedDING = "pending"           # etc.translated
     PROCESSING = "processing"     # processing
     COMPLETED = "completed"       # completed
     FAILED = "failed"            # failed
 
 class ProjectType(str, enum.Enum):
-    """projectEN"""
-    DEFAULT = "default"           # EN
-    KNOWLEDGE = "knowledge"       # EN
-    BUSINESS = "business"         # EN
-    OPINION = "opinion"          # EN
-    EXPERIENCE = "experience"    # EN
-    SPEECH = "speech"            # EN
-    CONTENT_REVIEW = "content_review"  # EN
-    ENTERTAINMENT = "entertainment"    # EN
+    """projecttranslated"""
+    DEFAULT = "default"           # default
+    KNOWLEDGE = "knowledge"       # translated
+    BUSINESS = "business"         # providertranslated
+    OPINION = "opinion"          # translated
+    EXPERItranslatedCE = "experience"    # translated
+    SPEECH = "speech"            # translated
+    CONTtranslatedT_REVIEW = "content_review"  # translated
+    translatedTERTAINMtranslatedT = "entertainment"    # translated
 
 class Project(BaseModel):
-    """projectEN"""
+    """projectmodel"""
     
     __tablename__ = "projects"
     
-    # EN
+    # translatedinfo
     name = Column(
         String(255), 
         nullable=False, 
-        comment="projectEN"
+        comment="projecttranslated"
     )
     description = Column(
         Text, 
         nullable=True, 
-        comment="projectdescription"
+        comment="projecttranslated"
     )
     
-    # statusEN
+    # statusinfo
     status = Column(
         Enum(ProjectStatus), 
-        default=ProjectStatus.PENDING,
+        default=ProjectStatus.PtranslatedDING,
         nullable=False,
         comment="projectstatus"
     )
     
-    # projectEN
+    # projecttranslated
     project_type = Column(
         Enum(ProjectType), 
         default=ProjectType.DEFAULT,
         nullable=False,
-        comment="projectEN"
+        comment="projecttranslated"
     )
     video_path = Column(
         String(500), 
         nullable=True, 
-        comment="videofilepath"
+        comment="videofile path"
     )
     subtitle_path = Column(
         String(500), 
         nullable=True, 
-        comment="subtitlesfilepath"
+        comment="subtitlesfile path"
     )
     video_duration = Column(
         Integer, 
         nullable=True, 
-        comment="videoduration（EN）"
+        comment="videotranslated（seconds）"
     )
     thumbnail = Column(
         Text, 
         nullable=True, 
-        comment="projectEN（base64EN）"
+        comment="projecttranslated（base64translated）"
     )
     
-    # processingconfig
+    # processconfig
     processing_config = Column(
         JSON, 
         nullable=True, 
-        comment="processingconfigparameters"
+        comment="processconfigtranslated"
     )
     
-    # EN
+    # translated
     project_metadata = Column(
         JSON, 
         nullable=True, 
-        comment="projectEN（EN，ENfilesystem）"
+        comment="projecttranslated（translated，translatedinfileSystem）"
     )
     
-    # EN
+    # addtranslated
     @property
     def storage_initialized(self) -> bool:
-        """ENserviceENinitialize"""
+        """translatedserviceIstranslated"""
         if self.project_metadata and 'storage_service_initialized' in self.project_metadata:
             return self.project_metadata['storage_service_initialized']
         return False
     
     @property
     def has_video_file(self) -> bool:
-        """ENvideofile"""
+        """Istranslatedvideofile"""
         return self.video_path is not None
     
     @property
     def has_subtitle_file(self) -> bool:
-        """ENsubtitlesfile"""
+        """Istranslatedsubtitlesfile"""
         return self.subtitle_path is not None
     
-    # ENtime
+    # translated
     completed_at = Column(
         DateTime, 
         nullable=True, 
-        comment="projectENtime"
+        comment="projecttranslated"
     )
     
-    # EN
+    # translated
     clips = relationship(
         "Clip", 
         back_populates="project",
@@ -141,25 +141,25 @@ class Project(BaseModel):
     
     @property
     def clips_count(self):
-        """fetchclipEN"""
+        """fetchcliptranslated"""
         return len(self.clips) if self.clips else 0
     
     @property
     def collections_count(self):
-        """fetchcollectionEN"""
+        """fetchcollectiontranslated"""
         return len(self.collections) if self.collections else 0
     
     @property
     def is_processing(self):
-        """ENcurrentlyprocessing"""
+        """Istranslatedinprocess"""
         return self.status == ProjectStatus.PROCESSING
     
     @property
     def is_completed(self):
-        """ENcompleted"""
+        """Istranslatedcompleted"""
         return self.status == ProjectStatus.COMPLETED
     
     @property
     def has_error(self):
-        """ENerror"""
+        """Istranslatederror"""
         return self.status == ProjectStatus.FAILED

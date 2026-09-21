@@ -1,24 +1,24 @@
 #!/bin/bash
 
-# AutoClip Docker StopScript
-# Version: 1.0
-# EN: StopAutoClip DockerService
+# AutoClip Docker translated
+# version: 1.0
+# feature: translatedAutoClip Dockerservice
 
 set -euo pipefail
 
 # =============================================================================
-# ConfigEN
+# configtranslated
 # =============================================================================
 
-# EN
+# translated
 RED='\033[0;31m'
-GREEN='\033[0;32m'
+GREtranslated='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
-# EN
+# translated
 ICON_SUCCESS="✅"
 ICON_ERROR="❌"
 ICON_WARNING="⚠️"
@@ -26,7 +26,7 @@ ICON_INFO="ℹ️"
 ICON_STOP="🛑"
 
 # =============================================================================
-# ToolEN
+# tooltranslated
 # =============================================================================
 
 log_info() {
@@ -34,7 +34,7 @@ log_info() {
 }
 
 log_success() {
-    echo -e "${GREEN}${ICON_SUCCESS} $1${NC}"
+    echo -e "${GREtranslated}${ICON_SUCCESS} $1${NC}"
 }
 
 log_warning() {
@@ -51,11 +51,11 @@ log_header() {
 }
 
 # =============================================================================
-# StopEN
+# translated
 # =============================================================================
 
 stop_services() {
-    log_header "StopAutoClipService"
+    log_header "translatedAutoClipservice"
     
     local mode="${1:-production}"
     local compose_file="docker-compose.yml"
@@ -64,87 +64,87 @@ stop_services() {
         compose_file="docker-compose.dev.yml"
     fi
     
-    log_info "StopService (EN: $mode)..."
+    log_info "translatedservice (translated: $mode)..."
     
-    # StopService
+    # translatedservice
     if docker-compose -f "$compose_file" down; then
-        log_success "ServiceENStop"
+        log_success "servicetranslated"
     else
-        log_error "StopServiceFailed"
+        log_error "translatedservicefailed"
         exit 1
     fi
 }
 
 cleanup_containers() {
-    log_header "EN"
+    log_header "cleantranslated"
     
-    # StopAllEN
+    # translated
     local containers=$(docker ps -a --filter "name=autoclip" --format "{{.Names}}" 2>/dev/null || true)
     
     if [[ -n "$containers" ]]; then
-        log_info "ENAutoClipEN:"
+        log_info "translatedAutoCliptranslated:"
         echo "$containers"
         
         if [[ "${1:-}" == "--force" ]]; then
-            log_info "ENStopAllEN..."
+            log_info "translated..."
             echo "$containers" | xargs docker stop 2>/dev/null || true
             echo "$containers" | xargs docker rm 2>/dev/null || true
-            log_success "ENCompleted"
+            log_success "translatedcleantranslated"
         else
-            log_warning "EN --force EN"
+            log_warning "use --force translatedcleantranslated"
         fi
     else
-        log_success "ENAutoClipEN"
+        log_success "translatedAutoCliptranslated"
     fi
 }
 
 cleanup_images() {
-    log_header "EN"
+    log_header "cleantranslated"
     
     if [[ "${1:-}" == "--force" ]]; then
-        log_info "EN..."
+        log_info "cleantranslateduse'stranslated..."
         docker image prune -f
-        log_success "ENCompleted"
+        log_success "translatedcleantranslated"
     else
-        log_info "EN --force EN"
+        log_info "use --force translatedcleantranslateduse'stranslated"
     fi
 }
 
 cleanup_volumes() {
-    log_header "EN"
+    log_header "cleantranslated"
     
     if [[ "${1:-}" == "--force" ]]; then
-        log_warning "ENAllEN，ENProjectEN！"
-        read -p "EN？(y/N): " -n 1 -r
+        log_warning "thistranslateddeletetranslated，PackagetranslatedprojectfileAnddatabase！"
+        read -p "translated？(y/N): " -n 1 -r
         echo
         
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            log_info "EN..."
+            log_info "cleantranslated..."
             docker volume prune -f
-            log_success "ENCompleted"
+            log_success "translatedcleantranslated"
         else
-            log_info "EN"
+            log_info "cancelcleantranslated"
         fi
     else
-        log_info "EN --force EN"
+        log_info "use --force translatedcleantranslateduse'stranslated"
     fi
 }
 
 show_status() {
-    log_header "CurrentStatus"
+    log_header "translatedstatus"
     
-    echo -e "${BLUE}📊 ENStatus:${NC}"
-    docker-compose ps 2>/dev/null || echo "  ENService"
+    echo -e "${BLUE}📊 translatedstatus:${NC}"
+    docker-compose ps 2>/dev/null || echo "  translated'sservice"
     
-    echo -e "\n${BLUE}🐳 AutoClipEN:${NC}"
-    docker ps -a --filter "name=autoclip" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || echo "  EN"
+    echo -e "\n${BLUE}🐳 AutoCliptranslated:${NC}"
+    docker ps -a --filter "name=autoclip" --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || echo "  translated"
     
-    echo -e "\n${BLUE}💾 EN:${NC}"
-    docker volume ls --filter "name=autoclip" --format "table {{.Name}}\t{{.Driver}}\t{{.Size}}" 2>/dev/null || echo "  EN"
+    echo -e "\n${BLUE}💾 translated:${NC}"
+    docker volume ls --filter "name=autoclip" --format "table {{.Name}}\t{{.Driver}}\t{{.Size}}" 2>/dev/null || echo "  translated"
 }
 
 # =============================================================================
-# EN
+# translated
 # =============================================================================
 
 main() {
@@ -152,7 +152,7 @@ main() {
     local cleanup=false
     local force=false
     
-    # EN
+    # translated
     while [[ $# -gt 0 ]]; do
         case $1 in
             "dev")
@@ -172,54 +172,54 @@ main() {
                 exit 0
                 ;;
             *)
-                log_error "EN: $1"
+                log_error "translated: $1"
                 show_help
                 exit 1
                 ;;
         esac
     done
     
-    log_header "AutoClip Docker StopEN v1.0"
+    log_header "AutoClip Docker translated v1.0"
     
-    # StopService
+    # translatedservice
     stop_services "$mode"
     
-    # EN（IfNeed）
+    # clean（iftranslated）
     if [[ "$cleanup" == true ]]; then
         cleanup_containers "$force"
         cleanup_images "$force"
         cleanup_volumes "$force"
     fi
     
-    # ENStatus
+    # translatedstatus
     show_status
     
-    echo -e "\n${GREEN}🎉 AutoClip Docker ServiceENStop${NC}"
+    echo -e "\n${GREtranslated}🎉 AutoClip Docker servicetranslated${NC}"
 }
 
-# EN
+# translatedinfo
 show_help() {
-    echo "AutoClip Docker StopScript"
+    echo "AutoClip Docker translated"
     echo ""
-    echo "EN:"
-    echo "  $0 [EN]"
+    echo "usetranslated:"
+    echo "  $0 [Selecttranslated]"
     echo ""
-    echo "EN:"
-    echo "  dev          StopENEnvironment"
-    echo "  --cleanup    StopEN"
-    echo "  --force      EN（EN）"
-    echo "  help         EN"
+    echo "Selecttranslated:"
+    echo "  dev          translated"
+    echo "  --cleanup    translatedcleantranslated"
+    echo "  --force      translatedclean（Packagetranslated）"
+    echo "  help         translatedinfo"
     echo ""
-    echo "EN:"
-    echo "  $0                    # StopENEnvironment"
-    echo "  $0 dev                # StopENEnvironment"
-    echo "  $0 --cleanup          # StopEN"
-    echo "  $0 --cleanup --force  # StopENAllEN"
-    echo "  $0 help               # EN"
+    echo "translated:"
+    echo "  $0                    # translated"
+    echo "  $0 dev                # translated"
+    echo "  $0 --cleanup          # translatedcleantranslated"
+    echo "  $0 --cleanup --force  # translatedcleantranslated"
+    echo "  $0 help               # translated"
     echo ""
-    echo "EN:"
-    echo "  --force ENAllEN，PleaseEN！"
+    echo "translated:"
+    echo "  --force translateddeletetranslated，translateduse！"
 }
 
-# EN
+# translated
 main "$@"

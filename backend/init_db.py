@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-databaseinitializeEN
-createdatabaseEN
+databasetranslated
+createdatabasetranslated
 """
 
 import sys
 from pathlib import Path
 
-# ENbackenddirectoryENPythonpath
+# addbackenddirectorytranslatedPythonpath
 backend_dir = Path(__file__).parent
 if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
@@ -23,21 +23,21 @@ from sqlalchemy.orm import Session
 from ..core.database import SessionLocal
 
 def create_initial_data():
-    """createEN"""
+    """createtranslatedtesttranslated"""
     db = SessionLocal()
     try:
-        # checkEN
+        # checkIstranslated
         existing_projects = db.query(Project).count()
         if existing_projects > 0:
-            print("databaseEN，ENcreate")
+            print("databasetranslated，skiptranslatedcreate")
             return
         
-        # createENproject
+        # createtestproject
         test_project = Project(
-            name="ENproject",
-            description="ENproject，ENvalidatesystemEN",
+            name="testproject",
+            description="thisIsone testproject，usetranslatedverifySystemfeature",
             project_type=ProjectType.KNOWLEDGE,
-            status=ProjectStatus.PENDING,
+            status=ProjectStatus.PtranslatedDING,
             processing_config={
                 "chunk_size": 5000,
                 "min_score_threshold": 0.7,
@@ -48,23 +48,23 @@ def create_initial_data():
         db.commit()
         db.refresh(test_project)
         
-        # createENtask
+        # createtesttask
         test_task = Task(
-            name="ENtask",
-            description="ENprocessingtask",
+            name="testtask",
+            description="testprocesstask",
             task_type=TaskType.VIDEO_PROCESSING,
             project_id=test_project.id,
-            status=TaskStatus.PENDING,
+            status=TaskStatus.PtranslatedDING,
             progress=0,
-            current_step="ENstart",
+            current_step="etc.translated",
             total_steps=6
         )
         db.add(test_task)
         
-        # createENclip
+        # createtestclip
         test_clip = Clip(
-            title="ENclip",
-            content="ENclipEN",
+            title="testclip",
+            content="thisIsone testclip'stranslated",
             start_time=0,
             end_time=30,
             score=0.8,
@@ -72,44 +72,44 @@ def create_initial_data():
         )
         db.add(test_clip)
         
-        # createENcollection
+        # createtestcollection
         test_collection = Collection(
-            title="ENcollection",
-            description="ENcollection",
+            title="testcollection",
+            description="thisIsone testcollection",
             project_id=test_project.id
         )
         db.add(test_collection)
         
         db.commit()
-        print("✅ ENcreatesucceeded")
+        print("✅ translatedtesttranslatedcreatesucceeded")
         
     except Exception as e:
-        print(f"❌ createENfailed: {e}")
+        print(f"❌ createtranslatedfailed: {e}")
         db.rollback()
     finally:
         db.close()
 
 def main():
-    """EN"""
-    print("🚀 startinitializedatabase...")
+    """translated"""
+    print("🚀 translateddatabase...")
     
-    # initializepathconfig
+    # translatedpathconfig
     init_paths()
     
-    # ENdatabaseconfig
+    # translateddatabaseconfig
     print(f"databaseURL: {get_database_url()}")
-    print(f"ENdirectory: {get_data_directory()}")
+    print(f"translateddirectory: {get_data_directory()}")
     
-    # initializedatabase
+    # translateddatabase
     if init_database():
-        print("✅ databaseinitializesucceeded")
+        print("✅ databasetranslatedsucceeded")
         
-        # createEN
+        # createtranslated
         create_initial_data()
         
-        print("🎉 databaseinitializeEN！")
+        print("🎉 databasetranslated！")
     else:
-        print("❌ databaseinitializefailed")
+        print("❌ databasetranslatedfailed")
         sys.exit(1)
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 """
-Bilibili API routes.
-Handles Bilibili video parsing and downloads.
+BsitetranslatedAPItranslated
+processBsitevideotranslatedAnddownloadfeature
 """
 
 import logging
@@ -20,7 +20,7 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-# Download task states
+# translateddownloadtask'sstatus
 download_tasks = {}
 
 class BilibiliParseRequest(BaseModel):
@@ -60,19 +60,19 @@ async def parse_bilibili_video(
     url: str = Form(...),
     browser: Optional[str] = Form(None)
 ):
-    """Parse Bilibili video info"""
+    """translatedBsitevideoinfo"""
     try:
-        logger.info(f"Parsing Bilibili video: {url}")
-
-        # Validate the URL
+        logger.info(f"translatedBsitevideo: {url}")
+        
+        # verifyURLformat
         downloader = BilibiliDownloader(browser=browser)
         if not downloader.validate_bilibili_url(url):
-            raise HTTPException(status_code=400, detail="Invalid Bilibili video URL")
-
-        # Fetch the real video info
+            raise HTTPException(status_code=400, detail="translated'sBsitevideotranslated")
+        
+        # fetchtranslated'svideoinfo
         video_info = await downloader.get_video_info(url)
-
-        logger.info(f"Video info parsed: {video_info.title}")
+        
+        logger.info(f"videoinfotranslatedsucceeded: {video_info.title}")
         
         return {
             "success": True,
@@ -83,63 +83,63 @@ async def parse_bilibili_video(
                 "uploader": video_info.uploader,
                 "upload_date": video_info.upload_date,
                 "view_count": video_info.view_count,
-                "like_count": 0,  # Bilibili API may not provide like counts
+                "like_count": 0,  # BsiteAPIcantranslatedProvidestranslated
                 "thumbnail": video_info.thumbnail_url
             }
         }
-
+        
     except Exception as e:
-        logger.error(f"Failed to parse Bilibili video: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Parse failed: {str(e)}")
+        logger.error(f"translatedBsitevideofailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedfailed: {str(e)}")
 
 @router.post("/download")
 async def create_bilibili_download_task(request: BilibiliDownloadRequest):
-    """Create a Bilibili download task - creates the project immediately"""
+    """createBsitevideodownloadtask - translatedcreateproject"""
     try:
-        logger.info(f"Creating Bilibili download task: {request.url}")
-
-        # Fetch video info first for the thumbnail
+        logger.info(f"createBsitedownloadtask: {request.url}")
+        
+        # translatedfetchvideoinfotranslatedfetchtranslated
         from ...utils.bilibili_downloader import BilibiliDownloader
         downloader = BilibiliDownloader(browser=request.browser)
         video_info = await downloader.get_video_info(request.url)
-
-        # Create the project record immediately
+        
+        # translatedcreateprojecttranslated
         from ...core.database import SessionLocal
         from ...services.project_service import ProjectService
         from ...schemas.project import ProjectCreate, ProjectType, ProjectStatus
-
+        
         db = SessionLocal()
         try:
             project_service = ProjectService(db)
-
-            # Handle the thumbnail - use the parsed cover directly
+            
+            # processtranslated - translatedusetranslated'stranslated
             thumbnail_data = None
             if video_info.thumbnail_url:
                 try:
                     import requests
                     import base64
-
-                    # Download the thumbnail
+                    
+                    # downloadtranslated
                     response = requests.get(video_info.thumbnail_url, timeout=10)
                     if response.status_code == 200:
-                        # Encode as base64
+                        # translatedbase64
                         thumbnail_base64 = base64.b64encode(response.content).decode('utf-8')
                         thumbnail_data = f"data:image/jpeg;base64,{thumbnail_base64}"
-                        logger.info(f"Bilibili thumbnail fetched: {video_info.title}")
+                        logger.info(f"Bsitetranslatedfetchsucceeded: {video_info.title}")
                     else:
-                        logger.warning(f"Failed to download Bilibili thumbnail: {response.status_code}")
+                        logger.warning(f"downloadBsitetranslatedfailed: {response.status_code}")
                 except Exception as e:
-                    logger.error(f"Failed to process Bilibili thumbnail: {e}")
-                    # Thumbnail failures must not block the main flow
-
-            # Build the project data
+                    logger.error(f"processBsitetranslatedfailed: {e}")
+                    # translatedprocessing failedtranslated
+            
+            # createprojecttranslated
             project_data = ProjectCreate(
                 name=request.project_name,
-                description=f"Downloaded from Bilibili: {video_info.title}",
+                description=f"fromBsitedownload: {video_info.title}",
                 project_type=ProjectType(request.video_category),
-                status=ProjectStatus.PENDING,  # starts as pending
+                status=ProjectStatus.PtranslatedDING,  # translatedstatustranslatedetc.translated
                 source_url=request.url,
-                source_file=None,  # empty until the download finishes
+                source_file=None,  # translated，downloadtranslatedupdate
                 settings={
                     "download_status": "downloading",
                     "download_progress": 0.0,
@@ -154,28 +154,28 @@ async def create_bilibili_download_task(request: BilibiliDownloadRequest):
                     }
                 }
             )
-
+            
             project = project_service.create_project(project_data)
             project_id = str(project.id)
-
-            # Set the thumbnail
+            
+            # settingstranslated
             if thumbnail_data:
                 project.thumbnail = thumbnail_data
                 db.commit()
-                logger.info(f"Project {project_id} thumbnail set")
-
-            # Create the project directory
+                logger.info(f"project {project_id} translatedsettings")
+            
+            # createprojectdirectory
             from ...core.path_utils import get_project_directory
             project_dir = get_project_directory(project_id)
             raw_dir = project_dir / "raw"
             raw_dir.mkdir(parents=True, exist_ok=True)
-
-            logger.info(f"Project created: {project_id}")
-
-            # Generate a download task ID
+            
+            logger.info(f"projecttranslatedcreate: {project_id}")
+            
+            # translateddownloadtaskID
             task_id = str(uuid.uuid4())
-
-            # Create the task record
+            
+            # createtasktranslated
             task = BilibiliDownloadTask(
                 id=task_id,
                 url=request.url,
@@ -183,54 +183,54 @@ async def create_bilibili_download_task(request: BilibiliDownloadRequest):
                 video_category=request.video_category,
                 status="pending",
                 progress=0.0,
-                project_id=project_id,  # linked project ID
+                project_id=project_id,  # translatedprojectID
                 created_at=str(uuid.uuid1().time),
                 updated_at=str(uuid.uuid1().time)
             )
-
-            # Store the task
+            
+            # translatedtask
             download_tasks[task_id] = task
-
-            # Start the download in the background - via the safe task manager
+            
+            # translatedstartdownloadtask - usetranslated'stasktranslated
             from .async_task_manager import task_manager
             await task_manager.create_safe_task(
-                f"bilibili_download_{task_id}",
-                process_download_task,
-                task_id,
-                request,
+                f"bilibili_download_{task_id}", 
+                process_download_task, 
+                task_id, 
+                request, 
                 project_id
             )
-
-            # Return project info rather than task info
+            
+            # returnprojectinfotranslatedIstaskinfo
             return {
                 "project_id": project_id,
                 "task_id": task_id,
                 "status": "created",
-                "message": "Project created; download in progress..."
+                "message": "projecttranslatedcreate，translatedindownloadtranslated..."
             }
-
+            
         finally:
             db.close()
-
+        
     except Exception as e:
-        logger.error(f"Failed to create download task: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Failed to create task: {str(e)}")
+        logger.error(f"createdownloadtaskfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"createtaskfailed: {str(e)}")
 
 @router.get("/tasks/{task_id}")
 async def get_bilibili_task_status(task_id: str):
-    """Get download task status"""
+    """fetchdownloadtaskstatus"""
     if task_id not in download_tasks:
-        raise HTTPException(status_code=404, detail="Task not found")
-
+        raise HTTPException(status_code=404, detail="tasknot found")
+    
     return download_tasks[task_id]
 
 @router.get("/tasks")
 async def get_all_bilibili_tasks():
-    """Get all download tasks"""
+    """fetchtranslateddownloadtask"""
     return list(download_tasks.values())
 
 async def update_project_download_progress(project_id: str, progress: float, message: str):
-    """Update project download progress"""
+    """updateprojectdownloadprogress"""
     try:
         from ...core.database import SessionLocal
         from ...services.project_service import ProjectService
@@ -241,130 +241,130 @@ async def update_project_download_progress(project_id: str, progress: float, mes
             project = project_service.get(project_id)
             
             if project:
-                # Update download progress in the project settings
+                # updateprojectsettingstranslated'sdownloadprogress
                 if not project.processing_config:
                     project.processing_config = {}
-
+                
                 project.processing_config.update({
                     "download_progress": progress,
                     "download_message": message
                 })
-
-                # Mark as pending once progress reaches 100%
+                
+                # iftranslatedprogresstranslated100%，updatestatustranslatedetc.translatedprocess
                 if progress >= 100.0:
                     from ...schemas.project import ProjectStatus
-                    project.status = ProjectStatus.PENDING
-
+                    project.status = ProjectStatus.PtranslatedDING
+                
                 db.commit()
-                logger.info(f"Project {project_id} download progress: {progress}% - {message}")
-
+                logger.info(f"project {project_id} downloadprogressupdate: {progress}% - {message}")
+                
         finally:
             db.close()
-
+            
     except Exception as e:
-        logger.error(f"Failed to update project download progress: {e}")
+        logger.error(f"updateprojectdownloadprogressfailed: {e}")
 
 async def process_download_task(task_id: str, request: BilibiliDownloadRequest, project_id: str):
-    """Process a download task"""
+    """processdownloadtask"""
     try:
-        # Mark the task as processing
+        # updatetaskstatustranslatedprocessing
         download_tasks[task_id].status = "processing"
         download_tasks[task_id].progress = 10.0
-
-        # Update project state and progress
-        await update_project_download_progress(project_id, 10.0, "Fetching video info...")
-
-        # Fetch video info
+        
+        # updateprojectstatusAndprogress
+        await update_project_download_progress(project_id, 10.0, "translatedinfetchvideoinfo...")
+        
+        # fetchvideoinfo
         video_info = await get_bilibili_video_info(request.url, request.browser)
         download_tasks[task_id].progress = 30.0
-
-        # Update project progress
-        await update_project_download_progress(project_id, 30.0, "Downloading video...")
-
-        # Download the video
+        
+        # updateprojectprogress
+        await update_project_download_progress(project_id, 30.0, "translatedindownloadvideo...")
+        
+        # downloadvideo
         data_dir = get_data_directory()
         download_dir = data_dir / "temp"
         download_dir.mkdir(exist_ok=True)
-
+        
         from ...utils.bilibili_downloader import download_bilibili_video
         download_result = await download_bilibili_video(
-            request.url,
-            download_dir,
+            request.url, 
+            download_dir, 
             request.browser
         )
-
+        
         video_path = download_result.get('video_path', '')
         subtitle_path = download_result.get('subtitle_path', '')
-
-        # Update project progress
-        await update_project_download_progress(project_id, 60.0, "Video downloaded; processing subtitles...")
-
-        # Without subtitles, prefer Whisper for high-quality generation
+        
+        # updateprojectprogress
+        await update_project_download_progress(project_id, 60.0, "videodownloadtranslated，translatedinprocesssubtitles...")
+        
+        # iftranslatedsubtitlesfile，translateduseWhispergenerate subtitles
         if not subtitle_path and video_path:
-            logger.info("No subtitles found; generating high-quality subtitles with Whisper")
-            # Update project progress
-            await update_project_download_progress(project_id, 70.0, "Generating subtitles with Whisper...")
-
+            logger.info("translateduseWhispertranslatedsubtitles")
+            # updateprojectprogress
+            await update_project_download_progress(project_id, 70.0, "translatedinuseWhispergenerate subtitles...")
+            
             try:
                 from ...utils.speech_recognizer import generate_subtitle_for_video, SpeechRecognitionError
                 from pathlib import Path
                 video_file_path = Path(video_path)
-
-                # Pick a suitable model from the video info, but always auto-detect language
-                model = "base"  # balanced default
-                language = "auto"  # always auto-detect
-
-                # Choose a larger model for certain content types based on title/description
-                if video_info.title and any(keyword in video_info.title.lower() for keyword in ['tutorial', 'teaching', 'knowledge', 'explainer', 'EN', 'EN', 'EN', 'EN']):
-                    model = "small"  # more accurate model for knowledge content
-                elif video_info.title and any(keyword in video_info.title.lower() for keyword in ['speech', 'lecture', 'talk', 'EN', 'EN', 'EN']):
-                    model = "medium"  # high-precision model for speeches
-
-                logger.info(f"Generating subtitles with Whisper - language: {language}, model: {model}")
-
+                
+                # translatedvideoinfoSelectselecttranslated'smodel，translatedusetranslatedLanguagetranslated
+                model = "base"  # defaultusetranslatedmodel
+                language = "auto"  # translatedusetranslatedLanguagetranslated
+                
+                # cantranslatedvideotranslatedortranslated，Selectselecttranslated'smodeltranslated
+                if video_info.title and any(keyword in video_info.title.lower() for keyword in ['translated', 'translated', 'translated', 'translated']):
+                    model = "small"  # translatedusetranslated'smodel
+                elif video_info.title and any(keyword in video_info.title.lower() for keyword in ['translated', 'translated', 'translated']):
+                    model = "medium"  # translatedusetranslatedmodel
+                
+                logger.info(f"useWhispergenerate subtitles - Language: {language}, model: {model}")
+                
                 generated_subtitle = generate_subtitle_for_video(
                     video_file_path,
                     language=language,
                     model=model
                 )
                 subtitle_path = str(generated_subtitle)
-                logger.info(f"Whisper subtitles generated: {subtitle_path}")
-
-                # Update project progress
-                await update_project_download_progress(project_id, 90.0, "Subtitles ready; preparing to process...")
-
+                logger.info(f"Whispersubtitlestranslatedsucceeded: {subtitle_path}")
+                
+                # updateprojectprogress
+                await update_project_download_progress(project_id, 90.0, "subtitlestranslated，translatedintranslatedprocess...")
+                
             except SpeechRecognitionError as e:
-                logger.error(f"Whisper subtitle generation failed: {e}")
-                # On Whisper failure, mark the project as failed
-                logger.error("No subtitle file and Whisper generation failed; project will be marked as failed")
-                subtitle_path = None  # keep empty so the project is marked failed below
+                logger.error(f"Whispersubtitlestranslatedfailed: {e}")
+                # Whisperfailedtranslated，translatedprojecttranslatedfailedstatus
+                logger.error("subtitlesfile not foundtranslatedWhispertranslatedfailed，projecttranslatedfailedstatus")
+                subtitle_path = None  # ensuresubtitlespathtranslated，translatedprojectfailed
             except Exception as e:
-                logger.error(f"Unknown error while generating subtitles: {e}")
-                subtitle_path = None  # keep empty so the project is marked failed below
-
+                logger.error(f"generate subtitlestranslatederror: {e}")
+                subtitle_path = None  # ensuresubtitlespathtranslated，translatedprojectfailed
+        
         download_tasks[task_id].progress = 80.0
-
-        # Update project info (project was created at the start)
+        
+        # updateprojectinfo（projecttranslatedintranslatedcreate）
         from ...services.project_service import ProjectService
         from ...core.database import SessionLocal
-
+        
         db = SessionLocal()
         try:
             project_service = ProjectService(db)
-
-            # Fetch the created project
+            
+            # fetchtranslatedcreate'sproject
             project = project_service.get(project_id)
             if not project:
-                raise Exception(f"Project {project_id} not found")
-
-            # Update project info
-            project.description = f"Downloaded from Bilibili: {video_info.title}"
-            # Note: video_path is set after the files are moved
-
-            # Update project settings
+                raise Exception(f"project {project_id} not found")
+            
+            # updateprojectinfo
+            project.description = f"fromBsitedownload: {video_info.title}"
+            # translated：Do notinthistranslatedsettingsvideo_path，etc.filetranslatedsettings
+            
+            # updateprojectsettings
             if not project.processing_config:
                 project.processing_config = {}
-
+            
             project.processing_config.update({
                 "bilibili_info": {
                     "title": video_info.title,
@@ -376,127 +376,127 @@ async def process_download_task(task_id: str, request: BilibiliDownloadRequest, 
                 "download_status": "completed",
                 "download_progress": 100.0
             })
-
-            # Move files into the project directory
+            
+            # translatedfiletranslatedprojectdirectory
             from ...core.path_utils import get_project_directory
             project_dir = get_project_directory(project_id)
             raw_dir = project_dir / "raw"
             raw_dir.mkdir(parents=True, exist_ok=True)
-
-            # Move the video file
+            
+            # translatedvideofiletranslatedprojectdirectory
             import shutil
             from pathlib import Path
-
+            
             if video_path:
                 video_file_path = Path(video_path)
                 if video_file_path.exists():
-                    # Rename to input.mp4
+                    # translatedvideofiletranslatedinput.mp4
                     new_video_path = raw_dir / "input.mp4"
                     shutil.move(str(video_file_path), str(new_video_path))
-                    logger.info(f"Video file moved to: {new_video_path}")
-
-                    # Update the video path on the project
+                    logger.info(f"videofiletranslated: {new_video_path}")
+                    
+                    # updateprojecttranslated'svideopath
                     project.video_path = str(new_video_path)
-
-            # Move the subtitle file
+            
+            # translatedsubtitlesfiletranslatedprojectdirectory
             if subtitle_path and subtitle_path.strip():
                 subtitle_file_path = Path(subtitle_path)
                 if subtitle_file_path.exists():
-                    # Rename to input.srt
+                    # translatedsubtitlesfiletranslatedinput.srt
                     new_subtitle_path = raw_dir / "input.srt"
                     shutil.move(str(subtitle_file_path), str(new_subtitle_path))
-                    logger.info(f"Subtitle file moved to: {new_subtitle_path}")
-
-                    # Update the subtitle path in the processing config
+                    logger.info(f"subtitlesfiletranslated: {new_subtitle_path}")
+                    
+                    # updateprojectprocessconfigtranslated'ssubtitlespath
                     if not project.processing_config:
                         project.processing_config = {}
                     project.processing_config["subtitle_path"] = str(new_subtitle_path)
-
-            # Save project updates
+            
+            # translatedprojectupdate
             db.commit()
-
-            # Without subtitles, mark the project as failed
+            
+            # checksubtitlesfileIstranslatedin，iftranslatednot foundtranslatedprojecttranslatedfailed
             srt_file_path = raw_dir / "input.srt"
             if not srt_file_path.exists():
-                logger.error(f"Subtitle file missing: {srt_file_path}; project will be marked as failed")
+                logger.error(f"subtitlesfile not found: {srt_file_path}，projecttranslatedfailedstatus")
                 from ...schemas.project import ProjectStatus
                 project.status = ProjectStatus.FAILED
                 if not project.processing_config:
                     project.processing_config = {}
-                project.processing_config["error_message"] = "No subtitle file and Whisper generation failed"
+                project.processing_config["error_message"] = "subtitlesfile not foundtranslatedWhispertranslatedfailed"
                 db.commit()
-
-                # Mark the task as failed
+                
+                # updatetaskstatustranslatedfailed
                 download_tasks[task_id].status = "failed"
-                download_tasks[task_id].error_message = "No subtitle file and Whisper generation failed"
+                download_tasks[task_id].error_message = "subtitlesfile not foundtranslatedWhispertranslatedfailed"
                 download_tasks[task_id].progress = 0.0
                 download_tasks[task_id].project_id = str(project.id)
                 download_tasks[task_id].updated_at = datetime.now().isoformat()
-
-                # Update project download progress as failed
-                await update_project_download_progress(project_id, 0.0, "Download failed: no subtitle file")
-
-                logger.info(f"Bilibili download task failed: {task_id}, project: {project.id}, reason: missing subtitles")
+                
+                # updateprojectdownloadprogresstranslatedfailed
+                await update_project_download_progress(project_id, 0.0, "downloadfailed：subtitlesfile not found")
+                
+                logger.info(f"Bsitedownloadtaskfailed: {task_id}, projectID: {project.id}, translated: subtitlesfile not found")
                 return
-
-            # Mark project download progress complete
-            await update_project_download_progress(project_id, 100.0, "Download complete; ready to process")
-
-            # Update task state
+            
+            # updateprojectdownloadprogresstranslated
+            await update_project_download_progress(project_id, 100.0, "downloadtranslated，translatedprocess")
+            
+            # updatetaskstatus
             download_tasks[task_id].status = "completed"
             download_tasks[task_id].progress = 100.0
             download_tasks[task_id].project_id = str(project.id)
             download_tasks[task_id].updated_at = datetime.now().isoformat()
-
-            logger.info(f"Bilibili download task completed: {task_id}, project: {project.id}")
-
-            # Auto-start processing
+            
+            logger.info(f"Bsitedownloadtasktranslated: {task_id}, projectID: {project.id}")
+            
+            # translatedstartprocesstranslated
             try:
-                # Set project state to pending
+                # updateprojectstatustranslatedetc.translatedprocess
                 from ...schemas.project import ProjectStatus
-                project.status = ProjectStatus.PENDING  # PENDING so the automation service picks it up
+                project.status = ProjectStatus.PtranslatedDING  # translatedPtranslatedDING，translatedservicestart
                 db.commit()
-
-                logger.info(f"Bilibili project {project.id} downloaded; waiting for the auto pipeline")
-
-                # Start the auto pipeline asynchronously
+                
+                logger.info(f"Bsiteproject {project.id} downloadtranslated，etc.translatedstart")
+                
+                # translatedstarttranslated
                 import asyncio
                 from ...services.auto_pipeline_service import auto_pipeline_service
-
-                # Run inside the running event loop
+                
+                # usecreate_taskintranslated'stranslated
                 try:
                     loop = asyncio.get_running_loop()
-                    # Create the task in the running loop
+                    # intranslated'stranslatedcreatetask
                     task = loop.create_task(
                         auto_pipeline_service.auto_start_pipeline(str(project.id))
                     )
-                    # Wait for completion
+                    # etc.translatedtasktranslated
                     pipeline_result = await task
                 except RuntimeError:
-                    # No running loop; create a new one
+                    # iftranslated'stranslated，createtranslated's
                     pipeline_result = await auto_pipeline_service.auto_start_pipeline(str(project.id))
-
+                
                 if pipeline_result['status'] == 'started':
-                    logger.info(f"Bilibili project {project.id} auto pipeline started: {pipeline_result}")
+                    logger.info(f"Bsiteproject {project.id} translatedstart: {pipeline_result}")
                 else:
-                    logger.warning(f"Bilibili project {project.id} auto pipeline result: {pipeline_result}")
-
+                    logger.warning(f"Bsiteproject {project.id} translatedstarttranslated: {pipeline_result}")
+                
             except Exception as e:
-                logger.error(f"Failed to start auto pipeline for Bilibili project {project.id}: {str(e)}")
-                # A processing-start failure still counts as a successful download
-                # Users can restart processing via the retry button
-
+                logger.error(f"startBsiteproject {project.id} translatedfailed: {str(e)}")
+                # translatedprocessstartfailed，translatedreturndownloadsucceeded
+                # usercantranslatedbytranslatedstartprocess
+            
         finally:
             db.close()
-
+            
     except Exception as e:
-        logger.error(f"Failed to process download task: {str(e)}")
+        logger.error(f"processdownloadtaskfailed: {str(e)}")
         download_tasks[task_id].status = "failed"
         download_tasks[task_id].error_message = str(e)
         download_tasks[task_id].progress = 0.0
 
-        # Also mark the project as failed; otherwise it stays pending forever and
-        # the frontend keeps treating it as "about to start" and retrying (one root cause of the earlier error spam).
+        # translated 「project」translatedfailed，translatedprojecttranslatedin pending，
+        # frontendtranslatedonetranslated translated「translatedstart」translated（translated'stranslatedone）。
         try:
             from ...core.database import SessionLocal
             from ...services.project_service import ProjectService
@@ -505,14 +505,14 @@ async def process_download_task(task_id: str, request: BilibiliDownloadRequest, 
             try:
                 project_service = ProjectService(db)
                 project = project_service.get(project_id)
-                if project and project.status == ProjectStatus.PENDING:
+                if project and project.status == ProjectStatus.PtranslatedDING:
                     project.status = ProjectStatus.FAILED
                     if not project.processing_config:
                         project.processing_config = {}
-                    project.processing_config["error_message"] = f"Download failed: {e}"
+                    project.processing_config["error_message"] = f"downloadfailed: {e}"
                     db.commit()
-                    logger.info(f"Project {project_id} marked as failed")
+                    logger.info(f"project {project_id} translatedfailed")
             finally:
                 db.close()
         except Exception as inner:
-            logger.error(f"Error marking project {project_id} as failed: {inner}")
+            logger.error(f"translatedproject {project_id} failedstatustranslated: {inner}")

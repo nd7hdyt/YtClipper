@@ -1,6 +1,6 @@
 """
-ENprogressservice
-ENprogresssystem，ENerrorprocessingENstatusEN
+translatedprogressservice
+translatedprogressSystem，Providestranslated'serrorprocessAndstatustranslated
 """
 
 import time
@@ -23,47 +23,47 @@ logger = logging.getLogger(__name__)
 
 
 class ProgressStage(Enum):
-    """progressEN"""
-    INGEST = "INGEST"          # download/EN
-    SUBTITLE = "SUBTITLE"      # subtitles/EN
-    ANALYZE = "ANALYZE"        # ENanalysis/EN
-    HIGHLIGHT = "HIGHLIGHT"    # EN/EN
-    EXPORT = "EXPORT"          # EN/EN
-    DONE = "DONE"              # EN/EN
+    """progresstranslated"""
+    INGEST = "INGEST"          # download/translated
+    SUBTITLE = "SUBTITLE"      # subtitles/translated
+    ANALYZE = "ANALYZE"        # translated/translated
+    HIGHLIGHT = "HIGHLIGHT"    # translated/translated
+    EXPORT = "EXPORT"          # export/translated
+    DONE = "DONE"              # translated/translated
     ERROR = "ERROR"            # errorstatus
 
 
 class ProgressStatus(Enum):
-    """progressstatusEN"""
-    PENDING = "PENDING"        # EN
-    RUNNING = "RUNNING"        # runEN
+    """progressstatustranslated"""
+    PtranslatedDING = "PtranslatedDING"        # etc.translated
+    RUNNING = "RUNNING"        # translated
     COMPLETED = "COMPLETED"    # completed
     FAILED = "FAILED"          # failed
-    CANCELLED = "CANCELLED"    # ENcancel
+    CANCELLED = "CANCELLED"    # translatedcancel
 
 
 @dataclass
 class ProgressInfo:
-    """progressEN"""
+    """progressinfotranslated"""
     project_id: str
     task_id: Optional[str] = None
     stage: ProgressStage = ProgressStage.INGEST
-    status: ProgressStatus = ProgressStatus.PENDING
+    status: ProgressStatus = ProgressStatus.PtranslatedDING
     progress: int = 0  # 0-100
     message: str = ""
     error_message: Optional[str] = None
     start_time: Optional[datetime] = None
     end_time: Optional[datetime] = None
-    estimated_remaining: Optional[int] = None  # ENtime(EN)
+    estimated_remaining: Optional[int] = None  # translated(seconds)
     metadata: Optional[Dict[str, Any]] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        """EN"""
+        """translatedformat"""
         data = asdict(self)
-        # EN
+        # translated
         data['stage'] = self.stage.value
         data['status'] = self.status.value
-        # ENtimeEN
+        # translated
         if self.start_time:
             data['start_time'] = self.start_time.isoformat()
         if self.end_time:
@@ -72,13 +72,13 @@ class ProgressInfo:
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'ProgressInfo':
-        """ENcreateEN"""
-        # EN
+        """fromtranslatedcreatetranslated"""
+        # translated
         if 'stage' in data and isinstance(data['stage'], str):
             data['stage'] = ProgressStage(data['stage'])
         if 'status' in data and isinstance(data['status'], str):
             data['status'] = ProgressStatus(data['status'])
-        # ENtimeEN
+        # translated
         if 'start_time' in data and isinstance(data['start_time'], str):
             data['start_time'] = datetime.fromisoformat(data['start_time'])
         if 'end_time' in data and isinstance(data['end_time'], str):
@@ -87,9 +87,9 @@ class ProgressInfo:
 
 
 class EnhancedProgressService:
-    """ENprogressservice"""
+    """translatedprogressservice"""
     
-    # EN
+    # translated
     STAGE_WEIGHTS = {
         ProgressStage.INGEST: 10,
         ProgressStage.SUBTITLE: 15,
@@ -99,7 +99,7 @@ class EnhancedProgressService:
         ProgressStage.DONE: 10,
     }
     
-    # EN
+    # translated
     STAGE_ORDER = [
         ProgressStage.INGEST,
         ProgressStage.SUBTITLE,
@@ -116,7 +116,7 @@ class EnhancedProgressService:
         self.progress_callbacks: List[Callable[[ProgressInfo], None]] = []
     
     def _init_redis(self):
-        """initializeRedisconnect"""
+        """translatedRedisconnect"""
         try:
             self.redis_client = redis.Redis.from_url(
                 "redis://127.0.0.1:6379/0", 
@@ -124,20 +124,20 @@ class EnhancedProgressService:
                 socket_timeout=5,
                 socket_connect_timeout=5
             )
-            # ENconnect
+            # testconnect
             self.redis_client.ping()
             logger.info("Redisconnectsucceeded")
         except Exception as e:
-            logger.warning(f"Redisconnectfailed，ENuseENcache: {e}")
+            logger.warning(f"Redisconnectfailed，translatedusetranslatedcache: {e}")
             self.redis_client = None
     
     def _get_redis_key(self, project_id: str) -> str:
-        """fetchRedisEN"""
+        """fetchRedistranslated"""
         return f"progress:{project_id}"
     
     def _calculate_progress(self, stage: ProgressStage, sub_progress: float = 0.0) -> int:
-        """ENprogressEN"""
-        # ENbeforeEN
+        """translatedprogresstranslated"""
+        # translated'stranslated
         total_weight = 0
         current_stage_weight = 0
         
@@ -147,20 +147,20 @@ class EnhancedProgressService:
                 break
             total_weight += self.STAGE_WEIGHTS.get(s, 0)
         
-        # ENcurrentENprogress
+        # translatedCurrent Stage'sprogress
         if stage == ProgressStage.DONE:
             return 100
         elif stage == ProgressStage.ERROR:
-            return total_weight  # errorENcurrentprogress
+            return total_weight  # errortranslatedprogress
         
-        # ENcurrentENprogress
+        # addCurrent Stage'stranslatedprogress
         current_progress = int(current_stage_weight * sub_progress / 100.0)
         total_progress = total_weight + current_progress
         
         return min(99, total_progress)
     
     def _estimate_remaining_time(self, progress_info: ProgressInfo) -> Optional[int]:
-        """ENtime"""
+        """translated"""
         if not progress_info.start_time or progress_info.progress <= 0:
             return None
         
@@ -168,15 +168,15 @@ class EnhancedProgressService:
         if elapsed <= 0:
             return None
         
-        # ENcurrentprogressENtime
+        # Based ontranslatedprogresstranslated
         estimated_total = elapsed * 100 / progress_info.progress
         remaining = estimated_total - elapsed
         
         return max(0, int(remaining))
     
     def start_progress(self, project_id: str, task_id: Optional[str] = None, 
-                      initial_message: str = "startprocessing") -> ProgressInfo:
-        """startprogressEN"""
+                      initial_message: str = "translatedprocess") -> ProgressInfo:
+        """translatedprogresstranslated"""
         try:
             progress_info = ProgressInfo(
                 project_id=project_id,
@@ -188,33 +188,33 @@ class EnhancedProgressService:
                 start_time=datetime.utcnow()
             )
             
-            # saveENcache
+            # translatedcache
             self.progress_cache[project_id] = progress_info
             
-            # saveENRedis
+            # translatedRedis
             if self.redis_client:
                 try:
                     self.redis_client.setex(
                         self._get_redis_key(project_id),
-                        3600,  # 1EN
+                        3600,  # 1translated
                         json.dumps(progress_info.to_dict())
                     )
                 except Exception as e:
-                    logger.warning(f"saveprogressENRedisfailed: {e}")
+                    logger.warning(f"translatedprogresstranslatedRedisfailed: {e}")
             
             # updatedatabase
             self._update_database_progress(progress_info)
             
-            # EN
+            # translated
             self._trigger_callbacks(progress_info)
             
-            logger.info(f"startENproject {project_id} ENprogress")
+            logger.info(f"translatedproject {project_id} 'sprogress")
             return progress_info
             
         except Exception as e:
-            logger.error(f"startprogressENfailed: {e}")
+            logger.error(f"translatedprogresstranslatedfailed: {e}")
             raise AutoClipsException(
-                message="startprogressENfailed",
+                message="translatedprogresstranslatedfailed",
                 category=ErrorCategory.SYSTEM,
                 original_exception=e
             )
@@ -224,13 +224,13 @@ class EnhancedProgressService:
                        metadata: Optional[Dict[str, Any]] = None) -> ProgressInfo:
         """updateprogress"""
         try:
-            # fetchcurrentprogressEN
+            # fetchtranslatedprogressinfo
             progress_info = self.get_progress(project_id)
             if not progress_info:
-                logger.warning(f"project {project_id} ENprogressENdoes not exist，createEN")
+                logger.warning(f"project {project_id} 'sprogressinfonot found，createtranslated's")
                 progress_info = self.start_progress(project_id, message=message)
             
-            # updateprogressEN
+            # updateprogressinfo
             progress_info.stage = stage
             progress_info.message = message
             progress_info.progress = self._calculate_progress(stage, sub_progress)
@@ -242,10 +242,10 @@ class EnhancedProgressService:
                 else:
                     progress_info.metadata = metadata
             
-            # saveENcache
+            # translatedcache
             self.progress_cache[project_id] = progress_info
             
-            # saveENRedis
+            # translatedRedis
             if self.redis_client:
                 try:
                     self.redis_client.setex(
@@ -259,7 +259,7 @@ class EnhancedProgressService:
             # updatedatabase
             self._update_database_progress(progress_info)
             
-            # EN
+            # translated
             self._trigger_callbacks(progress_info)
             
             logger.info(f"project {project_id} progressupdate: {progress_info.progress}% - {stage.value}")
@@ -273,15 +273,15 @@ class EnhancedProgressService:
                 original_exception=e
             )
     
-    def complete_progress(self, project_id: str, message: str = "processingEN") -> ProgressInfo:
-        """ENprogress"""
+    def complete_progress(self, project_id: str, message: str = "processing completed") -> ProgressInfo:
+        """translatedprogress"""
         try:
             progress_info = self.get_progress(project_id)
             if not progress_info:
-                logger.warning(f"project {project_id} ENprogressENdoes not exist")
+                logger.warning(f"project {project_id} 'sprogressinfonot found")
                 return None
             
-            # updateENstatus
+            # updatetranslatedstatus
             progress_info.stage = ProgressStage.DONE
             progress_info.status = ProgressStatus.COMPLETED
             progress_info.progress = 100
@@ -289,10 +289,10 @@ class EnhancedProgressService:
             progress_info.end_time = datetime.utcnow()
             progress_info.estimated_remaining = 0
             
-            # saveENcache
+            # translatedcache
             self.progress_cache[project_id] = progress_info
             
-            # saveENRedis
+            # translatedRedis
             if self.redis_client:
                 try:
                     self.redis_client.setex(
@@ -301,44 +301,44 @@ class EnhancedProgressService:
                         json.dumps(progress_info.to_dict())
                     )
                 except Exception as e:
-                    logger.warning(f"saveENstatusENRedisfailed: {e}")
+                    logger.warning(f"translatedstatustranslatedRedisfailed: {e}")
             
             # updatedatabase
             self._update_database_progress(progress_info)
             
-            # EN
+            # translated
             self._trigger_callbacks(progress_info)
             
-            logger.info(f"project {project_id} processingEN")
+            logger.info(f"project {project_id} processing completed")
             return progress_info
             
         except Exception as e:
-            logger.error(f"ENprogressfailed: {e}")
+            logger.error(f"translatedprogressfailed: {e}")
             raise AutoClipsException(
-                message="ENprogressfailed",
+                message="translatedprogressfailed",
                 category=ErrorCategory.SYSTEM,
                 original_exception=e
             )
     
     def fail_progress(self, project_id: str, error_message: str) -> ProgressInfo:
-        """ENprogressENfailed"""
+        """translatedprogresstranslatedfailed"""
         try:
             progress_info = self.get_progress(project_id)
             if not progress_info:
-                logger.warning(f"project {project_id} ENprogressENdoes not exist")
+                logger.warning(f"project {project_id} 'sprogressinfonot found")
                 return None
             
-            # updateENfailedstatus
+            # updatetranslatedfailedstatus
             progress_info.stage = ProgressStage.ERROR
             progress_info.status = ProgressStatus.FAILED
             progress_info.error_message = error_message
             progress_info.end_time = datetime.utcnow()
             progress_info.estimated_remaining = 0
             
-            # saveENcache
+            # translatedcache
             self.progress_cache[project_id] = progress_info
             
-            # saveENRedis
+            # translatedRedis
             if self.redis_client:
                 try:
                     self.redis_client.setex(
@@ -347,33 +347,33 @@ class EnhancedProgressService:
                         json.dumps(progress_info.to_dict())
                     )
                 except Exception as e:
-                    logger.warning(f"savefailedstatusENRedisfailed: {e}")
+                    logger.warning(f"translatedfailedstatustranslatedRedisfailed: {e}")
             
             # updatedatabase
             self._update_database_progress(progress_info)
             
-            # EN
+            # translated
             self._trigger_callbacks(progress_info)
             
-            logger.error(f"project {project_id} processingfailed: {error_message}")
+            logger.error(f"project {project_id} processing failed: {error_message}")
             return progress_info
             
         except Exception as e:
-            logger.error(f"ENprogressfailedfailed: {e}")
+            logger.error(f"translatedprogressfailedfailed: {e}")
             raise AutoClipsException(
-                message="ENprogressfailedfailed",
+                message="translatedprogressfailedfailed",
                 category=ErrorCategory.SYSTEM,
                 original_exception=e
             )
     
     def get_progress(self, project_id: str) -> Optional[ProgressInfo]:
-        """fetchprogressEN"""
+        """fetchprogressinfo"""
         try:
-            # ENcachefetch
+            # translatedfromcachefetch
             if project_id in self.progress_cache:
                 return self.progress_cache[project_id]
             
-            # ENRedisfetch
+            # fromRedisfetch
             if self.redis_client:
                 try:
                     redis_data = self.redis_client.get(self._get_redis_key(project_id))
@@ -383,14 +383,14 @@ class EnhancedProgressService:
                         self.progress_cache[project_id] = progress_info
                         return progress_info
                 except Exception as e:
-                    logger.warning(f"ENRedisfetchprogressfailed: {e}")
+                    logger.warning(f"fromRedisfetchprogressfailed: {e}")
             
-            # ENdatabasefetch
+            # fromdatabasefetch
             db = SessionLocal()
             try:
                 project = db.query(Project).filter(Project.id == project_id).first()
                 if project:
-                    # ENprojectstatuscreateprogressEN
+                    # translatedprojectstatuscreateprogressinfo
                     stage = self._map_project_status_to_stage(project.status)
                     status = self._map_project_status_to_progress_status(project.status)
                     
@@ -412,13 +412,13 @@ class EnhancedProgressService:
             return None
             
         except Exception as e:
-            logger.error(f"fetchprogressENfailed: {e}")
+            logger.error(f"fetchprogressinfofailed: {e}")
             return None
     
     def _map_project_status_to_stage(self, project_status: str) -> ProgressStage:
-        """ENprojectstatusENprogressEN"""
+        """translatedprojectstatustranslatedprogresstranslated"""
         status_mapping = {
-            ProjectStatus.PENDING: ProgressStage.INGEST,
+            ProjectStatus.PtranslatedDING: ProgressStage.INGEST,
             ProjectStatus.PROCESSING: ProgressStage.ANALYZE,
             ProjectStatus.COMPLETED: ProgressStage.DONE,
             ProjectStatus.FAILED: ProgressStage.ERROR,
@@ -426,17 +426,17 @@ class EnhancedProgressService:
         return status_mapping.get(project_status, ProgressStage.INGEST)
     
     def _map_project_status_to_progress_status(self, project_status: str) -> ProgressStatus:
-        """ENprojectstatusENprogressstatus"""
+        """translatedprojectstatustranslatedprogressstatus"""
         status_mapping = {
-            ProjectStatus.PENDING: ProgressStatus.PENDING,
+            ProjectStatus.PtranslatedDING: ProgressStatus.PtranslatedDING,
             ProjectStatus.PROCESSING: ProgressStatus.RUNNING,
             ProjectStatus.COMPLETED: ProgressStatus.COMPLETED,
             ProjectStatus.FAILED: ProgressStatus.FAILED,
         }
-        return status_mapping.get(project_status, ProgressStatus.PENDING)
+        return status_mapping.get(project_status, ProgressStatus.PtranslatedDING)
     
     def _update_database_progress(self, progress_info: ProgressInfo):
-        """updatedatabaseENprogressEN"""
+        """updatedatabasetranslated'sprogressinfo"""
         try:
             db = SessionLocal()
             try:
@@ -476,38 +476,38 @@ class EnhancedProgressService:
             logger.error(f"updatedatabaseprogressfailed: {e}")
     
     def add_progress_callback(self, callback: Callable[[ProgressInfo], None]):
-        """ENprogressEN"""
+        """translatedAdd totranslated"""
         self.progress_callbacks.append(callback)
     
     def remove_progress_callback(self, callback: Callable[[ProgressInfo], None]):
-        """ENprogressEN"""
+        """translatedprogresstranslated"""
         if callback in self.progress_callbacks:
             self.progress_callbacks.remove(callback)
     
     def _trigger_callbacks(self, progress_info: ProgressInfo):
-        """ENprogressEN"""
+        """translatedprogresstranslated"""
         for callback in self.progress_callbacks:
             try:
                 callback(progress_info)
             except Exception as e:
-                logger.error(f"progressENexecutefailed: {e}")
+                logger.error(f"progresstranslatedfailed: {e}")
     
     def cleanup_old_progress(self, max_age_hours: int = 24):
-        """ENprogressEN"""
+        """cleantranslated'sprogressinfo"""
         try:
             cutoff_time = datetime.utcnow() - timedelta(hours=max_age_hours)
             cleaned_count = 0
             
-            # ENcache
+            # cleancache
             for project_id, progress_info in list(self.progress_cache.items()):
                 if progress_info.end_time and progress_info.end_time < cutoff_time:
                     del self.progress_cache[project_id]
                     cleaned_count += 1
             
-            # ENRedis
+            # cleanRedis
             if self.redis_client:
                 try:
-                    # fetchallprogressEN
+                    # fetchtranslatedprogresstranslated
                     keys = self.redis_client.keys("progress:*")
                     for key in keys:
                         try:
@@ -520,26 +520,26 @@ class EnhancedProgressService:
                                         self.redis_client.delete(key)
                                         cleaned_count += 1
                         except Exception as e:
-                            logger.warning(f"ENRedisEN {key} failed: {e}")
+                            logger.warning(f"cleanRedistranslated {key} failed: {e}")
                 except Exception as e:
-                    logger.warning(f"ENRedisprogressfailed: {e}")
+                    logger.warning(f"cleanRedisprogressfailed: {e}")
             
-            logger.info(f"EN {cleaned_count} ENprogressEN")
+            logger.info(f"cleantranslated {cleaned_count}  translatedprogresstranslated")
             
         except Exception as e:
-            logger.error(f"ENprogressfailed: {e}")
+            logger.error(f"cleantranslatedprogressfailed: {e}")
     
     def get_all_active_progress(self) -> List[ProgressInfo]:
-        """fetchallENprogressEN"""
+        """fetchtranslated'sprogressinfo"""
         try:
             active_progress = []
             
-            # ENcachefetch
+            # fromcachefetch
             for progress_info in self.progress_cache.values():
-                if progress_info.status in [ProgressStatus.PENDING, ProgressStatus.RUNNING]:
+                if progress_info.status in [ProgressStatus.PtranslatedDING, ProgressStatus.RUNNING]:
                     active_progress.append(progress_info)
             
-            # ENRedisfetch
+            # fromRedisfetch
             if self.redis_client:
                 try:
                     keys = self.redis_client.keys("progress:*")
@@ -549,30 +549,30 @@ class EnhancedProgressService:
                             if data:
                                 progress_data = json.loads(data)
                                 progress_info = ProgressInfo.from_dict(progress_data)
-                                if progress_info.status in [ProgressStatus.PENDING, ProgressStatus.RUNNING]:
-                                    # EN
+                                if progress_info.status in [ProgressStatus.PtranslatedDING, ProgressStatus.RUNNING]:
+                                    # translated
                                     if not any(p.project_id == progress_info.project_id for p in active_progress):
                                         active_progress.append(progress_info)
                         except Exception as e:
-                            logger.warning(f"parseRedisprogressENfailed: {e}")
+                            logger.warning(f"translatedRedisprogresstranslatedfailed: {e}")
                 except Exception as e:
                     logger.warning(f"fetchRedisprogressfailed: {e}")
             
             return active_progress
             
         except Exception as e:
-            logger.error(f"fetchENprogressfailed: {e}")
+            logger.error(f"fetchtranslatedprogressfailed: {e}")
             return []
 
 
-# ENprogressserviceEN
+# translatedprogressservicetranslated
 progress_service = EnhancedProgressService()
 
 
-# EN
+# translated
 def start_progress(project_id: str, task_id: Optional[str] = None, 
-                  initial_message: str = "startprocessing") -> ProgressInfo:
-    """startprogressEN"""
+                  initial_message: str = "translatedprocess") -> ProgressInfo:
+    """translatedprogresstranslated"""
     return progress_service.start_progress(project_id, task_id, initial_message)
 
 
@@ -583,16 +583,16 @@ def update_progress(project_id: str, stage: ProgressStage,
     return progress_service.update_progress(project_id, stage, message, sub_progress, metadata)
 
 
-def complete_progress(project_id: str, message: str = "processingEN") -> ProgressInfo:
-    """ENprogress"""
+def complete_progress(project_id: str, message: str = "processing completed") -> ProgressInfo:
+    """translatedprogress"""
     return progress_service.complete_progress(project_id, message)
 
 
 def fail_progress(project_id: str, error_message: str) -> ProgressInfo:
-    """ENprogressENfailed"""
+    """translatedprogresstranslatedfailed"""
     return progress_service.fail_progress(project_id, error_message)
 
 
 def get_progress(project_id: str) -> Optional[ProgressInfo]:
-    """fetchprogressEN"""
+    """fetchprogressinfo"""
     return progress_service.get_progress(project_id)

@@ -10,12 +10,12 @@ from .ffmpeg_utils import get_ffmpeg_path, get_ffprobe_path
 logger = logging.getLogger(__name__)
 
 class VideoEditor:
-    """videoEN - ENsubtitlesdeleteENvideoEN"""
+    """videotranslated - supportBased onsubtitlesdelete'svideotranslated"""
     
     def __init__(self, clips_dir: Optional[str] = None, collections_dir: Optional[str] = None):
-        # VideoEditor ENneedENpathparameters，ENuseENpath
+        # VideoEditor translatedpathtranslated，translatedusetranslatedpath
         if clips_dir is None or collections_dir is None:
-            # ifENpath，useENdirectory（EN）
+            # iftranslatedProvidespath，usetranslateddirectory（translated）
             from ..core.shared_config import CLIPS_DIR, COLLECTIONS_DIR
             clips_dir = str(CLIPS_DIR) if clips_dir is None else clips_dir
             collections_dir = str(COLLECTIONS_DIR) if collections_dir is None else collections_dir
@@ -29,44 +29,44 @@ class VideoEditor:
                                       deleted_segments: List[str],
                                       output_path: Path) -> Dict:
         """
-        ENsubtitlesdeleteENvideo
+        Based onsubtitlesdeletetranslatedvideo
         
         Args:
-            video_path: ENvideopath
-            subtitle_data: subtitlesEN
-            deleted_segments: ENdeleteENsubtitlesENIDEN
-            output_path: ENvideopath
+            video_path: translatedvideopath
+            subtitle_data: subtitlestranslated
+            deleted_segments: translateddelete'ssubtitlestranslatedIDlist
+            output_path: translatedvideopath
             
         Returns:
-            ENresultEN
+            translatedinfo
         """
         try:
-            logger.info(f"startENsubtitlesdeleteENvideo: {video_path}")
+            logger.info(f"translatedBased onsubtitlesdeletetranslatedvideo: {video_path}")
             
-            # generateENtimeEN
+            # translated'stranslated
             timeline = self.subtitle_processor.generate_edited_video_timeline(
                 subtitle_data, deleted_segments
             )
             
             if not timeline:
-                logger.warning("ENtimeEN，cannotgeneratevideo")
+                logger.warning("translated'stranslated，translatedvideo")
                 return {
                     'success': False,
-                    'error': 'ENtimeEN'
+                    'error': 'translated'stranslated'
                 }
             
-            # ENdeleteENduration
+            # translateddelete'stranslated
             total_deleted_duration = self._calculate_deleted_duration(
                 subtitle_data, deleted_segments
             )
             
-            # executevideoEN
+            # translatedvideotranslated
             success = self._concatenate_video_segments(
                 video_path, timeline, output_path
             )
             
             if success:
-                # fetchENvideoduration
+                # fetchtranslatedvideotranslated
                 final_duration = self._get_video_duration(output_path)
                 
                 result = {
@@ -79,17 +79,17 @@ class VideoEditor:
                     'deletedSegments': deleted_segments
                 }
                 
-                logger.info(f"videoEN: deleteduration {total_deleted_duration:.2f}EN，"
-                          f"ENduration {final_duration:.2f}EN")
+                logger.info(f"videotranslated: deletetranslated {total_deleted_duration:.2f}seconds，"
+                          f"translated {final_duration:.2f}seconds")
                 return result
             else:
                 return {
                     'success': False,
-                    'error': 'videoENfailed'
+                    'error': 'videotranslatedfailed'
                 }
                 
         except Exception as e:
-            logger.error(f"videoENfailed: {e}")
+            logger.error(f"videotranslatedfailed: {e}")
             return {
                 'success': False,
                 'error': str(e)
@@ -98,14 +98,14 @@ class VideoEditor:
     def _calculate_deleted_duration(self, subtitle_data: List[Dict], 
                                   deleted_segments: List[str]) -> float:
         """
-        ENdeleteENduration
+        translateddelete'stranslated
         
         Args:
-            subtitle_data: subtitlesEN
-            deleted_segments: deleteENsubtitlesENIDEN
+            subtitle_data: subtitlestranslated
+            deleted_segments: delete'ssubtitlestranslatedIDlist
             
         Returns:
-            deleteENduration（EN）
+            delete'stranslated（seconds）
         """
         deleted_ids = set(deleted_segments)
         total_duration = 0.0
@@ -121,50 +121,50 @@ class VideoEditor:
                                   timeline: List[Tuple[float, float]], 
                                   output_path: Path) -> bool:
         """
-        ENvideoEN
+        translatedvideotranslated
         
         Args:
-            video_path: ENvideopath
-            timeline: timeEN [(start, end), ...]
-            output_path: ENpath
+            video_path: translatedvideopath
+            timeline: translated [(start, end), ...]
+            output_path: translatedpath
             
         Returns:
-            ENsucceeded
+            Istranslatedsucceeded
         """
         try:
-            # ENdirectoryEN
+            # ensuretranslateddirectorytranslatedin
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
             if len(timeline) == 1:
-                # EN，EN
+                # translatedone translated，translated
                 start_time, end_time = timeline[0]
                 return self._extract_single_segment(
                     video_path, start_time, end_time, output_path
                 )
             else:
-                # EN，needEN
+                # multi translated，translated
                 return self._concatenate_multiple_segments(
                     video_path, timeline, output_path
                 )
                 
         except Exception as e:
-            logger.error(f"ENvideoENfailed: {e}")
+            logger.error(f"translatedvideotranslatedfailed: {e}")
             return False
     
     def _extract_single_segment(self, video_path: Path, 
                               start_time: float, end_time: float, 
                               output_path: Path) -> bool:
         """
-        ENvideoEN
+        translated videotranslated
         
         Args:
-            video_path: ENvideopath
-            start_time: starttime（EN）
-            end_time: endtime（EN）
-            output_path: ENpath
+            video_path: translatedvideopath
+            start_time: translated（seconds）
+            end_time: translated（seconds）
+            output_path: translatedpath
             
         Returns:
-            ENsucceeded
+            Istranslatedsucceeded
         """
         try:
             duration = end_time - start_time
@@ -185,36 +185,36 @@ class VideoEditor:
             result = subprocess.run(cmd, capture_output=True, text=True)
             
             if result.returncode == 0:
-                logger.info(f"succeededENvideoEN: {start_time:.2f}s - {end_time:.2f}s")
+                logger.info(f"succeededtranslatedvideotranslated: {start_time:.2f}s - {end_time:.2f}s")
                 return True
             else:
-                logger.error(f"ENvideoENfailed: {result.stderr}")
+                logger.error(f"translatedvideotranslatedfailed: {result.stderr}")
                 return False
                 
         except Exception as e:
-            logger.error(f"ENvideoENexception: {e}")
+            logger.error(f"translatedvideotranslated: {e}")
             return False
     
     def _concatenate_multiple_segments(self, video_path: Path, 
                                      timeline: List[Tuple[float, float]], 
                                      output_path: Path) -> bool:
         """
-        ENvideoEN
+        translatedmulti videotranslated
         
         Args:
-            video_path: ENvideopath
-            timeline: timeEN [(start, end), ...]
-            output_path: ENpath
+            video_path: translatedvideopath
+            timeline: translated [(start, end), ...]
+            output_path: translatedpath
             
         Returns:
-            ENsucceeded
+            Istranslatedsucceeded
         """
         try:
-            # createENdirectory
+            # createtranslateddirectory
             with tempfile.TemporaryDirectory() as temp_dir:
                 temp_path = Path(temp_dir)
                 
-                # ENallEN
+                # translated
                 segment_files = []
                 for i, (start_time, end_time) in enumerate(timeline):
                     segment_file = temp_path / f"segment_{i:03d}.mp4"
@@ -226,16 +226,16 @@ class VideoEditor:
                     if success:
                         segment_files.append(segment_file)
                     else:
-                        logger.error(f"EN {i} failed")
+                        logger.error(f"translated {i} failed")
                         return False
                 
-                # createfileEN
+                # createfilelist
                 file_list_path = temp_path / "file_list.txt"
                 with open(file_list_path, 'w', encoding='utf-8') as f:
                     for segment_file in segment_files:
                         f.write(f"file '{segment_file}'\n")
                 
-                # ENallEN
+                # translated
                 ffmpeg_bin = get_ffmpeg_path()
                 cmd = [
                     ffmpeg_bin,
@@ -250,25 +250,25 @@ class VideoEditor:
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 
                 if result.returncode == 0:
-                    logger.info(f"succeededEN {len(segment_files)} ENvideoEN")
+                    logger.info(f"succeededtranslated {len(segment_files)}  videotranslated")
                     return True
                 else:
-                    logger.error(f"ENvideoENfailed: {result.stderr}")
+                    logger.error(f"translatedvideotranslatedfailed: {result.stderr}")
                     return False
                     
         except Exception as e:
-            logger.error(f"ENvideoENexception: {e}")
+            logger.error(f"translatedmulti videotranslated: {e}")
             return False
     
     def _get_video_duration(self, video_path: Path) -> float:
         """
-        fetchvideoduration
+        fetchvideotranslated
         
         Args:
             video_path: videopath
             
         Returns:
-            videoduration（EN）
+            videotranslated（seconds）
         """
         try:
             ffprobe_bin = get_ffprobe_path()
@@ -286,11 +286,11 @@ class VideoEditor:
                 duration = float(result.stdout.strip())
                 return duration
             else:
-                logger.warning(f"fetchvideodurationfailed: {result.stderr}")
+                logger.warning(f"fetchvideotranslatedfailed: {result.stderr}")
                 return 0.0
                 
         except Exception as e:
-            logger.error(f"fetchvideodurationexception: {e}")
+            logger.error(f"fetchvideotranslated: {e}")
             return 0.0
     
     def create_preview_clips(self, video_path: Path, 
@@ -298,22 +298,22 @@ class VideoEditor:
                            deleted_segments: List[str],
                            output_dir: Path) -> List[Path]:
         """
-        createEN，EN
+        createtranslated，usetranslated'stranslated
         
         Args:
-            video_path: ENvideopath
-            subtitle_data: subtitlesEN
-            deleted_segments: ENdeleteENsubtitlesENIDEN
-            output_dir: ENdirectory
+            video_path: translatedvideopath
+            subtitle_data: subtitlestranslated
+            deleted_segments: translateddelete'ssubtitlestranslatedIDlist
+            output_dir: translateddirectory
             
         Returns:
-            ENfilepathEN
+            translatedfile pathlist
         """
         try:
             output_dir.mkdir(parents=True, exist_ok=True)
             preview_files = []
             
-            # ENeachENdeleteENcreateEN
+            # translatedper translateddelete'stranslatedcreatetranslated
             for segment_id in deleted_segments:
                 segment = next((s for s in subtitle_data if s['id'] == segment_id), None)
                 if segment:
@@ -329,27 +329,27 @@ class VideoEditor:
                     if success:
                         preview_files.append(preview_file)
             
-            logger.info(f"createEN {len(preview_files)} EN")
+            logger.info(f"createtranslated {len(preview_files)}  translated")
             return preview_files
             
         except Exception as e:
-            logger.error(f"createENfailed: {e}")
+            logger.error(f"createtranslatedfailed: {e}")
             return []
     
     def validate_edit_operations(self, subtitle_data: List[Dict], 
                                deleted_segments: List[str]) -> Dict:
         """
-        validateEN
+        verifytranslated'stranslated
         
         Args:
-            subtitle_data: subtitlesEN
-            deleted_segments: ENdeleteENsubtitlesENIDEN
+            subtitle_data: subtitlestranslated
+            deleted_segments: translateddelete'ssubtitlestranslatedIDlist
             
         Returns:
-            validateresult
+            verifytranslated
         """
         try:
-            # checkdeleteENsubtitlesEN
+            # checkdelete'ssubtitlestranslatedIstranslatedin
             existing_ids = {seg['id'] for seg in subtitle_data}
             deleted_ids = set(deleted_segments)
             
@@ -357,24 +357,24 @@ class VideoEditor:
             if invalid_ids:
                 return {
                     'valid': False,
-                    'error': f'ENsubtitlesENID: {list(invalid_ids)}'
+                    'error': f'translated'ssubtitlestranslatedID: {list(invalid_ids)}'
                 }
             
-            # checkdeleteEN
+            # checkdeletetranslatedIstranslated
             remaining_segments = [seg for seg in subtitle_data if seg['id'] not in deleted_ids]
             
             if not remaining_segments:
                 return {
                     'valid': False,
-                    'error': 'deleteallsubtitlesEN'
+                    'error': 'deletetranslatedsubtitlestranslated'
                 }
             
-            # ENdeleteENduration
+            # translateddelete'stranslated
             total_deleted_duration = self._calculate_deleted_duration(
                 subtitle_data, deleted_segments
             )
             
-            # ENduration
+            # translated
             total_duration = max(seg['endTime'] for seg in subtitle_data) - min(seg['startTime'] for seg in subtitle_data)
             
             return {
@@ -387,7 +387,7 @@ class VideoEditor:
             }
             
         except Exception as e:
-            logger.error(f"validateENfailed: {e}")
+            logger.error(f"verifytranslatedfailed: {e}")
             return {
                 'valid': False,
                 'error': str(e)

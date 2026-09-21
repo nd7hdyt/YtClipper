@@ -1,61 +1,61 @@
-# ❓ AutoClip Desktop FAQEN
+# ❓ AutoClip Desktop FAQ
 
-## 🚀 EN
+## 🚀 installstart
 
-### Q: EN？
+### Q: start？
 
-**A:** EN：
+**A:** step：
 
-1. **EN**
+1. **check**
    - macOS: 10.13+ (Intel/Apple Silicon)
-   - Windows: Windows 10+ (64EN)
-   - Linux: Ubuntu 18.04+ EN
+   - Windows: Windows 10+ (64)
+   - Linux: Ubuntu 18.04+ 
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. **install**
+   - version
+   - downloadinstall
+   - installinstall
 
-3. **EN**
-   - macOS: EN > EN > EN
-   - Windows: EN
-   - Linux: EN
+3. **check**
+   - macOS: settings > security > 
+   - Windows: 
+   - Linux: checkfile
 
-4. **EN**
-   - EN
-   - ContactENSupportENProvidesEN
+4. **viewerror**
+   - checkerror
+   - tech supporterror
 
-### Q: EN"EN"？
+### Q: "verify"？
 
-**A:** ENmacOSEN，EN：
+**A:** macOSsecurity，solvemethod：
 
-1. EN **EN** > **EN**
-2. EN **EN** EN
-3. EN **"EN"** EN
-4. EN
+1. open **settings** > **security**
+2.  **** tab
+3. click **"open"** button
+4. confirm
 
-### Q: EN？
+### Q: startpage？
 
-**A:** EN：
+**A:** reasonsolution：
 
-1. **EN**
-   - EN
-   - EN (F5)
+1. **network issue**
+   - check network connection
+   - refresh page (F5)
 
-2. **EN**
-   - EN
-   - EN8000EN
+2. **port**
+   - restart app
+   - check8000port
 
-3. **EN**
-   - EN
-   - EN
+3. **cacheissue**
+   - cache
+   - restart app
 
-## 📁 ENUpload
+## 📁 file upload
 
-### Q: SupportEN？
+### Q: supportformat？
 
-**A:** SupportEN：
-- **MP4** (EN)
+**A:** supportformat：
+- **MP4** (recommend)
 - **AVI**
 - **MOV**
 - **MKV**
@@ -63,459 +63,459 @@
 - **FLV**
 - **WMV**
 
-### Q: EN？
+### Q: filelimit？
 
-**A:** EN，EN：
+**A:** ，settings：
 
-- **EN**: EN512MB
-- **EN**: EN2GB (EN)
-- **EN**: EN5GB
+- ****: max512MB
+- **medium**: max2GB (recommend)
+- ****: max5GB
 
-### Q: UploadEN？
+### Q: failed？
 
-**A:** EN：
+**A:** checkproject：
 
-1. **EN**
-   - ENSupportEN
-   - ENMP4EN
+1. **fileformat**
+   - usesupportformat
+   - recommendedMP4format
 
-2. **EN**
-   - EN
-   - EN
+2. **file**
+   - checkfilelimit
+   - canfile
 
-3. **EN**
-   - EN
-   - ENUpload
+3. ****
+   - check network connection
+   - 
 
-4. **EN**
-   - EN
-   - EN2EN
+4. ****
+   - 
+   - needfile2
 
-### Q: ENUploadEN？
+### Q: cansubtitlesfile？
 
-**A:** EN，SupportEN：
-- **SRT** (EN)
+**A:** can，supportsubtitlesformat：
+- **SRT** (recommend)
 - **VTT**
 - **ASS**
 - **SSA**
 
-UploadEN：
-- EN
-- EN
-- ProvidesEN
+subtitlesfilecan：
+- speech recognition
+- 
+- 
 
-## 🤖 AIEN
+## 🤖 AIconfig
 
-### Q: EN？
+### Q: configspeech recognition？
 
-**A:** EN：
+**A:** ：
 
-#### ENWhisperEN
-1. EN **EN** > **EN**
-2. EN **"ENWhisperEN"**
-3. EN：
-   - `base`: EN (EN)
-   - `small`: EN
-   - `medium`: EN
-   - `large`: EN
-4. EN **"EN"** (EN)
+#### localWhispermodel
+1.  **settings** > **config**
+2. select **"localWhispermodel"**
+3. selectmodel：
+   - `base`:  (recommend)
+   - `small`: 
+   - `medium`: 
+   - `large`: 
+4. click **"downloadmodel"** (use)
 
-#### ENAPIEN
-1. EN **"ENAPIEN"**
-2. ENProvidesEN：
+#### cloudAPIservice
+1. select **"cloudAPIservice"**
+2. selectserviceprovider：
    - OpenAI Whisper API
    - Azure Speech Services
    - Google Cloud Speech-to-Text
-   - EN
-3. ENAPIEN
-4. EN
+   - Alibaba speech recognition
+3. APIkey
+4. test
 
-### Q: ENAPIEN？
+### Q: fetchAPIkey？
 
-**A:** EN：
+**A:** servicefetch：
 
-#### EN
-1. EN [EN](https://dashscope.console.aliyun.com/)
-2. EN/ENAccount
-3. EN
-4. ENAPIEN
+#### Alibaba Qwen
+1. access [](https://dashscope.console.aliyun.com/)
+2. /sign inaccount
+3. Qwenservice
+4. fetchAPIkey
 
 #### OpenAI
-1. EN [OpenAIEN](https://platform.openai.com/)
-2. EN/ENAccount
-3. ENAPIEN
-4. EN
+1. access [OpenAIofficial site](https://platform.openai.com/)
+2. /sign inaccount
+3. createAPIkey
+4. 
 
 #### Google Gemini
-1. EN [Google AI Studio](https://makersuite.google.com/)
-2. ENGoogleAccountEN
-3. ENAPIEN
-4. EN：EN15EN
+1. access [Google AI Studio](https://makersuite.google.com/)
+2. useGoogleaccountsign in
+3. fetchAPIkey
+4. free：minutes15
 
-### Q: APIEN？
+### Q: APItestfailed？
 
-**A:** EN：
+**A:** check：
 
-1. **APIEN**
-   - EN
-   - EN
-   - EN
+1. **APIkey**
+   - key
+   - check
+   - confirm
 
-2. **EN**
-   - EN
-   - ENAPIEN
+2. ****
+   - check
+   - confirmcanaccessAPIservice
 
-3. **EN**
-   - ENAPIEN
-   - EN
+3. **servicestatus**
+   - checkAPIservice
+   - viewservicestatuspage
 
-4. **EN**
-   - EN
-   - EN
+4. **config**
+   - confirmconfig
+   - checksettings
 
-## ⚙️ EN
+## ⚙️ settings
 
-### Q: EN？
+### Q: select？
 
-**A:** EN：
+**A:** configselect：
 
-#### EN
-- **EN**: EN、EN
-- **EN**: EN512MB、1EN
-- **EN**: 2GB
+#### 
+- **applicable**: 、
+- **limit**: file512MB、1
+- **memory**: 2GB
 
-#### EN (EN)
-- **EN**: EN、EN
-- **EN**: EN2GB、2EN
-- **EN**: 4GB
+#### medium (recommend)
+- **applicable**: 、daily use
+- **limit**: file2GB、2
+- **memory**: 4GB
 
-#### EN
-- **EN**: EN、EN
-- **EN**: EN5GB、4EN
-- **EN**: 8GB
+#### 
+- **applicable**: 、config
+- **limit**: file5GB、4
+- **memory**: 8GB
 
-### Q: EN？
+### Q: ？
 
-**A:** EN：
+**A:** ：
 
-1. **EN**
-   - EN
-   - EN
+1. **settings**
+   - 
+   - 
 
-2. **ENAPI**
-   - EN
-   - ENAPIEN
+2. **usecloudAPI**
+   - local
+   - cloudAPI
 
-3. **EN**
-   - ENWhisperEN
-   - EN
+3. **selectmodel**
+   - useWhispermodel
+   - 
 
-4. **EN**
-   - EN
-   - EN
+4. ****
+   - 
+   - 
 
-### Q: EN？
+### Q: out of memory？
 
-**A:** EN：
+**A:** solution：
 
-1. **EN**
-   - EN
-   - EN
+1. **settings**
+   - 
+   - 
 
-2. **EN**
-   - EN
-   - EN
+2. ****
+   - memory
+   - restart app
 
-3. **EN**
-   - EN
-   - EN
+3. **cache**
+   - file
+   - 
 
-## 🎬 EN
+## 🎬 
 
-### Q: EN？
+### Q: need？
 
-**A:** EN：
+**A:** ：
 
-1. **EN**
-   - 1EN10-30EN
-   - EN
+1. ****
+   - 110-30minutes
+   - 
 
-2. **EN**
-   - EN
-   - EN
+2. ****
+   - 
+   - impactspeech recognition
 
-3. **EN**
-   - CPUEN
-   - EN
+3. ****
+   - CPUimpact
+   - memoryimpact
 
-4. **AIEN**
-   - ENAPIEN
-   - EN
+4. **AIserviceselect**
+   - cloudAPI
+   - localneed
 
-### Q: EN？
+### Q: clip？
 
-**A:** EN：
+**A:** ：
 
-1. **EN**
-   - EN
-   - EN
-   - EN
+1. ****
+   - 
+   - 
+   - 
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. ****
+   - 
+   - 
+   - 
 
-3. **EN**
-   - EN
-   - EN
-   - ENAIEN
+3. **settings**
+   - 
+   - clip
+   - useAImodel
 
-### Q: EN？
+### Q: canclip？
 
-**A:** EN，SupportEN：
+**A:** can，support：
 
-1. **EN**
-   - EN
-   - EN
+1. **editclip**
+   - 
+   - 
 
-2. **EN**
-   - EN
-   - EN
+2. **needclip**
+   - clip
+   - 
 
-3. **EN**
-   - EN
-   - EN
+3. **clip**
+   - clip
+   - create
 
-## 📚 EN
+## 📚 
 
-### Q: EN？
+### Q: create collection？
 
-**A:** EN：
+**A:** createstep：
 
-1. **EN**
-   - EN
-   - EN、EN
+1. **selectclip**
+   - projectpageselectclip
+   - can、
 
-2. **EN**
-   - EN"EN"EN
-   - EN
+2. **create collection**
+   - click"create collection"button
+   - 
 
-3. **EN**
-   - AIEN：EN
-   - EN：EN
+3. **select**
+   - AIrecommend：recommend
+   - create：select
 
-4. **EN**
-   - EN
-   - EN"EN"
+4. **completedcreate**
+   - confirm
+   - click"create collection"
 
-### Q: EN？
+### Q: canexport？
 
-**A:** EN，SupportEN：
+**A:** can，supportexport：
 
-1. **EN**
-   - ENMP4EN
-   - EN
+1. **file**
+   - exportMP4format
+   - clip
 
-2. **EN**
-   - EN
-   - SupportEN
+2. ****
+   - generate
+   - support
 
-3. **EN**
-   - ENJSON
-   - ENCSV
+3. **export**
+   - exportJSON
+   - exportclipCSV
 
-### Q: EN？
+### Q: ？
 
-**A:** EN：
+**A:** ：
 
-1. **EN**
-   - EN
-   - EN
-   - EN
+1. ****
+   - 
+   - 
+   - use
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. ****
+   - need
+   - update
+   - 
 
-3. **EN**
-   - EN
-   - EN
+3. ****
+   - export
+   - 
 
-## 🔧 Troubleshooting
+## 🔧 troubleshooting
 
-### Q: EN？
+### Q: ？
 
-**A:** EN：
+**A:** step：
 
-1. **EN**
-   - EN
-   - EN
+1. **restart app**
+   - 
+   - start
 
-2. **EN**
-   - EN
-   - EN
+2. **check**
+   - memory
+   - check
 
-3. **EN**
-   - EN
-   - ContactENSupport
+3. **viewerror**
+   - error
+   - tech support
 
-4. **EN**
-   - EN
-   - EN
+4. **install**
+   - issue
+   - downloadinstall
 
-### Q: EN？
+### Q: ？
 
-**A:** EN：
+**A:** ：
 
-1. **EN**
-   - EN
-   - EN
+1. **check**
+   - view
+   - version
 
-2. **EN**
-   - EN
-   - EN
+2. **data directory**
+   - checklocation
+   - projectfile
 
-3. **ContactSupport**
-   - ProvidesEN
-   - ENSupport
+3. **support**
+   - 
+   - tech support
 
-### Q: EN？
+### Q: network issue？
 
-**A:** EN：
+**A:** solution：
 
-1. **EN**
-   - EN
-   - EN
+1. **check**
+   - confirm
+   - test
 
-2. **EN**
-   - EN
-   - EN
+2. **settings**
+   - checkconfig
+   - access
 
-3. **EN**
-   - EN
-   - EN
+3. **proxysettings**
+   - configproxyserver
+   - checkproxysettings
 
-## 💰 EN
+## 💰 cost
 
-### Q: EN？
+### Q: usecost？
 
-**A:** EN：
+**A:** costnotes：
 
-1. **EN**
-   - EN
-   - EN
+1. ****
+   - free use
+   - cost
 
-2. **AIEN**
-   - EN：EN
-   - OpenAI：ENTokenEN
-   - Google Gemini：EN
+2. **AIservicecost**
+   - Alibaba Qwen：call
+   - OpenAI：Token
+   - Google Gemini：free
 
-3. **EN**
-   - EN
-   - EN
+3. **cost**
+   - localfree
+   - cloud
 
-### Q: EN？
+### Q: cost？
 
-**A:** EN：
+**A:** ：
 
-1. **EN**
-   - Google GeminiEN
-   - ENWhisperEN
+1. **usefreeservice**
+   - Google Geminifree
+   - localWhispermodelfree
 
-2. **EN**
-   - ENAPIEN
-   - EN
+2. **use**
+   - APIcall
+   - uselocal
 
-3. **EN**
-   - EN
-   - EN
+3. ****
+   - project
+   - 
 
-## 🔄 EN
+## 🔄 update
 
-### Q: EN？
+### Q: update？
 
-**A:** EN：
+**A:** update：
 
-1. **EN**
-   - EN
-   - EN"EN"EN
+1. **auto-update**
+   - checkupdate
+   - click"update"install
 
-2. **EN**
-   - ENGitHub ReleasesEN
-   - EN
+2. **manual update**
+   - accessGitHub Releasespage
+   - downloadversioninstall
 
-3. **EN**
-   - EN
-   - Performance
-   - EN
+3. **update**
+   - features
+   - performance
+   - issuefix
 
-### Q: EN？
+### Q: ？
 
-**A:** EN：
+**A:** security：
 
-1. **EN**
-   - EN
-   - EN
+1. ****
+   - 
+   - 
 
-2. **EN**
-   - EN
-   - EN
+2. ****
+   - canexport
+   - 
 
-3. **EN**
-   - EN
-   - SupportEN
+3. ****
+   - update
+   - support
 
-## 📞 ENSupport
+## 📞 tech support
 
-### Q: ENSupport？
+### Q: fetchtech support？
 
-**A:** SupportEN：
+**A:** support：
 
-1. **EN**
-   - EN
-   - ENFAQ
+1. ****
+   - view
+   - FAQ
 
-2. **ENSupport**
+2. **support**
    - GitHub Issues
-   - EN
+   - 
 
-3. **ENContact**
-   - ENSupport
-   - EN
+3. ****
+   - tech support
+   - 
 
-### Q: EN？
+### Q: issue？
 
-**A:** EN：
+**A:** step：
 
-1. **EN**
-   - EN
-   - EN
-   - EN
+1. ****
+   - error
+   - error
+   - step
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. ****
+   - issuephenomenon
+   - step
+   - 
 
-3. **EN**
-   - ENGitHub Issues
-   - ENSupport
+3. ****
+   - GitHub Issues
+   - tech support
 
 ---
 
-## 💡 EN
+## 💡 use
 
-1. **EN**：EN
-2. **Performance**：EN
-3. **APIEN**：ENAPIEN
-4. **EN**：EN
-5. **EN**：EN
+1. **use**：
+2. **performance**：select
+3. **APIconfig**：configAPIservice
+4. ****：needprojectcache
+5. ****：project
 
-EN，EN：
-- EN
-- ENGitHub IssuesEN
-- ContactENSupportEN
+issue，：
+- view
+- accessGitHub Issuespage
+- tech support
 
-🎉 **EN！**
+🎉 **use！**

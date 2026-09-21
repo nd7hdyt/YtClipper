@@ -1,11 +1,11 @@
 /**
- * EN「EN」（Chrome / Edge / Safari）ENTextEN <font> EN。
- * React EN removeChild / insertBefore EN，EN，
- * EN NotFoundError，EN ErrorBoundary uninstall（issue #100：Docker Web EN
- * EN LLM EN）。
+ * translated「translated」（Chrome / Edge / Safari）translated translated <font> Packagetranslated'stranslated。
+ * React translatedthistranslated removeChild / insertBefore translated，translatedintranslated'stranslated，
+ * translated NotFoundError，translated ErrorBoundary translated（issue #100：Docker Web translated
+ * translatedusertranslated LLM Providesprovidertranslated）。
  *
- * EN DOM ActionsEN「EN → EN / ENtoEN」，
- * EN，EN。EN facebook/react#11538 EN。
+ * thistranslated thistranslated  DOM translated「translated → skip / translated」，
+ * translatedIstranslatedcantranslated，translated。translated facebook/react#11538 'stranslated。
  */
 
 const GUARD_FLAG = '__autoclipDomTranslationGuard'
@@ -16,7 +16,7 @@ export function isPageTranslated(): boolean {
   return (
     html.classList.contains('translated-ltr') ||
     html.classList.contains('translated-rtl') ||
-    // Safari / EN Chrome versionEN class，EN <font> EN
+    // Safari / translated Chrome versiontranslated class，translated's <font> translated
     !!document.querySelector('font[style*="vertical-align: inherit"] > font')
   )
 }
@@ -39,7 +39,7 @@ export function installDomTranslationGuard(): void {
   Node.prototype.removeChild = function removeChild<T extends Node>(this: Node, child: T): T {
     if (child.parentNode !== this) {
       if (import.meta.env.DEV) {
-        console.warn('[dom-guard] removeChild EN：EN', child)
+        console.warn('[dom-guard] removeChild skip：translatedetc.translated', child)
       }
       return child
     }
@@ -54,7 +54,7 @@ export function installDomTranslationGuard(): void {
   ): T {
     if (referenceNode && referenceNode.parentNode !== this) {
       if (import.meta.env.DEV) {
-        console.warn('[dom-guard] insertBefore EN，ENtoEN', referenceNode)
+        console.warn('[dom-guard] insertBefore Referencetranslated，translated', referenceNode)
       }
       return originalInsertBefore.call(this, newNode, null) as T
     }

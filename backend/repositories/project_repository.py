@@ -1,6 +1,6 @@
 """
 projectRepository
-ENprojectEN
+Providesprojecttranslated'stranslated
 """
 
 from typing import List, Optional, Dict, Any
@@ -11,68 +11,68 @@ from .base import BaseRepository
 from ..models.project import Project, ProjectStatus, ProjectType
 
 class ProjectRepository(BaseRepository[Project]):
-    """projectRepositoryEN"""
+    """projectRepositorytranslated"""
     
     def __init__(self, db: Session):
         super().__init__(Project, db)
     
     def get_by_status(self, status: ProjectStatus) -> List[Project]:
         """
-        ENstatusfetchprojectEN
+        translatedstatusfetchprojectlist
         
         Args:
             status: projectstatus
             
         Returns:
-            projectEN
+            projectlist
         """
         return self.find_by(status=status)
     
     def get_by_category(self, category: ProjectType) -> List[Project]:
         """
-        ENprojectENfetchprojectEN
+        translatedprojecttranslatedfetchprojectlist
         
         Args:
-            category: projectEN
+            category: projecttranslated
             
         Returns:
-            projectEN
+            projectlist
         """
         return self.find_by(project_type=category)
     
     def get_recent_projects(self, limit: int = 10) -> List[Project]:
         """
-        fetchENcreateENproject
+        fetchtranslatedcreate'sproject
         
         Args:
-            limit: returnEN
+            limit: returntranslated
             
         Returns:
-            ENprojectEN
+            translated'sprojectlist
         """
         return self.db.query(self.model).order_by(
             desc(self.model.created_at)
         ).limit(limit).all()
     
     def create_project(self, project_data: Dict[str, Any]) -> Project:
-        """createprojectEN（EN）"""
+        """createprojecttranslated（translated）"""
         from ..services.storage_service import StorageService
         import uuid
         
-        # generateprojectID（ifEN）
+        # translatedprojectID（iftranslatedProvides）
         if "id" not in project_data:
             project_data["id"] = str(uuid.uuid4())
         
-        # initializeENservice
+        # translatedservice
         storage_service = StorageService(project_data["id"])
         
-        # createprojectEN
+        # createprojecttranslated
         project = Project(
             id=project_data["id"],
             name=project_data["name"],
             description=project_data.get("description"),
             project_type=project_data.get("project_type", ProjectType.DEFAULT),
-            status=project_data.get("status", ProjectStatus.PENDING),
+            status=project_data.get("status", ProjectStatus.PtranslatedDING),
             processing_config=project_data.get("processing_config", {}),
             project_metadata={
                 'project_id': project_data["id"],
@@ -86,7 +86,7 @@ class ProjectRepository(BaseRepository[Project]):
         return project
     
     def get_project_file_paths(self, project_id: str) -> Dict[str, Optional[Path]]:
-        """fetchprojectfilepath"""
+        """fetchprojectfile path"""
         project = self.get_by_id(project_id)
         if not project:
             return {}
@@ -97,7 +97,7 @@ class ProjectRepository(BaseRepository[Project]):
         }
     
     def update_project_file_path(self, project_id: str, file_type: str, file_path: str) -> bool:
-        """updateprojectfilepath"""
+        """updateprojectfile path"""
         project = self.get_by_id(project_id)
         if not project:
             return False
@@ -113,7 +113,7 @@ class ProjectRepository(BaseRepository[Project]):
         return True
     
     def get_project_storage_info(self, project_id: str) -> Dict[str, Any]:
-        """fetchprojectEN"""
+        """fetchprojecttranslatedinfo"""
         from ..services.storage_service import StorageService
         
         project = self.get_by_id(project_id)
@@ -134,40 +134,40 @@ class ProjectRepository(BaseRepository[Project]):
     
     def get_processing_projects(self) -> List[Project]:
         """
-        fetchcurrentlyprocessingENproject
+        fetchtranslatedinprocess'sproject
         
         Returns:
-            currentlyprocessingENprojectEN
+            translatedinprocess'sprojectlist
         """
         return self.find_by(status=ProjectStatus.PROCESSING)
     
     def get_completed_projects(self) -> List[Project]:
         """
-        fetchcompletedENproject
+        fetchcompleted'sproject
         
         Returns:
-            completedENprojectEN
+            completed'sprojectlist
         """
         return self.find_by(status=ProjectStatus.COMPLETED)
     
     def get_error_projects(self) -> List[Project]:
         """
-        fetchENproject
+        fetchtranslated'sproject
         
         Returns:
-            ENprojectEN
+            translated'sprojectlist
         """
         return self.find_by(status=ProjectStatus.FAILED)
     
     def search_projects(self, keyword: str) -> List[Project]:
         """
-        ENproject
+        translatedproject
         
         Args:
-            keyword: EN
+            keyword: translated
             
         Returns:
-            ENprojectEN
+            translated'sprojectlist
         """
         return self.db.query(self.model).filter(
             self.model.name.contains(keyword) | 
@@ -176,28 +176,28 @@ class ProjectRepository(BaseRepository[Project]):
     
     def get_projects_with_clips_count(self, skip: int = 0, limit: int = 100) -> List[Project]:
         """
-        fetchprojectEN，ENclipEN
+        fetchprojectlist，Packageincludecliptranslated
         
         Args:
-            skip: EN
-            limit: returnEN
+            skip: skip'stranslated
+            limit: return'stranslated
             
         Returns:
-            projectEN
+            projectlist
         """
         return self.db.query(self.model).options(
-            # ENcanENloadEN，ENN+1EN
+            # thistranslatedcantranslatedaddtranslatedSelecttranslated，translatedN+1translatedissue
         ).offset(skip).limit(limit).all()
     
     def get_project_with_details(self, project_id: str) -> Optional[Project]:
         """
-        fetchprojectEN，ENclipENcollection
+        fetchprojecttranslated，Packageincludetranslated'sclipAndcollection
         
         Args:
             project_id: projectID
             
         Returns:
-            projectENNone
+            projecttranslatedorNone
         """
         return self.db.query(self.model).filter(
             self.model.id == project_id
@@ -209,23 +209,23 @@ class ProjectRepository(BaseRepository[Project]):
         
         Args:
             project_id: projectID
-            status: ENstatus
+            status: translatedstatus
             
         Returns:
-            updateENprojectENNone
+            updatetranslated'sprojecttranslatedorNone
         """
         return self.update(project_id, status=status)
     
     def get_projects_by_date_range(self, start_date, end_date) -> List[Project]:
         """
-        ENfetchproject
+        translatedfetchproject
         
         Args:
-            start_date: startEN
-            end_date: endEN
+            start_date: translated
+            end_date: translated
             
         Returns:
-            projectEN
+            projectlist
         """
         return self.db.query(self.model).filter(
             self.model.created_at >= start_date,
@@ -234,10 +234,10 @@ class ProjectRepository(BaseRepository[Project]):
     
     def get_project_statistics(self) -> dict:
         """
-        fetchprojectEN
+        fetchprojecttranslatedinfo
         
         Returns:
-            EN
+            translatedinfotranslated
         """
         total_projects = self.count()
         processing_projects = len(self.get_processing_projects())

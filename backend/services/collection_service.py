@@ -1,6 +1,6 @@
 """
 collectionservice
-ENcollectionEN
+Providescollectiontranslated'stranslated
 """
 
 from typing import List, Optional, Dict, Any
@@ -27,25 +27,25 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
     
     def update_collection(self, collection_id: str, collection_data: CollectionUpdate) -> Optional[Collection]:
         """Update a collection with business logic."""
-        # fetchallEN，includeNoneEN
+        # fetchtranslated，PackagetranslatedNonetranslated
         all_data = collection_data.model_dump()
         
-        # ENNoneEN，ENmetadataEN
+        # translatedNonetranslated，translatedmetadatatranslated
         update_data = {k: v for k, v in all_data.items() if v is not None or k == 'metadata'}
         
-        # ifmetadataEN，needEN
+        # iftranslatedmetadatatranslatedin，translatedIstranslated
         if 'metadata' in all_data:
-            # fetchcurrentcollectionENmetadata
+            # fetchtranslatedcollection'smetadata
             current_collection = self.get(collection_id)
             if current_collection:
                 current_metadata = getattr(current_collection, 'collection_metadata', {}) or {}
                 new_metadata = collection_data.metadata or {}
                 
-                # ENmetadata，EN
+                # translatedmetadata，translated
                 merged_metadata = {**current_metadata, **new_metadata}
-                # useEN collection_metadata
+                # usetranslated'stranslated collection_metadata
                 update_data['collection_metadata'] = merged_metadata
-                # ENerrorEN
+                # translatederror'stranslated
                 if 'metadata' in update_data:
                     del update_data['metadata']
         
@@ -55,7 +55,7 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
         return self.update(collection_id, **update_data)
     
     def delete_collection_with_filesystem_update(self, collection_id: str) -> bool:
-        """deletecollectionENupdatefilesystemENdeleteEN"""
+        """deletecollectiontranslatedupdatefileSystem'sdeletetranslated"""
         import logging
         import json
         from pathlib import Path
@@ -64,24 +64,24 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
         
         logger = logging.getLogger(__name__)
         
-        # fetchcollectionEN
+        # fetchcollectioninfo
         collection = self.get(collection_id)
         if not collection:
             return False
         
         project_id = collection.project_id
         
-        # deletedatabaseEN
+        # deletedatabasetranslated
         success = self.delete(collection_id)
         if not success:
             return False
         
-        # updatefilesystemENdeleteEN
+        # updatefileSystem'sdeletetranslated
         try:
             project_dir = get_project_directory(project_id)
             deleted_collections_file = project_dir / "deleted_collections.json"
             
-            # readENdeleteEN
+            # translated'sdeletetranslated
             deleted_collections = []
             if deleted_collections_file.exists():
                 try:
@@ -89,13 +89,13 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
                         data = json.load(f)
                         deleted_collections = data.get('deleted_collection_ids', [])
                 except Exception as e:
-                    logger.warning(f"readdeleteENfilefailed: {e}")
+                    logger.warning(f"translateddeletetranslatedfilefailed: {e}")
             
-            # ENdeleteEN
+            # addtranslated'sdeletetranslated
             if collection_id not in deleted_collections:
                 deleted_collections.append(collection_id)
                 
-                # saveupdateENdeleteEN
+                # translatedupdatetranslated'sdeletetranslated
                 deleted_data = {
                     'deleted_collection_ids': deleted_collections,
                     'last_updated': datetime.now().isoformat()
@@ -104,11 +104,11 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
                 with open(deleted_collections_file, 'w', encoding='utf-8') as f:
                     json.dump(deleted_data, f, ensure_ascii=False, indent=2)
                 
-                logger.info(f"updateddeleteENfile: {deleted_collections_file}")
+                logger.info(f"translatedupdatedeletetranslatedfile: {deleted_collections_file}")
             
         except Exception as e:
-            logger.error(f"updatedeleteENfilefailed: {e}")
-            # ENfileupdatefailed，databasedeletealreadysucceeded，soreturnTrue
+            logger.error(f"updatedeletetranslatedfilefailed: {e}")
+            # translatedfileupdatefailed，databasedeletetranslatedsucceeded，SoreturnTrue
         
         return True
     
@@ -137,7 +137,7 @@ class CollectionService(BaseService[Collection, CollectionCreate, CollectionUpda
             clip_ids = []
             metadata = getattr(collection, 'collection_metadata', {}) or {}
             if metadata and 'clip_ids' in metadata:
-                # ENusemetadataENclip_ids，ENalreadyENUUIDEN
+                # translatedusemetadatatranslated'sclip_ids，translatedIsUUIDformat
                 clip_ids = metadata['clip_ids']
             
             collection_responses.append(CollectionResponse(

@@ -3,13 +3,13 @@ import { projectApi } from '../services/api'
 import { Project, useProjectStore } from '../store/useProjectStore'
 
 interface UseProjectPollingOptions {
-  interval?: number // EN，EN10EN
+  interval?: number // translated，default10seconds
   onProjectsUpdate?: (projects: Project[]) => void
-  enabled?: boolean // EN
+  enabled?: boolean // Istranslatedusetranslated
 }
 
 export const useProjectPolling = ({
-  interval = 30000, // EN30EN，ENrequest
+  interval = 30000, // default30seconds，translated
   onProjectsUpdate,
   enabled = true
 }: UseProjectPollingOptions = {}) => {
@@ -24,10 +24,10 @@ export const useProjectPolling = ({
     
     const poll = async () => {
       try {
-        // ENfetchisDraggingStatus
+        // translatedfetchisDraggingstatus
         const currentIsDragging = useProjectStore.getState().isDragging
         
-        // ENDrag，EN
+        // iftranslatedintranslated，skipthistranslated
         if (currentIsDragging) {
           console.log('Skipping poll: dragging in progress')
           return
@@ -37,7 +37,7 @@ export const useProjectPolling = ({
         const projects = await projectApi.getProjects()
         console.log('Polled projects:', projects)
         
-        // ensureprojectsEN
+        // ensureprojectsIstranslated
         const safeProjects = Array.isArray(projects) ? projects : []
         const hasProcessingProjects = safeProjects.some(p => p.status === 'processing')
         
@@ -48,20 +48,20 @@ export const useProjectPolling = ({
         
         setLastUpdateTime(Date.now())
         
-        // EN：ENProcessingENproject，EN
+        // translated：iftranslatedinprocess'sproject，translated
         if (!hasProcessingProjects) {
-          // ENproject，EN
-          console.log('ENproject，EN')
+          // iftranslatedproject，cantranslatedonetranslated
+          console.log('translatedproject，translated')
         }
       } catch (error) {
         console.error('Polling error:', error)
       }
     }
 
-    // Execute once immediately
+    // translatedonetranslated
     poll()
     
-    // Set timer
+    // settingstranslated
     intervalRef.current = window.setInterval(poll, interval)
   }
 
@@ -76,7 +76,7 @@ export const useProjectPolling = ({
   const refreshNow = async () => {
     try {
       const projects = await projectApi.getProjects()
-      // ensureprojectsEN
+      // ensureprojectsIstranslated
       const safeProjects = Array.isArray(projects) ? projects : []
       if (onProjectsUpdate) {
         onProjectsUpdate(safeProjects)

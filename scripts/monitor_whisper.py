@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-WhisperENTool
-ENWhisperEN
+Whisperprocessmonitortool
+usetranslatedAndtranslated'sWhisperprocess
 """
 
 import psutil
@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def find_whisper_processes():
-    """ENAllCurrentlyENWhisperEN"""
+    """translatedintranslated'sWhisperprocess"""
     whisper_processes = []
     
     for proc in psutil.process_iter(['pid', 'name', 'cmdline', 'cpu_percent', 'memory_info']):
@@ -33,20 +33,20 @@ def find_whisper_processes():
     return whisper_processes
 
 def check_duplicate_whisper_processes():
-    """CheckENWhisperENProcessingEN"""
+    """checkIstranslated'sWhisperprocessprocesstranslatedone file"""
     whisper_processes = find_whisper_processes()
     
     if not whisper_processes:
-        logger.info("ENWhisperEN")
+        logger.info("translatedWhisperprocess")
         return True
     
-    logger.info(f"EN {len(whisper_processes)} ENWhisperEN:")
+    logger.info(f"translated {len(whisper_processes)}  Whisperprocess:")
     
-    # EN
+    # byvideofiletranslated
     video_files = {}
     for proc in whisper_processes:
         cmdline = proc['cmdline']
-        # EN
+        # translatedvideofile path
         parts = cmdline.split()
         video_file = None
         for i, part in enumerate(parts):
@@ -59,29 +59,29 @@ def check_duplicate_whisper_processes():
                 video_files[video_file] = []
             video_files[video_file].append(proc)
     
-    # CheckENProcessing
+    # checktranslatedprocess
     duplicates_found = False
     for video_file, processes in video_files.items():
         if len(processes) > 1:
-            logger.warning(f"ENProcessingEN {video_file}:")
+            logger.warning(f"translatedprocessfile {video_file}:")
             duplicates_found = True
             for proc in processes:
-                logger.warning(f"  PID {proc['pid']}: CPU {proc['cpu_percent']:.1f}%, EN {proc['memory_mb']:.1f}MB")
+                logger.warning(f"  PID {proc['pid']}: CPU {proc['cpu_percent']:.1f}%, translated {proc['memory_mb']:.1f}MB")
     
     if not duplicates_found:
-        logger.info("ENProcessingENWhisperEN")
+        logger.info("translatedprocess'sWhisperprocess")
     
     return not duplicates_found
 
 def kill_duplicate_whisper_processes():
-    """ENWhisperEN"""
+    """translated'sWhisperprocess"""
     whisper_processes = find_whisper_processes()
     
     if not whisper_processes:
-        logger.info("ENWhisperENNeedEN")
+        logger.info("translatedWhisperprocesstranslated")
         return
     
-    # EN
+    # byvideofiletranslated
     video_files = {}
     for proc in whisper_processes:
         cmdline = proc['cmdline']
@@ -97,39 +97,39 @@ def kill_duplicate_whisper_processes():
                 video_files[video_file] = []
             video_files[video_file].append(proc)
     
-    # ENCPUEN，EN
+    # translatedCPUusetranslated'sprocess，translated's
     for video_file, processes in video_files.items():
         if len(processes) > 1:
-            logger.info(f"ProcessingEN - EN: {video_file}")
+            logger.info(f"processtranslatedprocess - file: {video_file}")
             
-            # ENCPUEN，EN
+            # byCPUusetranslated，translated's
             processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
             keep_process = processes[0]
             
-            logger.info(f"EN PID {keep_process['pid']} (CPU: {keep_process['cpu_percent']:.1f}%)")
+            logger.info(f"translatedprocess PID {keep_process['pid']} (CPU: {keep_process['cpu_percent']:.1f}%)")
             
-            # EN
+            # translatedprocess
             for proc in processes[1:]:
                 try:
-                    logger.info(f"EN PID {proc['pid']}")
+                    logger.info(f"translatedprocess PID {proc['pid']}")
                     psutil.Process(proc['pid']).terminate()
                 except psutil.NoSuchProcess:
-                    logger.info(f"EN PID {proc['pid']} AlreadyEN")
+                    logger.info(f"process PID {proc['pid']} translatednot found")
                 except psutil.AccessDenied:
-                    logger.error(f"EN PID {proc['pid']} (EN)")
+                    logger.error(f"translatedprocess PID {proc['pid']} (translated)")
 
 def main():
-    """EN"""
+    """translated"""
     if len(sys.argv) > 1 and sys.argv[1] == '--kill-duplicates':
-        logger.info("CheckENWhisperEN...")
+        logger.info("checktranslated'sWhisperprocess...")
         kill_duplicate_whisper_processes()
     else:
-        logger.info("CheckWhisperENStatus...")
+        logger.info("checkWhisperprocessstatus...")
         if check_duplicate_whisper_processes():
-            logger.info("✅ SystemStatusEN")
+            logger.info("✅ Systemstatustranslated")
             sys.exit(0)
         else:
-            logger.warning("⚠️ ENWhisperEN")
+            logger.warning("⚠️ translated'sWhisperprocess")
             sys.exit(1)
 
 if __name__ == '__main__':

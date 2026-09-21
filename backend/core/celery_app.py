@@ -1,6 +1,6 @@
 """
-CeleryENconfig
-taskqueueconfigENinitialize
+Celerytranslateduseconfig
+Task QueueconfigAndtranslated
 """
 
 import os
@@ -8,17 +8,17 @@ from celery import Celery
 from celery.schedules import crontab
 from pathlib import Path
 
-# settingsENconfigEN
+# settingsdefaultconfigtranslated
 # os.environ.setdefault('CELERY_CONFIG_MODULE', 'backend.core.celery_app')
 
-# createCeleryEN
+# createCelerytranslateduse
 celery_app = Celery('autoclip')
 
 # configCelery
 class CeleryConfig:
-    """CeleryconfigEN"""
+    """Celeryconfigtranslated"""
     
-    # taskEN
+    # tasktranslatedformat
     task_serializer = 'json'
     accept_content = ['json']
     result_serializer = 'json'
@@ -30,45 +30,45 @@ class CeleryConfig:
     result_backend = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
     
     # taskconfig
-    task_always_eager = os.getenv('CELERY_ALWAYS_EAGER', 'False').lower() == 'true'  # ENexecute
+    task_always_eager = os.getenv('CELERY_ALWAYS_EAGER', 'False').lower() == 'true'  # translated
     task_eager_propagates = True
     
-    # ENconfig
+    # translatedprocessconfig
     worker_prefetch_multiplier = 1
     worker_max_tasks_per_child = 1000
     worker_disable_rate_limits = True
-    worker_concurrency = 1  # ENsettingsEN1，ENprocessing
+    worker_concurrency = 1  # translatedsettingstranslated1，translatedprocess
     
-    # taskEN
+    # tasktranslated
     task_routes = {
         'backend.tasks.processing.*': {'queue': 'processing'},
         'backend.tasks.video.*': {'queue': 'video'},
         'backend.tasks.notification.*': {'queue': 'notification'},
-        'backend.tasks.upload.*': {'queue': 'upload'},  # ENuploadtaskEN
-        'backend.tasks.import_processing.*': {'queue': 'processing'},  # ENtaskEN
+        'backend.tasks.upload.*': {'queue': 'upload'},  # adduploadtasktranslated
+        'backend.tasks.import_processing.*': {'queue': 'processing'},  # importtasktranslated
     }
     
-    # ENtaskconfig
+    # translatedtaskconfig
     beat_schedule = {
         'cleanup-expired-tasks': {
             'task': 'backend.tasks.maintenance.cleanup_expired_tasks',
-            'schedule': crontab(hour=2, minute=0),  # EN2EN
+            'schedule': crontab(hour=2, minute=0),  # pertranslated2translated
         },
         'health-check': {
             'task': 'backend.tasks.maintenance.health_check',
-            'schedule': crontab(minute='*/5'),  # EN5EN
+            'schedule': crontab(minute='*/5'),  # per5minutes
         },
     }
     
-    # resultconfig
-    result_expires = 3600  # 1EN
+    # translatedconfig
+    result_expires = 3600  # 1translated
     task_ignore_result = False
     
-    # logconfig
+    # logsconfig
     worker_log_format = '[%(asctime)s: %(levelname)s/%(processName)s] %(message)s'
     worker_task_log_format = '[%(asctime)s: %(levelname)s/%(processName)s] [%(task_name)s(%(task_id)s)] %(message)s'
 
-# ENconfig
+# translateduseconfig
 celery_app.config_from_object(CeleryConfig)
 
 
@@ -77,12 +77,12 @@ def _is_desktop_mode() -> bool:
 
 
 class _LocalAsyncResult:
-    """EN AsyncResult EN，ENexecuteENreturn。"""
+    """translated AsyncResult translated，translatedlocaltranslatedreturn。"""
 
     def __init__(self, task_id: str):
         self.id = task_id
         self.task_id = task_id
-        self.state = "PENDING"
+        self.state = "PtranslatedDING"
 
     def get(self, *args, **kwargs):
         return None
@@ -92,13 +92,13 @@ class _LocalAsyncResult:
 
 
 class DesktopAwareTask(celery_app.Task):
-    """EN Redis broker，EN core.celery_app EN redis://localhost。
+    """translatedinstallPackagetranslated Redis broker，translated core.celery_app translated redis://localhost。
 
-    allEN `task.delay(...)` / `apply_async(...)` ENtask，ENtaskEN
-    Redis queue —— EN，EN 0%「initializeEN」。
+    translateduse `task.delay(...)` / `apply_async(...)` translatedtask，defaulttranslated tasktranslated
+    Redis translated —— translated，translatedIstranslatedin 0%「translated」。
 
-    EN apply_async EN「ENexecute apply()」：
-    EN broker，ENreturn，progressEN。EN。
+    thistranslatedintranslated  apply_async translated「intranslated apply()」：
+    translateddependenciestranslated broker，translatedreturn，progresstranslatedfrontendtranslated。translated。
     """
 
     def apply_async(self, args=None, kwargs=None, task_id=None, **options):
@@ -116,7 +116,7 @@ class DesktopAwareTask(celery_app.Task):
                 except Exception as exc:  # noqa: BLE001
                     import logging
                     logging.getLogger(__name__).error(
-                        f"ENexecutetaskfailed {self.name} ({tid}): {exc}", exc_info=True
+                        f"translatedlocaltranslatedtaskfailed {self.name} ({tid}): {exc}", exc_info=True
                     )
 
             threading.Thread(target=_run, name=f"task-{self.name}", daemon=True).start()
@@ -125,23 +125,23 @@ class DesktopAwareTask(celery_app.Task):
         return super().apply_async(args=args, kwargs=kwargs, task_id=task_id, **options)
 
     def update_state(self, task_id=None, state=None, meta=None, **kwargs):
-        # EN Redis resultEN；taskEN self.update_state() EN ConnectionRefused，
-        # ENtaskEN。userENprogressEN simple_progress，EN
+        # translated Redis translatedbackend；tasktranslated's self.update_state() translated ConnectionRefused，
+        #  translatedimporttasktranslated。usercantranslatedprogresstranslated simple_progress，thistranslatedcan
         if _is_desktop_mode():
             return None
         return super().update_state(task_id=task_id, state=state, meta=meta, **kwargs)
 
 
-# ENall @celery_app.task useENexecuteEN
+# translated @celery_app.task usetranslated'slocaltranslated
 celery_app.Task = DesktopAwareTask
 
-# ENtask
+# translatedtask
 celery_app.autodiscover_tasks([
     'backend.tasks.processing',
     'backend.tasks.video', 
     'backend.tasks.notification',
     'backend.tasks.maintenance',
-    'backend.tasks.import_processing'  # ENprocessingtask
+    'backend.tasks.import_processing'  # addimportprocesstask
 ])
 
 if __name__ == '__main__':

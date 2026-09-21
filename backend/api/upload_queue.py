@@ -5,11 +5,11 @@ from pydantic import BaseModel
 
 from ..core.database import get_db
 from ..services.upload_queue_service import UploadQueueService, TaskPriority
-# from ..utils.auth import get_current_user  # EN，ENneedcanEN
+# from ..utils.auth import get_current_user  # translated，iftranslatedcantranslated
 
 router = APIRouter(prefix="/api/upload-queue", tags=["upload-queue"])
 
-# requestEN
+# translatedmodel
 class UploadTaskRequest(BaseModel):
     video_path: str
     title: str
@@ -45,12 +45,12 @@ class QueueStatusResponse(BaseModel):
     queue_details: List[Dict[str, Any]]
     processing_details: List[Dict[str, Any]]
 
-# ENqueueserviceEN
+# translatedservicetranslated
 queue_services: Dict[int, UploadQueueService] = {}
 
 def get_queue_service(db: Session = Depends(get_db)) -> UploadQueueService:
-    """fetchqueueserviceEN"""
-    # ENuseENuserID，ENcanEN
+    """fetchtranslatedservicetranslated"""
+    # translatedusedefaultuserID，translatedcantranslatedaddtranslated
     user_id = 1
     
     if user_id not in queue_services:
@@ -63,14 +63,14 @@ async def add_upload_task(
     request: UploadTaskRequest,
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """ENuploadtask"""
+    """addtranslated Uploadtask"""
     try:
-        # EN
+        # translated
         priority_map = {
             "low": TaskPriority.LOW,
             "normal": TaskPriority.NORMAL,
             "high": TaskPriority.HIGH,
-            "urgent": TaskPriority.URGENT
+            "urgent": TaskPriority.URGtranslatedT
         }
         priority = priority_map.get(request.priority.lower(), TaskPriority.NORMAL)
         
@@ -83,7 +83,7 @@ async def add_upload_task(
             priority=priority
         )
         
-        return {"task_id": task_id, "message": "taskENqueue"}
+        return {"task_id": task_id, "message": "tasktranslatedaddtranslated"}
         
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -93,15 +93,15 @@ async def add_batch_upload_tasks(
     request: BatchUploadRequest,
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """ENuploadtask"""
+    """translatedaddUploadtask"""
     try:
-        # ENtaskEN
+        # translatedtasktranslated
         tasks_data = []
         priority_map = {
             "low": TaskPriority.LOW,
             "normal": TaskPriority.NORMAL,
             "high": TaskPriority.HIGH,
-            "urgent": TaskPriority.URGENT
+            "urgent": TaskPriority.URGtranslatedT
         }
         
         for task_req in request.tasks:
@@ -120,7 +120,7 @@ async def add_batch_upload_tasks(
         return {
             "task_ids": task_ids,
             "count": len(task_ids),
-            "message": f"EN {len(task_ids)} ENtaskENqueue"
+            "message": f"translatedadd {len(task_ids)}  tasktranslated"
         }
         
     except Exception as e:
@@ -135,7 +135,7 @@ async def get_task_status(
     try:
         task_status = queue_service.get_task_status(task_id)
         if not task_status:
-            raise HTTPException(status_code=404, detail="taskdoes not exist")
+            raise HTTPException(status_code=404, detail="tasknot found")
         
         return task_status
         
@@ -153,9 +153,9 @@ async def cancel_task(
     try:
         success = queue_service.cancel_task(task_id)
         if not success:
-            raise HTTPException(status_code=404, detail="taskdoes not existENcannotcancel")
+            raise HTTPException(status_code=404, detail="tasknot foundortranslatedcancel")
         
-        return {"message": "taskENcancel"}
+        return {"message": "tasktranslatedcancel"}
         
     except HTTPException:
         raise
@@ -166,7 +166,7 @@ async def cancel_task(
 async def get_queue_status(
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """fetchqueuestatus"""
+    """fetchtranslatedstatus"""
     try:
         status = queue_service.get_queue_status()
         return status
@@ -179,17 +179,17 @@ async def retry_failed_task(
     task_id: str,
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """retryfailedENtask"""
+    """translatedfailed'stask"""
     try:
         # fetchtaskstatus
         task_status = queue_service.get_task_status(task_id)
         if not task_status:
-            raise HTTPException(status_code=404, detail="taskdoes not exist")
+            raise HTTPException(status_code=404, detail="tasknot found")
         
         if task_status["status"] != "failed":
-            raise HTTPException(status_code=400, detail="ENretryfailedENtask")
+            raise HTTPException(status_code=400, detail="translatedfailed'stask")
         
-        # ENtask
+        # translatedaddtask
         new_task_id = queue_service.add_task(
             video_path=task_status["video_path"],
             title=task_status["title"],
@@ -201,7 +201,7 @@ async def retry_failed_task(
         
         return {
             "new_task_id": new_task_id,
-            "message": "taskENqueue"
+            "message": "tasktranslatedaddtranslated"
         }
         
     except HTTPException:
@@ -215,9 +215,9 @@ async def get_upload_history(
     offset: int = 0,
     status: Optional[str] = None,
     db: Session = Depends(get_db),
-    # current_user = Depends(get_current_user)  # EN
+    # current_user = Depends(get_current_user)  # translated
 ):
-    """fetchuploadEN"""
+    """fetchUploadtranslated"""
     try:
         from ..models.bilibili import BilibiliUploadRecord
         
@@ -226,7 +226,7 @@ async def get_upload_history(
         if status:
             query = query.filter(BilibiliUploadRecord.status == status)
         
-        # ENcreatetimeEN
+        # bycreatetranslated
         records = query.order_by(BilibiliUploadRecord.created_at.desc()).offset(offset).limit(limit).all()
         
         return {
@@ -254,11 +254,11 @@ async def get_upload_history(
 async def clear_completed_tasks(
     queue_service: UploadQueueService = Depends(get_queue_service)
 ):
-    """ENcompletedENtask"""
+    """cleancompleted'stask"""
     try:
-        # ENcanEN
-        # ENtaskENqueueEN，ENdatabaseEN
-        return {"message": "completedtaskEN"}
+        # thistranslatedcantranslatedaddcleantranslated
+        # translatedtasktranslatedfromtranslated，translatedIscleandatabasetranslated'stranslated
+        return {"message": "completedtaskclean"}
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -267,18 +267,18 @@ async def clear_completed_tasks(
 async def get_upload_statistics(
     days: int = 7,
     db: Session = Depends(get_db),
-    # current_user = Depends(get_current_user)  # EN
+    # current_user = Depends(get_current_user)  # translated
 ):
-    """fetchuploadEN"""
+    """fetchUploadtranslatedinfo"""
     try:
         from ..models.bilibili import BilibiliUploadRecord
         from datetime import datetime, timedelta
         from sqlalchemy import func
         
-        # ENtimeEN
+        # translated
         start_date = datetime.now() - timedelta(days=days)
         
-        # EN
+        # translated
         total_uploads = db.query(BilibiliUploadRecord).filter(
             BilibiliUploadRecord.created_at >= start_date
         ).count()
@@ -293,7 +293,7 @@ async def get_upload_statistics(
             BilibiliUploadRecord.status == 'failed'
         ).count()
         
-        # ENaccountEN
+        # byAccounttranslated
         account_stats = db.query(
             BilibiliUploadRecord.account_id,
             func.count(BilibiliUploadRecord.id).label('count'),

@@ -27,23 +27,23 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
   const [generating, setGenerating] = useState(false)
   const inputRef = useRef<any>(null)
 
-  // ENtitlewhen changed，ENStatus
+  // translatedtitletranslated，translatedstatus
   useEffect(() => {
     setEditValue(title)
   }, [title])
 
-  // ENtitlewhen changed，ENEditEN，ensureEN
+  // translatedtitletranslated，iftranslatedintranslated，ensuretranslated
   useEffect(() => {
     if (!isEditing) {
       setEditValue(title)
     }
   }, [title, isEditing])
 
-  // ENEditEN
+  // translated
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus()
-      // TextAreaENselectEN，ENsetSelectionRangeEN
+      // TextAreatranslatedselecttranslated，usesetSelectionRangetranslated
       if (inputRef.current.setSelectionRange) {
         inputRef.current.setSelectionRange(0, inputRef.current.value.length)
       }
@@ -64,12 +64,12 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
     const trimmedValue = editValue.trim()
     
     if (!trimmedValue) {
-      message.error('Titlecannot be empty')
+      message.error('translated')
       return
     }
     
     if (trimmedValue.length > maxLength) {
-      message.error(`Titlelength cannot exceed${maxLength} characters`)
+      message.error(`translated${maxLength} translated`)
       return
     }
     
@@ -81,33 +81,33 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
     setLoading(true)
     try {
       await projectApi.updateClipTitle(clipId, trimmedValue)
-      message.success('TitleupdateSucceeded')
+      message.success('translatedupdatesucceeded')
       setIsEditing(false)
-      // ENupdateENStatus，EN
+      // translatedupdatelocalstatus，translatedcalltranslated
       onTitleUpdate?.(trimmedValue)
     } catch (error: any) {
-      console.error('updateTitleFailed:', error)
-      message.error(error.userMessage || error.message || 'updateTitleFailed')
+      console.error('updatetranslatedfailed:', error)
+      message.error(error.userMessage || error.message || 'updatetranslatedfailed')
     } finally {
       setLoading(false)
     }
   }
 
   const handleGenerateTitle = async () => {
-    console.log('Start generatingTitle，clipId:', clipId)
+    console.log('translated，clipId:', clipId)
     setGenerating(true)
     try {
       const result = await projectApi.generateClipTitle(clipId)
-      console.log('generateTitleEN:', result)
+      console.log('translated:', result)
       if (result.success && result.generated_title) {
         setEditValue(result.generated_title)
-        message.success('TitlegenerateSucceeded，You can continue editing or clickSave')
+        message.success('translatedsucceeded，translatedcantranslatedorclicktranslated')
       } else {
-        message.error('TitlegenerateFailed')
+        message.error('translatedfailed')
       }
     } catch (error: any) {
-      console.error('generateTitleFailed:', error)
-      message.error(error.userMessage || error.message || 'generateTitleFailed')
+      console.error('translatedfailed:', error)
+      message.error(error.userMessage || error.message || 'translatedfailed')
     } finally {
       setGenerating(false)
     }
@@ -124,7 +124,7 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
   if (isEditing) {
     return (
       <Modal
-        title="EditTitle"
+        title="translated"
         open={isEditing}
         onCancel={handleCancel}
         footer={null}
@@ -139,7 +139,7 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
             onChange={(e) => setEditValue(e.target.value)}
             onKeyDown={handleKeyPress}
             maxLength={maxLength}
-            placeholder="Please enterTitle"
+            placeholder="translated"
             autoSize={{ minRows: 3, maxRows: 8 }}
             style={{ 
               resize: 'none',
@@ -150,24 +150,24 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontSize: '12px', color: '#666' }}>
-            EN: {editValue.length}/{maxLength}
+            translated: {editValue.length}/{maxLength}
           </div>
           <Space>
-            <Tooltip title="AIgenerateTitle">
+            <Tooltip title="AItranslated">
               <Button
                 icon={<MagicWandIcon />}
                 loading={generating}
                 onClick={() => {
-                  console.log('AIgenerateTitleEN');
+                  console.log('AItranslatedbytranslatedclick');
                   handleGenerateTitle();
                 }}
                 disabled={loading}
               >
-                AIgenerate
+                AItranslated
               </Button>
             </Tooltip>
             <Button onClick={handleCancel} disabled={loading || generating}>
-              Cancel
+              cancel
             </Button>
             <Button
               type="primary"
@@ -176,7 +176,7 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
               onClick={handleSave}
               disabled={generating}
             >
-              Save
+              translated
             </Button>
           </Space>
         </div>
@@ -192,7 +192,7 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
       }}
       className={`ac-editable ${className || ''}`}
       onClick={handleStartEdit}
-      title="ENEditTitle"
+      title="clicktranslated"
     >
       <span style={{ wordBreak: 'break-word', display: 'inline' }}>
         {title}

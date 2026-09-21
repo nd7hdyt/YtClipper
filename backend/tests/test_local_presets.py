@@ -1,4 +1,4 @@
-"""EN（ollama / lmstudio）：provider EN、LLMManager EN、test-api EN、EN"""
+"""localmodeltranslated（ollama / lmstudio）：provider translated、LLMManager translated、test-api translated、localtranslated"""
 import asyncio
 import json
 import sys
@@ -33,8 +33,8 @@ def fake_openai(monkeypatch):
     module.OpenAI = _FakeOpenAIClient
     monkeypatch.setitem(sys.modules, "openai", module)
     _FakeOpenAIClient.created.clear()
-    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
-    for name in ("LLM_PROVIDER", "API_MODEL_NAME", "LLM_MODEL", "API_OPENAI_API_KEY", "OPENAI_API_KEY"):
+    monkeypatch.delenv("OPtranslatedAI_BASE_URL", raising=False)
+    for name in ("LLM_PROVIDER", "API_MODEL_NAME", "LLM_MODEL", "API_OPtranslatedAI_API_KEY", "OPtranslatedAI_API_KEY"):
         monkeypatch.delenv(name, raising=False)
     from backend.core import llm_manager as manager_module
     monkeypatch.setattr(manager_module.config_sync_service, "is_sync_needed", lambda: False)
@@ -47,9 +47,9 @@ def test_resolve_provider_maps_presets_to_openai_compatible():
 
     assert resolve_provider("ollama") == ("openai", "http://localhost:11434/v1", "ollama")
     assert resolve_provider("LM-Studio") == ("openai", "http://localhost:1234/v1", "lmstudio")
-    # EN：EN
+    # usertranslated：translated
     assert resolve_provider("ollama", "http://192.168.1.8:11434/v1") == ("openai", "http://192.168.1.8:11434/v1", "ollama")
-    # EN
+    # translatedreturn
     assert resolve_provider("dashscope") == ("dashscope", "", None)
     assert resolve_provider("openai", "https://api.deepseek.com/v1") == ("openai", "https://api.deepseek.com/v1", None)
 
@@ -98,8 +98,8 @@ def test_manager_restores_ollama_preset(fake_openai, tmp_path):
     assert info["base_url"] == "http://localhost:11434/v1"
     assert info["model"] == "qwen2.5:7b"
     assert info["available"] is True
-    assert "EN" in info["display_name"]
-    # EN OpenAI key EN
+    assert "local" in info["display_name"]
+    # translated user's OpenAI key translatedlocalservice
     assert fake_openai.created[-1]["api_key"] == "EMPTY"
 
 
@@ -107,13 +107,13 @@ def test_manager_preset_uses_default_model_when_unset(fake_openai, tmp_path):
     from backend.core.llm_manager import LLMManager
 
     settings = tmp_path / "settings.json"
-    _write(settings, api_provider="ollama")  # api_model EN dashscope EN qwen-plus
+    _write(settings, api_provider="ollama")  # api_model translatedIs dashscope 'sdefault qwen-plus
     info = LLMManager(settings_file=settings).get_current_provider_info()
     assert info["model"] == "qwen2.5:7b"
 
 
 def test_manager_env_provider_ollama(fake_openai, tmp_path, monkeypatch):
-    """Docker / CLI：LLM_PROVIDER=ollama EN"""
+    """Docker / CLI：LLM_PROVIDER=ollama translateduse"""
     from backend.core.llm_manager import LLMManager
 
     monkeypatch.setenv("LLM_PROVIDER", "ollama")

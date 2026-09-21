@@ -1,5 +1,5 @@
 """
-clipAPIEN
+clipAPItranslated
 """
 
 from typing import List, Optional
@@ -32,17 +32,17 @@ async def update_clip_title(
     try:
         new_title = title_data.get("title", "").strip()
         if not new_title:
-            raise HTTPException(status_code=400, detail="titleEN")
+            raise HTTPException(status_code=400, detail="translated")
         
         if len(new_title) > 200:
-            raise HTTPException(status_code=400, detail="titleEN200EN")
+            raise HTTPException(status_code=400, detail="translated200 translated")
         
-        # updatecliptitle
+        # updatecliptranslated
         clip = clip_service.update_clip(clip_id, ClipUpdate(title=new_title))
         if not clip:
-            raise HTTPException(status_code=404, detail="clipdoes not exist")
+            raise HTTPException(status_code=404, detail="clipnot found")
         
-        # returnupdateENclipEN
+        # returnupdatetranslated'sclipinfo
         return ClipResponse(
             id=str(clip.id),
             project_id=str(clip.project_id),
@@ -64,8 +64,8 @@ async def update_clip_title(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"updatecliptitlefailed: {e}")
-        raise HTTPException(status_code=500, detail=f"updatecliptitlefailed: {str(e)}")
+        logger.error(f"updatecliptranslatedfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"updatecliptranslatedfailed: {str(e)}")
 
 
 @router.post("/{clip_id}/generate-title", response_model=dict)
@@ -75,18 +75,18 @@ async def generate_clip_title(
 ):
     """Generate a new title for a clip using LLM."""
     try:
-        # fetchclipEN
+        # fetchclipinfo
         clip = clip_service.get(clip_id)
         if not clip:
-            raise HTTPException(status_code=404, detail="clipdoes not exist")
+            raise HTTPException(status_code=404, detail="clipnot found")
         
-        # ENclip_metadatafetchEN，ENneedENfilesystemfetch
+        # translatedfromclip_metadatafetchtranslated，No needfromfileSystemfetch
         clip_metadata = getattr(clip, 'clip_metadata', {}) or {}
         
         if not clip_metadata:
-            raise HTTPException(status_code=404, detail="clipENdoes not exist")
+            raise HTTPException(status_code=404, detail="cliptranslatednot found")
         
-        # ENLLMEN
+        # translatedLLMtranslated
         llm_input = [{
             "id": clip_id,
             "title": clip_metadata.get('outline', '') or getattr(clip, 'title', ''),
@@ -94,13 +94,13 @@ async def generate_clip_title(
             "recommend_reason": clip_metadata.get('recommend_reason', '')
         }]
         
-        # callLLMgeneratetitle
+        # callLLMtranslated
         from ...utils.llm_client import LLMClient
         from ...core.shared_config import PROMPT_FILES
         
         llm_client = LLMClient()
         
-        # loadtitlegeneratehintEN
+        # translated
         with open(PROMPT_FILES['title'], 'r', encoding='utf-8') as f:
             title_prompt = f.read()
         
@@ -110,11 +110,11 @@ async def generate_clip_title(
         if not raw_response:
             raise HTTPException(status_code=500, detail="LLMcallfailed")
         
-        # parseLLMresponse
+        # translatedLLMtranslated
         titles_map = llm_client.parse_json_response(raw_response)
         
         if not isinstance(titles_map, dict) or clip_id not in titles_map:
-            raise HTTPException(status_code=500, detail="LLMreturnENerror")
+            raise HTTPException(status_code=500, detail="LLMreturnformaterror")
         
         generated_title = titles_map[clip_id]
         
@@ -127,8 +127,8 @@ async def generate_clip_title(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"generatecliptitlefailed: {e}")
-        raise HTTPException(status_code=500, detail=f"generatecliptitlefailed: {str(e)}")
+        logger.error(f"translatedcliptranslatedfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"translatedcliptranslatedfailed: {str(e)}")
 
 
 @router.post("/", response_model=ClipResponse)
@@ -245,7 +245,7 @@ async def cleanup_duplicate_clips(
     project_id: str,
     db: Session = Depends(get_db)
 ):
-    """ENprojectENclipEN"""
+    """cleanprojecttranslated'stranslatedcliptranslated"""
     try:
         from ...models.project import Project
         import json
@@ -255,29 +255,29 @@ async def cleanup_duplicate_clips(
         # fetchproject
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail="projectdoes not exist")
+            raise HTTPException(status_code=404, detail="project not found")
         
-        # fetchdatabaseENallclip
+        # fetchdatabasetranslated'stranslatedclip
         db_clips = db.query(Clip).filter(Clip.project_id == project_id).all()
-        logger.info(f"databaseEN {len(db_clips)} ENclip")
+        logger.info(f"databasetranslated {len(db_clips)}  clip")
         
-        # readfilesystemEN
+        # translatedfileSystemtranslated'stranslated
         data_dir = get_data_directory()
         project_dir = data_dir / "projects" / project_id
         clips_metadata_file = project_dir / "metadata" / "clips_metadata.json"
         
         if not clips_metadata_file.exists():
-            raise HTTPException(status_code=404, detail="clipENfiledoes not exist")
+            raise HTTPException(status_code=404, detail="cliptranslatedfile not found")
         
         with open(clips_metadata_file, 'r', encoding='utf-8') as f:
             original_clips = json.load(f)
         
-        logger.info(f"filesystemEN {len(original_clips)} ENclip")
+        logger.info(f"fileSystemtranslated {len(original_clips)}  clip")
         
-        # createENclipENIDEN
+        # createtranslatedclip'sIDtranslated
         original_clip_ids = {clip['id']: clip for clip in original_clips}
         
-        # EN
+        # cleantranslated
         deleted_count = 0
         kept_count = 0
         
@@ -286,12 +286,12 @@ async def cleanup_duplicate_clips(
             original_id = metadata.get('id')
             
             if original_id and original_id in original_clip_ids:
-                # thisclipEN，EN
+                # this clipIstranslated's，translated
                 kept_count += 1
-                logger.info(f"ENclip: {db_clip.title} (ID: {original_id})")
+                logger.info(f"translatedclip: {db_clip.title} (ID: {original_id})")
             else:
-                # thisclipEN，delete
-                logger.info(f"deleteENclip: {db_clip.title} (DB ID: {db_clip.id})")
+                # this clipIstranslated'sortranslated's，delete
+                logger.info(f"deletetranslatedclip: {db_clip.title} (DB ID: {db_clip.id})")
                 db.delete(db_clip)
                 deleted_count += 1
         
@@ -304,15 +304,15 @@ async def cleanup_duplicate_clips(
             "db_before_count": len(db_clips),
             "kept_count": kept_count,
             "deleted_count": deleted_count,
-            "message": f"EN：EN {kept_count} EN，delete {deleted_count} ENclip"
+            "message": f"cleantranslated：translated {kept_count}  ，delete {deleted_count}  translatedclip"
         }
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"ENclipfailed: {e}")
+        logger.error(f"cleantranslatedclipfailed: {e}")
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"ENfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"cleanfailed: {str(e)}")
 
 
 @router.post("/resync-project")
@@ -320,7 +320,7 @@ async def resync_project_clips(
     project_id: str,
     db: Session = Depends(get_db)
 ):
-    """ENprojectENclipEN"""
+    """translatedproject'scliptranslated"""
     try:
         from ...models.project import Project
         from ...services.data_sync_service import DataSyncService
@@ -330,17 +330,17 @@ async def resync_project_clips(
         # fetchproject
         project = db.query(Project).filter(Project.id == project_id).first()
         if not project:
-            raise HTTPException(status_code=404, detail="projectdoes not exist")
+            raise HTTPException(status_code=404, detail="project not found")
         
-        # deleteENclipEN
+        # deletetranslated'scliptranslated
         existing_clips = db.query(Clip).filter(Clip.project_id == project_id).all()
         deleted_count = len(existing_clips)
         for clip in existing_clips:
             db.delete(clip)
         db.commit()
-        logger.info(f"deleteEN {deleted_count} ENclip")
+        logger.info(f"deletetranslated {deleted_count}  translatedclip")
         
-        # EN
+        # translated
         data_dir = get_data_directory()
         project_dir = data_dir / "projects" / project_id
         
@@ -352,12 +352,12 @@ async def resync_project_clips(
             "project_name": project.name,
             "deleted_count": deleted_count,
             "synced_count": synced_count,
-            "message": f"EN：delete {deleted_count} EN，EN {synced_count} ENclip"
+            "message": f"translated：delete {deleted_count}  ，translated {synced_count}  clip"
         }
         
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"ENclipfailed: {e}")
+        logger.error(f"translatedclipfailed: {e}")
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"ENfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedfailed: {str(e)}")

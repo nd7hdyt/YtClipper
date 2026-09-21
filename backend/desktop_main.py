@@ -1,6 +1,6 @@
 """
-ENstartfile
-useEN app_factory createEN，EN
+translatedstartfile
+usetranslatedone's app_factory createtranslateduse，supporttranslated
 """
 import os
 import sys
@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 from fastapi import FastAPI
 
-# ENprojectENdirectoryENPythonpath
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
@@ -35,7 +35,7 @@ from backend.core.desktop_config import (
 )
 
 class DesktopServiceManager:
-    """ENserviceEN，ENFastAPIENCeleryservice"""
+    """translatedservicetranslated，translatedonetranslatedFastAPIAndCeleryservice"""
     
     def __init__(self):
         self.config = get_desktop_config()
@@ -47,15 +47,15 @@ class DesktopServiceManager:
         self.start_time: Optional[float] = None
         self.actual_port: Optional[int] = None
         
-        # ENdirectoryEN
+        # ensuredirectorytranslatedin
         if not ensure_desktop_directories():
-            raise RuntimeError("createENdirectoryfailed")
+            raise RuntimeError("createtranslateddirectoryfailed")
 
-        # settingslog
+        # settingslogs
         self._setup_logging()
     
     def _setup_logging(self):
-        """settingslogconfig"""
+        """settingslogsconfig"""
         logging.basicConfig(
             level=getattr(logging, self.config.log_level.upper()),
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -67,14 +67,14 @@ class DesktopServiceManager:
         self.logger = logging.getLogger(__name__)
     
     def _create_fastapi_app(self) -> FastAPI:
-        """createFastAPIEN"""
-        # useEN app_factory
+        """createFastAPItranslateduse"""
+        # usetranslatedone's app_factory
         app = create_app(mode="desktop")
         
-        # EN
+        # addtranslatedusetranslated
         @app.get("/desktop/info")
         async def desktop_info():
-            """EN"""
+            """translateduseinfo"""
             return {
                 "app_name": self.config.app_name,
                 "app_version": self.config.app_version,
@@ -107,10 +107,10 @@ class DesktopServiceManager:
                     daemon=True,
                 )
                 self.celery_worker_thread.start()
-                self.logger.info("✅ Celery Worker ENrunENstartsucceeded")
+                self.logger.info("✅ Celery Worker translatedRuntimetranslatedstartsucceeded")
                 return
             
-            # usesubprocessstartCelery Worker，ENprocessingEN
+            # usesubprocessstartCelery Worker，translatedprocesstranslated
             self.celery_worker_process = subprocess.Popen([
                 sys.executable, '-m', 'celery', '-A', 'backend.desktop_celery', 'worker',
                 '--loglevel=' + self.config.log_level.lower(),
@@ -125,7 +125,7 @@ class DesktopServiceManager:
             raise
     
     def _start_fastapi_server(self):
-        """startFastAPIserviceEN"""
+        """startFastAPIservicetranslated"""
         try:
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -142,23 +142,23 @@ class DesktopServiceManager:
             )
             server = uvicorn.Server(config)
 
-            # EN stdout（EN Rust read）
+            # translatedinfotranslated stdout（translated Rust translated）
             print(f"PORT={self.actual_port}", flush=True)
-            print(f"BACKEND_URL=http://{self.config.host}:{self.actual_port}", flush=True)
+            print(f"BACKtranslatedD_URL=http://{self.config.host}:{self.actual_port}", flush=True)
             
-            # ENwritefile（EN）
+            # translatedfile（translatedusetranslated）
             port_file = self.config.paths.data_dir / "backend.port"
             with open(port_file, 'w') as f:
                 f.write(str(self.actual_port))
             
-            self.logger.info(f"🚀 ENservicestartEN: {self.actual_port}")
+            self.logger.info(f"🚀 backendservicestartintranslated: {self.actual_port}")
             
-            # runserviceEN
+            # translatedservicetranslated
             server.run(sockets=[server_socket])
             
         except Exception as e:
-            self.logger.error(f"❌ FastAPI serviceENstartfailed: {e}")
-            print(f"BACKEND_ERROR={e}", flush=True)
+            self.logger.error(f"❌ FastAPI servicetranslatedstartfailed: {e}")
+            print(f"BACKtranslatedD_ERROR={e}", flush=True)
             self.is_running = False
             if getattr(self, "celery_worker_process", None):
                 self.celery_worker_process.terminate()
@@ -166,15 +166,15 @@ class DesktopServiceManager:
             raise
     
     def start(self):
-        """startallservice"""
+        """starttranslatedservice"""
         if self.is_running:
-            self.logger.warning("serviceENrunEN")
+            self.logger.warning("servicetranslatedintranslated")
             return
         
         try:
             self.start_time = time.time()
             
-            # createFastAPIEN
+            # createFastAPItranslateduse
             self.app = self._create_fastapi_app()
             
             # startCelery Worker
@@ -182,7 +182,7 @@ class DesktopServiceManager:
             
             self.is_running = True
 
-            # startFastAPIserviceEN
+            # startFastAPIservicetranslated
             self.server_thread = threading.Thread(
                 target=self._start_fastapi_server,
                 daemon=True
@@ -190,7 +190,7 @@ class DesktopServiceManager:
             self.server_thread.start()
             
             self.logger.info(f"🚀 AutoClip Desktop servicestartsucceeded")
-            self.logger.info(f"🌐 APIEN: http://{self.config.host}:<dynamic>")
+            self.logger.info(f"🌐 APItranslated: http://{self.config.host}:<dynamic>")
             
         except Exception as e:
             self.logger.error(f"❌ servicestartfailed: {e}")
@@ -198,46 +198,46 @@ class DesktopServiceManager:
             raise
     
     def stop(self):
-        """stopallservice"""
+        """translatedservice"""
         if not self.is_running:
             return
         
         try:
-            self.logger.info("🛑 currentlystopservice...")
+            self.logger.info("🛑 translatedintranslatedservice...")
             
-            # stopCelery WorkerEN
+            # translatedCelery Workerprocess
             if hasattr(self, 'celery_worker_process') and self.celery_worker_process:
                 try:
                     self.celery_worker_process.terminate()
-                    # ENlogout
+                    # etc.translatedprocesstranslated
                     try:
                         self.celery_worker_process.wait(timeout=5)
-                        self.logger.info("✅ Celery Worker ENstop")
+                        self.logger.info("✅ Celery Worker translated")
                     except subprocess.TimeoutExpired:
-                        self.logger.warning("Celery Worker EN5ENstop，EN")
+                        self.logger.warning("Celery Worker translatedin5secondstranslated，translated")
                         self.celery_worker_process.kill()
                         self.celery_worker_process.wait()
                 except Exception as e:
-                    self.logger.error(f"stopCelery Workerfailed: {e}")
+                    self.logger.error(f"translatedCelery Workerfailed: {e}")
                 finally:
                     self.celery_worker_process = None
 
             if hasattr(self, 'celery_worker_thread') and self.celery_worker_thread:
                 self.celery_worker_thread = None
             
-            # stopFastAPIserviceEN - useENsendEN
+            # translatedFastAPIservicetranslated - usetranslatedIstranslated
             if self.server_thread and self.server_thread.is_alive():
-                # ENserviceENend
+                # etc.translatedservicetranslated
                 self.server_thread.join(timeout=5)
                 if self.server_thread.is_alive():
-                    self.logger.warning("serviceEN5ENend")
+                    self.logger.warning("servicetranslatedin5secondstranslated")
             
             self.is_running = False
             self.start_time = None
-            self.logger.info("✅ serviceENstop")
+            self.logger.info("✅ servicetranslated")
             
         except Exception as e:
-            self.logger.error(f"❌ stopservicefailed: {e}")
+            self.logger.error(f"❌ translatedservicefailed: {e}")
     
     def get_status(self) -> Dict[str, Any]:
         """fetchservicestatus"""
@@ -254,7 +254,7 @@ class DesktopServiceManager:
         }
     
     def health_check(self) -> Dict[str, Any]:
-        """ENcheck"""
+        """Health Check"""
         try:
             import requests
             port = self.actual_port or self.config.port
@@ -283,38 +283,38 @@ class DesktopServiceManager:
                 "port": self.actual_port or self.config.port
             }
 
-# ENserviceEN
+# translatedservicetranslated
 service_manager = None
 
 def get_service_manager() -> DesktopServiceManager:
-    """fetchserviceEN"""
+    """fetchservicetranslated"""
     global service_manager
     if service_manager is None:
         service_manager = DesktopServiceManager()
     return service_manager
 
 def main():
-    """EN"""
-    # settingsEN
+    """translated"""
+    # settingstranslated
     os.environ["AUTOCLIP_DESKTOP_MODE"] = "true"
     os.environ["AUTOCLIP_MODE"] = "desktop"
     
-    # checkEN
+    # checktranslated
     if not is_desktop_mode():
-        print("❌ ENrun")
+        print("❌ translateduseOnlyintranslated")
         sys.exit(1)
     
-    # fetchserviceEN
+    # fetchservicetranslated
     manager = get_service_manager()
     config = manager.config
     
     print(f"🚀 start AutoClip Desktop v{config.app_version}")
-    print(f"📁 ENdirectory: {config.paths.data_dir}")
-    print(f"🌐 serviceEN: http://{config.host}:0 (EN)")
+    print(f"📁 translateddirectory: {config.paths.data_dir}")
+    print(f"🌐 servicetranslated: http://{config.host}:0 (translated)")
     
-    # settingsENprocessing
+    # settingstranslatedprocess
     def signal_handler(signum, frame):
-        print(f"\n🛑 ENstopEN ({signum})，currentlyENservice...")
+        print(f"\n🛑 translated ({signum})，translatedintranslatedservice...")
         if manager.is_running:
             manager.stop()
         sys.exit(0)
@@ -326,15 +326,15 @@ def main():
         # startservice
         manager.start()
         
-        # ENrun
+        # translated
         while manager.is_running:
             time.sleep(1)
             
     except KeyboardInterrupt:
-        print("\n🛑 EN，currentlyENservice...")
+        print("\n🛑 translated，translatedintranslatedservice...")
         manager.stop()
     except Exception as e:
-        print(f"❌ servicerunfailed: {e}")
+        print(f"❌ servicetranslatedfailed: {e}")
         manager.stop()
         sys.exit(1)
 

@@ -1,178 +1,178 @@
-# AutoClip EN
+# AutoClip 
 
 *[English version →](./PRIVACY.en.md)*
 
-**EN：2026 EN 6 EN 3 EN**
-**EN：2026 EN 6 EN 3 EN**
+**date：2026  6  3 **
+**update：2026  6  3 **
 
-> ⚠️ EN，EN（EN「EN」）。
+> ⚠️ ，（「」）。
 
-AutoClip（EN"EN""EN"）EN**EN**EN。EN。EN、EN、EN，EN。
+AutoClip（""""）**local**cliptool。。notes、use、，。
 
-EN《EN》《EN》《EN》EN。
-
----
-
-## EN、EN：EN
-
-- **EN、EN、EN，EN**，ENUploadEN。
-- **EN API EN**（EN、OpenAI、Gemini EN）**EN**，ENUpload，EN。
-- EN**EN**EN、EN、EN、EN。
+《Personal Info Protection Law》《security》《security》。
 
 ---
 
-## EN、EN
+## 、：local
 
-### 2.1 EN（EN）
+- **、、subtitles，**，server。
+- **config API key**（Qwen、OpenAI、Gemini ）****，，now。
+- ****、、、。
 
-EN、EN、EN，EN **PostHog** EN**EN**EN。EN**EN**EN、EN/EN、EN API EN。
+---
 
-| EN | EN | EN |
+## 、
+
+### 2.1 use（）
+
+use、fixissue、improve， **PostHog** ****use。****、subtitles/、file API key。
+
+|  |  |  |
 |------|---------|------|
-| EN | EN、CPU EN、EN、ENLanguage | EN |
-| EN | EN、EN、EN、EN、EN | EN |
-| EN | EN/EN、EN | EN |
-| EN | EN（EN，EN） | EN、EN |
+|  | 、CPU 、version、 | issue |
+| use | start、pageaccess、import、exportclip、configevent | use |
+|  | succeeded/failed、failederror |  |
+|  | generate（，） | 、 |
 
-- **EN**：EN，EN。
-- **EN**：PostHog Inc.，EN**EN**EN（EN「EN」）。
-- **EN**：EN，EN。
+- ****：usegenerate，create。
+- ****：PostHog Inc.，****server（「」）。
+- **local**：event，impactuse。
 
-### 2.2 ENProvidesEN
+### 2.2 
 
-- **ENAccount/Cookie**：EN B EN、YouTube ENUploadEN，EN（Cookie EN）**EN**，EN，EN、ENUpload。
+- **account/Cookie**：use B 、YouTube download，sign in（Cookie ）****，completed，、。
 
-### 2.3 EN
+### 2.3 
 
-- EN/EN
-- EN、EN
-- EN API EN
-- EN、EN、EN、EN、EN
-
----
-
-## EN、EN
-
-EN：
-
-1. EN（EN→EN）；
-2. EN、EN；
-3. EN、EN。
-
-EN**EN**EN，EN**EN**EN。
+- /
+- subtitles、
+-  API key
+- 、、、location、
 
 ---
 
-## EN、EN
+## 、use
 
-### 4.1 EN
+：
 
-EN **EN → EN → EN** EN「EN」。EN**EN**，EN。
+1. use（import→）；
+2. fix、；
+3. 、。
 
-### 4.2 EN
-
-EN《EN》，EN：
-
-- EN、EN、EN；
-- EN、EN；
-- EN；
-- EN（EN）；
-- EN（AccountEN）。
-
-EN，ENContactENContact。
+****，****。
 
 ---
 
-## EN、EN
+## 、select
 
-- **EN**（EN、EN、EN、EN、EN）：EN，EN；EN。
-- **EN**：EN PostHog，EN（EN **12 EN**），EN。
+### 4.1 use
+
+ **settings → settings → ** 「use」。**use**，settings。
+
+### 4.2 
+
+《Personal Info Protection Law》，applicable：
+
+- 、、；
+- 、；
+- ；
+- （）；
+- （accountapplicable）。
+
+，。
 
 ---
 
-## EN、EN
+## 、
 
-EN PostHog EN**EN**EN，ENProvides。EN。**〔EN：ENProvidesEN（EN / EN / EN）EN《EN》EN〕**
+- **local**（project、、subtitles、config、key）：，；project。
+- ****： PostHog，follow（default **12 **），。
 
 ---
 
-## EN、EN
+## 、
 
-| EN | ProvidesEN | EN | EN |
+use PostHog ****server，。。**〔：（ /  / security）《Personal Info Protection Law》confirm〕**
+
+---
+
+## 、service
+
+| service |  |  |  |
 |------|--------|------|---------|
-| EN | PostHog Inc. | EN | https://posthog.com/privacy |
-| EN AI EN（EN） | EN / OpenAI / Google EN | EN，EN | EN |
-| EN（EN） | B EN / YouTube EN | EN/Upload | EN |
+|  | PostHog Inc. | use | https://posthog.com/privacy |
+|  AI model（config） | Qwen / OpenAI / Google  | call，keylocal | service |
+| （use） | B  / YouTube  | download/ |  |
 
-EN AI EN，EN，EN。
-
----
-
-## EN、EN
-
-EN，**EN 14 EN**，EN。
+call AI service，applicableservice，。
 
 ---
 
-## EN、EN
+## 、
 
-EN，EN：EN（HTTPS）、EN、EN、EN。EN，EN。
-
----
-
-## EN、EN（EN）
-
-EN，**EN、EN**。EN，EN、EN，EN**EN**：
-
-- **AccountEN**：EN/EN、EN。ENAccountEN。
-- **EN LLM EN**：EN，EN**EN/EN**EN AI EN。EN，EN。
-- **EN**：EN、EN，EN。
+，** 14 **，。
 
 ---
 
-## EN、EN
+## 、security
 
-EN，EN「EN」EN；EN。
-
----
-
-## EN、ContactEN
-
-EN、EN，ENContact：
-
-- EN：**christine95zhouye@gmail.com**
-- EN：**https://zhouxiaoka.github.io/autoclip_intro/**
+security，：（HTTPS）、、、key。，security。
 
 ---
 
+## 、（）
+
+，**、**。，update、，****：
+
+- **account**：optional/sign inconfig、use。account。
+- **cloud LLM proxy**：selectusemodelproxy，**subtitles/proxyserver**completed AI 。optional，。
+- ****：、，。
+
 ---
 
-## EN（Compliance Checklist）
+## 、update
 
-| EN | EN | EN |
+，update「update」date；。
+
+---
+
+## 、
+
+、，：
+
+- ：**christine95zhouye@gmail.com**
+- official site：**https://zhouxiaoka.github.io/autoclip_intro/**
+
+---
+
+---
+
+## check（Compliance Checklist）
+
+|  | status | notes |
 |------|------|------|
-| 《EN》(PIPL) | ⚠️ EN | EN，EN |
-| 《EN》/《EN》 | ✅ EN | EN、EN |
-| GDPR（EN）| ⚠️ EN | EN PostHog EN US EN；EN EU EN |
-| CCPA（EN）| ⚠️ EN | EN |
-| COPPA / EN | ✅ EN | EN |
+| 《Personal Info Protection Law》(PIPL) | ⚠️  | ，confirm |
+| 《security》/《security》 | ✅  | local、 |
+| GDPR（）| ⚠️  |  PostHog  US ； EU  |
+| CCPA（）| ⚠️  |  |
+| COPPA /  | ✅ applicable |  |
 
-## EN（Clauses Requiring Legal Review）
+## （Clauses Requiring Legal Review）
 
-| EN | EN | EN |
+|  | reason |  |
 |------|------|--------|
-| EN EN（PostHog US） | PIPL ENProvidesEN（EN/EN/EN） | EN |
-| 「EN」EN | EN + EN，EN | EN |
-| EN EN | EN | EN |
-| EN EN（EN） | EN | EN（EN） |
-| EN（GDPR/CCPA） | EN | EN（EN Roadmap Phase 3） |
+|  （PostHog US） | PIPL （//security） |  |
+| 「」 |  + ，impact |  |
+|   |  |  |
+|  （proxy） |  | （） |
+| （GDPR/CCPA） |  | （ Roadmap Phase 3） |
 
-## EN（Implementation Checklist）
+## （Implementation Checklist）
 
-- [x] ENContactEN、EN/EN、EN
-- [ ] EN「EN」EN
-- [ ] EN / EN
-- [ ] EN
-- [ ] EN「EN」EN
-- [ ] PostHog EN，EN
-- [ ] Account / EN / EN，EN
+- [x] 、official site/、
+- [ ] 「」
+- [ ] start / 
+- [ ] official siteversion
+- [ ] Settings page「」
+- [ ] PostHog settings，
+- [ ] account / proxy / ，update

@@ -1,6 +1,6 @@
 """
-ENAPI
-ENOpenAI、Gemini、EN、ENDashScopeEN
+multimodelProvidesprovidertranslatedonetranslated
+supportOpenAI、Gemini、translated、translatedDashScopeetc.
 """
 import json
 import logging
@@ -14,15 +14,15 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 class ProviderType(Enum):
-    """EN"""
-    DASHSCOPE = "dashscope"  # EN
-    OPENAI = "openai"        # OpenAI
+    """modelProvidesprovidertranslated"""
+    DASHSCOPE = "dashscope"  # translated
+    OPtranslatedAI = "openai"        # OpenAI
     GEMINI = "gemini"        # Google Gemini
-    SILICONFLOW = "siliconflow"  # EN
+    SILICONFLOW = "siliconflow"  # translated
 
 @dataclass
 class ModelInfo:
-    """EN"""
+    """modelinfo"""
     name: str
     display_name: str
     provider: ProviderType
@@ -32,14 +32,14 @@ class ModelInfo:
 
 @dataclass
 class LLMResponse:
-    """LLMresponse"""
+    """LLMtranslated"""
     content: str
     usage: Optional[Dict[str, Any]] = None
     model: Optional[str] = None
     finish_reason: Optional[str] = None
 
 class LLMProvider(ABC):
-    """LLMEN"""
+    """LLMProvidesprovidertranslated"""
     
     def __init__(self, api_key: str, model_name: str, **kwargs):
         self.api_key = api_key
@@ -49,77 +49,77 @@ class LLMProvider(ABC):
     @abstractmethod
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
         """
-        callENAPI
+        callmodelAPI
         
         Args:
-            prompt: hintEN
-            input_data: EN
-            **kwargs: ENparameters
+            prompt: translated
+            input_data: translated
+            **kwargs: translated
             
         Returns:
-            LLMResponse: ENresponse
+            LLMResponse: modeltranslated
         """
         pass
     
     @abstractmethod
     def test_connection(self) -> bool:
         """
-        ENAPIconnect
+        testAPIconnect
         
         Returns:
-            bool: connectENsucceeded
+            bool: connectIstranslatedsucceeded
         """
         pass
     
     @abstractmethod
     def get_available_models(self) -> List[ModelInfo]:
         """
-        fetchEN
+        fetchcanusemodellist
         
         Returns:
-            List[ModelInfo]: EN
+            List[ModelInfo]: canusemodellist
         """
         pass
     
     def _build_full_input(self, prompt: str, input_data: Any = None) -> str:
-        """EN"""
+        """translated'stranslated"""
         if input_data:
             if isinstance(input_data, (dict, list, tuple)):
-                return f"{prompt}\n\nEN：\n{json.dumps(input_data, ensure_ascii=False, indent=2, default=str)}"
+                return f"{prompt}\n\ntranslated：\n{json.dumps(input_data, ensure_ascii=False, indent=2, default=str)}"
             else:
-                return f"{prompt}\n\nEN：\n{input_data}"
+                return f"{prompt}\n\ntranslated：\n{input_data}"
         return prompt
 
 class DashScopeProvider(LLMProvider):
-    """ENDashScopeEN"""
+    """translatedDashScopeProvidesprovider"""
     
     def __init__(self, api_key: str, model_name: str = "qwen-plus", **kwargs):
         super().__init__(api_key, model_name, **kwargs)
-        # EN（alibabacloud.com，#45）EN key EN dashscope-intl EN；native SDK EN，
-        # soEN base_url EN OpenAI EN，EN
+        # translatedsite（alibabacloud.com，#45）'s key translated dashscope-intl translated；native SDK 'stranslatedIsprocesstranslated，
+        # Sotranslated base_url translatedonetranslated OpenAI translated，bytranslated
         custom_base_url = normalize_base_url(kwargs.get("base_url") or os.getenv("DASHSCOPE_BASE_URL", ""))
-        # EN: native (SDK Generation.call) | compatible (OpenAIEN)
+        # translated: native (SDK Generation.call) | compatible (OpenAItranslated)
         self.mode = (kwargs.get("mode") or os.getenv("DASHSCOPE_MODE") or ("compatible" if custom_base_url else "native")).lower()
-        # EN base_url
+        # translated base_url
         self.base_url = custom_base_url or DASHSCOPE_CN_COMPATIBLE_BASE_URL
         self.is_international = self.base_url == DASHSCOPE_INTL_COMPATIBLE_BASE_URL
-        # EN SDK
+        # translated SDK
         self._ds_generation = None
         if self.mode == "native":
             try:
                 from dashscope import Generation
                 self._ds_generation = Generation
             except ImportError:
-                raise ImportError("pleaseENdashscope: pip install dashscope")
+                raise ImportError("translatedinstalldashscope: pip install dashscope")
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
         """callDashScope API（mode: native|compatible）"""
         masked_key = self.api_key[:3] + "***" + self.api_key[-2:] if self.api_key else ""
         logger.info(f"[DashScope] mode={self.mode} model={self.model_name} base_url={self.base_url if self.mode=='compatible' else 'sdk-generation'} key={masked_key}")
-        logger.debug(f"[DashScope] ENkwargs: {kwargs}")
+        logger.debug(f"[DashScope] translated'skwargs: {kwargs}")
         if self.mode == "native":
             try:
-                # ENuseENAPI key，ENsettingsEN
+                # ensureusetranslated'sAPI key，translatedsettingstranslated
                 old_api_key = os.getenv("DASHSCOPE_API_KEY")
                 os.environ["DASHSCOPE_API_KEY"] = self.api_key
                 
@@ -132,7 +132,7 @@ class DashScopeProvider(LLMProvider):
                     **kwargs
                 )
                 
-                # EN
+                # translated'stranslated
                 if old_api_key is not None:
                     os.environ["DASHSCOPE_API_KEY"] = old_api_key
                 elif "DASHSCOPE_API_KEY" in os.environ:
@@ -145,10 +145,10 @@ class DashScopeProvider(LLMProvider):
                             finish_reason=getattr(resp.output, 'finish_reason', None)
                         )
                     finish_reason = getattr(resp.output, 'finish_reason', 'unknown') if getattr(resp, 'output', None) else 'unknown'
-                    logger.warning(f"APIrequestsucceeded，EN。endEN: {finish_reason}")
+                    logger.warning(f"APItranslatedsucceeded，translated。translated: {finish_reason}")
                     return LLMResponse(content="")
                 code = getattr(resp, 'code', 'N/A')
-                message = getattr(resp, 'message', 'ENAPIerror')
+                message = getattr(resp, 'message', 'translatedAPIerror')
                 raise Exception(f"APIcallfailed - Status: {getattr(resp,'status_code', 'N/A')}, Code: {code}, Message: {message}")
             except Exception as e:
                 logger.error(f"DashScope(native)callfailed: {str(e)}")
@@ -186,81 +186,81 @@ class DashScopeProvider(LLMProvider):
                 raise
     
     def test_connection(self) -> bool:
-        """ENDashScopeconnect"""
+        """testDashScopeconnect"""
         try:
-            # ENvalidateAPI KeyEN
+            # translatedverifyAPI Keyformat
             if not self.api_key or len(self.api_key.strip()) < 10:
-                logger.error("API KeyEN")
+                logger.error("API Keytranslatedortranslated")
                 return False
             
-            # checkAPI KeyEN（DashScope API KeyENsk-EN）
+            # checkAPI Keyformat（DashScope API KeytranslatedIssk-translated）
             if not self.api_key.startswith("sk-"):
-                logger.warning(f"API KeyENmayEN，EN'sk-'EN，EN: {self.api_key[:10]}...")
-                # ENreturnFalse，becauseENAPI KeymayEN
+                logger.warning(f"API Keyformatcantranslated，translated'sk-'translated，translated: {self.api_key[:10]}...")
+                # translatedreturnFalse，translatedAPI Keycantranslatedformattranslated
             
-            # useENcall，ENAPIvalidate
+            # usetranslated'stestcall，translated'sAPIverify
             try:
-                # ENcallcallEN
-                response = self.call("EN", max_tokens=1)
+                # translatedcallcalltranslatedtest
+                response = self.call("test", max_tokens=1)
                 if response and response.content:
-                    logger.info("DashScope APIconnectENsucceeded")
+                    logger.info("DashScope APIconnecttestsucceeded")
                     return True
                 else:
-                    logger.error("DashScope APIENreturnENresponse")
+                    logger.error("DashScope APItestreturntranslated")
                     return False
                     
             except Exception as e:
-                logger.error(f"DashScope APIENfailed: {str(e)}")
+                logger.error(f"DashScope APItestfailed: {str(e)}")
                 return False
                 
         except Exception as e:
-            logger.error(f"DashScopeconnectENfailed: {e}")
+            logger.error(f"DashScopeconnecttestfailed: {e}")
             return False
     
     def get_available_models(self) -> List[ModelInfo]:
-        """fetchDashScopeEN"""
+        """fetchDashScopecanusemodel"""
         return [
             ModelInfo(
                 name="qwen-plus",
-                display_name="ENPlus",
+                display_name="translatedPlus",
                 provider=ProviderType.DASHSCOPE,
                 max_tokens=8192,
-                description="ENPlusEN"
+                description="translatedPlusmodel"
             ),
             ModelInfo(
                 name="qwen-max",
-                display_name="ENMax",
+                display_name="translatedMax",
                 provider=ProviderType.DASHSCOPE,
                 max_tokens=8192,
-                description="ENMaxEN"
+                description="translatedMaxmodel"
             ),
             ModelInfo(
                 name="qwen-turbo",
-                display_name="ENTurbo",
+                display_name="translatedTurbo",
                 provider=ProviderType.DASHSCOPE,
                 max_tokens=8192,
-                description="ENTurboEN"
+                description="translatedTurbomodel"
             )
         ]
 
-OPENAI_OFFICIAL_BASE_URL = "https://api.openai.com/v1"
-# EN/EN OpenAI ENservice（Ollama、vLLM、LM Studio EN）EN key，EN SDK EN
-OPENAI_COMPATIBLE_PLACEHOLDER_KEY = "EMPTY"
-# EN OpenAI ENAPI：EN / EN（alibabacloud.com EN key EN，#45）
+OPtranslatedAI_OFFICIAL_BASE_URL = "https://api.openai.com/v1"
+# local/translated OpenAI translatedservice（Ollama、vLLM、LM Studio etc.）translated key，translated SDK translated
+OPtranslatedAI_COMPATIBLE_PLACEHOLDER_KEY = "EMPTY"
+# translated OpenAI translated：translatedsite / translatedsite（alibabacloud.com translated's key translatedsite，#45）
 DASHSCOPE_CN_COMPATIBLE_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 DASHSCOPE_INTL_COMPATIBLE_BASE_URL = "https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
 
 
 def normalize_base_url(base_url: Optional[str]) -> str:
-    """EN `/`，ENreturnEN（ENuseEN）"""
+    """translatedandtranslated's `/`，translatedreturntranslated（translatedusetranslated）"""
     return (base_url or "").strip().rstrip("/")
 
 
 def is_local_url(url: Optional[str]) -> bool:
     """
-    EN / EN（Ollama、LM Studio、vLLM EN）。
-    ENsystemEN：macOS EN httpx ENsystemENsettings（Clash / Surge EN），
-    EN localhost requestEN，resultEN 502 / timeout，userEN。
+    Istranslated / translated（Ollama、LM Studio、vLLM translated）。
+    thistranslatedSystemtranslated：macOS translated httpx translatedSystemtranslatedsettings（Clash / Surge etc.），
+      localhost translated，translatedIs 502 / translated，usertranslated。
     """
     if not url:
         return False
@@ -280,7 +280,7 @@ def is_local_url(url: Optional[str]) -> bool:
 
 
 def make_openai_http_client(base_url: Optional[str]):
-    """EN → EN / systemEN httpx.Client；ENreturn None（EN SDK EN）。"""
+    """localtranslated → translated / Systemtranslated's httpx.Client；translatedreturn None（use SDK default）。"""
     if not is_local_url(base_url):
         return None
     try:
@@ -291,17 +291,17 @@ def make_openai_http_client(base_url: Optional[str]):
 
 
 class OpenAIProvider(LLMProvider):
-    """OpenAI EN OpenAI ENAPI（EN、DeepSeek、OpenRouter、Ollama、vLLM、LM Studio EN）
+    """OpenAI translatedonetranslated OpenAI translated（translated、DeepSeek、OpenRouter、Ollama、vLLM、LM Studio etc.）
 
-    through `base_url` ENserviceEN；EN OpenAI EN。
+    translated `base_url` translatedservicetranslatedcantranslateduse；translated OpenAI translated。
     """
     
     def __init__(self, api_key: str, model_name: str = "gpt-4o-mini", **kwargs):
         super().__init__(api_key, model_name, **kwargs)
-        self.base_url = normalize_base_url(kwargs.get("base_url") or os.getenv("OPENAI_BASE_URL"))
-        self.is_custom_endpoint = bool(self.base_url) and self.base_url != OPENAI_OFFICIAL_BASE_URL
+        self.base_url = normalize_base_url(kwargs.get("base_url") or os.getenv("OPtranslatedAI_BASE_URL"))
+        self.is_custom_endpoint = bool(self.base_url) and self.base_url != OPtranslatedAI_OFFICIAL_BASE_URL
         if not api_key and self.is_custom_endpoint:
-            api_key = OPENAI_COMPATIBLE_PLACEHOLDER_KEY
+            api_key = OPtranslatedAI_COMPATIBLE_PLACEHOLDER_KEY
             self.api_key = api_key
         try:
             import openai
@@ -313,7 +313,7 @@ class OpenAIProvider(LLMProvider):
                     client_kwargs["http_client"] = http_client
             self.client = openai.OpenAI(**client_kwargs)
         except ImportError:
-            raise ImportError("pleaseENopenai: pip install openai")
+            raise ImportError("translatedinstallopenai: pip install openai")
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
         """callOpenAI API"""
@@ -345,51 +345,51 @@ class OpenAIProvider(LLMProvider):
             raise
     
     def test_connection(self) -> bool:
-        """ENOpenAI / ENAPIconnect"""
+        """testOpenAI / translatedconnect"""
         try:
-            # EN OpenAI EN key EN；ENserviceEN key EN（ENneed）
+            # translated OpenAI translated key format；translatedservice's key translated（translatedNo need）
             if not self.is_custom_endpoint:
                 if not self.api_key or len(self.api_key.strip()) < 10:
-                    logger.error("OpenAI API KeyEN")
+                    logger.error("OpenAI API Keytranslatedortranslated")
                     return False
                 if not self.api_key.startswith("sk-"):
-                    logger.warning(f"OpenAI API KeyENmayEN，EN'sk-'EN，EN: {self.api_key[:10]}...")
+                    logger.warning(f"OpenAI API Keyformatcantranslated，translated'sk-'translated，translated: {self.api_key[:10]}...")
             
-            # useEN
-            response = self.call("EN", max_tokens=1)
+            # usetranslated'stest
+            response = self.call("test", max_tokens=1)
             return response and response.content is not None
         except Exception as e:
-            logger.error(f"OpenAIconnectENfailed (base_url={self.base_url or OPENAI_OFFICIAL_BASE_URL}): {e}")
+            logger.error(f"OpenAIconnecttestfailed (base_url={self.base_url or OPtranslatedAI_OFFICIAL_BASE_URL}): {e}")
             return False
     
     def get_available_models(self) -> List[ModelInfo]:
-        """fetchOpenAIEN（ENAPIENuserEN，EN）"""
+        """fetchOpenAIcanusemodel（translated'smodeltranslatedusertranslated，thistranslatedusetranslated）"""
         return [
             ModelInfo(
                 name="gpt-4o-mini",
                 display_name="GPT-4o mini",
-                provider=ProviderType.OPENAI,
+                provider=ProviderType.OPtranslatedAI,
                 max_tokens=128000,
-                description="OpenAI GPT-4o mini（EN）"
+                description="OpenAI GPT-4o mini（translated）"
             ),
             ModelInfo(
                 name="gpt-4o",
                 display_name="GPT-4o",
-                provider=ProviderType.OPENAI,
+                provider=ProviderType.OPtranslatedAI,
                 max_tokens=128000,
                 description="OpenAI GPT-4o"
             ),
             ModelInfo(
                 name="gpt-4-turbo",
                 display_name="GPT-4 Turbo",
-                provider=ProviderType.OPENAI,
+                provider=ProviderType.OPtranslatedAI,
                 max_tokens=128000,
-                description="OpenAI GPT-4 TurboEN"
+                description="OpenAI GPT-4 Turbomodel"
             )
         ]
 
 class GeminiProvider(LLMProvider):
-    """Google GeminiEN"""
+    """Google GeminiProvidesprovider"""
     
     def __init__(self, api_key: str, model_name: str = "gemini-2.5-flash", **kwargs):
         super().__init__(api_key, model_name, **kwargs)
@@ -399,7 +399,7 @@ class GeminiProvider(LLMProvider):
             from google import genai
             self.client = genai.Client(api_key=api_key)
         except ImportError:
-            raise ImportError("pleaseENgoogle-genai: pip install google-genai")
+            raise ImportError("translatedinstallgoogle-genai: pip install google-genai")
 
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
         """callGemini API"""
@@ -430,53 +430,53 @@ class GeminiProvider(LLMProvider):
             raise
     
     def test_connection(self) -> bool:
-        """ENGeminiconnect"""
+        """testGeminiconnect"""
         try:
-            # useENhint
-            response = self.call("EN", max_tokens=10)
-            # checkresponseEN
+            # usetranslated'stesttranslated
+            response = self.call("test", max_tokens=10)
+            # checktranslatedIstranslated
             if response and response.content:
                 return True
             return False
         except Exception as e:
-            logger.error(f"GeminiconnectENfailed: {e}")
+            logger.error(f"Geminiconnecttestfailed: {e}")
             return False
     
     def get_available_models(self) -> List[ModelInfo]:
-        """fetchGeminiEN"""
+        """fetchGeminicanusemodel"""
         return [
             ModelInfo(
                 name="gemini-2.5-flash",
                 display_name="Gemini 2.5 Flash",
                 provider=ProviderType.GEMINI,
                 max_tokens=1000000,
-                description="Google Gemini 2.5 FlashEN"
+                description="Google Gemini 2.5 Flashmodel"
             ),
             ModelInfo(
                 name="gemini-1.5-pro",
                 display_name="Gemini 1.5 Pro",
                 provider=ProviderType.GEMINI,
                 max_tokens=2000000,
-                description="Google Gemini 1.5 ProEN"
+                description="Google Gemini 1.5 Promodel"
             ),
             ModelInfo(
                 name="gemini-1.5-flash",
                 display_name="Gemini 1.5 Flash",
                 provider=ProviderType.GEMINI,
                 max_tokens=1000000,
-                description="Google Gemini 1.5 FlashEN"
+                description="Google Gemini 1.5 Flashmodel"
             )
         ]
 
 class SiliconFlowProvider(LLMProvider):
-    """EN"""
+    """translatedProvidesprovider"""
     
     def __init__(self, api_key: str, model_name: str = "Qwen/Qwen2.5-7B-Instruct", **kwargs):
         super().__init__(api_key, model_name, **kwargs)
         self.base_url = "https://api.siliconflow.cn/v1"
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        """callENAPI"""
+        """calltranslatedAPI"""
         try:
             import requests
             
@@ -515,84 +515,84 @@ class SiliconFlowProvider(LLMProvider):
             )
             
         except Exception as e:
-            logger.error(f"ENcallfailed: {str(e)}")
+            logger.error(f"translatedcallfailed: {str(e)}")
             raise
     
     def test_connection(self) -> bool:
-        """ENconnect"""
+        """testtranslatedconnect"""
         try:
-            # useENhint
-            response = self.call("EN", max_tokens=10)
-            # checkresponseEN
+            # usetranslated'stesttranslated
+            response = self.call("test", max_tokens=10)
+            # checktranslatedIstranslated
             if response and response.content:
                 return True
             return False
         except Exception as e:
-            logger.error(f"ENconnectENfailed: {e}")
+            logger.error(f"translatedconnecttestfailed: {e}")
             return False
     
     def get_available_models(self) -> List[ModelInfo]:
-        """fetchEN"""
+        """fetchtranslatedcanusemodel"""
         return [
             ModelInfo(
                 name="Qwen/Qwen2.5-7B-Instruct",
                 display_name="Qwen2.5-7B",
                 provider=ProviderType.SILICONFLOW,
                 max_tokens=32768,
-                description="ENQwen2.5-7BEN"
+                description="translatedQwen2.5-7Bmodel"
             ),
             ModelInfo(
                 name="Qwen/Qwen2.5-14B-Instruct",
                 display_name="Qwen2.5-14B",
                 provider=ProviderType.SILICONFLOW,
                 max_tokens=32768,
-                description="ENQwen2.5-14BEN"
+                description="translatedQwen2.5-14Bmodel"
             ),
             ModelInfo(
                 name="Qwen/Qwen2.5-32B-Instruct",
                 display_name="Qwen2.5-32B",
                 provider=ProviderType.SILICONFLOW,
                 max_tokens=32768,
-                description="ENQwen2.5-32BEN"
+                description="translatedQwen2.5-32Bmodel"
             ),
             ModelInfo(
                 name="deepseek-ai/DeepSeek-V2.5",
                 display_name="DeepSeek-V2.5",
                 provider=ProviderType.SILICONFLOW,
                 max_tokens=65536,
-                description="ENDeepSeek-V2.5EN"
+                description="translatedDeepSeek-V2.5model"
             )
         ]
 
 class LLMProviderFactory:
-    """LLMEN"""
+    """LLMProvidesprovidertranslated"""
     
     _providers = {
         ProviderType.DASHSCOPE: DashScopeProvider,
-        ProviderType.OPENAI: OpenAIProvider,
+        ProviderType.OPtranslatedAI: OpenAIProvider,
         ProviderType.GEMINI: GeminiProvider,
         ProviderType.SILICONFLOW: SiliconFlowProvider,
     }
     
     @classmethod
     def create_provider(cls, provider_type: ProviderType, api_key: str, model_name: str, **kwargs) -> LLMProvider:
-        """createEN"""
+        """createProvidesprovidertranslated"""
         if provider_type not in cls._providers:
-            raise ValueError(f"EN: {provider_type}")
+            raise ValueError(f"translatedsupport'sProvidesprovidertranslated: {provider_type}")
         
         provider_class = cls._providers[provider_type]
         return provider_class(api_key, model_name, **kwargs)
     
     @classmethod
     def get_all_available_models(cls) -> Dict[ProviderType, List[ModelInfo]]:
-        """fetchallEN"""
+        """fetchtranslatedProvidesprovider'scanusemodel"""
         models = {}
         for provider_type, provider_class in cls._providers.items():
             try:
-                # createENfetchEN
+                # createtranslatedfetchmodellist
                 temp_provider = provider_class("dummy_key", "dummy_model")
                 models[provider_type] = temp_provider.get_available_models()
             except Exception as e:
-                logger.warning(f"cannotfetch{provider_type.value}EN: {e}")
+                logger.warning(f"translatedfetch{provider_type.value}'smodellist: {e}")
                 models[provider_type] = []
         return models

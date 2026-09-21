@@ -1,87 +1,87 @@
-# EN
+# progressfixsummary
 
-## EN
+## issue
 
-1. **EN**: EN0%EN，EN，EN
-2. **WebSocketEN**: ENWebSocketEN，EN
-3. **UIEN**: EN、ENUIEN，EN
-4. **EN**: EN
+1. **frontendprogressissue**: frontend0%progress，completed，progress
+2. **WebSocket**: WebSocketprogress，
+3. **UIstatus**: download、processingstatusUI，
+4. **downloadprogress**: downloadprogress
 
-## EN
+## solution
 
-### 1. EN
+### 1. backendprogress
 
-**EN**: `backend/services/simple_progress.py`
-- 6EN，EN
-- EN
-- RedisEN
-- SupportEN（EN）
+**file**: `backend/services/simple_progress.py`
+- 6stage，stage
+- 
+- Redisevent
+- supportprogress（optional）
 
-**EN**: `backend/api/v1/simple_progress.py`
-- ENAPIEN
-- EN
-- EN
+**file**: `backend/api/v1/simple_progress.py`
+- progressAPIAPI
+- fetchprojectprogress
+- stageconfig
 
-**EN**: `backend/services/simple_pipeline_adapter.py`
-- EN
-- EN
-- EN6EN
+**file**: `backend/services/simple_pipeline_adapter.py`
+- integrationprogress
+- stageevent
+- 6event
 
-### 2. EN
+### 2. frontendstate management
 
-**EN**: `frontend/src/stores/useSimpleProgressStore.ts`
-- ZustandEN
-- EN
-- EN
-- SupportEN
+**file**: `frontend/src/stores/useSimpleProgressStore.ts`
+- Zustandstate management
+- 
+- progresscache
+- support
 
-### 3. ENUIEN
+### 3. UI
 
-**EN**: `frontend/src/components/UnifiedStatusBar.tsx`
-- EN
-- SupportEN、EN、EN、EN
-- EN32px，EN
-- EN，VisualEN
-- EN
+**file**: `frontend/src/components/UnifiedStatusBar.tsx`
+- status
+- supportdownload、processing、completed、failedstatus
+- 32px，
+- ，
+- downloadprogressprogress
 
-**EN**: `frontend/src/components/SimpleProgressDisplay.tsx`
-- EN
-- EN
-- SupportEN
+**file**: `frontend/src/components/SimpleProgressDisplay.tsx`
+- progress
+- processing
+- supportstage
 
-### 4. EN
+### 4. integration
 
-**EN**: `frontend/src/components/ProjectCard.tsx`
-- EN
-- EN
-- SupportEN
-- EN
+**file**: `frontend/src/components/ProjectCard.tsx`
+- progress
+- integrationstatus
+- supportdownloadprogress
+- status
 
-## Core Features
+## 
 
-### EN
+### stage
 ```python
 STAGES = [
-    ("INGEST", 10),        # EN/EN
-    ("SUBTITLE", 15),      # EN/EN  
-    ("ANALYZE", 20),       # EN/EN
-    ("HIGHLIGHT", 25),     # EN/EN
-    ("EXPORT", 20),        # EN/EN
-    ("DONE", 10),          # EN/EN
+    ("INGEST", 10),        # download/
+    ("SUBTITLE", 15),      # subtitles/  
+    ("ANALYZE", 20),       # /outline
+    ("HIGHLIGHT", 25),     # /
+    ("EXPORT", 20),        # export/
+    ("DONE", 10),          # validate/archive
 ]
 ```
 
-### EN
+### progress
 ```python
 def compute_percent(stage: str, subpercent: Optional[float] = None) -> int:
-    # EN
+    # stage
     done = 0
     for s in ORDER:
         if s == stage:
             break
         done += WEIGHTS[s]
     
-    # Current Stage
+    # current stage
     cur = WEIGHTS.get(stage, 0)
     
     if subpercent is None:
@@ -90,88 +90,88 @@ def compute_percent(stage: str, subpercent: Optional[float] = None) -> int:
         return min(99, done + int(cur * subpercent / 100))
 ```
 
-### EN
+### eventformat
 ```json
 {
   "project_id": "46ab50a6-....",
   "stage": "HIGHLIGHT",
   "percent": 70,
-  "message": "EN，EN 12 EN",
+  "message": "completed， 12 ",
   "ts": 1640995200
 }
 ```
 
-## UIEN
+## UIimprove
 
-### EN
-- **EN**: EN32px，EN
-- **EN**: EN，EN
-- **EN**: EN+EN，EN
-- **EN**:
-  - EN: EN (#1890ff → #40a9ff)
-  - EN: EN
-  - EN: EN (#52c41a → #73d13d)
-  - EN: EN (#ff4d4f → #ff7875)
-  - EN: EN (#d9d9d9 → #f0f0f0)
+### status
+- ****: 32px，
+- ****: ，statususe
+- ****: +，
+- ****:
+  - download:  (#1890ff → #40a9ff)
+  - processing: stage
+  - completed:  (#52c41a → #73d13d)
+  - failed:  (#ff4d4f → #ff7875)
+  - :  (#d9d9d9 → #f0f0f0)
 
-### Responsive Design
-- SupportEN
-- ENSpacingEN
-- EN
+### responsive design
+- support
+- 
+- 
 
-## EN
+## 
 
-### EN
-- EN2ENAPIEN
-- EN
-- EN
+### downloadprogress
+- 2projectAPIfetchdownloadprogress
+- auto-updateprogress
+- downloadcompletedstatus
 
-### EN
-- EN2ENAPI
-- EN
-- SupportEN
+### progress
+- 2progressAPI
+- fetchstageprogress
+- supportproject
 
-## EN
+## testverify
 
-**EN**: `frontend/src/pages/ProgressTestPage.tsx`
-- ProvidesENInterface
-- EN
-- ENUIEN
+**file**: `frontend/src/pages/ProgressTestPage.tsx`
+- test
+- canstatusprogress
+- verifyUI
 
-## EN
+## 
 
-### EN
-1. EN`SimplePipelineAdapter`EN
-2. EN`emit_progress()`
-3. ENWebSocketEN
+### backend
+1. use`SimplePipelineAdapter`
+2. call`emit_progress()`
+3. WebSocketprogress
 
-### EN
-1. EN`UnifiedStatusBar`EN
-2. EN`useSimpleProgressStore`EN
-3. ENWebSocketEN
+### frontend
+1. use`UnifiedStatusBar`progress
+2. use`useSimpleProgressStore`status
+3. configWebSocket
 
-## Performance
+## performance
 
-1. **EN**: EN
-2. **EN**: EN
-3. **EN**: EN
-4. **EN**: EN
+1. ****: fetchprojectprogress
+2. **cache**: 
+3. ****: needstart
+4. ****: progress
 
-## EN
+## 
 
-1. **RedisEN**: EN，EN
-2. **EN**: EN，EN
-3. **EN**: SupportEN，ProvidesEN
+1. **Redisconnection failed**: ，progress
+2. ****: frontend，cachelocal
+3. **stage**: supportfailedstatus，
 
-## EN
+## summary
 
-EN，EN：
+fix，：
 
-✅ **EN**: Based onHTTPEN，ENWebSocket
-✅ **EN**: EN，EN  
-✅ **EN**: UIEN，EN
-✅ **EN**: EN
-✅ **EN**: EN
-✅ **EN**: EN
+✅ ****: based onHTTP，dependenciesWebSocket
+✅ ****: stage，  
+✅ ****: UI，
+✅ ****: downloadprogress
+✅ ****: stage
+✅ ****: status
 
-EN，EN，EN。
+，，。

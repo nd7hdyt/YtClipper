@@ -1,5 +1,5 @@
 """
-ENprocessingEN
+translatedprocesstool
 """
 import json
 import logging
@@ -7,11 +7,11 @@ import re
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 
-# EN
+# fixedimportissue
 try:
     from ..core.shared_config import CHUNK_SIZE
 except ImportError:
-    # ifENfailed，EN
+    # iftranslatedimportfailed，translatedimport
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -24,19 +24,19 @@ import pysrt
 logger = logging.getLogger(__name__)
 
 class TextProcessor:
-    """ENprocessingEN"""
+    """translatedprocesstooltranslated"""
     
     @staticmethod
     def chunk_text(text: str, chunk_size: int = CHUNK_SIZE) -> List[str]:
         """
-        EN
+        translatedbytranslated
         
         Args:
-            text: EN
-            chunk_size: EN
+            text: translated
+            chunk_size: translated
             
         Returns:
-            EN
+            translatedlist
         """
         if len(text) <= chunk_size:
             return [text]
@@ -44,21 +44,21 @@ class TextProcessor:
         chunks = []
         current_chunk = ""
         
-        # EN
+        # bytranslated
         paragraphs = text.split('\n')
         
         for paragraph in paragraphs:
-            # ifcurrentEN，thenEN
+            # iftranslated，translatedadd
             if len(current_chunk) + len(paragraph) + 1 <= chunk_size:
                 current_chunk += paragraph + '\n'
             else:
-                # ifcurrentEN，saveEN
+                # iftranslated，translated
                 if current_chunk.strip():
                     chunks.append(current_chunk.strip())
                 
-                # ifEN，needEN
+                # iftranslated translated，translatedonetranslated
                 if len(paragraph) > chunk_size:
-                    # EN
+                    # bytranslated
                     sentences = re.split(r'[。！？]', paragraph)
                     temp_chunk = ""
                     for sentence in sentences:
@@ -72,7 +72,7 @@ class TextProcessor:
                 else:
                     current_chunk = paragraph + '\n'
         
-        # EN
+        # addtranslatedone translated
         if current_chunk.strip():
             chunks.append(current_chunk.strip())
         
@@ -80,21 +80,21 @@ class TextProcessor:
     
     def chunk_srt_data(self, srt_data: List[Dict], interval_minutes: int = 30, pause_threshold_ms: int = 1000) -> List[Dict]:
         """
-        ENtime，ENSRTENtimeEN。
-        ENcanENdisconnect。
+        translated，translatedSRTtranslatedetc.translated'stranslated。
+        thiscantranslatedintranslated。
 
         Args:
-            srt_data: SRTEN
-            interval_minutes: eachENtimeEN（EN）
-            pause_threshold_ms: EN
+            srt_data: SRTtranslatedlist
+            interval_minutes: per translated'stranslated（minutes）
+            pause_threshold_ms: translated'stranslatedsecondstranslated
 
         Returns:
-            EN，amongEN srt_entries ENprocessingEN。
+            translated'stranslatedlist，translated's srt_entries translatedPackageincludetranslatedprocesstranslated。
         """
         if not srt_data:
             return []
 
-        # createEN，EN
+        # createone translatedsecondstranslated'stranslatedlist，translatedIstranslated
         srt_data_with_seconds = []
         for sub in srt_data:
             entry = sub.copy()
@@ -112,47 +112,47 @@ class TextProcessor:
         while current_chunk_start_index < len(srt_data_with_seconds):
             target_cut_time = last_cut_time + interval_seconds
             
-            # ENtimeEN
+            # translated'stranslated
             best_cut_index = -1
             
-            # ENcurrentENstartEN 90% EN 110% ENtimeEN
+            # translatedfromtranslated's 90% translated 110% translated'sone translated
             search_start_index = current_chunk_start_index
             while search_start_index < len(srt_data_with_seconds) and srt_data_with_seconds[search_start_index]['start_seconds'] < target_cut_time * 0.9:
                 search_start_index += 1
 
-            # ENstartEN
+            # fromtranslated'stranslated
             for i in range(search_start_index, len(srt_data_with_seconds) - 1):
                 current_sub = srt_data_with_seconds[i]
                 next_sub = srt_data_with_seconds[i+1]
                 
-                # ifwealreadyENtimeEN110%，ENstopEN
+                # iftranslated's110%，translated
                 if current_sub['start_seconds'] > target_cut_time * 1.1:
                     break
                 
-                # ENsubtitlesENtime
+                # translated subtitlestranslated'stranslated
                 pause = next_sub['start_seconds'] - current_sub['end_seconds']
                 if pause * 1000 >= pause_threshold_ms:
-                    best_cut_index = i + 1  # EN
+                    best_cut_index = i + 1  # intranslated
                     break
             
-            # ifEN，ENtimeEN
+            # iftranslated'stranslated，translatedintranslated
             if best_cut_index == -1:
-                # ENtimeENsubtitlesEN
+                # translated'ssubtitlestranslated
                 i = current_chunk_start_index
                 while i < len(srt_data_with_seconds) and srt_data_with_seconds[i]['start_seconds'] < target_cut_time:
                     i += 1
                 best_cut_index = i if i < len(srt_data_with_seconds) else len(srt_data_with_seconds)
 
-            # ifEN，thenENallEN
+            # iftranslatedortranslated，translatedone translated
             if best_cut_index <= current_chunk_start_index:
                  best_cut_index = len(srt_data_with_seconds)
 
-            # createEN
+            # createtranslated
             chunk_entries_with_seconds = srt_data_with_seconds[current_chunk_start_index:best_cut_index]
             if not chunk_entries_with_seconds:
                 break
 
-            # EN，ENsrt_entries
+            # translated，translated'ssrt_entries
             chunk_entries = []
             for entry in chunk_entries_with_seconds:
                 clean_entry = entry.copy()
@@ -181,27 +181,27 @@ class TextProcessor:
     @staticmethod
     def parse_srt(srt_path: Path) -> List[Dict]:
         """
-        parseSRTsubtitlesfile
+        translatedSRTsubtitlesfile
         
         Args:
-            srt_path: SRTfilepath
+            srt_path: SRTfile path
             
         Returns:
-            subtitlesEN，eachENtimeEN
+            subtitlestranslatedlist，per translatedPackageincludetranslatedAndtranslated
         """
         if not srt_path.exists():
-            logger.error(f"SRTfiledoes not exist: {srt_path}")
+            logger.error(f"SRTfile not found: {srt_path}")
             return []
         
         if srt_path.stat().st_size == 0:
-            logger.warning(f"SRTfileEN: {srt_path}")
+            logger.warning(f"SRTfiletranslated: {srt_path}")
             return []
 
         try:
             try:
                 subs = pysrt.open(str(srt_path), encoding='utf-8')
             except UnicodeDecodeError:
-                logger.warning("UTF-8ENfailed，ENuse utf-8-sig...")
+                logger.warning("UTF-8translatedfailed，translateduse utf-8-sig...")
                 subs = pysrt.open(str(srt_path), encoding='utf-8-sig')
 
             subtitles = []
@@ -214,40 +214,40 @@ class TextProcessor:
                 })
 
             if not subtitles:
-                logger.warning(f"succeededENSRTfileENparseENsubtitlesEN: {srt_path}")
+                logger.warning(f"succeededtranslatedSRTfiletranslatedsubtitlestranslated: {srt_path}")
             
             return subtitles
         except Exception as e:
-            logger.error(f"usepysrtparseSRTfile'{srt_path}'ENUnknown error: {e}", exc_info=True)
+            logger.error(f"usepysrttranslatedSRTfile'{srt_path}'translatederror: {e}", exc_info=True)
             return []
     
     @staticmethod
     def extract_text_by_time_range(text: str, srt_data: List[Dict], 
                                   start_time: str, end_time: str) -> str:
         """
-        ENtimeEN
+        translatedfromtranslated
         
         Args:
-            text: EN
-            srt_data: SRTsubtitlesEN
-            start_time: starttime (EN: "00:01:25")
-            end_time: endtime (EN: "00:02:53")
+            text: translated
+            srt_data: SRTsubtitlestranslated
+            start_time: translated (format: "00:01:25")
+            end_time: translated (format: "00:02:53")
             
         Returns:
-            ENtimeEN
+            translated'stranslated
         """
-        # ENtimeENsubtitles
+        # translated'ssubtitles
         target_subtitles = []
         
         for sub in srt_data:
             sub_start = sub['start_time']
             sub_end = sub['end_time']
             
-            # checktimeEN
+            # checktranslated
             if (sub_start <= end_time and sub_end >= start_time):
                 target_subtitles.append(sub)
         
-        # EN
+        # translated'stranslated
         extracted_text = ""
         for sub in target_subtitles:
             extracted_text += sub['text'] + " "
@@ -257,13 +257,13 @@ class TextProcessor:
     @staticmethod
     def time_to_seconds(time_str: str) -> float:
         """
-        ENSRTtimeEN（HH:MM:SS,mmm）EN
+        translatedSRTtranslated（HH:MM:SS,mmm）translatedsecondstranslated
         
         Args:
-            time_str: timeEN
+            time_str: translated
             
         Returns:
-            EN
+            secondstranslated
         """
         time_str = time_str.replace(',', '.')
         parts = time_str.split(':')
@@ -276,18 +276,18 @@ class TextProcessor:
             ms = int(s_parts[1]) if len(s_parts) > 1 else 0
             return h * 3600 + m * 60 + s + ms / 1000.0
         
-        raise ValueError(f"ENtimeEN: {time_str}")
+        raise ValueError(f"translated'stranslatedformat: {time_str}")
     
     @staticmethod
     def seconds_to_time(seconds: float) -> str:
         """
-        ENtimeEN
+        translatedsecondstranslated
         
         Args:
-            seconds: EN
+            seconds: secondstranslated
             
         Returns:
-            timeEN (EN: "00:01:25")
+            translated (format: "00:01:25")
         """
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)

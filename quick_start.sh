@@ -1,29 +1,29 @@
 #!/bin/bash
 
-# AutoClip ENStartScript
-# Version: 2.0
-# EN: ENStartENEnvironment，ENCheck
+# AutoClip translatedstarttranslated
+# version: 2.0
+# feature: translatedstarttranslated，skiptranslatedcheck
 
 set -euo pipefail
 
 # =============================================================================
-# ConfigEN
+# configtranslated
 # =============================================================================
 
-BACKEND_PORT=8000
-FRONTEND_PORT=3000
+BACKtranslatedD_PORT=8000
+FRONTtranslatedD_PORT=3000
 
 # =============================================================================
-# EN
+# translated
 # =============================================================================
 
-GREEN='\033[0;32m'
+GREtranslated='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # =============================================================================
-# ToolEN
+# tooltranslated
 # =============================================================================
 
 log_info() {
@@ -31,7 +31,7 @@ log_info() {
 }
 
 log_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    echo -e "${GREtranslated}✅ $1${NC}"
 }
 
 log_warning() {
@@ -39,95 +39,95 @@ log_warning() {
 }
 
 # =============================================================================
-# EN
+# translated
 # =============================================================================
 
 main() {
-    echo -e "${GREEN}🚀 AutoClip ENStart${NC}"
+    echo -e "${GREtranslated}🚀 AutoClip translatedstart${NC}"
     echo ""
     
-    # CheckENEnvironment
+    # checktranslated
     if [[ ! -d "venv" ]]; then
-        log_warning "ENEnvironmentEN，PleaseEN: python3 -m venv venv"
+        log_warning "translatednot found，translated: python3 -m venv venv"
         exit 1
     fi
     
-    # ENEnvironment
-    log_info "ENEnvironment..."
+    # translated
+    log_info "translated..."
     source venv/bin/activate
     
-    # ENPythonEN
+    # settingsPythonpath
     : "${PYTHONPATH:=}"
     export PYTHONPATH="${PWD}:${PYTHONPATH}"
     
-    # ENEnvironmentEN
+    # translated
     if [[ -f ".env" ]]; then
         set -a
         source .env
         set +a
     fi
     
-    # StartRedis（IfNeed）
+    # startRedis（iftranslated）
     if ! redis-cli ping >/dev/null 2>&1; then
-        log_info "StartRedis..."
+        log_info "startRedis..."
         if command -v brew >/dev/null; then
             brew services start redis
             sleep 2
         fi
     fi
     
-    # EN
+    # createlogsdirectory
     mkdir -p logs
     
-    # StartEN
-    log_info "StartENService..."
-    nohup python -m uvicorn backend.main:app --host 0.0.0.0 --port "$BACKEND_PORT" --reload > logs/backend.log 2>&1 &
+    # startbackend
+    log_info "startbackendservice..."
+    nohup python -m uvicorn backend.main:app --host 0.0.0.0 --port "$BACKtranslatedD_PORT" --reload > logs/backend.log 2>&1 &
     echo $! > backend.pid
     
-    # StartCelery Worker
-    log_info "StartCelery Worker..."
+    # startCelery Worker
+    log_info "startCelery Worker..."
     nohup celery -A backend.core.celery_app worker --loglevel=info --concurrency=1 --prefetch-multiplier=1 -Q celery,processing,video,notification,upload > logs/celery.log 2>&1 &
     echo $! > celery.pid
     
-    # StartEN
-    log_info "StartENService..."
+    # startfrontend
+    log_info "startfrontendservice..."
     cd frontend
-    nohup npm run dev -- --host 0.0.0.0 --port "$FRONTEND_PORT" > ../logs/frontend.log 2>&1 &
+    nohup npm run dev -- --host 0.0.0.0 --port "$FRONTtranslatedD_PORT" > ../logs/frontend.log 2>&1 &
     echo $! > ../frontend.pid
     cd ..
     
-    # ENServiceStart
-    log_info "ENServiceStart..."
+    # etc.translatedservicestart
+    log_info "etc.translatedservicestart..."
     sleep 5
     
-    # CheckServiceStatus
-    if curl -fsS "http://localhost:$BACKEND_PORT/api/v1/health/" >/dev/null 2>&1; then
-        log_success "ENServiceENStart"
+    # checkservicestatus
+    if curl -fsS "http://localhost:$BACKtranslatedD_PORT/api/v1/health/" >/dev/null 2>&1; then
+        log_success "backendservicetranslatedstart"
     else
-        log_warning "ENServiceStartEN"
+        log_warning "backendservicestartcantranslatedissue"
     fi
     
-    if curl -fsS "http://localhost:$FRONTEND_PORT/" >/dev/null 2>&1; then
-        log_success "ENServiceENStart"
+    if curl -fsS "http://localhost:$FRONTtranslatedD_PORT/" >/dev/null 2>&1; then
+        log_success "frontendservicetranslatedstart"
     else
-        log_warning "ENServiceStartEN"
+        log_warning "frontendservicestartcantranslatedissue"
     fi
     
     echo ""
-    log_success "ENStartCompleted！"
+    log_success "translatedstarttranslated！"
     echo ""
-    echo "🌐 EN:"
-    echo "  EN: http://localhost:$FRONTEND_PORT"
-    echo "  EN: http://localhost:$BACKEND_PORT"
-    echo "  APIEN: http://localhost:$BACKEND_PORT/docs"
+    echo "🌐 translated:"
+    echo "  frontend: http://localhost:$FRONTtranslatedD_PORT"
+    echo "  backend: http://localhost:$BACKtranslatedD_PORT"
+    echo "  APIdocs: http://localhost:$BACKtranslatedD_PORT/docs"
     echo ""
-    echo "📝 EN:"
+    echo "📝 translatedlogs:"
     echo "  tail -f logs/backend.log"
     echo "  tail -f logs/frontend.log"
     echo "  tail -f logs/celery.log"
     echo ""
-    echo "🛑 StopService: ./stop_autoclip.sh"
+    echo "🛑 translatedservice: ./stop_autoclip.sh"
 }
 
-# EN
+# translated
 main "$@"

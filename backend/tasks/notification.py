@@ -1,5 +1,5 @@
 """
-ENtask
+translatedtask
 """
 
 import os
@@ -19,28 +19,28 @@ logger = logging.getLogger(__name__)
 @shared_task(bind=True, name='backend.tasks.notification.send_processing_notification')
 def send_processing_notification(self, project_id: str, task_id: str, message: str, notification_type: str = 'info') -> Dict[str, Any]:
     """
-    sendprocessingEN
+    translatedprocesstranslated
     
     Args:
         project_id: projectID
         task_id: taskID
-        message: EN
-        notification_type: EN (info, warning, error, success)
+        message: translated
+        notification_type: translated (info, warning, error, success)
         
     Returns:
-        ENresult
+        translated
     """
-    logger.info(f"sendprocessingEN: {project_id}, {task_id}, {notification_type}")
+    logger.info(f"translatedprocesstranslated: {project_id}, {task_id}, {notification_type}")
     
     try:
-        # createdatabaseEN
+        # createdatabasetranslated
         db = SessionLocal()
         
         try:
-            # ENcanENsystem
-            # for example：WebSocket、EN、EN
+            # thistranslatedcantranslated'stranslatedSystem
+            # translatedif：WebSocket、translated、translatedetc.
             
-            # ENsend
+            # translated
             notification_data = {
                 'project_id': project_id,
                 'task_id': task_id,
@@ -49,42 +49,42 @@ def send_processing_notification(self, project_id: str, task_id: str, message: s
                 'timestamp': datetime.utcnow().isoformat()
             }
             
-            logger.info(f"ENsend: {notification_data}")
+            logger.info(f"translated: {notification_data}")
             
             return {
                 'success': True,
                 'project_id': project_id,
                 'task_id': task_id,
                 'notification': notification_data,
-                'message': 'ENsendsucceeded'
+                'message': 'translatedsucceeded'
             }
             
         finally:
             db.close()
             
     except Exception as e:
-        logger.error(f"ENsendfailed: {project_id}, {task_id}, error: {e}")
+        logger.error(f"translatedfailed: {project_id}, {task_id}, error: {e}")
         raise
 
 
 @shared_task(bind=True, name='backend.tasks.notification.send_error_notification')
 def send_error_notification(self, project_id: str, task_id: str, error_message: str, error_details: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """
-    senderrorEN
+    translatederrortranslated
     
     Args:
         project_id: projectID
         task_id: taskID
-        error_message: errorEN
-        error_details: errorEN
+        error_message: errortranslated
+        error_details: errortranslated
         
     Returns:
-        ENresult
+        translated
     """
-    logger.error(f"senderrorEN: {project_id}, {task_id}, {error_message}")
+    logger.error(f"translatederrortranslated: {project_id}, {task_id}, {error_message}")
     
     try:
-        # createdatabaseEN
+        # createdatabasetranslated
         db = SessionLocal()
         
         try:
@@ -96,7 +96,7 @@ def send_error_notification(self, project_id: str, task_id: str, error_message: 
             #     task.error_message = error_message # This line was removed as per the new_code
             #     db.commit() # This line was removed as per the new_code
             
-            # senderrorEN
+            # translatederrortranslated
             notification_data = {
                 'project_id': project_id,
                 'task_id': task_id,
@@ -106,41 +106,41 @@ def send_error_notification(self, project_id: str, task_id: str, error_message: 
                 'timestamp': datetime.utcnow().isoformat()
             }
             
-            logger.error(f"errorENsend: {notification_data}")
+            logger.error(f"errortranslated: {notification_data}")
             
             return {
                 'success': True,
                 'project_id': project_id,
                 'task_id': task_id,
                 'notification': notification_data,
-                'message': 'errorENsendsucceeded'
+                'message': 'errortranslatedsucceeded'
             }
             
         finally:
             db.close()
             
     except Exception as e:
-        logger.error(f"errorENsendfailed: {project_id}, {task_id}, error: {e}")
+        logger.error(f"errortranslatedfailed: {project_id}, {task_id}, error: {e}")
         raise
 
 
 @shared_task(bind=True, name='backend.tasks.notification.send_completion_notification')
 def send_completion_notification(self, project_id: str, task_id: str, result: Dict[str, Any]) -> Dict[str, Any]:
     """
-    sendEN
+    translated
     
     Args:
         project_id: projectID
         task_id: taskID
-        result: processingresult
+        result: processtranslated
         
     Returns:
-        ENresult
+        translated
     """
-    logger.info(f"sendEN: {project_id}, {task_id}")
+    logger.info(f"translated: {project_id}, {task_id}")
     
     try:
-        # createdatabaseEN
+        # createdatabasetranslated
         db = SessionLocal()
         
         try:
@@ -152,29 +152,29 @@ def send_completion_notification(self, project_id: str, task_id: str, result: Di
             #     task.result = result # This line was removed as per the new_code
             #     db.commit() # This line was removed as per the new_code
             
-            # sendEN
+            # translated
             notification_data = {
                 'project_id': project_id,
                 'task_id': task_id,
                 'type': 'success',
-                'message': 'processingEN',
+                'message': 'processing completed',
                 'result': result,
                 'timestamp': datetime.utcnow().isoformat()
             }
             
-            logger.info(f"ENsend: {notification_data}")
+            logger.info(f"translated: {notification_data}")
             
             return {
                 'success': True,
                 'project_id': project_id,
                 'task_id': task_id,
                 'notification': notification_data,
-                'message': 'ENsendsucceeded'
+                'message': 'translatedsucceeded'
             }
             
         finally:
             db.close()
             
     except Exception as e:
-        logger.error(f"ENsendfailed: {project_id}, {task_id}, error: {e}")
+        logger.error(f"translatedfailed: {project_id}, {task_id}, error: {e}")
         raise

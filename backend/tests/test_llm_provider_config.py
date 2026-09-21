@@ -1,4 +1,4 @@
-"""OpenAI EN（EN base_url）EN provider EN / EN"""
+"""OpenAI translated（translated base_url）and provider translated / translated'stranslatedtest"""
 import asyncio
 import json
 import os
@@ -25,7 +25,7 @@ def fake_openai(monkeypatch):
     module.OpenAI = _FakeOpenAIClient
     monkeypatch.setitem(sys.modules, "openai", module)
     _FakeOpenAIClient.created.clear()
-    monkeypatch.delenv("OPENAI_BASE_URL", raising=False)
+    monkeypatch.delenv("OPtranslatedAI_BASE_URL", raising=False)
     return _FakeOpenAIClient
 
 
@@ -41,7 +41,7 @@ def test_openai_provider_defaults_to_official_endpoint(fake_openai):
 
 def test_openai_provider_uses_custom_base_url_and_placeholder_key(fake_openai):
     from backend.core.llm_providers import (
-        OPENAI_COMPATIBLE_PLACEHOLDER_KEY,
+        OPtranslatedAI_COMPATIBLE_PLACEHOLDER_KEY,
         OpenAIProvider,
     )
 
@@ -50,11 +50,11 @@ def test_openai_provider_uses_custom_base_url_and_placeholder_key(fake_openai):
     assert provider.base_url == "http://localhost:11434/v1"
     assert provider.is_custom_endpoint is True
     created = dict(fake_openai.created[-1])
-    # EN httpx.Client（EN is_local_url）
+    # localtranslatedone translatedSystemtranslated's httpx.Client（translated is_local_url）
     http_client = created.pop("http_client")
     assert http_client.trust_env is False
     assert created == {
-        "api_key": OPENAI_COMPATIBLE_PLACEHOLDER_KEY,
+        "api_key": OPtranslatedAI_COMPATIBLE_PLACEHOLDER_KEY,
         "base_url": "http://localhost:11434/v1",
     }
 
@@ -62,7 +62,7 @@ def test_openai_provider_uses_custom_base_url_and_placeholder_key(fake_openai):
 def test_openai_provider_reads_base_url_from_env(fake_openai, monkeypatch):
     from backend.core.llm_providers import OpenAIProvider
 
-    monkeypatch.setenv("OPENAI_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
+    monkeypatch.setenv("OPtranslatedAI_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
     provider = OpenAIProvider(api_key="zhipu-key-1234567890", model_name="glm-4-flash")
 
     assert provider.base_url == "https://open.bigmodel.cn/api/paas/v4"
@@ -87,11 +87,11 @@ def _write_client_settings(path: Path, **api_overrides):
 
 @pytest.fixture
 def manager_env(monkeypatch, tmp_path, fake_openai):
-    for name in ("LLM_PROVIDER", "API_MODEL_NAME", "LLM_MODEL", "API_OPENAI_API_KEY", "OPENAI_API_KEY",
+    for name in ("LLM_PROVIDER", "API_MODEL_NAME", "LLM_MODEL", "API_OPtranslatedAI_API_KEY", "OPtranslatedAI_API_KEY",
                  "API_DASHSCOPE_API_KEY", "DASHSCOPE_API_KEY"):
         monkeypatch.delenv(name, raising=False)
 
-    # EN
+    # translatedconfigtranslatedservicetranslateduserdirectory
     from backend.core import llm_manager as manager_module
     monkeypatch.setattr(manager_module.config_sync_service, "is_sync_needed", lambda: False)
     return tmp_path / "settings.json"
@@ -131,13 +131,13 @@ def test_manager_allows_keyless_custom_endpoint(manager_env):
 def test_manager_reloads_when_settings_file_changes(manager_env):
     from backend.core.llm_manager import LLMManager
 
-    _write_client_settings(manager_env)  # EN key -> EN
+    _write_client_settings(manager_env)  # translated key -> translatedconfig
     manager = LLMManager(settings_file=manager_env)
     assert manager.get_current_provider_info()["available"] is False
 
     _write_client_settings(manager_env, api_provider="openai", api_base_url="http://localhost:11434/v1",
                            api_model="qwen2.5:7b")
-    # EN mtime EN，EN
+    # translatedonesecondstranslated mtime cantranslated，translatedonetranslated
     os.utime(manager_env, (manager_env.stat().st_atime, manager_env.stat().st_mtime + 5))
 
     info = manager.get_current_provider_info()
@@ -150,11 +150,11 @@ def test_manager_env_fallbacks_for_docker(manager_env, monkeypatch):
     from backend.core.llm_manager import LLMManager
 
     monkeypatch.setenv("LLM_PROVIDER", "openai")
-    monkeypatch.setenv("OPENAI_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
-    monkeypatch.setenv("API_OPENAI_API_KEY", "zhipu-key-1234567890")
+    monkeypatch.setenv("OPtranslatedAI_BASE_URL", "https://open.bigmodel.cn/api/paas/v4")
+    monkeypatch.setenv("API_OPtranslatedAI_API_KEY", "zhipu-key-1234567890")
     monkeypatch.setenv("API_MODEL_NAME", "glm-4-flash")
 
-    manager = LLMManager(settings_file=manager_env)  # EN
+    manager = LLMManager(settings_file=manager_env)  # file not found
 
     info = manager.get_current_provider_info()
     assert info == {
@@ -162,13 +162,13 @@ def test_manager_env_fallbacks_for_docker(manager_env, monkeypatch):
         "backend_provider": "openai",
         "model": "glm-4-flash",
         "available": True,
-        "display_name": "OpenAI / EN",
+        "display_name": "OpenAI / translated",
         "base_url": "https://open.bigmodel.cn/api/paas/v4",
     }
 
 
 class _ChatCapableClient(_FakeOpenAIClient):
-    """EN chat.completions.create EN，EN"""
+    """translated chat.completions.create 'stranslated，translatedmodeltranslated"""
     last_model = None
 
     def __init__(self, **kwargs):
@@ -210,7 +210,7 @@ def test_test_api_endpoint_still_validates_official_key(monkeypatch, fake_openai
     result = asyncio.run(settings_api.test_api_connection(request))
 
     assert result["success"] is False
-    assert "EN" in result["error"]
+    assert "translated" in result["error"]
 
 
 def test_settings_file_provider_wins_over_env(manager_env, monkeypatch):

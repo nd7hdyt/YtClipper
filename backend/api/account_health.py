@@ -11,7 +11,7 @@ from ..services.account_health_service import check_account_health_task, check_a
 
 router = APIRouter()
 
-# requestEN
+# translatedmodel
 class HealthCheckRequest(BaseModel):
     account_ids: Optional[List[int]] = None
     force_check: bool = False
@@ -20,7 +20,7 @@ class CookieRefreshRequest(BaseModel):
     account_id: int
     auto_refresh: bool = True
 
-# responseEN
+# translatedmodel
 class AccountHealthResponse(BaseModel):
     account_id: int
     username: str
@@ -51,28 +51,28 @@ async def check_single_account_health(
     force_check: bool = False,
     db: Session = Depends(get_db)
 ):
-    """checkENaccountENstatus"""
+    """checktranslated Accounttranslatedstatus"""
     try:
-        # checkaccountEN
+        # checkAccountIstranslatedin
         account = db.query(BilibiliAccount).filter(BilibiliAccount.id == account_id).first()
         if not account:
-            raise HTTPException(status_code=404, detail="accountdoes not exist")
+            raise HTTPException(status_code=404, detail="Accountnot found")
         
-        # ifENcheckENcheckEN，returncacheresult
+        # iftranslatedchecktranslatedchecktranslated，returncachetranslated
         if not force_check and account.last_health_check:
             time_diff = datetime.now() - account.last_health_check
-            if time_diff.total_seconds() < 300:  # 5ENcheckEN
+            if time_diff.total_seconds() < 300:  # 5minutestranslatedchecktranslated
                 return AccountHealthResponse(
                     account_id=account.id,
                     username=account.username,
                     status=account.health_status or AccountHealthStatus.UNKNOWN,
-                    message=account.health_details.get("message", "cacheresult") if account.health_details else "cacheresult",
+                    message=account.health_details.get("message", "cachetranslated") if account.health_details else "cachetranslated",
                     details=account.health_details or {},
                     last_check=account.last_health_check,
                     expires_in=account.health_details.get("cookie", {}).get("expires_in") if account.health_details else None
                 )
         
-        # executeENcheck
+        # translatedHealth Check
         result = await health_service.check_account_health(account_id)
         
         return AccountHealthResponse(
@@ -96,9 +96,9 @@ async def check_multiple_accounts_health(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """ENcheckaccountENstatus"""
+    """translatedcheckAccounttranslatedstatus"""
     try:
-        # fetchENcheckENaccount
+        # fetchtranslatedcheck'sAccount
         if request.account_ids:
             accounts = db.query(BilibiliAccount).filter(
                 BilibiliAccount.id.in_(request.account_ids),
@@ -118,25 +118,25 @@ async def check_multiple_accounts_health(
                 last_updated=datetime.now()
             )
         
-        # executeENcheck
+        # translatedcheck
         results = []
         for account in accounts:
-            # ifENcheckENcheckEN，usecacheresult
+            # iftranslatedchecktranslatedchecktranslated，usecachetranslated
             if not request.force_check and account.last_health_check:
                 time_diff = datetime.now() - account.last_health_check
-                if time_diff.total_seconds() < 300:  # 5ENcheckEN
+                if time_diff.total_seconds() < 300:  # 5minutestranslatedchecktranslated
                     results.append(AccountHealthResponse(
                         account_id=account.id,
                         username=account.username,
                         status=account.health_status or AccountHealthStatus.UNKNOWN,
-                        message=account.health_details.get("message", "cacheresult") if account.health_details else "cacheresult",
+                        message=account.health_details.get("message", "cachetranslated") if account.health_details else "cachetranslated",
                         details=account.health_details or {},
                         last_check=account.last_health_check,
                         expires_in=account.health_details.get("cookie", {}).get("expires_in") if account.health_details else None
                     ))
                     continue
             
-            # executeENcheck
+            # translatedcheck
             result = await health_service.check_account_health(account.id)
             results.append(AccountHealthResponse(
                 account_id=result["account_id"],
@@ -148,7 +148,7 @@ async def check_multiple_accounts_health(
                 expires_in=result.get("details", {}).get("cookie", {}).get("expires_in")
             ))
         
-        # ENstatusEN
+        # translatedstatustranslated
         status_counts = {
             AccountHealthStatus.HEALTHY: 0,
             AccountHealthStatus.WARNING: 0,
@@ -173,11 +173,11 @@ async def check_multiple_accounts_health(
         )
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"ENcheckfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedcheckfailed: {str(e)}")
 
 @router.get("/health/summary", response_model=HealthSummaryResponse)
 async def get_health_summary(db: Session = Depends(get_db)):
-    """fetchaccountENstatusEN"""
+    """fetchAccounttranslatedstatustranslated"""
     try:
         accounts = db.query(BilibiliAccount).filter(BilibiliAccount.is_active == True).all()
         
@@ -192,7 +192,7 @@ async def get_health_summary(db: Session = Depends(get_db)):
                 last_updated=datetime.now()
             )
         
-        # ENstatusEN
+        # translatedstatustranslated
         status_counts = {
             AccountHealthStatus.HEALTHY: 0,
             AccountHealthStatus.WARNING: 0,
@@ -212,7 +212,7 @@ async def get_health_summary(db: Session = Depends(get_db)):
                 account_id=account.id,
                 username=account.username,
                 status=status,
-                message=account.health_details.get("message", "ENcheck") if account.health_details else "ENcheck",
+                message=account.health_details.get("message", "translatedcheck") if account.health_details else "translatedcheck",
                 details=account.health_details or {},
                 last_check=account.last_health_check or datetime.now(),
                 expires_in=account.health_details.get("cookie", {}).get("expires_in") if account.health_details else None
@@ -229,7 +229,7 @@ async def get_health_summary(db: Session = Depends(get_db)):
         )
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"fetchENfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchtranslatedfailed: {str(e)}")
 
 @router.post("/health/refresh-cookie", response_model=CookieRefreshResponse)
 async def refresh_account_cookie(
@@ -237,27 +237,27 @@ async def refresh_account_cookie(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db)
 ):
-    """ENaccountCookie"""
+    """translatedAccountCookie"""
     try:
-        # checkaccountEN
+        # checkAccountIstranslatedin
         account = db.query(BilibiliAccount).filter(BilibiliAccount.id == request.account_id).first()
         if not account:
-            raise HTTPException(status_code=404, detail="accountdoes not exist")
+            raise HTTPException(status_code=404, detail="Accountnot found")
         
         if request.auto_refresh:
-            # ENexecuteEN
+            # translated
             background_tasks.add_task(
                 lambda: auto_refresh_cookies_task.delay(request.account_id)
             )
             
             return CookieRefreshResponse(
                 success=True,
-                message="ENstartENtask，pleaseENresult",
+                message="translatedstarttranslatedtask，translated",
                 account_id=request.account_id,
                 username=account.username
             )
         else:
-            # executeEN
+            # translated
             result = await health_service.auto_refresh_cookies(request.account_id)
             
             return CookieRefreshResponse(
@@ -270,17 +270,17 @@ async def refresh_account_cookie(
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"ENCookiefailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedCookiefailed: {str(e)}")
 
 @router.post("/health/schedule-check")
 async def schedule_health_check(
     background_tasks: BackgroundTasks,
     account_ids: Optional[List[int]] = None
 ):
-    """ENchecktask"""
+    """translatedHealth Checktask"""
     try:
         if account_ids:
-            # ENaccountENchecktask
+            # translatedAccount'schecktask
             for account_id in account_ids:
                 background_tasks.add_task(
                     lambda aid=account_id: check_account_health_task.delay(aid)
@@ -288,33 +288,33 @@ async def schedule_health_check(
             
             return {
                 "success": True,
-                "message": f"EN {len(account_ids)} ENaccountENchecktask",
+                "message": f"translated {len(account_ids)}  Account'sHealth Checktask",
                 "account_count": len(account_ids)
             }
         else:
-            # ENallaccountENchecktask
+            # translatedAccount'schecktask
             background_tasks.add_task(
                 lambda: check_all_accounts_health_task.delay()
             )
             
             return {
                 "success": True,
-                "message": "ENallaccountENchecktask"
+                "message": "translatedAccount'sHealth Checktask"
             }
         
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"ENtaskfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedtaskfailed: {str(e)}")
 
 @router.get("/health/status/{account_id}")
 async def get_account_status(
     account_id: int,
     db: Session = Depends(get_db)
 ):
-    """fetchaccountstatusEN"""
+    """fetchAccountstatusinfo"""
     try:
         account = db.query(BilibiliAccount).filter(BilibiliAccount.id == account_id).first()
         if not account:
-            raise HTTPException(status_code=404, detail="accountdoes not exist")
+            raise HTTPException(status_code=404, detail="Accountnot found")
         
         return {
             "account_id": account.id,

@@ -1,42 +1,42 @@
 """
-PipelineENconfigfile
+Pipelinetranslatedconfigfile
 """
 
 import os
 from pathlib import Path
 
-# fetchprojectENdirectory
+# fetchprojecttranslateddirectory
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-BACKEND_ROOT = Path(__file__).parent.parent
+BACKtranslatedD_ROOT = Path(__file__).parent.parent
 
-# ENdirectory
+# translateddirectory
 DATA_DIR = PROJECT_ROOT / "data"
 METADATA_DIR = DATA_DIR / "output" / "metadata"
 
-# hintENfilepath
+# translatedfile path
 PROMPT_DIR = PROJECT_ROOT / "prompt"
 PROMPT_FILES = {
-    'outline': PROMPT_DIR / "EN.txt",
-    'timeline': PROMPT_DIR / "timeEN.txt", 
-    'scoring': PROMPT_DIR / "EN.txt",
-    'recommendation': PROMPT_DIR / "EN.txt",  # EN
-    'title': PROMPT_DIR / "titlegenerate.txt",
-    'clustering': PROMPT_DIR / "EN.txt"
+    'outline': PROMPT_DIR / "translated.txt",
+    'timeline': PROMPT_DIR / "translated.txt", 
+    'scoring': PROMPT_DIR / "recommendtranslated.txt",
+    'recommendation': PROMPT_DIR / "recommendtranslated.txt",  # addtranslated
+    'title': PROMPT_DIR / "translated.txt",
+    'clustering': PROMPT_DIR / "translated.txt"
 }
 
-# ENdirectoryEN
+# ensuredirectorytranslatedin
 METADATA_DIR.mkdir(parents=True, exist_ok=True)
 PROMPT_DIR.mkdir(parents=True, exist_ok=True)
 
-# APIENconfig
+# APIkeyconfig
 DASHSCOPE_API_KEY = os.getenv('DASHSCOPE_API_KEY')
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+OPtranslatedAI_API_KEY = os.getenv('OPtranslatedAI_API_KEY')
 
-# ENAPIEN
-DEFAULT_API_KEY = DASHSCOPE_API_KEY or OPENAI_API_KEY
+# defaultAPIkey
+DEFAULT_API_KEY = DASHSCOPE_API_KEY or OPtranslatedAI_API_KEY
 
-# scoringEN
+# translated
 MIN_SCORE_THRESHOLD = 7.0
 
-# ENconfig
+# translatedconfig
 MAX_CLIPS_PER_COLLECTION = 10

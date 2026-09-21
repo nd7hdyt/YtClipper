@@ -1,5 +1,5 @@
 services:
-  # RedisService
+  # Redisservice
   redis:
     image: redis:7-alpine
     container_name: autoclip-redis
@@ -15,18 +15,18 @@ services:
       timeout: 5s
       retries: 5
 
-  # ENService
+  # translateduseservice
   autoclip:
     build:
       context: .
       dockerfile: Dockerfile
-    # ENServiceEN；EN image EN build EN
+    # translated servicetranslatedusetranslatedone translated；translatedone image translated build onetranslated
     image: autoclip:local
     container_name: autoclip-app
     restart: unless-stopped
     ports:
-      - "8000:8000"  # ENAPI
-      - "3000:3000"  # EN
+      - "8000:8000"  # backendAPI
+      - "3000:3000"  # frontendInterface
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
@@ -37,8 +37,8 @@ services:
       - ENVIRONMENT=production
       - DEBUG=false
       - LOG_LEVEL=INFO
-      # LLM ConfigEN .env / shell EN（compose ENAutoENProjectEN .env EN）。
-      # EN DOCKER.md EN API_DASHSCOPE_API_KEY EN。
+      # LLM configfromtranslated .env / shell translated（compose translatedprojecttranslateddirectory's .env translated）。
+      # translatedthisonetranslated DOCKER.md translatedusertranslated's API_DASHSCOPE_API_KEY translated。
       - LLM_PROVIDER=${LLM_PROVIDER:-dashscope}
       - API_MODEL_NAME=${API_MODEL_NAME:-qwen-plus}
       - API_DASHSCOPE_API_KEY=${API_DASHSCOPE_API_KEY:-}
@@ -58,7 +58,7 @@ services:
       retries: 3
       start_period: 40s
 
-  # Celery WorkerService
+  # Celery Workerservice
   celery-worker:
     build:
       context: .
@@ -76,8 +76,8 @@ services:
       - ENVIRONMENT=production
       - DEBUG=false
       - LOG_LEVEL=INFO
-      # LLM ConfigEN .env / shell EN（compose ENAutoENProjectEN .env EN）。
-      # EN DOCKER.md EN API_DASHSCOPE_API_KEY EN。
+      # LLM configfromtranslated .env / shell translated（compose translatedprojecttranslateddirectory's .env translated）。
+      # translatedthisonetranslated DOCKER.md translatedusertranslated's API_DASHSCOPE_API_KEY translated。
       - LLM_PROVIDER=${LLM_PROVIDER:-dashscope}
       - API_MODEL_NAME=${API_MODEL_NAME:-qwen-plus}
       - API_DASHSCOPE_API_KEY=${API_DASHSCOPE_API_KEY:-}
@@ -87,8 +87,8 @@ services:
       - API_GEMINI_API_KEY=${API_GEMINI_API_KEY:-}
       - API_SILICONFLOW_API_KEY=${API_SILICONFLOW_API_KEY:-}
       - AUTOCLIP_YT_SUBTITLE_LANGS=${AUTOCLIP_YT_SUBTITLE_LANGS:-}
-    # EN celery_app.task_routes EN；EN -Q EN worker EN
-    # `celery` EN，EN `processing` EN，ProjectENProcessingEN。
+    # tasktranslated celery_app.task_routes translatedusetranslated；translated -Q 's worker translateddefault's
+    # `celery` translated，translatedtasktranslatedonetranslatedin `processing` translated，projecttranslatedinprocessing。
     command: celery -A backend.core.celery_app worker --loglevel=info --concurrency=2 -Q celery,processing,video,notification,upload
     depends_on:
       redis:
@@ -96,7 +96,7 @@ services:
       autoclip:
         condition: service_healthy
 
-  # Celery BeatEN
+  # Celery Beattranslated
   celery-beat:
     build:
       context: .
@@ -120,7 +120,7 @@ services:
       autoclip:
         condition: service_healthy
 
-  # FlowerENService（EN）
+  # Flowermonitorservice（canSelect）
   flower:
     build:
       context: .

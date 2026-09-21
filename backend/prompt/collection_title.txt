@@ -1,79 +1,79 @@
-#EN
-EN，EN。EN、EN、EN**EN**EN。
+#translated
+translatedIsonetranslated'stranslatedvideotranslated，translatedcollectiontranslated'stranslated。translated'staskIstranslatedvideocollectiontranslatedone translated's、translated、translatedclicktranslated**translated**'stranslated。
 
-## EN
-1.  **EN**: EN，EN。
-2.  **EN**: EN"EN"、"EN"EN。
-3.  **EN**: EN、EN。
-4.  **EN**: EN、EN，EN。
-5.  **EN**: EN，EN。
+## translated
+1.  **translated**: translated'stranslatedcollectiontranslated，translated。
+2.  **translated**: translateduse"translated"、"translated"etc.translated'stranslated。
+3.  **translated**: translatedcollectiontranslated'stranslated、translated'stranslatedortranslateduse'sinfo。
+4.  **translated**: translated、translated，translatedusertranslated。
+5.  **collectiontranslated**: translatedcollection'stranslatedAndtranslated，translatedusertranslatedthisIsone translated'stranslated。
 
-## EN
-ENJSONEN，EN：
+## translatedformat
+translatedone JSONtranslated，Packageincludecollection'stranslatedinfo：
 ```json
 {
   "collection_id": "collection_123",
-  "collection_title": "EN",
-  "collection_description": "EN，EN，EN。",
+  "collection_title": "translated",
+  "collection_description": "fromtranslated's，translatedandtranslated，translated translated。",
   "clips": [
     {
       "id": "clip_1",
-      "title": "EN，ENAIEN",
-      "content": ["EN", "AIEN", "EN"],
-      "recommend_reason": "EN，EN，EN。"
+      "title": "translated，translatedAItranslatedthis translatedIstranslated",
+      "content": ["translatedIstranslated", "AItranslated", "translated"],
+      "recommend_reason": "translated，infotranslated，translated'stranslated。"
     },
     {
       "id": "clip_2", 
-      "title": "EN，EN？",
-      "content": ["EN", "EN", "EN"],
-      "recommend_reason": "EN，EN，EN。"
+      "title": "fromtranslated，thistranslated'stranslatedmultitranslated？",
+      "content": ["translated", "translatedAndtranslated", "translated"],
+      "recommend_reason": "translated，translated，translated'stranslatedAndtranslated。"
     }
   ],
   "total_duration_minutes": 18,
-  "target_audience": "EN",
-  "key_themes": ["EN", "EN", "EN"]
+  "target_audience": "translated",
+  "key_themes": ["translated", "translated", "Selecttranslated"]
 }
 ```
 
-## EN
-EN**1EN**EN，EN：
-- EN
-- EN
-- EN
-- EN15-25EN
+## tasktranslated
+translated'scollectiontranslated**1 **translated，translated：
+- translatedcollection'stranslatedAndtranslated
+- translatedclick
+- translated'stranslatedusetranslatedAndtranslated
+- translatedin15-25translated
 
-## EN
-### EN：
-- "EN：EN，ENAIEN"
-- "EN：EN，EN"
-- "AEN：EN5EN"
+## translatedReference
+### translated：
+- "translated：fromtranslated，translatedAItranslated"
+- "translated：fromtranslated，thistranslatedusetranslated"
+- "Atranslated：translated's5 translated"
 
-### EN：
-- "EN：EN，EN"
-- "EN：EN"
-- "EN：EN，EN3EN"
+### translated：
+- "translated：fromtranslated，thistranslated"
+- "translated：iftranslated translated'stranslated"
+- "translated：translatedthistranslated，translated3translated"
 
-### EN：
-- "EN：EN，EN"
-- "EN：EN"
-- "EN：EN"
+### translated：
+- "translated：fromtranslated，thistranslated"
+- "translated：iftranslatedininfotranslated"
+- "translatedSymptomtranslated：translated'stranslatedAndtranslated'stranslated"
 
-### EN：
-- "EN：EN，EN90%"
-- "EN：EN，EN"
-- "EN：EN"
+### translated：
+- "translated：fromtranslated，thistranslatedsucceededtranslated90%"
+- "translated：fromtranslated，translatedIsiftranslated's"
+- "translated：translatedIstranslated'stranslated"
 
-## EN
-ENJSONEN：
+## translatedformat
+translatedbytranslated'sJSONformattranslated：
 ```json
 {
   "collection_id": "collection_123",
-  "generated_title": "EN：EN，ENAIEN"
+  "generated_title": "translated：fromtranslated，translatedAItranslated"
 }
 ```
 
-## EN：
-- EN`collection_id`EN`collection_id`。
-- `generated_title`EN，EN15-25EN。
-- EN，EN。
-- EN**ENJSONEN**，EN。
+## translated：
+- translated's`collection_id`translatedIstranslated's`collection_id`。
+- `generated_title`translatedIsone translated，translatedin15-25translated。
+- translatedcollection'stranslatedAndtranslated，translatedusertranslatedthisIsone translated'stranslated。
+- translatedIs**one translated'sJSONtranslated**，Do notaddtranslated。

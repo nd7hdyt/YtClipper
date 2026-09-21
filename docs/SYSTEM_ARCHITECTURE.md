@@ -1,181 +1,181 @@
-# AutoClip System ArchitectureEN
+# AutoClip notes
 
-## 🏗️ EN
+## 🏗️ 
 
-AutoClip ENBased on Python + React ENAuto ClippingENCollection GenerationEN，AdoptsFrontend-Backend SeparationEN。
+AutoClip based on Python + React clipgenerate，backend。
 
-### **EN**
+### ****
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   EN (React)   │    │   EN (FastAPI) │    │   EN      │
+│   frontend (React)   │    │   backend (FastAPI) │    │   file system      │
 │                 │    │                 │    │                 │
-│ - Project Management      │◄──►│ - API EN      │◄──►│ - EN      │
-│ - EN      │    │ - EN      │    │ - EN      │
-│ - EN      │    │ - EN      │    │ - EN        │
+│ - project management      │◄──►│ - API service      │◄──►│ - projectfile      │
+│ -       │    │ -       │    │ - file      │
+│ - statusmonitor      │    │ -       │    │ - metadata        │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
                                 │
                        ┌─────────────────┐
-                       │   EN (SQLite) │
+                       │   database (SQLite) │
                        │                 │
-                       │ - EN      │
-                       │ - EN    │
-                       │ - EN    │
-                       │ - EN      │
+                       │ - project      │
+                       │ - clipmetadata    │
+                       │ - metadata    │
+                       │ - status      │
                        └─────────────────┘
 ```
 
-## 📁 EN
+## 📁 
 
-### **1. EN (SQLite)**
+### **1. database (SQLite)**
 
-**EN：**
-- `projects`: EN
-- `clips`: EN
-- `collections`: EN
-- `tasks`: EN
-- `bilibili_accounts`: BENAccountEN
-- `upload_records`: ENUploadEN
+**：**
+- `projects`: project
+- `clips`: clipmetadata
+- `collections`: metadata
+- `tasks`: status
+- `bilibili_accounts`: Bsite account
+- `upload_records`: file upload
 
-**EN：**
+**：**
 ```
 projects (1) ──► (N) clips
 projects (1) ──► (N) collections
 projects (1) ──► (N) tasks
 ```
 
-### **2. EN**
+### **2. file system**
 
-**EN：**
+**：**
 ```
 data/
-├── projects/                    # EN
-│   └── {project_id}/           # EN
-│       ├── raw/                # EN
-│       ├── step1_outline/      # EN
-│       ├── step2_timeline/     # EN
-│       ├── step3_scoring/      # EN
-│       ├── step4_title/        # EN
-│       ├── step5_clustering/   # EN
-│       └── step6_video/        # EN
-│           ├── clips_metadata.json    # EN
-│           └── collections_metadata.json # EN
-├── output/                      # EN
-│   ├── clips/                  # EN
-│   │   └── {project_id}/       # EN
-│   ├── collections/            # EN
-│   │   └── {project_id}/       # EN
-│   └── metadata/               # EN
-├── temp/                       # EN
-├── cache/                      # EN
-├── uploads/                    # UploadEN
-└── backups/                    # EN
+├── projects/                    # projectfile
+│   └── {project_id}/           # project
+│       ├── raw/                # file
+│       ├── step1_outline/      # outlinegenerate
+│       ├── step2_timeline/     # 
+│       ├── step3_scoring/      # content scoring
+│       ├── step4_title/        # title generation
+│       ├── step5_clustering/   # 
+│       └── step6_video/        # generate
+│           ├── clips_metadata.json    # clipmetadata
+│           └── collections_metadata.json # metadata
+├── output/                      # file
+│   ├── clips/                  # clipfile
+│   │   └── {project_id}/       # project
+│   ├── collections/            # file
+│   │   └── {project_id}/       # project
+│   └── metadata/               # metadata
+├── temp/                       # file
+├── cache/                      # cachefile
+├── uploads/                    # upload file
+└── backups/                    # database
 ```
 
-## 🔄 EN
+## 🔄 
 
-### **1. EN**
+### **1. projectcreate**
 
 ```
-ENUploadEN → EN → EN → EN
+ → createproject → file → 
      ↓
-EN: projects EN
-EN: data/projects/{project_id}/raw/ EN
+database: projects added
+file system: data/projects/{project_id}/raw/ 
 ```
 
-### **2. EN**
+### **2. **
 
 ```
-EN → EN → EN → EN → Collection Generation → EN
+ → subtitles →  → clipgenerate → generate → 
     ↓           ↓         ↓         ↓         ↓         ↓
 step1_outline → step2_timeline → step3_scoring → step4_title → step5_clustering → step6_video
 ```
 
-### **3. EN**
+### **3. **
 
 ```
-EN → EN → EN → EN
+file systemcompleted → metadatagenerate → database → frontend
         ↓              ↓           ↓           ↓
-   clips_metadata.json → EN → ENclipsEN → APIEN
-collections_metadata.json → EN → ENcollectionsEN → APIEN
+   clips_metadata.json → metadata → clips → APIreturn
+collections_metadata.json → metadata → collections → APIreturn
 ```
 
-## 🔧 EN
+## 🔧 technical details
 
-### **1. EN**
+### **1. **
 
-- **EN**: EN
-- **EN**: ProvidesEN
-- **EN**: EN
+- ****: completedmetadatadatabase
+- ****: 
+- ****: added
 
-### **2. EN**
+### **2. **
 
-- **EN**: `backend/core/unified_paths.py`
-- **EN**: EN
-- **EN**: EN
+- ****: `backend/core/unified_paths.py`
+- ****: auto-detect
+- **verify**: checkconfig
 
-### **3. EN**
+### **3. state management**
 
-- **EN**: pending → processing → completed
-- **EN**: pending → running → completed/failed
-- **EN**: WebSocket + EN
+- **project status**: pending → processing → completed
+- **status**: pending → running → completed/failed
+- **update**: WebSocket + 
 
-## 🚨 FAQEN
+## 🚨 FAQsolution
 
-### **1. EN**
+### **1. issue**
 
-**EN**: EN，EN
-**EN**: EN
-**EN**: EN `scripts/sync_complete_metadata.py`
+**phenomenon**: file system，database
+**reason**: failed
+**solve**:  `scripts/sync_complete_metadata.py`
 
-### **2. EN**
+### **2. issue**
 
-**EN**: EN
-**EN**: EN
-**EN**: EN
+**phenomenon**: file
+**reason**: config
+**solve**: use
 
-### **3. EN**
+### **3. frontend**
 
-**EN**: ENAPIEN，EN
-**EN**: EN
-**EN**: EN，EN
+**phenomenon**: backendAPI，frontend
+**reason**: frontendcachestate managementissue
+**solve**: cache，frontendservice
 
-## 📋 EN
+## 📋 monitor
 
-### **1. EN**
+### **1. check**
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- ****: checkfile systemdatabase
+- **config**: verifyconfig
+- ****: monitoruse
 
-### **2. EN**
+### **2. **
 
-- **EN**: EN SQLite EN
-- **EN**: EN
-- **EN**: EN
+- **database**:  SQLite database
+- **file**: projectfile
+- **config**: configfile
 
-### **3. EN**
+### **3. monitor**
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- ****: monitorstatus
+- **error**: issue
+- ****: monitor
 
-## 🚀 EN
+## 🚀 best practices
 
-### **1. EN**
+### **1. data management**
 
-- EN
-- EN
-- EN
+- 
+- filecache
+- file system
 
-### **2. EN**
+### **2. **
 
-- EN
-- EN
-- EN
+- test
+- useconfig
+- updatedocs
 
-### **3. EN**
+### **3. deploy**
 
-- EN
-- EN
-- EN
+- production
+- monitoruse
+- updatedependenciesfixsecurity

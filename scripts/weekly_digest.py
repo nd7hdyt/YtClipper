@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
 """
-AutoClip EN：GitHub EN issue + EN + PostHog EN → EN。
+AutoClip pertranslated：GitHub translated issue + translated + PostHog translatedusetranslated → onetranslated。
 
-EN Cursor Automation（EN cron）EN，ENManualEN。ENDependencies Python 3 EN。
+translated Cursor Automation（translated cron）translated，translatedintranslated。translateddependencies Python 3 translated。
 
-EN（EN，EN）
-  GitHub   : `gh` CLI（EN）EN GH_TOKEN + REST。
-  EN : EN `lark-cli`（personal profile，user EN）EN CLI；
-             ElseEN LARK_APP_ID / LARK_APP_SECRET EN tenant_access_token EN
-             EN API（ENPlease base:record:read / bitable:app:readonly，
-             EN）。
-  PostHog  : POSTHOG_PERSONAL_API_KEY + POSTHOG_PROJECT_ID（HogQL EN
-             `feedback_submitted` / `survey sent` EN）。
+translated（translated translatedskiptranslated ，translatedintranslated）
+  GitHub   : `gh` CLI（translated）or GH_TOKtranslated + REST。
+  translated : translated `lark-cli`（personal profile，user translated）translated CLI；
+             translateduse LARK_APP_ID / LARK_APP_SECRET translated tenant_access_token translated
+             multitranslated API（translatedusetranslated base:record:read / bitable:app:readonly，
+             translated translatedusetranslatedmultitranslated）。
+  PostHog  : POSTHOG_PERSONAL_API_KEY + POSTHOG_PROJECT_ID（HogQL translated
+             `feedback_submitted` / `survey sent` translated）。
 
-EN
-  FEISHU_WEBHOOK_URL（EN webhook，EN FEISHU_WEBHOOK_SECRET EN）。
-  EN webhook EN stdout。
+translated
+  FEISHU_WEBHOOK_URL（translated webhook，canSelect FEISHU_WEBHOOK_SECRET Signature）。
+  translated webhook translated stdout。
 
-EN
-  python3 scripts/weekly_digest.py                # EN markdown EN
-  python3 scripts/weekly_digest.py --json         # EN（EN agent EN）
-  python3 scripts/weekly_digest.py --post         # GenerateEN
-  python3 scripts/weekly_digest.py --post --message-file digest.md   # EN agent EN
-  python3 scripts/weekly_digest.py --days 14      # EN
+usetranslated
+  python3 scripts/weekly_digest.py                # translated markdown translated
+  python3 scripts/weekly_digest.py --json         # translated（translated agent translated）
+  python3 scripts/weekly_digest.py --post         # translated
+  python3 scripts/weekly_digest.py --post --message-file digest.md   # translated agent translated'stranslated
+  python3 scripts/weekly_digest.py --days 14      # translated
 """
 from __future__ import annotations
 
@@ -42,14 +42,14 @@ import urllib.request
 from typing import Any
 
 REPO = os.environ.get("AUTOCLIP_REPO", "zhouxiaoka/autoclip")
-FEISHU_BASE_TOKEN = os.environ.get("FEISHU_BASE_TOKEN", "EuYLb3lQ2awwDFsTkDXchabsnbd")
+FEISHU_BASE_TOKtranslated = os.environ.get("FEISHU_BASE_TOKtranslated", "EuYLb3lQ2awwDFsTkDXchabsnbd")
 FEISHU_TABLE_ID = os.environ.get("FEISHU_TABLE_ID", "tbl92rUV2NnRX6GJ")
 FEISHU_FORM_URL = "https://my.feishu.cn/share/base/shrcn8hKUG2icIJLpNry6uWVNJe"
-FEISHU_BASE_URL = f"https://my.feishu.cn/base/{FEISHU_BASE_TOKEN}?table={FEISHU_TABLE_ID}"
+FEISHU_BASE_URL = f"https://my.feishu.cn/base/{FEISHU_BASE_TOKtranslated}?table={FEISHU_TABLE_ID}"
 LARK_PROFILE = os.environ.get("LARK_PROFILE", "personal")
 POSTHOG_HOST = os.environ.get("POSTHOG_HOST", "https://us.posthog.com").rstrip("/")
 
-CATEGORY_LABEL = {"bug": "EN", "feature": "EN", "other": "EN"}
+CATEGORY_LABEL = {"bug": "translatedissuetranslated", "feature": "translatedfeature", "other": "translated"}
 
 
 # ---------------------------------------------------------------- helpers ---
@@ -89,7 +89,7 @@ def _trunc(s: str, n: int = 120) -> str:
 
 
 def _first(v: Any) -> str:
-    """EN select EN list，EN str / list[{text}]。EN str。"""
+    """translated select translatedIs list，translatedcantranslatedIs str / list[{text}]。translatedonetranslated str。"""
     if v is None:
         return ""
     if isinstance(v, list):
@@ -121,12 +121,12 @@ def fetch_github(since: dt.datetime) -> dict[str, Any]:
                                "--search", f"closed:>={day}", "--json", fields])
             closed = json.loads(so or "[]") if rc == 0 else []
         except Exception as e:  # noqa: BLE001
-            out["note"] = f"gh Failed：{e}"
+            out["note"] = f"gh failed：{e}"
             return out
     else:
-        token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+        token = os.environ.get("GH_TOKtranslated") or os.environ.get("GITHUB_TOKtranslated")
         if not token:
-            out["note"] = "EN gh，EN GH_TOKEN"
+            out["note"] = "translated gh，translated GH_TOKtranslated"
             return out
         hdr = {"Authorization": f"Bearer {token}", "X-GitHub-Api-Version": "2022-11-28"}
         try:
@@ -137,7 +137,7 @@ def fetch_github(since: dt.datetime) -> dict[str, Any]:
             r = _http_json(f"https://api.github.com/search/issues?q={urllib.parse.quote(q)}&per_page=100", headers=hdr)
             closed = [_gh_norm(i) for i in r.get("items", [])]
         except Exception as e:  # noqa: BLE001
-            out["note"] = f"GitHub API Failed：{e}"
+            out["note"] = f"GitHub API failed：{e}"
             return out
 
     def norm(i: dict[str, Any]) -> dict[str, Any]:
@@ -169,7 +169,7 @@ def fetch_feishu_form(since: dt.datetime) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
 
     if shutil.which("lark-cli"):
-        cmd = ["lark-cli", "base", "+record-list", "--base-token", FEISHU_BASE_TOKEN, "--table-id", FEISHU_TABLE_ID,
+        cmd = ["lark-cli", "base", "+record-list", "--base-token", FEISHU_BASE_TOKtranslated, "--table-id", FEISHU_TABLE_ID,
                "--as", "user", "--limit", "200", "--json"]
         if LARK_PROFILE:
             cmd += ["--profile", LARK_PROFILE]
@@ -183,14 +183,14 @@ def fetch_feishu_form(since: dt.datetime) -> dict[str, Any]:
                     rows.append(dict(zip(names, matrix_row)))
                 out["via"] = "lark-cli"
             else:
-                out["note"] = f"lark-cli Failed：{(j.get('error') or {}).get('message') or se.strip()[:200]}"
+                out["note"] = f"lark-cli failed：{(j.get('error') or {}).get('message') or se.strip()[:200]}"
         except Exception as e:  # noqa: BLE001
-            out["note"] = f"lark-cli EN：{e}"
+            out["note"] = f"lark-cli translated：{e}"
 
     if not out["via"]:
         app_id, app_secret = os.environ.get("LARK_APP_ID"), os.environ.get("LARK_APP_SECRET")
         if not (app_id and app_secret):
-            out["note"] = out["note"] or "EN lark-cli，EN LARK_APP_ID / LARK_APP_SECRET"
+            out["note"] = out["note"] or "translated lark-cli，translated LARK_APP_ID / LARK_APP_SECRET"
             return out
         try:
             tok = _http_json("https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal", method="POST",
@@ -200,7 +200,7 @@ def fetch_feishu_form(since: dt.datetime) -> dict[str, Any]:
             hdr = {"Authorization": f"Bearer {tok['tenant_access_token']}"}
             page_token, items = "", []
             while True:
-                url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/{FEISHU_BASE_TOKEN}/tables/{FEISHU_TABLE_ID}/records/search?page_size=200"
+                url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/{FEISHU_BASE_TOKtranslated}/tables/{FEISHU_TABLE_ID}/records/search?page_size=200"
                 if page_token:
                     url += f"&page_token={page_token}"
                 r = _http_json(url, method="POST", headers=hdr, body={})
@@ -212,30 +212,30 @@ def fetch_feishu_form(since: dt.datetime) -> dict[str, Any]:
                 page_token = r["data"].get("page_token", "")
             for it in items:
                 f = dict(it.get("fields", {}))
-                # created_at EN API EN
-                ct = f.get("EN")
+                # created_at translatedin API translatedIstranslatedsecondstranslated
+                ct = f.get("translated")
                 if isinstance(ct, (int, float)):
-                    f["EN"] = dt.datetime.fromtimestamp(ct / 1000, tz=dt.timezone.utc).isoformat()
+                    f["translated"] = dt.datetime.fromtimestamp(ct / 1000, tz=dt.timezone.utc).isoformat()
                 rows.append(f)
             out["via"] = "open-api"
         except Exception as e:  # noqa: BLE001
-            out["note"] = f"EN API Failed：{e}"
+            out["note"] = f"translated API failed：{e}"
             return out
 
     out["total_all"] = len(rows)
     for r in rows:
-        t = _parse_iso(_first(r.get("EN")))
+        t = _parse_iso(_first(r.get("translated")))
         if t and t < since:
             continue
         out["items"].append({
             "time": t.isoformat() if t else "",
-            "type": _first(r.get("EN")),
-            "platform": _first(r.get("EN")),
-            "version": _first(r.get("Version")),
-            "content": _first(r.get("EN")),
-            "contact": _first(r.get("EN")),
-            "status": _first(r.get("Status")),
-            "has_attachment": bool(r.get("EN / EN")),
+            "type": _first(r.get("translated")),
+            "platform": _first(r.get("translated")),
+            "version": _first(r.get("version")),
+            "content": _first(r.get("translated")),
+            "contact": _first(r.get("Contacttranslated")),
+            "status": _first(r.get("status")),
+            "has_attachment": bool(r.get("translated / logs")),
         })
     out["items"].sort(key=lambda x: x["time"], reverse=True)
     out["ok"] = True
@@ -247,7 +247,7 @@ def fetch_posthog(since: dt.datetime, days: int) -> dict[str, Any]:
     out: dict[str, Any] = {"ok": False, "items": [], "survey_responses": 0, "note": ""}
     key, pid = os.environ.get("POSTHOG_PERSONAL_API_KEY"), os.environ.get("POSTHOG_PROJECT_ID")
     if not (key and pid):
-        out["note"] = "EN POSTHOG_PERSONAL_API_KEY / POSTHOG_PROJECT_ID"
+        out["note"] = "translated POSTHOG_PERSONAL_API_KEY / POSTHOG_PROJECT_ID"
         return out
     hdr = {"Authorization": f"Bearer {key}"}
     q = f"""
@@ -275,7 +275,7 @@ def fetch_posthog(since: dt.datetime, days: int) -> dict[str, Any]:
     except urllib.error.HTTPError as e:
         out["note"] = f"PostHog HTTP {e.code}: {e.read().decode('utf-8', 'ignore')[:200]}"
     except Exception as e:  # noqa: BLE001
-        out["note"] = f"PostHog Failed：{e}"
+        out["note"] = f"PostHog failed：{e}"
     return out
 
 
@@ -284,37 +284,37 @@ def render_markdown(data: dict[str, Any]) -> str:
     since, until = data["window"]["since"], data["window"]["until"]
     gh, fs, ph = data["github"], data["feishu_form"], data["posthog"]
     L: list[str] = []
-    L.append(f"**AutoClip EN** · {since[:10]} → {until[:10]}")
+    L.append(f"**AutoClip translated** · {since[:10]} → {until[:10]}")
     L.append("")
 
-    # EN
+    # translated
     n_gh = len(gh["opened"]) if gh["ok"] else "—"
     n_fs = len(fs["items"]) if fs["ok"] else "—"
     n_ph = len(ph["items"]) if ph["ok"] else "—"
-    L.append(f"GitHub EN issue **{n_gh}**（EN {len(gh['closed']) if gh['ok'] else '—'}） · EN **{n_fs}** · EN **{n_ph}**")
+    L.append(f"GitHub translated issue **{n_gh}**（translated {len(gh['closed']) if gh['ok'] else '—'}） · translated **{n_fs}** · translatedusetranslated **{n_ph}**")
     L.append("")
 
     # GitHub
     L.append(f"**GitHub**（[{REPO}](https://github.com/{REPO}/issues)）")
     if not gh["ok"]:
-        L.append(f"- EN：{gh['note']}")
+        L.append(f"- translated：{gh['note']}")
     elif not gh["opened"]:
-        L.append("- EN issue。")
+        L.append("- translated issue。")
     else:
         for i in gh["opened"][:15]:
             tag = f"[{', '.join(i['labels'])}] " if i["labels"] else ""
-            st = "" if i["state"] == "open" else " ✓EN"
+            st = "" if i["state"] == "open" else " ✓translated"
             L.append(f"- [#{i['number']}]({i['url']}) {tag}{_trunc(i['title'], 70)}{st}")
         if len(gh["opened"]) > 15:
-            L.append(f"- … EN {len(gh['opened']) - 15} EN")
+            L.append(f"- … translated {len(gh['opened']) - 15} translated")
     L.append("")
 
-    # EN
-    L.append(f"**EN**（[EN]({FEISHU_BASE_URL})）")
+    # translated
+    L.append(f"**translated**（[translated]({FEISHU_BASE_URL})）")
     if not fs["ok"]:
-        L.append(f"- EN：{fs['note']}")
+        L.append(f"- translated：{fs['note']}")
     elif not fs["items"]:
-        L.append("- EN。")
+        L.append("- translated。")
     else:
         for it in fs["items"][:15]:
             meta = " · ".join(x for x in [it["type"], it["platform"], it["version"]] if x)
@@ -322,41 +322,41 @@ def render_markdown(data: dict[str, Any]) -> str:
             contact = f" — {it['contact']}" if it["contact"] else ""
             L.append(f"- {meta and f'[{meta}] '}{_trunc(it['content'], 90)}{extra}{contact}")
         if len(fs["items"]) > 15:
-            L.append(f"- … EN {len(fs['items']) - 15} EN")
+            L.append(f"- … translated {len(fs['items']) - 15} translated")
     L.append("")
 
     # PostHog
-    L.append("**EN**（PostHog）")
+    L.append("**translatedusetranslated**（PostHog）")
     if not ph["ok"]:
-        L.append(f"- EN：{ph['note']}")
+        L.append(f"- translated：{ph['note']}")
     elif not ph["items"]:
-        L.append("- EN。")
+        L.append("- translatedusetranslated。")
     else:
         by_cat: dict[str, int] = {}
         by_src: dict[str, int] = {}
         for it in ph["items"]:
             by_cat[CATEGORY_LABEL.get(str(it.get("category")), str(it.get("category")))] = by_cat.get(CATEGORY_LABEL.get(str(it.get("category")), str(it.get("category"))), 0) + 1
             by_src[str(it.get("source") or "—")] = by_src.get(str(it.get("source") or "—"), 0) + 1
-        L.append("- EN：" + " · ".join(f"{k} {v}" for k, v in sorted(by_cat.items(), key=lambda kv: -kv[1])) +
-                 "；EN：" + " · ".join(f"{k} {v}" for k, v in sorted(by_src.items(), key=lambda kv: -kv[1])) +
-                 (f"；Survey EN {ph['survey_responses']}" if ph["survey_responses"] else ""))
+        L.append("- translated：" + " · ".join(f"{k} {v}" for k, v in sorted(by_cat.items(), key=lambda kv: -kv[1])) +
+                 "；translated：" + " · ".join(f"{k} {v}" for k, v in sorted(by_src.items(), key=lambda kv: -kv[1])) +
+                 (f"；Survey translated {ph['survey_responses']}" if ph["survey_responses"] else ""))
         for it in ph["items"][:12]:
             meta = " · ".join(str(x) for x in [CATEGORY_LABEL.get(str(it.get("category")), it.get("category")), it.get("app_version"), it.get("os"),
                                               (f"{it.get('llm_provider')}/{it.get('llm_model')}" if it.get("llm_provider") else None)] if x)
             err = f"  `{_trunc(str(it['error_message']), 60)}`" if it.get("error_message") else ""
             L.append(f"- [{meta}] {_trunc(str(it.get('text') or ''), 90)}{err}")
         if len(ph["items"]) > 12:
-            L.append(f"- … EN {len(ph['items']) - 12} EN")
+            L.append(f"- … translated {len(ph['items']) - 12} translated")
     L.append("")
-    L.append("_EN agent EN。_")
+    L.append("_translatedandtranslated agent translatedintranslated。_")
     return "\n".join(L)
 
 
 # ---------------------------------------------------------------- send ---
-def post_feishu(markdown: str, title: str = "AutoClip EN") -> None:
+def post_feishu(markdown: str, title: str = "AutoClip translated") -> None:
     url = os.environ.get("FEISHU_WEBHOOK_URL")
     if not url:
-        raise SystemExit("ENConfig FEISHU_WEBHOOK_URL，EN。")
+        raise SystemExit("translatedconfig FEISHU_WEBHOOK_URL，translated。")
     body: dict[str, Any] = {
         "msg_type": "interactive",
         "card": {
@@ -373,18 +373,18 @@ def post_feishu(markdown: str, title: str = "AutoClip EN") -> None:
         body["timestamp"], body["sign"] = ts, sign
     r = _http_json(url, method="POST", body=body)
     if r.get("code") not in (0, None) or (r.get("StatusCode") not in (0, None)):
-        raise SystemExit(f"EN webhook ENError：{r}")
-    print("EN。", file=sys.stderr)
+        raise SystemExit(f"translated webhook returnerror：{r}")
+    print("translated。", file=sys.stderr)
 
 
 # ---------------------------------------------------------------- main ---
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--days", type=int, default=7, help="EN（EN），EN 7")
-    ap.add_argument("--json", action="store_true", help="EN JSON EN markdown")
-    ap.add_argument("--post", action="store_true", help="EN（Need FEISHU_WEBHOOK_URL）")
-    ap.add_argument("--message-file", help="EN markdown（EN agent ENVersion），ENAutoGenerateEN")
-    ap.add_argument("--title", default="AutoClip EN")
+    ap.add_argument("--days", type=int, default=7, help="translated（translated），default 7")
+    ap.add_argument("--json", action="store_true", help="translated JSON translatedIs markdown")
+    ap.add_argument("--post", action="store_true", help="translated（translated FEISHU_WEBHOOK_URL）")
+    ap.add_argument("--message-file", help="translatedthis filetranslated's markdown（translatedIs agent translated'sversion），translatedIstranslated's")
+    ap.add_argument("--title", default="AutoClip translated")
     args = ap.parse_args()
 
     if args.post and args.message_file:

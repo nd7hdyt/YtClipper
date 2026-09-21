@@ -1,52 +1,52 @@
-# ENProvidesEN
+# modelproviderintegrate
 
-## 🎯 EN
+## 🎯 overview
 
-ENSupportENAIENProvidesEN，EN，ENAIAuto ClippingEN。
+nowsupportAImodelprovider，canneedselectservicemodel，AIclip。
 
-## 🏗️ EN
+## 🏗️ 
 
-### SupportENProvidesEN
+### supportprovider
 
-| ProvidesEN | EN | EN | EN |
+| provider |  | model | features |
 |--------|----------|----------|------|
-| `dashscope` | EN | qwen-plus, qwen-max, qwen-turbo | EN，ChineseEN |
-| `openai` | OpenAI | gpt-3.5-turbo, gpt-4, gpt-4-turbo | EN，EN |
-| `gemini` | Google Gemini | gemini-2.5-flash, gemini-1.5-pro | ENSupport，EN |
-| `siliconflow` | EN | Qwen2.5EN, DeepSeek-V2.5 | EN，EN |
+| `dashscope` | Alibaba Qwen | qwen-plus, qwen-max, qwen-turbo | access，Chinese |
+| `openai` | OpenAI | gpt-3.5-turbo, gpt-4, gpt-4-turbo | ， |
+| `gemini` | Google Gemini | gemini-2.5-flash, gemini-1.5-pro | support， |
+| `siliconflow` |  | Qwen2.5, DeepSeek-V2.5 | ， |
 
-### System Architecture
+### 
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    EN                              │
+│                    frontendSettings page                              │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ ProvidesEN  │  │ APIEN │  │  EN   │         │
+│  │ providerselect  │  │ APIkey │  │  model selection   │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   ENAPIEN                               │
+│                   backendAPIservice                               │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ ENAPI │  │ ENAPI │  │ ENAPI │         │
+│  │ settingsAPI │  │ testAPI │  │ modelAPI │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   LLMEN                                 │
+│                   LLM                                 │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ ProvidesEN  │  │ EN    │  │ EN    │         │
+│  │ provider  │  │ API    │  │ config    │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 └─────────────────────────────────────────────────────────────┘
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   ENProvidesEN                            │
+│                   provider                            │
 ├─────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
 │  │ DashScope   │  │   OpenAI    │  │   Gemini    │         │
@@ -59,125 +59,125 @@ ENSupportENAIENProvidesEN，EN，ENAIAuto ClippingEN。
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## 🚀 Quick Start
+## 🚀 quick start
 
-### 1. EN
+### 1. installdependencies
 
 ```bash
-# EN
+# dependenciesinstall
 python install_llm_dependencies.py
 
-# ENManual Installation
+# install
 pip install openai>=1.0.0 google-generativeai>=0.3.0 requests>=2.25.0 dashscope>=1.10.0
 ```
 
-### 2. EN
+### 2. start
 
 ```bash
-# EN
+# startbackendservice
 python backend/main.py
 
-# EN
+# startfrontendservice
 cd frontend && npm run dev
 ```
 
-### 3. ENAPIEN
+### 3. configAPIkey
 
-1. EN
-2. ENAIENProvidesEN
-3. ENAPIEN
-4. EN
-5. EN
-6. EN
+1. accessSettings page
+2. selectAImodelprovider
+3. APIkey
+4. selectmodel
+5. test
+6. config
 
-## 📋 ENConfiguration
+## 📋 config notes
 
-### EN (DashScope)
+### Alibaba Qwen (DashScope)
 
-**ENAPIEN:**
-1. EN [EN](https://dashscope.console.aliyun.com/)
-2. EN
-3. ENAPIEN
+**fetchAPIkey:**
+1. access [](https://dashscope.console.aliyun.com/)
+2. Qwenservice
+3. createAPIkey
 
-**SupportEN:**
-- `qwen-plus`: ENPlus (EN)
-- `qwen-max`: ENMax (EN)
-- `qwen-turbo`: ENTurbo (EN)
+**supportmodel:**
+- `qwen-plus`: QwenPlus (recommend)
+- `qwen-max`: QwenMax ()
+- `qwen-turbo`: QwenTurbo ()
 
 ### OpenAI
 
-**ENAPIEN:**
-1. EN [OpenAI Platform](https://platform.openai.com/)
-2. ENAccountEN
-3. ENAPIEN
+**fetchAPIkey:**
+1. access [OpenAI Platform](https://platform.openai.com/)
+2. account
+3. createAPIkey
 
-**SupportEN:**
-- `gpt-3.5-turbo`: GPT-3.5 Turbo (EN)
-- `gpt-4`: GPT-4 (EN)
-- `gpt-4-turbo`: GPT-4 Turbo (EN)
+**supportmodel:**
+- `gpt-3.5-turbo`: GPT-3.5 Turbo ()
+- `gpt-4`: GPT-4 ()
+- `gpt-4-turbo`: GPT-4 Turbo ()
 
 ### Google Gemini
 
-**ENAPIEN:**
-1. EN [Google AI Studio](https://ai.google.dev/)
-2. ENGoogleAccount
-3. ENAPIEN
+**fetchAPIkey:**
+1. access [Google AI Studio](https://ai.google.dev/)
+2. sign inGoogleaccount
+3. createAPIkey
 
-**SupportEN:**
-- `gemini-2.5-flash`: Gemini 2.5 Flash (EN)
-- `gemini-1.5-pro`: Gemini 1.5 Pro (EN)
-- `gemini-1.5-flash`: Gemini 1.5 Flash (EN)
+**supportmodel:**
+- `gemini-2.5-flash`: Gemini 2.5 Flash ()
+- `gemini-1.5-pro`: Gemini 1.5 Pro ()
+- `gemini-1.5-flash`: Gemini 1.5 Flash ()
 
-### EN
+### 
 
-**ENAPIEN:**
-1. EN [EN](https://cloud.siliconflow.cn/)
-2. ENAccount
-3. ENAPIEN
+**fetchAPIkey:**
+1. access [](https://cloud.siliconflow.cn/)
+2. account
+3. createAPIkey
 
-**SupportEN:**
+**supportmodel:**
 - `Qwen/Qwen2.5-7B-Instruct`: Qwen2.5-7B
 - `Qwen/Qwen2.5-14B-Instruct`: Qwen2.5-14B
 - `Qwen/Qwen2.5-32B-Instruct`: Qwen2.5-32B
 - `deepseek-ai/DeepSeek-V2.5`: DeepSeek-V2.5
 
-### Ollama / LM Studio（EN，EN API EN）
+### Ollama / LM Studio（local，no need API key）
 
-EN「ENProvidesEN」EN「Ollama（EN）」EN「LM Studio（EN）」，EN OpenAI EN + EN `base_url`：
+Settings page「modelprovider」「Ollama（local）」「LM Studio（local）」， OpenAI API +  `base_url`：
 
-| EN | EN | EN |
+|  | default | defaultmodel |
 |---|---|---|
 | Ollama | `http://localhost:11434/v1` | `qwen2.5:7b`（`ollama pull qwen2.5:7b`） |
-| LM Studio | `http://localhost:1234/v1` | EN Local Server ENAs Standard |
+| LM Studio | `http://localhost:1234/v1` |  Local Server  |
 
-EN；EN。EN（Clash EN）EN。
-CLI EN：`autoclip run video.mp4 --provider ollama`。EN `docs/CLI_AND_MCP.md` EN 4 EN。
+serviceavailablemodel；。proxy（Clash ）impactlocal。
+CLI available：`autoclip run video.mp4 --provider ollama`。 `docs/CLI_AND_MCP.md`  4 。
 
-## 🔧 EN
+## 🔧 technical details
 
-### EN
+### 
 
-#### 1. LLMProvider EN
+#### 1. LLMProvider 
 
 ```python
 class LLMProvider(ABC):
     @abstractmethod
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        """ENAPI"""
+        """callmodelAPI"""
         pass
     
     @abstractmethod
     def test_connection(self) -> bool:
-        """ENAPIEN"""
+        """testAPI"""
         pass
     
     @abstractmethod
     def get_available_models(self) -> List[ModelInfo]:
-        """EN"""
+        """fetchavailablemodel"""
         pass
 ```
 
-#### 2. ProvidesEN
+#### 2. provider
 
 ```python
 class LLMProviderFactory:
@@ -190,191 +190,191 @@ class LLMProviderFactory:
     
     @classmethod
     def create_provider(cls, provider_type: ProviderType, api_key: str, model_name: str, **kwargs) -> LLMProvider:
-        """ENProvidesEN"""
+        """createprovider"""
         pass
 ```
 
-#### 3. LLMEN
+#### 3. LLM
 
 ```python
 class LLMManager:
     def __init__(self, settings_file: Optional[Path] = None):
-        """EN"""
+        """"""
         pass
     
     def set_provider(self, provider_type: ProviderType, api_key: str, model_name: str):
-        """ENProvidesEN"""
+        """settingsprovider"""
         pass
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> str:
-        """ENLLM"""
+        """callLLM"""
         pass
 ```
 
-### APIEN
+### APIAPI
 
-#### EN
+#### settings
 
 ```http
 GET /api/v1/settings
 POST /api/v1/settings
 ```
 
-#### EN
+#### test
 
 ```http
 POST /api/v1/settings/test-api-key
 ```
 
-#### EN
+#### model
 
 ```http
 GET /api/v1/settings/available-models
 GET /api/v1/settings/current-provider
 ```
 
-## 🎨 ENInterface
+## 🎨 frontend
 
-### EN
+### Settings page
 
-1. **ProvidesEN**: ENAIENProvidesEN
-2. **APIEN**: ENProvidesEN
-3. **EN**: ENProvidesEN
-4. **EN**: ENAPIEN
-5. **EN**: ENProvidesEN
+1. **providerselect**: selectAImodelprovider
+2. **APIkey**: providerkey
+3. **model selection**: selectprovideravailablemodel
+4. **test**: testAPIkeymodelavailable
+5. **status**: useprovidermodel
 
-### InterfaceEN
+### features
 
-- Responsive Design，SupportEN
-- EN，EN
-- EN，EN
-- EN
+- responsive design，support
+- ，
+- status，
+- usenotes
 
-## 🔍 Troubleshooting
+## 🔍 troubleshooting
 
 ### FAQ
 
-#### 1. APIEN
+#### 1. APIkey
 
-**EN**: EN，EN"API KeyEN"
+**symptom**: testconnection failed，"API Key"
 
-**EN**:
-- ENAPIEN
-- ENAPIEN
-- EN
+**solution**:
+- checkAPIkey
+- confirmAPIkey
+- check
 
-#### 2. EN
+#### 2. network issue
 
-**EN**: EN
+**symptom**: error
 
-**EN**:
-- EN
-- EN
-- EN（EN）
+**solution**:
+- check network connection
+- confirmsettings
+- useproxy（need）
 
-#### 3. EN
+#### 3. modelavailable
 
-**EN**: EN
+**symptom**: selectmodeluse
 
-**EN**:
-- EN
-- EN
-- EN
+**solution**:
+- checkmodel
+- confirmusemodel
+- availablemodel
 
-#### 4. EN
+#### 4. dependenciesissue
 
-**EN**: EN
+**symptom**: importerror
 
-**EN**:
+**solution**:
 ```bash
-# EN
+# installdependencies
 python install_llm_dependencies.py
 
-# ENManual Installation
+# install
 pip install --upgrade openai google-generativeai requests dashscope
 ```
 
-### EN
+### view
 
-EN：
+location：
 
-- EN: `logs/backend.log`
-- EN: EN
+- backend: `logs/backend.log`
+- frontend: tool
 
-## 🚀 EN
+## 🚀 
 
-### ENProvidesEN
+### provider
 
-1. **ENProvidesEN**:
+1. **createprovider**:
 ```python
 class NewProvider(LLMProvider):
     def __init__(self, api_key: str, model_name: str, **kwargs):
         super().__init__(api_key, model_name, **kwargs)
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> LLMResponse:
-        # ENAPIEN
+        # APIcall
         pass
     
     def test_connection(self) -> bool:
-        # EN
+        # test
         pass
     
     def get_available_models(self) -> List[ModelInfo]:
-        # EN
+        # returnavailablemodel
         pass
 ```
 
-2. **EN**:
+2. ****:
 ```python
-# EN llm_providers.py EN
+#  llm_providers.py 
 class LLMProviderFactory:
     _providers = {
-        # ... ENProvidesEN
+        # ... provider
         ProviderType.NEW_PROVIDER: NewProvider,
     }
 ```
 
-3. **EN**:
+3. **updatefrontendconfig**:
 ```typescript
-// EN SettingsPage.tsx EN
+//  SettingsPage.tsx 
 const providerConfig = {
-  // ... EN
+  // ... config
   new_provider: {
-    name: 'ENProvidesEN',
+    name: 'provider',
     icon: <RobotOutlined />,
     color: '#ff4d4f',
-    description: 'ENProvidesEN',
+    description: 'provider',
     apiKeyField: 'new_provider_api_key',
-    placeholder: 'ENProvidesENAPIEN'
+    placeholder: 'providerAPIkey'
   }
 }
 ```
 
-## 📊 EN
+## 📊 
 
-| ProvidesEN | EN | ChineseEN | EN | EN | EN |
+| provider |  | Chinese |  |  | recommend |
 |--------|----------|----------|------|--------|----------|
-| EN | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ChineseEN |
-| OpenAI | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐ | EN |
-| Google Gemini | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | EN |
-| EN | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | EN |
+| Alibaba Qwen | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Chinese |
+| OpenAI | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐⭐ |  |
+| Google Gemini | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |  |
+|  | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |  |
 
-## 🎯 EN
+## 🎯 best practices
 
-1. **ENProvidesEN**: ENProvidesEN
-2. **EN**: ENAPIEN
-3. **EN**: EN
-4. **EN**: ENAPIEN
-5. **EN**: Do notENAPIEN
+1. **selectprovider**: selectprovider
+2. **test**: APIkeymodelavailable
+3. **monitoruse**: limit
+4. **config**: APIkeyconfig
+5. **security**: APIkey
 
-## 📞 ENSupport
+## 📞 tech support
 
-EN，EN：
+useissue，canget help：
 
-1. EN
-2. ENAPIProvidesEN
-3. ContactENSupportEN
+1. viewfile
+2. checkAPIproviderdocs
+3. tech support
 
 ---
 
-**EN**: ENAPIEN，Do notEN。ENAPIEN。
+****: APIkey，security。APIkeysecurity。

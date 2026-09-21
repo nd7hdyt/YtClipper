@@ -12,7 +12,7 @@ from .base import BaseSchema, PaginationResponse
 
 class ProjectStatus(str, Enum):
     """Project status enumeration."""
-    PENDING = "pending"
+    PtranslatedDING = "pending"
     PROCESSING = "processing"
     COMPLETED = "completed"
     FAILED = "failed"
@@ -24,10 +24,10 @@ class ProjectType(str, Enum):
     KNOWLEDGE = "knowledge"
     BUSINESS = "business"
     OPINION = "opinion"
-    EXPERIENCE = "experience"
+    EXPERItranslatedCE = "experience"
     SPEECH = "speech"
-    CONTENT_REVIEW = "content_review"
-    ENTERTAINMENT = "entertainment"
+    CONTtranslatedT_REVIEW = "content_review"
+    translatedTERTAINMtranslatedT = "entertainment"
 
 
 class ProjectCreate(BaseSchema):
@@ -70,7 +70,7 @@ class ProjectResponse(BaseSchema):
             datetime: lambda v: v.isoformat() if v else None
         }
     
-    # failedEN：ENfailedtaskENerrorEN（ENhint），EN / projectEN / EN
+    # failedtranslated：translatedonetranslatedfailedtask'serrortranslated（translatedandtranslatedonetranslated），translated / projecttranslated / translatedusetranslated
     error_message: Optional[str] = Field(default=None, description="Latest failure message when status is failed")
 
     # Statistics

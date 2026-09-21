@@ -17,7 +17,7 @@ from ..core.celery_app import celery_app
 logger = logging.getLogger(__name__)
 
 class TaskStatus(Enum):
-    PENDING = "pending"
+    PtranslatedDING = "pending"
     QUEUED = "queued"
     PROCESSING = "processing"
     COMPLETED = "completed"
@@ -28,10 +28,10 @@ class TaskPriority(Enum):
     LOW = 1
     NORMAL = 2
     HIGH = 3
-    URGENT = 4
+    URGtranslatedT = 4
 
 class UploadTask:
-    """uploadtaskEN"""
+    """Uploadtasktranslated"""
     def __init__(self, task_id: str, video_path: str, title: str, 
                  description: str = "", tags: str = "", 
                  account_id: Optional[int] = None, priority: TaskPriority = TaskPriority.NORMAL):
@@ -42,7 +42,7 @@ class UploadTask:
         self.tags = tags
         self.account_id = account_id
         self.priority = priority
-        self.status = TaskStatus.PENDING
+        self.status = TaskStatus.PtranslatedDING
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
         self.progress = 0
@@ -71,7 +71,7 @@ class UploadTask:
         }
 
 class UploadQueueService:
-    """uploadqueueENservice"""
+    """Uploadtranslatedservice"""
     
     def __init__(self, db: Session):
         self.db = db
@@ -79,12 +79,12 @@ class UploadQueueService:
         self.bilibili_upload_service = BilibiliUploadService(db)
         self.task_queue: Dict[str, UploadTask] = {}
         self.processing_tasks: Dict[str, UploadTask] = {}
-        self.max_concurrent_uploads = 3  # ENuploadEN
+        self.max_concurrent_uploads = 3  # translatedUploadtranslated
         
     def add_task(self, video_path: str, title: str, description: str = "", 
                  tags: str = "", account_id: Optional[int] = None, 
                  priority: TaskPriority = TaskPriority.NORMAL) -> str:
-        """ENuploadtask"""
+        """addUploadtask"""
         try:
             task_id = str(uuid4())
             task = UploadTask(
@@ -97,63 +97,63 @@ class UploadQueueService:
                 priority=priority
             )
             
-            # validatevideofile
+            # verifyvideofile
             import os
             if not os.path.exists(video_path):
-                raise ValueError(f"videofiledoes not exist: {video_path}")
+                raise ValueError(f"videofile not found: {video_path}")
             
-            # ifENaccount，ENaccount
+            # iftranslatedAccount，translatedSelectselecttranslatedAccount
             if not account_id:
                 best_account = self.bilibili_account_service.select_best_account()
                 if not best_account:
-                    raise ValueError("ENBENaccount")
+                    raise ValueError("translatedcanuse'sBsiteAccount")
                 task.account_id = best_account.id
             
             self.task_queue[task_id] = task
             task.status = TaskStatus.QUEUED
             
-            logger.info(f"ENuploadtask: {task_id} - {title}")
+            logger.info(f"addUploadtask: {task_id} - {title}")
             
-            # ENprocessingtask
+            # translatedprocesstask
             asyncio.create_task(self._process_queue())
             
             return task_id
             
         except Exception as e:
-            logger.error(f"ENuploadtaskfailed: {e}")
+            logger.error(f"addUploadtaskfailed: {e}")
             raise
     
     def add_batch_tasks(self, tasks_data: List[Dict[str, Any]]) -> List[str]:
-        """ENuploadtask"""
+        """translatedaddUploadtask"""
         try:
             task_ids = []
             
-            # ENtaskENaccount
+            # translatedtasktranslatedAccount
             accounts = self.bilibili_account_service.rotate_accounts_for_batch_upload(len(tasks_data))
             
             for i, task_data in enumerate(tasks_data):
-                # ENaccount
+                # translatedAccount
                 if i < len(accounts):
                     task_data['account_id'] = accounts[i].id
                 
                 task_id = self.add_task(**task_data)
                 task_ids.append(task_id)
             
-            logger.info(f"EN {len(task_ids)} ENuploadtask")
+            logger.info(f"translatedadd {len(task_ids)}  Uploadtask")
             return task_ids
             
         except Exception as e:
-            logger.error(f"ENuploadtaskfailed: {e}")
+            logger.error(f"translatedaddUploadtaskfailed: {e}")
             raise
     
     async def _process_queue(self):
-        """processingtaskqueue"""
+        """processTask Queue"""
         try:
-            # checkENprocessingEN
+            # checkIstranslated'sprocesstranslated
             if len(self.processing_tasks) >= self.max_concurrent_uploads:
                 return
             
-            # fetchENprocessingENtask（EN）
+            # fetchtranslatedprocess'stask（bytranslated）
             pending_tasks = [
                 task for task in self.task_queue.values() 
                 if task.status == TaskStatus.QUEUED
@@ -162,31 +162,31 @@ class UploadQueueService:
             if not pending_tasks:
                 return
             
-            # ENcreatetimeEN
+            # bytranslatedAndcreatetranslated
             pending_tasks.sort(key=lambda t: (-t.priority.value, t.created_at))
             
-            # processingtask
+            # processtask
             available_slots = self.max_concurrent_uploads - len(self.processing_tasks)
             for task in pending_tasks[:available_slots]:
                 await self._start_task(task)
                 
         except Exception as e:
-            logger.error(f"processingtaskqueuefailed: {e}")
+            logger.error(f"processTask Queuefailed: {e}")
     
     async def _start_task(self, task: UploadTask):
-        """startENtask"""
+        """starttranslated task"""
         try:
             task.status = TaskStatus.PROCESSING
             task.updated_at = datetime.now()
             
-            # ENprocessingqueue
+            # translatedprocesstranslated
             self.processing_tasks[task.task_id] = task
             if task.task_id in self.task_queue:
                 del self.task_queue[task.task_id]
             
-            logger.info(f"startprocessinguploadtask: {task.task_id}")
+            logger.info(f"translatedprocessUploadtask: {task.task_id}")
             
-            # ENCelery
+            # translatedCelery
             celery_task = upload_video_task.delay(
                 task.task_id,
                 task.video_path,
@@ -205,20 +205,20 @@ class UploadQueueService:
             self._move_task_to_completed(task)
     
     def _move_task_to_completed(self, task: UploadTask):
-        """ENtaskENstatus"""
+        """translatedtasktranslatedstatus"""
         task.updated_at = datetime.now()
         
-        # ENprocessingqueueEN
+        # fromprocesstranslated
         if task.task_id in self.processing_tasks:
             del self.processing_tasks[task.task_id]
         
-        # ENprocessingqueueENtask
+        # translatedprocesstranslated'stranslatedtask
         asyncio.create_task(self._process_queue())
     
     def get_task_status(self, task_id: str) -> Optional[Dict[str, Any]]:
         """fetchtaskstatus"""
         try:
-            # ENprocessingqueueEN
+            # translatedinprocesstranslated
             if task_id in self.processing_tasks:
                 task = self.processing_tasks[task_id]
                 
@@ -233,7 +233,7 @@ class UploadQueueService:
                         task.status = TaskStatus.FAILED
                         task.error_message = str(celery_task.info)
                         self._move_task_to_completed(task)
-                    elif celery_task.state == 'PENDING':
+                    elif celery_task.state == 'PtranslatedDING':
                         task.progress = 0
                     elif celery_task.state == 'PROGRESS':
                         if hasattr(celery_task.info, 'get'):
@@ -241,11 +241,11 @@ class UploadQueueService:
                 
                 return task.to_dict()
             
-            # ENqueueEN
+            # inetc.translated
             if task_id in self.task_queue:
                 return self.task_queue[task_id].to_dict()
             
-            # ENdatabaseENcompletedENtask
+            # indatabasetranslatedcompleted'stask
             upload_record = self.db.query(BilibiliUploadRecord).filter(
                 BilibiliUploadRecord.task_id == task_id
             ).first()
@@ -270,15 +270,15 @@ class UploadQueueService:
     def cancel_task(self, task_id: str) -> bool:
         """canceltask"""
         try:
-            # ENqueueENcancel
+            # inetc.translatedcancel
             if task_id in self.task_queue:
                 task = self.task_queue[task_id]
                 task.status = TaskStatus.CANCELLED
                 del self.task_queue[task_id]
-                logger.info(f"cancelENtask: {task_id}")
+                logger.info(f"canceletc.translated'stask: {task_id}")
                 return True
             
-            # ENprocessingqueueENcancel
+            # inprocesstranslatedcancel
             if task_id in self.processing_tasks:
                 task = self.processing_tasks[task_id]
                 
@@ -288,7 +288,7 @@ class UploadQueueService:
                 
                 task.status = TaskStatus.CANCELLED
                 self._move_task_to_completed(task)
-                logger.info(f"cancelprocessingENtask: {task_id}")
+                logger.info(f"cancelprocessing'stask: {task_id}")
                 return True
             
             return False
@@ -298,7 +298,7 @@ class UploadQueueService:
             return False
     
     def get_queue_status(self) -> Dict[str, Any]:
-        """fetchqueuestatus"""
+        """fetchtranslatedstatus"""
         try:
             queued_count = len([t for t in self.task_queue.values() if t.status == TaskStatus.QUEUED])
             processing_count = len(self.processing_tasks)
@@ -328,24 +328,24 @@ class UploadQueueService:
             }
             
         except Exception as e:
-            logger.error(f"fetchqueuestatusfailed: {e}")
+            logger.error(f"fetchtranslatedstatusfailed: {e}")
             return {"error": str(e)}
 
-# CelerytaskEN
+# Celerytasktranslated
 @celery_app.task(bind=True)
 def upload_video_task(self, task_id: str, video_path: str, title: str, 
                      description: str, tags: str, account_id: int):
-    """Celeryuploadtask"""
+    """CeleryUploadtask"""
     try:
         # updatetaskprogress
         self.update_state(state='PROGRESS', meta={'progress': 10})
         
-        # fetchdatabaseEN
+        # fetchdatabasetranslated
         db = next(get_db())
         bilibili_upload_service = BilibiliUploadService(db)
         bilibili_account_service = BilibiliAccountService(db)
         
-        # ENuploadEN
+        # translatedUploadtranslated
         clip_data = {
             'video_path': video_path,
             'title': title,
@@ -356,7 +356,7 @@ def upload_video_task(self, task_id: str, video_path: str, title: str,
         # updateprogress
         self.update_state(state='PROGRESS', meta={'progress': 30})
         
-        # executeupload - useEN
+        # translatedUpload - usetranslated
         import concurrent.futures
         
         def run_async_upload():
@@ -372,7 +372,7 @@ def upload_video_task(self, task_id: str, video_path: str, title: str,
         upload_record.task_id = task_id
         db.commit()
         
-        # updateaccountusetime
+        # updateAccountusetranslated
         bilibili_account_service.update_account_usage(account_id)
         
         if upload_record.status == 'completed':
@@ -383,8 +383,8 @@ def upload_video_task(self, task_id: str, video_path: str, title: str,
                 'upload_record_id': upload_record.id
             }
         else:
-            raise Exception(upload_record.error_message or "uploadfailed")
+            raise Exception(upload_record.error_message or "Uploadfailed")
             
     except Exception as e:
-        logger.error(f"Celeryuploadtaskfailed: {e}")
+        logger.error(f"CeleryUploadtaskfailed: {e}")
         raise self.retry(exc=e, countdown=60, max_retries=3)

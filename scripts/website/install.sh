@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# ENAutoEN autoclip_intro EN（EN）。
+#  translatedthistranslated autoclip_intro translated（onetranslated）。
 #
 #   bash scripts/website/install.sh ../autoclip_intro
 #
-# EN autoclip_intro EN `git add -A && git commit -m "build: sync release info automatically" && git push`。
-# EN repository_dispatch EN .github/workflows/desktop-build.yml EN "Notify website" EN，
-# NeedEN Settings → Secrets EN WEBSITE_DISPATCH_TOKEN（fine-grained PAT：EN autoclip_intro，Contents: Read and write）。
-# EN：EN workflow EN cron EN，EN。
+# translatedin autoclip_intro translated `git add -A && git commit -m "build: sync release info automatically" && git push`。
+# translatedthistranslated's repository_dispatch translated .github/workflows/desktop-build.yml 's "Notify website" step，
+# translatedintranslated Settings → Secrets translated WEBSITE_DISPATCH_TOKtranslated（fine-grained PAT：translated autoclip_intro，Contents: Read and write）。
+# translated：translated workflow translatedpertranslated cron translated，translatedIstranslatedmultionetranslated。
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET="${1:-}"
 if [[ -z "$TARGET" || ! -f "$TARGET/index.html" ]]; then
-  echo "EN: bash scripts/website/install.sh <autoclip_intro EN>（EN index.html）" >&2
+  echo "usetranslated: bash scripts/website/install.sh <autoclip_intro translatedpath>（translateddirectorytranslated index.html）" >&2
   exit 1
 fi
 
@@ -22,11 +22,11 @@ cp "$HERE/sync-release.yml" "$TARGET/.github/workflows/sync-release.yml"
 chmod +x "$TARGET/scripts/sync_release.py"
 grep -q '__pycache__' "$TARGET/.gitignore" 2>/dev/null || echo '__pycache__/' >> "$TARGET/.gitignore"
 
-echo "EN $TARGET："
+echo "translated $TARGET："
 echo "  scripts/sync_release.py"
 echo "  .github/workflows/sync-release.yml"
 echo
-echo "EN Release："
+echo "translatedintranslatedonetranslated Release："
 (cd "$TARGET" && python3 scripts/sync_release.py)
 echo
-echo "EN：cd $TARGET && git add -A && git commit -m 'build: sync release info automatically' && git push"
+echo "translatedonetranslated：cd $TARGET && git add -A && git commit -m 'build: sync release info automatically' && git push"

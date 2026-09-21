@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   
   return {
     plugins: [react()],
-    base: isProduction ? './' : '/', // ENEnvironmentEN
+    base: isProduction ? './' : '/', // translatedusetranslatedpath
     optimizeDeps: {
       include: ['@tauri-apps/api', '@tauri-apps/api/dialog']
     },
@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
         // undefined (reading 'createContext')" → blank/black screen. Letting
         // Rollup decide chunking keeps React's evaluation ordered correctly.
       },
-      // ENEnvironmentEN Service Worker
+      // translateduse Service Worker
       serviceWorker: false
     },
     resolve: {
@@ -36,14 +36,14 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       port: 3000,
-      strictPort: true, // IfENThenEN，ENAutoEN
+      strictPort: true, // iftranslatedusetranslated，translatedIstranslated
       hmr: {
-        overlay: false // ENErrorEN
+        overlay: false // translateduseerrortranslated
       },
       proxy: {
         '/api': {
-          // Override when the desktop backend (random port) is running: BACKEND_URL=http://127.0.0.1:PORT npm run dev
-          target: process.env.BACKEND_URL || 'http://localhost:8000',
+          // Override when the desktop backend (random port) is running: BACKtranslatedD_URL=http://127.0.0.1:PORT npm run dev
+          target: process.env.BACKtranslatedD_URL || 'http://localhost:8000',
           changeOrigin: true
         }
       }

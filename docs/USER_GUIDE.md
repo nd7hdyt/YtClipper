@@ -1,374 +1,374 @@
-# 📚 AutoClip Desktop ENUsage Guide
+# 📚 AutoClip Desktop use
 
-## 🎯 Quick Start
+## 🎯 quick start
 
-### EN
+### use
 
-1. **EN**：EN
-2. **EN**：EN
-3. **ENAIEN**：ENAIENAPIEN
-4. **EN**：UploadEN，EN
+1. **start**：filestart
+2. **config**：completedsettings
+3. **configAIservice**：settingsspeech recognitionAImodelAPIkey
+4. **use**：file，project
 
-### EN
+### 
 
 ```
-UploadEN → EN → AIEN → EN → EN → EN
+ →  → AI → generateclip → create collection → export
 ```
 
-## 📁 Project Management
+## 📁 project management
 
-### EN
+### createproject
 
-1. EN **"EN"** EN
-2. EN（SupportMP4、AVI、MOV、MKV、WEBMEN）
-3. EN：UploadEN（SRT、VTTEN）
-4. EN
-5. EN（EN：EN、EN、EN）
-6. EN **"EN"**
+1. click **"new project"** button
+2. selectfile（supportMP4、AVI、MOV、MKV、WEBMformat）
+3. optional：subtitlesfile（SRT、VTTformat）
+4. project
+5. select（：、、business）
+6. click **""**
 
-### EN
+### project statusnotes
 
-- **🔄 EN**：EN
-- **✅ EN**：EN，EN
-- **❌ EN**：EN，EN
-- **⏸️ EN**：EN
+- **🔄 processing**：
+- **✅ completed**：completed，canview
+- **❌ failed**：failed，checkerror
+- **⏸️ **：
 
-### EN
+### project
 
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
+- **view details**：clickprojectview
+- ****：failedprojectcan
+- **project**：needprojectfile
+- **exportproject**：exportproject
 
-## 🎬 EN
+## 🎬 clip
 
-### EN
+### viewclip
 
-1. EN
-2. EN **"EN"** EN
-3. EN：
-   - EN
-   - EN
-   - EN
-   - EN
+1. projectpage
+2.  **"clip"** viewgenerateclip
+3. clip：
+   - 
+   - 
+   - 
+   - 
 
-### EN
+### clip
 
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
+- ****：clickclip
+- **edit**：clip
+- ****：clip
+- **clip**：needclip
 
-### EN
+### clip
 
-EN：
+clip：
 
-- **EN**：EN、EN
-- **LanguageEN**：EN、EN
-- **VisualEN**：EN、EN
-- **EN**：EN
+- ****：、
+- ****：、
+- ****：、
+- ****：
 
-EN：0-100EN，EN70EN。
+：0-100，recommended70clip。
 
-## 📚 EN
+## 📚 
 
-### EN
+### create collection
 
-1. EN，EN **"EN"**
-2. EN
-3. EN
-4. EN：
-   - **AIEN**：EN
-   - **EN**：EN
-5. EN **"EN"**
+1. projectpage，click **"create collection"**
+2. selectclip
+3. 
+4. select：
+   - **AIrecommend**：recommendclip
+   - **create**：selectclip
+5. click **"create collection"**
 
-### EN
+### 
 
-- **EN**：EN
-- **EN**：EN、EN
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
+- **view**：clip
+- **edit**：、clip
+- ****：clip
+- **export**：generatefile
+- ****：fetch
 
-### EN
+### 
 
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
+- ****：clip
+- ****：clip
+- ****：clip
+- ****：clip
 
-## ⚙️ EN
+## ⚙️ settings
 
-### AIEN
+### AImodelconfig
 
-#### EN
+#### speech recognitionsettings
 
-**ENWhisperEN**
-- EN：EN、EN、EN
-- EN：EN、EN
-- EN：
-  - `base`：EN
-  - `small`：EN，ENReal-time Processing
-  - `medium`：EN，EN
-  - `large`：EN，EN
+**localWhispermodel**
+- pros：free、security、available
+- cons：needdownloadmodelfile、
+- recommendmodel：
+  - `base`：
+  - `small`：，
+  - `medium`：，
+  - `large`：，
 
-**ENAPIEN**
-- EN：EN、EN、EN
-- EN：EN、EN
-- SupportEN：
+**cloudAPIservice**
+- pros：、、no needlocal
+- cons：need、cost
+- supportservice：
   - OpenAI Whisper API
   - Azure Speech Services
   - Google Cloud Speech-to-Text
-  - EN
+  - Alibaba speech recognition
 
-#### ENLanguageEN
+#### modelsettings
 
-**EN**
-- **EN**：ChineseSupportEN，EN
-- **OpenAI GPT**：EN，SupportENLanguage
-- **Google Gemini**：EN，EN
-- **EN**：EN，EN
+**recommended config**
+- **Alibaba Qwen**：Chinesesupport，
+- **OpenAI GPT**：，support
+- **Google Gemini**：free，
+- ****：service，access
 
-### EN
+### settings
 
-#### EN
+#### 
 
-- **EN**：EN
-  - EN：512MB
-  - EN：1EN
-  - EN：2GB
+- ****：
+  - filelimit：512MB
+  - ：1
+  - memoryuse：2GB
   
-- **EN**：EN（EN）
-  - EN：2GB
-  - EN：2EN
-  - EN：4GB
+- **medium**：use（recommend）
+  - filelimit：2GB
+  - ：2
+  - memoryuse：4GB
   
-- **EN**：EN
-  - EN：5GB
-  - EN：4EN
-  - EN：8GB
+- ****：
+  - filelimit：5GB
+  - ：4
+  - memoryuse：8GB
 
-#### EN
+#### settings
 
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
+- **data directory**：settingsprojectfilelocation
+- **cache**：filecache
+- ****：projectfile
 
-### EN
+### settings
 
-#### EN
+#### start
 
-- EN，EN
-- EN
-- EN
+- ，start
+- canaccess
+- needuse
 
-#### EN
+#### settings
 
-- EN
-- EN
-- EN
+- completed
+- error
+- status
 
-## 🔧 EN
+## 🔧 
 
-### EN
+### 
 
-1. EN
-2. EN **"EN"**
-3. EN：
-   - EN
-   - EN
-   - EN
+1. selectproject
+2. click **""**
+3. select：
+   - 
+   - export
+   - 
 
-### EN
+### 
 
-ENAIEN：
+settingscanAI：
 
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
+- **clip**：clip
+- **title generation**：generate
+- **recommend**：recommend
 
-### APIEN
+### APIintegration
 
-#### WebhookEN
+#### Webhook
 
-- ENWebhookEN
-- SupportEN
-- EN
+- settingscompletedWebhook
+- supportformat
+- availableintegration
 
-#### EN
+#### export
 
-- ENJSONEN
-- ENCSVEN
-- SupportEN
+- exportprojectJSONformat
+- exportclipCSVformat
+- supportexport
 
-## 🚨 Troubleshooting
+## 🚨 troubleshooting
 
 ### FAQ
 
-#### EN
+#### start
 
-**EN**：EN
+**symptom**：
 
-**EN**：
-1. EN
-2. EN
-3. EN
-4. EN
+**solution**：
+1. check
+2. downloadinstall
+3. checksettings
+4. viewerror
 
-#### ENUploadEN
+#### failed
 
-**EN**：UploadEN
+**symptom**：error
 
-**EN**：
-- ENSupport
-- EN
-- EN
-- EN
+**reason**：
+- fileformatsupport
+- filelimit
+- network issue
+- 
 
-**EN**：
-1. EN
-2. EN
-3. EN
-4. ENUpload
+**solution**：
+1. checkfileformat
+2. check network connection
+3. 
+4. 
 
-#### EN
+#### 
 
-**EN**：EN
+**symptom**：
 
-**EN**：
-1. EN
-2. EN
-3. ENAPIEN
-4. ENWhisperEN
+****：
+1. settings
+2. 
+3. usecloudAPIservice
+4. selectWhispermodel
 
-#### APIEN
+#### APIconnection failed
 
-**EN**：AIEN
+**symptom**：AIservice
 
-**EN**：
-1. ENAPIEN
-2. EN
-3. ENAPIEN
-4. EN
+**checkstep**：
+1. verifyAPIkey
+2. check network connection
+3. confirmAPIservicestatus
+4. check
 
-### EN
+### errornotes
 
-| EN | EN | EN |
+| error | notes | solution |
 |---------|------|----------|
-| ERR_001 | ENSupport | ENSupportEN |
-| ERR_002 | EN | ENUpload |
-| ERR_003 | APIEN | ENAPIEN |
-| ERR_004 | EN | EN |
-| ERR_005 | EN | EN |
-| ERR_006 | EN | EN |
+| ERR_001 | fileformatsupport | usesupportformat |
+| ERR_002 | file | use |
+| ERR_003 | APIkey | checkupdateAPIkey |
+| ERR_004 | connection failed | check network connection |
+| ERR_005 |  |  |
+| ERR_006 | out of memory | settings |
 
-### EN
+### get help
 
-#### EN
+#### 
 
-- **EN**：EN
-- **EN**：EN
-- **FAQ**：ENFAQEN
+- ****：viewusenotes
+- ****：
+- **FAQ**：viewFAQsolution
 
-#### ENSupport
+#### tech support
 
-- **GitHub Issues**：ENbugEN
-- **EN**：EN
-- **ENSupport**：ENSupport
+- **GitHub Issues**：bug
+- ****：
+- **support**：fetchtech support
 
-#### EN
+#### 
 
-EN：
+：
 
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
+- ****：
+- **use**：use
+- **issue**：issue
 
-## 📊 EN
+## 📊 best practices
 
-### EN
+### 
 
-1. **EN**：
-   - EN：1080pEN
-   - EN：30fpsEN
-   - EN：EN
+1. ****：
+   - ：1080p
+   - ：30fps
+   - ：
 
-2. **EN**：
-   - EN，EN
-   - EN
-   - EN，EN
+2. ****：
+   - ，
+   - 
+   - ，
 
-3. **EN**：
-   - ENMP4EN
-   - EN2GBEN
-   - EN
+3. **fileformat**：
+   - recommendedMP4format
+   - file2GB
+   - can
 
-### EN
+### clip
 
-1. **EN**：
-   - EN，EN
-   - EN，EN
-   - EN30EN
+1. ****：
+   - ，
+   - ，
+   - 30
 
-2. **EN**：
-   - EN
-   - EN
-   - EN
+2. ****：
+   - clip
+   - 
+   - use
 
-3. **EN**：
-   - EN
-   - EN
-   - EN
+3. ****：
+   - preferclip
+   - 
+   - 
 
-### EN
+### 
 
-1. **EN**：
-   - EN
-   - EN
-   - EN
+1. ****：
+   - 
+   - 
+   - 
 
-2. **EN**：
-   - EN
-   - EN
-   - EN
+2. ****：
+   - update
+   - 
+   - update
 
-3. **EN**：
-   - EN
-   - EN
-   - EN
+3. ****：
+   - 
+   - 
+   - select
 
-## 🔄 EN
+## 🔄 versionupdate
 
-### EN
+### auto-update
 
-EN：
+checkupdate：
 
-1. EN **"EN"** EN
-2. EN
-3. EN
+1. click **"update"** downloadversion
+2. installcompletedrestart app
+3. 
 
-### EN
+### manual update
 
-1. EN [ReleasesEN](https://github.com/autoclip/autoclip/releases)
-2. EN
-3. EN
+1. access [Releasespage](https://github.com/autoclip/autoclip/releases)
+2. downloadversioninstall
+3. installstepinstall
 
-### EN
+### changelog
 
-EN：
+update：
 
-- **EN**：EN
-- **EN**：EN
-- **EN**：ENbugEN
-- **EN**：EN
+- ****：addedfeatures
+- **improve**：improve
+- **issuefix**：fixbugissue
+- ****：update
 
 ---
 
-## 📞 ContactEN
+## 📞 
 
-- **EN**：https://autoclip.ai
-- **GitHubEN**：https://github.com/autoclip/autoclip
-- **EN**：https://community.autoclip.ai
-- **ENSupport**：support@autoclip.ai
+- ****：https://autoclip.ai
+- **GitHub**：https://github.com/autoclip/autoclip
+- ****：https://community.autoclip.ai
+- **tech support**：support@autoclip.ai
 
-EN AutoClip Desktop！🎉
+use AutoClip Desktop！🎉

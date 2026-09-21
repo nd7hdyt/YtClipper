@@ -1,6 +1,6 @@
 """
-ENtranscriptionconfigvalidateservice
-ENvalidateconfigEN
+translatedconfigverifyservice
+translatedverifyconfig'stranslatedAndtranslated
 """
 import logging
 from typing import Dict, List, Optional, Tuple
@@ -12,20 +12,20 @@ logger = logging.getLogger(__name__)
 
 
 class SpeechConfigValidator:
-    """ENtranscriptionconfigvalidateEN"""
+    """translatedconfigverifytranslated"""
     
     def __init__(self):
         self.model_manager = get_model_manager()
     
     def validate_config(self, config: SpeechRecognitionSettings) -> Dict[str, any]:
         """
-        validateENtranscriptionconfig
+        verifytranslatedconfig
         
         Args:
-            config: ENtranscriptionconfig
+            config: translatedconfig
             
         Returns:
-            validateresultEN
+            verifytranslated
         """
         result = {
             "valid": True,
@@ -34,13 +34,13 @@ class SpeechConfigValidator:
             "recommendations": []
         }
         
-        # validateEN
+        # verifytranslated
         method_validation = self._validate_method(config.method)
         if not method_validation["valid"]:
             result["valid"] = False
             result["errors"].extend(method_validation["errors"])
         
-        # validateENconfig
+        # verifytranslatedconfig
         if config.method == "whisper_local":
             whisper_validation = self._validate_whisper_config(config.whisper_config)
             if not whisper_validation["valid"]:
@@ -57,7 +57,7 @@ class SpeechConfigValidator:
             result["warnings"].extend(api_validation["warnings"])
             result["recommendations"].extend(api_validation["recommendations"])
         
-        # validateENconfig
+        # verifytranslatedconfig
         if config.enable_fallback:
             fallback_validation = self._validate_fallback_config(config)
             if not fallback_validation["valid"]:
@@ -66,7 +66,7 @@ class SpeechConfigValidator:
         return result
     
     def _validate_method(self, method: str) -> Dict[str, any]:
-        """validateEN"""
+        """verifytranslatedSelectselect"""
         valid_methods = [
             "whisper_local", "openai_api", "azure_speech", 
             "google_speech", "aliyun_speech", "custom_api"
@@ -75,60 +75,60 @@ class SpeechConfigValidator:
         if method not in valid_methods:
             return {
                 "valid": False,
-                "errors": [f"EN: {method}"]
+                "errors": [f"translatedsupport'stranslated: {method}"]
             }
         
         return {"valid": True, "errors": []}
     
     def _validate_whisper_config(self, config: WhisperConfig) -> Dict[str, any]:
-        """validateWhisperconfig"""
+        """verifyWhisperconfig"""
         result = {"valid": True, "errors": [], "warnings": [], "recommendations": []}
         
-        # validateEN
+        # verifymodeltranslated
         valid_models = ["tiny", "base", "small", "medium", "large"]
         if config.model_name not in valid_models:
             result["valid"] = False
-            result["errors"].append(f"ENWhisperEN: {config.model_name}")
+            result["errors"].append(f"translatedsupport'sWhispermodel: {config.model_name}")
         
-        # checkENdownload
+        # checkmodelIstranslateddownload
         model_info = self.model_manager.get_model_info(config.model_name)
         if model_info and model_info.status != ModelStatus.DOWNLOADED:
             if model_info.status == ModelStatus.AVAILABLE:
-                result["warnings"].append(f"EN {config.model_name} ENdownload，ENuseENdownload")
+                result["warnings"].append(f"model {config.model_name} translateddownload，translatedusetranslateddownload")
             elif model_info.status == ModelStatus.DOWNLOADING:
-                result["warnings"].append(f"EN {config.model_name} currentlydownloadEN")
+                result["warnings"].append(f"model {config.model_name} translatedindownloadtranslated")
             elif model_info.status == ModelStatus.ERROR:
-                result["errors"].append(f"EN {config.model_name} downloadfailed")
+                result["errors"].append(f"model {config.model_name} downloadfailed")
         
-        # validatetimeouttime
+        # verifytranslated
         if config.timeout < 60:
-            result["warnings"].append("timeouttimeEN，suggestionEN60EN")
+            result["warnings"].append("translated，translated60seconds")
         elif config.timeout > 7200:
-            result["warnings"].append("timeouttimeEN，suggestionEN2EN")
+            result["warnings"].append("translated，translated2translated")
         
-        # validateENdirectory
+        # verifytranslatedmodeldirectory
         if config.custom_models_dir:
             custom_dir = Path(config.custom_models_dir)
             if not custom_dir.exists():
-                result["errors"].append(f"ENdirectorydoes not exist: {config.custom_models_dir}")
+                result["errors"].append(f"translatedmodeldirectorynot found: {config.custom_models_dir}")
             elif not custom_dir.is_dir():
-                result["errors"].append(f"ENdirectoryENdirectory: {config.custom_models_dir}")
+                result["errors"].append(f"translatedmodeldirectorytranslatedIstranslateddirectory: {config.custom_models_dir}")
         
-        # EN
+        # addrecommend
         if config.model_name == "tiny":
-            result["recommendations"].append("tinyEN，suggestionENprocessing")
+            result["recommendations"].append("tinymodeltranslated，translatedusetranslatedReal-time Processing")
         elif config.model_name == "base":
-            result["recommendations"].append("baseEN，ENuse")
+            result["recommendations"].append("basemodelIstranslatedSelectselect，recommendtranslateduse")
         elif config.model_name in ["small", "medium", "large"]:
-            result["recommendations"].append(f"{config.model_name}EN，EN")
+            result["recommendations"].append(f"{config.model_name}modeltranslated，translated")
         
         return result
     
     def _validate_api_config(self, config: SpeechRecognitionSettings, method: str) -> Dict[str, any]:
-        """validateAPIconfig"""
+        """verifyAPIconfig"""
         result = {"valid": True, "errors": [], "warnings": [], "recommendations": []}
         
-        # fetchENAPIconfig
+        # fetchtranslated'sAPIconfig
         if method == "openai_api":
             api_config = config.openai_config
         elif method == "azure_speech":
@@ -140,90 +140,90 @@ class SpeechConfigValidator:
         elif method == "custom_api":
             api_config = config.custom_api_config
         else:
-            return {"valid": False, "errors": [f"ENAPIEN: {method}"]}
+            return {"valid": False, "errors": [f"translatedsupport'sAPItranslated: {method}"]}
         
-        # validateAPIEN
+        # verifyAPIkey
         if not api_config.api_key:
             result["valid"] = False
-            result["errors"].append(f"{method} APIEN")
+            result["errors"].append(f"{method} APIkeytranslated")
         elif len(api_config.api_key) < 10:
-            result["warnings"].append("APIEN，pleasecheckEN")
+            result["warnings"].append("APIkeytranslated，translatedcheckIstranslated")
         
-        # validateAzureEN
+        # verifyAzuretranslated
         if method == "azure_speech" and not api_config.region:
             result["valid"] = False
-            result["errors"].append("Azure SpeechserviceneedEN")
+            result["errors"].append("Azure Speechservicetranslated")
         
-        # validateENAPIEN
+        # verifytranslatedAPItranslated
         if method == "custom_api":
             if not api_config.endpoint:
                 result["valid"] = False
-                result["errors"].append("ENAPIneedENURL")
+                result["errors"].append("translatedAPItranslatedURL")
             elif not api_config.endpoint.startswith(("http://", "https://")):
-                result["errors"].append("APIENmustENHTTP/HTTPS URL")
+                result["errors"].append("APItranslatedIstranslated'sHTTP/HTTPS URL")
         
-        # EN
+        # addrecommend
         if method == "openai_api":
-            result["recommendations"].append("OpenAI APIEN，ENneedEN")
+            result["recommendations"].append("OpenAI APItranslated，translated")
         elif method == "azure_speech":
-            result["recommendations"].append("Azure SpeechEN，EN")
+            result["recommendations"].append("Azure Speechtranslateduse，supportmultitranslatedLanguage")
         elif method == "google_speech":
-            result["recommendations"].append("Google SpeechEN，EN")
+            result["recommendations"].append("Google Speechfeaturetranslated，supporttranslated")
         elif method == "aliyun_speech":
-            result["recommendations"].append("EN")
+            result["recommendations"].append("translated")
         
         return result
     
     def _validate_fallback_config(self, config: SpeechRecognitionSettings) -> Dict[str, any]:
-        """validateENconfig"""
+        """verifytranslatedconfig"""
         result = {"valid": True, "warnings": [], "recommendations": []}
         
-        # checkEN
+        # checktranslatedIstranslatedandtranslated
         if config.fallback_method == config.method:
-            result["warnings"].append("EN，suggestionEN")
+            result["warnings"].append("translatedandtranslated，translatedSelectselecttranslated'stranslated")
         
-        # checkEN
+        # checktranslatedIstranslatedcanuse
         if config.fallback_method == "whisper_local":
             model_info = self.model_manager.get_model_info(config.whisper_config.model_name)
             if model_info and model_info.status not in [ModelStatus.DOWNLOADED, ModelStatus.AVAILABLE]:
-                result["warnings"].append("ENuseENWhisperEN")
+                result["warnings"].append("translateduse'sWhispermodeltranslatedcanuse")
         
-        # EN
+        # addrecommend
         if config.method != "whisper_local" and config.fallback_method != "whisper_local":
-            result["recommendations"].append("suggestionENWhisperEN，EN")
+            result["recommendations"].append("translatedWhisperlocalmodeltranslated，ensuretranslatedcanuse")
         
         return result
     
     def get_config_recommendations(self, config: SpeechRecognitionSettings) -> List[str]:
-        """fetchconfigsuggestion"""
+        """fetchconfigtranslated"""
         recommendations = []
         
-        # ENuseEN
+        # translatedusetranslatedrecommend
         if config.method == "whisper_local":
             if config.whisper_config.model_name == "tiny":
-                recommendations.append("tinyENprocessing，EN")
+                recommendations.append("tinymodeltranslatedprocess，translated")
             elif config.whisper_config.model_name in ["medium", "large"]:
-                recommendations.append("ENprocessingtimeEN，EN")
+                recommendations.append("translatedmodeltranslatedprocesstranslated，translated")
         
-        # ENsuggestion
+        # translated
         if config.method != "whisper_local":
-            recommendations.append("useAPIserviceneedENconnect")
+            recommendations.append("useAPIservicetranslated'stranslatedconnect")
             if config.enable_fallback and config.fallback_method == "whisper_local":
-                recommendations.append("ENconfigEN，EN")
+                recommendations.append("translatedconfiglocaltranslated，ensuretranslatedcanuse")
         
-        # ENsuggestion
+        # translated
         if config.whisper_config.enable_speaker_diarization:
-            recommendations.append("ENprocessingtime")
+            recommendations.append("translatedfeaturetranslatedprocesstranslated")
         
         return recommendations
 
 
-# ENvalidateEN
+# translatedverifytranslated
 _validator: Optional[SpeechConfigValidator] = None
 
 
 def get_config_validator() -> SpeechConfigValidator:
-    """fetchconfigvalidateEN"""
+    """fetchconfigverifytranslated"""
     global _validator
     if _validator is None:
         _validator = SpeechConfigValidator()

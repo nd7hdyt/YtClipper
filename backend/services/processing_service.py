@@ -1,6 +1,6 @@
 """
-processingservice
-useEN：configEN、EN、EN
+processservice
+usetranslated：configtranslated、translated、translated
 """
 
 import logging
@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from backend.models.task import Task, TaskStatus, TaskType
 from backend.repositories.task_repository import TaskRepository
 from backend.services.config_manager import ProjectConfigManager, ProcessingStep
-# from backend.services.pipeline_adapter import PipelineAdapter  # EN，filedoes not exist
+# from backend.services.pipeline_adapter import PipelineAdapter  # translated，file not found
 from backend.services.processing_orchestrator import ProcessingOrchestrator
 from backend.services.processing_context import ProcessingContext
 from backend.services.exceptions import ServiceError, ProcessingError, TaskError, ProjectError, handle_service_error
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProcessingService:
-    """processingservice，useEN"""
+    """processservice，usetranslated"""
     
     def __init__(self, db: Session):
         self.db = db
@@ -31,35 +31,35 @@ class ProcessingService:
     @with_concurrency_control()
     def start_processing(self, project_id: str, srt_path: Path) -> Dict[str, Any]:
         """
-        startprocessingproject
+        translatedprocessproject
         
         Args:
             project_id: projectID
-            srt_path: SRTfilepath
+            srt_path: SRTfile path
             
         Returns:
-            processingresult
+            processtranslated
         """
-        logger.info(f"startprocessingproject: {project_id}")
+        logger.info(f"translatedprocessproject: {project_id}")
         
-        # createprocessingEN
+        # createprocesstranslated
         context = ProcessingContext(project_id, "temp_task_id", self.db)
         context.set_srt_path(srt_path)
         context.mark_initialized()
         
-        # createprocessingtask
+        # createprocesstask
         task = self._create_processing_task(project_id)
         context.task_id = str(task.id)
         
-        # initializeEN
+        # translated
         orchestrator = ProcessingOrchestrator(project_id, str(task.id), self.db)
         
-        # executeEN
+        # translated
         result = orchestrator.execute_pipeline(srt_path)
         
         context.mark_completed()
         
-        # updateprojectstatusENcompletedEN
+        # updateprojectstatustranslatedcompletedtranslated
         try:
             from ..models.project import Project, ProjectStatus
             from ..services.data_sync_service import DataSyncService
@@ -69,17 +69,17 @@ class ProcessingService:
             if project:
                 project.status = ProjectStatus.COMPLETED
                 self.db.commit()
-                logger.info(f"projectstatusupdatedENcompleted: {project_id}")
+                logger.info(f"projectstatustranslatedupdatetranslatedcompleted: {project_id}")
                 
-                # ENdatabase
+                # translateddatabase
                 project_dir = Path(__file__).parent.parent / "data" / "projects" / project_id
                 if project_dir.exists():
                     sync_service = DataSyncService(self.db)
                     sync_result = sync_service.sync_project_from_filesystem(project_id, project_dir)
                     if sync_result.get("success"):
-                        logger.info(f"project {project_id} ENsucceeded: {sync_result}")
+                        logger.info(f"project {project_id} translatedsucceeded: {sync_result}")
                     else:
-                        logger.error(f"project {project_id} ENfailed: {sync_result}")
+                        logger.error(f"project {project_id} translatedfailed: {sync_result}")
         except Exception as e:
             logger.warning(f"updateprojectstatusfailed: {e}")
         
@@ -96,19 +96,19 @@ class ProcessingService:
     def execute_single_step(self, project_id: str, step: ProcessingStep, 
                            srt_path: Optional[Path] = None) -> Dict[str, Any]:
         """
-        executeEN
+        translated step
         
         Args:
             project_id: projectID
-            step: processingEN
-            srt_path: SRTfilepath（ENStep1need）
+            step: processstep
+            srt_path: SRTfile path（OnlyStep1translated）
             
         Returns:
-            executeresult
+            translated
         """
-        logger.info(f"executeEN: {step.value}")
+        logger.info(f"translatedstep: {step.value}")
         
-        # createprocessingEN
+        # createprocesstranslated
         context = ProcessingContext(project_id, "temp_task_id", self.db)
         if srt_path:
             context.set_srt_path(srt_path)
@@ -118,10 +118,10 @@ class ProcessingService:
         task = self._create_processing_task(project_id, task_type=TaskType.VIDEO_PROCESSING)
         context.task_id = str(task.id)
         
-        # initializeEN
+        # translated
         orchestrator = ProcessingOrchestrator(project_id, str(task.id), self.db)
         
-        # executeEN
+        # translatedstep
         kwargs = {}
         if step == ProcessingStep.STEP1_OUTLINE and srt_path:
             kwargs['srt_path'] = srt_path
@@ -130,7 +130,7 @@ class ProcessingService:
         
         context.mark_completed()
         
-        # ifEN（step6_video），ENdatabase
+        # iftranslatedIstranslatedonetranslated（step6_video），translateddatabase
         if step == ProcessingStep.STEP6_VIDEO:
             try:
                 from ..services.data_sync_service import DataSyncService
@@ -141,11 +141,11 @@ class ProcessingService:
                     sync_service = DataSyncService(self.db)
                     sync_result = sync_service.sync_project_from_filesystem(project_id, project_dir)
                     if sync_result.get("success"):
-                        logger.info(f"project {project_id} ENsucceeded: {sync_result}")
+                        logger.info(f"project {project_id} translatedsucceeded: {sync_result}")
                     else:
-                        logger.error(f"project {project_id} ENfailed: {sync_result}")
+                        logger.error(f"project {project_id} translatedfailed: {sync_result}")
             except Exception as e:
-                logger.warning(f"ENfailed: {e}")
+                logger.warning(f"translatedfailed: {e}")
         
         return {
             "success": True,
@@ -158,14 +158,14 @@ class ProcessingService:
     @handle_service_error
     def get_processing_status(self, project_id: str, task_id: str) -> Dict[str, Any]:
         """
-        fetchprocessingstatus
+        fetchprocessstatus
         
         Args:
             project_id: projectID
             task_id: taskID
             
         Returns:
-            processingstatus
+            processstatus
         """
         orchestrator = ProcessingOrchestrator(project_id, task_id, self.db)
         return orchestrator.get_pipeline_status()
@@ -175,20 +175,20 @@ class ProcessingService:
     def retry_step(self, project_id: str, task_id: str, step: ProcessingStep,
                    srt_path: Optional[Path] = None) -> Dict[str, Any]:
         """
-        retryEN
+        translatedstep
         
         Args:
             project_id: projectID
             task_id: taskID
-            step: processingEN
-            srt_path: SRTfilepath（ENStep1need）
+            step: processstep
+            srt_path: SRTfile path（OnlyStep1translated）
             
         Returns:
-            retryresult
+            translated
         """
-        logger.info(f"retryEN: {step.value}")
+        logger.info(f"translatedstep: {step.value}")
         
-        # createprocessingEN
+        # createprocesstranslated
         context = ProcessingContext(project_id, task_id, self.db)
         if srt_path:
             context.set_srt_path(srt_path)
@@ -216,32 +216,32 @@ class ProcessingService:
     def resume_processing(self, project_id: str, start_step: str, 
                          srt_path: Optional[Path] = None) -> Dict[str, Any]:
         """
-        ENprocessing
+        fromtranslatedsteptranslatedprocess
         
         Args:
             project_id: projectID
-            start_step: startEN
-            srt_path: SRTfilepath（ENStep1need）
+            start_step: translatedsteptranslated
+            srt_path: SRTfile path（OnlyStep1translated）
             
         Returns:
-            ENprocessingresult
+            translatedprocesstranslated
         """
-        logger.info(f"EN {start_step} ENprocessingproject: {project_id}")
+        logger.info(f"fromstep {start_step} translatedprocessproject: {project_id}")
         
-        # createprocessingEN
+        # createprocesstranslated
         context = ProcessingContext(project_id, "temp_task_id", self.db)
         if srt_path:
             context.set_srt_path(srt_path)
         context.mark_initialized()
         
-        # createprocessingtask
+        # createprocesstask
         task = self._create_processing_task(project_id)
         context.task_id = str(task.id)
         
-        # initializeEN
+        # translated
         orchestrator = ProcessingOrchestrator(project_id, str(task.id), self.db)
         
-        # ENProcessingStepEN
+        # translatedsteptranslatedProcessingSteptranslated
         step_mapping = {
             "step1_outline": ProcessingStep.STEP1_OUTLINE,
             "step2_timeline": ProcessingStep.STEP2_TIMELINE,
@@ -252,16 +252,16 @@ class ProcessingService:
         }
         
         if start_step not in step_mapping:
-            raise ValueError(f"EN: {start_step}")
+            raise ValueError(f"translated'ssteptranslated: {start_step}")
         
         processing_step = step_mapping[start_step]
         
-        # ENexecute
+        # fromtranslatedsteptranslated
         result = orchestrator.resume_from_step(processing_step, srt_path)
         
         context.mark_completed()
         
-        # updateprojectstatusENcompletedEN
+        # updateprojectstatustranslatedcompletedtranslated
         try:
             from ..models.project import Project, ProjectStatus
             from ..services.data_sync_service import DataSyncService
@@ -271,17 +271,17 @@ class ProcessingService:
             if project:
                 project.status = ProjectStatus.COMPLETED
                 self.db.commit()
-                logger.info(f"projectstatusupdatedENcompleted: {project_id}")
+                logger.info(f"projectstatustranslatedupdatetranslatedcompleted: {project_id}")
                 
-                # ENdatabase
+                # translateddatabase
                 project_dir = Path(__file__).parent.parent / "data" / "projects" / project_id
                 if project_dir.exists():
                     sync_service = DataSyncService(self.db)
                     sync_result = sync_service.sync_project_from_filesystem(project_id, project_dir)
                     if sync_result.get("success"):
-                        logger.info(f"project {project_id} ENsucceeded: {sync_result}")
+                        logger.info(f"project {project_id} translatedsucceeded: {sync_result}")
                     else:
-                        logger.error(f"project {project_id} ENfailed: {sync_result}")
+                        logger.error(f"project {project_id} translatedfailed: {sync_result}")
         except Exception as e:
             logger.warning(f"updateprojectstatusfailed: {e}")
         
@@ -318,11 +318,11 @@ class ProcessingService:
             config_updates: configupdate
             
         Returns:
-            updateresult
+            updatetranslated
         """
         config_manager = ProjectConfigManager(project_id)
         
-        # updateprocessingparameters
+        # updateprocesstranslated
         if "processing_params" in config_updates:
             config_manager.update_processing_params(**config_updates["processing_params"])
         
@@ -330,7 +330,7 @@ class ProcessingService:
         if "llm_config" in config_updates:
             config_manager.update_llm_config(**config_updates["llm_config"])
         
-        # updateENconfig
+        # updatestepconfig
         if "steps" in config_updates:
             for step_name, step_config in config_updates["steps"].items():
                 config_manager.update_step_config(step_name, **step_config)
@@ -343,15 +343,15 @@ class ProcessingService:
     @handle_service_error
     def validate_project_setup(self, project_id: str) -> Dict[str, Any]:
         """
-        validateprojectsettings
+        verifyprojectsettings
         
         Args:
             project_id: projectID
             
         Returns:
-            validateresult
+            verifytranslated
         """
-        # EN，PipelineAdapter filedoes not exist
+        # translated，PipelineAdapter file not found
         # adapter = PipelineAdapter(project_id)
         # errors = adapter.validate_pipeline_prerequisites()
         
@@ -363,17 +363,17 @@ class ProcessingService:
         
         return {
             "valid": True,
-            "message": "projectsettingsvalidatethrough（ENPipelineAdaptervalidate）"
+            "message": "projectsettingsverifytranslated（translatedskipPipelineAdapterverify）"
         }
     
     def _create_processing_task(self, project_id: str, task_type: TaskType = TaskType.VIDEO_PROCESSING) -> Task:
-        """createprocessingtask"""
+        """createprocesstask"""
         task_data = {
-            "name": f"videoprocessingtask - {project_id}",
-            "description": f"processingproject {project_id} ENvideoEN",
+            "name": f"videoprocesstask - {project_id}",
+            "description": f"processproject {project_id} 'svideotranslated",
             "project_id": project_id,
             "task_type": task_type,
-            "status": TaskStatus.PENDING,
+            "status": TaskStatus.PtranslatedDING,
             "progress": 0.0,
             "metadata": {
                 "project_id": project_id,

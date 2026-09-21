@@ -1,37 +1,37 @@
-# CookieENTroubleshootingEN
+# Cookieimporttroubleshooting
 
-## EN
+## issue
 
-ENCookieEN，EN"Request failed with status code 500"EN。
+Cookieimportfailed，"Request failed with status code 500"error。
 
-## EN
+## issue
 
-EN，EN：
+，issue：
 
-1. **EN**：APIENCookieEN`bilibili_service.py`EN
-2. **CookieEN**：EN，ENCookieEN
-3. **EN**：EN，EN
+1. **format**：APICookieformat`bilibili_service.py`format
+2. **Cookieverify**：verify，Cookie
+3. **error handling**：，issue
 
-## EN
+## solution
 
-### 1. EN
+### 1. fixformat
 
-**EN**：APIENCookieEN，EN`code`EN
+**issue**：APICookie，service`code`format
 
-**EN**：ENAPIENCookieEN
+**fix**：APICookieformat
 
 ```python
-# EN：ENCookie
+# fix：Cookie
 cookie_content=json.dumps(cookies)
 
-# EN：EN
+# fix：format
 cookie_data = {
     "code": 0,
-    "message": "EN",
+    "message": "sign insucceeded",
     "data": {
         "user_info": {
             "username": cookie_validation.get("username", "cookie_user"),
-            "nickname": cookie_validation.get("nickname", "BEN"),
+            "nickname": cookie_validation.get("nickname", "B"),
             "mid": cookie_validation.get("mid", "")
         },
         "cookie_info": {
@@ -42,14 +42,14 @@ cookie_data = {
 cookie_content=json.dumps(cookie_data)
 ```
 
-### 2. ENCookieEN
+### 2. Cookieverify
 
-**EN**：EN，EN
+**issue**：verify，test
 
-**EN**：ENSupport，ENAPIEN
+**fix**：dev modesupport，APIverify
 
 ```python
-# EN：ENAPIEN
+# dev environment：APIverify
 skip_validation = (
     os.getenv("SKIP_COOKIE_VALIDATION", "false").lower() == "true" or
     os.getenv("ENVIRONMENT", "development") == "development"
@@ -59,131 +59,131 @@ if skip_validation:
     return {
         "valid": True,
         "username": f"user_{cookies.get('DedeUserID', 'unknown')}",
-        "nickname": f"BEN_{cookies.get('DedeUserID', 'unknown')}",
+        "nickname": f"B_{cookies.get('DedeUserID', 'unknown')}",
         "mid": cookies.get('DedeUserID', '')
     }
 ```
 
-### 3. EN
+### 3. error handling
 
-**EN**：EN
+**issue**：
 
-**EN**：EN
+**fix**：errorstatus
 
 ```python
 except HTTPException:
-    raise  # ENHTTPEN，EN
+    raise  # HTTP，status
 except Exception as e:
-    logger.error(f"CookieEN: {str(e)}")
-    raise HTTPException(status_code=500, detail="EN")
+    logger.error(f"Cookiesign infailed: {str(e)}")
+    raise HTTPException(status_code=500, detail="sign infailed")
 ```
 
-## EN
+## testverify
 
-### EN
+### test
 
 ```
-✅ EN
-✅ CookieEN
-✅ AccountEN
-✅ EN
-✅ CookieEN (EN)
+✅ fetchsign insucceeded
+✅ Cookieverify
+✅ password login
+✅ sign in
+✅ Cookieimportsucceeded (test)
 ```
 
-### SupportENCookieEN
+### supportCookieformat
 
-1. **ENBENCookie**：
+1. **BCookie**：
    ```
    SESSDATA=abc123def456; bili_jct=xyz789; DedeUserID=12345; buvid3=test123
    ```
 
-2. **ENCookie**：
+2. **Cookie**：
    ```
    SESSDATA=space test; bili_jct=space jct; DedeUserID=11111; buvid3=space123
    ```
 
-3. **ENCookie**：
+3. **Cookie**：
    ```
    SESSDATA=test_sessdata; bili_jct=test_jct; DedeUserID=67890; buvid3=test456; sid=test_sid
    ```
 
-## EN
+## config
 
-### EN
+### dev environment
 
 ```bash
-# ENCookieEN（EN）
+# Cookieverify（test）
 export ENVIRONMENT=development
 
-# EN
+# 
 export SKIP_COOKIE_VALIDATION=true
 ```
 
-### EN
+### production
 
 ```bash
-# EN
+# verify
 export ENVIRONMENT=production
 export SKIP_COOKIE_VALIDATION=false
 ```
 
-## EN
+## usenotes
 
-### 1. ENCookie
+### 1. fetchCookie
 
-1. ENBEN
-2. ENF12EN
-3. ENNetworkEN
-4. EN，EN
-5. ENCookieEN
+1. sign inB
+2. F12open devtools
+3. Networktab
+4. refresh page，
+5. Cookie
 
-### 2. ENCookie
+### 2. importCookie
 
-1. ENAutoClipENAccount ManagementInterface
-2. EN"CookieEN"EN
-3. ENCookieEN
-4. EN
-5. EN"ENCookie"
+1. openAutoClipaccount
+2. select"Cookieimport"tab
+3. Cookie
+4. settings
+5. click"importCookie"
 
-### 3. EN
+### 3. verifysucceeded
 
-- EN：200
-- ENAccountEN：ID、EN、EN、EN
+- status：200
+- returnaccount：ID、、、status
 
 ## FAQ
 
-### Q: ENCookieEN？
+### Q: testCookiesucceededimport？
 
-A: EN，ENAPIEN，EN。EN。
+A: dev mode，APIverify，test。productionverify。
 
-### Q: ENCookieEN？
+### Q: Cookieimportfailed？
 
-A: EN：
-1. CookieEN（SESSDATA、bili_jct、DedeUserID）
-2. CookieEN
-3. EN
-4. BENAPIEN
+A: check：
+1. Cookie（SESSDATA、bili_jct、DedeUserID）
+2. Cookie
+3. 
+4. BAPIaccess
 
-### Q: EN？
+### Q: production？
 
-A: EN：
-- `ENVIRONMENT=development`：EN，EN
-- `ENVIRONMENT=production`：EN，EN
+A: env var：
+- `ENVIRONMENT=development`：dev mode，verify
+- `ENVIRONMENT=production`：，verify
 
-## EN
+## 
 
-1. **ENCookieEN**：ENCookieEN
-2. **EN**：ENCookieEN
-3. **EN**：SupportENAccountEN
-4. **EN**：ENCookieEN
+1. **Cookieupdate**：checkCookie
+2. **verify**：Cookie
+3. **import**：supportaccountimport
+4. **import**：Cookieimportupdate
 
-## EN
+## summary
 
-EN、EN，CookieEN。ENCookieEN，EN。
+fixformat、verifyerror handling，Cookieimportnowcan。canuseformatCookieimport，verify。
 
-EN：
-- ✅ EN500EN
-- ✅ SupportENCookieEN
-- ✅ ProvidesEN
-- ✅ EN
-- ✅ EN
+improve：
+- ✅ solve500errorissue
+- ✅ supportCookieformat
+- ✅ productionconfig
+- ✅ error handling
+- ✅ test

@@ -1,44 +1,44 @@
-# EN
+# 
 
-## EN
+## issue
 
-### EN
+### issue
 
-1. **EN**: EN
-2. **EN**: EN
-3. **EN**: EN
-4. **EN**: EN
+1. ****: file systemdatabase
+2. ****: 
+3. ****: need
+4. **issue**: impact
 
-### EN
+### 
 
-EN：
-- EN: 100MB
-- EN: 1MB
-- EN: 50MB
-- EN: 200MB
-- EN: 1MB
+project：
+- file: 100MB
+- subtitlesfile: 1MB
+- processingfile: 50MB
+- clipfile: 200MB
+- databasemetadata: 1MB
 
-**EN**: 352MB (EN) + 1MB (EN) = 353MB
-**EN**: 351MB (EN) + 1MB (EN) = 352MB
+****: 352MB (file system) + 1MB (database) = 353MB
+****: 351MB (file system) + 1MB (database) = 352MB
 
-EN，EN。
+project，project。
 
-## EN
+## 
 
-### EN：EN，EN
+### ：databasemetadata，file systemfile
 
 ```
 ┌─────────────────┐    ┌─────────────────┐
-│   EN        │    │   EN      │
-│   (EN)      │    │   (EN)    │
+│   database        │    │   file system      │
+│   (metadata)      │    │   (file)    │
 ├─────────────────┤    ├─────────────────┤
-│ Project         │    │ EN    │
-│ - id            │    │ EN        │
-│ - name          │    │ EN    │
-│ - status        │    │ EN    │
-│ - metadata      │    │ EN        │
+│ Project         │    │ file    │
+│ - id            │    │ subtitlesfile        │
+│ - name          │    │ processingfile    │
+│ - status        │    │ clipfile    │
+│ - metadata      │    │ file        │
 ├─────────────────┤    ├─────────────────┤
-│ Clip            │    │ EN    │
+│ Clip            │    │ file    │
 │ - id            │    │ - video_path    │
 │ - title         │    │ - subtitle_path │
 │ - start_time    │    │ - output_path   │
@@ -49,50 +49,50 @@ EN，EN。
 └─────────────────┘    └─────────────────┘
 ```
 
-### EN：EN
+### ：
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    EN                               │
+│                                                   │
 ├─────────────────────────────────────────────────────────┤
-│                    EN                               │
+│                    service                               │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │ EN    │  │ EN    │  │ EN    │     │
+│  │ projectservice    │  │ clipservice    │  │ service    │     │
 │  └─────────────┘  └─────────────┘  └─────────────┘     │
 ├─────────────────────────────────────────────────────────┤
-│                    EN                               │
+│                                                   │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │
-│  │ EN      │  │ EN    │  │ EN    │     │
-│  │ (EN)    │  │ (EN)  │  │ (EN)  │     │
+│  │ database      │  │ file system    │  │ cache    │     │
+│  │ (metadata)    │  │ (file)  │  │ ()  │     │
 │  └─────────────┘  └─────────────┘  └─────────────┘     │
 └─────────────────────────────────────────────────────────┘
 ```
 
-## EN
+## 
 
-### 1. EN
+### 1. databasemodel
 
 ```python
 # backend/models/project.py
 class Project(BaseModel, TimestampMixin):
     __tablename__ = "projects"
     
-    # EN
+    # 
     id = Column(String(36), primary_key=True)
     name = Column(String(255), nullable=False)
     description = Column(Text)
     status = Column(Enum(ProjectStatus), default=ProjectStatus.PENDING)
     project_type = Column(Enum(ProjectType), default=ProjectType.DEFAULT)
     
-    # EN (EN)
-    video_path = Column(String(500), comment="EN")
-    subtitle_path = Column(String(500), comment="EN")
+    # file (file)
+    video_path = Column(String(500), comment="file")
+    subtitle_path = Column(String(500), comment="subtitlesfile")
     
-    # EN
-    processing_config = Column(JSON, comment="EN")
-    project_metadata = Column(JSON, comment="EN")
+    # configmetadata
+    processing_config = Column(JSON, comment="config")
+    project_metadata = Column(JSON, comment="projectmetadata")
     
-    # EN (EN，EN)
+    #  (，)
     @property
     def clips_count(self):
         return len(self.clips) if self.clips else 0
@@ -107,46 +107,46 @@ class Project(BaseModel, TimestampMixin):
 class Clip(BaseModel):
     __tablename__ = "clips"
     
-    # EN
+    # 
     id = Column(String(36), primary_key=True)
     project_id = Column(String(36), ForeignKey("projects.id"))
     title = Column(String(255), nullable=False)
     description = Column(Text)
     
-    # EN
+    # 
     start_time = Column(Integer, nullable=False)
     end_time = Column(Integer, nullable=False)
     duration = Column(Integer, nullable=False)
     
-    # EN
+    # 
     score = Column(Float)
     recommendation_reason = Column(Text)
     
-    # EN (EN)
-    video_path = Column(String(500), comment="EN")
-    thumbnail_path = Column(String(500), comment="EN")
+    # file (file)
+    video_path = Column(String(500), comment="clipfile")
+    thumbnail_path = Column(String(500), comment="file")
     
-    # EN
-    clip_metadata = Column(JSON, comment="EN")
+    # metadata
+    clip_metadata = Column(JSON, comment="clipmetadata")
     status = Column(Enum(ClipStatus), default=ClipStatus.PENDING)
 ```
 
-### 2. EN
+### 2. file system
 
 ```
 data/
 ├── projects/
 │   └── {project_id}/
-│       ├── raw/                    # EN
+│       ├── raw/                    # file
 │       │   ├── video.mp4
 │       │   └── subtitle.srt
-│       ├── processing/             # EN
+│       ├── processing/             # processingfile
 │       │   ├── step1_outline.json
 │       │   ├── step2_timeline.json
 │       │   ├── step3_scoring.json
 │       │   ├── step4_title.json
 │       │   └── step5_clustering.json
-│       └── output/                 # EN
+│       └── output/                 # file
 │           ├── clips/
 │           │   ├── clip_1.mp4
 │           │   ├── clip_2.mp4
@@ -154,23 +154,23 @@ data/
 │           └── collections/
 │               ├── collection_1.mp4
 │               └── ...
-├── temp/                           # EN
-└── cache/                          # EN
+├── temp/                           # file
+└── cache/                          # cachefile
 ```
 
-### 3. EN
+### 3. service
 
 ```python
 # backend/services/storage_service.py
 class StorageService:
-    """EN"""
+    """service"""
     
     def __init__(self, project_id: str):
         self.project_id = project_id
         self.project_dir = self._get_project_dir()
     
     def save_metadata(self, metadata: Dict[str, Any], step: str) -> str:
-        """EN"""
+        """metadatafile system"""
         metadata_file = self.project_dir / "processing" / f"{step}.json"
         metadata_file.parent.mkdir(parents=True, exist_ok=True)
         
@@ -180,17 +180,17 @@ class StorageService:
         return str(metadata_file)
     
     def save_clip_file(self, clip_data: Dict[str, Any], clip_id: str) -> str:
-        """EN"""
+        """clipfile"""
         clip_file = self.project_dir / "output" / "clips" / f"{clip_id}.mp4"
         clip_file.parent.mkdir(parents=True, exist_ok=True)
         
-        # EN
+        # file
         # ...
         
         return str(clip_file)
     
     def get_file_path(self, file_type: str, file_id: str = None) -> Path:
-        """EN"""
+        """fetchfile"""
         if file_type == "video":
             return self.project_dir / "raw" / "video.mp4"
         elif file_type == "subtitle":
@@ -200,21 +200,21 @@ class StorageService:
         elif file_type == "collection":
             return self.project_dir / "output" / "collections" / f"{file_id}.mp4"
         else:
-            raise ValueError(f"ENSupportEN: {file_type}")
+            raise ValueError(f"supportfile: {file_type}")
 ```
 
-### 4. EN
+### 4. access
 
 ```python
 # backend/repositories/clip_repository.py
 class ClipRepository(BaseRepository[Clip]):
     def create_clip(self, clip_data: Dict[str, Any]) -> Clip:
-        """EN"""
-        # 1. EN
+        """createclip"""
+        # 1. clipfilefile system
         storage_service = StorageService(clip_data["project_id"])
         video_path = storage_service.save_clip_file(clip_data, clip_data["id"])
         
-        # 2. EN
+        # 2. metadatadatabase
         clip = Clip(
             id=clip_data["id"],
             project_id=clip_data["project_id"],
@@ -224,7 +224,7 @@ class ClipRepository(BaseRepository[Clip]):
             end_time=clip_data["end_time"],
             duration=clip_data["duration"],
             score=clip_data.get("score"),
-            video_path=video_path,  # EN
+            video_path=video_path,  # 
             clip_metadata=clip_data.get("metadata", {})
         )
         
@@ -233,82 +233,82 @@ class ClipRepository(BaseRepository[Clip]):
         return clip
     
     def get_clip_file(self, clip_id: str) -> Optional[Path]:
-        """EN"""
+        """fetchclipfile"""
         clip = self.get_by_id(clip_id)
         if clip and clip.video_path:
             return Path(clip.video_path)
         return None
 ```
 
-## EN
+## 
 
-### EN
+### 
 
-| EN | EN | EN | EN |
+| project |  |  |  |
 |---------|---------|-----------|---------|
-| 10EN | 3.53GB | 3.52GB | 10MB |
-| 100EN | 35.3GB | 35.2GB | 100MB |
-| 1000EN | 353GB | 352GB | 1GB |
+| 10project | 3.53GB | 3.52GB | 10MB |
+| 100project | 35.3GB | 35.2GB | 100MB |
+| 1000project | 353GB | 352GB | 1GB |
 
-### Performance
+### performance
 
-1. **EN**: EN50%EN
-2. **EN**: EN，EN
-3. **EN**: EN
-4. **EN**: EN
+1. ****: 50%
+2. ****: database，fileaccess
+3. ****: no need
+4. ****: candatabasefile system
 
-### EN
+### 
 
-1. **EN**: EN
-2. **EN**: EN
-3. **EN**: EN
-4. **EN**: SupportEN
+1. ****: 
+2. **error**: issue
+3. ****: issue
+4. ****: support
 
-## EN
+## 
 
-### EN：EN (1EN)
+### stage： (1)
 
-1. **EN**
-   - EN
-   - EN
-   - EN
+1. **databasemodel**
+   - 
+   - file
+   - 
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. **service**
+   - service
+   - file
+   - file
 
-### EN：EN (1EN)
+### stage：service (1)
 
-1. **RepositoryEN**
-   - EN
-   - EN
-   - EN
+1. **Repository**
+   - access
+   - file
+   - cache
 
-2. **APIEN**
-   - ENUploadEN
-   - EN
-   - EN
+2. **API**
+   - file uploaddownload
+   - 
+   - fileverify
 
-### EN：EN (0.5EN)
+### stage： (0.5)
 
-1. **EN**
-   - EN
-   - EN
-   - EN
+1. ****
+   - 
+   - file
+   - verify
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. **test**
+   - test
+   - testaccess
+   - issue
 
-## EN
+## summary
 
-EN，EN：
+，can：
 
-1. **EN**: EN
-2. **EN**: EN
-3. **EN**: EN
-4. **EN**: EN
+1. ****: 
+2. ****: 
+3. ****: 
+4. ****: 
 
-EN，EN。
+，。

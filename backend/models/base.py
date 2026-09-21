@@ -1,6 +1,6 @@
 """
-EN
-ENallEN
+translatedmodeltranslated
+Packageincludetranslatedmodel'stranslatedAndtranslated
 """
 
 import uuid
@@ -9,39 +9,39 @@ from sqlalchemy import Column, String, DateTime, MetaData
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.dialects.postgresql import UUID
 
-# createMetaDataEN，EN
+# createMetaDatatranslated，ensuretranslated
 metadata = MetaData()
 
-# createEN
+# createtranslated
 Base = declarative_base(metadata=metadata)
 
 def get_utc_now():
-    """fetchcurrentUTCtime"""
+    """fetchtranslatedUTCtranslated"""
     return datetime.now(timezone.utc)
 
 class TimestampMixin:
-    """timeEN，ENcreateENupdatetime"""
+    """translated，translatedmodeladdcreateAndupdatetranslated"""
     
     created_at = Column(
         DateTime(timezone=True), 
         default=get_utc_now, 
         nullable=False,
-        comment="createtime"
+        comment="createtranslated"
     )
     updated_at = Column(
         DateTime(timezone=True), 
         default=get_utc_now, 
         onupdate=get_utc_now, 
         nullable=False,
-        comment="updatetime"
+        comment="updatetranslated"
     )
 
 def generate_uuid():
-    """generateUUIDEN"""
+    """translatedUUIDtranslated"""
     return str(uuid.uuid4())
 
 class BaseModel(Base, TimestampMixin):
-    """EN，EN"""
+    """translatedmodeltranslated，Packageincludetranslatedusetranslated"""
     
     __abstract__ = True
     
@@ -50,22 +50,22 @@ class BaseModel(Base, TimestampMixin):
         primary_key=True, 
         default=generate_uuid,
         index=True,
-        comment="ENID"
+        comment="translatedID"
     )
     
     def __repr__(self):
-        """EN"""
+        """model'stranslated"""
         return f"<{self.__class__.__name__}(id={self.id})>"
     
     def to_dict(self):
-        """EN"""
+        """translated"""
         return {
             column.name: getattr(self, column.name)
             for column in self.__table__.columns
         }
     
     def update_from_dict(self, data: dict):
-        """ENupdateEN"""
+        """fromtranslatedupdatemodel"""
         for key, value in data.items():
             if hasattr(self, key) and key != 'id':
                 setattr(self, key, value)

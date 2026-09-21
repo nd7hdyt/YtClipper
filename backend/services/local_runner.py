@@ -1,14 +1,12 @@
 """
-Local runner: no FastAPI, no Celery — run a video through the full pipeline in-process.
+localtranslated：translated FastAPI、translated Celery，intranslatedprocesstranslated onetranslatedvideotranslated。
 
-Shared by the `autoclip` CLI (backend/cli.py) and the MCP server (backend/mcp_server.py).
-It reuses the same `SimplePipelineAdapter` the desktop app actually runs, so output
-directories, metadata, and SQLite records all match the desktop app — clips produced
-via CLI show up when you open the desktop app.
+translated `autoclip` CLI（backend/cli.py）And MCP server（backend/mcp_server.py）translateduse。
+translateduse'sIstranslatedinuse's `SimplePipelineAdapter`，Artifactsdirectory、metadata、SQLite translated
+translatedAndtranslateduseonetranslated——CLI translated'stranslated，translatedusetranslated。
 
-Note: `configure_environment()` must be called before importing anything from
-`backend.core.database`, because the SQLAlchemy engine is built from `DATABASE_URL`
-at import time.
+translated：`configure_environment()` translatedin import translated `backend.core.database` translatedcall，
+translated SQLAlchemy engine in import translatedby `DATABASE_URL` translated。
 """
 from __future__ import annotations
 
@@ -32,7 +30,7 @@ PROVIDER_CHOICES = ("dashscope", "openai", "gemini", "siliconflow", "ollama", "l
 
 # ---------------------------------------------------------------- environment ---
 def default_app_dir() -> Path:
-    """Same data directory as the desktop app: ~/Library/Application Support/AutoClip on macOS."""
+    """andtranslateduseonetranslated'stranslateddirectory：mac translated ~/Library/Application Support/AutoClip。"""
     env = os.getenv("AUTOCLIP_DATA_DIR") or os.getenv("AUTOCLIP_APP_DIR")
     if env:
         return Path(env).expanduser()
@@ -48,8 +46,8 @@ def default_app_dir() -> Path:
 
 def configure_environment(data_dir: Optional[Path] = None, quiet: bool = True) -> Path:
     """
-    Set data-directory / database / log env vars. Returns the actual data directory.
-    Must be called before importing backend.core.database.
+    translateddirectory / database / logstranslated。returntranslateddirectory。
+    translatedin import backend.core.database translatedcall。
     """
     target = (data_dir or default_app_dir()).expanduser()
     target.mkdir(parents=True, exist_ok=True)
@@ -58,10 +56,10 @@ def configure_environment(data_dir: Optional[Path] = None, quiet: bool = True) -
     os.environ["AUTOCLIP_DATA_DIR"] = str(target)
     os.environ.setdefault("DATABASE_URL", f"sqlite:///{target / 'autoclip.db'}")
     os.environ.setdefault("LOG_FILE", str(target / "logs" / "cli.log"))
-    # The in-pipeline logs are noisy; the CLI shows progress by default, logs go to file
+    # translatedlogstranslated；CLI defaulttranslatedprogress，logstranslatedfile
     if quiet:
         os.environ.setdefault("AUTOCLIP_CLI_QUIET", "1")
-    # Make `backend.*` importable (running `python -m backend.cli` from any cwd)
+    # translated `backend.*` can import（fromtranslated cwd translated `python -m backend.cli`）
     root = str(Path(__file__).resolve().parent.parent.parent)
     if root not in sys.path:
         sys.path.insert(0, root)
@@ -69,7 +67,7 @@ def configure_environment(data_dir: Optional[Path] = None, quiet: bool = True) -
 
 
 def setup_logging(verbose: bool = False) -> None:
-    """CLI logging policy: everything to the file, backend logs on terminal only with --verbose."""
+    """CLI logstranslated：filetranslated，translatedin --verbose translated backend logs。"""
     log_file = os.getenv("LOG_FILE")
     handlers: List[logging.Handler] = []
     if log_file:
@@ -84,7 +82,7 @@ def setup_logging(verbose: bool = False) -> None:
         handlers.append(sh)
     logging.basicConfig(level=logging.INFO, handlers=handlers, force=True)
     if not verbose:
-        # Third-party WARNINGs should not flood the terminal either
+        # No.translated's WARNING translatedDo nottranslated
         for noisy in ("httpx", "openai", "urllib3", "faster_whisper", "sqlalchemy"):
             logging.getLogger(noisy).setLevel(logging.ERROR)
 
@@ -103,11 +101,10 @@ class LLMOverride:
 
 def configure_llm(override: LLMOverride) -> Dict[str, Any]:
     """
-    Apply the CLI-provided provider / model / base_url / api_key.
-    No overrides → use the desktop app's settings.json as-is.
-    Overrides given → write a `cli-settings.json` (flat format, leaving the user's real
-    settings untouched) in the data directory and init the global LLMManager with it.
-    Returns the current provider info.
+    translatedusetranslated's provider / model / base_url / api_key。
+    translated → translatedusetranslateduse's settings.json。
+    translated → intranslateddirectorytranslatedonetranslated `cli-settings.json`（translatedformat，translateduser'stranslatedsettings），
+          usetranslated LLMManager。returntranslated provider info。
     """
     from backend.core.llm_manager import get_llm_manager, initialize_llm_manager
     from backend.core.local_presets import resolve_provider, LOCAL_PRESETS
@@ -116,7 +113,7 @@ def configure_llm(override: LLMOverride) -> Dict[str, Any]:
     if override.is_empty():
         return get_llm_manager().get_current_provider_info()
 
-    base = get_llm_manager()  # read the user's real settings as a base (keys etc.)
+    base = get_llm_manager()  # translatedusertranslatedsettingstranslated（key etc.）
     settings = dict(base.settings)
     settings.pop("llm_provider_preset", None)
 
@@ -143,23 +140,22 @@ def configure_llm(override: LLMOverride) -> Dict[str, Any]:
     info = manager.get_current_provider_info()
     if not info.get("available"):
         raise RuntimeError(
-            f"LLM provider {info.get('provider')} is not ready: missing API key (or local server address). "
-            f"Pass --api-key / --base-url, or configure it on the desktop app settings page first."
+            f"LLM Providesprovider {info.get('provider')} translated：translated API Key（orlocalservicetranslated）。"
+            f" use --api-key / --base-url translated，ortranslatedintranslateduseSettings pageconfig。"
         )
     return info
 
 
 def check_llm_connection() -> Dict[str, Any]:
-    """Send one minimal request through the current global LLMManager. Returns {ok, provider, model, error}."""
+    """usetranslated LLMManager translatedonetranslated，return {ok, provider, model, error}."""
     from backend.core.llm_manager import get_llm_manager
     m = get_llm_manager()
     info = m.get_current_provider_info()
     if not m.current_provider:
-        return {"ok": False, **info, "error": "No API key / local server address configured"}
+        return {"ok": False, **info, "error": "translatedconfig API Key / localservicetranslated"}
     base_url = info.get("base_url")
     if base_url:
-        # For local / self-hosted servers, probe the address first so a dead endpoint
-        # surfaces here instead of a bare "connection failed" after long SDK retries
+        # local / translatedservicetranslatedonetranslated，translated SDK translatedonetranslated「connectfailed」
         try:
             import httpx
             from backend.core.llm_providers import is_local_url
@@ -168,11 +164,11 @@ def check_llm_connection() -> Dict[str, Any]:
         except Exception as e:  # noqa: BLE001
             from backend.core.local_presets import LOCAL_PRESETS
             preset = LOCAL_PRESETS.get(info.get("provider") or "")
-            tip = f"Please start {preset.display_name.split('（')[0]} first ({preset.docs_url})" if preset else "Please check the address and that the server is running"
-            return {"ok": False, **info, "error": f"{base_url} unreachable: {type(e).__name__}. {tip}"}
+            tip = f"translatedstart {preset.display_name.split('（')[0]}（{preset.docs_url}）" if preset else "translatedchecktranslatedIstranslated、serviceIstranslatedstart"
+            return {"ok": False, **info, "error": f"{base_url} translatedcantranslated：{type(e).__name__}。{tip}"}
     try:
         ok = bool(m.current_provider.test_connection())
-        return {"ok": ok, **info, "error": None if ok else "Connection test failed"}
+        return {"ok": ok, **info, "error": None if ok else "connecttestfailed"}
     except Exception as e:  # noqa: BLE001
         return {"ok": False, **info, "error": str(e)[:300]}
 
@@ -191,10 +187,10 @@ class RunRequest:
 
 
 def _write_project_json(project_dir: Path, req: RunRequest, extra: Optional[Dict[str, Any]] = None) -> None:
-    """`DataSyncService` reads project.json for the name; record the source while at it."""
+    """`DataSyncService` translated project.json translated；translated translated。"""
     meta = {
         "project_name": req.name or req.video.stem,
-        "description": f"Created by the autoclip CLI from {req.video}",
+        "description": f"translated autoclip CLI from {req.video} create",
         "created_at": datetime.now().isoformat(),
         "source": {"video": str(req.video), "srt": str(req.srt) if req.srt else None, "via": "cli"},
         "video_category": req.category,
@@ -204,7 +200,7 @@ def _write_project_json(project_dir: Path, req: RunRequest, extra: Optional[Dict
 
 
 def _register_project(req: RunRequest, video_path: Path) -> None:
-    """Insert the project row into SQLite so the desktop app home page lists it directly."""
+    """in SQLite translatedprojecttranslated，thistranslatedusetranslated。"""
     from backend.core.database import SessionLocal, create_tables
     from backend.models.project import Project, ProjectStatus, ProjectType
 
@@ -219,16 +215,15 @@ def _register_project(req: RunRequest, video_path: Path) -> None:
             ptype = ProjectType.DEFAULT if hasattr(ProjectType, "DEFAULT") else list(ProjectType)[0]
         thumbnail = None
         try:
-            # Desktop home-page cards need a thumbnail; extract one frame via ffmpeg
-            # and base64 it, same as the upload flow
+            # translated；AndUploadtranslatedonetranslateduse ffmpeg translatedonetranslated base64
             from backend.utils.thumbnail_generator import generate_project_thumbnail
             thumbnail = generate_project_thumbnail(req.project_id, video_path)
         except Exception as e:  # noqa: BLE001
-            logger.debug(f"Thumbnail generation failed: {e}")
+            logger.debug(f"translatedfailed: {e}")
         project = Project(
             id=req.project_id,
             name=req.name or req.video.stem,
-            description=f"Created by the autoclip CLI from {req.video.name}",
+            description=f"translated autoclip CLI from {req.video.name} create",
             project_type=ptype,
             status=ProjectStatus.PROCESSING,
             video_path=str(video_path),
@@ -257,10 +252,8 @@ def _set_project_status(project_id: str, status: str, error: Optional[str] = Non
             if status == "completed":
                 p.completed_at = datetime.utcnow()
             if error is not None:
-                # The Project table has no error_message column, and the CLI path creates
-                # no Task row either, so record it in metadata instead —
-                # ProjectService.latest_error_message falls back to reading it, so the
-                # desktop home / detail pages still show the reason
+                # Project translated error_message translated；CLI pathtranslated Task translated，Sotranslated metadata，
+                # ProjectService.latest_error_message translated，translated / translated
                 meta = dict(p.project_metadata or {})
                 meta["last_error"] = error[:2000]
                 p.project_metadata = meta
@@ -268,23 +261,23 @@ def _set_project_status(project_id: str, status: str, error: Optional[str] = Non
         finally:
             db.close()
     except Exception as e:  # noqa: BLE001
-        logger.warning(f"Failed to update project status: {e}")
+        logger.warning(f"updateprojectstatusfailed: {e}")
 
 
 def prepare_project(req: RunRequest, link: bool = True) -> Path:
     """
-    Create the project directory and place the video into raw/ (hard link by default,
-    copy on failure; `link=False` forces a copy). Returns the video path inside raw/.
+    translatedprojectdirectory、 videotranslated raw/（defaulttranslated，failedtranslated；`link=False` translated）。
+    return raw translated'svideopath。
     """
     from backend.core.path_utils import get_project_directory
 
     req.video = req.video.expanduser().resolve()
     if not req.video.exists():
-        raise FileNotFoundError(f"Video not found: {req.video}")
+        raise FileNotFoundError(f"videonot found: {req.video}")
     if req.srt:
         req.srt = req.srt.expanduser().resolve()
         if not req.srt.exists():
-            raise FileNotFoundError(f"Subtitle file not found: {req.srt}")
+            raise FileNotFoundError(f"subtitlesnot found: {req.srt}")
 
     project_dir = get_project_directory(req.project_id)
     raw_dir = project_dir / "raw"
@@ -314,13 +307,12 @@ ProgressFn = Callable[[Dict[str, Any]], None]
 
 
 def run_pipeline(req: RunRequest, video_in_raw: Path, on_progress: Optional[ProgressFn] = None) -> Dict[str, Any]:
-    """Run the full pipeline synchronously (blocking). Returns the adapter result dict (status: succeeded / failed)."""
+    """translated（translated）。return adapter 'stranslated dict（status: succeeded / failed）。"""
     from backend.services.simple_progress import add_progress_listener, remove_progress_listener
     from backend.services.simple_pipeline_adapter import SimplePipelineAdapter
 
     import backend.pipeline.step3_scoring as step3
-    # An explicit CLI threshold wins over the settings page; without one, step3 reads
-    # the settings page / default itself
+    # CLI translated'stranslatedSettings page；translated step3 translatedSettings page / defaulttranslated
     step3.MIN_SCORE_OVERRIDE = float(req.min_score) if req.min_score is not None else None
 
     srt_in_raw = video_in_raw.parent / "input.srt"
@@ -356,7 +348,7 @@ def _load_json(path: Path, default: Any) -> Any:
 
 
 def normalize_score(score: Any) -> Optional[int]:
-    """Pipeline scores come in 0-1 and 0-10 flavors; normalize to a 0-100 int (same as the frontend ClipCard)."""
+    """translated 0–1 / 0–10 translated，translatedonetranslated 0–100 translated（andfrontend ClipCard onetranslated）。"""
     if not isinstance(score, (int, float)):
         return None
     s = float(score)
@@ -368,12 +360,12 @@ def normalize_score(score: Any) -> Optional[int]:
 
 
 def summarize_project(project_id: str) -> Dict[str, Any]:
-    """ENprojectdirectoryENclip / collection / filepath，EN CLI --json EN MCP return。"""
+    """fromprojectdirectorytranslatedclip / collection / file path，translated CLI --json And MCP return。"""
     from backend.core.path_utils import get_projects_directory
 
     project_dir = get_projects_directory() / project_id
     if not project_dir.exists():
-        raise FileNotFoundError(f"projectdoes not exist: {project_id}")
+        raise FileNotFoundError(f"project not found: {project_id}")
     meta_dir = project_dir / "metadata"
     out_dir = project_dir / "output"
     project_meta = _load_json(project_dir / "project.json", {})
@@ -432,7 +424,7 @@ def summarize_project(project_id: str) -> Dict[str, Any]:
 
 
 def _db_projects() -> Dict[str, Dict[str, Any]]:
-    """SQLite ENproject（ENprojectEN project.json，EN / statusEN）。ENreturnEN。"""
+    """SQLite translated'sproject（translatedusetranslated'sprojecttranslated project.json，translated / statusinthistranslated）。translatedreturntranslated。"""
     try:
         from backend.core.database import SessionLocal
         from backend.models.project import Project
@@ -449,12 +441,12 @@ def _db_projects() -> Dict[str, Dict[str, Any]]:
         finally:
             db.close()
     except Exception as e:  # noqa: BLE001
-        logger.debug(f"readdatabaseprojectfailed: {e}")
+        logger.debug(f"translateddatabaseprojectfailed: {e}")
         return {}
 
 
 def list_projects(limit: int = 50) -> List[Dict[str, Any]]:
-    """ENdirectoryENproject（ENtimeEN），EN / statusEN SQLite，ENfile。"""
+    """translateddirectorytranslated'sproject（bytranslated），translated / statustranslated SQLite，translatedfile。"""
     from backend.core.path_utils import get_projects_directory
 
     db_rows = _db_projects()
@@ -481,7 +473,7 @@ def list_projects(limit: int = 50) -> List[Dict[str, Any]]:
 
 # ---------------------------------------------------------------- doctor ---
 def environment_report() -> Dict[str, Any]:
-    """ffmpeg / whisper runEN / LLM config / ENdirectoryEN，EN `autoclip doctor` EN MCP EN。"""
+    """ffmpeg / whisper Runtime / LLM config / translateddirectoryonetranslated，translated `autoclip doctor` And MCP use。"""
     from backend.core.path_utils import get_data_directory
     from backend.services import whisper_runtime
 

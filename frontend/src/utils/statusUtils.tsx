@@ -1,6 +1,6 @@
 /**
- * unifiedStatusEN
- * ENprojectENStatusEN
+ * translatedone'sstatusprocesstool
+ * translatedfrontendprojecttranslatedstatusprocesstranslatedonetranslated'sissue
  */
 
 import { 
@@ -12,12 +12,12 @@ import {
   PlayCircleOutlined
 } from '@ant-design/icons'
 
-// unifiedStatusType definitions
+// translatedone'sstatustranslated
 export type ProjectStatus = 'pending' | 'processing' | 'completed' | 'failed'
 export type TaskStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
 export type UploadStatus = 'pending' | 'processing' | 'success' | 'failed'
 
-// projectStatusconfig
+// projectstatusconfig
 export interface ProjectStatusConfig {
   color: string
   icon: any
@@ -27,7 +27,7 @@ export interface ProjectStatusConfig {
   borderColor: string
 }
 
-// taskStatusconfig
+// taskstatusconfig
 export interface TaskStatusConfig {
   color: string
   icon: any
@@ -35,7 +35,7 @@ export interface TaskStatusConfig {
   badgeStatus: 'default' | 'processing' | 'success' | 'error'
 }
 
-// UploadStatusconfig
+// Uploadstatusconfig
 export interface UploadStatusConfig {
   color: string
   icon: any
@@ -44,7 +44,7 @@ export interface UploadStatusConfig {
 }
 
 /**
- * fetchprojectStatusconfig
+ * fetchprojectstatusconfig
  */
 export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConfig => {
   switch (status) {
@@ -52,7 +52,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
       return {
         color: '#1890ff',
         icon: ClockCircleOutlined,
-        text: 'Pending',
+        text: 'etc.translated',
         badgeStatus: 'processing',
         backgroundColor: 'rgba(217, 217, 217, 0.15)',
         borderColor: 'rgba(217, 217, 217, 0.3)'
@@ -61,7 +61,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
       return {
         color: '#1890ff',
         icon: LoadingOutlined,
-        text: 'Processing',
+        text: 'processing',
         badgeStatus: 'processing',
         backgroundColor: 'rgba(24, 144, 255, 0.15)',
         borderColor: 'rgba(24, 144, 255, 0.3)'
@@ -70,7 +70,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
       return {
         color: '#52c41a',
         icon: CheckCircleOutlined,
-        text: 'Completed',
+        text: 'completed',
         badgeStatus: 'success',
         backgroundColor: 'rgba(82, 196, 26, 0.15)',
         borderColor: 'rgba(82, 196, 26, 0.3)'
@@ -79,7 +79,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
       return {
         color: '#ff4d4f',
         icon: ExclamationCircleOutlined,
-        text: 'Failed',
+        text: 'failed',
         badgeStatus: 'error',
         backgroundColor: 'rgba(255, 77, 79, 0.15)',
         borderColor: 'rgba(255, 77, 79, 0.3)'
@@ -88,7 +88,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
       return {
         color: '#d9d9d9',
         icon: ClockCircleOutlined,
-        text: 'unknownStatus',
+        text: 'translatedstatus',
         badgeStatus: 'default',
         backgroundColor: 'rgba(217, 217, 217, 0.15)',
         borderColor: 'rgba(217, 217, 217, 0.3)'
@@ -97,7 +97,7 @@ export const getProjectStatusConfig = (status: ProjectStatus): ProjectStatusConf
 }
 
 /**
- * Fetch tasksStatusconfig
+ * fetchtaskstatusconfig
  */
 export const getTaskStatusConfig = (status: TaskStatus): TaskStatusConfig => {
   switch (status) {
@@ -105,49 +105,49 @@ export const getTaskStatusConfig = (status: TaskStatus): TaskStatusConfig => {
       return {
         color: '#1890ff',
         icon: ClockCircleOutlined,
-        text: 'Pending',
+        text: 'etc.translated',
         badgeStatus: 'processing'
       }
     case 'running':
       return {
         color: '#1890ff',
         icon: PlayCircleOutlined,
-        text: 'Running',
+        text: 'translated',
         badgeStatus: 'processing'
       }
     case 'completed':
       return {
         color: '#52c41a',
         icon: CheckCircleOutlined,
-        text: 'Completed',
+        text: 'completed',
         badgeStatus: 'success'
       }
     case 'failed':
       return {
         color: '#ff4d4f',
         icon: CloseCircleOutlined,
-        text: 'Failed',
+        text: 'failed',
         badgeStatus: 'error'
       }
     case 'cancelled':
       return {
         color: '#d9d9d9',
         icon: CloseCircleOutlined,
-        text: 'Cancelled',
+        text: 'translatedcancel',
         badgeStatus: 'default'
       }
     default:
       return {
         color: '#d9d9d9',
         icon: ClockCircleOutlined,
-        text: 'unknownStatus',
+        text: 'translatedstatus',
         badgeStatus: 'default'
       }
   }
 }
 
 /**
- * fetchUploadStatusconfig
+ * fetchUploadstatusconfig
  */
 export const getUploadStatusConfig = (status: UploadStatus): UploadStatusConfig => {
   switch (status) {
@@ -155,42 +155,42 @@ export const getUploadStatusConfig = (status: UploadStatus): UploadStatusConfig 
       return {
         color: '#1890ff',
         icon: ClockCircleOutlined,
-        text: 'pending',
+        text: 'translatedprocess',
         badgeStatus: 'processing'
       }
     case 'processing':
       return {
         color: '#1890ff',
         icon: LoadingOutlined,
-        text: 'Processing',
+        text: 'processing',
         badgeStatus: 'processing'
       }
     case 'success':
       return {
         color: '#52c41a',
         icon: CheckCircleOutlined,
-        text: 'Succeeded',
+        text: 'succeeded',
         badgeStatus: 'success'
       }
     case 'failed':
       return {
         color: '#ff4d4f',
         icon: CloseCircleOutlined,
-        text: 'Failed',
+        text: 'failed',
         badgeStatus: 'error'
       }
     default:
       return {
         color: '#d9d9d9',
         icon: ClockCircleOutlined,
-        text: 'unknownStatus',
+        text: 'translatedstatus',
         badgeStatus: 'default'
       }
   }
 }
 
 /**
- * fetchProgressENStatus
+ * fetchprogresstranslatedstatus
  */
 export const getProgressStatus = (status: ProjectStatus | TaskStatus | UploadStatus): 'normal' | 'active' | 'success' | 'exception' => {
   switch (status) {
@@ -208,7 +208,7 @@ export const getProgressStatus = (status: ProjectStatus | TaskStatus | UploadSta
 }
 
 /**
- * ENprojectProgressEN
+ * translatedprojectprogresstranslated
  */
 export const calculateProjectProgress = (
   status: ProjectStatus, 
@@ -224,8 +224,8 @@ export const calculateProjectProgress = (
 }
 
 /**
- * StatusEN
- * ENStatusENStatusEN
+ * statustranslated
+ * translated'sstatustranslated'stranslatedonestatustranslated
  */
 export const normalizeProjectStatus = (status: string): ProjectStatus => {
   switch (status) {

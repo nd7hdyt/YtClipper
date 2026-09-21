@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
-ENVersionEN + EN CHANGELOG，EN。
+translatedonetranslatedversiontranslated + translated CHANGELOG，translateduse。
 
-    python scripts/bump_version.py 1.3.0            # EN、EN CHANGELOG，EN
-    python scripts/bump_version.py 1.3.0 --commit   # EN git commit（EN tag，tag EN）
-    python scripts/bump_version.py --check          # ENCheckENVersionEN（CI EN）
+    python scripts/bump_version.py 1.3.0            # translatedfile、translated CHANGELOG，translated
+    python scripts/bump_version.py 1.3.0 --commit   # translated git commit（translated tag，tag translated）
+    python scripts/bump_version.py --check          # translatedchecktranslatedversiontranslatedIstranslatedonetranslated（CI canuse）
 
-EN：
+translated：
   src-tauri/tauri.conf.json  "version"
-  src-tauri/Cargo.toml       version = "..."（[package] EN）
-  pyproject.toml             version = "..."（[project] EN）
-  backend/core/desktop_config.py  AUTOCLIP_APP_VERSION EN
-  CHANGELOG.md               [ENRelease] → [X.Y.Z] - YYYY-MM-DD，EN [ENRelease]；EN compare EN
+  src-tauri/Cargo.toml       version = "..."（[package] translated）
+  pyproject.toml             version = "..."（[project] translated）
+  backend/core/desktop_config.py  AUTOCLIP_APP_VERSION 'stranslated
+  CHANGELOG.md               [translatedRelease] → [X.Y.Z] - YYYY-MM-DD，translatedone translated's [translatedRelease]；translated compare translated
 
-EN。
+translatedusetranslated。
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-REPO_URL = "https://github.com/nd7hdyt/YtClipper"
+REPO_URL = "https://github.com/zhouxiaoka/autoclip"
 
 TAURI_CONF = ROOT / "src-tauri" / "tauri.conf.json"
 CARGO_TOML = ROOT / "src-tauri" / "Cargo.toml"
@@ -71,11 +71,11 @@ def set_version(new: str) -> None:
     _write(TAURI_CONF, json.dumps(conf, ensure_ascii=False, indent=2) + "\n")
 
     def _sub_section(text: str, section: str) -> str:
-        # EN [section] EN version =，ENDependenciesEN version
+        # translated [section] translated'sNo.one  version =，translateddependenciestranslated's version
         pattern = re.compile(rf'(^\[{re.escape(section)}\][^\[]*?^version\s*=\s*")[^"]+(")', re.MULTILINE | re.DOTALL)
         new_text, n = pattern.subn(rf"\g<1>{new}\g<2>", text, count=1)
         if n != 1:
-            raise SystemExit(f"EN [{section}] EN version EN")
+            raise SystemExit(f"translated [{section}] translated's version translated")
         return new_text
 
     _write(CARGO_TOML, _sub_section(_read(CARGO_TOML), "package"))
@@ -84,25 +84,25 @@ def set_version(new: str) -> None:
     dc = _read(DESKTOP_CONFIG)
     dc_new, n = re.subn(r'(os\.getenv\("AUTOCLIP_APP_VERSION",\s*")[^"]+(")', rf"\g<1>{new}\g<2>", dc, count=1)
     if n != 1:
-        raise SystemExit("desktop_config.py EN AUTOCLIP_APP_VERSION EN")
+        raise SystemExit("desktop_config.py translated AUTOCLIP_APP_VERSION translated")
     _write(DESKTOP_CONFIG, dc_new)
 
 
 def roll_changelog(new: str, today: str) -> None:
     text = _read(CHANGELOG)
     if f"## [{new}]" in text:
-        print(f"CHANGELOG EN [{new}]，EN")
+        print(f"CHANGELOG translated [{new}]，skiptranslated")
         return
-    if "## [ENRelease]" not in text:
-        raise SystemExit("CHANGELOG.md EN `## [ENRelease]` EN")
+    if "## [translatedRelease]" not in text:
+        raise SystemExit("CHANGELOG.md translated `## [translatedRelease]` translated")
 
     text = text.replace(
-        "## [ENRelease]",
-        f"## [ENRelease]\n\n_（EN）_\n\n## [{new}] - {today}",
+        "## [translatedRelease]",
+        f"## [translatedRelease]\n\n_（translated）_\n\n## [{new}] - {today}",
         1,
     )
 
-    # EN：EN Unreleased EN tag，ENVersionEN compare EN
+    # translated：  Unreleased translated tag，translatedonetranslatedversion's compare translated
     prev = None
     m = re.search(r"^- \[Unreleased\]: .*/compare/v([\d.]+)\.\.\.HEAD$", text, re.MULTILINE)
     if m:
@@ -128,10 +128,10 @@ def roll_changelog(new: str, today: str) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("version", nargs="?", help="ENVersionEN，EN 1.3.0")
-    ap.add_argument("--check", action="store_true", help="ENCheckENVersionEN")
-    ap.add_argument("--commit", action="store_true", help="EN git commit -m 'chore: release vX.Y.Z'")
-    ap.add_argument("--date", default=dt.datetime.now(tz=dt.timezone.utc).astimezone().date().isoformat(), help="CHANGELOG EN，EN")
+    ap.add_argument("version", nargs="?", help="translatedversiontranslated，if 1.3.0")
+    ap.add_argument("--check", action="store_true", help="translatedchecktranslatedversiontranslatedIstranslatedonetranslated")
+    ap.add_argument("--commit", action="store_true", help="translated git commit -m 'chore: release vX.Y.Z'")
+    ap.add_argument("--date", default=dt.datetime.now(tz=dt.timezone.utc).astimezone().date().isoformat(), help="CHANGELOG use'stranslated，defaulttranslated")
     args = ap.parse_args(argv)
 
     versions = current_versions()
@@ -140,24 +140,24 @@ def main(argv: list[str] | None = None) -> int:
         for k, v in versions.items():
             print(f"{k:20s} {v}")
         if len(distinct) != 1:
-            print("VersionEN", file=sys.stderr)
+            print("versiontranslatedonetranslated", file=sys.stderr)
             return 1
-        print(f"EN：{distinct.pop()}")
+        print(f"onetranslated：{distinct.pop()}")
         return 0
 
     new = args.version.lstrip("v")
     if not SEMVER.match(new):
-        raise SystemExit(f"VersionEN X.Y.Z：{args.version}")
+        raise SystemExit(f"versiontranslatedIs X.Y.Z：{args.version}")
 
     set_version(new)
     roll_changelog(new, args.date)
-    print(f"EN {', '.join(versions)} EN {new}，CHANGELOG EN [{new}] - {args.date}")
+    print(f"translated  {', '.join(versions)} translated {new}，CHANGELOG translated [{new}] - {args.date}")
 
     if args.commit:
         files = [str(p.relative_to(ROOT)) for p in (TAURI_CONF, CARGO_TOML, PYPROJECT, DESKTOP_CONFIG, CHANGELOG)]
         subprocess.run(["git", "add", *files], cwd=ROOT, check=True)
         subprocess.run(["git", "commit", "-m", f"chore: release v{new}"], cwd=ROOT, check=True)
-        print(f"EN。EN：git tag v{new} && git push origin main v{new}")
+        print(f"translated。translatedonetranslated：git tag v{new} && git push origin main v{new}")
     return 0
 
 

@@ -1,9 +1,9 @@
 """
-EN：ENclipENuploadEN。
+Releaseexport：bytranslated onetranslatedcliptranslatedcantranslatedUpload'stranslated。
 
-EN 16:9 stream-copy EN；userEN「EN」EN。
-EN ffmpeg call：EN + EN + ENsubtitles + titleEN。
-EN docs/QUALITY_AND_PUBLISH_PLAN.md EN 2。
+defaulttranslated 16:9 stream-copy translated；usertranslated「Releaseexport」translated。
+one  ffmpeg call：translated + translated + translatedsubtitles + translated。
+translated docs/QUALITY_AND_PUBLISH_PLAN.md translated 2。
 """
 from __future__ import annotations
 
@@ -23,11 +23,11 @@ from backend.utils.ffmpeg_utils import get_ffmpeg_path, get_ffprobe_path
 logger = logging.getLogger(__name__)
 
 PRESETS: Dict[str, Dict[str, Any]] = {
-    "douyin": {"label": "EN 9:16", "w": 1080, "h": 1920, "layout": "blur", "max_sec": None},
-    "xiaohongshu": {"label": "EN 9:16", "w": 1080, "h": 1920, "layout": "blur", "max_sec": None},
+    "douyin": {"label": "translated 9:16", "w": 1080, "h": 1920, "layout": "blur", "max_sec": None},
+    "xiaohongshu": {"label": "translated 9:16", "w": 1080, "h": 1920, "layout": "blur", "max_sec": None},
     "shorts": {"label": "YouTube Shorts", "w": 1080, "h": 1920, "layout": "crop", "max_sec": 60},
-    "bilibili": {"label": "B EN", "w": 1920, "h": 1080, "layout": "fit", "max_sec": None},
-    "original": {"label": "EN", "w": None, "h": None, "layout": "none", "max_sec": None},
+    "bilibili": {"label": "B sitetranslated", "w": 1920, "h": 1080, "layout": "fit", "max_sec": None},
+    "original": {"label": "translated", "w": None, "h": None, "layout": "none", "max_sec": None},
 }
 
 _jobs: Dict[str, Dict[str, Any]] = {}
@@ -41,7 +41,7 @@ class ExportRequest:
     preset: str = "douyin"
     subtitles: bool = True
     title_card: bool = True
-    layout: Optional[str] = None  # EN：blur / crop / fit / none
+    layout: Optional[str] = None  # translated：blur / crop / fit / none
 
 
 # ---------------------------------------------------------------- resolve ---
@@ -58,7 +58,7 @@ def find_source_video(project_id: str) -> Path:
     vids = sorted(raw.glob("input.*"))
     if vids:
         return vids[0]
-    raise FileNotFoundError(f"project {project_id} ENvideo（raw/input.*）")
+    raise FileNotFoundError(f"project {project_id} translatedvideo（raw/input.*）")
 
 
 def find_source_srt(project_id: str) -> Optional[Path]:
@@ -79,7 +79,7 @@ def load_clip_meta(project_id: str, clip_id: str) -> Dict[str, Any]:
         for c in clips:
             if str(c.get("id")) == str(clip_id):
                 return c
-    raise FileNotFoundError(f"project {project_id} ENclip {clip_id}")
+    raise FileNotFoundError(f"project {project_id} translatedclip {clip_id}")
 
 
 def resolve_cjk_font() -> Optional[Path]:
@@ -160,7 +160,7 @@ def _build_filter(req: ExportRequest, spec: Dict[str, Any], srt_path: Optional[P
     if srt_path is not None:
         style = "Fontsize=16,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Outline=2,Shadow=0,MarginV=48,Alignment=2"
         if font:
-            # FontName EN libass；mac EN PingFang SC ENparse
+            # FontName translated libass；mac translated PingFang SC translated
             style = "FontName=PingFang SC," + style
         nxt = "sub"
         parts.append(f"[{last}]subtitles='{_escape_filter_path(srt_path)}':force_style='{style}'[{nxt}]")
@@ -175,15 +175,15 @@ def _build_filter(req: ExportRequest, spec: Dict[str, Any], srt_path: Optional[P
         last = nxt
     if not parts:
         return None
-    # ENtagsEN ffmpeg EN，ENweENtags：ENtagsEN
-    # filter_complex EN [tag] need map
+    # translatedonetranslated ffmpeg translateduse，translated： translateddefaulttranslated
+    # filter_complex translatedone  [tag] translated map
     return ";".join(parts), last
 
 
 def export_clip(req: ExportRequest) -> Dict[str, Any]:
-    """ENclip。EN：ENparametersalready existsENreturn。"""
+    """translatedexportonetranslatedclip。translatedetc.：translatedintranslatedreturn。"""
     if req.preset not in PRESETS:
-        raise ValueError(f"EN: {req.preset}（EN {', '.join(PRESETS)}）")
+        raise ValueError(f"translated: {req.preset}（canSelect {', '.join(PRESETS)}）")
     spec = PRESETS[req.preset]
     clip = load_clip_meta(req.project_id, req.clip_id)
     video = find_source_video(req.project_id)
@@ -193,7 +193,7 @@ def export_clip(req: ExportRequest) -> Dict[str, Any]:
     warnings: List[str] = []
     if spec.get("max_sec") and duration > spec["max_sec"]:
         duration = float(spec["max_sec"])
-        warnings.append(f"ENdurationEN {spec['max_sec']}s（{req.preset}）")
+        warnings.append(f"bytranslated {spec['max_sec']}s（{req.preset}）")
 
     title = str(clip.get("generated_title") or clip.get("title") or clip.get("outline") or f"clip{req.clip_id}")
     from backend.core.path_utils import get_project_directory
@@ -217,7 +217,7 @@ def export_clip(req: ExportRequest) -> Dict[str, Any]:
 
     font = resolve_cjk_font()
     if req.title_card and not font:
-        warnings.append("EN，ENtitleEN")
+        warnings.append("translatedTypography，translatedskiptranslated")
     tmpdir = Path(tempfile.mkdtemp(prefix="ac-export-"))
     srt_file = None
     title_file = None
@@ -229,7 +229,7 @@ def export_clip(req: ExportRequest) -> Dict[str, Any]:
                 srt_file = tmpdir / "clip.srt"
                 srt_file.write_text(body, encoding="utf-8")
             else:
-                warnings.append("ENsubtitles，EN")
+                warnings.append("translatedcanusesubtitles，translated")
         if req.title_card and font:
             title_file = tmpdir / "title.txt"
             title_file.write_text(title[:40], encoding="utf-8")
@@ -246,7 +246,7 @@ def export_clip(req: ExportRequest) -> Dict[str, Any]:
             cmd += ["-map", "0:v:0"]
         cmd += ["-map", "0:a:0?", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
                 "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", "-y", str(out_path)]
-        logger.info("EN: %s", " ".join(cmd))
+        logger.info("Releaseexport: %s", " ".join(cmd))
         proc = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="ignore")
         if proc.returncode != 0 or not out_path.exists() or out_path.stat().st_size == 0:
             raise RuntimeError((proc.stderr or proc.stdout or "ffmpeg failed")[-800])
@@ -301,7 +301,7 @@ def _run_job(job_id: str, req: ExportRequest) -> None:
         with _jobs_lock:
             _jobs[job_id].update(status="completed", percent=100, result=result)
     except Exception as e:  # noqa: BLE001
-        logger.exception("ENfailed")
+        logger.exception("Releaseexportfailed")
         with _jobs_lock:
             _jobs[job_id].update(status="failed", percent=100, error=str(e)[:500])
 

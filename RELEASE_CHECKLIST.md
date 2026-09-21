@@ -1,55 +1,55 @@
-# AutoClip EN
+# AutoClip 
 
-> EN：**EN**，EN（`1.3.0 → 1.4.0 → …`，EN `x.y.1`）。
-> EN「EN」，EN「EN main EN」。`HANDOFF.md` EN v1.3 / v1.4 EN。
-> EN（EN tag EN Release EN）EN 25 EN，EN `desktop-build.yml` EN；EN。
+> ：**Monday**，version（`1.3.0 → 1.4.0 → …`， `x.y.1`）。
+> target「」，「 main verify」。`HANDOFF.md`  v1.3 / v1.4 。
+> （ tag  Release ） 25 minutes， `desktop-build.yml` completed；。
 
-## EN（EN – EN）
+## （Monday – Friday）
 
-- [ ] EN **CI EN + EN** EN PR（PR EN「EN」）。EN PR EN `HANDOFF.md` EN。
-- [ ] EN PR EN `CHANGELOG.md` EN `## [EN]` EN（EN / EN / EN），EN，EN。
-- [ ] EN **EN** EN **EN**（issue EN）。
-- [ ] EN（`scripts/weekly_digest.py`）EN，EN，EN `HANDOFF.md` EN。
+- [ ]  **CI  + verify**  PR（PR 「」）。 PR  `HANDOFF.md` 。
+- [ ]  PR  `CHANGELOG.md`  `## []` （added / fix / improve），，。
+- [ ]  **failed**  **install**（issue ）。
+- [ ] （`scripts/weekly_digest.py`）issue，， `HANDOFF.md` 。
 
-## EN（EN / EN，EN 24 EN）
+## （ / ， 24 ）
 
-- [ ] main CI EN（`gh run list --branch main --limit 1`）。
-- [ ] `python scripts/bump_version.py --check` EN。
-- [ ] EN `pytest backend/tests`、`cd frontend && npm run lint && npm run typecheck && npm run build`、`python -m backend.eval`。
-- [ ] EN `CHANGELOG.md [EN]`：EN、EN issue EN PR、EN / EN。
+- [ ] main CI （`gh run list --branch main --limit 1`）。
+- [ ] `python scripts/bump_version.py --check` version。
+- [ ] local `pytest backend/tests`、`cd frontend && npm run lint && npm run typecheck && npm run build`、`python -m backend.eval`。
+- [ ]  `CHANGELOG.md []`：、 issue  PR、 / key。
 - [ ] `python scripts/bump_version.py X.Y.0 --commit`
-      → EN `tauri.conf.json` / `Cargo.toml` / `pyproject.toml` / `desktop_config.py`，EN `[EN]` EN `[X.Y.0] - EN`。
+      →  `tauri.conf.json` / `Cargo.toml` / `pyproject.toml` / `desktop_config.py`， `[]`  `[X.Y.0] - date`。
 - [ ] `git push origin main && git tag vX.Y.0 && git push origin vX.Y.0`
-      → EN `desktop-build.yml`：macOS arm64 DMG + Windows x64 EN，`release` job EN `scripts/release_notes.py`
-      EN CHANGELOG EN + EN Release EN。
-- [ ] EN Actions EN Desktop Build EN、Release EN（EN = EN，EN run EN）。
+      →  `desktop-build.yml`：macOS arm64 DMG + Windows x64 installbuild，`release` job  `scripts/release_notes.py`
+       CHANGELOG version + notesgenerate Release 。
+- [ ]  Actions  Desktop Build 、Release file（ = buildfailed， run ）。
 
-## EN（EN）
+## （）
 
-- [ ] **EN（EN，CI EN）**：
-  - Windows：EN `-setup.exe` → EN → EN provider → EN。**Windows EN DMG EN 3 EN，EN。**
-  - macOS：EN DMG EN → EN。
-- [ ] EN #96 EN「v1.x EN」EN。
-- [ ] EN Release EN `needs-info` / EN issue：EN（EN `HANDOFF.md` EN）。
-- [ ] `HANDOFF.md` EN「EN：EN · main@sha」EN。
+- [ ] **verify（，CI ）**：
+  - Windows： `-setup.exe` → start → Settings page provider → local。**Windows download DMG  3 ，。**
+  - macOS：open DMG  → 。
+- [ ] update #96 version「v1.x 」。
+- [ ]  Release  `needs-info` / fix issue：（ `HANDOFF.md` ）。
+- [ ] `HANDOFF.md` 「update：date · main@sha」status。
 
-## EN（EN bug）
+## （impact bug）
 
-- [ ] EN → PR → CI EN → EN → `bump_version.py X.Y.1 --commit` → EN tag。EN。
+- [ ]  → PR → CI  →  → `bump_version.py X.Y.1 --commit` →  tag。weekend。
 
-## EN
+## 
 
-- EN；EN CI / EN CHANGELOG EN。
-- EN（EN），EN Release EN（EN CHANGELOG EN）。
-- EN「EN」EN。main EN。
+- ； CI /  CHANGELOG 。
+- editversion（）， Release （ CHANGELOG generate）。
+- 「」。main 。
 
-## EN
+## file
 
-| EN | EN |
+|  | location |
 |---|---|
-| EN + CHANGELOG EN | `scripts/bump_version.py` |
-| Release EN | `scripts/release_notes.py`（EN `desktop-build.yml` EN `release` job EN） |
-| EN workflow | `.github/workflows/desktop-build.yml`（tag `v*` EN；`workflow_dispatch` EN） |
-| EN | `scripts/build_macos_arm.sh`、`scripts/build_windows_x64.sh`（EN `BUILD_GUIDE.md`、`scripts/README.md`） |
-| EN | `scripts/weekly_digest.py` |
-| EN / EN | `HANDOFF.md` |
+| version + CHANGELOG  | `scripts/bump_version.py` |
+| Release generate | `scripts/release_notes.py`（ `desktop-build.yml`  `release` job call） |
+| build workflow | `.github/workflows/desktop-build.yml`（tag `v*` ；`workflow_dispatch` build） |
+|  | `scripts/build_macos_arm.sh`、`scripts/build_windows_x64.sh`（notes `BUILD_GUIDE.md`、`scripts/README.md`） |
+|  | `scripts/weekly_digest.py` |
+| status /  | `HANDOFF.md` |

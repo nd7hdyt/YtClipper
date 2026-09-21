@@ -1,12 +1,12 @@
 """
-EN（Ollama / LM Studio）。
+localmodeltranslated（Ollama / LM Studio）。
 
-EN OpenAI ENAPI（provider=openai + base_url），EN「provider EN → EN /
-EN / EN」EN，ENsettingsEN、CLI、MCP EN `--provider ollama` EN，
-EN `http://localhost:11434/v1`。
+translatedIs OpenAI translated（provider=openai + base_url），thistranslatedIs 「provider translated → defaulttranslated /
+defaultmodel / translated」translated，translatedSettings page、CLI、MCP translateduse `--provider ollama` thistranslated，
+translatedusetranslated `http://localhost:11434/v1`。
 
-settingsfileEN `api_provider` EN `ollama` / `lmstudio`；`LLMManager` loadENthrough
-`resolve_provider()` EN openai + base_url。
+settingsfiletranslated  `api_provider` translated `ollama` / `lmstudio`；`LLMManager` translated
+`resolve_provider()` translated openai + base_url。
 """
 from __future__ import annotations
 
@@ -27,28 +27,28 @@ class LocalPreset:
 LOCAL_PRESETS: Dict[str, LocalPreset] = {
     "ollama": LocalPreset(
         key="ollama",
-        display_name="Ollama（EN）",
+        display_name="Ollama（local）",
         base_url="http://localhost:11434/v1",
         default_model="qwen2.5:7b",
         docs_url="https://ollama.com/download",
-        hint="ENrun Ollama EN，EN。EN `ollama pull qwen2.5:7b`（ENsubtitlesanalysisEN）。",
+        hint="translated Ollama translatedcanuse，translatedkey。recommend `ollama pull qwen2.5:7b`（translatedsubtitlestranslated）。",
     ),
     "lmstudio": LocalPreset(
         key="lmstudio",
-        display_name="LM Studio（EN）",
+        display_name="LM Studio（local）",
         base_url="http://localhost:1234/v1",
         default_model="",
         docs_url="https://lmstudio.ai",
-        hint="EN LM Studio ENloadENstart Local Server（EN 1234），ENserviceEN。",
+        hint="in LM Studio translatedmodeltranslatedstart Local Server（defaulttranslated 1234），modeltranslatedservicetranslated'sAs Standard。",
     ),
 }
 
-# EN
+# translated
 _ALIASES = {"lm-studio": "lmstudio", "lm_studio": "lmstudio", "local": "ollama"}
 
 
 def normalize_preset_key(name: Optional[str]) -> Optional[str]:
-    """returnEN key；ENthenreturn None。"""
+    """returntranslated'stranslated key；translatedIstranslatedreturn None。"""
     if not name:
         return None
     key = name.strip().lower()
@@ -58,9 +58,9 @@ def normalize_preset_key(name: Optional[str]) -> Optional[str]:
 
 def resolve_provider(provider: Optional[str], base_url: Optional[str] = None) -> Tuple[str, str, Optional[str]]:
     """
-    ENuserEN provider（mayEN `ollama` / `lmstudio`）EN provider EN base_url。
+     usertranslated's provider（cantranslatedIs `ollama` / `lmstudio`）translated's provider and base_url。
 
-    return (provider_value, base_url, preset_key)。ENreturn (provider, base_url or "", None)。
+    return (provider_value, base_url, preset_key)。translatedreturn (provider, base_url or "", None)。
     """
     preset_key = normalize_preset_key(provider)
     if not preset_key:

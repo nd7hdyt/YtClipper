@@ -1,15 +1,15 @@
 """
-RepositoryEN
-EN
+Repositorytranslatedtest
+verifytranslated'sfeature
 """
 
 import sys, os
-# ENsys.path，ENbackendEN
+# addprojecttranslateddirectorytranslatedsys.path，ensuretranslatedbackendPackage
 current_file = os.path.abspath(__file__)
-backend_dir = os.path.dirname(os.path.dirname(current_file))  # backendEN
-project_root = os.path.dirname(backend_dir)  # autoclipEN
+backend_dir = os.path.dirname(os.path.dirname(current_file))  # backenddirectory
+project_root = os.path.dirname(backend_dir)  # autocliptranslateddirectory
 
-# ENsys.path，ENPythonENbackendEN
+# translatedprojecttranslateddirectoryaddtranslatedsys.path，thistranslatedPythontranslatedbackendPackage
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
@@ -29,72 +29,72 @@ from backend.models.collection import CollectionStatus
 from backend.models.task import TaskStatus, TaskType
 
 class TestRepositoryPattern:
-    """RepositoryEN"""
+    """Repositorytranslatedtesttranslated"""
     
     @pytest.fixture(autouse=True)
     def setup_database(self):
-        """EN"""
-        # EN，EN
+        """settingstestdatabase"""
+        # translateddatabase，ensuretesttranslated
         reset_database()
-        # EN
+        # translateddatabase
         init_database()
         yield
-        # EN
+        # testtranslatedcleandatabase
         reset_database()
     
     def test_project_repository_crud(self):
-        """ENRepositoryENCRUDEN"""
+        """testprojectRepository'sCRUDtranslated"""
         db = next(get_db())
         project_repo = get_project_repository(db)
         
-        # EN
+        # createproject
         project_data = {
-            "name": "EN",
-            "description": "EN",
+            "name": "testproject",
+            "description": "thisIsone testproject",
             "project_type": ProjectType.KNOWLEDGE,
-            "status": ProjectStatus.PENDING
+            "status": ProjectStatus.PtranslatedDING
         }
         
         project = project_repo.create(**project_data)
         assert project.id is not None
-        assert project.name == "EN"
-        assert project.status == ProjectStatus.PENDING
+        assert project.name == "testproject"
+        assert project.status == ProjectStatus.PtranslatedDING
         
-        # EN
+        # translatedproject
         retrieved_project = project_repo.get_by_id(project.id)
         assert retrieved_project is not None
-        assert retrieved_project.name == "EN"
+        assert retrieved_project.name == "testproject"
         
-        # EN
+        # updateproject
         updated_project = project_repo.update(project.id, status=ProjectStatus.PROCESSING)
         assert updated_project.status == ProjectStatus.PROCESSING
         
-        # EN
+        # deleteproject
         success = project_repo.delete(project.id)
         assert success is True
         
-        # EN
+        # verifydelete
         deleted_project = project_repo.get_by_id(project.id)
         assert deleted_project is None
     
     def test_clip_repository_operations(self):
-        """ENRepositoryEN"""
+        """testclipRepository'stranslated"""
         db = next(get_db())
         project_repo = get_project_repository(db)
         clip_repo = get_clip_repository(db)
         
-        # EN
+        # createproject
         project = project_repo.create(
-            name="EN",
+            name="testproject",
             project_type=ProjectType.KNOWLEDGE,
-            status=ProjectStatus.PENDING
+            status=ProjectStatus.PtranslatedDING
         )
         
-        # EN
+        # createclip
         clip_data = {
             "project_id": project.id,
-            "title": "EN",
-            "description": "EN",
+            "title": "testclip",
+            "description": "thisIsone testclip",
             "start_time": 0,
             "end_time": 60,
             "duration": 60,
@@ -104,42 +104,42 @@ class TestRepositoryPattern:
         
         clip = clip_repo.create(**clip_data)
         assert clip.project_id == project.id
-        assert clip.title == "EN"
+        assert clip.title == "testclip"
         
-        # EN
+        # testbyprojecttranslatedclip
         project_clips = clip_repo.get_by_project(project.id)
         assert len(project_clips) == 1
         assert project_clips[0].id == clip.id
         
-        # EN
+        # testbystatustranslatedclip
         completed_clips = clip_repo.get_by_status(ClipStatus.COMPLETED)
         assert len(completed_clips) == 1
         assert completed_clips[0].id == clip.id
         
-        # EN
+        # testtranslatedcliptranslated
         high_score_clips = clip_repo.get_high_score_clips(project.id, min_score=0.7)
         assert len(high_score_clips) == 1
         assert high_score_clips[0].id == clip.id
     
     def test_collection_repository_operations(self):
-        """ENRepositoryEN"""
+        """testcollectionRepository'stranslated"""
         db = next(get_db())
         project_repo = get_project_repository(db)
         collection_repo = get_collection_repository(db)
         
-        # EN
+        # createproject
         project = project_repo.create(
-            name="EN",
+            name="testproject",
             project_type=ProjectType.KNOWLEDGE,
-            status=ProjectStatus.PENDING
+            status=ProjectStatus.PtranslatedDING
         )
         
-        # EN
+        # createcollection
         collection_data = {
             "project_id": project.id,
-            "name": "EN",
-            "description": "EN",
-            "theme": "EN",
+            "name": "testcollection",
+            "description": "thisIsone testcollection",
+            "theme": "testtranslated",
             "clips_count": 5,
             "total_duration": 300,
             "status": CollectionStatus.COMPLETED
@@ -147,81 +147,81 @@ class TestRepositoryPattern:
         
         collection = collection_repo.create(**collection_data)
         assert collection.project_id == project.id
-        assert collection.name == "EN"
+        assert collection.name == "testcollection"
         
-        # EN
+        # testbyprojecttranslatedcollection
         project_collections = collection_repo.get_by_project(project.id)
         assert len(project_collections) == 1
         assert project_collections[0].id == collection.id
         
-        # EN
-        theme_collections = collection_repo.get_by_theme(project.id, "EN")
+        # testbytranslatedcollection
+        theme_collections = collection_repo.get_by_theme(project.id, "testtranslated")
         assert len(theme_collections) == 1
         assert theme_collections[0].id == collection.id
     
     def test_task_repository_operations(self):
-        """ENRepositoryEN"""
+        """testtaskRepository'stranslated"""
         db = next(get_db())
         project_repo = get_project_repository(db)
         task_repo = get_task_repository(db)
         
-        # EN
+        # createproject
         project = project_repo.create(
-            name="EN",
+            name="testproject",
             project_type=ProjectType.KNOWLEDGE,
-            status=ProjectStatus.PENDING
+            status=ProjectStatus.PtranslatedDING
         )
         
-        # EN
+        # createtask
         task_data = {
             "project_id": project.id,
-            "name": "EN",
-            "description": "EN",
+            "name": "testtask",
+            "description": "thisIsone testtask",
             "task_type": TaskType.VIDEO_PROCESSING,
-            "status": TaskStatus.PENDING,
+            "status": TaskStatus.PtranslatedDING,
             "priority": 1
         }
         
         task = task_repo.create(**task_data)
         assert task.project_id == project.id
-        assert task.name == "EN"
-        assert task.status == TaskStatus.PENDING
+        assert task.name == "testtask"
+        assert task.status == TaskStatus.PtranslatedDING
         
-        # EN
+        # testtaskstatusupdate
         task_repo.update_task_status(task.id, TaskStatus.RUNNING)
         updated_task = task_repo.get_by_id(task.id)
         assert updated_task.status == TaskStatus.RUNNING
         
-        # EN
+        # testtasktranslated
         task_repo.update_task_status(task.id, TaskStatus.COMPLETED)
         completed_task = task_repo.get_by_id(task.id)
         assert completed_task.status == TaskStatus.COMPLETED
         
-        # EN
+        # testbyprojecttranslatedtask
         project_tasks = task_repo.get_by_project(project.id)
         assert len(project_tasks) == 1
         assert project_tasks[0].id == task.id
     
     def test_repository_statistics(self):
-        """ENRepositoryEN"""
+        """testRepositorytranslatedfeature"""
         db = next(get_db())
         project_repo = get_project_repository(db)
         clip_repo = get_clip_repository(db)
         collection_repo = get_collection_repository(db)
         task_repo = get_task_repository(db)
         
-        # EN
+        # createproject
         project = project_repo.create(
-            name="EN",
+            name="translatedtestproject",
             project_type=ProjectType.KNOWLEDGE,
             status=ProjectStatus.COMPLETED
         )
         
-        # EN
+        # createmulti clip
         for i in range(5):
             clip_repo.create(
                 project_id=project.id,
-                title=f"EN{i+1}",
+                title=f"clip{i+1}",
                 start_time=i*60,
                 end_time=(i+1)*60,
                 duration=60,
@@ -229,83 +229,83 @@ class TestRepositoryPattern:
                 status=ClipStatus.COMPLETED
             )
         
-        # EN
+        # createmulti collection
         for i in range(3):
             collection_repo.create(
                 project_id=project.id,
-                name=f"EN{i+1}",
-                theme=f"EN{i+1}",
+                name=f"collection{i+1}",
+                theme=f"translated{i+1}",
                 clips_count=2,
                 total_duration=120,
                 status=CollectionStatus.COMPLETED
             )
         
-        # EN
+        # createmulti task
         for i in range(6):
             task_repo.create(
                 project_id=project.id,
-                name=f"EN{i+1}",
+                name=f"task{i+1}",
                             task_type=TaskType.VIDEO_PROCESSING,
             status=TaskStatus.COMPLETED if i < 5 else TaskStatus.FAILED
             )
         
-        # EN
+        # testprojecttranslated
         project_stats = project_repo.get_project_statistics()
         assert project_stats["total"] >= 1
         assert project_stats["completed"] >= 1
         
-        # EN
+        # testcliptranslated
         clip_stats = clip_repo.get_clips_statistics(project.id)
         assert clip_stats["total"] == 5
         assert clip_stats["completed"] == 5
         assert clip_stats["avg_score"] > 0.7
         
-        # EN
+        # testcollectiontranslated
         collection_stats = collection_repo.get_collections_statistics(project.id)
         assert collection_stats["total"] == 3
         assert collection_stats["completed"] == 3
         
-        # EN
+        # testtasktranslated
         task_stats = task_repo.get_tasks_statistics(project.id)
         assert task_stats["total"] == 6
         assert task_stats["completed"] == 5
         assert task_stats["failed"] == 1
     
     def test_repository_search(self):
-        """ENRepositoryEN"""
+        """testRepositorytranslatedfeature"""
         db = next(get_db())
         project_repo = get_project_repository(db)
         clip_repo = get_clip_repository(db)
         
-        # EN
+        # createproject
         project = project_repo.create(
-            name="EN",
-            description="EN",
+            name="translatedtestproject",
+            description="thisIsone usetranslatedtest'sproject",
             project_type=ProjectType.KNOWLEDGE,
-            status=ProjectStatus.PENDING
+            status=ProjectStatus.PtranslatedDING
         )
         
-        # EN
+        # createclip
         clip_repo.create(
             project_id=project.id,
-            title="EN",
-            description="EN",
+            title="Packageincludetranslated'sclip",
+            description="this clipPackageincludetranslated'stranslated",
             start_time=0,
             end_time=60,
             duration=60,
             status=ClipStatus.COMPLETED
         )
         
-        # EN
-        search_results = project_repo.search_projects("EN")
+        # testprojecttranslated
+        search_results = project_repo.search_projects("translatedtest")
         assert len(search_results) == 1
         assert search_results[0].id == project.id
         
-        # EN
-        clip_results = clip_repo.search_clips(project.id, "EN")
+        # testcliptranslated
+        clip_results = clip_repo.search_clips(project.id, "translated")
         assert len(clip_results) == 1
-        assert "EN" in clip_results[0].title or "EN" in clip_results[0].description
+        assert "translated" in clip_results[0].title or "translated" in clip_results[0].description
 
 if __name__ == "__main__":
-    # EN
+    # translatedtest
     pytest.main([__file__, "-v"]) 

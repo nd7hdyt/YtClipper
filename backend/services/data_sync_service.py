@@ -1,5 +1,5 @@
 """
-ENservice - ENprocessingresultENdatabase
+translatedservice - translatedprocesstranslateddatabase
 """
 
 import json
@@ -17,25 +17,25 @@ logger = logging.getLogger(__name__)
 
 
 class DataSyncService:
-    """ENservice"""
+    """translatedservice"""
     
     def __init__(self, db: Session):
         self.db = db
     
     def sync_all_projects_from_filesystem(self, data_dir: Path) -> Dict[str, Any]:
-        """ENfilesystemENallprojectENdatabase"""
+        """fromfileSystemtranslatedprojecttranslateddatabase"""
         try:
-            logger.info(f"startENfilesystemENallproject: {data_dir}")
+            logger.info(f"translatedfromfileSystemtranslatedproject: {data_dir}")
             
             projects_dir = data_dir / "projects"
             if not projects_dir.exists():
-                logger.warning(f"projectdirectorydoes not exist: {projects_dir}")
-                return {"success": False, "error": "projectdirectorydoes not exist"}
+                logger.warning(f"projectdirectorynot found: {projects_dir}")
+                return {"success": False, "error": "projectdirectorynot found"}
             
             synced_projects = []
             failed_projects = []
             
-            # ENallprojectdirectory
+            # translatedprojectdirectory
             for project_dir in projects_dir.iterdir():
                 if project_dir.is_dir() and not project_dir.name.startswith('.'):
                     project_id = project_dir.name
@@ -46,10 +46,10 @@ class DataSyncService:
                         else:
                             failed_projects.append({"project_id": project_id, "error": result.get("error")})
                     except Exception as e:
-                        logger.error(f"ENproject {project_id} failed: {str(e)}")
+                        logger.error(f"translatedproject {project_id} failed: {str(e)}")
                         failed_projects.append({"project_id": project_id, "error": str(e)})
             
-            logger.info(f"EN: succeeded {len(synced_projects)} EN, failed {len(failed_projects)} EN")
+            logger.info(f"translated: succeeded {len(synced_projects)}  , failed {len(failed_projects)}  ")
             
             return {
                 "success": True,
@@ -60,36 +60,36 @@ class DataSyncService:
             }
             
         except Exception as e:
-            logger.error(f"ENallprojectfailed: {str(e)}")
+            logger.error(f"translatedprojectfailed: {str(e)}")
             return {"success": False, "error": str(e)}
     
     def sync_project_from_filesystem(self, project_id: str, project_dir: Path) -> Dict[str, Any]:
-        """ENfilesystemENprojectENdatabase"""
+        """fromfileSystemtranslated projecttranslateddatabase"""
         try:
-            logger.info(f"startENproject: {project_id}")
+            logger.info(f"translatedproject: {project_id}")
             
-            # checkprojectENalready existsENdatabase
+            # checkprojectIstranslatedintranslateddatabase
             existing_project = self.db.query(Project).filter(Project.id == project_id).first()
             if existing_project:
-                logger.info(f"project {project_id} already existsENdatabase，ENclipEN")
+                logger.info(f"project {project_id} translatedintranslateddatabase，translatedcliptranslated")
             else:
-                # readprojectEN
+                # translatedprojecttranslated
                 project_metadata = self._read_project_metadata(project_dir)
                 if not project_metadata:
-                    logger.warning(f"project {project_id} ENfile，createENprojectEN")
+                    logger.warning(f"project {project_id} translatedfile，createtranslatedprojecttranslated")
                     project_metadata = {
                         "project_name": f"project_{project_id[:8]}",
                         "created_at": datetime.now().isoformat(),
                         "status": "pending"
                     }
                 
-                # createprojectEN
+                # createprojecttranslated
                 project = Project(
                     id=project_id,
                     name=project_metadata.get("project_name", f"project_{project_id[:8]}"),
                     description=project_metadata.get("description", ""),
-                    project_type=ProjectType.KNOWLEDGE,  # EN
-                    status=ProjectStatus.PENDING,
+                    project_type=ProjectType.KNOWLEDGE,  # defaulttranslated
+                    status=ProjectStatus.PtranslatedDING,
                     processing_config=project_metadata.get("processing_config", {}),
                     project_metadata=project_metadata
                 )
@@ -98,19 +98,19 @@ class DataSyncService:
                 self.db.commit()
                 self.db.refresh(project)
                 
-                logger.info(f"project {project_id} ENdatabasesucceeded")
+                logger.info(f"project {project_id} translateddatabasesucceeded")
             
 
             
-            # ENclipEN
+            # translatedcliptranslated
             clips_count = self._sync_clips_from_filesystem(project_id, project_dir)
             
-            # ENcollectionEN
-            logger.info(f"startENproject {project_id} ENcollectionEN")
+            # translatedcollectiontranslated
+            logger.info(f"translatedproject {project_id} 'scollectiontranslated")
             collections_count = self._sync_collections_from_filesystem(project_id, project_dir)
-            logger.info(f"project {project_id} collectionEN，EN {collections_count} ENcollection")
+            logger.info(f"project {project_id} collectiontranslated，translated {collections_count}  collection")
             
-            # checkprojectENcompletedprocessing，updateprojectstatus
+            # checkprojectIstranslatedcompletedprocess，updateprojectstatus
             self._update_project_status_if_completed(project_id, project_dir)
             
             return {
@@ -121,12 +121,12 @@ class DataSyncService:
             }
             
         except Exception as e:
-            logger.error(f"ENproject {project_id} failed: {str(e)}")
+            logger.error(f"translatedproject {project_id} failed: {str(e)}")
             self.db.rollback()
             return {"success": False, "error": str(e)}
     
     def _read_project_metadata(self, project_dir: Path) -> Optional[Dict[str, Any]]:
-        """readprojectEN"""
+        """translatedprojecttranslated"""
         metadata_files = [
             project_dir / "project.json",
             project_dir / "metadata.json",
@@ -139,17 +139,17 @@ class DataSyncService:
                     with open(metadata_file, 'r', encoding='utf-8') as f:
                         return json.load(f)
                 except Exception as e:
-                    logger.warning(f"readENfilefailed {metadata_file}: {e}")
+                    logger.warning(f"translatedfilefailed {metadata_file}: {e}")
         
         return None
     
     def _sync_clips_from_filesystem(self, project_id: str, project_dir: Path) -> int:
-        """ENfilesystemENclipEN"""
+        """fromfileSystemtranslatedcliptranslated"""
         try:
-            # ENclipENfile
+            # translatedcliptranslatedfile
             clips_files = [
-                project_dir / "step6_video" / "clips_metadata.json",  # EN
-                project_dir / "step3_all_scored.json",  # ENuseEN
+                project_dir / "step6_video" / "clips_metadata.json",  # translated'stranslated
+                project_dir / "step3_all_scored.json",  # translatedusetranslated'stranslated
                 project_dir / "step4_title" / "step4_title.json",
                 project_dir / "step4_titles.json",
                 project_dir / "clips_metadata.json",
@@ -163,85 +163,85 @@ class DataSyncService:
                     try:
                         with open(clips_file, 'r', encoding='utf-8') as f:
                             clips_data = json.load(f)
-                        logger.info(f"succeededreadclipfile: {clips_file}, EN: {len(clips_data) if isinstance(clips_data, list) else 'not list'}")
+                        logger.info(f"succeededtranslatedclipfile: {clips_file}, translated: {len(clips_data) if isinstance(clips_data, list) else 'not list'}")
                         break
                     except Exception as e:
-                        logger.warning(f"readclipfilefailed {clips_file}: {e}")
+                        logger.warning(f"translatedclipfilefailed {clips_file}: {e}")
                 else:
-                    logger.info(f"clipfiledoes not exist: {clips_file}")
+                    logger.info(f"clipfile not found: {clips_file}")
             
             if not clips_data:
-                logger.info(f"project {project_id} ENclipEN")
+                logger.info(f"project {project_id} translatedcliptranslated")
                 return 0
             
-            # ENclips_dataEN
+            # ensureclips_dataIslist
             if isinstance(clips_data, dict) and "clips" in clips_data:
                 clips_data = clips_data["clips"]
             elif not isinstance(clips_data, list):
-                logger.warning(f"project {project_id} clipEN")
+                logger.warning(f"project {project_id} cliptranslatedformattranslated")
                 return 0
             
             synced_count = 0
             updated_count = 0
             for clip_data in clips_data:
                 try:
-                    # checkclipENalready exists
+                    # checkclipIstranslatedin
                     existing_clip = self.db.query(Clip).filter(
                         Clip.project_id == project_id,
                         Clip.title == clip_data.get("generated_title", clip_data.get("title", ""))
                     ).first()
                     
                     if existing_clip:
-                        # updateENclipENvideo_pathENtags，ENuseprojectENdirectory
+                        # updatetranslatedclip'svideo_pathAndtags，translateduseprojecttranslateddirectory
                         clip_id = clip_data.get('id', str(synced_count + 1))
                         safe_title = clip_data.get('generated_title', clip_data.get('title', clip_data.get('outline', '')))
-                        # ENfileEN，EN
+                        # cleanfiletranslated，translated
                         safe_title = "".join(c for c in safe_title if c.isalnum() or c in (' ', '-', '_')).rstrip()
                         safe_title = safe_title.replace(' ', '_')
                         
-                        # ENuseprojectENpath
+                        # translateduseprojecttranslatedpath
                         from ..core.path_utils import get_project_directory
                         project_dir = get_project_directory(project_id)
                         project_clips_dir = project_dir / "output" / "clips"
                         project_clips_dir.mkdir(parents=True, exist_ok=True)
                         project_video_path = project_clips_dir / f"{clip_id}_{safe_title}.mp4"
                         
-                        # ENdirectory，ifENthenENprojectdirectory
+                        # translated'stranslateddirectory，iftranslatedintranslatedprojectdirectory
                         from ..core.path_utils import get_data_directory
                         legacy_video_path = get_data_directory() / "output" / "clips" / f"{clip_id}_{safe_title}.mp4"
                         try:
                             if legacy_video_path.exists() and not project_video_path.exists():
                                 import shutil
                                 shutil.copy2(legacy_video_path, project_video_path)
-                                logger.info(f"ENclipfileENprojectdirectory: {legacy_video_path} -> {project_video_path}")
+                                logger.info(f"translatedclipfiletranslatedprojectdirectory: {legacy_video_path} -> {project_video_path}")
                         except Exception as _e:
-                            logger.warning(f"ENclipfilefailed: {legacy_video_path} -> {project_video_path}: {_e}")
+                            logger.warning(f"translatedclipfilefailed: {legacy_video_path} -> {project_video_path}: {_e}")
                         
-                        # ENuseprojectENpath
+                        # translateduseprojecttranslatedpath
                         video_path = str(project_video_path)
-                        logger.info(f"updateclip {existing_clip.id} ENvideo_path: {video_path}")
+                        logger.info(f"updateclip {existing_clip.id} 'svideo_path: {video_path}")
                         existing_clip.video_path = video_path
                         if existing_clip.tags is None:
-                            existing_clip.tags = []  # ENtagsENnull
+                            existing_clip.tags = []  # ensuretagsIstranslatedlisttranslatedIsnull
                         updated_count += 1
                         continue
                     
-                    # ENtimeEN
+                    # translatedformat
                     start_time = self._convert_time_to_seconds(clip_data.get('start_time', '00:00:00'))
                     end_time = self._convert_time_to_seconds(clip_data.get('end_time', '00:00:00'))
                     duration = end_time - start_time
                     
-                    # ENvideofilepath，ENuseprojectENdirectory
+                    # translatedvideofile path，translateduseprojecttranslateddirectory
                     clip_id = clip_data.get('id', str(synced_count + 1))
                     title = clip_data.get('generated_title', clip_data.get('title', clip_data.get('outline', '')))
                     
-                    # ENuseprojectENpath
+                    # translateduseprojecttranslatedpath
                     from ..core.path_utils import get_project_directory, get_data_directory
                     project_dir = get_project_directory(project_id)
                     project_clips_dir = project_dir / "output" / "clips"
                     project_clips_dir.mkdir(parents=True, exist_ok=True)
                     
-                    # ENfileEN（EN）
+                    # translated'sfiletranslated（translated）
                     actual_filename = None
                     for file_path in project_clips_dir.glob(f"{clip_id}_*.mp4"):
                         actual_filename = file_path.name
@@ -250,12 +250,12 @@ class DataSyncService:
                     if actual_filename:
                         project_video_path = project_clips_dir / actual_filename
                     else:
-                        # ifENfile，useENfileEN
+                        # iftranslatedfile，usecleantranslated'sfiletranslated
                         safe_title = "".join(c for c in title if c.isalnum() or c in (' ', '-', '_')).rstrip()
                         safe_title = safe_title.replace(' ', '_')
                         project_video_path = project_clips_dir / f"{clip_id}_{safe_title}.mp4"
                     
-                    # ENdirectory，ifENthenENprojectdirectory
+                    # translated'stranslateddirectory，iftranslatedintranslatedprojectdirectory
                     global_clips_dir = get_data_directory() / "output" / "clips"
                     if actual_filename:
                         global_video_path = global_clips_dir / actual_filename
@@ -267,12 +267,12 @@ class DataSyncService:
                     if global_video_path.exists() and not project_video_path.exists():
                         import shutil
                         shutil.copy2(global_video_path, project_video_path)
-                        logger.info(f"ENclipfileENdirectoryENprojectdirectory: {global_video_path} -> {project_video_path}")
+                        logger.info(f"translatedclipfilefromtranslateddirectorytranslatedprojectdirectory: {global_video_path} -> {project_video_path}")
                     
-                    # ENuseprojectENpath
+                    # translateduseprojecttranslatedpath
                     video_path = str(project_video_path)
                     
-                    # createclipEN
+                    # createcliptranslated
                     clip = Clip(
                         project_id=project_id,
                         title=clip_data.get('generated_title', clip_data.get('title', clip_data.get('outline', ''))),
@@ -282,7 +282,7 @@ class DataSyncService:
                         duration=duration,
                         score=clip_data.get('final_score', 0.0),
                         video_path=video_path,
-                        tags=[],  # ENtagsENnull
+                        tags=[],  # ensuretagsIstranslatedlisttranslatedIsnull
                         clip_metadata=clip_data,
                         status=ClipStatus.COMPLETED
                     )
@@ -291,28 +291,28 @@ class DataSyncService:
                     synced_count += 1
                     
                 except Exception as e:
-                    logger.error(f"ENclipfailed: {e}")
+                    logger.error(f"translatedclipfailed: {e}")
                     continue
             
             self.db.commit()
-            logger.info(f"project {project_id} EN {synced_count} ENclip，updateEN {updated_count} ENclip")
+            logger.info(f"project {project_id} translated {synced_count}  clip，updatetranslated {updated_count}  clip")
             return synced_count
             
         except Exception as e:
-            logger.error(f"ENclipENfailed: {str(e)}")
+            logger.error(f"translatedcliptranslatedfailed: {str(e)}")
             return 0
     
     def _sync_collections_from_filesystem(self, project_id: str, project_dir: Path) -> int:
-        """ENfilesystemENcollectionEN"""
+        """fromfileSystemtranslatedcollectiontranslated"""
         try:
-            # ENcollectionsdirectorypath
+            # translatedcollectionsdirectorypath
             collections_dir = project_dir / "output" / "collections"
             
-            # ENcollectionENfile
+            # translatedcollectiontranslatedfile
             collections_files = [
-                project_dir / "step6_video" / "collections_metadata.json",  # EN
+                project_dir / "step6_video" / "collections_metadata.json",  # translated'stranslated
                 project_dir / "step5_clustering" / "step5_clustering.json",
-                project_dir / "metadata" / "step5_collections.json",  # ENstep5_collections.json
+                project_dir / "metadata" / "step5_collections.json",  # addstep5_collections.json
                 project_dir / "collections_metadata.json",
                 project_dir / "metadata" / "collections_metadata.json"
             ]
@@ -324,25 +324,25 @@ class DataSyncService:
                     try:
                         with open(collections_file, 'r', encoding='utf-8') as f:
                             collections_data = json.load(f)
-                        logger.info(f"succeededreadcollectionfile: {collections_file}, EN: {len(collections_data) if isinstance(collections_data, list) else 'not list'}")
+                        logger.info(f"succeededtranslatedcollectionfile: {collections_file}, translated: {len(collections_data) if isinstance(collections_data, list) else 'not list'}")
                         break
                     except Exception as e:
-                        logger.warning(f"readcollectionfilefailed {collections_file}: {e}")
+                        logger.warning(f"translatedcollectionfilefailed {collections_file}: {e}")
                 else:
-                    logger.info(f"collectionfiledoes not exist: {collections_file}")
+                    logger.info(f"collectionfile not found: {collections_file}")
             
             if not collections_data:
-                logger.info(f"project {project_id} ENcollectionEN")
+                logger.info(f"project {project_id} translatedcollectiontranslated")
                 return 0
             
-            # ENcollections_dataEN
+            # ensurecollections_dataIslist
             if isinstance(collections_data, dict) and "collections" in collections_data:
                 collections_data = collections_data["collections"]
             elif not isinstance(collections_data, list):
-                logger.warning(f"project {project_id} collectionEN")
+                logger.warning(f"project {project_id} collectiontranslatedformattranslated")
                 return 0
             
-            # readdeleteENfile
+            # translateddeletetranslatedfile
             deleted_collections_file = project_dir / "deleted_collections.json"
             deleted_collections = set()
             if deleted_collections_file.exists():
@@ -351,7 +351,7 @@ class DataSyncService:
                         deleted_data = json.load(f)
                         deleted_collections = set(deleted_data.get('deleted_collection_ids', []))
                 except Exception as e:
-                    logger.warning(f"readdeleteENfailed: {e}")
+                    logger.warning(f"translateddeletetranslatedfailed: {e}")
             
             synced_count = 0
             for collection_data in collections_data:
@@ -359,27 +359,27 @@ class DataSyncService:
                     collection_id = collection_data.get("id", "")
                     collection_title = collection_data.get("collection_title", "")
                     
-                    # checkENdelete
+                    # checkIstranslateddelete
                     if collection_id in deleted_collections:
-                        logger.info(f"collection {collection_id} ENdelete，EN")
+                        logger.info(f"collection {collection_id} translateddelete，skiptranslated")
                         continue
                     
-                    # checkcollectionENalready exists
+                    # checkcollectionIstranslatedin
                     existing_collection = self.db.query(Collection).filter(
                         Collection.project_id == project_id,
                         Collection.name == collection_title
                     ).first()
                     
                     if existing_collection:
-                        # collectionalready exists，checkENneedEN
+                        # collectiontranslatedin，checkIstranslated
                         collection = existing_collection
-                        logger.info(f"collection {collection_title} already exists，checkEN")
+                        logger.info(f"collection {collection_title} translatedin，checktranslated")
                     else:
-                        # createENcollection
+                        # createtranslatedcollection
                         collection = None
                     
-                    # ENcollectionvideofilepath，ENuseprojectENdirectory
-                    # ENmayENfileEN
+                    # translatedcollectionvideofile path，translateduseprojecttranslateddirectory
+                    # translatedmultitranslatedcantranslated'sfiletranslatedformat
                     possible_filenames = [
                         f"{collection_id}_{collection_title}.mp4",
                         f"{collection_title}.mp4",
@@ -392,55 +392,55 @@ class DataSyncService:
                     project_collections_dir.mkdir(parents=True, exist_ok=True)
                     
                     video_path = None
-                    # ENprojectdirectoryEN
+                    # translatedinprojectdirectorytranslated
                     for filename in possible_filenames:
                         project_video_path = project_collections_dir / filename
                         if project_video_path.exists():
                             video_path = str(project_video_path)
                             break
                     
-                    # ifprojectdirectoryEN，ENdirectoryEN
+                    # iftranslatedprojectdirectorytranslated，translateddirectorytranslated
                     if not video_path:
                         for filename in possible_filenames:
                             legacy_video_path = get_data_directory() / "output" / "collections" / filename
                             if legacy_video_path.exists():
-                                # ENprojectdirectory
+                                # translatedprojectdirectory
                                 project_video_path = project_collections_dir / filename
                                 import shutil
                                 shutil.copy2(legacy_video_path, project_video_path)
                                 video_path = str(project_video_path)
-                                logger.info(f"ENcollectionfileENdirectoryENprojectdirectory: {legacy_video_path} -> {project_video_path}")
+                                logger.info(f"translatedcollectionfilefromtranslateddirectorytranslatedprojectdirectory: {legacy_video_path} -> {project_video_path}")
                                 break
                     
-                    # ifEN，useprojectENpath（filemayENgenerate）
+                    # iftranslatedIstranslated，useprojecttranslatedpath（filecantranslated）
                     if not video_path:
                         video_path = str(project_collections_dir / possible_filenames[0])
                     
-                    # ENclip_idsENUUIDEN
+                    # translatedformat'sclip_idstranslatedUUIDformat
                     original_clip_ids = collection_data.get('clip_ids', [])
                     uuid_clip_ids = []
                     
-                    # fetchprojectENallclipEN（ENID -> UUID）
+                    # fetchprojecttranslatedclip'stranslated（translatedID -> UUID）
                     clips = self.db.query(Clip).filter(Clip.project_id == project_id).all()
                     clip_id_mapping = {}
                     for clip in clips:
-                        # ENclip_metadataENfetchENID
+                        # fromclip_metadatatranslatedfetchtranslatedID
                         if clip.clip_metadata and 'id' in clip.clip_metadata:
                             original_id = str(clip.clip_metadata['id'])
                             clip_id_mapping[original_id] = clip.id
                     
-                    # ENclip_ids
+                    # translatedclip_ids
                     for original_id in original_clip_ids:
                         if str(original_id) in clip_id_mapping:
                             uuid_clip_ids.append(clip_id_mapping[str(original_id)])
                         else:
-                            logger.warning(f"ENclipID {original_id} ENUUID")
+                            logger.warning(f"translatedclipID {original_id} translated'sUUID")
                     
-                    # ENpath
+                    # translatedpath
                     thumbnail_filename = f"{collection_id}_{collection_title}_thumbnail.jpg"
                     thumbnail_path = collections_dir / thumbnail_filename
                     
-                    # ifcollectiondoes not exist，createENcollection
+                    # iftranslatedcollectionnot found，createtranslatedcollection
                     if not collection:
                         collection = Collection(
                             project_id=project_id,
@@ -450,8 +450,8 @@ class DataSyncService:
                             export_path=video_path,  # settingsexport_path
                             thumbnail_path=str(thumbnail_path) if thumbnail_path.exists() else None,
                             collection_metadata={
-                                'clip_ids': uuid_clip_ids,  # useUUIDENclip_ids
-                                'original_clip_ids': original_clip_ids,  # ENID
+                                'clip_ids': uuid_clip_ids,  # useUUIDformat'sclip_ids
+                                'original_clip_ids': original_clip_ids,  # translatedID
                                 'collection_type': 'ai_recommended',
                                 'original_id': collection_id
                             },
@@ -459,10 +459,10 @@ class DataSyncService:
                         )
                         
                         self.db.add(collection)
-                        self.db.flush()  # ENcollectionENID
-                        logger.info(f"createENcollection: {collection.id}")
+                        self.db.flush()  # ensurecollectiontranslatedID
+                        logger.info(f"createtranslatedcollection: {collection.id}")
                     else:
-                        # updateENcollectionEN
+                        # updatetranslatedcollection'stranslated
                         if not collection.collection_metadata:
                             collection.collection_metadata = {}
                         collection.collection_metadata.update({
@@ -473,15 +473,15 @@ class DataSyncService:
                         })
                         collection.video_path = video_path
                         collection.export_path = video_path  # settingsexport_path
-                        logger.info(f"updateENcollection: {collection.id}")
+                        logger.info(f"updatetranslatedcollection: {collection.id}")
                     
-                    # ENcollectionENclipEN
+                    # translatedcollectionAndclip'stranslated
                     for i, clip_id in enumerate(uuid_clip_ids):
                         try:
-                            # checkclipEN
+                            # checkclipIstranslatedin
                             clip = self.db.query(Clip).filter(Clip.id == clip_id).first()
                             if clip:
-                                # checkENalready exists
+                                # checktranslatedIstranslatedin
                                 from ..models.collection import clip_collection
                                 existing_relation = self.db.execute(
                                     clip_collection.select().where(
@@ -491,50 +491,50 @@ class DataSyncService:
                                 ).first()
                                 
                                 if not existing_relation:
-                                    # useEN
+                                    # usetranslated
                                     stmt = clip_collection.insert().values(
                                         clip_id=clip_id,
                                         collection_id=collection.id,
                                         order_index=i
                                     )
                                     self.db.execute(stmt)
-                                    logger.info(f"ENcollection {collection.id} ENclip {clip_id} EN")
+                                    logger.info(f"translatedcollection {collection.id} Andclip {clip_id} 'stranslated")
                                 else:
-                                    logger.info(f"collection {collection.id} ENclip {clip_id} ENalready exists")
+                                    logger.info(f"collection {collection.id} Andclip {clip_id} 'stranslatedin")
                             else:
-                                logger.warning(f"clip {clip_id} does not exist，EN")
+                                logger.warning(f"clip {clip_id} not found，skiptranslated")
                         except Exception as e:
-                            logger.error(f"ENcollectionENclipENfailed: {e}")
+                            logger.error(f"translatedcollectionAndcliptranslatedfailed: {e}")
                     
                     synced_count += 1
                     
                 except Exception as e:
-                    logger.error(f"ENcollectionfailed: {e}")
+                    logger.error(f"translatedcollectionfailed: {e}")
                     continue
             
             self.db.commit()
-            logger.info(f"project {project_id} EN {synced_count} ENcollection")
+            logger.info(f"project {project_id} translated {synced_count}  collection")
             return synced_count
             
         except Exception as e:
-            logger.error(f"ENcollectionENfailed: {str(e)}")
+            logger.error(f"translatedcollectiontranslatedfailed: {str(e)}")
             return 0
     
     def sync_project_data(self, project_id: str, project_dir: Path) -> Dict[str, Any]:
-        """ENprojectENdatabase"""
+        """translatedprojecttranslateddatabase"""
         try:
-            logger.info(f"startENprojectEN: {project_id}")
+            logger.info(f"translatedprojecttranslated: {project_id}")
             
-            # ENclipsEN
+            # translatedclipstranslated
             clips_count = self._sync_clips(project_id, project_dir)
             
-            # ENcollectionsEN
+            # translatedcollectionstranslated
             collections_count = self._sync_collections(project_id, project_dir)
             
-            # updateprojectEN
+            # updateprojecttranslatedinfo
             self._update_project_stats(project_id, clips_count, collections_count)
             
-            logger.info(f"projectEN: {project_id}, clips: {clips_count}, collections: {collections_count}")
+            logger.info(f"projecttranslated: {project_id}, clips: {clips_count}, collections: {collections_count}")
             
             return {
                 "success": True,
@@ -543,14 +543,14 @@ class DataSyncService:
             }
             
         except Exception as e:
-            logger.error(f"ENprojectENfailed: {str(e)}")
+            logger.error(f"translatedprojecttranslatedfailed: {str(e)}")
             raise
     
     def _sync_clips(self, project_id: str, project_dir: Path) -> int:
-        """ENclipsEN"""
+        """translatedclipstranslated"""
         clips_file = project_dir / "step4_titles.json"
         if not clips_file.exists():
-            logger.warning(f"Clipsfiledoes not exist: {clips_file}")
+            logger.warning(f"Clipsfile not found: {clips_file}")
             return 0
         
         try:
@@ -559,17 +559,17 @@ class DataSyncService:
             
             clips_count = 0
             for clip_data in clips_data:
-                # checkENalready exists
+                # checkIstranslatedin
                 existing_clip = self.db.query(Clip).filter(
                     Clip.project_id == project_id,
                     Clip.title == clip_data.get("generated_title")
                 ).first()
                 
                 if existing_clip:
-                    logger.info(f"Clipalready exists，EN: {clip_data.get('generated_title')}")
+                    logger.info(f"Cliptranslatedin，skip: {clip_data.get('generated_title')}")
                     continue
                 
-                # createENclipEN
+                # createtranslated'scliptranslated
                 clip = Clip(
                     project_id=project_id,
                     title=clip_data.get("generated_title", ""),
@@ -597,23 +597,23 @@ class DataSyncService:
                 logger.info(f"createclip: {clip.title}")
             
             self.db.commit()
-            logger.info(f"EN {clips_count} ENclips")
+            logger.info(f"translated {clips_count}  clips")
             return clips_count
             
         except Exception as e:
-            logger.error(f"ENclipsfailed: {str(e)}")
+            logger.error(f"translatedclipsfailed: {str(e)}")
             self.db.rollback()
             raise
     
     def _sync_collections(self, project_id: str, project_dir: Path) -> int:
-        """ENcollectionsENdatabase"""
+        """translatedcollectionstranslateddatabase"""
         collections_file = project_dir / "step5_collections.json"
         if not collections_file.exists():
-            logger.warning(f"Collectionsfiledoes not exist: {collections_file}")
+            logger.warning(f"Collectionsfile not found: {collections_file}")
             return 0
         
         try:
-            # ENcollectionsdirectorypath
+            # translatedcollectionsdirectorypath
             collections_dir = project_dir / "output" / "collections"
             
             with open(collections_file, 'r', encoding='utf-8') as f:
@@ -621,23 +621,23 @@ class DataSyncService:
             
             collections_count = 0
             for collection_data in collections_data:
-                # checkENalready exists
+                # checkIstranslatedin
                 existing_collection = self.db.query(Collection).filter(
                     Collection.project_id == project_id,
                     Collection.name == collection_data.get("collection_title")
                 ).first()
                 
                 if existing_collection:
-                    logger.info(f"Collectionalready exists，EN: {collection_data.get('collection_title')}")
+                    logger.info(f"Collectiontranslatedin，skip: {collection_data.get('collection_title')}")
                     continue
                 
-                # ENpath
+                # translatedpath
                 collection_id = collection_data.get("id", "")
                 collection_title = collection_data.get("collection_title", "")
                 thumbnail_filename = f"{collection_id}_{collection_title}_thumbnail.jpg"
                 thumbnail_path = collections_dir / thumbnail_filename
                 
-                # createENcollectionEN
+                # createtranslated'scollectiontranslated
                 collection = Collection(
                     project_id=project_id,
                     name=collection_data.get("collection_title", ""),
@@ -649,7 +649,7 @@ class DataSyncService:
                     collection_metadata={
                         "clip_ids": collection_data.get("clip_ids", []),
                         "original_id": collection_data.get("id"),
-                        "collection_type": "ai_recommended"  # ENAIEN
+                        "collection_type": "ai_recommended"  # translatedAIrecommend
                     }
                 )
                 
@@ -658,28 +658,28 @@ class DataSyncService:
                 logger.info(f"createcollection: {collection.name}")
             
             self.db.commit()
-            logger.info(f"EN {collections_count} ENcollections")
+            logger.info(f"translated {collections_count}  collections")
             return collections_count
             
         except Exception as e:
-            logger.error(f"ENcollectionsfailed: {str(e)}")
+            logger.error(f"translatedcollectionsfailed: {str(e)}")
             self.db.rollback()
             raise
     
     def _update_project_stats(self, project_id: str, clips_count: int, collections_count: int):
-        """updateprojectEN"""
+        """updateprojecttranslatedinfo"""
         try:
             project = self.db.query(Project).filter(Project.id == project_id).first()
             if project:
                 project.total_clips = clips_count
                 project.total_collections = collections_count
                 self.db.commit()
-                logger.info(f"updateprojectEN: clips={clips_count}, collections={collections_count}")
+                logger.info(f"updateprojecttranslated: clips={clips_count}, collections={collections_count}")
         except Exception as e:
-            logger.error(f"updateprojectENfailed: {str(e)}")
+            logger.error(f"updateprojecttranslatedfailed: {str(e)}")
     
     def _parse_time(self, time_str: str) -> float:
-        """parsetimeEN"""
+        """translatedsecondstranslated"""
         try:
             if ',' in time_str:
                 time_str = time_str.replace(',', '.')
@@ -696,15 +696,15 @@ class DataSyncService:
             return 0.0
     
     def _calculate_duration(self, start_time: str, end_time: str) -> float:
-        """ENtime"""
+        """translated"""
         start_seconds = self._parse_time(start_time)
         end_seconds = self._parse_time(end_time)
         return end_seconds - start_seconds
 
     def _convert_time_to_seconds(self, time_str: str) -> int:
-        """ENtimeEN"""
+        """translatedsecondstranslated"""
         try:
-            # processingEN "00:00:00,120" EN "00:00:00.120"
+            # processformat "00:00:00,120" or "00:00:00.120"
             time_str = time_str.replace(',', '.')
             parts = time_str.split(':')
             hours = int(parts[0])
@@ -716,40 +716,40 @@ class DataSyncService:
             total_seconds = hours * 3600 + minutes * 60 + seconds + milliseconds / 1000
             return int(total_seconds)
         except Exception as e:
-            logger.error(f"timeENfailed: {time_str}, error: {e}")
+            logger.error(f"translatedfailed: {time_str}, error: {e}")
             return 0
     
     def _update_project_status_if_completed(self, project_id: str, project_dir: Path):
-        """checkprojectENcompletedprocessing，ifENthenupdatestatusENcompleted"""
+        """checkprojectIstranslatedcompletedprocess，iftranslatedIstranslatedupdatestatustranslatedcompleted"""
         try:
-            # checkENstep6_video_output.jsonfile，ENprocessingEN
+            # checkIstranslatedstep6_video_output.jsonfile，thisIsprocessing completed'stranslated
             step6_output_file = project_dir / "output" / "step6_video_output.json"
             
             if step6_output_file.exists():
-                # fetchprojectEN
+                # fetchprojecttranslated
                 project = self.db.query(Project).filter(Project.id == project_id).first()
                 if project and project.status != ProjectStatus.COMPLETED:
-                    # readstep6ENfilefetchEN
+                    # translatedstep6translatedfilefetchtranslatedinfo
                     try:
                         with open(step6_output_file, 'r', encoding='utf-8') as f:
                             step6_output = json.load(f)
                         
-                        # updateprojectstatusEN
+                        # updateprojectstatusAndtranslatedinfo
                         project.status = ProjectStatus.COMPLETED
                         project.total_clips = step6_output.get("clips_count", 0)
                         project.total_collections = step6_output.get("collections_count", 0)
                         project.completed_at = datetime.now()
                         
                         self.db.commit()
-                        logger.info(f"project {project_id} statusupdatedENcompleted，clipEN: {project.total_clips}, collectionEN: {project.total_collections}")
+                        logger.info(f"project {project_id} statustranslatedupdatetranslatedcompleted，cliptranslated: {project.total_clips}, collectiontranslated: {project.total_collections}")
                         
                     except Exception as e:
-                        logger.error(f"readstep6ENfilefailed: {e}")
-                        # ENreadfailed，ENcompleted
+                        logger.error(f"translatedstep6translatedfilefailed: {e}")
+                        # translatedfailed，translatedcompleted
                         project.status = ProjectStatus.COMPLETED
                         project.completed_at = datetime.now()
                         self.db.commit()
-                        logger.info(f"project {project_id} statusupdatedENcompleted（EN）")
+                        logger.info(f"project {project_id} statustranslatedupdatetranslatedcompleted（translatedinfo）")
                         
         except Exception as e:
             logger.error(f"updateprojectstatusfailed: {e}")

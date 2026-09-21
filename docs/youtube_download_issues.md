@@ -1,90 +1,90 @@
-# YouTubeEN
+# YouTubedownloadissuesolution
 
-## EN
+## issue
 
-### 1. YouTubeEN (HTTP Error 403: Forbidden)
+### 1. YouTubedownloadfailed (HTTP Error 403: Forbidden)
 
-**EN：**
+**phenomenon：**
 ```
 ERROR: unable to download video data: HTTP Error 403: Forbidden
 ```
 
-**EN：**
-- YouTubeEN
-- 403EN，EN：
-  - EN
-  - EN
-  - EN
-  - YouTubeEN
-  - EN
+**reason：**
+- YouTubedownloadlimit
+- 403erroraccess，reason：
+  - 
+  - limit
+  - needsign inaccess
+  - YouTubedownload
+  - 
 
-### 2. ENreloading
+### 2. backendreloading
 
-**EN：**
+**phenomenon：**
 ```
 WARNING: WatchFiles detected changes in 'backend/services/collection_service.py', 'backend/api/v1/projects.py', 'scripts/test_collection_preview.py'. Reloading...
 ```
 
-**EN：**
-- EN
-- EN，EN
-- EN
+**reason：**
+- dev mode
+- file，
+- productionissue
 
-## EN
+## solution
 
-### 1. ENYouTubeEN
+### 1. improveYouTubedownload
 
-#### EN (`youtube_improved.py`)
-- EN
-- EN
-- ENUser-AgentEN
-- SupportEN
+#### createimprovedownload (`youtube_improved.py`)
+- 
+- improveerror handling
+- User-Agentsettings
+- supportdownload
 
-#### EN：
+#### improve：
 ```python
 class YouTubeDownloader:
     def __init__(self):
         self.max_retries = 3
-        self.retry_delay = 5  # EN
+        self.retry_delay = 5  # 
     
     async def download_video(self, url, output_dir, browser=None, retry_count=0):
-        # EN
+        # 
         if "HTTP Error 403" in error_msg:
             if retry_count < self.max_retries:
                 await asyncio.sleep(self.retry_delay)
                 return await self.download_video(url, output_dir, browser, retry_count + 1)
 ```
 
-### 2. EN
+### 2. security
 
-#### EN (`async_task_manager.py`)
-- EN
-- ProvidesEN
-- SupportEN
+#### create (`async_task_manager.py`)
+- backend
+- status
+- support
 
-#### EN：
+#### ：
 ```python
 class AsyncTaskManager:
     async def create_safe_task(self, task_id, coro, *args, **kwargs):
-        # EN，EN
+        # security，
         async def safe_wrapper():
             try:
                 result = await coro(*args, **kwargs)
                 return result
             except Exception as e:
-                # EN
-                logger.error(f"EN: {task_id}, EN: {e}")
+                # error
+                logger.error(f"failed: {task_id}, error: {e}")
                 return {"error": str(e)}
 ```
 
-### 3. ENAPI
+### 3. API
 
-#### YouTube APIEN：
+#### YouTube APIimprove：
 ```python
-# EN
+# 
 asyncio.create_task(process_youtube_download_task(task_id, request, project_id))
 
-# EN
+# improve
 from .async_task_manager import task_manager
 await task_manager.create_safe_task(
     f"youtube_download_{task_id}", 
@@ -95,54 +95,54 @@ await task_manager.create_safe_task(
 )
 ```
 
-## EN
+## use
 
-### 1. ENYouTubeEN
+### 1. YouTubedownloadfailed
 
-**EN：**
-- ENURL
-- EN
-- EN，ProvidesENcookies
+**：**
+- useURL
+- access
+- needsign in，cookies
 
-**EN：**
-- EN
-- EN
-- ProvidesEN
+**improve：**
+- useimprovedownload
+- 
+- error
 
-### 2. EN
+### 2. backend
 
-**EN：**
-- EN
-- EN`--reload`EN
+**dev environment：**
+- 
+- can`--reload`
 
-**EN：**
-- EN
-- EN
+**production：**
+- issue
+- useimprove
 
-## EN
+## testverify
 
-### EN：
+### test：
 ```bash
-# EN
+# issue
 python scripts/fix_youtube_download.py --analyze
 
-# EN
+# testimprove
 python scripts/test_youtube_improvements.py
 ```
 
-### EN：
-1. EN
-2. YouTubeEN
-3. EN
-4. EN
+### test：
+1. security
+2. YouTubedownloadimprove
+3. 
+4. 
 
-## EN
+## summary
 
-EN，EN：
-1. ✅ YouTubeEN403EN
-2. ✅ EN
-3. ✅ ProvidesEN
-4. ✅ EN
+improve，solve：
+1. ✅ YouTubedownload403error
+2. ✅ backendissue
+3. ✅ error
+4. ✅ 
 
-ENYouTubeEN。
+improveYouTubedownload。
 

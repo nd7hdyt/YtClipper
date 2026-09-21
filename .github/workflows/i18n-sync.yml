@@ -49,13 +49,13 @@ jobs:
     - name: Check language consistency (Warning Only)
       run: |
         echo "🔍 Checking language consistency (warnings only)..."
-        if ! grep -q "EN.*English.*EN" README.md; then
+        if ! grep -q "Language.*English.*translated" README.md; then
           echo "⚠️  Warning: Language switcher may be missing in Chinese README"
         else
           echo "✅ Language switcher found in Chinese README"
         fi
         
-        if ! grep -q "Language.*English.*EN" README-EN.md; then
+        if ! grep -q "Language.*English.*translated" README-EN.md; then
           echo "⚠️  Warning: Language switcher may be missing in English README"
         else
           echo "✅ Language switcher found in English README"
@@ -65,13 +65,13 @@ jobs:
     - name: Validate contact information (Warning Only)
       run: |
         echo "🔍 Checking contact information (warnings only)..."
-        if ! grep -Eq '([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})|(EN|Contact).*(EN|Issue|EN|EN|QQ|Discord|Telegram|Link|EN)' README.md; then
+        if ! grep -Eq '([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})|(Contact|Contact).*(translated|Issue|translated|translated|QQ|Discord|Telegram|Link|translated)' README.md; then
           echo "⚠️  Warning: Contact information may be missing in Chinese README"
         else
           echo "✅ Contact information found in Chinese README"
         fi
         
-        if ! grep -Eq '([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})|(EN|Contact).*(EN|Issue|EN|EN|QQ|Discord|Telegram|Link|EN)' README-EN.md; then
+        if ! grep -Eq '([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})|(Contact|Contact).*(translated|Issue|translated|translated|QQ|Discord|Telegram|Link|translated)' README-EN.md; then
           echo "⚠️  Warning: Contact information may be missing in English README"
         else
           echo "✅ Contact information found in English README"

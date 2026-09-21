@@ -1,6 +1,6 @@
 """
-taskEN
-ENtaskENexecutestatus
+taskmodel
+translatedtask'stranslatedinfoAndtranslatedstatus
 """
 
 import enum
@@ -9,94 +9,94 @@ from sqlalchemy.orm import relationship
 from .base import BaseModel, TimestampMixin
 
 class TaskStatus(str, enum.Enum):
-    """taskstatusEN"""
-    PENDING = "pending"           # EN
-    RUNNING = "running"           # runEN
+    """taskstatustranslated"""
+    PtranslatedDING = "pending"           # etc.translated
+    RUNNING = "running"           # translated
     COMPLETED = "completed"       # completed
     FAILED = "failed"            # failed
-    CANCELLED = "cancelled"      # ENcancel
+    CANCELLED = "cancelled"      # translatedcancel
 
 class TaskType(str, enum.Enum):
-    """taskEN"""
-    VIDEO_PROCESSING = "video_processing"    # videoprocessing
-    CLIP_GENERATION = "clip_generation"      # clipgenerate
+    """tasktranslated"""
+    VIDEO_PROCESSING = "video_processing"    # videoprocess
+    CLIP_GtranslatedERATION = "clip_generation"      # cliptranslated
     COLLECTION_CREATION = "collection_creation"  # collectioncreate
-    EXPORT = "export"                        # EN
-    CLEANUP = "cleanup"                      # EN
+    EXPORT = "export"                        # export
+    CLEANUP = "cleanup"                      # clean
 
 class Task(BaseModel, TimestampMixin):
-    """taskEN"""
+    """taskmodel"""
     
     __tablename__ = "tasks"
     
-    # EN
+    # translatedinfo
     name = Column(
         String(255), 
         nullable=False, 
-        comment="taskEN"
+        comment="tasktranslated"
     )
     description = Column(
         Text, 
         nullable=True, 
-        comment="taskdescription"
+        comment="tasktranslated"
     )
     
-    # statusEN
+    # statusinfo
     status = Column(
         Enum(TaskStatus), 
-        default=TaskStatus.PENDING,
+        default=TaskStatus.PtranslatedDING,
         nullable=False,
         comment="taskstatus"
     )
     task_type = Column(
         Enum(TaskType), 
         nullable=False,
-        comment="taskEN"
+        comment="tasktranslated"
     )
     
-    # progressEN
-    progress = Column(Float, default=0.0, comment="progressEN")
+    # progressinfo
+    progress = Column(Float, default=0.0, comment="progresstranslated")
     current_step = Column(
         String(100), 
         nullable=True, 
-        comment="currentEN"
+        comment="translatedstep"
     )
     total_steps = Column(
         Integer, 
         default=1,
-        comment="EN"
+        comment="translatedsteptranslated"
     )
     priority = Column(
         Integer, 
         default=0,
-        comment="taskEN"
+        comment="tasktranslated"
     )
     
-    # executeEN
+    # translatedinfo
     started_at = Column(
         DateTime, 
         nullable=True, 
-        comment="starttime"
+        comment="translated"
     )
     completed_at = Column(
         DateTime, 
         nullable=True, 
-        comment="ENtime"
+        comment="translated"
     )
     error_message = Column(
         Text, 
         nullable=True, 
-        comment="errorEN"
+        comment="errorinfo"
     )
     
-    # CelerytaskEN
+    # Celerytaskinfo
     celery_task_id = Column(
         String(255), 
         nullable=True, 
         comment="CelerytaskID"
     )
     
-    # configEN
+    # configinfo
     task_config = Column(
         JSON, 
         nullable=True, 
@@ -105,20 +105,20 @@ class Task(BaseModel, TimestampMixin):
     result_data = Column(
         JSON, 
         nullable=True, 
-        comment="resultEN"
+        comment="translated"
     )
     task_metadata = Column(
         JSON, 
         nullable=True, 
-        comment="taskEN"
+        comment="tasktranslated"
     )
     
-    # EN
+    # translated
     project_id = Column(
         String(36), 
         ForeignKey("projects.id"),
         nullable=False,
-        comment="ENprojectID"
+        comment="translatedprojectID"
     )
     project = relationship(
         "Project", 
@@ -130,22 +130,22 @@ class Task(BaseModel, TimestampMixin):
     
     @property
     def is_running(self):
-        """ENcurrentlyrun"""
+        """Istranslatedintranslated"""
         return self.status == TaskStatus.RUNNING
     
     @property
     def is_completed(self):
-        """ENcompleted"""
+        """Istranslatedcompleted"""
         return self.status == TaskStatus.COMPLETED
     
     @property
     def has_error(self):
-        """ENerror"""
+        """Istranslatederror"""
         return self.status == TaskStatus.FAILED
     
     @property
     def duration(self):
-        """taskENtime（EN）"""
+        """tasktranslated（seconds）"""
         if self.started_at and self.completed_at:
             return (self.completed_at - self.started_at).total_seconds()
         elif self.started_at:
@@ -153,13 +153,13 @@ class Task(BaseModel, TimestampMixin):
         return 0
     
     def start(self):
-        """starttask"""
+        """translatedtask"""
         self.status = TaskStatus.RUNNING
         self.started_at = datetime.utcnow()
         self.progress = 0.0
     
     def complete(self, result_data=None):
-        """ENtask"""
+        """translatedtask"""
         self.status = TaskStatus.COMPLETED
         self.completed_at = datetime.utcnow()
         self.progress = 100.0
@@ -184,19 +184,19 @@ class Task(BaseModel, TimestampMixin):
             self.current_step = current_step
     
     def is_completed(self):
-        """checkEN"""
+        """checkIstranslated"""
         return self.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]
     
     def is_running(self):
-        """checkENrunEN"""
+        """checkIstranslated"""
         return self.status == TaskStatus.RUNNING
     
     def is_pending(self):
-        """checkENprocessing"""
-        return self.status == TaskStatus.PENDING
+        """checkIstranslatedprocess"""
+        return self.status == TaskStatus.PtranslatedDING
     
     def get_duration(self):
-        """fetchtaskENtime"""
+        """fetchtasktranslated"""
         if not self.started_at:
             return None
         
@@ -204,7 +204,7 @@ class Task(BaseModel, TimestampMixin):
         return (end_time - self.started_at).total_seconds()
     
     def to_dict(self):
-        """EN"""
+        """translated"""
         return {
             "id": self.id,
             "name": self.name,

@@ -25,9 +25,9 @@ import {
   SettingOutlined,
   ClockCircleOutlined
 } from '@ant-design/icons';
-// removedate-fnsEN，EN
+// translateddate-fnsdependencies，useBuilt-intranslated
 
-// EN
+// translated
 interface AccountHealth {
   account_id: number;
   username: string;
@@ -80,27 +80,27 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [refreshInterval, setRefreshInterval] = useState<number | null>(null);
 
-  // EN
+  // translatedformattranslated
   const getTimeAgo = (dateString: string) => {
     const now = new Date();
     const date = new Date(dateString);
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
     
     if (diffInSeconds < 60) {
-      return 'Just now';
+      return 'translated';
     } else if (diffInSeconds < 3600) {
       const minutes = Math.floor(diffInSeconds / 60);
-      return `${minutes} minutes ago`;
+      return `${minutes}minutestranslated`;
     } else if (diffInSeconds < 86400) {
       const hours = Math.floor(diffInSeconds / 3600);
-      return `${hours} hours ago`;
+      return `${hours}translated`;
     } else {
       const days = Math.floor(diffInSeconds / 86400);
-      return `${days}EN`;
+      return `${days}translated`;
     }
   };
 
-  // Fetch healthStatusEN
+  // fetchtranslatedstatustranslated
   const fetchHealthSummary = async (forceCheck = false) => {
     try {
       setLoading(true);
@@ -124,17 +124,17 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
       setHealthData(data);
       
       if (forceCheck) {
-        message.success('Health checkCompleted');
+        message.success('Health Checktranslated');
       }
     } catch (error) {
-      console.error('Fetch healthStatusFailed:', error);
-      message.error('Fetch healthStatusFailed');
+      console.error('fetchtranslatedstatusfailed:', error);
+      message.error('fetchtranslatedstatusfailed');
     } finally {
       setLoading(false);
     }
   };
 
-  // checkENaccount
+  // checktranslated Account
   const checkSingleAccount = async (accountId: number, forceCheck = true) => {
     try {
       setRefreshing(prev => [...prev, accountId]);
@@ -149,7 +149,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
       
       const updatedAccount = await response.json();
       
-      // updatehealthEN
+      // updatetranslated
       setHealthData(prev => {
         if (!prev) return prev;
         
@@ -157,7 +157,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
           account.account_id === accountId ? updatedAccount : account
         );
         
-        // EN
+        // translated
         const statusCounts = {
           healthy: 0,
           warning: 0,
@@ -180,16 +180,16 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
         };
       });
       
-      message.success(`account ${updatedAccount.username} checkCompleted`);
+      message.success(`Account ${updatedAccount.username} checktranslated`);
     } catch (error) {
-      console.error('Check accountFailed:', error);
-      message.error('Check accountFailed');
+      console.error('checkAccountfailed:', error);
+      message.error('checkAccountfailed');
     } finally {
       setRefreshing(prev => prev.filter(id => id !== accountId));
     }
   };
 
-  // RefreshCookie
+  // translatedCookie
   const refreshCookie = async (accountId: number) => {
     try {
       const response = await fetch('/health/refresh-cookie', {
@@ -215,18 +215,18 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
         message.warning(result.message);
       }
     } catch (error) {
-      console.error('RefreshCookieFailed:', error);
-      message.error('RefreshCookieFailed');
+      console.error('translatedCookiefailed:', error);
+      message.error('translatedCookiefailed');
     }
   };
 
-  // Get status tags
+  // fetchstatustranslated
   const getStatusTag = (status: string) => {
     const statusConfig = {
-      healthy: { color: 'success', icon: <CheckCircleOutlined />, text: 'health' },
-      warning: { color: 'warning', icon: <ExclamationCircleOutlined />, text: 'Warning' },
-      critical: { color: 'error', icon: <CloseCircleOutlined />, text: 'EN' },
-      unknown: { color: 'default', icon: <QuestionCircleOutlined />, text: 'unknown' }
+      healthy: { color: 'success', icon: <CheckCircleOutlined />, text: 'translated' },
+      warning: { color: 'warning', icon: <ExclamationCircleOutlined />, text: 'translated' },
+      critical: { color: 'error', icon: <CloseCircleOutlined />, text: 'translated' },
+      unknown: { color: 'default', icon: <QuestionCircleOutlined />, text: 'translated' }
     };
     
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.unknown;
@@ -238,13 +238,13 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
     );
   };
 
-  // fetchENProgressEN
+  // fetchtranslatedprogresstranslated
   const getExpirationProgress = (expiresIn?: number) => {
     if (expiresIn === undefined || expiresIn === null) {
       return null;
     }
     
-    const totalDays = 30; // ENCookieEN30EN
+    const totalDays = 30; // translatedCookietranslated30translated
     const percentage = Math.max(0, Math.min(100, (expiresIn / totalDays) * 100));
     
     let status: 'success' | 'normal' | 'exception' = 'success';
@@ -255,7 +255,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
     }
     
     return (
-      <Tooltip title={`EN ${expiresIn} EN`}>
+      <Tooltip title={`translated ${expiresIn} translated`}>
         <Progress
           percent={percentage}
           status={status}
@@ -267,17 +267,17 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
     );
   };
 
-  // Table columns
+  // translated
   const columns = [
     {
-      title: 'account',
+      title: 'Account',
       dataIndex: 'username',
       key: 'username',
       render: (username: string, record: AccountHealth) => (
         <Space>
           <span>{username}</span>
           {record.details.login?.user_info && (
-            <Tooltip title={`Level: ${record.details.login.user_info.level}`}>
+            <Tooltip title={`etc.translated: ${record.details.login.user_info.level}`}>
               <Badge count={record.details.login.user_info.level} color="blue" />
             </Tooltip>
           )}
@@ -285,13 +285,13 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
       ),
     },
     {
-      title: 'healthStatus',
+      title: 'translatedstatus',
       dataIndex: 'status',
       key: 'status',
       render: (status: string) => getStatusTag(status),
     },
     {
-      title: 'CookieStatus',
+      title: 'Cookiestatus',
       key: 'cookie_status',
       render: (record: AccountHealth) => (
         <Space direction="vertical" size="small">
@@ -301,7 +301,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
       ),
     },
     {
-      title: 'Last check',
+      title: 'translatedcheck',
       dataIndex: 'last_check',
       key: 'last_check',
       render: (lastCheck: string) => (
@@ -314,7 +314,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
       ),
     },
     {
-      title: 'Actions',
+      title: 'translated',
       key: 'actions',
       render: (record: AccountHealth) => (
         <Space>
@@ -334,7 +334,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
               setDetailsVisible(true);
             }}
           >
-            Details
+            translated
           </Button>
           {record.status === 'critical' || record.status === 'warning' ? (
             <Button
@@ -342,7 +342,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
               danger
               onClick={() => refreshCookie(record.account_id)}
             >
-              RefreshCookie
+              translatedCookie
             </Button>
           ) : null}
         </Space>
@@ -350,17 +350,17 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
     },
   ];
 
-  // ENfetchEN
+  // translatedfetchtranslated
   useEffect(() => {
     fetchHealthSummary();
   }, []);
 
-  // ENRefresh
+  // translated
   useEffect(() => {
     if (autoRefresh) {
       const interval = window.setInterval(() => {
         fetchHealthSummary();
-      }, 60000); // ENRefreshonce
+      }, 60000); // perminutestranslatedonetranslated
       setRefreshInterval(interval);
     } else {
       if (refreshInterval) {
@@ -378,12 +378,12 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
 
   return (
     <div>
-      {/* Stats card */}
+      {/* translated */}
       <Row gutter={16} style={{ marginBottom: 16 }}>
         <Col span={6}>
           <Card>
             <Statistic
-              title="ENaccountEN"
+              title="translatedAccounttranslated"
               value={healthData?.total_accounts || 0}
               prefix={<CheckCircleOutlined />}
             />
@@ -392,7 +392,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
         <Col span={6}>
           <Card>
             <Statistic
-              title="healthaccount"
+              title="translatedAccount"
               value={healthData?.healthy_count || 0}
               valueStyle={{ color: '#3f8600' }}
               prefix={<CheckCircleOutlined />}
@@ -402,7 +402,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
         <Col span={6}>
           <Card>
             <Statistic
-              title="Warningaccount"
+              title="translatedAccount"
               value={healthData?.warning_count || 0}
               valueStyle={{ color: '#cf1322' }}
               prefix={<ExclamationCircleOutlined />}
@@ -412,7 +412,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
         <Col span={6}>
           <Card>
             <Statistic
-              title="EN"
+              title="translatedissue"
               value={healthData?.critical_count || 0}
               valueStyle={{ color: '#cf1322' }}
               prefix={<CloseCircleOutlined />}
@@ -421,7 +421,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
         </Col>
       </Row>
 
-      {/* ActionsEN */}
+      {/* translated */}
       <Card style={{ marginBottom: 16 }}>
         <Space>
           <Button
@@ -430,43 +430,43 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
             loading={loading}
             onClick={() => fetchHealthSummary(true)}
           >
-            ENcheck
+            translatedcheck
           </Button>
           <Button
             icon={<ReloadOutlined />}
             loading={loading}
             onClick={() => fetchHealthSummary()}
           >
-            RefreshStatus
+            translatedstatus
           </Button>
           <Button
             type={autoRefresh ? 'primary' : 'default'}
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            {autoRefresh ? 'ENRefresh' : 'ENRefresh'}
+            {autoRefresh ? 'translated' : 'translated'}
           </Button>
         </Space>
         
         {healthData?.last_updated && (
           <div style={{ float: 'right', color: '#666' }}>
-            ENupdate: {getTimeAgo(healthData.last_updated)}
+            translatedupdate: {getTimeAgo(healthData.last_updated)}
           </div>
         )}
       </Card>
 
-      {/* Warninginfo */}
+      {/* translatedinfo */}
       {healthData && (healthData.critical_count > 0 || healthData.warning_count > 0) && (
         <Alert
-          message="Account healthWarning"
-          description={`EN ${healthData.critical_count} EN ${healthData.warning_count} ENWarning，EN`}
+          message="Accounttranslated"
+          description={`translated ${healthData.critical_count}  translatedissueAnd ${healthData.warning_count}  translated，translatedprocess`}
           type="warning"
           showIcon
           style={{ marginBottom: 16 }}
         />
       )}
 
-      {/* accountlist */}
-      <Card title="Account healthStatus">
+      {/* Accountlist */}
+      <Card title="Accounttranslatedstatus">
         <Spin spinning={loading}>
           <Table
             columns={columns}
@@ -476,20 +476,20 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
               pageSize: 10,
               showSizeChanger: true,
               showQuickJumper: true,
-              showTotal: (total) => `Total ${total} ENaccount`,
+              showTotal: (total) => `translated ${total}  Account`,
             }}
           />
         </Spin>
       </Card>
 
-      {/* Detailsdialog */}
+      {/* translated */}
       <Modal
-        title={`accountDetails - ${selectedAccount?.username}`}
+        title={`Accounttranslated - ${selectedAccount?.username}`}
         open={detailsVisible}
         onCancel={() => setDetailsVisible(false)}
         footer={[
           <Button key="close" onClick={() => setDetailsVisible(false)}>
-            Close
+            translated
           </Button>,
           <Button
             key="refresh"
@@ -501,7 +501,7 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
               }
             }}
           >
-            ENcheck
+            translatedcheck
           </Button>,
         ]}
         width={600}
@@ -510,44 +510,44 @@ const AccountHealthMonitor: React.FC<AccountHealthMonitorProps> = () => {
           <div>
             <Row gutter={16}>
               <Col span={12}>
-                <Card title="ENinfo" size="small">
-                  <p><strong>Account ID:</strong> {selectedAccount.account_id}</p>
-                  <p><strong>EN:</strong> {selectedAccount.username}</p>
-                  <p><strong>ENStatus:</strong> {getStatusTag(selectedAccount.status)}</p>
-                  <p><strong>Statusmessage:</strong> {selectedAccount.message}</p>
+                <Card title="translatedinfo" size="small">
+                  <p><strong>AccountID:</strong> {selectedAccount.account_id}</p>
+                  <p><strong>usertranslated:</strong> {selectedAccount.username}</p>
+                  <p><strong>translatedstatus:</strong> {getStatusTag(selectedAccount.status)}</p>
+                  <p><strong>statustranslated:</strong> {selectedAccount.message}</p>
                 </Card>
               </Col>
               <Col span={12}>
-                <Card title="checkEN" size="small">
-                  <p><strong>Last check:</strong> {new Date(selectedAccount.last_check).toLocaleString()}</p>
+                <Card title="checktranslated" size="small">
+                  <p><strong>translatedcheck:</strong> {new Date(selectedAccount.last_check).toLocaleString()}</p>
                   {selectedAccount.expires_in !== undefined && (
-                    <p><strong>CookieEN:</strong> {selectedAccount.expires_in} EN</p>
+                    <p><strong>Cookietranslated:</strong> {selectedAccount.expires_in} translated</p>
                   )}
                 </Card>
               </Col>
             </Row>
             
-            <Card title="ENStatus" size="small" style={{ marginTop: 16 }}>
+            <Card title="translatedstatus" size="small" style={{ marginTop: 16 }}>
               {selectedAccount.details.cookie && (
                 <div style={{ marginBottom: 12 }}>
-                  <strong>CookieStatus:</strong> {getStatusTag(selectedAccount.details.cookie.status)}
+                  <strong>Cookiestatus:</strong> {getStatusTag(selectedAccount.details.cookie.status)}
                   <p>{selectedAccount.details.cookie.message}</p>
                 </div>
               )}
               
               {selectedAccount.details.login && (
                 <div style={{ marginBottom: 12 }}>
-                  <strong>ENStatus:</strong> {getStatusTag(selectedAccount.details.login.status)}
+                  <strong>translatedstatus:</strong> {getStatusTag(selectedAccount.details.login.status)}
                   <p>{selectedAccount.details.login.message}</p>
                   {selectedAccount.details.login.user_info && (
-                    <p>ENinfo: {selectedAccount.details.login.user_info.uname} (Level {selectedAccount.details.login.user_info.level})</p>
+                    <p>userinfo: {selectedAccount.details.login.user_info.uname} (etc.translated {selectedAccount.details.login.user_info.level})</p>
                   )}
                 </div>
               )}
               
               {selectedAccount.details.upload && (
                 <div>
-                  <strong>UploadEN:</strong> {getStatusTag(selectedAccount.details.upload.status)}
+                  <strong>Uploadtranslated:</strong> {getStatusTag(selectedAccount.details.upload.status)}
                   <p>{selectedAccount.details.upload.message}</p>
                 </div>
               )}

@@ -1,5 +1,5 @@
 """
-videoprocessingEN
+videoprocesstool
 """
 import subprocess
 import json
@@ -9,11 +9,11 @@ from typing import List, Dict, Optional
 from pathlib import Path
 from .ffmpeg_utils import get_ffmpeg_path, get_ffprobe_path
 
-# EN
+# fixedimportissue
 try:
     from ..core.shared_config import CLIPS_DIR, COLLECTIONS_DIR
 except ImportError:
-    # ifENfailed，EN
+    # iftranslatedimportfailed，translatedimport
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -24,14 +24,14 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 class VideoProcessor:
-    """videoprocessingEN"""
+    """videoprocesstooltranslated"""
     
     def __init__(self, clips_dir: Optional[str] = None, collections_dir: Optional[str] = None):
-        # ENuseENprojectENpath，ENuseENpathEN
+        # translatedusetranslated'sprojecttranslatedpath，translatedusetranslatedpathtranslated
         if not clips_dir:
-            raise ValueError("clips_dir parametersEN，ENuseENpath")
+            raise ValueError("clips_dir translatedIstranslated's，translatedusetranslatedpath")
         if not collections_dir:
-            raise ValueError("collections_dir parametersEN，ENuseENpath")
+            raise ValueError("collections_dir translatedIstranslated's，translatedusetranslatedpath")
         
         self.clips_dir = Path(clips_dir)
         self.collections_dir = Path(collections_dir)
@@ -39,27 +39,27 @@ class VideoProcessor:
     @staticmethod
     def sanitize_filename(filename: str) -> str:
         """
-        ENfileEN，EN
+        cleanfiletranslated，translatedortranslated'stranslated
         
         Args:
-            filename: ENfileEN
+            filename: translatedfiletranslated
             
         Returns:
-            ENfileEN
+            cleantranslated'sfiletranslated
         """
-        # EN
-        # WindowsENUnixsystemEN: < > : " | ? * \ /
-        # EN
+        # translatedortranslated'stranslated
+        # WindowsAndUnixSystemtranslated'stranslated: < > : " | ? * \ /
+        # translated
         sanitized = re.sub(r'[<>:"|?*\\/]', '_', filename)
         
-        # EN
+        # translatedAndtranslated
         sanitized = sanitized.strip(' .')
         
-        # EN，ENfileEN
+        # translated，translatedfiletranslated
         if len(sanitized) > 100:
             sanitized = sanitized[:100]
         
-        # ENfileEN
+        # ensurefiletranslated
         if not sanitized:
             sanitized = "untitled"
             
@@ -68,27 +68,27 @@ class VideoProcessor:
     @staticmethod
     def convert_srt_time_to_ffmpeg_time(srt_time: str) -> str:
         """
-        ENSRTtimeENFFmpegtimeEN
+        translatedSRTtranslatedformattranslatedFFmpegtranslatedformat
         
         Args:
-            srt_time: SRTtimeEN (EN "00:00:06,140" EN "00:00:06.140")
+            srt_time: SRTtranslatedformat (if "00:00:06,140" or "00:00:06.140")
             
         Returns:
-            FFmpegtimeEN (EN "00:00:06.140")
+            FFmpegtranslatedformat (if "00:00:06.140")
         """
-        # EN
+        # translated
         return srt_time.replace(',', '.')
     
     @staticmethod
     def convert_seconds_to_ffmpeg_time(seconds: float) -> str:
         """
-        ENFFmpegtimeEN
+        translatedsecondstranslatedFFmpegtranslatedformat
         
         Args:
-            seconds: EN
+            seconds: secondstranslated
             
         Returns:
-            FFmpegtimeEN (EN "00:00:06.140")
+            FFmpegtranslatedformat (if "00:00:06.140")
         """
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)
@@ -100,16 +100,16 @@ class VideoProcessor:
     @staticmethod
     def convert_ffmpeg_time_to_seconds(time_str: str) -> float:
         """
-        ENFFmpegtimeEN
+        translatedFFmpegtranslatedformattranslatedsecondstranslated
         
         Args:
-            time_str: FFmpegtimeEN (EN "00:00:06.140")
+            time_str: FFmpegtranslatedformat (if "00:00:06.140")
             
         Returns:
-            EN
+            secondstranslated
         """
         try:
-            # processingEN
+            # processtranslatedsecondstranslated
             if '.' in time_str:
                 time_part, ms_part = time_str.split('.')
                 milliseconds = int(ms_part)
@@ -117,102 +117,102 @@ class VideoProcessor:
                 time_part = time_str
                 milliseconds = 0
             
-            # parseEN
+            # translatedseconds
             h, m, s = map(int, time_part.split(':'))
             
             return h * 3600 + m * 60 + s + milliseconds / 1000
         except Exception as e:
-            logger.error(f"timeENfailed: {time_str}, error: {e}")
+            logger.error(f"translatedformattranslatedfailed: {time_str}, error: {e}")
             return 0.0
     
     @staticmethod
     def extract_clip(input_video: Path, output_path: Path, 
                     start_time: str, end_time: str) -> bool:
         """
-        ENvideoENtimeEN
+        fromvideotranslated'stranslated
         
         Args:
-            input_video: ENvideopath
-            output_path: ENvideopath
-            start_time: starttime (EN: "00:01:25,140")
-            end_time: endtime (EN: "00:02:53,500")
+            input_video: translatedvideopath
+            output_path: translatedvideopath
+            start_time: translated (format: "00:01:25,140")
+            end_time: translated (format: "00:02:53,500")
             
         Returns:
-            ENsucceeded
+            Istranslatedsucceeded
         """
         try:
-            # ENdirectoryEN
+            # ensuretranslateddirectorytranslatedin
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # ENtimeEN：ENSRTENFFmpegEN
+            # translatedformat：fromSRTformattranslatedFFmpegformat
             ffmpeg_start_time = VideoProcessor.convert_srt_time_to_ffmpeg_time(start_time)
             ffmpeg_end_time = VideoProcessor.convert_srt_time_to_ffmpeg_time(end_time)
             
-            # ENtime
+            # translated
             start_seconds = VideoProcessor.convert_ffmpeg_time_to_seconds(ffmpeg_start_time)
             end_seconds = VideoProcessor.convert_ffmpeg_time_to_seconds(ffmpeg_end_time)
             duration = end_seconds - start_seconds
             
-            # ENFFmpegEN
-            # use -ss EN，use -t ENtime
+            # translated'sFFmpegtranslated
+            # use -ss intranslated，use -t translated
             ffmpeg_bin = get_ffmpeg_path()
             cmd = [
                 ffmpeg_bin,
-                '-ss', ffmpeg_start_time,  # EN，EN
+                '-ss', ffmpeg_start_time,  # intranslated，translated
                 '-i', str(input_video),
-                '-t', str(duration),  # useENtimeENendtime
-                '-c:v', 'copy',  # ENvideoEN
-                '-c:a', 'copy',  # EN
+                '-t', str(duration),  # usetranslatedIstranslated
+                '-c:v', 'copy',  # translatedvideotranslated
+                '-c:a', 'copy',  # translated
                 '-avoid_negative_ts', 'make_zero',
-                '-y',  # ENfile
+                '-y',  # translatedfile
                 str(output_path)
             ]
             
-            # executeEN
+            # translated
             result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore')
             
             if result.returncode == 0:
-                logger.info(f"succeededENvideoEN: {output_path} ({ffmpeg_start_time} -> {ffmpeg_end_time}, duration: {duration:.2f}EN)")
+                logger.info(f"succeededtranslatedvideotranslated: {output_path} ({ffmpeg_start_time} -> {ffmpeg_end_time}, translated: {duration:.2f}seconds)")
                 return True
             else:
-                logger.error(f"ENvideoENfailed: {result.stderr}")
+                logger.error(f"translatedvideotranslatedfailed: {result.stderr}")
                 return False
                 
         except Exception as e:
-            logger.error(f"videoprocessingexception: {str(e)}")
+            logger.error(f"videoprocesstranslated: {str(e)}")
             return False
     
     @staticmethod
     def create_collection(clips_list: List[Path], output_path: Path) -> bool:
         """
-        ENvideoENcollection
+        translatedmulti videotranslatedcollection
         
         Args:
-            clips_list: videoENpathEN
-            output_path: ENcollectionpath
+            clips_list: videotranslatedpathlist
+            output_path: translatedcollectionpath
             
         Returns:
-            ENsucceeded
+            Istranslatedsucceeded
         """
         try:
-            # validateENparameters
+            # verifytranslated
             if not clips_list:
-                logger.error("clips_listEN，cannotcreatecollection")
+                logger.error("clips_listtranslated，translatedcreatecollection")
                 return False
             
-            # validateallvideofileEN
+            # verifytranslatedvideofileIstranslatedin
             valid_clips = []
             for clip_path in clips_list:
                 if not clip_path.exists():
-                    logger.warning(f"videofiledoes not exist，EN: {clip_path}")
+                    logger.warning(f"videofile not found，skip: {clip_path}")
                     continue
                 valid_clips.append(clip_path)
             
             if not valid_clips:
-                logger.error("ENvideofile，cannotcreatecollection")
+                logger.error("translated'svideofile，translatedcreatecollection")
                 return False
             
-            # ENdirectoryEN
+            # ensuretranslateddirectorytranslatedin
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
             # createconcatfile
@@ -220,40 +220,40 @@ class VideoProcessor:
             
             with open(concat_file, 'w', encoding='utf-8') as f:
                 for clip_path in valid_clips:
-                    # useENpathEN
+                    # usetranslatedpathtranslated
                     abs_path = clip_path.absolute()
                     escaped_path = str(abs_path).replace("'", "'\"'\"'")
                     f.write(f"file '{escaped_path}'\n")
             
-            # validateconcatfileEN
+            # verifyconcatfiletranslated
             if concat_file.stat().st_size == 0:
-                logger.error("concatfileEN，cannotcreatecollection")
+                logger.error("concatfiletranslated，translatedcreatecollection")
                 concat_file.unlink(missing_ok=True)
                 return False
             
-            # ENFFmpegEN - useH.264EN
+            # translatedFFmpegtranslated - useH.264translatedensuretranslated
             ffmpeg_bin = get_ffmpeg_path()
             cmd = [
                 ffmpeg_bin,
                 '-f', 'concat',
                 '-safe', '0',
                 '-i', str(concat_file),
-                '-c:v', 'libx264',  # useH.264videoEN
-                '-preset', 'ultrafast',  # useEN
-                '-crf', '28',  # EN
-                '-c:a', 'aac',  # useAACEN
-                '-b:a', '128k',  # EN
-                '-movflags', '+faststart',  # EN
+                '-c:v', 'libx264',  # useH.264videotranslated
+                '-preset', 'ultrafast',  # usetranslated'stranslated
+                '-crf', '28',  # translated
+                '-c:a', 'aac',  # useAACtranslated
+                '-b:a', '128k',  # translated
+                '-movflags', '+faststart',  # translated
                 '-y',
                 str(output_path)
             ]
             
-            logger.info(f"executeFFmpegEN: {' '.join(cmd)}")
+            logger.info(f"translatedFFmpegtranslated: {' '.join(cmd)}")
             
-            # executeEN
+            # translated
             result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore')
             
-            # ENfile
+            # clean temp files
             concat_file.unlink(missing_ok=True)
             
             if result.returncode == 0:
@@ -265,61 +265,61 @@ class VideoProcessor:
                 return False
                 
         except Exception as e:
-            logger.error(f"videoENexception: {str(e)}")
+            logger.error(f"videotranslated: {str(e)}")
             return False
     
     @staticmethod
     def extract_thumbnail(video_path: Path, output_path: Path, time_offset: int = 5) -> bool:
         """
-        ENvideoEN
+        fromvideotranslated
         
         Args:
-            video_path: videofilepath
-            output_path: ENpath
-            time_offset: ENtimeEN（EN）
+            video_path: videofile path
+            output_path: translatedpath
+            time_offset: translated（seconds）
             
         Returns:
-            ENsucceeded
+            Istranslatedsucceeded
         """
         try:
-            # ENdirectoryEN
+            # ensuretranslateddirectorytranslatedin
             output_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # ENFFmpegEN
+            # translatedFFmpegtranslated
             cmd = [
                 'ffmpeg',
                 '-i', str(video_path),
                 '-ss', str(time_offset),
                 '-vframes', '1',
-                '-q:v', '2',  # EN
-                '-y',  # ENfile
+                '-q:v', '2',  # translated
+                '-y',  # translatedfile
                 str(output_path)
             ]
             
-            # executeEN
+            # translated
             result = subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8', errors='ignore')
             
             if result.returncode == 0 and output_path.exists():
-                logger.info(f"succeededEN: {output_path}")
+                logger.info(f"succeededtranslated: {output_path}")
                 return True
             else:
-                logger.error(f"ENfailed: {result.stderr}")
+                logger.error(f"translatedfailed: {result.stderr}")
                 return False
                 
         except Exception as e:
-            logger.error(f"ENexception: {str(e)}")
+            logger.error(f"translated: {str(e)}")
             return False
     
     @staticmethod
     def get_video_info(video_path: Path) -> Dict:
         """
-        fetchvideoEN
+        fetchvideoinfo
         
         Args:
-            video_path: videofilepath
+            video_path: videofile path
             
         Returns:
-            videoEN
+            videoinfotranslated
         """
         try:
             ffprobe_bin = get_ffprobe_path()
@@ -343,62 +343,62 @@ class VideoProcessor:
                     'streams': info['streams']
                 }
             else:
-                logger.error(f"fetchvideoENfailed: {result.stderr}")
+                logger.error(f"fetchvideoinfofailed: {result.stderr}")
                 return {}
                 
         except Exception as e:
-            logger.error(f"fetchvideoENexception: {str(e)}")
+            logger.error(f"fetchvideoinfotranslated: {str(e)}")
             return {}
     
     def batch_extract_clips(self, input_video: Path, clips_data: List[Dict]) -> List[Path]:
         """
-        ENvideoEN
+        translatedvideotranslated
         
         Args:
-            input_video: ENvideopath
-            clips_data: EN，eachENid、title、start_time、end_time
+            input_video: translatedvideopath
+            clips_data: translatedlist，per translatedPackageincludeid、title、start_time、end_time
             
         Returns:
-            succeededENpathEN
+            succeededtranslated'stranslatedpathlist
         """
         successful_clips = []
         
         for clip_data in clips_data:
             clip_id = clip_data['id']
-            title = clip_data.get('title', f"EN_{clip_id}")
+            title = clip_data.get('title', f"translated_{clip_id}")
             start_time = clip_data['start_time']
             end_time = clip_data['end_time']
             
-            # processingtimeEN - ifEN，ENSRTEN
+            # processtranslatedformat - iftranslatedIssecondstranslated，translatedSRTformat
             if isinstance(start_time, (int, float)):
                 start_time = VideoProcessor.convert_seconds_to_ffmpeg_time(start_time)
             if isinstance(end_time, (int, float)):
                 end_time = VideoProcessor.convert_seconds_to_ffmpeg_time(end_time)
             
-            # usetitleENfileEN，EN
-            # ENfileENclip_id，ENcollectionEN
+            # usetranslatedfiletranslated，translatedcleantranslated'stranslated
+            # infiletranslatedPackageincludeclip_id，translatedcollectiontranslated
             safe_title = VideoProcessor.sanitize_filename(title)
             output_path = self.clips_dir / f"{clip_id}_{safe_title}.mp4"
             
-            logger.info(f"ENclip {clip_id}: {start_time} -> {end_time}, EN: {output_path}")
+            logger.info(f"translatedclip {clip_id}: {start_time} -> {end_time}, translated: {output_path}")
             
             if VideoProcessor.extract_clip(input_video, output_path, start_time, end_time):
                 successful_clips.append(output_path)
-                logger.info(f"clip {clip_id} ENsucceeded")
+                logger.info(f"clip {clip_id} translatedsucceeded")
             else:
-                logger.error(f"clip {clip_id} ENfailed")
+                logger.error(f"clip {clip_id} translatedfailed")
         
         return successful_clips
     
     def create_collections_from_metadata(self, collections_data: List[Dict]) -> List[Dict]:
         """
-        ENcreatecollection
+        translatedcreatecollection
         
         Args:
-            collections_data: collectionEN
+            collections_data: collectiontranslatedlist
             
         Returns:
-            succeededcreateENcollectionEN，ENvideopathENpath
+            succeededcreate'scollectioninfolist，PackageincludevideopathAndtranslatedpath
         """
         successful_collections = []
         
@@ -407,45 +407,45 @@ class VideoProcessor:
             collection_title = collection_data.get('collection_title', f'collection_{collection_id}')
             clip_ids = collection_data['clip_ids']
             
-            # ENpathEN
+            # translatedpathlist
             clips_list = []
             for clip_id in clip_ids:
-                # ENclipfile
-                # ENfileEN: {clip_id}_{title}.mp4
+                # translated'sclipfile
+                # translated'sfiletranslatedformatIs: {clip_id}_{title}.mp4
                 clip_path = self.clips_dir / f"{clip_id}_*.mp4"
                 found_clips = list(self.clips_dir.glob(f"{clip_id}_*.mp4"))
                 
                 if found_clips:
-                    found_clip = found_clips[0]  # ENfile
+                    found_clip = found_clips[0]  # translatedNo.one translated'sfile
                     clips_list.append(found_clip)
-                    logger.info(f"ENcollection {collection_id} ENclip: {found_clip.name}")
+                    logger.info(f"translatedcollection {collection_id} 'sclip: {found_clip.name}")
                 else:
-                    logger.warning(f"not foundcollection {collection_id} ENclip {clip_id}")
+                    logger.warning(f"translatedcollection {collection_id} 'sclip {clip_id}")
             
             if clips_list:
-                # usecollection_titleENfileEN，EN
+                # usecollection_titletranslatedfiletranslated，translatedcleantranslated'stranslated
                 safe_title = VideoProcessor.sanitize_filename(collection_title)
                 output_path = self.collections_dir / f"{safe_title}.mp4"
                 
                 if VideoProcessor.create_collection(clips_list, output_path):
-                    # generatecollectionEN
+                    # translatedcollectiontranslated
                     thumbnail_path = None
                     try:
                         thumbnail_filename = f"{collection_id}_{safe_title}_thumbnail.jpg"
                         thumbnail_path = self.collections_dir / thumbnail_filename
                         
-                        # ENvideoEN（EN2EN）
+                        # fromvideotranslated（No.2seconds'stranslated）
                         thumbnail_success = VideoProcessor.extract_thumbnail(output_path, thumbnail_path, time_offset=2)
                         if thumbnail_success:
-                            logger.info(f"collection {collection_id} ENgeneratesucceeded: {thumbnail_path}")
+                            logger.info(f"collection {collection_id} translatedsucceeded: {thumbnail_path}")
                         else:
-                            logger.warning(f"collection {collection_id} ENgeneratefailed")
+                            logger.warning(f"collection {collection_id} translatedfailed")
                             thumbnail_path = None
                     except Exception as e:
-                        logger.error(f"generatecollection {collection_id} EN: {e}")
+                        logger.error(f"translatedcollection {collection_id} translated: {e}")
                         thumbnail_path = None
                     
-                    # returnENvideopathENpathEN
+                    # returnPackageincludevideopathAndtranslatedpath'sinfo
                     collection_info = {
                         'collection_id': collection_id,
                         'video_path': str(output_path),
@@ -455,6 +455,6 @@ class VideoProcessor:
                     successful_collections.append(collection_info)
                     logger.info(f"succeededcreatecollection {collection_id}: {output_path}")
             else:
-                logger.warning(f"collection {collection_id} ENclipfile")
+                logger.warning(f"collection {collection_id} translated'sclipfile")
         
         return successful_collections

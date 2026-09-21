@@ -1,6 +1,6 @@
 """
-progressENservice
-ENRedis PubSubENtaskprogressEN
+progresstranslatedservice
+Based onRedis PubSubtranslatedtaskprogresstranslated
 """
 
 import json
@@ -18,52 +18,52 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ProgressEvent:
-    """progressEN"""
+    """progresstranslated"""
     task_id: str
     progress: int  # 0-100
     step: int
     total: int
     phase: str  # transcribe|analyze|clip|encode|upload
     message: str
-    status: str  # PENDING|PROGRESS|DONE|FAIL
-    seq: int  # EN
-    ts: float  # ENtimeEN
+    status: str  # PtranslatedDING|PROGRESS|DONE|FAIL
+    seq: int  # translated
+    ts: float  # translated
     meta: Optional[Dict[str, Any]] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        """EN"""
+        """translatedformat"""
         return asdict(self)
     
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'ProgressEvent':
-        """ENcreateEN"""
+        """fromtranslatedcreatetranslated"""
         return cls(**data)
 
 class ProgressEventService:
-    """progressENservice"""
+    """progresstranslatedservice"""
     
     def __init__(self):
         self.redis_url = get_redis_url()
         self.redis_client: Optional[redis.Redis] = None
-        self.sequence_counters: Dict[str, int] = {}  # eachtask_idEN
-        self.throttle_cache: Dict[str, Dict[str, Any]] = {}  # ENcache
-        self.throttle_interval = 0.2  # 200msEN
+        self.sequence_counters: Dict[str, int] = {}  # per task_id'stranslated
+        self.throttle_cache: Dict[str, Dict[str, Any]] = {}  # translatedcache
+        self.throttle_interval = 0.2  # 200mstranslated
         
     async def _get_redis_client(self) -> redis.Redis:
-        """fetchRedisEN"""
+        """fetchRedistranslated"""
         if self.redis_client is None:
             self.redis_client = redis.from_url(self.redis_url, decode_responses=True)
         return self.redis_client
     
     def _get_next_seq(self, task_id: str) -> int:
-        """fetchEN"""
+        """fetchtranslatedone translated"""
         if task_id not in self.sequence_counters:
             self.sequence_counters[task_id] = 0
         self.sequence_counters[task_id] += 1
         return self.sequence_counters[task_id]
     
     def _should_throttle(self, task_id: str, progress: int) -> bool:
-        """checkENneedEN"""
+        """checkIstranslated"""
         now = time.time()
         cache_key = f"{task_id}_{progress}"
         
@@ -78,7 +78,7 @@ class ProgressEventService:
             'progress': progress
         }
         
-        # ENcache（EN1EN）
+        # cleantranslatedcache（translated1minutes's）
         expired_keys = [
             key for key, data in self.throttle_cache.items()
             if now - data['timestamp'] > 60
@@ -99,14 +99,14 @@ class ProgressEventService:
         status: str = "PROGRESS",
         meta: Optional[Dict[str, Any]] = None
     ) -> bool:
-        """ENtaskprogress"""
+        """translatedtaskprogress"""
         try:
-            # ENcheck
+            # translatedcheck
             if status == "PROGRESS" and self._should_throttle(task_id, progress):
-                logger.debug(f"task {task_id} progress {progress}% EN")
+                logger.debug(f"task {task_id} progress {progress}% translated")
                 return True
             
-            # createprogressEN
+            # createprogresstranslated
             event = ProgressEvent(
                 task_id=task_id,
                 progress=progress,
@@ -120,41 +120,41 @@ class ProgressEventService:
                 meta=meta
             )
             
-            # ENRedisEN - useprojectIDENtaskID
-            # ENtask_idENproject_id，orusemetaENproject_id
+            # ReleasetranslatedRedistranslated - useprojectIDtranslatedIstaskID
+            # fromtask_idtranslatedproject_id，ortranslatedusemetatranslated'sproject_id
             project_id = meta.get("project_id") if meta else None
             if not project_id:
-                # ifmetaENproject_id，ENtask_idEN
-                # ENneedEN
-                project_id = task_id  # ENusetask_id，ENneedEN
+                # iftranslatedmetatranslatedproject_id，translatedfromtask_idtranslated
+                # thistranslated
+                project_id = task_id  # translatedusetask_id，translated
             channel = project_progress_channel(project_id)
             redis_client = await self._get_redis_client()
             
-            # meanwhilesaveENRedis Hash
+            # translatedRedis Hash
             snapshot_key = f"progress:last:{channel}"
             event_dict = event.to_dict()
             
-            # ENNoneEN，ENallEN，ENRedisENerror
+            # translatedNonetranslated，translated，translatedRedistranslatederror
             filtered_dict = {}
             for k, v in event_dict.items():
                 if v is not None:
                     if isinstance(v, dict):
-                        # ENJSONEN
+                        # translatedJSONtranslated
                         filtered_dict[k] = json.dumps(v, ensure_ascii=False)
                     else:
                         filtered_dict[k] = str(v)
             
             await redis_client.hset(snapshot_key, mapping=filtered_dict)
-            await redis_client.expire(snapshot_key, 3600)  # 1EN
+            await redis_client.expire(snapshot_key, 3600)  # 1translated
             
-            # EN
+            # Releasetranslated
             await redis_client.publish(channel, json.dumps(event_dict))
             
-            logger.info(f"progressEN: {task_id} - {progress}% - {phase} - seq:{event.seq}")
+            logger.info(f"progresstranslatedRelease: {task_id} - {progress}% - {phase} - seq:{event.seq}")
             return True
             
         except Exception as e:
-            logger.error(f"ENprogressENfailed: {e}")
+            logger.error(f"Releaseprogresstranslatedfailed: {e}")
             return False
     
     async def subscribe_to_task(
@@ -162,7 +162,7 @@ class ProgressEventService:
         task_id: str,
         callback: Callable[[ProgressEvent], None]
     ) -> bool:
-        """ENtaskENprogressEN"""
+        """translatedtask'sprogresstranslated"""
         try:
             channel = f"progress:{task_id}"
             redis_client = await self._get_redis_client()
@@ -170,9 +170,9 @@ class ProgressEventService:
             pubsub = redis_client.pubsub()
             await pubsub.subscribe(channel)
             
-            logger.info(f"ENtaskprogressEN: {channel}")
+            logger.info(f"translatedtaskprogresstranslated: {channel}")
             
-            # ENprocessingEN
+            # translatedprocesstranslated
             async def message_handler():
                 try:
                     async for message in pubsub.listen():
@@ -182,30 +182,30 @@ class ProgressEventService:
                                 event = ProgressEvent.from_dict(data)
                                 callback(event)
                             except Exception as e:
-                                logger.error(f"processingprogressENfailed: {e}")
+                                logger.error(f"processprogresstranslatedfailed: {e}")
                 except Exception as e:
-                    logger.error(f"ENprocessingfailed: {e}")
+                    logger.error(f"translatedprocessing failed: {e}")
                 finally:
                     await pubsub.unsubscribe(channel)
                     await pubsub.close()
             
-            # startENprocessingEN
+            # starttranslatedprocesstranslated
             asyncio.create_task(message_handler())
             return True
             
         except Exception as e:
-            logger.error(f"ENtaskprogressfailed: {e}")
+            logger.error(f"translatedtaskprogressfailed: {e}")
             return False
     
     async def get_task_snapshot(self, task_id: str) -> Optional[Dict[str, Any]]:
-        """fetchtaskprogressEN"""
+        """fetchtaskprogresstranslated"""
         try:
             redis_client = await self._get_redis_client()
             channel = f"progress:{task_id}"
             snapshot_key = f"progress:last:{channel}"
             snapshot = await redis_client.hgetall(snapshot_key)
             if snapshot:
-                # ENwhenEN
+                # translated
                 if 'progress' in snapshot:
                     snapshot['progress'] = int(snapshot['progress'])
                 if 'step' in snapshot:
@@ -219,11 +219,11 @@ class ProgressEventService:
                 return snapshot
             return None
         except Exception as e:
-            logger.error(f"fetchtaskprogressENfailed: {e}")
+            logger.error(f"fetchtaskprogresstranslatedfailed: {e}")
             return None
 
     async def get_task_final_state(self, task_id: str) -> Optional[Dict[str, Any]]:
-        """fetchtaskENstatus（EN）"""
+        """fetchtasktranslatedstatus（usetranslated）"""
         try:
             redis_client = await self._get_redis_client()
             key = f"task_final_state:{task_id}"
@@ -232,29 +232,29 @@ class ProgressEventService:
                 return json.loads(data)
             return None
         except Exception as e:
-            logger.error(f"fetchtaskENstatusfailed: {e}")
+            logger.error(f"fetchtasktranslatedstatusfailed: {e}")
             return None
     
     async def save_task_final_state(self, task_id: str, state: Dict[str, Any]) -> bool:
-        """savetaskENstatus"""
+        """translatedtasktranslatedstatus"""
         try:
             redis_client = await self._get_redis_client()
             key = f"task_final_state:{task_id}"
-            await redis_client.setex(key, 3600, json.dumps(state))  # 1EN
+            await redis_client.setex(key, 3600, json.dumps(state))  # 1translated
             return True
         except Exception as e:
-            logger.error(f"savetaskENstatusfailed: {e}")
+            logger.error(f"translatedtasktranslatedstatusfailed: {e}")
             return False
     
     async def close(self):
-        """ENRedisconnect"""
+        """translatedRedisconnect"""
         if self.redis_client:
             await self.redis_client.close()
 
-# EN
+# translated
 progress_event_service = ProgressEventService()
 
-# EN
+# translated
 async def report_progress(
     task_id: str,
     progress: int,
@@ -265,7 +265,7 @@ async def report_progress(
     status: str = "PROGRESS",
     meta: Optional[Dict[str, Any]] = None
 ) -> bool:
-    """ENtaskprogressEN"""
+    """translatedtaskprogress'stranslated"""
     return await progress_event_service.report_progress(
         task_id, progress, step, total, phase, message, status, meta
     )

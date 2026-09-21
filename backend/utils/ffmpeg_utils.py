@@ -1,11 +1,11 @@
 """
-FFmpeg ENexecutepathparseEN
+FFmpeg cantranslatedpathtranslatedtool
 
-EN：
-1) EN AUTOCLIP_FFMPEG_PATH / AUTOCLIP_FFPROBE_PATH / FFMPEG_PATH / FFPROBE_PATH
-2) system PATH EN ffmpeg/ffprobe
+translated：
+1) translated AUTOCLIP_FFMPEG_PATH / AUTOCLIP_FFPROBE_PATH / FFMPEG_PATH / FFPROBE_PATH
+2) System PATH translated's ffmpeg/ffprobe
 
-EN：ENallcallEN ffmpeg/ffprobe path，EN。
+usetranslated：translatedonetranslatedbackendtranslatedcalltranslatedProvides ffmpeg/ffprobe path，translatedintranslatedinstallPackageBuilt-intranslateddependencies。
 """
 
 import os
@@ -22,8 +22,8 @@ def _resolve_from_env(var_names: list[str]) -> Optional[str]:
 
 
 def get_ffmpeg_path() -> str:
-    """return ffmpeg ENexecutefilepath（EN）。"""
-    # 1) EN
+    """return ffmpeg cantranslatedfile path（ortranslated）。"""
+    # 1) translated
     env_path = _resolve_from_env([
         "AUTOCLIP_FFMPEG_PATH",
         "FFMPEG_PATH",
@@ -31,18 +31,18 @@ def get_ffmpeg_path() -> str:
     if env_path:
         return env_path
 
-    # 2) system PATH
+    # 2) System PATH
     which = shutil.which("ffmpeg")
     if which:
         return which
 
-    # 3) ENreturnEN（mayENfailed，EN）
+    # 3) translatedreturntranslated（cantranslatedfailed，translated）
     return "ffmpeg"
 
 
 def get_ffprobe_path() -> str:
-    """return ffprobe ENexecutefilepath（EN）。"""
-    # 1) EN
+    """return ffprobe cantranslatedfile path（ortranslated）。"""
+    # 1) translated
     env_path = _resolve_from_env([
         "AUTOCLIP_FFPROBE_PATH",
         "FFPROBE_PATH",
@@ -50,12 +50,12 @@ def get_ffprobe_path() -> str:
     if env_path:
         return env_path
 
-    # 2) system PATH
+    # 2) System PATH
     which = shutil.which("ffprobe")
     if which:
         return which
 
-    # 3) ENreturnEN
+    # 3) translatedreturntranslated
     return "ffprobe"
 
 

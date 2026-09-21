@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-ENthumbnailENprojectsEN
+addthumbnailtranslatedprojectstranslated'stranslated
 """
 
 import sys
 from pathlib import Path
 
-# ENbackenddirectoryENPythonpath
+# addbackenddirectorytranslatedPythonpath
 backend_dir = Path(__file__).parent.parent
 if str(backend_dir) not in sys.path:
     sys.path.insert(0, str(backend_dir))
 
-# ENprojectENdirectoryENPythonpath
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
@@ -20,36 +20,36 @@ from backend.core.database import engine, SessionLocal
 from sqlalchemy import text
 
 def add_thumbnail_column():
-    """ENthumbnailENprojectsEN"""
+    """addthumbnailtranslatedprojectstranslated"""
     try:
-        # checkENalready exists
+        # checktranslatedIstranslatedin
         with engine.connect() as conn:
-            # ENSQLite，checkEN
+            # translatedSQLite，checktranslated
             result = conn.execute(text("PRAGMA table_info(projects)"))
             columns = [row[1] for row in result.fetchall()]
             
             if 'thumbnail' in columns:
-                print("✅ thumbnailENalready exists，EN")
+                print("✅ thumbnailtranslatedin，translatedadd")
                 return True
             
-            # ENthumbnailEN
+            # addthumbnailtranslated
             conn.execute(text("ALTER TABLE projects ADD COLUMN thumbnail TEXT"))
             conn.commit()
-            print("✅ succeededENthumbnailENprojectsEN")
+            print("✅ succeededaddthumbnailtranslatedprojectstranslated")
             return True
             
     except Exception as e:
-        print(f"❌ ENthumbnailENfailed: {e}")
+        print(f"❌ addthumbnailtranslatedfailed: {e}")
         return False
 
 def main():
-    """EN"""
-    print("🚀 startENthumbnailEN...")
+    """translated"""
+    print("🚀 translatedaddthumbnailtranslated...")
     
     if add_thumbnail_column():
-        print("🎉 thumbnailEN！")
+        print("🎉 thumbnailtranslatedaddtranslated！")
     else:
-        print("❌ thumbnailENfailed")
+        print("❌ thumbnailtranslatedaddfailed")
         sys.exit(1)
 
 if __name__ == "__main__":

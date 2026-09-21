@@ -82,7 +82,7 @@ const DesktopSettings: React.FC = () => {
   const [systemInfo, setSystemInfo] = useState<SystemInfo | null>(null);
   const [serviceStatus, setServiceStatus] = useState<ServiceStatus | null>(null);
 
-  // Load config
+  // translatedconfig
   const loadConfig = async () => {
     try {
       const response = await fetch('/api/v1/desktop/config');
@@ -91,15 +91,15 @@ const DesktopSettings: React.FC = () => {
         setConfig(data.config);
         form.setFieldsValue(data.config);
       } else {
-        message.error('Load configFailed');
+        message.error('translatedconfigfailed');
       }
     } catch (error) {
-      console.error('Load configError:', error);
-      message.error('Load configFailed');
+      console.error('translatedconfigerror:', error);
+      message.error('translatedconfigfailed');
     }
   };
 
-  // Load system info
+  // translatedSysteminfo
   const loadSystemInfo = async () => {
     try {
       const response = await fetch('/api/v1/desktop/system/info');
@@ -108,11 +108,11 @@ const DesktopSettings: React.FC = () => {
         setSystemInfo(data);
       }
     } catch (error) {
-      console.error('Load system infoFailed:', error);
+      console.error('translatedSysteminfofailed:', error);
     }
   };
 
-  // Load servicesStatus
+  // translatedservicestatus
   const loadServiceStatus = async () => {
     try {
       const response = await fetch('/api/v1/desktop/service/status');
@@ -121,15 +121,15 @@ const DesktopSettings: React.FC = () => {
         setServiceStatus(data);
       }
     } catch (error) {
-      console.error('Load servicesStatusFailed:', error);
+      console.error('translatedservicestatusfailed:', error);
     }
   };
 
-  // Saveconfig
+  // translatedconfig
   const saveConfig = async (values: DesktopConfig) => {
     setLoading(true);
     try {
-      // ENDesktopConfigEN
+      // translatedbackendtranslated'sDesktopConfigtranslated
       const configData = {
         app_name: values.app_name || "AutoClip Desktop",
         app_version: values.app_version || "1.0.0",
@@ -165,15 +165,15 @@ const DesktopSettings: React.FC = () => {
       });
 
       if (response.ok) {
-        message.success('configSaveSucceeded');
+        message.success('configtranslatedsucceeded');
         setConfig(configData);
       } else {
         const errorData = await response.json();
-        message.error(`configSave failed: ${errorData.detail || 'Unknown error'}`);
+        message.error(`configtranslatedfailed: ${errorData.detail || 'translatederror'}`);
       }
     } catch (error) {
-      console.error('configSaveError:', error);
-      message.error('configSave failed');
+      console.error('configtranslatederror:', error);
+      message.error('configtranslatedfailed');
     } finally {
       setLoading(false);
     }
@@ -196,12 +196,12 @@ const DesktopSettings: React.FC = () => {
   return (
     <div style={{ padding: '24px' }}>
       <Title level={2}>
-        <SettingOutlined /> ENsettings
+        <SettingOutlined /> translatedsettings
       </Title>
       
       <Tabs defaultActiveKey="basic">
-        {/* Basic settings */}
-        <TabPane tab={<span><SettingOutlined />Basic settings</span>} key="basic">
+        {/* translatedsettings */}
+        <TabPane tab={<span><SettingOutlined />translatedsettings</span>} key="basic">
           <Card>
             <Form
               form={form}
@@ -213,8 +213,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="app_name"
-                    label="App name"
-                    rules={[{ required: true, message: 'Please enterApp name' }]}
+                    label="translatedusetranslated"
+                    rules={[{ required: true, message: 'translatedusetranslated' }]}
                   >
                     <Input />
                   </Form.Item>
@@ -222,8 +222,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="app_version"
-                    label="App version"
-                    rules={[{ required: true, message: 'Please enterApp version' }]}
+                    label="translateduseversion"
+                    rules={[{ required: true, message: 'translateduseversion' }]}
                   >
                     <Input />
                   </Form.Item>
@@ -232,7 +232,7 @@ const DesktopSettings: React.FC = () => {
 
               <Form.Item
                 name="debug_mode"
-                label="EN"
+                label="translated"
                 valuePropName="checked"
               >
                 <Switch />
@@ -245,8 +245,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="host"
-                    label="Host"
-                    rules={[{ required: true, message: 'Please enterHost' }]}
+                    label="translated"
+                    rules={[{ required: true, message: 'translated' }]}
                   >
                     <Input />
                   </Form.Item>
@@ -254,8 +254,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="port"
-                    label="port"
-                    rules={[{ required: true, message: 'Please enterport' }]}
+                    label="translated"
+                    rules={[{ required: true, message: 'translated' }]}
                   >
                     <InputNumber min={1} max={65535} style={{ width: '100%' }} />
                   </Form.Item>
@@ -264,8 +264,8 @@ const DesktopSettings: React.FC = () => {
 
               <Form.Item
                 name="max_memory_usage"
-                label="Max memory usage (MB)"
-                rules={[{ required: true, message: 'Please enterMax memory usage' }]}
+                label="translateduse (MB)"
+                rules={[{ required: true, message: 'translateduse' }]}
               >
                 <InputNumber min={512} max={8192} style={{ width: '100%' }} />
               </Form.Item>
@@ -278,13 +278,13 @@ const DesktopSettings: React.FC = () => {
                     loading={loading}
                     icon={<SaveOutlined />}
                   >
-                    Saveconfig
+                    translatedconfig
                   </Button>
                   <Button 
                     icon={<ReloadOutlined />}
                     onClick={loadConfig}
                   >
-                    EN
+                    translated
                   </Button>
                 </Space>
               </Form.Item>
@@ -301,44 +301,44 @@ const DesktopSettings: React.FC = () => {
               onFinish={saveConfig}
               initialValues={config ?? undefined}
             >
-              <Title level={4}>APIEN</Title>
+              <Title level={4}>APIkey</Title>
               <Form.Item
                 name="dashscope_api_key"
                 label="DashScope API Key"
               >
-                <Input.Password placeholder="Please enterDashScope API Key" />
+                <Input.Password placeholder="translatedDashScope API Key" />
               </Form.Item>
 
               <Form.Item
                 name="openai_api_key"
                 label="OpenAI API Key"
               >
-                <Input.Password placeholder="Please enterOpenAI API Key" />
+                <Input.Password placeholder="translatedOpenAI API Key" />
               </Form.Item>
 
               <Form.Item
                 name="gemini_api_key"
                 label="Gemini API Key"
               >
-                <Input.Password placeholder="Please enterGemini API Key" />
+                <Input.Password placeholder="translatedGemini API Key" />
               </Form.Item>
 
               <Form.Item
                 name="siliconflow_api_key"
                 label="SiliconFlow API Key"
               >
-                <Input.Password placeholder="Please enterSiliconFlow API Key" />
+                <Input.Password placeholder="translatedSiliconFlow API Key" />
               </Form.Item>
 
               <Divider />
 
-              <Title level={4}>Modelconfig</Title>
+              <Title level={4}>modelconfig</Title>
               <Row gutter={16}>
                 <Col span={12}>
                   <Form.Item
                     name="default_model"
-                    label="Default model"
-                    rules={[{ required: true, message: 'Please enterDefault model' }]}
+                    label="defaultmodel"
+                    rules={[{ required: true, message: 'translateddefaultmodel' }]}
                   >
                     <Input />
                   </Form.Item>
@@ -346,8 +346,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="max_tokens"
-                    label="maxTokenEN"
-                    rules={[{ required: true, message: 'Please entermaxTokenEN' }]}
+                    label="translatedTokentranslated"
+                    rules={[{ required: true, message: 'translatedTokentranslated' }]}
                   >
                     <InputNumber min={100} max={8000} style={{ width: '100%' }} />
                   </Form.Item>
@@ -356,8 +356,8 @@ const DesktopSettings: React.FC = () => {
 
               <Form.Item
                 name="timeout"
-                label="Timeout (EN)"
-                rules={[{ required: true, message: 'Please enterTimeout' }]}
+                label="translated (seconds)"
+                rules={[{ required: true, message: 'translated' }]}
               >
                 <InputNumber min={10} max={300} style={{ width: '100%' }} />
               </Form.Item>
@@ -369,15 +369,15 @@ const DesktopSettings: React.FC = () => {
                   loading={loading}
                   icon={<SaveOutlined />}
                 >
-                  Saveconfig
+                  translatedconfig
                 </Button>
               </Form.Item>
             </Form>
           </Card>
         </TabPane>
 
-        {/* Processing settings */}
-        <TabPane tab={<span><ToolOutlined />Processing settings</span>} key="processing">
+        {/* processsettings */}
+        <TabPane tab={<span><ToolOutlined />processsettings</span>} key="processing">
           <Card>
             <Form
               form={form}
@@ -389,8 +389,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="chunk_size"
-                    label="Chunk size"
-                    rules={[{ required: true, message: 'Please enterChunk size' }]}
+                    label="translated"
+                    rules={[{ required: true, message: 'translated' }]}
                   >
                     <InputNumber min={1000} max={10000} style={{ width: '100%' }} />
                   </Form.Item>
@@ -398,8 +398,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="min_score_threshold"
-                    label="Min score threshold"
-                    rules={[{ required: true, message: 'Please enterMin score threshold' }]}
+                    label="translated"
+                    rules={[{ required: true, message: 'translated' }]}
                   >
                     <InputNumber min={0.1} max={1.0} step={0.1} style={{ width: '100%' }} />
                   </Form.Item>
@@ -410,8 +410,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="max_clips_per_collection"
-                    label="ENCollectionMax clips"
-                    rules={[{ required: true, message: 'Please enterMax clips' }]}
+                    label="per collectiontranslated"
+                    rules={[{ required: true, message: 'translated' }]}
                   >
                     <InputNumber min={1} max={20} style={{ width: '100%' }} />
                   </Form.Item>
@@ -419,8 +419,8 @@ const DesktopSettings: React.FC = () => {
                 <Col span={12}>
                   <Form.Item
                     name="max_retries"
-                    label="maxRetryEN"
-                    rules={[{ required: true, message: 'Please entermaxRetryEN' }]}
+                    label="translated"
+                    rules={[{ required: true, message: 'translated' }]}
                   >
                     <InputNumber min={1} max={10} style={{ width: '100%' }} />
                   </Form.Item>
@@ -434,28 +434,28 @@ const DesktopSettings: React.FC = () => {
                   loading={loading}
                   icon={<SaveOutlined />}
                 >
-                  Saveconfig
+                  translatedconfig
                 </Button>
               </Form.Item>
             </Form>
           </Card>
         </TabPane>
 
-        {/* System info */}
-        <TabPane tab={<span><DatabaseOutlined />System info</span>} key="system">
+        {/* Systeminfo */}
+        <TabPane tab={<span><DatabaseOutlined />Systeminfo</span>} key="system">
           <Card>
             {systemInfo && (
               <Row gutter={16}>
                 <Col span={8}>
                   <Statistic
-                    title="Actionssystem"
+                    title="translatedSystem"
                     value={systemInfo.platform}
                     suffix={systemInfo.platform_version}
                   />
                 </Col>
                 <Col span={8}>
                   <Statistic
-                    title="arch"
+                    title="translated"
                     value={systemInfo.architecture}
                   />
                 </Col>
@@ -474,13 +474,13 @@ const DesktopSettings: React.FC = () => {
                 <Row gutter={16}>
                   <Col span={12}>
                     <Statistic
-                      title="EN"
+                      title="translated"
                       value={formatBytes(systemInfo.memory_total)}
                     />
                   </Col>
                   <Col span={12}>
                     <Statistic
-                      title="EN"
+                      title="canusetranslated"
                       value={formatBytes(systemInfo.memory_available)}
                     />
                   </Col>
@@ -488,14 +488,14 @@ const DesktopSettings: React.FC = () => {
                 <Row gutter={16}>
                   <Col span={12}>
                     <Statistic
-                      title="EN"
+                      title="translatedusetranslated"
                       value={systemInfo.memory_usage_percent}
                       suffix="%"
                     />
                   </Col>
                   <Col span={12}>
                     <Statistic
-                      title="EN"
+                      title="translatedusetranslated"
                       value={systemInfo.disk_usage_percent}
                       suffix="%"
                     />
@@ -507,24 +507,24 @@ const DesktopSettings: React.FC = () => {
             {serviceStatus && (
               <>
                 <Divider />
-                <Title level={4}>serviceStatus</Title>
+                <Title level={4}>servicestatus</Title>
                 <Row gutter={16}>
                   <Col span={8}>
                     <Statistic
-                      title="serviceStatus"
-                      value={serviceStatus.is_running ? "running" : "EN"}
+                      title="servicestatus"
+                      value={serviceStatus.is_running ? "translated" : "translated"}
                       valueStyle={{ color: serviceStatus.is_running ? '#3f8600' : '#cf1322' }}
                     />
                   </Col>
                   <Col span={8}>
                     <Statistic
-                      title="port"
+                      title="translated"
                       value={serviceStatus.port}
                     />
                   </Col>
                   <Col span={8}>
                     <Statistic
-                      title="EN"
+                      title="Runtimetranslated"
                       value={serviceStatus.uptime}
                     />
                   </Col>
@@ -540,7 +540,7 @@ const DesktopSettings: React.FC = () => {
                 loadServiceStatus();
               }}
             >
-              Refreshinfo
+              translatedinfo
             </Button>
           </Card>
         </TabPane>

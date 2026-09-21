@@ -1,31 +1,31 @@
-name: ✨ EN / Feature request
-description: EN AutoClip EN / Suggest something new
+name: ✨ featuretranslated / Feature request
+description: translated AutoClip multitranslated / Suggest something new
 labels: ["feature", "needs-triage"]
 body:
   - type: textarea
     id: problem
     attributes:
-      label: EN / The problem
-      description: EN，EN：EN、EN / Describe the situation, not the solution
-      placeholder: "ENProcessing 5 EN 2 EN，ENManual……"
+      label: translated'sissue / The problem
+      description: translated，translated：translatedintranslated、translatedintranslated / Describe the situation, not the solution
+      placeholder: "translatedpertranslatedprocess 5 translated 2 translated'stranslated，translatedinpertranslated……"
     validations:
       required: true
 
   - type: textarea
     id: proposal
     attributes:
-      label: EN / What you'd like
-      placeholder: "IfEN……EN"
+      label: translated'stranslated / What you'd like
+      placeholder: "iftranslated……translated"
     validations:
       required: true
 
   - type: dropdown
     id: platform
     attributes:
-      label: EN / Platform
+      label: translateduse'stranslated / Platform
       options:
-        - macOS EN
-        - Windows EN
-        - Docker / EN
+        - macOS translated
+        - Windows translated
+        - Docker / translated
     validations:
       required: false

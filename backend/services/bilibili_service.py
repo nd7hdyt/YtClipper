@@ -1,6 +1,6 @@
 """
-BENserviceEN - EN
-ENbilitoolEN，useENAPIcall
+Bsiteservicetranslated - translatedversion
+translatedbilitooldependencies，usetranslatedAPIcall
 """
 
 import asyncio
@@ -25,13 +25,13 @@ logger = logging.getLogger(__name__)
 
 
 class BilibiliAccountService:
-    """BENaccountservice"""
+    """BsiteAccountservice"""
     
     def __init__(self, db: Session):
         self.db = db
     
     async def verify_cookie(self, cookie: str) -> Tuple[bool, Optional[Dict]]:
-        """validateBENCookieEN"""
+        """verifyBsiteCookieIstranslated"""
         try:
             headers = {
                 "Cookie": cookie,
@@ -40,7 +40,7 @@ class BilibiliAccountService:
             }
             
             async with aiohttp.ClientSession() as session:
-                # ENcheckloginstatus
+                # translatedchecktranslatedstatus
                 async with session.get(
                     "https://api.bilibili.com/x/web-interface/nav",
                     headers=headers,
@@ -56,36 +56,36 @@ class BilibiliAccountService:
                             "username": user_info.get("uname"),
                             "face": user_info.get("face"),
                             "level": user_info.get("level_info", {}).get("current_level", 0),
-                            "can_upload": True,  # ENTrue，ENAPIcall
+                            "can_upload": True,  # translatedTrue，translated'sAPIcall
                             "vip_status": user_info.get("vipStatus", 0),
                             "verified_at": datetime.now().isoformat()
                         }
                     else:
-                        logger.warning(f"Cookievalidatefailed: code={data.get('code')}, message={data.get('message')}")
+                        logger.warning(f"Cookieverifyfailed: code={data.get('code')}, message={data.get('message')}")
                         return False, None
                         
         except asyncio.TimeoutError:
-            logger.error("validateCookietimeout")
+            logger.error("verifyCookietranslated")
             return False, None
         except Exception as e:
-            logger.error(f"validateCookiefailed: {e}")
+            logger.error(f"verifyCookiefailed: {e}")
             return False, None
     
     async def create_account(self, account_data: BilibiliAccountCreate) -> BilibiliAccount:
-        """createBENaccount"""
+        """createBsiteAccount"""
         try:
-            # validateCookie
+            # verifyCookie
             is_valid, user_info = await self.verify_cookie(account_data.cookie_content)
             if not is_valid:
-                raise ValueError("ENCookie，pleasecheckCookieEN")
+                raise ValueError("translated'sCookie，translatedcheckCookieIstranslatedortranslated")
             
-            # checkaccountENalready exists
+            # checkAccountIstranslatedin
             existing_account = self.db.query(BilibiliAccount).filter(
                 BilibiliAccount.username == user_info.get("username")
             ).first()
             
             if existing_account:
-                # updateENaccountEN
+                # updatetranslatedAccountinfo
                 existing_account.cookies = encrypt_data(account_data.cookie_content)
                 existing_account.nickname = account_data.nickname or user_info.get("username")
                 existing_account.status = "active"
@@ -94,16 +94,16 @@ class BilibiliAccountService:
                 self.db.commit()
                 self.db.refresh(existing_account)
                 
-                logger.info(f"updateENBENaccount: {existing_account.username}")
+                logger.info(f"updatetranslatedBsiteAccount: {existing_account.username}")
                 return existing_account
             
-            # ENcookies
+            # translatedcookies
             encrypted_cookies = encrypt_data(account_data.cookie_content)
             
-            # createENaccountEN
+            # createtranslatedAccounttranslated
             account = BilibiliAccount(
                 username=user_info.get("username", account_data.username),
-                nickname=account_data.nickname or user_info.get("username", "BENuser"),
+                nickname=account_data.nickname or user_info.get("username", "Bsiteuser"),
                 cookies=encrypted_cookies,
                 status="active",
                 created_at=datetime.now(),
@@ -114,28 +114,28 @@ class BilibiliAccountService:
             self.db.commit()
             self.db.refresh(account)
             
-            logger.info(f"BENaccountcreatesucceeded: {account.username} (UID: {user_info.get('uid')})")
+            logger.info(f"BsiteAccountcreatesucceeded: {account.username} (UID: {user_info.get('uid')})")
             return account
             
         except Exception as e:
             self.db.rollback()
-            logger.error(f"createBENaccountfailed: {e}")
+            logger.error(f"createBsiteAccountfailed: {e}")
             raise
     
     async def check_account_health(self, account_id: int) -> Dict[str, Any]:
-        """checkaccountENstatus"""
+        """checkAccounttranslatedstatus"""
         try:
             account = self.db.query(BilibiliAccount).filter(
                 BilibiliAccount.id == account_id
             ).first()
             
             if not account:
-                raise ValueError("accountdoes not exist")
+                raise ValueError("Accountnot found")
             
-            # ENCookie
+            # translatedCookie
             decrypted_cookies = decrypt_data(account.cookies)
             
-            # validateCookieEN
+            # verifyCookietranslated
             is_valid, user_info = await self.verify_cookie(decrypted_cookies)
             
             health_status = {
@@ -154,18 +154,18 @@ class BilibiliAccountService:
                     "vip_status": user_info.get("vip_status", 0)
                 })
                 
-                # updateaccountstatus
+                # updateAccountstatus
                 account.status = "active"
                 account.updated_at = datetime.now()
             else:
-                health_status["error"] = "CookieENaccountexception"
+                health_status["error"] = "CookietranslatedorAccounttranslated"
                 account.status = "inactive"
             
             self.db.commit()
             return health_status
             
         except Exception as e:
-            logger.error(f"checkaccountENstatusfailed: {e}")
+            logger.error(f"checkAccounttranslatedstatusfailed: {e}")
             return {
                 "account_id": account_id,
                 "is_valid": False,
@@ -174,7 +174,7 @@ class BilibiliAccountService:
             }
     
     async def batch_check_accounts_health(self) -> List[Dict[str, Any]]:
-        """ENcheckallaccountENstatus"""
+        """translatedchecktranslatedAccounttranslatedstatus"""
         try:
             accounts = self.db.query(BilibiliAccount).all()
             results = []
@@ -183,18 +183,18 @@ class BilibiliAccountService:
                 health_status = await self.check_account_health(account.id)
                 results.append(health_status)
                 
-                # ENrequestEN
+                # translated
                 await asyncio.sleep(1)
             
-            logger.info(f"ENcheckEN，ENcheck {len(results)} ENaccount")
+            logger.info(f"translatedchecktranslated，translatedcheck {len(results)}  Account")
             return results
             
         except Exception as e:
-            logger.error(f"ENcheckaccountENstatusfailed: {e}")
+            logger.error(f"translatedcheckAccounttranslatedstatusfailed: {e}")
             raise
     
     def get_active_accounts(self) -> List[BilibiliAccount]:
-        """fetchallENaccount"""
+        """fetchtranslatedAccount"""
         try:
             accounts = self.db.query(BilibiliAccount).filter(
                 BilibiliAccount.status == "active"
@@ -203,22 +203,22 @@ class BilibiliAccountService:
             return accounts
             
         except Exception as e:
-            logger.error(f"fetchENaccountfailed: {e}")
+            logger.error(f"fetchtranslatedAccountfailed: {e}")
             return []
     
     def get_account_by_id(self, account_id: int) -> Optional[BilibiliAccount]:
-        """ENIDfetchaccount"""
+        """translatedIDfetchAccount"""
         try:
             return self.db.query(BilibiliAccount).filter(
                 BilibiliAccount.id == account_id
             ).first()
             
         except Exception as e:
-            logger.error(f"fetchaccountfailed: {e}")
+            logger.error(f"fetchAccountfailed: {e}")
             return None
     
     def select_best_account(self, exclude_ids: List[int] = None) -> Optional[BilibiliAccount]:
-        """ENuploadaccount"""
+        """translatedSelectselecttranslatedUploadAccount"""
         try:
             query = self.db.query(BilibiliAccount).filter(
                 BilibiliAccount.status == "active"
@@ -232,35 +232,35 @@ class BilibiliAccountService:
             if not accounts:
                 return None
             
-            # EN：VIP > EN > ENusetime
+            # bytranslated：VIP > etc.translated > translatedusetranslated
             def account_priority(account):
-                # VIPaccountEN
+                # VIPAccounttranslated
                 vip_score = account.vip_status * 1000 if hasattr(account, 'vip_status') else 0
-                # EN
+                # etc.translated
                 level_score = getattr(account, 'level', 0) * 100
-                # ENusetime（ENuseEN）
+                # translatedusetranslated（translatedusetranslated）
                 last_used = account.updated_at or account.created_at
-                time_score = (datetime.now() - last_used).total_seconds() / 3600  # EN
+                time_score = (datetime.now() - last_used).total_seconds() / 3600  # translated
                 
                 return vip_score + level_score + time_score
             
             best_account = max(accounts, key=account_priority)
-            logger.info(f"ENaccountENupload: {best_account.username} (ID: {best_account.id})")
+            logger.info(f"SelectselectAccounttranslatedUpload: {best_account.username} (ID: {best_account.id})")
             
             return best_account
             
         except Exception as e:
-            logger.error(f"ENaccountfailed: {e}")
+            logger.error(f"SelectselecttranslatedAccountfailed: {e}")
             return None
     
     def get_account_upload_stats(self, account_id: int, days: int = 7) -> Dict[str, Any]:
-        """fetchaccountuploadEN"""
+        """fetchAccountUploadtranslatedinfo"""
         try:
             from datetime import timedelta
             
             start_date = datetime.now() - timedelta(days=days)
             
-            # ENuploadEN
+            # translatedUploadtranslated
             upload_records = self.db.query(UploadRecord).filter(
                 UploadRecord.account_id == account_id,
                 UploadRecord.created_at >= start_date
@@ -283,39 +283,39 @@ class BilibiliAccountService:
             }
             
         except Exception as e:
-            logger.error(f"fetchaccountENfailed: {e}")
+            logger.error(f"fetchAccounttranslatedinfofailed: {e}")
             return {
                 "account_id": account_id,
                 "error": str(e)
             }
     
     def rotate_accounts_for_batch_upload(self, video_count: int) -> List[BilibiliAccount]:
-        """ENuploadENaccount（EN）"""
+        """translatedUploadtranslatedAccount（translated）"""
         try:
             active_accounts = self.get_active_accounts()
             
             if not active_accounts:
                 return []
             
-            # ifvideoENaccountEN，EN
+            # iftranslatedvideotranslatedAccounttranslated，translated
             if video_count <= len(active_accounts):
                 return active_accounts[:video_count]
             
-            # elseEN
+            # translated
             allocated_accounts = []
             for i in range(video_count):
                 account_index = i % len(active_accounts)
                 allocated_accounts.append(active_accounts[account_index])
             
-            logger.info(f"EN {video_count} ENvideoEN {len(set(allocated_accounts))} ENaccount")
+            logger.info(f"translated {video_count}  videotranslated {len(set(allocated_accounts))}  Account")
             return allocated_accounts
             
         except Exception as e:
-            logger.error(f"accountENfailed: {e}")
+            logger.error(f"Accounttranslatedfailed: {e}")
             return []
     
     def update_account_usage(self, account_id: int):
-        """updateaccountusetime"""
+        """updateAccountusetranslated"""
         try:
             account = self.get_account_by_id(account_id)
             if account:
@@ -323,85 +323,85 @@ class BilibiliAccountService:
                 self.db.commit()
                 
         except Exception as e:
-            logger.error(f"updateaccountusetimefailed: {e}")
+            logger.error(f"updateAccountusetranslatedfailed: {e}")
     
     def get_accounts(self) -> List[BilibiliAccount]:
-        """fetchallaccount"""
+        """fetchtranslatedAccount"""
         return self.db.query(BilibiliAccount).all()
     
     def get_account(self, account_id: UUID) -> Optional[BilibiliAccount]:
-        """fetchENaccount"""
+        """fetchtranslatedAccount"""
         return self.db.query(BilibiliAccount).filter(BilibiliAccount.id == account_id).first()
     
     def delete_account(self, account_id: UUID) -> bool:
-        """deleteaccount"""
+        """deleteAccount"""
         account = self.get_account(account_id)
         if not account:
             return False
         
         try:
-            # ENdeleteallEN
+            # translateddeletetranslated'stranslated
             from ..models.bilibili import UploadRecord
             upload_records = self.db.query(UploadRecord).filter(UploadRecord.account_id == account_id).all()
             
             for record in upload_records:
-                logger.info(f"deleteEN: {record.id}")
+                logger.info(f"deletetranslated: {record.id}")
                 self.db.delete(record)
             
-            # deleteaccount
+            # deleteAccount
             self.db.delete(account)
             self.db.commit()
             
-            logger.info(f"BENaccountdeletesucceeded: {account.username}，meanwhiledeleteEN {len(upload_records)} EN")
+            logger.info(f"BsiteAccountdeletesucceeded: {account.username}，translateddeletetranslated {len(upload_records)} translated")
             return True
             
         except Exception as e:
             self.db.rollback()
-            logger.error(f"deleteaccountfailed: {str(e)}")
+            logger.error(f"deleteAccountfailed: {str(e)}")
             return False
     
     def check_account_status(self, account_id: UUID) -> bool:
-        """checkaccountstatus"""
+        """checkAccountstatus"""
         account = self.get_account(account_id)
         if not account:
             return False
         
         try:
-            # ENcookies
+            # translatedcookies
             try:
                 cookies_data_str = decrypt_data(account.cookies)
-                # validatecookieEN
+                # verifycookietranslatedformat
                 if not cookies_data_str or not isinstance(cookies_data_str, str):
                     return False
                 return True
             except Exception as e:
-                logger.warning(f"ENcookiesfailed: {str(e)}")
+                logger.warning(f"translatedcookiesfailed: {str(e)}")
                 return False
                     
         except Exception as e:
-            logger.error(f"checkaccountstatusfailed: {str(e)}")
+            logger.error(f"checkAccountstatusfailed: {str(e)}")
             return False
 
 
 class BilibiliUploadService:
-    """BENservice - useENAPIcall"""
+    """Bsitetranslatedservice - usetranslatedAPIcall"""
     
     def __init__(self, db: Session):
         self.db = db
         self.account_service = BilibiliAccountService(db)
     
     def create_upload_record(self, project_id: UUID, upload_data: UploadRequest) -> UploadRecord:
-        """createEN"""
-        # validateaccount
+        """createtranslated"""
+        # verifyAccount
         account = self.account_service.get_account(upload_data.account_id)
         if not account:
-            raise ValueError("accountdoes not exist")
+            raise ValueError("Accountnot found")
         
-        # createEN
+        # createtranslated
         record = UploadRecord(
             project_id=project_id,
             account_id=upload_data.account_id,
-            clip_id=",".join(upload_data.clip_ids),  # EN
+            clip_id=",".join(upload_data.clip_ids),  # translated
             title=upload_data.title,
             description=upload_data.description,
             tags=json.dumps(upload_data.tags),
@@ -413,31 +413,31 @@ class BilibiliUploadService:
         self.db.commit()
         self.db.refresh(record)
         
-        logger.info(f"ENcreatesucceeded: {record.id}")
+        logger.info(f"translatedcreatesucceeded: {record.id}")
         return record
     
     async def upload_clip(self, record_id: int, video_path: str, max_retries: int = 3) -> bool:
-        """uploadENclip - useENuploadEN"""
+        """Uploadtranslated clip - useBuilt-inUploadtranslated"""
         try:
-            # fetchEN
+            # fetchtranslated
             record = self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
             if not record:
-                logger.error(f"ENdoes not exist: {record_id}")
+                logger.error(f"translatednot found: {record_id}")
                 return False
             
-            # fetchaccountEN
+            # fetchAccountinfo
             account = self.db.query(BilibiliAccount).filter(BilibiliAccount.id == record.account_id).first()
             if not account:
-                logger.error(f"accountdoes not exist: {record.account_id}")
+                logger.error(f"Accountnot found: {record.account_id}")
                 return False
             
-            # ENCookie
+            # translatedCookie
             cookies = decrypt_data(account.cookies)
             if not cookies:
-                logger.error("CookieENfailed")
+                logger.error("Cookietranslatedfailed")
                 return False
             
-            # useENuploadEN
+            # usetranslatedUploadtranslated
             uploader = BilibiliDirectUploader(cookies)
             success = await uploader.upload_video(
                 video_path=video_path,
@@ -465,8 +465,8 @@ class BilibiliUploadService:
             return success
             
         except Exception as e:
-            logger.error(f"uploadclipfailed: {e}")
-            # updateENstatus
+            logger.error(f"Uploadclipfailed: {e}")
+            # updatetranslatedstatus
             try:
                 record = self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
                 if record:
@@ -479,7 +479,7 @@ class BilibiliUploadService:
             return False
     
     def update_upload_status(self, record_id, status: str, error_message: str = None) -> bool:
-        """updateENstatus"""
+        """updatetranslatedstatus"""
         try:
             record = self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
             if not record:
@@ -493,27 +493,27 @@ class BilibiliUploadService:
             self.db.commit()
             return True
         except Exception as e:
-            logger.error(f"updateENstatusfailed: {str(e)}")
+            logger.error(f"updatetranslatedstatusfailed: {str(e)}")
             self.db.rollback()
             return False
 
     def retry_upload_task(self, record_id: int) -> bool:
-        """retryfailedENtask"""
+        """translatedfailed'stranslatedtask"""
         try:
             record = self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
             if not record:
-                raise ValueError("ENdoes not exist")
+                raise ValueError("translatednot found")
             
             if record.status != "failed":
-                raise ValueError("ENfailedENtaskcanretry")
+                raise ValueError("translatedfailed'staskcantranslated")
             
-            # ENstatusENprocessing
+            # translatedstatustranslatedprocess
             record.status = "pending"
             record.error_message = None
             record.updated_at = datetime.utcnow()
             self.db.commit()
             
-            # ENstartuploadtask
+            # translatedstartUploadtask
             clip_ids = record.clip_id.split(",") if record.clip_id else []
             for clip_id in clip_ids:
                 clip_id = clip_id.strip()
@@ -521,62 +521,62 @@ class BilibiliUploadService:
                     from ..tasks.upload import upload_clip_task
                     upload_clip_task.delay(str(record.id), clip_id)
             
-            logger.info(f"ENtaskretryENstart: {record_id}")
+            logger.info(f"translatedtasktranslatedstart: {record_id}")
             return True
             
         except Exception as e:
-            logger.error(f"retryENtaskfailed: {str(e)}")
+            logger.error(f"translatedtaskfailed: {str(e)}")
             self.db.rollback()
             return False
 
     def cancel_upload_task(self, record_id: int) -> bool:
-        """cancelENtask"""
+        """canceltranslated'stranslatedtask"""
         try:
             record = self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
             if not record:
-                raise ValueError("ENdoes not exist")
+                raise ValueError("translatednot found")
             
             if record.status not in ["pending", "processing"]:
-                raise ValueError("ENprocessingENprocessingENtaskcancancel")
+                raise ValueError("translatedprocessorprocessing'staskcantranslatedcancel")
             
-            # updatestatusENcancel
+            # updatestatustranslatedcancel
             record.status = "cancelled"
             record.updated_at = datetime.utcnow()
             self.db.commit()
             
-            logger.info(f"ENtaskENcancel: {record_id}")
+            logger.info(f"translatedtasktranslatedcancel: {record_id}")
             return True
             
         except Exception as e:
-            logger.error(f"cancelENtaskfailed: {str(e)}")
+            logger.error(f"canceltranslatedtaskfailed: {str(e)}")
             self.db.rollback()
             return False
     
     def delete_upload_task(self, record_id: int) -> bool:
-        """deleteENtask"""
+        """deletetranslatedtask"""
         try:
             record = self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
             if not record:
-                raise ValueError("ENdoes not exist")
+                raise ValueError("translatednot found")
             
-            # ENcompleted、failedENcancelENtaskcandelete
+            # translatedcompleted、failedorcancel'staskcantranslateddelete
             if record.status in ["pending", "processing"]:
-                raise ValueError("ENtaskENdelete，pleaseENcancel")
+                raise ValueError("translated'stasktranslateddelete，translatedcancel")
             
-            # deleteEN
+            # deletetranslated
             self.db.delete(record)
             self.db.commit()
             
-            logger.info(f"ENtaskdeleted: {record_id}")
+            logger.info(f"translatedtasktranslateddelete: {record_id}")
             return True
             
         except Exception as e:
-            logger.error(f"deleteENtaskfailed: {str(e)}")
+            logger.error(f"deletetranslatedtaskfailed: {str(e)}")
             self.db.rollback()
             return False
     
     def get_upload_records(self, project_id: Optional[UUID] = None) -> List[dict]:
-        """fetchEN，EN"""
+        """fetchtranslated，Packageincludetranslatedinfo"""
         from ..models.project import Project
         
         query = self.db.query(
@@ -595,7 +595,7 @@ class BilibiliUploadService:
         
         results = query.order_by(UploadRecord.created_at.desc()).all()
         
-        # EN，EN
+        # translatedformat，Packageincludetranslatedinfo
         records = []
         for record, account_username, account_nickname, project_name in results:
             record_dict = {
@@ -627,35 +627,35 @@ class BilibiliUploadService:
         return records
     
     def get_upload_record(self, record_id: UUID) -> Optional[UploadRecord]:
-        """fetchEN"""
+        """fetchtranslated"""
         return self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
     
     def get_upload_record_by_id(self, record_id: int) -> Optional[UploadRecord]:
-        """ENIDfetchEN"""
+        """translatedIDfetchtranslated"""
         return self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
     
     def upload_clip_sync(self, record_id: int, video_path: str, max_retries: int = 3) -> bool:
-        """ENuploadENclip"""
+        """translatedversion'sUploadtranslated clip"""
         try:
-            # fetchEN
+            # fetchtranslated
             record = self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
             if not record:
-                logger.error(f"ENdoes not exist: {record_id}")
+                logger.error(f"translatednot found: {record_id}")
                 return False
             
-            # fetchaccountEN
+            # fetchAccountinfo
             account = self.db.query(BilibiliAccount).filter(BilibiliAccount.id == record.account_id).first()
             if not account:
-                logger.error(f"accountdoes not exist: {record.account_id}")
+                logger.error(f"Accountnot found: {record.account_id}")
                 return False
             
-            # ENCookie
+            # translatedCookie
             cookies = decrypt_data(account.cookies)
             if not cookies:
-                logger.error("CookieENfailed")
+                logger.error("Cookietranslatedfailed")
                 return False
             
-            # useENuploadEN（EN）
+            # usetranslatedUploadtranslated（translatedversion）
             uploader = BilibiliDirectUploader(cookies)
             success = uploader.upload_video_sync(
                 video_path=video_path,
@@ -683,8 +683,8 @@ class BilibiliUploadService:
             return success
             
         except Exception as e:
-            logger.error(f"uploadclipfailed: {e}")
-            # updateENstatus
+            logger.error(f"Uploadclipfailed: {e}")
+            # updatetranslatedstatus
             try:
                 record = self.db.query(UploadRecord).filter(UploadRecord.id == record_id).first()
                 if record:
@@ -698,7 +698,7 @@ class BilibiliUploadService:
 
 
 class BilibiliDirectUploader:
-    """BENAPIuploadEN"""
+    """BsitetranslatedAPIUploadtranslated"""
     
     def __init__(self, cookies: str):
         self.cookies = cookies
@@ -707,33 +707,33 @@ class BilibiliDirectUploader:
         self.session = None
     
     async def upload_video(self, video_path: str, metadata: dict, max_retries: int = 3) -> bool:
-        """uploadvideo - EN，ENreturnfailedstatus"""
+        """Uploadvideo - translatedversion，translatedreturnfailedstatus"""
         try:
-            # ENreturnfailed，becauseneedENuploadEN
-            self.error_message = "uploadENcurrentlyEN，pleaseEN"
-            logger.warning("uploadEN，returnfailedstatus")
+            # translatedreturnfailed，translatedUploadtranslated
+            self.error_message = "UploadfeaturetranslatedinIn Development，translated"
+            logger.warning("Uploadfeaturetranslated，returnfailedstatus")
             return False
                 
         except Exception as e:
             self.error_message = str(e)
-            logger.error(f"uploadvideofailed: {e}")
+            logger.error(f"Uploadvideofailed: {e}")
             return False
     
     def upload_video_sync(self, video_path: str, metadata: dict, max_retries: int = 3) -> bool:
-        """ENuploadvideo"""
+        """translatedversion'sUploadvideo"""
         try:
-            # ENreturnfailed，becauseneedENuploadEN
-            self.error_message = "uploadENcurrentlyEN，pleaseEN"
-            logger.warning("uploadEN，returnfailedstatus")
+            # translatedreturnfailed，translatedUploadtranslated
+            self.error_message = "UploadfeaturetranslatedinIn Development，translated"
+            logger.warning("Uploadfeaturetranslated，returnfailedstatus")
             return False
                 
         except Exception as e:
             self.error_message = str(e)
-            logger.error(f"uploadvideofailed: {e}")
+            logger.error(f"Uploadvideofailed: {e}")
             return False
     
     async def _pre_upload(self, video_path: str) -> Optional[str]:
-        """ENupload，fetchupload_id"""
+        """translatedUpload，fetchupload_id"""
         try:
             file_size = os.path.getsize(video_path)
             file_name = os.path.basename(video_path)
@@ -759,20 +759,20 @@ class BilibiliDirectUploader:
                 
                 if result.get("code") == 0:
                     upload_id = result.get("data", {}).get("id")
-                    logger.info(f"ENuploadsucceeded，upload_id: {upload_id}")
+                    logger.info(f"translatedUploadsucceeded，upload_id: {upload_id}")
                     return upload_id
                 else:
-                    self.error_message = f"ENuploadfailed: {result.get('message', 'Unknown error')}"
+                    self.error_message = f"translatedUploadfailed: {result.get('message', 'translatederror')}"
                     logger.error(self.error_message)
                     return None
                     
         except Exception as e:
-            self.error_message = f"ENuploadexception: {str(e)}"
+            self.error_message = f"translatedUploadtranslated: {str(e)}"
             logger.error(self.error_message)
             return None
     
     async def _chunk_upload(self, video_path: str, upload_id: str, max_retries: int = 3) -> bool:
-        """ENupload"""
+        """translatedUpload"""
         try:
             chunk_size = 2 * 1024 * 1024  # 2MB per chunk
             file_size = os.path.getsize(video_path)
@@ -790,7 +790,7 @@ class BilibiliDirectUploader:
                     if not chunk_data:
                         break
                     
-                    # retryEN
+                    # translated
                     for attempt in range(max_retries):
                         try:
                             form_data = aiohttp.FormData()
@@ -807,11 +807,11 @@ class BilibiliDirectUploader:
                                 result = await response.json()
                                 
                                 if result.get("code") == 0:
-                                    logger.info(f"EN {chunk_index} uploadsucceeded")
+                                    logger.info(f"translated {chunk_index} Uploadsucceeded")
                                     break
                                 else:
                                     if attempt == max_retries - 1:
-                                        self.error_message = f"EN {chunk_index} uploadfailed: {result.get('message', 'Unknown error')}"
+                                        self.error_message = f"translated {chunk_index} Uploadfailed: {result.get('message', 'translatederror')}"
                                         logger.error(self.error_message)
                                         return False
                                     else:
@@ -819,7 +819,7 @@ class BilibiliDirectUploader:
                                         
                         except Exception as e:
                             if attempt == max_retries - 1:
-                                self.error_message = f"EN {chunk_index} uploadexception: {str(e)}"
+                                self.error_message = f"translated {chunk_index} Uploadtranslated: {str(e)}"
                                 logger.error(self.error_message)
                                 return False
                             else:
@@ -827,16 +827,16 @@ class BilibiliDirectUploader:
                     
                     chunk_index += 1
             
-            logger.info(f"allENuploadEN，EN {chunk_index} EN")
+            logger.info(f"translatedUploadtranslated，translated {chunk_index}  translated")
             return True
             
         except Exception as e:
-            self.error_message = f"ENuploadexception: {str(e)}"
+            self.error_message = f"translatedUploadtranslated: {str(e)}"
             logger.error(self.error_message)
             return False
     
     async def _merge_chunks(self, upload_id: str) -> bool:
-        """EN"""
+        """translated"""
         try:
             headers = {
                 "Cookie": self.cookies,
@@ -857,20 +857,20 @@ class BilibiliDirectUploader:
                 result = await response.json()
                 
                 if result.get("code") == 0:
-                    logger.info("ENsucceeded")
+                    logger.info("translatedsucceeded")
                     return True
                 else:
-                    self.error_message = f"ENfailed: {result.get('message', 'Unknown error')}"
+                    self.error_message = f"translatedfailed: {result.get('message', 'translatederror')}"
                     logger.error(self.error_message)
                     return False
                     
         except Exception as e:
-            self.error_message = f"ENexception: {str(e)}"
+            self.error_message = f"translated: {str(e)}"
             logger.error(self.error_message)
             return False
     
     async def _submit_video(self, upload_id: str, metadata: dict) -> bool:
-        """EN"""
+        """translated"""
         try:
             headers = {
                 "Cookie": self.cookies,
@@ -879,9 +879,9 @@ class BilibiliDirectUploader:
                 "Content-Type": "application/json"
             }
             
-            # EN
+            # translated
             submit_data = {
-                "copyright": 1,  # EN
+                "copyright": 1,  # translated
                 "videos": [{
                     "filename": upload_id,
                     "title": metadata.get('title', ''),
@@ -916,22 +916,22 @@ class BilibiliDirectUploader:
                 
                 if result.get("code") == 0:
                     self.bv_id = result.get("data", {}).get("bvid")
-                    logger.info(f"ENsucceeded，BVEN: {self.bv_id}")
+                    logger.info(f"translatedsucceeded，BVtranslated: {self.bv_id}")
                     return True
                 else:
-                    self.error_message = f"ENfailed: {result.get('message', 'Unknown error')}"
+                    self.error_message = f"translatedfailed: {result.get('message', 'translatederror')}"
                     logger.error(self.error_message)
                     return False
                     
         except Exception as e:
-            self.error_message = f"ENexception: {str(e)}"
+            self.error_message = f"translated: {str(e)}"
             logger.error(self.error_message)
             return False
     
     def get_bv_id(self) -> Optional[str]:
-        """fetchBVEN"""
+        """fetchBVtranslated"""
         return self.bv_id
     
     def get_error_message(self) -> Optional[str]:
-        """fetcherrorEN"""
+        """fetcherrorinfo"""
         return self.error_message

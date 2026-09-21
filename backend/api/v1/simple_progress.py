@@ -1,5 +1,5 @@
 """
-ENprogressAPI - ENAPI
+translated'sprogressAPI - Providestranslated
 """
 
 from fastapi import APIRouter, HTTPException, Query
@@ -14,66 +14,66 @@ router = APIRouter(prefix="/simple-progress", tags=["simple-progress"])
 
 
 @router.get("/snapshot")
-def get_progress_snapshots(project_ids: List[str] = Query(..., description="projectIDEN")):
+def get_progress_snapshots(project_ids: List[str] = Query(..., description="projectIDlist")):
     """
-    ENfetchprojectprogressEN
+    translatedfetchprojectprogresstranslated
     
     Args:
-        project_ids: projectIDEN
+        project_ids: projectIDlist
         
     Returns:
-        progressEN
+        progresstranslatedlist
     """
     try:
         if not project_ids:
             return []
             
         snapshots = get_multiple_progress_snapshots(project_ids)
-        logger.info(f"fetchprogressEN: {len(snapshots)} ENproject")
+        logger.info(f"fetchprogresstranslated: {len(snapshots)}  project")
         return snapshots
         
     except Exception as e:
-        logger.error(f"fetchprogressENfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"fetchprogressENfailed: {str(e)}")
+        logger.error(f"fetchprogresstranslatedfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchprogresstranslatedfailed: {str(e)}")
 
 
 @router.get("/snapshot/{project_id}")
 def get_single_progress_snapshot(project_id: str):
     """
-    fetchENprojectprogressEN
+    fetchtranslated projectprogresstranslated
     
     Args:
         project_id: projectID
         
     Returns:
-        progressEN
+        progresstranslated
     """
     try:
         snapshot = get_progress_snapshot(project_id)
         if snapshot is None:
-            # returnENstatus
+            # returndefaultstatus
             return {
                 "project_id": project_id,
                 "stage": "INGEST",
                 "percent": 0,
-                "message": "ENstart",
+                "message": "etc.translated",
                 "ts": 0
             }
             
         return snapshot
         
     except Exception as e:
-        logger.error(f"fetchprojectprogressENfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"fetchprojectprogressENfailed: {str(e)}")
+        logger.error(f"fetchprojectprogresstranslatedfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchprojectprogresstranslatedfailed: {str(e)}")
 
 
 @router.get("/stages")
 def get_available_stages():
     """
-    fetchENprocessingEN
+    fetchcanuse'sprocesstranslatedinfo
     
     Returns:
-        ENconfigEN
+        translatedconfiginfo
     """
     from backend.services.simple_progress import STAGES, STAGE_NAMES
     

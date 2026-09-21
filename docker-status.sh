@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# AutoClip Docker StatusCheckScript
-# Version: 1.0
-# EN: CheckAutoClip DockerServiceStatus
+# AutoClip Docker statuschecktranslated
+# version: 1.0
+# feature: checkAutoClip Dockerservicestatus
 
 set -euo pipefail
 
 # =============================================================================
-# ConfigEN
+# configtranslated
 # =============================================================================
 
-# EN
+# translated
 RED='\033[0;31m'
-GREEN='\033[0;32m'
+GREtranslated='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
@@ -20,7 +20,7 @@ CYAN='\033[0;36m'
 WHITE='\033[1;37m'
 NC='\033[0m' # No Color
 
-# EN
+# translated
 ICON_SUCCESS="✅"
 ICON_ERROR="❌"
 ICON_WARNING="⚠️"
@@ -31,7 +31,7 @@ ICON_ROCKET="🚀"
 ICON_DOCKER="🐳"
 
 # =============================================================================
-# ToolEN
+# tooltranslated
 # =============================================================================
 
 log_info() {
@@ -39,7 +39,7 @@ log_info() {
 }
 
 log_success() {
-    echo -e "${GREEN}${ICON_SUCCESS} $1${NC}"
+    echo -e "${GREtranslated}${ICON_SUCCESS} $1${NC}"
 }
 
 log_warning() {
@@ -56,47 +56,47 @@ log_header() {
 }
 
 # =============================================================================
-# CheckEN
+# checktranslated
 # =============================================================================
 
 check_docker() {
-    log_header "DockerEnvironmentCheck"
+    log_header "Dockertranslatedcheck"
     
     if ! command -v docker >/dev/null 2>&1; then
-        log_error "DockerENInstall"
+        log_error "Dockertranslatedinstall"
         return 1
     fi
-    log_success "DockerENInstall"
+    log_success "Dockertranslatedinstall"
     
     if ! command -v docker-compose >/dev/null 2>&1; then
-        log_error "Docker ComposeENInstall"
+        log_error "Docker Composetranslatedinstall"
         return 1
     fi
-    log_success "Docker ComposeENInstall"
+    log_success "Docker Composetranslatedinstall"
     
     if ! docker info >/dev/null 2>&1; then
-        log_error "DockerServiceEN"
+        log_error "Dockerservicetranslated"
         return 1
     fi
-    log_success "DockerServiceEN"
+    log_success "Dockerservicetranslated"
     
     return 0
 }
 
 check_containers() {
-    log_header "ENStatusCheck"
+    log_header "translatedstatuscheck"
     
     local containers=$(docker ps -a --filter "name=autoclip" --format "{{.Names}}\t{{.Status}}\t{{.Ports}}" 2>/dev/null || true)
     
     if [[ -z "$containers" ]]; then
-        log_warning "ENAutoClipEN"
+        log_warning "translatedAutoCliptranslated"
         return 1
     fi
     
-    echo -e "${CYAN}📊 ENStatus:${NC}"
+    echo -e "${CYAN}📊 translatedstatus:${NC}"
     echo "$containers" | while IFS=$'\t' read -r name status ports; do
         if [[ "$status" == *"Up"* ]]; then
-            echo -e "  ${GREEN}${ICON_HEALTH} $name${NC} - $status"
+            echo -e "  ${GREtranslated}${ICON_HEALTH} $name${NC} - $status"
         else
             echo -e "  ${RED}${ICON_SICK} $name${NC} - $status"
         fi
@@ -106,41 +106,41 @@ check_containers() {
 }
 
 check_services() {
-    log_header "ServiceENCheck"
+    log_header "serviceHealth Check"
     
-    # CheckENAPI
+    # checkbackendAPI
     if curl -fsS "http://localhost:8000/api/v1/health/" >/dev/null 2>&1; then
-        log_success "ENAPIServiceEN"
+        log_success "backendAPIservicetranslated"
     else
-        log_error "ENAPIServiceEN"
+        log_error "backendAPIservicetranslated"
     fi
     
-    # CheckENService
+    # checkfrontendservice
     if curl -fsS "http://localhost:3000/" >/dev/null 2>&1; then
-        log_success "ENServiceEN"
+        log_success "frontendservicetranslated"
     else
-        log_error "ENServiceEN"
+        log_error "frontendservicetranslated"
     fi
     
-    # CheckRedis
+    # checkRedis
     if docker exec autoclip-redis redis-cli ping >/dev/null 2>&1; then
-        log_success "RedisServiceEN"
+        log_success "Redisservicetranslated"
     else
-        log_error "RedisServiceEN"
+        log_error "Redisservicetranslated"
     fi
 }
 
 check_volumes() {
-    log_header "ENCheck"
+    log_header "translatedcheck"
     
     local volumes=$(docker volume ls --filter "name=autoclip" --format "{{.Name}}\t{{.Driver}}\t{{.Size}}" 2>/dev/null || true)
     
     if [[ -z "$volumes" ]]; then
-        log_warning "ENAutoClipEN"
+        log_warning "translatedAutoCliptranslated"
         return 1
     fi
     
-    echo -e "${CYAN}💾 EN:${NC}"
+    echo -e "${CYAN}💾 translated:${NC}"
     echo "$volumes" | while IFS=$'\t' read -r name driver size; do
         echo -e "  ${ICON_INFO} $name ($driver) - $size"
     done
@@ -149,16 +149,16 @@ check_volumes() {
 }
 
 check_networks() {
-    log_header "ENCheck"
+    log_header "translatedcheck"
     
     local networks=$(docker network ls --filter "name=autoclip" --format "{{.Name}}\t{{.Driver}}\t{{.Scope}}" 2>/dev/null || true)
     
     if [[ -z "$networks" ]]; then
-        log_warning "ENAutoClipEN"
+        log_warning "translatedAutoCliptranslated"
         return 1
     fi
     
-    echo -e "${CYAN}🌐 EN:${NC}"
+    echo -e "${CYAN}🌐 translated:${NC}"
     echo "$networks" | while IFS=$'\t' read -r name driver scope; do
         echo -e "  ${ICON_INFO} $name ($driver) - $scope"
     done
@@ -167,93 +167,93 @@ check_networks() {
 }
 
 check_resources() {
-    log_header "EN"
+    log_header "translatedusetranslated"
     
-    echo -e "${CYAN}📊 EN:${NC}"
-    docker stats --no-stream --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}" $(docker ps --filter "name=autoclip" --format "{{.Names}}" 2>/dev/null || true) 2>/dev/null || log_warning "EN"
+    echo -e "${CYAN}📊 translateduse:${NC}"
+    docker stats --no-stream --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.NetIO}}\t{{.BlockIO}}" $(docker ps --filter "name=autoclip" --format "{{.Names}}" 2>/dev/null || true) 2>/dev/null || log_warning "translatedfetchtranslatedusetranslated"
 }
 
 show_access_info() {
-    log_header "EN"
+    log_header "translatedinfo"
     
-    echo -e "${CYAN}🌐 ServiceEN:${NC}"
-    echo -e "  EN: http://localhost:3000"
-    echo -e "  ENAPI:  http://localhost:8000"
-    echo -e "  APIEN:  http://localhost:8000/docs"
-    echo -e "  FlowerEN: http://localhost:5555"
+    echo -e "${CYAN}🌐 servicetranslated:${NC}"
+    echo -e "  frontendInterface: http://localhost:3000"
+    echo -e "  backendAPI:  http://localhost:8000"
+    echo -e "  APIdocs:  http://localhost:8000/docs"
+    echo -e "  Flowermonitor: http://localhost:5555"
     
-    echo -e "\n${CYAN}📝 EN:${NC}"
-    echo -e "  EN: docker-compose logs -f"
-    echo -e "  StopService: docker-compose down"
-    echo -e "  ENService: docker-compose restart"
-    echo -e "  EN: docker-compose exec autoclip bash"
+    echo -e "\n${CYAN}📝 translatedusetranslated:${NC}"
+    echo -e "  translatedlogs: docker-compose logs -f"
+    echo -e "  translatedservice: docker-compose down"
+    echo -e "  translatedservice: docker-compose restart"
+    echo -e "  translated: docker-compose exec autoclip bash"
 }
 
 # =============================================================================
-# EN
+# translated
 # =============================================================================
 
 main() {
-    log_header "AutoClip Docker StatusCheck v1.0"
+    log_header "AutoClip Docker statuscheck v1.0"
     
     local overall_status=0
     
-    # CheckDockerEnvironment
+    # checkDockertranslated
     if ! check_docker; then
         overall_status=1
     fi
     
-    # CheckENStatus
+    # checktranslatedstatus
     if ! check_containers; then
         overall_status=1
     fi
     
-    # CheckServiceENStatus
+    # checkservicetranslatedstatus
     check_services
     
-    # CheckEN
+    # checktranslated
     check_volumes
     
-    # CheckEN
+    # checktranslated
     check_networks
     
-    # CheckEN
+    # checktranslateduse
     check_resources
     
-    # EN
+    # translatedinfo
     show_access_info
     
-    # ENStatus
-    log_header "ENStatus"
+    # translatedstatus
+    log_header "translatedstatus"
     
     if [[ $overall_status -eq 0 ]]; then
-        log_success "AutoClip DockerServiceEN"
-        echo -e "\n${WHITE}🎉 AllServiceEN！${NC}"
+        log_success "AutoClip Dockerservicetranslated"
+        echo -e "\n${WHITE}🎉 translatedservicetranslated！${NC}"
     else
-        log_error "ENServiceEN"
-        echo -e "\n${YELLOW}💡 EN:${NC}"
-        echo -e "  1. EN: docker-compose logs"
-        echo -e "  2. ENService: docker-compose restart"
-        echo -e "  3. ENStart: ./docker-start.sh"
+        log_error "translatedservicetranslatedinissue"
+        echo -e "\n${YELLOW}💡 translated:${NC}"
+        echo -e "  1. translatedlogs: docker-compose logs"
+        echo -e "  2. translatedservice: docker-compose restart"
+        echo -e "  3. translatedstart: ./docker-start.sh"
     fi
 }
 
-# EN
+# translatedinfo
 show_help() {
-    echo "AutoClip Docker StatusCheckScript"
+    echo "AutoClip Docker statuschecktranslated"
     echo ""
-    echo "EN:"
-    echo "  $0 [EN]"
+    echo "usetranslated:"
+    echo "  $0 [Selecttranslated]"
     echo ""
-    echo "EN:"
-    echo "  help    EN"
+    echo "Selecttranslated:"
+    echo "  help    translatedinfo"
     echo ""
-    echo "EN:"
-    echo "  $0          # CheckServiceStatus"
-    echo "  $0 help     # EN"
+    echo "translated:"
+    echo "  $0          # checkservicestatus"
+    echo "  $0 help     # translated"
 }
 
-# ProcessingEN
+# processtranslated
 case "${1:-}" in
     "help"|"-h"|"--help")
         show_help

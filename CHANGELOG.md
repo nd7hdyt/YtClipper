@@ -1,143 +1,143 @@
-# EN
+# changelog
 
-ENAutoClipEN。
+docsAutoClipproject。
 
-ENBased on [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
-EN [EN](https://semver.org/lang/zh-CN/)。
+formatbased on [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
+projectfollow [version](https://semver.org/lang/zh-CN/)。
 
-## [EN]
+## []
 
-_（EN）_
+_（）_
 
 ## [1.3.0] - 2026-09-20
 
-### EN
-- **`autoclip` EN**：`autoclip run video.mp4 --provider ollama` One command to produce clips，`list / show / providers / doctor` EN，`--json` EN agent；EN SQLite（`pip install -e .`；`docs/CLI_AND_MCP.md`）
-- **MCP server**（`autoclip mcp`，stdio）：`clip_video`、`start_clip_job` / `get_job_status`、`get_project`、`list_projects`、`list_providers`、`check_environment`，Cursor / Claude Can be called directly；Agent skill `skills/autoclip/SKILL.md`
-- **EN Ollama / LM Studio**：ENProvidesEN，EN，EN API Key；Docker / CLI EN `LLM_PROVIDER=ollama`
-- `GET /settings/local-presets`、`GET /settings/compatible-models?base_url=`；`POST /settings/test-api` EN `ollama` / `lmstudio`
-- **EN**：EN（EN/EN/EN）EN 90 EN；EN；EN、EN top-K。EN `python -m backend.eval`
-- **EN**：EN/EN/Shorts 9:16 EN B EN（EN + EN）。EN：EN「EN」、`autoclip export`、MCP `export_clip`
-- **Docker / EN**：`GET/PUT /settings`、`/test-api`、`/current-provider`、`/compatible-models` EN；Web EN LLM ProvidesEN `settings.json`，api EN worker EN。EN `.env` EN `LLM_PROVIDER` / `API_MODEL_NAME`（#100）
-- **EN**：LLM EN / EN / EN / EN / EN / ffmpeg EN——
-  EN `failed`，EN（SUBTITLE / ANALYZE / EXPORT）EN（EN、EN）。EN `Completed · 0 EN`
-  EN `processing`。`ProjectResponse` EN `error_message`（EN，CLI EN `project_metadata.last_error`），EN / EN / EN（#100 #11 #24）
-- LLM EN（EN），EN
-- **EN**（#45）：EN「EN / EN」EN，alibabacloud.com EN Key EN；Docker EN `DASHSCOPE_BASE_URL`。EN OpenAI EN，EN，EN SDK EN
-- **EN「EN」EN**：EN API EN，EN（worker / EN）EN 0.7；EN step3 EN settings.json EN，CLI `--min-score` EN。`chunk_size` / `max_clips` EN settings，EN
-- EN：`scripts/bump_version.py`（EN + CHANGELOG EN，`--check` EN）、`scripts/release_notes.py`（Release EN CHANGELOG EN）；`RELEASE_CHECKLIST.md` EN
+### added
+- **`autoclip` **：`autoclip run video.mp4 --provider ollama` ，`list / show / providers / doctor` ，`--json`  agent；data directory SQLite（`pip install -e .`；`docs/CLI_AND_MCP.md`）
+- **MCP server**（`autoclip mcp`，stdio）：`clip_video`、`start_clip_job` / `get_job_status`、`get_project`、`list_projects`、`list_providers`、`check_environment`，Cursor / Claude call；Agent skill `skills/autoclip/SKILL.md`
+- **localmodel Ollama / LM Studio**：Settings pageprovideroptional，servicemodel，no need API Key；Docker / CLI available `LLM_PROVIDER=ollama`
+- `GET /settings/local-presets`、`GET /settings/compatible-models?base_url=`；`POST /settings/test-api`  `ollama` / `lmstudio`
+- ****：（//） 90 ；subtitles；、 top-K。 `python -m backend.eval`
+- **export**：clip//Shorts 9:16  B （subtitles + ）。：「export」、`autoclip export`、MCP `export_clip`
+- **Docker / localavailableSettings page**：`GET/PUT /settings`、`/test-api`、`/current-provider`、`/compatible-models` config；Web Settings page LLM providerkeydata directory `settings.json`，api  worker 。 `.env`  `LLM_PROVIDER` / `API_MODEL_NAME`（#100）
+- **failedfailed**：LLM config / subtitles / outlinefailed /  /  / ffmpeg clip——
+   `failed`，stage（SUBTITLE / ANALYZE / EXPORT）（settings、）。 `Completed · 0 clip`
+   `processing`。`ProjectResponse` added `error_message`（failed，CLI  `project_metadata.last_error`）， / project / （#100 #11 #24）
+- LLM failed（），failed
+- **Qwen**（#45）：Settings pageQwenadded「 / 」，alibabacloud.com  Key ；Docker  `DASHSCOPE_BASE_URL`。 OpenAI ，， SDK 
+- **Settings page「」**： API memory，（worker / local） 0.7；now step3  settings.json ，CLI `--min-score` 。`chunk_size` / `max_clips`  settings，stepintegrate
+- tool：`scripts/bump_version.py`（version + CHANGELOG ，`--check` validate）、`scripts/release_notes.py`（Release  CHANGELOG generate）；`RELEASE_CHECKLIST.md` 
 
-### EN
-- DashScope ProvidesEN API Key EN INFO EN
-- **ENUploadEN**：`/projects/upload` EN `db`，`NameError` EN，EN pending EN「EN」（EN 2026-05 `593cc62b` EN）
-- **EN SQLite EN**：EN SQLite EN `StaticPool`（EN），EN ROLLBACK EN Task EN（`ObjectDeletedError`、EN、EN）。EN + WAL，`StaticPool` EN `:memory:`
-- EN Celery EN `self.update_state()` EN Redis EN（EN ConnectionRefused EN）
-- **EN「EN」ENProvidesEN / EN**（#100）：Chrome / Edge EN `<font>`，React EN `removeChild NotFoundError`。EN `removeChild` / `insertBefore` EN，EN；EN
-- EN `DESIGN.md` EN（ENPurple GradientEN AntD `Result`，EN + `Btn` EN），「EN」EN HashRouter EN
-- macOS EN（Clash EN）EN Ollama / LM Studio EN 502：EN localhost / EN
-- EN（`apiConfig.notifyListeners` EN listener EN）
-- ENProvidesEN `qwen2.5:7b` EN
+### fix
+- DashScope provider API Key  INFO 
+- **localproject**：`/projects/upload` startimport `db`，`NameError` ，project pending 「」（ 2026-05 `593cc62b` ）
+- ** SQLite **：file SQLite  `StaticPool`（），import ROLLBACK  Task （`ObjectDeletedError`、、progress）。default + WAL，`StaticPool`  `:memory:`
+-  Celery  `self.update_state()`  Redis backend（ ConnectionRefused import）
+- **「」provider / model**（#100）：Chrome / Edge  `<font>`，React update `removeChild NotFoundError`。now `removeChild` / `insertBefore` ，；error
+- error `DESIGN.md` （ AntD `Result`， + `Btn` ），「return」 HashRouter 
+- macOS proxy（Clash ）local Ollama / LM Studio proxy 502： localhost / proxyenv var
+- Settings pagemodel（`apiConfig.notifyListeners`  listener ）
+- localcloudprovidermodel `qwen2.5:7b` localmodel
 
 ## [1.2.1] - 2026-09-06
 
-> EN：EN README EN `docker compose` EN（issue #88 EN issue）。
+> ： README recommend `docker compose` local（issue #88  issue）。
 
-### EN
-- **OpenAI EN `base_url`**：EN OpenAI ProvidesEN「EN」，EN / DeepSeek / OpenRouter / EN Ollama、vLLM、LM Studio EN；EN key（#72 #57，EN #78）
-- **Windows x64 EN**（EN，NSIS，EN）：`scripts/build_windows_x64.sh` + `desktop-build.yml` Windows job；EN macOS EN `scripts/lib/desktop_build_common.sh`（#73）
-- Docker / EN LLM：`LLM_PROVIDER`、`API_MODEL_NAME`、`OPENAI_BASE_URL`、`API_{DASHSCOPE,OPENAI,GEMINI,SILICONFLOW}_API_KEY`；compose EN api EN worker，CI docker-smoke EN
-- `requirements.txt` EN（EN CI / Docker EN；3.11 EN 3.13 EN）
+### added
+- **OpenAI API `base_url`**：Settings page OpenAI provideradded「API」， / DeepSeek / OpenRouter / local Ollama、vLLM、LM Studio ；service key（#72 #57， #78）
+- **Windows x64 install**（version，NSIS，install）：`scripts/build_windows_x64.sh` + `desktop-build.yml` Windows job； macOS  `scripts/lib/desktop_build_common.sh`（#73）
+- Docker / availableenv varconfig LLM：`LLM_PROVIDER`、`API_MODEL_NAME`、`OPENAI_BASE_URL`、`API_{DASHSCOPE,OPENAI,GEMINI,SILICONFLOW}_API_KEY`；compose  api  worker，CI docker-smoke 
+- `requirements.txt` dependenciesversion（ CI / Docker ；3.11  3.13 ）
 
-### EN
-- **EN LLM ProvidesEN**：`api_provider` / `api_base_url` EN `settings.json` EN；`/settings/current-provider` EN；EN API EN Celery worker EN mtime EN，EN
-- EN（`mode="tags"`）EN，EN
-- Docker EN：`.dockerignore` EN `docker-entrypoint.sh` / `docker-dev-entrypoint.sh`（#1 #4 #9 #47 #50 #88）
-- Windows EN：EN `.gitattributes`，shell EN LF EN（#73 #88）
-- Docker EN：compose / dev compose EN Celery worker EN `-Q`，EN；EN `celery,processing,video,notification,upload`。EN `start_autoclip.sh` EN `celery` EN `video` EN（#88）
-- Docker EN：`task_submission_utils` EN `redis.Redis(host='localhost')` EN `try` EN；EN `REDIS_URL` EN warning（#88）
-- YouTube EN 500：`youtube.py` EN `/Users/zhoukk/...` yt-dlp EN `cwd` EN `sys.executable -m yt_dlp` + EN；EN `fix_project_thumbnails.py` EN（#88）
-- LLM EN list EN JSON EN（`_build_full_input`）（#53）
-- EN 5 ENLanguageEN YouTube 429：EN `zh-Hans,zh,en`，EN `AUTOCLIP_YT_SUBTITLE_LANGS` EN（#88）
+### fix
+- **Settings pageselect LLM provider**：`api_provider` / `api_base_url` now `settings.json` ；`/settings/current-provider` returnQwen；settings API  Celery worker file mtime ，
+- model selection（`mode="tags"`）backendfailed，
+- Docker build：`.dockerignore`  `docker-entrypoint.sh` / `docker-dev-entrypoint.sh`（#1 #4 #9 #47 #50 #88）
+- Windows start：added `.gitattributes`，shell  LF （#73 #88）
+- Docker ：compose / dev compose  Celery worker  `-Q`，default；now `celery,processing,video,notification,upload`。local `start_autoclip.sh`  `celery`  `video` （#88）
+- Docker projectfailed：`task_submission_utils`  `redis.Redis(host='localhost')`  `try` ； `REDIS_URL` failed warning（#88）
+- YouTube  500：`youtube.py`  `/Users/zhoukk/...` yt-dlp  `cwd`  `sys.executable -m yt_dlp` + data directory； `fix_project_thumbnails.py` Settings page（#88）
+- LLM step list  JSON （`_build_full_input`）（#53）
+-  5 subtitles YouTube 429：default `zh-Hans,zh,en`，available `AUTOCLIP_YT_SUBTITLE_LANGS` （#88）
 
-### EN
-- Docker EN `python:3.9-slim` → `python:3.11-slim`（EN yt-dlp ENSupport 3.9，EN 3.9 EN 360p）
-- `docker-compose.yml` EN `autoclip:local` EN，EN
-- CI EN `docker-smoke` job：EN、EN redis + api + worker、ENHealth Check、yt-dlp EN、REDIS_URL EN、worker EN
-- EN `AUTOCLIP_APP_VERSION`，EN `/settings` EN `1.0.0`
-- EN `AUTOCLIP_APP_DIR`（macOS EN；Windows EN `%APPDATA%\AutoClip`），Windows EN `PYTHONUTF8=1` EN
-- `src-tauri/Cargo.toml` EN `tauri.conf.json` EN
-- `desktop-build.yml` EN macOS + Windows EN，`release` job EN，ENUpload
+### improve
+- Docker  `python:3.9-slim` → `python:3.11-slim`（ yt-dlp support 3.9， 3.9  360p）
+- `docker-compose.yml` service `autoclip:local` ，build
+- CI added `docker-smoke` job：build、 redis + api + worker、validatecheck、yt-dlp available、REDIS_URL 、worker route
+- startbackend `AUTOCLIP_APP_VERSION`，backend `/settings` return `1.0.0`
+- settingsdata directory `AUTOCLIP_APP_DIR`（macOS ；Windows  `%APPDATA%\AutoClip`），Windows  `PYTHONUTF8=1` 
+- `src-tauri/Cargo.toml` version `tauri.conf.json` 
+- `desktop-build.yml`  macOS + Windows build，`release` job ，failed
 
-### EN
-- EN `backend/api/v1/youtube_improved.py`
+### 
+-  `backend/api/v1/youtube_improved.py`
 
 ## [1.2.0] - 2026-06-03
 
-> EN,ENAccount / EN。
+> integrate,account / business。
 
-### EN
-- EN PostHog EN：EN/EN/EN、EN、EN、EN、EN API key EN，EN/EN/EN
-- EN「EN」EN，EN（EN，EN）
-- ENAnalyticsEN `docs/ANALYTICS.md` ENEnglishEN `docs/PRIVACY.md` / `docs/PRIVACY.en.md`
+### added
+- integrate PostHog ：install/start/update、import、export、failed、settings API key event，eventversion//
+- Settings pageadded「」，use（，）
+- addeddocs `docs/ANALYTICS.md` English `docs/PRIVACY.md` / `docs/PRIVACY.en.md`
 
-### EN（1.0.0 EN、EN）
-- EN、BENMulti-Account ManagementENAccountEN、EN、EN、Docker EN
+### （1.0.0 、）
+- edit、Baccountaccountstatusmonitor、、、Docker 
 
 ## [1.1.0] - 2026-05-31
 
-> EN macOS EN、EN、EN。
+>  macOS 、available、。
 
-### EN
-- 🖥️ EN：Built-inEN Python EN + EN ffmpeg/ffprobe，EN Python/ffmpeg
-- 🗣️ EN（EN）：EN「EN → EN」EN faster-whisper EN
+### added
+- 🖥️ dependenciesinstall： Python  +  ffmpeg/ffprobe，no need Python/ffmpeg
+- 🗣️ localsubtitles（install）：subtitles「settings → 」install faster-whisper model
 
-### EN
-- EN（EN vendor chunk EN React EN）
-- EN「EN」（EN pytz EN 500）
-- EN/EN「EN / EN」EN
-- EN 0%「EN」（EN，EN Redis）
-- EN（Built-in ffmpeg EN）
+### fix
+- fixstart（frontend vendor chunk  React ）
+- fixproject「」（ pytz dependenciesAPI 500）
+- fiximport/「failed / 」
+- fix 0%「」（local，dependencies Redis）
+- fix（ ffmpeg versionintegratebackend）
 
-### EN
-- AI ProvidesEN Gemini EN `google-genai` SDK
-- CI EN（python-build-standalone）
-- EN：EN，ENProject Structure
+### improve
+- AI provider Gemini  `google-genai` SDK
+- CI buildverify（python-build-standalone）
+- ：docs，project
 
 ## [1.0.0] - 2024-01-15
 
-### EN
-- 🎬 SupportYouTubeEN
-- 🎬 SupportBEN
-- 🎬 SupportLocal File Upload
-- 🤖 AIEN
-- ✂️ EN
-- 📚 Smart CollectionsEN
-- 🎨 ENWebInterface
-- 🚀 EN
-- 📊 EN
-- 🔐 BENAccount Management
-- 📱 Responsive Design
-- 🛠️ One-Click Start Script
+### added
+- 🎬 supportYouTubedownload
+- 🎬 supportBdownload
+- 🎬 supportlocalfile upload
+- 🤖 AI
+- ✂️ clip
+- 📚 generate
+- 🎨 Web
+- 🚀 
+- 📊 progressmonitor
+- 🔐 Bsite account
+- 📱 responsive design
+- 🛠️ start
 
-### EN
-- FastAPIEN
-- React + TypeScriptEN
-- CeleryENTask Queue
-- RedisEN
-- SQLiteEN
-- WebSocketENCommunication
-- ENAIEN
+### 
+- FastAPIbackend
+- React + TypeScriptfrontend
+- Celery
+- Redisproxy
+- SQLitedatabase
+- WebSocket
+- QwenAIintegration
 
 ## [0.9.0] - 2024-01-01
 
-### EN
-- EN
-- ENAPIEN
-- ENInterface
-- EN
-- AIEN
+### added
+- project
+- APIAPI
+- frontend
+- 
+- AIservice
 
-### Tech Stack
+### 
 - Python 3.8+
 - React 18
 - FastAPI
@@ -147,29 +147,29 @@ _（EN）_
 
 ---
 
-## EN
+## versionnotes
 
-### EN
+### versionformat
 
-EN (SemVer)：
+useversion (SemVer)：
 
-- **EN**: ENAPIEN
-- **EN**: EN
-- **EN**: EN
+- **version**: API
+- **version**: added
+- ****: issue
 
-### EN
+### 
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: BugEN
-- **EN**: EN
-- **EN**: EN
+- **added**: 
+- **improve**: improve
+- **fix**: Bugfix
+- ****: 
+- **security**: securityfix
 
-### EN
+### 
 
-- [Unreleased]: https://github.com/nd7hdyt/YtClipper/compare/v1.3.0...HEAD
-- [1.3.0]: https://github.com/nd7hdyt/YtClipper/compare/v1.2.1...v1.3.0
-- [1.2.1]: https://github.com/nd7hdyt/YtClipper/compare/v1.2.0...v1.2.1
-- [1.2.0]: https://github.com/nd7hdyt/YtClipper/releases/tag/v1.2.0
-- [1.1.0]: https://github.com/nd7hdyt/YtClipper/releases/tag/v1.1.0
-- [1.0.0]: https://github.com/nd7hdyt/YtClipper/releases/tag/v1.0.0
+- [Unreleased]: https://github.com/zhouxiaoka/autoclip/compare/v1.3.0...HEAD
+- [1.3.0]: https://github.com/zhouxiaoka/autoclip/compare/v1.2.1...v1.3.0
+- [1.2.1]: https://github.com/zhouxiaoka/autoclip/compare/v1.2.0...v1.2.1
+- [1.2.0]: https://github.com/zhouxiaoka/autoclip/releases/tag/v1.2.0
+- [1.1.0]: https://github.com/zhouxiaoka/autoclip/releases/tag/v1.1.0
+- [1.0.0]: https://github.com/zhouxiaoka/autoclip/releases/tag/v1.0.0

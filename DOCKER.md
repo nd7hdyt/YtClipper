@@ -1,79 +1,79 @@
-# Docker Deployment
+# Docker deploy
 
-ENDockerENAutoClipEN。
+docsuseDockerdeployAutoClip。
 
-## 📋 EN
+## 📋 
 
-- [Quick Start](#Quick Start)
-- [EN](#EN)
-- [EN](#EN)
-- [Configuration](#Configuration)
-- [EN](#EN)
-- [Troubleshooting](#Troubleshooting)
+- [quick start](#quick start)
+- [productiondeploy](#productiondeploy)
+- [dev environmentdeploy](#dev environmentdeploy)
+- [config notes](#config notes)
+- [data management](#data management)
+- [troubleshooting](#troubleshooting)
 
-## 🚀 Quick Start
+## 🚀 quick start
 
-### Requirements
+### 
 
 - Docker 20.10+
 - Docker Compose 2.0+
-- EN 4GB EN
-- EN 10GB EN
+-  4GB availablememory
+-  10GB available
 
-### One-Click Start
+### start
 
 ```bash
-# EN
+# project
 git clone https://github.com/your-username/autoclip.git
 cd autoclip
 
-# EN
+# configenv var
 cp env.example .env
-# EN .env EN，EN
+# edit .env file，config
 
-# Linux EN：EN root EN，bind mount EN
+# Linux ： root ，bind mount need
 mkdir -p data logs uploads && chmod -R 777 data logs uploads
 
-# EN
+# startservice
 docker-compose up -d
 
-# EN
+# viewservicestatus
 docker-compose ps
 
-# EN
+# view
 docker-compose logs -f
 ```
 
-### EN
+### accessservice
 
-- **ENInterface**: http://localhost:3000
-- **ENAPI**: http://localhost:8000
-- **APIEN**: http://localhost:8000/docs
-- **FlowerEN**: http://localhost:5555
+- **frontend**: http://localhost:3000
+- **backendAPI**: http://localhost:8000
+- **APIdocs**: http://localhost:8000/docs
+- **Flowermonitor**: http://localhost:5555
 
-## 🏭 EN
+## 🏭 productiondeploy
 
-### EN
+### useconfig
 
 ```bash
-# EN
+# useproductionconfig
 docker-compose -f docker-compose.yml up -d
 
-# EN
+# 
 docker-compose up -d
 
-# EN
+# viewservicestatus
 docker-compose ps
 
-# EN
+# view
 docker-compose logs -f autoclip
 ```
 
-### EN
+### production
 
-1. **EN**
+1. **limit**
 ```yaml
-# ENdocker-compose.ymlEN
+# docker-compose.ymllimit
 services:
   autoclip:
     deploy:
@@ -86,21 +86,21 @@ services:
           cpus: '0.5'
 ```
 
-2. **EN**
+2. ****
 ```bash
-# EN
+# create
 docker volume create autoclip_data
 docker volume create autoclip_logs
 
-# ENdocker-compose.ymlEN
+# docker-compose.ymlconfig
 volumes:
   - autoclip_data:/app/data
   - autoclip_logs:/app/logs
 ```
 
-3. **EN**
+3. **config**
 ```yaml
-# EN
+# use
 networks:
   autoclip-network:
     driver: bridge
@@ -109,44 +109,44 @@ networks:
         - subnet: 172.20.0.0/16
 ```
 
-## 🛠️ EN
+## 🛠️ dev environmentdeploy
 
-### EN
+### useconfig
 
 ```bash
-# EN
+# usedev environmentconfig
 docker-compose -f docker-compose.dev.yml up -d
 
-# EN
+# view
 docker-compose -f docker-compose.dev.yml logs -f
 
-# EN
+# 
 docker-compose -f docker-compose.dev.yml exec autoclip-dev bash
 ```
 
-### EN
+### dev environment
 
-- ENSupport
-- EN
-- EN
-- EN
+- support
+- 
+- 
+- 
 
-## ⚙️ Configuration
+## ⚙️ config notes
 
-### EN
+### env var
 
-EN `.env` EN：
+create `.env` file：
 
 ```bash
-# EN
+# databaseconfig
 DATABASE_URL=sqlite:///./data/autoclip.db
 
-# RedisEN
+# Redisconfig
 REDIS_URL=redis://redis:6379/0
 
-# LLM EN（EN）：EN http://localhost:3000 EN「EN → EN」EN，EN ./data/settings.json，
-# api EN worker EN；EN settings.json EN。
-# compose EN api EN worker。
+# LLM config（optional）：can http://localhost:3000 「settings → model」， ./data/settings.json，
+# api  worker ；env var settings.json default。
+# compose  api  worker。
 # LLM_PROVIDER: dashscope | openai | gemini | siliconflow
 LLM_PROVIDER=dashscope
 API_MODEL_NAME=qwen-plus
@@ -154,222 +154,222 @@ API_DASHSCOPE_API_KEY=your_dashscope_api_key
 # API_OPENAI_API_KEY=
 # API_GEMINI_API_KEY=
 # API_SILICONFLOW_API_KEY=
-# OpenAI EN（LLM_PROVIDER=openai EN）：EN / DeepSeek / OpenRouter / EN Ollama、vLLM EN。
-#   EN:    OPENAI_BASE_URL=https://open.bigmodel.cn/api/paas/v4   API_MODEL_NAME=glm-4-flash
+# OpenAI API（LLM_PROVIDER=openai ）： / DeepSeek / OpenRouter / local Ollama、vLLM 。
+#   :    OPENAI_BASE_URL=https://open.bigmodel.cn/api/paas/v4   API_MODEL_NAME=glm-4-flash
 #   DeepSeek: OPENAI_BASE_URL=https://api.deepseek.com/v1          API_MODEL_NAME=deepseek-chat
-#   EN Ollama: OPENAI_BASE_URL=http://host.docker.internal:11434/v1  API_MODEL_NAME=qwen2.5:7b（EN key）
+#    Ollama: OPENAI_BASE_URL=http://host.docker.internal:11434/v1  API_MODEL_NAME=qwen2.5:7b（ key）
 # OPENAI_BASE_URL=
-# EN（alibabacloud.com EN Key）：
+# Qwen（alibabacloud.com  Key）：
 # DASHSCOPE_BASE_URL=https://dashscope-intl.aliyuncs.com/compatible-mode/v1
 
-# EN
+# config
 LOG_LEVEL=INFO
 ENVIRONMENT=production
 DEBUG=false
 
-# EN
+# file
 UPLOAD_DIR=./data/uploads
 PROJECT_DIR=./data/projects
 ```
 
-### EN
+### serviceconfig
 
-#### EN
-- **EN**: 8000 (EN), 3000 (EN)
-- **Health Check**: `/api/v1/health/`
-- **EN**: `unless-stopped`
+#### service
+- **port**: 8000 (backend), 3000 (frontend)
+- **check**: `/api/v1/health/`
+- ****: `unless-stopped`
 
-#### RedisEN
-- **EN**: 6379
-- **EN**: AOFEN
-- **EN**: EN
+#### Redisservice
+- **port**: 6379
+- ****: AOF
+- **memorylimit**: config
 
-#### CeleryEN
-- **Worker**: EN
-- **Beat**: EN
-- **EN**: EN
+#### Celeryservice
+- **Worker**: 
+- **Beat**: 
+- ****: config
 
-## 💾 EN
+## 💾 data management
 
-### EN
+### 
 
 ```bash
-# EN
+# view
 docker volume ls
 
-# EN
+# 
 docker run --rm -v autoclip_data:/data -v $(pwd):/backup alpine tar czf /backup/autoclip-backup.tar.gz -C /data .
 
-# EN
+# 
 docker run --rm -v autoclip_data:/data -v $(pwd):/backup alpine tar xzf /backup/autoclip-backup.tar.gz -C /data
 ```
 
-### EN
+### data directory
 
 ```
 data/
-├── autoclip.db          # SQLiteEN
-├── projects/            # EN
-├── uploads/             # UploadEN
-├── temp/                # EN
-└── output/              # EN
+├── autoclip.db          # SQLitedatabase
+├── projects/            # project
+├── uploads/             # upload file
+├── temp/                # file
+└── output/              # file
 ```
 
-### EN
+### 
 
 ```bash
-# EN
+# file
 docker-compose exec autoclip find /app/data/temp -type f -mtime +7 -delete
 
-# EN
+# 
 docker-compose exec autoclip find /app/logs -name "*.log" -mtime +30 -delete
 ```
 
-## 🔧 Troubleshooting
+## 🔧 troubleshooting
 
 ### FAQ
 
-#### 1. EN
+#### 1. servicestartfailed
 
 ```bash
-# EN
+# viewservicestatus
 docker-compose ps
 
-# EN
+# view
 docker-compose logs autoclip
 
-# EN
+# service
 docker-compose restart autoclip
 ```
 
-#### 2. EN
+#### 2. port
 
 ```bash
-# EN
+# checkport
 netstat -tulpn | grep :8000
 
-# EN
-# ENdocker-compose.ymlENportsEN
+# port
+# docker-compose.ymlportsconfig
 ports:
-  - "8001:8000"  # EN8001EN8000EN
+  - "8001:8000"  # local8001port8000port
 ```
 
-#### 3. EN
+#### 3. out of memory
 
 ```bash
-# EN
+# viewuse
 docker stats
 
-# EN
-# ENdocker-compose.ymlENdeployEN
+# limituse
+# docker-compose.ymldeployconfig
 ```
 
-#### 4. EN
+#### 4. 
 
 ```bash
-# EN
+# check
 docker volume inspect autoclip_data
 
-# EN
-# EN
+# 
+# use
 ```
 
-### EN
+### view
 
 ```bash
-# EN
+# viewservice
 docker-compose logs
 
-# EN
+# viewservice
 docker-compose logs autoclip
 docker-compose logs celery-worker
 
-# EN
+# view
 docker-compose logs -f
 
-# EN100EN
+# view100
 docker-compose logs --tail=100
 ```
 
-### EN
+### perf monitor
 
 ```bash
-# EN
+# viewuse
 docker stats
 
-# EN
+# viewservicestatus
 docker-compose ps
 
-# EN
+# 
 docker-compose exec autoclip bash
 ```
 
-## 🔄 EN
+## 🔄 update
 
-### EN
+### updateservice
 
 ```bash
-# EN
+# 
 git pull
 
-# EN
+# build
 docker-compose build
 
-# EN
+# service
 docker-compose up -d
 ```
 
-### EN
+### 
 
 ```bash
 #!/bin/bash
-# backup.sh - EN
+# backup.sh - 
 
 DATE=$(date +%Y%m%d_%H%M%S)
 BACKUP_DIR="/backup/autoclip"
 
-# EN
+# create
 mkdir -p $BACKUP_DIR
 
-# EN
+# 
 docker run --rm -v autoclip_data:/data -v $BACKUP_DIR:/backup alpine \
     tar czf /backup/autoclip-data-$DATE.tar.gz -C /data .
 
-# EN
+# config
 cp .env $BACKUP_DIR/autoclip-config-$DATE.env
 
-# EN（EN7EN）
+# （7）
 find $BACKUP_DIR -name "*.tar.gz" -mtime +7 -delete
 find $BACKUP_DIR -name "*.env" -mtime +7 -delete
 
-echo "EN: $DATE"
+echo "completed: $DATE"
 ```
 
-### EN
+### monitor
 
 ```bash
 #!/bin/bash
-# monitor.sh - EN
+# monitor.sh - servicemonitor
 
-# EN
+# checkservicestatus
 if ! docker-compose ps | grep -q "Up"; then
-    echo "EN，EN..."
+    echo "service，..."
     docker-compose restart
 fi
 
-# EN
+# checkstatus
 if ! curl -f http://localhost:8000/api/v1/health/ >/dev/null 2>&1; then
-    echo "Health CheckEN，EN..."
-    # EN
+    echo "checkfailed，..."
+    # can
 fi
 ```
 
-## 📚 EN
+## 📚 config
 
-### EN
+### usedatabase
 
 ```yaml
-# ENPostgreSQL
+# usePostgreSQL
 services:
   postgres:
     image: postgres:15
@@ -387,10 +387,10 @@ services:
       - postgres
 ```
 
-### ENRedis
+### useRedis
 
 ```yaml
-# ENRedisEN
+# useRedis
 services:
   autoclip:
     environment:
@@ -399,10 +399,10 @@ services:
       - redis-cluster:redis
 ```
 
-### EN
+### 
 
 ```yaml
-# ENNginxEN
+# useNginx
 services:
   nginx:
     image: nginx:alpine
@@ -414,19 +414,19 @@ services:
       - autoclip
 
   autoclip:
-    # EN
+    # canstart
     scale: 3
 ```
 
-## 🆘 EN
+## 🆘 get help
 
-EN，EN：
+if you encounter issues，：
 
-1. ENTroubleshootingEN
-2. ENGitHub Issues
-3. EN
-4. ContactENSupport
+1. viewdocstroubleshooting
+2. checkGitHub Issues
+3. viewprojectdocs
+4. tech support
 
 ---
 
-**EN**: 2024-01-15
+**last updated**: 2024-01-15

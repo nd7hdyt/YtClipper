@@ -1,19 +1,19 @@
 # scripts/
 
-ENScript。EN**EN**EN（python-build-standalone，EN PBS），
-EN PyInstaller / prepare_resources ENScriptEN。
+build。****（python-build-standalone， PBS），
+ PyInstaller / prepare_resources 。
 
-## ScriptEN
+## 
 
-| Script | EN |
+|  |  |
 |------|------|
-| `build_macos_arm.sh` | EN（macOS Apple Silicon）。EN `.app` + `.dmg`。 |
-| `build_windows_x64.sh` | EN（Windows x64）。EN Git Bash EN，EN NSIS InstallEN `*-setup.exe`。 |
-| `lib/desktop_build_common.sh` | ENScriptEN（EN Python Download、pip、EN、DependenciesCheck、EN）。EN。 |
-| `verify_desktop.sh` | ENTest：`cargo check` + EN，EN `/health` EN `/api/v1/video-categories`。EN `nightly-desktop-smoke.yml` EN。 |
-| `monitor_whisper.py` | EN Whisper EN，EN `start_autoclip.sh` / `check_whisper_status.sh` EN。 |
+| `build_macos_arm.sh` | （macOS Apple Silicon）。 `.app` + `.dmg`。 |
+| `build_windows_x64.sh` | （Windows x64）。 Git Bash ， NSIS install `*-setup.exe`。 |
+| `lib/desktop_build_common.sh` | step（ Python download、pip、backend、dependenciescheck、frontendbuild）。。 |
+| `verify_desktop.sh` | backendtest：`cargo check` + backend，validate `/health`  `/api/v1/video-categories`。 `nightly-desktop-smoke.yml` call。 |
+| `monitor_whisper.py` |  Whisper monitor， `start_autoclip.sh` / `check_whisper_status.sh` call。 |
 
-## EN
+## 
 
 ### macOS arm64
 
@@ -21,7 +21,7 @@ EN PyInstaller / prepare_resources ENScriptEN。
 ./scripts/build_macos_arm.sh
 ```
 
-EN：
+：
 ```
 src-tauri/target/release/bundle/macos/
 ├── AutoClip Desktop.app
@@ -30,65 +30,65 @@ src-tauri/target/release/bundle/macos/
 
 ### Windows x64
 
-EN **Git Bash** EN（Need Node.js、Rust MSVC ToolEN、Visual Studio Build Tools C++ EN、cargo-tauri）：
+ **Git Bash** （need Node.js、Rust MSVC tool、Visual Studio Build Tools C++ 、cargo-tauri）：
 
 ```bash
 bash scripts/build_windows_x64.sh
 ```
 
-EN：
+：
 ```
 src-tauri/target/release/bundle/nsis/
 └── AutoClip Desktop_<version>_x64-setup.exe
 ```
 
-Windows EN macOS EN：macOS EN `python/ backend/ ffmpeg/` EN `.app`
-EN；Windows ENInstallEN，EN `src-tauri/tauri.windows.conf.json`
-EN `bundle.resources` EN，EN Tauri EN NSIS。EN Windows EN
-Tauri EN，EN macOS。
+Windows  macOS ：macOS build `python/ backend/ ffmpeg/`  `.app`
+；Windows install， `src-tauri/tauri.windows.conf.json`
+ `bundle.resources` ， Tauri  NSIS。file Windows build
+Tauri ，impact macOS。
 
-### ENScriptEN（`lib/desktop_build_common.sh`）
+### （`lib/desktop_build_common.sh`）
 
-1. DownloadEN Python EN（python-build-standalone，EN `build/pbs-cache/`；EN，AutoEN）
-2. EN Python Install `requirements.txt` ENDependencies
-3. EN `src-tauri/resources/backend/`（EN / tests / EN；EN Python `shutil` EN，Windows EN rsync）
-4. **DependenciesENCheck**：AST ENAllEN import，ENFailed
-   （EN"EN、EN 500"）
-5. EN（`npm ci && npm run build`）
+1. download Python （python-build-standalone，cache `build/pbs-cache/`；，）
+2.  Python install `requirements.txt` dependencies
+3. backend `src-tauri/resources/backend/`（cache / tests / ； Python `shutil` ，Windows  rsync）
+4. **dependenciescheck**：AST backend import，buildfailed
+   （"、 500"）
+5. buildfrontend（`npm ci && npm run build`）
 
-ENScriptEN：EN ffmpeg/ffprobe（macOS: osxexperts arm64 EN；Windows: BtbN win64 gpl EN）、
-`cargo tauri build`、EN。
+： ffmpeg/ffprobe（macOS: osxexperts arm64 ；Windows: BtbN win64 gpl ）、
+`cargo tauri build`、。
 
-### EN（`src-tauri/src/backend_manager.rs`）
+### （`src-tauri/src/backend_manager.rs`）
 
-- Python：`resources/python/bin/python3`（unix）EN `resources/python/python.exe`（Windows）
-- ffmpeg：`resources/ffmpeg/ffmpeg[.exe]`，EN `AUTOCLIP_FFMPEG_PATH` / `AUTOCLIP_FFPROBE_PATH` EN
-- EN：Rust EN `AUTOCLIP_APP_DIR=<EN>/AutoClip`
+- Python：`resources/python/bin/python3`（unix） `resources/python/python.exe`（Windows）
+- ffmpeg：`resources/ffmpeg/ffmpeg[.exe]`， `AUTOCLIP_FFMPEG_PATH` / `AUTOCLIP_FFPROBE_PATH` backend
+- data directory：Rust settings `AUTOCLIP_APP_DIR=<data directory>/AutoClip`
   （macOS `~/Library/Application Support/AutoClip`，Windows `%APPDATA%\AutoClip`）
-- Windows EN：`PYTHONUTF8=1`（EN stdout EN emoji，Else GBK EN UnicodeEncodeError）、
-  `CREATE_NO_WINDOW`（EN）
+- Windows ：`PYTHONUTF8=1`（backend stdout  emoji， GBK  UnicodeEncodeError）、
+  `CREATE_NO_WINDOW`（）
 
-### ENDependencies
+### dependencies
 
 - Node.js 18+、Rust、cargo-tauri (`cargo install tauri-cli`)
-- macOS：`aarch64-apple-darwin` target；Windows：MSVC ToolEN + VS Build Tools
-- System **ENNeed** EN Python / ffmpeg —— ScriptEN
+- macOS：`aarch64-apple-darwin` target；Windows：MSVC tool + VS Build Tools
+-  **need**  Python / ffmpeg —— 
 
-### EnvironmentEN
+### env var
 
-- `PIP_INDEX_URL`：pip EN，EN；CI EN `https://pypi.org/simple`
-- `PBS_VERSION` / `PBS_PYTHON_VERSION`：EN Python Version（EN `lib/desktop_build_common.sh`）
+- `PIP_INDEX_URL`：pip ，default；CI  `https://pypi.org/simple`
+- `PBS_VERSION` / `PBS_PYTHON_VERSION`： Python version（default `lib/desktop_build_common.sh`）
 
 ## CI
 
 `.github/workflows/desktop-build.yml`：
-- `workflow_dispatch`：EN macOS EN Windows
-- `v*` tag：EN，`release` job EN GitHub Release（ENFailedENUpload）
+- `workflow_dispatch`：build macOS build Windows
+- `v*` tag：build，`release` job  GitHub Release（failed）
 
-## EN（EN）
+## dev mode（）
 
-EN Tauri EN，EN：
+ Tauri dev mode，：
 ```bash
 cd src-tauri && cargo tauri dev
 ```
-（EN :3000 + EN，EN `backend_manager.rs` EN）
+（frontend :3000 + backendport， `backend_manager.rs` ）

@@ -1,6 +1,6 @@
 """
-RepositoryEN
-ENRepositoryEN
+Repositorytranslated
+Providestranslatedone'sRepositorytranslatedAndtranslated
 """
 
 from typing import Dict, Type
@@ -12,14 +12,14 @@ from ..repositories.collection_repository import CollectionRepository
 from ..repositories.task_repository import TaskRepository
 
 class RepositoryFactory:
-    """RepositoryEN"""
+    """Repositorytranslated"""
     
     def __init__(self, db: Session):
         """
-        initializeRepositoryEN
+        translatedRepositorytranslated
         
         Args:
-            db: databaseEN
+            db: databasetranslated
         """
         self.db = db
         self._repositories: Dict[str, BaseRepository] = {}
@@ -50,13 +50,13 @@ class RepositoryFactory:
     
     def get_repository(self, repository_type: str) -> BaseRepository:
         """
-        ENfetchRepository
+        translatedfetchRepository
         
         Args:
-            repository_type: RepositoryEN
+            repository_type: Repositorytranslated
             
         Returns:
-            RepositoryEN
+            Repositorytranslated
         """
         repository_map = {
             "project": self.get_project_repository,
@@ -71,29 +71,29 @@ class RepositoryFactory:
         return repository_map[repository_type]()
     
     def clear_cache(self):
-        """ENRepositorycache"""
+        """translatedRepositorycache"""
         self._repositories.clear()
     
     def __enter__(self):
-        """EN"""
+        """translated"""
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
-        """EN"""
+        """translated"""
         self.clear_cache()
 
-# ENRepositoryEN
+# translatedRepositorytranslated
 _repository_factory: RepositoryFactory = None
 
 def get_repository_factory(db: Session) -> RepositoryFactory:
     """
-    fetchRepositoryEN
+    fetchRepositorytranslated
     
     Args:
-        db: databaseEN
+        db: databasetranslated
         
     Returns:
-        RepositoryEN
+        Repositorytranslated
     """
     global _repository_factory
     if _repository_factory is None or _repository_factory.db != db:
@@ -105,10 +105,10 @@ def get_project_repository(db: Session) -> ProjectRepository:
     fetchprojectRepository
     
     Args:
-        db: databaseEN
+        db: databasetranslated
         
     Returns:
-        projectRepositoryEN
+        projectRepositorytranslated
     """
     return get_repository_factory(db).get_project_repository()
 
@@ -117,10 +117,10 @@ def get_clip_repository(db: Session) -> ClipRepository:
     fetchclipRepository
     
     Args:
-        db: databaseEN
+        db: databasetranslated
         
     Returns:
-        clipRepositoryEN
+        clipRepositorytranslated
     """
     return get_repository_factory(db).get_clip_repository()
 
@@ -129,10 +129,10 @@ def get_collection_repository(db: Session) -> CollectionRepository:
     fetchcollectionRepository
     
     Args:
-        db: databaseEN
+        db: databasetranslated
         
     Returns:
-        collectionRepositoryEN
+        collectionRepositorytranslated
     """
     return get_repository_factory(db).get_collection_repository()
 
@@ -141,9 +141,9 @@ def get_task_repository(db: Session) -> TaskRepository:
     fetchtaskRepository
     
     Args:
-        db: databaseEN
+        db: databasetranslated
         
     Returns:
-        taskRepositoryEN
+        taskRepositorytranslated
     """
     return get_repository_factory(db).get_task_repository() 

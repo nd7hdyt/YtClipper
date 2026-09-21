@@ -1,4 +1,4 @@
-"""EN：SRT EN、EN、ffmpeg EN（EN ffmpeg EN）"""
+"""Releaseexport：SRT clip、translated、ffmpeg translatedexportonetranslated（translated ffmpeg translated）"""
 import json
 import shutil
 import subprocess
@@ -23,12 +23,12 @@ def data_dir(tmp_path, monkeypatch):
 def test_slice_srt_shifts_to_zero():
     from backend.services.publish_export import slice_srt
     entries = [
-        {"start_time": "00:00:08,000", "end_time": "00:00:10,000", "text": "EN"},
-        {"start_time": "00:00:12,000", "end_time": "00:00:14,500", "text": "EN"},
-        {"start_time": "00:00:20,000", "end_time": "00:00:22,000", "text": "EN"},
+        {"start_time": "00:00:08,000", "end_time": "00:00:10,000", "text": "translated"},
+        {"start_time": "00:00:12,000", "end_time": "00:00:14,500", "text": "translated"},
+        {"start_time": "00:00:20,000", "end_time": "00:00:22,000", "text": "translated"},
     ]
     body = slice_srt(entries, 10.0, 16.0)
-    assert "EN" in body and "EN" not in body and "EN" not in body
+    assert "translated" in body and "translated" not in body and "translated" not in body
     assert "00:00:02,000 --> 00:00:04,500" in body
 
 
@@ -38,7 +38,7 @@ def test_list_presets_has_vertical_and_horizontal():
     assert keys == {"douyin", "xiaohongshu", "shorts", "bilibili", "original"}
 
 
-@pytest.mark.skipif(not shutil.which("ffmpeg"), reason="EN ffmpeg")
+@pytest.mark.skipif(not shutil.which("ffmpeg"), reason="translated ffmpeg")
 def test_export_original_reencodes_and_is_idempotent(data_dir, tmp_path):
     from backend.core.path_utils import get_project_directory
     from backend.services.publish_export import ExportRequest, export_clip
@@ -56,10 +56,10 @@ def test_export_original_reencodes_and_is_idempotent(data_dir, tmp_path):
     )
     (pdir / "metadata").mkdir(parents=True, exist_ok=True)
     (pdir / "metadata" / "clips_metadata.json").write_text(json.dumps([
-        {"id": cid, "generated_title": "EN", "start_time": "00:00:00,500", "end_time": "00:00:02,500"}
+        {"id": cid, "generated_title": "testtranslated", "start_time": "00:00:00,500", "end_time": "00:00:02,500"}
     ]), encoding="utf-8")
     (pdir / "raw" / "input.srt").write_text(
-        "1\n00:00:00,000 --> 00:00:02,000\nEN\n\n2\n00:00:02,000 --> 00:00:03,000\nEN\n",
+        "1\n00:00:00,000 --> 00:00:02,000\ntranslated\n\n2\n00:00:02,000 --> 00:00:03,000\nNo.translated\n",
         encoding="utf-8",
     )
 

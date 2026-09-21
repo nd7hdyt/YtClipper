@@ -1,6 +1,6 @@
 """
-ENAPIAPI
-EN
+translatedAPItranslated
+usetranslatedtestAndtranslatedfeature
 """
 
 import json
@@ -15,25 +15,25 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 class PublishMessage(BaseModel):
-    """EN"""
+    """Releasetranslatedmodel"""
     task_id: str
     progress: int
     step: int = 1
     total: int = 6
     phase: str = "test"
-    message: str = "EN"
+    message: str = "translated"
     status: str = "PROGRESS"
     seq: int = 1
     meta: Dict[str, Any] = {}
 
 @router.post("/debug/publish")
 async def debug_publish_message(message: PublishMessage):
-    """ENAPI：ENprogressENRedis"""
+    """translated：ReleaseprogresstranslatedRedis"""
     try:
         # connectRedis
         redis_client = redis.from_url(get_redis_url(), decode_responses=True)
         
-        # EN
+        # translated
         import time
         full_message = {
             "task_id": message.task_id,
@@ -48,13 +48,13 @@ async def debug_publish_message(message: PublishMessage):
             "meta": message.meta
         }
         
-        # ENRedis
+        # ReleasetranslatedRedis
         channel = f"progress:{message.task_id}"
         result = await redis_client.publish(channel, json.dumps(full_message))
         
         await redis_client.aclose()
         
-        logger.info(f"EN: {channel} -> {result} EN")
+        logger.info(f"translatedReleasetranslated: {channel} -> {result}  translated")
         
         return {
             "success": True,
@@ -64,12 +64,12 @@ async def debug_publish_message(message: PublishMessage):
         }
         
     except Exception as e:
-        logger.error(f"ENfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"ENfailed: {str(e)}")
+        logger.error(f"translatedReleasetranslatedfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"Releasefailed: {str(e)}")
 
 @router.get("/debug/subscriptions")
 async def debug_get_subscriptions():
-    """ENAPI：fetchcurrentENstatus"""
+    """translated：fetchtranslatedstatus"""
     try:
         from ...services.websocket_gateway_service import websocket_gateway_service
         
@@ -82,20 +82,20 @@ async def debug_get_subscriptions():
             }
             
     except Exception as e:
-        logger.error(f"fetchENstatusfailed: {e}")
+        logger.error(f"fetchtranslatedstatusfailed: {e}")
         raise HTTPException(status_code=500, detail=f"fetchfailed: {str(e)}")
 
 @router.get("/debug/redis-info")
 async def debug_redis_info():
-    """ENAPI：fetchRedisconnectEN"""
+    """translated：fetchRedisconnectinfo"""
     try:
         redis_url = get_redis_url()
         redis_client = redis.from_url(redis_url, decode_responses=True)
         
-        # ENconnect
+        # testconnect
         await redis_client.ping()
         
-        # fetchEN
+        # fetchinfo
         info = await redis_client.info()
         
         await redis_client.aclose()
@@ -109,6 +109,6 @@ async def debug_redis_info():
         }
         
     except Exception as e:
-        logger.error(f"fetchRedisENfailed: {e}")
+        logger.error(f"fetchRedisinfofailed: {e}")
         raise HTTPException(status_code=500, detail=f"fetchfailed: {str(e)}")
 

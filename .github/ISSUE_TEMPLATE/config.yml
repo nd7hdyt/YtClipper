@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 📋 CurrentStatus / EN / Status & known issues
-    url: https://github.com/nd7hdyt/YtClipper/issues/96
-    about: EN issue EN，ENAlreadyEN。Check here first.
-  - name: 💬 EN / Questions & discussion
-    url: https://github.com/nd7hdyt/YtClipper/discussions
-    about: EN、EN、EN，EN Discussions。How-to questions go to Discussions.
-  - name: 📝 EN GitHub？EN / Feedback form (no GitHub account needed)
+  - name: 📋 translatedstatus / translatedissue / Status & known issues
+    url: https://github.com/zhouxiaoka/autoclip/issues/96
+    about: translated issue translatedthistranslated，translated'sissuecantranslated。Check here first.
+  - name: 💬 usetranslatedandtranslated / Questions & discussion
+    url: https://github.com/zhouxiaoka/autoclip/discussions
+    about: translateduse、modelSelecttranslated 、cliptranslated，translated Discussions。How-to questions go to Discussions.
+  - name: 📝 translateduse GitHub？usetranslated / Feedback form (no GitHub account needed)
     url: https://zhouxiaoka.github.io/autoclip_intro/#feedback
-    about: EN，EN。Quick form on the website.
+    about: translated'stranslated，oneminutestranslated。Quick form on the website.

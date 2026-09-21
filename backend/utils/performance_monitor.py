@@ -1,6 +1,6 @@
 """
-EN
-ENsystemEN，includeCPU、EN、EN、EN
+translatedmonitortool
+monitorSystemtranslated，PackagetranslatedCPU、translated、translated、translatedetc.
 """
 
 import psutil
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class MetricType(Enum):
-    """EN"""
+    """translated"""
     CPU = "cpu"
     MEMORY = "memory"
     DISK = "disk"
@@ -29,7 +29,7 @@ class MetricType(Enum):
 
 @dataclass
 class PerformanceMetric:
-    """EN"""
+    """translated"""
     name: str
     value: float
     unit: str
@@ -40,7 +40,7 @@ class PerformanceMetric:
 
 @dataclass
 class SystemStats:
-    """systemEN"""
+    """Systemtranslatedinfo"""
     timestamp: datetime
     cpu_percent: float
     memory_percent: float
@@ -55,7 +55,7 @@ class SystemStats:
 
 
 class PerformanceMonitor:
-    """EN"""
+    """translatedmonitortranslated"""
     
     def __init__(self, max_history_size: int = 1000, collection_interval: int = 60):
         self.max_history_size = max_history_size
@@ -66,34 +66,34 @@ class PerformanceMonitor:
         self.monitor_task: Optional[asyncio.Task] = None
         self.lock = threading.Lock()
         
-        # EN
+        # translated
         self._network_baseline = None
         self._last_network_check = None
     
     def _get_system_stats(self) -> SystemStats:
-        """fetchsystemEN"""
+        """fetchSystemtranslatedinfo"""
         
-        # CPUuseEN
+        # CPUusetranslated
         cpu_percent = psutil.cpu_percent(interval=1)
         
-        # ENuseEN
+        # translatedusetranslated
         memory = psutil.virtual_memory()
         memory_percent = memory.percent
         memory_used = memory.used
         memory_total = memory.total
         
-        # ENuseEN
+        # translatedusetranslated
         disk = psutil.disk_usage('/')
         disk_usage_percent = (disk.used / disk.total) * 100
         disk_used = disk.used
         disk_total = disk.total
         
-        # EN
+        # translated
         network = psutil.net_io_counters()
         network_bytes_sent = network.bytes_sent
         network_bytes_recv = network.bytes_recv
         
-        # EN
+        # translatedprocesstranslated
         active_processes = len(psutil.pids())
         
         return SystemStats(
@@ -111,7 +111,7 @@ class PerformanceMonitor:
         )
     
     def _get_process_stats(self, process_name: str = None) -> List[Dict[str, Any]]:
-        """fetchEN"""
+        """fetchprocesstranslatedinfo"""
         
         processes = []
         
@@ -134,7 +134,7 @@ class PerformanceMonitor:
         return processes
     
     def _calculate_network_delta(self, current_stats: SystemStats) -> Dict[str, int]:
-        """EN"""
+        """translated"""
         
         if self._network_baseline is None:
             self._network_baseline = current_stats
@@ -148,7 +148,7 @@ class PerformanceMonitor:
         bytes_sent_delta = current_stats.network_bytes_sent - self._network_baseline.network_bytes_sent
         bytes_recv_delta = current_stats.network_bytes_recv - self._network_baseline.network_bytes_recv
         
-        # EN
+        # translatedpersecondstranslated
         bytes_sent_per_sec = bytes_sent_delta / time_delta
         bytes_recv_per_sec = bytes_recv_delta / time_delta
         
@@ -163,19 +163,19 @@ class PerformanceMonitor:
         }
     
     async def collect_metrics(self):
-        """EN"""
+        """translated"""
         
         try:
-            # fetchsystemEN
+            # fetchSystemtranslatedinfo
             system_stats = self._get_system_stats()
             
             with self.lock:
                 self.system_stats_history.append(system_stats)
             
-            # EN
+            # translated
             network_delta = self._calculate_network_delta(system_stats)
             
-            # createEN
+            # createtranslated
             metrics = [
                 PerformanceMetric(
                     name="cpu_usage",
@@ -238,25 +238,25 @@ class PerformanceMonitor:
             with self.lock:
                 self.metrics_history.extend(metrics)
             
-            logger.debug(f"EN: {len(metrics)} EN")
+            logger.debug(f"translated: {len(metrics)}  translated")
             
         except Exception as e:
-            logger.error(f"ENfailed: {e}")
+            logger.error(f"translatedfailed: {e}")
     
     async def start_monitoring(self):
-        """startEN"""
+        """translatedmonitor"""
         
         if self.is_monitoring:
-            logger.warning("ENrun")
+            logger.warning("translatedmonitortranslatedintranslated")
             return
         
         self.is_monitoring = True
         self.monitor_task = asyncio.create_task(self._monitoring_loop())
         
-        logger.info(f"startEN，EN: {self.collection_interval} EN")
+        logger.info(f"translatedmonitor，translated: {self.collection_interval} seconds")
     
     async def stop_monitoring(self):
-        """stopEN"""
+        """translatedmonitor"""
         
         if not self.is_monitoring:
             return
@@ -270,10 +270,10 @@ class PerformanceMonitor:
             except asyncio.CancelledError:
                 pass
         
-        logger.info("stopEN")
+        logger.info("translatedmonitor")
     
     async def _monitoring_loop(self):
-        """EN"""
+        """monitortranslated"""
         
         while self.is_monitoring:
             try:
@@ -282,11 +282,11 @@ class PerformanceMonitor:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                logger.error(f"ENerror: {e}")
+                logger.error(f"monitortranslatederror: {e}")
                 await asyncio.sleep(self.collection_interval)
     
     def get_current_stats(self) -> SystemStats:
-        """fetchcurrentsystemEN"""
+        """fetchtranslatedSystemtranslatedinfo"""
         
         with self.lock:
             if self.system_stats_history:
@@ -295,25 +295,25 @@ class PerformanceMonitor:
                 return self._get_system_stats()
     
     def get_metrics_summary(self, time_range_minutes: int = 60) -> Dict[str, Any]:
-        """fetchEN"""
+        """fetchtranslated"""
         
         cutoff_time = datetime.now() - timedelta(minutes=time_range_minutes)
         
         with self.lock:
-            # ENtimeEN
+            # translated'stranslated
             recent_metrics = [
                 metric for metric in self.metrics_history
                 if metric.timestamp >= cutoff_time
             ]
             
-            # EN
+            # bytranslated
             metrics_by_name = {}
             for metric in recent_metrics:
                 if metric.name not in metrics_by_name:
                     metrics_by_name[metric.name] = []
                 metrics_by_name[metric.name].append(metric.value)
             
-            # EN
+            # translatedinfo
             summary = {}
             for name, values in metrics_by_name.items():
                 if values:
@@ -328,25 +328,25 @@ class PerformanceMonitor:
             return summary
     
     def get_system_health(self) -> Dict[str, Any]:
-        """fetchsystemENstatus"""
+        """fetchSystemtranslatedstatus"""
         
         current_stats = self.get_current_stats()
         
-        # ENstatusEN
+        # translatedstatustranslated
         health_status = "healthy"
         warnings = []
         
         if current_stats.cpu_percent > 80:
             health_status = "warning"
-            warnings.append(f"CPUuseEN: {current_stats.cpu_percent:.1f}%")
+            warnings.append(f"CPUusetranslated: {current_stats.cpu_percent:.1f}%")
         
         if current_stats.memory_percent > 85:
             health_status = "warning"
-            warnings.append(f"ENuseEN: {current_stats.memory_percent:.1f}%")
+            warnings.append(f"translatedusetranslated: {current_stats.memory_percent:.1f}%")
         
         if current_stats.disk_usage_percent > 90:
             health_status = "critical"
-            warnings.append(f"ENuseEN: {current_stats.disk_usage_percent:.1f}%")
+            warnings.append(f"translatedusetranslated: {current_stats.disk_usage_percent:.1f}%")
         
         return {
             "status": health_status,
@@ -361,11 +361,11 @@ class PerformanceMonitor:
         }
     
     def get_top_processes(self, limit: int = 10, sort_by: str = "cpu") -> List[Dict[str, Any]]:
-        """fetchEN"""
+        """fetchtranslatedusetranslatedmulti'sprocess"""
         
         processes = self._get_process_stats()
         
-        # EN
+        # bytranslated
         if sort_by == "cpu":
             processes.sort(key=lambda x: x['cpu_percent'], reverse=True)
         elif sort_by == "memory":
@@ -374,7 +374,7 @@ class PerformanceMonitor:
         return processes[:limit]
     
     def add_custom_metric(self, name: str, value: float, unit: str = "", tags: Dict[str, str] = None):
-        """EN"""
+        """addtranslated"""
         
         metric = PerformanceMetric(
             name=name,
@@ -389,22 +389,22 @@ class PerformanceMonitor:
             self.metrics_history.append(metric)
     
     def clear_history(self):
-        """EN"""
+        """translated"""
         
         with self.lock:
             self.metrics_history.clear()
             self.system_stats_history.clear()
         
-        logger.info("EN")
+        logger.info("translatedmonitortranslated")
 
 
-# EN
+# translatedmonitortranslated
 performance_monitor = PerformanceMonitor()
 
 
-# EN
+# translatedmonitortranslated
 def monitor_performance(metric_name: str, unit: str = ""):
-    """EN"""
+    """translatedmonitortranslated"""
     
     def decorator(func):
         async def async_wrapper(*args, **kwargs):

@@ -1,6 +1,6 @@
 """
-ENtask
-ENdatabaseENfilesystemEN
+translatedcleantask
+translatedcleandatabaseAndfileSystemtranslated'stranslated
 """
 
 import os
@@ -26,18 +26,18 @@ logger = logging.getLogger(__name__)
 @shared_task(bind=True, name='backend.tasks.data_cleanup.cleanup_expired_data')
 def cleanup_expired_data(self, days: int = 30) -> Dict[str, Any]:
     """
-    EN
+    cleantranslated
     
     Args:
-        days: EN，EN30EN
+        days: translated，default30translated
         
     Returns:
-        ENresult
+        cleantranslated
     """
-    logger.info(f"startEN，EN: {days}")
+    logger.info(f"translatedcleantranslated，translated: {days}")
     
     try:
-        # createdatabaseEN
+        # createdatabasetranslated
         db = SessionLocal()
         
         try:
@@ -50,44 +50,44 @@ def cleanup_expired_data(self, days: int = 30) -> Dict[str, Any]:
                 'errors': []
             }
             
-            # 1. ENtask
+            # 1. cleantranslatedtask
             try:
                 task_repo = TaskRepository(db)
                 tasks_cleaned = task_repo.cleanup_old_tasks(days)
                 cleanup_results['tasks_cleaned'] = tasks_cleaned
-                logger.info(f"EN {tasks_cleaned} ENtask")
+                logger.info(f"cleantranslated {tasks_cleaned}  translatedtask")
             except Exception as e:
-                error_msg = f"ENtaskfailed: {str(e)}"
+                error_msg = f"cleantaskfailed: {str(e)}"
                 logger.error(error_msg)
                 cleanup_results['errors'].append(error_msg)
             
-            # 2. ENproject
+            # 2. cleantranslatedproject
             try:
                 projects_cleaned = _cleanup_expired_projects(db, days)
                 cleanup_results['projects_cleaned'] = projects_cleaned
-                logger.info(f"EN {projects_cleaned} ENproject")
+                logger.info(f"cleantranslated {projects_cleaned}  translatedproject")
             except Exception as e:
-                error_msg = f"ENprojectfailed: {str(e)}"
+                error_msg = f"cleanprojectfailed: {str(e)}"
                 logger.error(error_msg)
                 cleanup_results['errors'].append(error_msg)
             
-            # 3. ENfile
+            # 3. cleantranslatedfile
             try:
                 files_cleaned = _cleanup_orphaned_files()
                 cleanup_results['files_cleaned'] = files_cleaned
-                logger.info(f"EN {files_cleaned} ENfile")
+                logger.info(f"cleantranslated {files_cleaned}  translatedfile")
             except Exception as e:
-                error_msg = f"ENfilefailed: {str(e)}"
+                error_msg = f"cleanfilefailed: {str(e)}"
                 logger.error(error_msg)
                 cleanup_results['errors'].append(error_msg)
             
-            # 4. ENfile
+            # 4. clean temp files
             try:
                 temp_files_cleaned = _cleanup_temp_files()
                 cleanup_results['temp_files_cleaned'] = temp_files_cleaned
-                logger.info(f"EN {temp_files_cleaned} ENfile")
+                logger.info(f"cleantranslated {temp_files_cleaned}  translatedfile")
             except Exception as e:
-                error_msg = f"ENfilefailed: {str(e)}"
+                error_msg = f"clean temp filesfailed: {str(e)}"
                 logger.error(error_msg)
                 cleanup_results['errors'].append(error_msg)
             
@@ -99,22 +99,22 @@ def cleanup_expired_data(self, days: int = 30) -> Dict[str, Any]:
                 cleanup_results.get('temp_files_cleaned', 0)
             )
             
-            logger.info(f"EN，EN {cleanup_results['total_cleaned']} EN")
+            logger.info(f"translatedcleantranslated，translatedclean {cleanup_results['total_cleaned']} translated")
             return cleanup_results
             
         finally:
             db.close()
             
     except Exception as e:
-        logger.error(f"ENfailed，error: {e}")
+        logger.error(f"cleantranslatedfailed，error: {e}")
         raise
 
 
 def _cleanup_expired_projects(db: SessionLocal, days: int) -> int:
-    """ENproject"""
+    """cleantranslatedproject"""
     cutoff_date = datetime.utcnow() - timedelta(days=days)
     
-    # ENcompletedproject
+    # translated'scompletedproject
     expired_projects = db.query(Project).filter(
         Project.status == ProjectStatus.COMPLETED,
         Project.updated_at < cutoff_date
@@ -123,28 +123,28 @@ def _cleanup_expired_projects(db: SessionLocal, days: int) -> int:
     cleaned_count = 0
     for project in expired_projects:
         try:
-            # deleteprojectEN
+            # deleteprojecttranslated
             _delete_project_data(db, project.id)
             cleaned_count += 1
-            logger.info(f"ENproject: {project.id}")
+            logger.info(f"cleantranslatedproject: {project.id}")
         except Exception as e:
-            logger.error(f"ENproject {project.id} failed: {e}")
+            logger.error(f"cleanproject {project.id} failed: {e}")
     
     return cleaned_count
 
 
 def _delete_project_data(db: SessionLocal, project_id: str):
-    """deleteprojectEN"""
-    # deleteENtask
+    """deleteprojecttranslated"""
+    # deletetranslatedtask
     db.query(Task).filter(Task.project_id == project_id).delete()
     
-    # deleteENclip
+    # deletetranslatedclip
     db.query(Clip).filter(Clip.project_id == project_id).delete()
     
-    # deleteENcollection
+    # deletetranslatedcollection
     db.query(Collection).filter(Collection.project_id == project_id).delete()
     
-    # deleteprojectEN
+    # deleteprojecttranslated
     db.query(Project).filter(Project.id == project_id).delete()
     
     # deleteprojectfile
@@ -152,29 +152,29 @@ def _delete_project_data(db: SessionLocal, project_id: str):
     if project_dir.exists():
         shutil.rmtree(project_dir)
     
-    # ENprogressEN
+    # cleanprogresstranslated
     try:
         from ..services.simple_progress import clear_progress
         clear_progress(project_id)
     except Exception as e:
-        logger.warning(f"ENprogressENfailed: {e}")
+        logger.warning(f"cleanprogresstranslatedfailed: {e}")
     
     db.commit()
 
 
 def _cleanup_orphaned_files() -> int:
-    """ENfile"""
+    """cleantranslatedfile"""
     cleaned_count = 0
     
     try:
-        # fetchdatabaseENprojectID
+        # fetchdatabasetranslated'sprojectID
         db = SessionLocal()
         try:
             db_projects = {p.id for p in db.query(Project).all()}
         finally:
             db.close()
         
-        # ENprojectdirectory
+        # cleantranslated'sprojectdirectory
         projects_dir = Path("data/projects")
         if projects_dir.exists():
             for project_dir in projects_dir.iterdir():
@@ -182,14 +182,14 @@ def _cleanup_orphaned_files() -> int:
                     if not project_dir.name.startswith('.'):
                         shutil.rmtree(project_dir)
                         cleaned_count += 1
-                        logger.info(f"ENprojectdirectory: {project_dir.name}")
+                        logger.info(f"cleantranslatedprojectdirectory: {project_dir.name}")
         
-        # ENfile
+        # cleantranslated'stranslatedfile
         output_dir = Path("data/output")
         if output_dir.exists():
             for file_path in output_dir.rglob("*"):
                 if file_path.is_file():
-                    # checkfileENproject
+                    # checkfileIstranslatedproject
                     file_name = file_path.name
                     is_orphaned = True
                     
@@ -201,16 +201,16 @@ def _cleanup_orphaned_files() -> int:
                     if is_orphaned:
                         file_path.unlink()
                         cleaned_count += 1
-                        logger.info(f"ENfile: {file_path}")
+                        logger.info(f"cleantranslatedfile: {file_path}")
         
     except Exception as e:
-        logger.error(f"ENfilefailed: {e}")
+        logger.error(f"cleantranslatedfilefailed: {e}")
     
     return cleaned_count
 
 
 def _cleanup_temp_files() -> int:
-    """ENfile"""
+    """clean temp files"""
     cleaned_count = 0
     
     try:
@@ -218,14 +218,14 @@ def _cleanup_temp_files() -> int:
         if temp_dir.exists():
             for file_path in temp_dir.iterdir():
                 if file_path.is_file():
-                    # checkfileEN1EN
+                    # checkfileIstranslated1translated
                     file_age = datetime.now() - datetime.fromtimestamp(file_path.stat().st_mtime)
                     if file_age > timedelta(hours=1):
                         file_path.unlink()
                         cleaned_count += 1
-                        logger.info(f"ENfile: {file_path}")
+                        logger.info(f"clean temp files: {file_path}")
         
-        # ENprocessingENfile
+        # cleanprocessingtranslatedfile
         projects_dir = Path("data/projects")
         if projects_dir.exists():
             for project_dir in projects_dir.iterdir():
@@ -234,15 +234,15 @@ def _cleanup_temp_files() -> int:
                     if processing_dir.exists():
                         for file_path in processing_dir.iterdir():
                             if file_path.is_file():
-                                # checkfileEN24EN
+                                # checkfileIstranslated24translated
                                 file_age = datetime.now() - datetime.fromtimestamp(file_path.stat().st_mtime)
                                 if file_age > timedelta(hours=24):
                                     file_path.unlink()
                                     cleaned_count += 1
-                                    logger.info(f"ENprocessingENfile: {file_path}")
+                                    logger.info(f"cleanprocessingtranslatedfile: {file_path}")
         
     except Exception as e:
-        logger.error(f"ENfilefailed: {e}")
+        logger.error(f"clean temp filesfailed: {e}")
     
     return cleaned_count
 
@@ -250,21 +250,21 @@ def _cleanup_temp_files() -> int:
 @shared_task(bind=True, name='backend.tasks.data_cleanup.check_data_consistency')
 def check_data_consistency(self) -> Dict[str, Any]:
     """
-    checkEN
+    checktranslatedonetranslated
     
     Returns:
-        ENcheckresult
+        onetranslatedchecktranslated
     """
-    logger.info("startENcheck")
+    logger.info("translatedonetranslatedcheck")
     
     try:
-        # createdatabaseEN
+        # createdatabasetranslated
         db = SessionLocal()
         
         try:
             issues = []
             
-            # 1. checkprojectEN
+            # 1. checkprojecttranslatedonetranslated
             db_projects = {p.id for p in db.query(Project).all()}
             fs_projects = set()
             
@@ -274,7 +274,7 @@ def check_data_consistency(self) -> Dict[str, Any]:
                     if project_dir.is_dir() and not project_dir.name.startswith('.'):
                         fs_projects.add(project_dir.name)
             
-            # checkENfile
+            # checktranslatedfile
             orphaned_files = fs_projects - db_projects
             if orphaned_files:
                 issues.append({
@@ -283,7 +283,7 @@ def check_data_consistency(self) -> Dict[str, Any]:
                     "details": list(orphaned_files)
                 })
             
-            # checkENfile
+            # checktranslatedfile
             missing_files = db_projects - fs_projects
             if missing_files:
                 issues.append({
@@ -292,7 +292,7 @@ def check_data_consistency(self) -> Dict[str, Any]:
                     "details": list(missing_files)
                 })
             
-            # 2. checktaskEN
+            # 2. checktasktranslatedonetranslated
             orphaned_tasks = db.query(Task).filter(
                 ~Task.project_id.in_(db_projects)
             ).count()
@@ -304,7 +304,7 @@ def check_data_consistency(self) -> Dict[str, Any]:
                     "details": []
                 })
             
-            # 3. checkclipEN
+            # 3. checkcliptranslatedonetranslated
             orphaned_clips = db.query(Clip).filter(
                 ~Clip.project_id.in_(db_projects)
             ).count()
@@ -316,7 +316,7 @@ def check_data_consistency(self) -> Dict[str, Any]:
                     "details": []
                 })
             
-            # 4. checkcollectionEN
+            # 4. checkcollectiontranslatedonetranslated
             orphaned_collections = db.query(Collection).filter(
                 ~Collection.project_id.in_(db_projects)
             ).count()
@@ -339,22 +339,22 @@ def check_data_consistency(self) -> Dict[str, Any]:
             db.close()
             
     except Exception as e:
-        logger.error(f"ENcheckfailed，error: {e}")
+        logger.error(f"translatedonetranslatedcheckfailed，error: {e}")
         raise
 
 
 @shared_task(bind=True, name='backend.tasks.data_cleanup.cleanup_orphaned_data')
 def cleanup_orphaned_data(self) -> Dict[str, Any]:
     """
-    EN
+    cleantranslated
     
     Returns:
-        ENresult
+        cleantranslated
     """
-    logger.info("startEN")
+    logger.info("translatedcleantranslated")
     
     try:
-        # createdatabaseEN
+        # createdatabasetranslated
         db = SessionLocal()
         
         try:
@@ -366,10 +366,10 @@ def cleanup_orphaned_data(self) -> Dict[str, Any]:
                 'orphaned_files_cleaned': 0
             }
             
-            # fetchallprojectID
+            # fetchtranslatedprojectID
             db_projects = {p.id for p in db.query(Project).all()}
             
-            # 1. ENtask
+            # 1. cleantranslatedtask
             orphaned_tasks = db.query(Task).filter(
                 ~Task.project_id.in_(db_projects)
             ).all()
@@ -377,9 +377,9 @@ def cleanup_orphaned_data(self) -> Dict[str, Any]:
             for task in orphaned_tasks:
                 db.delete(task)
                 cleanup_results['orphaned_tasks_cleaned'] += 1
-                logger.info(f"ENtask: {task.id}")
+                logger.info(f"cleantranslatedtask: {task.id}")
             
-            # 2. ENclip
+            # 2. cleantranslatedclip
             orphaned_clips = db.query(Clip).filter(
                 ~Clip.project_id.in_(db_projects)
             ).all()
@@ -387,9 +387,9 @@ def cleanup_orphaned_data(self) -> Dict[str, Any]:
             for clip in orphaned_clips:
                 db.delete(clip)
                 cleanup_results['orphaned_clips_cleaned'] += 1
-                logger.info(f"ENclip: {clip.id}")
+                logger.info(f"cleantranslatedclip: {clip.id}")
             
-            # 3. ENcollection
+            # 3. cleantranslatedcollection
             orphaned_collections = db.query(Collection).filter(
                 ~Collection.project_id.in_(db_projects)
             ).all()
@@ -397,9 +397,9 @@ def cleanup_orphaned_data(self) -> Dict[str, Any]:
             for collection in orphaned_collections:
                 db.delete(collection)
                 cleanup_results['orphaned_collections_cleaned'] += 1
-                logger.info(f"ENcollection: {collection.id}")
+                logger.info(f"cleantranslatedcollection: {collection.id}")
             
-            # 4. ENfile
+            # 4. cleantranslatedfile
             cleanup_results['orphaned_files_cleaned'] = _cleanup_orphaned_files()
             
             db.commit()
@@ -414,12 +414,12 @@ def cleanup_orphaned_data(self) -> Dict[str, Any]:
             cleanup_results['total_cleaned'] = total_cleaned
             cleanup_results['success'] = True
             
-            logger.info(f"EN，EN {total_cleaned} EN")
+            logger.info(f"translatedcleantranslated，translatedclean {total_cleaned} translated")
             return cleanup_results
             
         finally:
             db.close()
             
     except Exception as e:
-        logger.error(f"ENfailed，error: {e}")
+        logger.error(f"cleantranslatedfailed，error: {e}")
         raise

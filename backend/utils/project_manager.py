@@ -1,5 +1,5 @@
 """
-projectEN
+Project Managementtool
 """
 import json
 import logging
@@ -8,11 +8,11 @@ from typing import Dict, Any, List, Optional
 from pathlib import Path
 from datetime import datetime
 
-# EN
+# fixedimportissue
 try:
     from ..core.shared_config import config_manager
 except ImportError:
-    # ifENfailed，EN
+    # iftranslatedimportfailed，translatedimport
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -23,17 +23,17 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 class ProjectManager:
-    """projectEN"""
+    """projecttranslated"""
     
     def __init__(self):
         self.config = config_manager
     
     def create_project(self, project_name: Optional[str] = None) -> str:
         """
-        createENproject
+        createtranslatedproject
         
         Args:
-            project_name: projectEN（EN）
+            project_name: projecttranslated（canSelect）
             
         Returns:
             projectID
@@ -41,10 +41,10 @@ class ProjectManager:
         project_id = str(uuid.uuid4())
         project_name = project_name or f"project_{project_id[:8]}"
         
-        # ENprojectdirectoryEN
+        # ensureprojectdirectorytranslatedin
         self.config.ensure_project_directories(project_id)
         
-        # createprojectEN
+        # createprojecttranslated
         project_metadata = {
             "project_id": project_id,
             "project_name": project_name,
@@ -60,7 +60,7 @@ class ProjectManager:
             }
         }
         
-        # saveprojectEN
+        # translatedprojecttranslated
         self._save_project_metadata(project_id, project_metadata)
         
         logger.info(f"createproject: {project_id} ({project_name})")
@@ -74,40 +74,40 @@ class ProjectManager:
             project_id: projectID
             
         Returns:
-            projectpathEN
+            projectpathtranslated
         """
         return self.config.get_project_paths(project_id)
     
     def validate_project_exists(self, project_id: str) -> bool:
         """
-        validateprojectEN
+        verifyprojectIstranslatedin
         
         Args:
             project_id: projectID
             
         Returns:
-            projectEN
+            projectIstranslatedin
         """
         paths = self.get_project_paths(project_id)
         return paths["project_base"].exists()
     
     def get_project_metadata(self, project_id: str) -> Dict[str, Any]:
         """
-        fetchprojectEN
+        fetchprojecttranslated
         
         Args:
             project_id: projectID
             
         Returns:
-            projectEN
+            projecttranslated
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         metadata_file = self.get_project_paths(project_id)["metadata_dir"] / "project_metadata.json"
         
         if not metadata_file.exists():
-            # ifENfiledoes not exist，createEN
+            # iftranslatedfile not found，createdefaulttranslated
             default_metadata = {
                 "project_id": project_id,
                 "project_name": f"project_{project_id[:8]}",
@@ -129,15 +129,15 @@ class ProjectManager:
             with open(metadata_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            raise FileIOError(f"readprojectENfailed: {e}")
+            raise FileIOError(f"translatedprojecttranslatedfailed: {e}")
     
     def update_project_metadata(self, project_id: str, updates: Dict[str, Any]):
         """
-        updateprojectEN
+        updateprojecttranslated
         
         Args:
             project_id: projectID
-            updates: ENupdateEN
+            updates: translatedupdate'stranslated
         """
         metadata = self.get_project_metadata(project_id)
         metadata.update(updates)
@@ -146,42 +146,42 @@ class ProjectManager:
         self._save_project_metadata(project_id, metadata)
     
     def _save_project_metadata(self, project_id: str, metadata: Dict[str, Any]) -> None:
-        """saveprojectEN"""
+        """translatedprojecttranslated"""
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
         metadata_file = metadata_dir / "project_metadata.json"
         
         try:
-            # ENmetadatadirectoryEN
+            # ensuremetadatadirectorytranslatedin
             metadata_dir.mkdir(parents=True, exist_ok=True)
             
             with open(metadata_file, 'w', encoding='utf-8') as f:
                 json.dump(metadata, f, ensure_ascii=False, indent=2)
         except Exception as e:
-            raise FileIOError(f"saveprojectENfailed: {e}")
+            raise FileIOError(f"translatedprojecttranslatedfailed: {e}")
     
     def save_input_file(self, project_id: str, file_path: Path, file_type: str) -> str:
         """
-        saveENfileENprojectdirectory
+        translatedfiletranslatedprojectdirectory
         
         Args:
             project_id: projectID
-            file_path: ENfilepath
-            file_type: fileEN (video, srt, txt)
+            file_path: translatedfile path
+            file_type: filetranslated (video, srt, txt)
             
         Returns:
-            saveENfilepath
+            translated'sfile path
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         if not file_path.exists():
-            raise FileIOError(f"ENfiledoes not exist: {file_path}")
+            raise FileIOError(f"translatedfile not found: {file_path}")
         
         paths = self.get_project_paths(project_id)
         input_dir = paths["input_dir"]
         
-        # ENfileEN
+        # translatedfiletranslated
         if file_type == "video":
             target_name = "input.mp4"
         elif file_type == "srt":
@@ -189,54 +189,54 @@ class ProjectManager:
         elif file_type == "txt":
             target_name = "input.txt"
         else:
-            raise ValidationError(f"ENfileEN: {file_type}")
+            raise ValidationError(f"translatedsupport'sfiletranslated: {file_type}")
         
         target_path = input_dir / target_name
         
         try:
-            # ENfile
+            # translatedfile
             shutil.copy2(file_path, target_path)
             
-            # updateprojectEN
+            # updateprojecttranslated
             metadata = self.get_project_metadata(project_id)
             metadata["file_info"][f"{file_type}_file"] = str(target_path)
             self._save_project_metadata(project_id, metadata)
             
-            logger.info(f"fileENsaveENproject {project_id}: {target_path}")
+            logger.info(f"filetranslatedproject {project_id}: {target_path}")
             return str(target_path)
             
         except Exception as e:
-            raise FileIOError(f"savefilefailed: {e}")
+            raise FileIOError(f"translatedfilefailed: {e}")
     
     def get_input_files(self, project_id: str) -> Dict[str, Optional[Path]]:
         """
-        fetchprojectENfile
+        fetchprojecttranslatedfile
         
         Args:
             project_id: projectID
             
         Returns:
-            ENfilepathEN
+            translatedfile pathtranslated
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         paths = self.get_project_paths(project_id)
         project_base = paths["project_base"]
         input_dir = paths["input_dir"]
         
-        # checkENmayEN：inputENdirectoryENprojectENdirectory
+        # checktranslated cantranslated'stranslated：inputtranslateddirectoryAndprojecttranslateddirectory
         file_names = ["input.mp4", "input.srt", "input.txt"]
         file_keys = ["video_file", "srt_file", "txt_file"]
         
         files = {}
         for key, name in zip(file_keys, file_names):
-            # ENcheckinputENdirectory
+            # translatedcheckinputtranslateddirectory
             input_path = input_dir / name
             if input_path.exists():
                 files[key] = input_path
             else:
-                # checkprojectENdirectory
+                # checkprojecttranslateddirectory
                 root_path = project_base / name
                 if root_path.exists():
                     files[key] = root_path
@@ -247,13 +247,13 @@ class ProjectManager:
     
     def validate_input_files(self, project_id: str) -> Dict[str, bool]:
         """
-        validateprojectENfile
+        verifyprojecttranslatedfile
         
         Args:
             project_id: projectID
             
         Returns:
-            filevalidateresult
+            fileverifytranslated
         """
         files = self.get_input_files(project_id)
         
@@ -268,23 +268,23 @@ class ProjectManager:
     
     def save_processing_result(self, project_id: str, step: int, result: Dict[str, Any]):
         """
-        saveprocessingresult
+        translatedprocesstranslated
         
         Args:
             project_id: projectID
-            step: processingEN
-            result: processingresult
+            step: processstep
+            result: processtranslated
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
         
-        # ENmetadatadirectoryEN
+        # ensuremetadatadirectorytranslatedin
         metadata_dir.mkdir(parents=True, exist_ok=True)
         
-        # saveENresult
+        # translatedsteptranslated
         step_file = metadata_dir / f"step{step}_result.json"
         
         try:
@@ -297,24 +297,24 @@ class ProjectManager:
                 "status": "processing" if step < 6 else "completed"
             })
             
-            logger.info(f"EN {step} resultENsaveENproject {project_id}")
+            logger.info(f"step {step} translatedproject {project_id}")
             
         except Exception as e:
-            raise FileIOError(f"saveprocessingresultfailed: {e}")
+            raise FileIOError(f"translatedprocesstranslatedfailed: {e}")
     
     def get_processing_result(self, project_id: str, step: int) -> Optional[Dict[str, Any]]:
         """
-        fetchprocessingresult
+        fetchprocesstranslated
         
         Args:
             project_id: projectID
-            step: processingEN
+            step: processstep
             
         Returns:
-            processingresult，ifdoes not existthenreturnNone
+            processtranslated，iftranslatednot foundtranslatedreturnNone
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
@@ -327,27 +327,27 @@ class ProjectManager:
             with open(step_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            raise FileIOError(f"readprocessingresultfailed: {e}")
+            raise FileIOError(f"translatedprocesstranslatedfailed: {e}")
     
     def save_clip(self, project_id: str, clip_data: Dict[str, Any], clip_index: int):
         """
-        savevideoclipEN
+        translatedvideoclipinfo
         
         Args:
             project_id: projectID
-            clip_data: clipEN
-            clip_index: clipEN
+            clip_data: cliptranslated
+            clip_index: cliptranslated
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
         
-        # ENmetadatadirectoryEN
+        # ensuremetadatadirectorytranslatedin
         metadata_dir.mkdir(parents=True, exist_ok=True)
         
-        # readENclipEN
+        # translatedcliptranslated
         clips_file = metadata_dir / "clips_metadata.json"
         clips_data = []
         
@@ -358,44 +358,44 @@ class ProjectManager:
             except Exception:
                 clips_data = []
         
-        # ENclip
+        # addtranslatedclip
         clip_data["clip_index"] = clip_index
         clip_data["created_at"] = datetime.now().isoformat()
         
-        # EN
+        # ensuretranslatedadd
         existing_indices = [clip["clip_index"] for clip in clips_data]
         if clip_index in existing_indices:
-            # updateENclip
+            # updatetranslatedclip
             for i, clip in enumerate(clips_data):
                 if clip["clip_index"] == clip_index:
                     clips_data[i] = clip_data
                     break
         else:
-            # ENclip
+            # addtranslatedclip
             clips_data.append(clip_data)
         
-        # saveclipEN
+        # translatedcliptranslated
         try:
             with open(clips_file, 'w', encoding='utf-8') as f:
                 json.dump(clips_data, f, ensure_ascii=False, indent=2)
             
-            logger.info(f"clip {clip_index} ENsaveENproject {project_id}")
+            logger.info(f"clip {clip_index} translatedproject {project_id}")
             
         except Exception as e:
-            raise FileIOError(f"saveclipENfailed: {e}")
+            raise FileIOError(f"translatedcliptranslatedfailed: {e}")
     
     def get_clips(self, project_id: str) -> List[Dict[str, Any]]:
         """
-        fetchprojectallclip
+        fetchprojecttranslatedclip
         
         Args:
             project_id: projectID
             
         Returns:
-            clipEN
+            cliplist
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
@@ -408,26 +408,26 @@ class ProjectManager:
             with open(clips_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            raise FileIOError(f"readclipENfailed: {e}")
+            raise FileIOError(f"translatedcliptranslatedfailed: {e}")
     
     def save_collection(self, project_id: str, collection_data: Dict[str, Any]):
         """
-        savecollectionEN
+        translatedcollectioninfo
         
         Args:
             project_id: projectID
-            collection_data: collectionEN
+            collection_data: collectiontranslated
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
         
-        # ENmetadatadirectoryEN
+        # ensuremetadatadirectorytranslatedin
         metadata_dir.mkdir(parents=True, exist_ok=True)
         
-        # readENcollectionEN
+        # translatedcollectiontranslated
         collections_file = metadata_dir / "collections_metadata.json"
         collections_data = []
         
@@ -438,32 +438,32 @@ class ProjectManager:
             except Exception:
                 collections_data = []
         
-        # ENcollection
+        # addtranslatedcollection
         collection_data["created_at"] = datetime.now().isoformat()
         collections_data.append(collection_data)
         
-        # savecollectionEN
+        # translatedcollectiontranslated
         try:
             with open(collections_file, 'w', encoding='utf-8') as f:
                 json.dump(collections_data, f, ensure_ascii=False, indent=2)
             
-            logger.info(f"collectionENsaveENproject {project_id}")
+            logger.info(f"collectiontranslatedproject {project_id}")
             
         except Exception as e:
-            raise FileIOError(f"savecollectionENfailed: {e}")
+            raise FileIOError(f"translatedcollectiontranslatedfailed: {e}")
     
     def get_collections(self, project_id: str) -> List[Dict[str, Any]]:
         """
-        fetchprojectallcollection
+        fetchprojecttranslatedcollection
         
         Args:
             project_id: projectID
             
         Returns:
-            collectionEN
+            collectionlist
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         paths = self.get_project_paths(project_id)
         metadata_dir = paths["metadata_dir"]
@@ -476,14 +476,14 @@ class ProjectManager:
             with open(collections_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            raise FileIOError(f"readcollectionENfailed: {e}")
+            raise FileIOError(f"translatedcollectiontranslatedfailed: {e}")
     
     def list_projects(self) -> List[Dict[str, Any]]:
         """
-        ENallproject
+        translatedproject
         
         Returns:
-            projectEN
+            projectlist
         """
         projects = []
         uploads_dir = Path(self.config.settings.uploads_dir)
@@ -497,9 +497,9 @@ class ProjectManager:
                     metadata = self.get_project_metadata(project_dir.name)
                     projects.append(metadata)
                 except Exception as e:
-                    logger.warning(f"readproject {project_dir.name} ENfailed: {e}")
+                    logger.warning(f"translatedproject {project_dir.name} translatedfailed: {e}")
         
-        # ENcreatetimeEN
+        # bycreatetranslated
         projects.sort(key=lambda x: x.get("created_at", ""), reverse=True)
         return projects
     
@@ -511,10 +511,10 @@ class ProjectManager:
             project_id: projectID
             
         Returns:
-            ENdeletesucceeded
+            Istranslateddeletesucceeded
         """
         if not self.validate_project_exists(project_id):
-            logger.warning(f"projectdoes not exist: {project_id}")
+            logger.warning(f"project not found: {project_id}")
             return False
         
         paths = self.get_project_paths(project_id)
@@ -522,7 +522,7 @@ class ProjectManager:
         
         try:
             shutil.rmtree(project_base)
-            logger.info(f"projectdeleted: {project_id}")
+            logger.info(f"projecttranslateddelete: {project_id}")
             return True
         except Exception as e:
             logger.error(f"deleteprojectfailed: {e}")
@@ -530,16 +530,16 @@ class ProjectManager:
     
     def get_project_summary(self, project_id: str) -> Dict[str, Any]:
         """
-        fetchprojectEN
+        fetchprojecttranslatedinfo
         
         Args:
             project_id: projectID
             
         Returns:
-            projectEN
+            projecttranslated
         """
         if not self.validate_project_exists(project_id):
-            raise FileIOError(f"projectdoes not exist: {project_id}")
+            raise FileIOError(f"project not found: {project_id}")
         
         metadata = self.get_project_metadata(project_id)
         validation = self.validate_input_files(project_id)
@@ -558,5 +558,5 @@ class ProjectManager:
             }
         }
 
-# ENprojectEN
+# translatedProject Managementtranslated
 project_manager = ProjectManager()

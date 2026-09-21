@@ -1,177 +1,177 @@
-# EN
+# security
 
-## SupportEN
+## supportversion
 
-ENProvidesEN：
+versionsecurityupdate：
 
-| EN | SupportEN |
+| version | supportstatus |
 | ---- | -------- |
-| 1.0.x | ✅ Support |
-| 0.9.x | ❌ ENSupport |
+| 1.0.x | ✅ support |
+| 0.9.x | ❌ support |
 
-## EN
+## security
 
-EN，EN：
+security，：
 
-### EN
+### 
 
-**ENGitHub IssuesEN！**
+**GitHub Issuessecurity！**
 
-1. **EN** (EN)
-   - EN: security@autoclip.com
-   - EN: [SECURITY] EN
+1. **** (recommend)
+   - : security@autoclip.com
+   - : [SECURITY] security
 
-2. **GitHubEN**
-   - EN: https://github.com/your-username/autoclip/security/advisories/new
-   - EN"Report a vulnerability"
+2. **GitHubsecurity**
+   - access: https://github.com/your-username/autoclip/security/advisories/new
+   - click"Report a vulnerability"
 
-### EN
+### 
 
-EN：
+：
 
-1. **EN**
-   - EN
-   - EN
-   - EN
+1. ****
+   - security
+   - impact
+   - security
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. **step**
+   - step
+   - config
+   - 
 
-3. **EN**
-   - EN
-   - EN
-   - EN
+3. **impact**
+   - 
+   - impact
+   - 
 
-4. **EN**
-   - EN
-   - PythonEN
-   - EN
-   - EN
+4. ****
+   - version
+   - Pythonversion
+   - projectversion
+   - 
 
-### EN
+### 
 
-- **EN**: 24EN
-- **EN**: 72EN
-- **EN**: 7EN
-- **EN**: EN
+- **confirm**: 24
+- ****: 72
+- **fix**: 7
+- **fix**: 
 
-## EN
+## securitybest practices
 
-### EN
+### deploysecurity
 
-1. **EN**
+1. **env varsecurity**
    ```bash
-   # EN
+   # use
    API_DASHSCOPE_API_KEY=your_strong_api_key
    
-   # EN
-   # Do notEN
+   # key
+   # 
    ```
 
-2. **EN**
-   - ENHTTPSEN
-   - EN
-   - ENAPIEN
-   - ENCORSEN
+2. **security**
+   - useHTTPSdeploy
+   - config
+   - limitAPIaccess
+   - CORS
 
-3. **EN**
-   - EN
-   - EN
-   - EN
-   - EN
+3. **security**
+   - 
+   - 
+   - access
+   - monitoraccess
 
-### EN
+### security
 
-1. **EN**
+1. **dependencies**
    ```bash
-   # EN
+   # updatedependencies
    pip install --upgrade -r requirements.txt
    npm audit fix
    
-   # EN
+   # checksecurity
    pip install safety
    safety check
    ```
 
-2. **EN**
-   - EN
-   - SQLEN
-   - XSSEN
-   - CSRFEN
+2. **security**
+   - verify
+   - SQL
+   - XSS
+   - CSRF
 
-3. **APIEN**
-   - EN
-   - EN
-   - EN
-   - EN
+3. **APIsecurity**
+   - 
+   - limit
+   - verify
+   - security
 
-## EN
+## securityissue
 
-### EN
+### fix
 
-- **CVE-2024-XXXX**: EN
-- **CVE-2024-YYYY**: EN
+- **CVE-2024-XXXX**: fixsecurityissue
+- **CVE-2024-YYYY**: fixissue
 
-### EN
+### fix
 
-- EN
+- fixsecurityissue
 
-## EN
+## securityupdate
 
-### EN
+### auto-update
 
-EN：
+：
 
-1. **EN**
+1. **updatedependencies**
    ```bash
-   # EN
+   # backenddependencies
    pip install --upgrade -r requirements.txt
    
-   # EN
+   # frontenddependencies
    cd frontend && npm update
    ```
 
-2. **EN**
-   - ENGitHubEN
-   - EN
-   - EN
+2. **monitorsecurity**
+   - GitHubsecurity
+   - projectupdate
+   - checkdependencies
 
-### EN
+### manual update
 
-EN：
+securityupdate：
 
-1. EN
-2. EN
-3. EN
-4. EN
+1. viewnotes
+2. 
+3. 
+4. verify
 
-## Security
+## securityconfig
 
-### EN
+### productionconfig
 
 ```bash
-# .env EN
+# .env productionconfig
 ENVIRONMENT=production
 DEBUG=false
 LOG_LEVEL=WARNING
 
-# EN
+# use
 API_DASHSCOPE_API_KEY=your_production_api_key
 ENCRYPTION_KEY=your_strong_encryption_key
 
-# EN
+# databasesecurity
 DATABASE_URL=postgresql://user:password@localhost/autoclip
 
-# RedisEN
+# Redissecurity
 REDIS_URL=redis://:password@localhost:6379/0
 ```
 
-### EN
+### security
 
 ```nginx
-# NginxEN
+# Nginxconfig
 server {
     listen 443 ssl;
     server_name your-domain.com;
@@ -179,7 +179,7 @@ server {
     ssl_certificate /path/to/cert.pem;
     ssl_certificate_key /path/to/key.pem;
     
-    # EN
+    # security
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
     add_header X-XSS-Protection "1; mode=block";
@@ -192,48 +192,48 @@ server {
 }
 ```
 
-## EN
+## security
 
-### EN
+### 
 
-EN：
+security：
 
-1. **EN**
-   - EN
-   - EN
-   - EN
+1. **dependencies**
+   - check
+   - updatedependencies
+   - usedependencies
 
-2. **EN**
-   - EN
-   - ENCode Review
-   - EN
+2. ****
+   - 
+   - security
+   - test
 
-3. **EN**
-   - ENSecurity
-   - EN
-   - EN
+3. **config**
+   - checksecurityconfig
+   - verifyaccess
+   - test
 
-### EN
+### 
 
-- EN
-- EN
-- EN
+- security
+- securityproject
+- followsecuritybest practices
 
-## ContactEN
+## 
 
-- **EN**: security@autoclip.com
-- **EN**: [GitHub Profile](https://github.com/your-username)
-- **ENContact**: ENGitHub IssuesEN"security"
+- **security**: security@autoclip.com
+- **project**: [GitHub Profile](https://github.com/your-username)
+- ****: GitHub Issues"security"
 
-## EN
+## 
 
-ENAutoClipEN。EN，EN。EN：
+securitysecurityuseAutoClipproject。projectsecurity，security。need：
 
-1. EN
-2. EN
-3. EN
-4. EN
+1. security
+2. security
+3. update
+4. 
 
 ---
 
-**EN**: 2024-01-15
+**last updated**: 2024-01-15

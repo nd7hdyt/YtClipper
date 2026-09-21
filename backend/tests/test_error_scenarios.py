@@ -1,6 +1,6 @@
 """
-EN
-EN
+errortranslatedtest
+translatedfailedtranslatedAndtranslated
 """
 
 import pytest
@@ -9,7 +9,7 @@ from unittest.mock import Mock, patch
 import sys
 import os
 
-# ENPythonEN
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
@@ -23,294 +23,294 @@ from backend.services.pipeline_adapter import PipelineAdapter
 
 
 class TestConfigurationErrorScenarios:
-    """EN"""
+    """configerrortranslatedtest"""
     
     def test_missing_api_key(self, tmp_path, monkeypatch):
-        """ENAPIEN"""
-        # CI EN DASHSCOPE_API_KEY EN，EN
+        """testtranslatedAPIkey"""
+        # CI translated DASHSCOPE_API_KEY translatedusetranslateduse，thistranslatedpath
         monkeypatch.delenv("DASHSCOPE_API_KEY", raising=False)
 
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
 
-        # ENAPIEN
+        # createtranslatedAPIkey'sconfig
         config_manager = ProjectConfigManager(str(project_dir))
 
         with pytest.raises(ValueError, match="DASHSCOPE_API_KEY"):
             config_manager.get_llm_config()
     
     def test_invalid_processing_params(self, tmp_path):
-        """EN"""
+        """testtranslated'sprocesstranslated"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         
         config_manager = ProjectConfigManager(str(project_dir))
         
-        # EN
+        # settingstranslated
         config_manager.update_processing_params(chunk_size=-1)
         
-        # EN
+        # verifyconfigtranslatedfailed
         validation_result = config_manager.validate_config()
         assert validation_result["valid"] is False
         assert any("chunk_size" in error for error in validation_result["errors"])
     
     def test_missing_prompt_files(self, tmp_path):
-        """ENpromptEN"""
+        """testtranslatedpromptfile"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         
         config_manager = ProjectConfigManager(str(project_dir))
         
-        # ENpromptEN
+        # translatedpromptfile'stranslated
         with patch('pathlib.Path.exists', return_value=False):
             prompt_files = config_manager.get_prompt_files()
             
-            # EN
+            # translatedreturntranslatedorPackageincludetranslatedfile'sinfo
             assert isinstance(prompt_files, dict)
 
 
 class TestFileOperationErrorScenarios:
-    """EN"""
+    """filetranslatederrortranslatedtest"""
     
     def test_nonexistent_srt_file(self, tmp_path):
-        """ENSRTEN"""
+        """testnot found'sSRTfile"""
         context = ProcessingContext("test_project", "test_task")
         
         with pytest.raises(FileNotFoundError):
             context.set_srt_path(Path("nonexistent.srt"))
     
     def test_invalid_srt_format(self, tmp_path):
-        """ENSRTEN"""
-        # ENSRTEN
+        """testtranslated'sSRTformat"""
+        # createformaterror'sSRTfile
         invalid_srt = tmp_path / "invalid.srt"
-        invalid_srt.write_text("ENSRTEN\nEN\nEN")
+        invalid_srt.write_text("thistranslatedIstranslated'sSRTformat\ntranslated\ntranslated")
         
-        # ENSRTEN
-        # EN，EN
+        # thistranslatedtestSRTformatverifytranslated
+        # translatedformatverify，translatedtestfiletranslatedintranslated
         assert invalid_srt.exists()
     
     def test_permission_denied(self, tmp_path):
-        """EN"""
-        # EN
+        """testtranslated"""
+        # createtranslatedfile
         read_only_file = tmp_path / "readonly.srt"
-        read_only_file.write_text("EN")
-        read_only_file.chmod(0o444)  # EN
+        read_only_file.write_text("testtranslated")
+        read_only_file.chmod(0o444)  # translated
         
         try:
-            # EN
+            # translatedfile
             with pytest.raises(PermissionError):
-                read_only_file.write_text("EN")
+                read_only_file.write_text("translated")
         finally:
-            # EN
+            # translated
             read_only_file.chmod(0o666)
     
     def test_corrupted_config_file(self, tmp_path):
-        """EN"""
+        """testtranslated'sconfigfile"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         
-        # ENYAMLEN
+        # createtranslated'sYAMLfile
         config_file = project_dir / "config.yaml"
         config_file.write_text("invalid: yaml: content: [")
         
         config_manager = ProjectConfigManager(str(project_dir))
         
-        # EN
+        # translatedprocesstranslated'sconfigfile
         config = config_manager.config
         assert isinstance(config, dict)
 
 
 class TestProcessingErrorScenarios:
-    """EN"""
+    """processerrortranslatedtest"""
     
     def test_step_execution_failure(self, tmp_path):
-        """EN"""
+        """teststeptranslatedfailed"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         
         adapter = PipelineAdapter(str(project_dir))
         
-        # EN（EN）
+        # teststeptranslatedfailed（file not found）
         with pytest.raises(FileNotFoundError):
             adapter.adapt_step("step1_outline", srt_path=Path("nonexistent.srt"))
     
     def test_timeout_error(self, tmp_path):
-        """EN"""
+        """testtranslatederror"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         
         adapter = PipelineAdapter(str(project_dir))
         
-        # EN（EN）
+        # testtranslatederror（file not found）
         with pytest.raises(FileNotFoundError):
             adapter.adapt_step("step1_outline", srt_path=Path("nonexistent.srt"))
     
     def test_missing_dependencies(self, tmp_path):
-        """EN"""
+        """testtranslateddependencies"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         
         adapter = PipelineAdapter(str(project_dir))
         
-        # EN（EN）
+        # testtranslateddependencies'stranslated（file not found）
         with pytest.raises(FileNotFoundError):
             adapter.adapt_step("step1_outline", srt_path=Path("nonexistent.srt"))
 
 
 class TestConcurrencyErrorScenarios:
-    """EN"""
+    """translatederrortranslatedtest"""
     
     def test_resource_already_locked(self, tmp_path):
-        """EN"""
+        """testtranslated"""
         from backend.services.concurrency_manager import concurrency_manager
         
         resource_id = "test_resource"
         task_id_1 = "task_001"
         task_id_2 = "task_002"
         
-        # EN
+        # No.one taskfetchtranslated
         acquired_1 = concurrency_manager.acquire_lock(resource_id, task_id_1)
         assert acquired_1 is True
         
-        # EN
+        # No.translated tasktranslatedfetchtranslatedone translated
         acquired_2 = concurrency_manager.acquire_lock(resource_id, task_id_2)
         assert acquired_2 is False
         
-        # EN
+        # clean
         concurrency_manager.release_lock(resource_id, task_id_1)
     
     def test_lock_timeout(self, tmp_path):
-        """EN"""
+        """testtranslated"""
         from backend.services.concurrency_manager import concurrency_manager
         
         resource_id = "test_resource"
         task_id = "task_001"
         
-        # EN
+        # fetchtranslated
         acquired = concurrency_manager.acquire_lock(resource_id, task_id, timeout_seconds=1)
         assert acquired is True
         
-        # EN
+        # checktranslatedstatus
         is_locked = concurrency_manager.is_locked(resource_id)
         assert is_locked is True
         
-        # EN
+        # clean
         concurrency_manager.release_lock(resource_id, task_id)
     
     def test_invalid_lock_release(self, tmp_path):
-        """EN"""
+        """testtranslated'stranslated"""
         from backend.services.concurrency_manager import concurrency_manager
         
         resource_id = "test_resource"
         task_id = "task_001"
         
-        # EN
+        # translatednot found'stranslated
         released = concurrency_manager.release_lock(resource_id, task_id)
         assert released is False
 
 
 class TestContextErrorScenarios:
-    """EN"""
+    """translatederrortranslatedtest"""
     
     def test_invalid_project_id(self):
-        """ENID"""
-        with pytest.raises(ValueError, match="project_idEN"):
+        """testtranslated'sprojectID"""
+        with pytest.raises(ValueError, match="project_idtranslated"):
             ProcessingContext("", "test_task")
     
     def test_invalid_task_id(self):
-        """ENID"""
-        with pytest.raises(ValueError, match="task_idEN"):
+        """testtranslated'staskID"""
+        with pytest.raises(ValueError, match="task_idtranslated"):
             ProcessingContext("test_project", "")
     
     def test_context_validation_failure(self):
-        """EN"""
+        """testtranslatedverifyfailed"""
         context = ProcessingContext("test_project", "test_task")
         
-        # EN
+        # translated'stranslated
         assert context.is_valid_for_execution() is False
         
-        # EN
-        context.set_error("EN")
+        # settingserrortranslated
+        context.set_error("testerror")
         assert context.is_valid_for_execution() is False
         
-        # EN
+        # translated
         context.mark_completed()
         assert context.is_valid_for_execution() is False
 
 
 class TestIntegrationErrorScenarios:
-    """EN"""
+    """translatederrortranslatedtest"""
     
     def test_full_pipeline_failure(self, tmp_path):
-        """EN"""
+        """testtranslatedfailed"""
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         
-        # EN
+        # createconfigtranslated
         config_manager = ProjectConfigManager(str(project_dir))
         
-        # EN
+        # createtranslated
         adapter = PipelineAdapter(str(project_dir))
         
-        # EN（EN，ENSRTEN）
+        # verifytranslated（translatedfailed，translatedSRTfile）
         errors = adapter.validate_pipeline_prerequisites()
         assert len(errors) > 0
-        assert any("SRTEN" in error for error in errors)
+        assert any("SRTfile" in error for error in errors)
     
     def test_partial_success_scenario(self, tmp_path):
-        """EN"""
-        # EN
+        """testtranslatedsucceededtranslated"""
+        # settingstesttranslated
         import os
         os.environ['DASHSCOPE_API_KEY'] = 'test_api_key'
         
         project_dir = tmp_path / "test_project"
         project_dir.mkdir()
         
-        # ENSRTEN
+        # createSRTfileintranslated'stranslated
         raw_dir = project_dir / "raw"
         raw_dir.mkdir(parents=True, exist_ok=True)
         srt_file = raw_dir / "transcript.srt"
-        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\nEN")
+        srt_file.write_text("1\n00:00:01,000 --> 00:00:05,000\ntestsubtitles")
         
         adapter = PipelineAdapter(str(project_dir))
         
-        # EN（EN）
+        # verifytranslated（translatedsucceeded）
         errors = adapter.validate_pipeline_prerequisites()
         assert len(errors) == 0
     
     def test_error_recovery(self, tmp_path):
-        """EN"""
+        """testerrortranslated"""
         context = ProcessingContext("test_project", "test_task")
         
-        # EN
-        context.set_error("EN")
-        assert context.error_message == "EN"
+        # settingserror
+        context.set_error("translatederror")
+        assert context.error_message == "translatederror"
         assert context.is_valid_for_execution() is False
         
-        # EN（EN：EN）
-        # EN
+        # translatederror（translated：translatederror'stranslated）
+        # thistranslatedtesterrorstatus'stranslated
         assert context.error_message is not None
 
 
 def test_error_propagation():
-    """EN"""
-    # EN
-    original_error = ValueError("EN")
+    """testerrortranslated"""
+    # testerrortranslated
+    original_error = ValueError("translatederror")
     
     service_error = ServiceError(
-        "EN",
+        "serviceerror",
         details={"operation": "test"},
         cause=original_error
     )
     
     assert service_error.cause == original_error
-    assert service_error.cause.args[0] == "EN"
+    assert service_error.cause.args[0] == "translatederror"
 
 
 def test_error_serialization():
-    """EN"""
+    """testerrortranslated"""
     error = ServiceError(
-        "EN",
+        "testerror",
         details={"key": "value", "number": 123}
     )
     

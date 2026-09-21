@@ -1,93 +1,93 @@
-# ENSRTENUploadEN
+# optionalSRTfile upload
 
-## EN
+## overview
 
-AutoClipENSupportENUploadEN：
-1. **EN + EN**：ENUploadENSRTEN
-2. **EN**：ENUploadEN，EN
+AutoClipnowsupport：
+1. ** + subtitlesfile**：SRTsubtitlesfile
+2. **file**：file，usespeech recognitiongeneratesubtitles
 
-## EN
+## features
 
-### ✅ ENUploadEN
-- **EN**：ENProvidesEN，EN
-- **AIEN**：ENUploadEN，EN
-- **EN**：EN，EN
+### ✅ 
+- ****：subtitlesfile，prefersubtitles
+- **AI**：，callspeech recognitiongeneratesubtitles
+- **error handling**：speech recognition failed，error
 
-### ✅ ENLanguageSupport
-- Support15ENLanguageEN
-- ENLanguage：
-  - EN/EN：ENChineseEN
-  - EN：ENLanguage
-  - EN：ENLanguage
+### ✅ multi-language support
+- support15speech recognition
+- select：
+  - business/：preferChinese
+  - ：auto-detect
+  - ：auto-detect
 
-### ✅ EN
-- ENWhisper（EN）
+### ✅ speech recognition
+- localWhisper（recommend）
 - OpenAI API
 - Azure Speech Services
 - Google Speech-to-Text
-- EN
+- Alibaba speech recognition
 
-## EN
+## usage
 
-### ENInterfaceEN
+### frontend
 
-1. **UploadEN**
-   - EN：EN(.srt)
-   - EN：EN(.srt)ENAIEN
+1. **update**
+   - ：importsubtitlesfile(.srt)
+   - ：optionalimportsubtitlesfile(.srt)useAIgenerate
 
-2. **EN**
-   - UploadEN+EN：EN
-   - ENUploadEN：EN"ENAIEN"
+2. ****
+   - +subtitles：file
+   - ："useAIspeech recognitiongeneratesubtitlesfile"
 
-3. **UploadEN**
-   - EN：EN+EN+EN
-   - EN：EN+EN
+3. **button**
+   - ：need+subtitles+project
+   - now：need+project
 
-### APIEN
+### APIAPI
 
-#### UploadEN `POST /api/v1/projects/upload`
+#### API `POST /api/v1/projects/upload`
 
-**EN：**
+**：**
 ```python
-# EN：srt_fileEN
+# ：srt_file
 srt_file: UploadFile = File(...)
 
-# EN：srt_fileEN
+# now：srt_fileoptional
 srt_file: Optional[UploadFile] = File(None)
 ```
 
-**EN：**
+**：**
 
-1. **ENUploadEN**
+1. **subtitles**
 ```python
 files = {
     'video_file': ('video.mp4', video_content, 'video/mp4'),
     'srt_file': ('subtitle.srt', srt_content, 'application/x-subrip')
 }
 data = {
-    'project_name': 'EN',
+    'project_name': 'project',
     'video_category': 'knowledge'
 }
 ```
 
-2. **ENUploadEN**
+2. ****
 ```python
 files = {
     'video_file': ('video.mp4', video_content, 'video/mp4')
 }
 data = {
-    'project_name': 'EN',
+    'project_name': 'project',
     'video_category': 'knowledge'
 }
 ```
 
-**EN：**
+**：**
 
-EN，EN：
+succeeded，project：
 ```json
 {
     "id": "project-id",
-    "name": "EN",
+    "name": "project",
     "description": "Video: video.mp4 (Will generate subtitle using speech recognition)",
     "settings": {
         "auto_generate_subtitle": true,
@@ -96,94 +96,94 @@ EN，EN：
 }
 ```
 
-**EN：**
+**error handling：**
 
-EN400EN：
+speech recognition failedreturn400error：
 ```json
 {
-    "detail": "EN: EN，ENwhisperENAPIEN。ENUploadEN。"
+    "detail": "speech recognition failed: availablespeech recognitionservice，installwhisperconfigAPIkey。subtitlesfilecheckspeech recognitionserviceconfig。"
 }
 ```
 
-## EN
+## technical details
 
-### EN
+### backend
 
-1. **EN**
+1. **verify**
    ```python
-   # EN（EN）
+   # fileverify（）
    if not video_file.filename.lower().endswith(('.mp4', '.avi', '.mov', '.mkv', '.webm')):
        raise HTTPException(status_code=400, detail="Invalid video file format")
    
-   # EN（EN）
+   # subtitlesfileverify（optional）
    if srt_file and not srt_file.filename.lower().endswith('.srt'):
        raise HTTPException(status_code=400, detail="Invalid subtitle file format")
    ```
 
-2. **EN**
+2. **subtitles**
    ```python
    if srt_file:
-       # ENProvidesEN
+       # subtitlesfile
        srt_path = save_user_subtitle(srt_file)
    else:
-       # EN
+       # usespeech recognitiongeneratesubtitles
        srt_path = generate_subtitle_with_speech_recognition(video_path, language, model)
    ```
 
-3. **LanguageEN**
+3. **select**
    ```python
-   # ENLanguage
-   language = "auto"  # EN
+   # 
+   language = "auto"  # defaultauto-detect
    if video_category in ["business", "knowledge"]:
-       language = "zh"  # ChineseEN
+       language = "zh"  # Chinese
    elif video_category == "entertainment":
-       language = "auto"  # ENLanguage
+       language = "auto"  # 
    ```
 
-### EN
+### frontend
 
-1. **UploadEN**
+1. ****
    ```typescript
-   // EN
+   // subtitlesfileverify
    if (!files.video) {
-       message.error('EN')
+       message.error('selectfile')
        return
    }
-   // if (!files.srt) {  // EN
-   //     message.error('EN(.srt)')
+   // if (!files.srt) {  // check
+   //     message.error('importsubtitlesfile(.srt)')
    //     return
    // }
    ```
 
-2. **UIEN**
+2. **UIupdate**
    ```typescript
-   // EN
+   // 
    {files.video && !files.srt && (
-       <div>ENAIEN</div>
+       <div>useAIspeech recognitiongeneratesubtitlesfile</div>
    )}
    ```
 
-3. **APIEN**
+3. **APIcall**
    ```typescript
    const formData = new FormData()
    formData.append('video_file', data.video_file)
-   if (data.srt_file) {  // EN
+   if (data.srt_file) {  // subtitlesfile
        formData.append('srt_file', data.srt_file)
    }
    ```
 
-## EN
+## config
 
-### EN
+### speech recognitionserviceconfig
 
-EN，EN：
+usespeech recognition，needconfigspeech recognitionservice：
 
-#### 1. ENWhisper（EN）
+#### 1. localWhisper（recommend）
 ```bash
-# ENWhisper
+# installWhisper
 pip install openai-whisper
 
-# ENFFmpeg
+# installFFmpeg
 # macOS
 brew install ffmpeg
 # Ubuntu/Debian
@@ -206,22 +206,22 @@ export AZURE_SPEECH_REGION="your-region"
 export GOOGLE_APPLICATION_CREDENTIALS="path/to/credentials.json"
 ```
 
-#### 5. EN
+#### 5. Alibaba speech recognition
 ```bash
 export ALIYUN_ACCESS_KEY_ID="your-access-key"
 export ALIYUN_ACCESS_KEY_SECRET="your-secret-key"
 export ALIYUN_SPEECH_APP_KEY="your-app-key"
 ```
 
-### EN
+### checkconfigstatus
 
-ENAPIEN：
+canAPIcheckspeech recognitionservicestatus：
 
 ```bash
-# EN
+# checkavailablespeech recognitionmethod
 GET /api/v1/speech-recognition/status
 
-# EN
+# 
 {
     "available_methods": {
         "whisper_local": true,
@@ -241,74 +241,74 @@ GET /api/v1/speech-recognition/status
 }
 ```
 
-## EN
+## best practices
 
-### 1. EN
-- **EN**：EN
-- **EN**：EN
-- **EN**：ProvidesENUploadEN
+### 1. 
+- ****：subtitlesfileoptional
+- ****：speech recognitionneed
+- **error**：subtitles
 
-### 2. EN
-- **EN**：EN`base`EN
-- **LanguageEN**：ENLanguage
-- **EN**：EN（EN5EN）
+### 2. 
+- **model selection**：defaultuse`base`model
+- ****：select
+- **settings**：settingsspeech recognition（default5minutes）
 
-### 3. EN
-- **EN**：EN
-- **EN**：EN
-- **EN**：ProvidesEN
+### 3. error handling
+- **servicecheck**：startcheckspeech recognitionserviceavailable
+- ****：speech recognitionservice
+- ****：errorsolve
 
-## Troubleshooting
+## troubleshooting
 
 ### FAQ
 
-1. **"EN"**
-   - ENWhisper：`which whisper`
-   - ENAPIEN
-   - EN：`GET /api/v1/speech-recognition/status`
+1. **"availablespeech recognitionservice"**
+   - checkinstallWhisper：`which whisper`
+   - checkconfigAPIkey
+   - viewservicestatus：`GET /api/v1/speech-recognition/status`
 
-2. **"EN"**
-   - EN（EN<100MB）
-   - EN
-   - EN（tiny/base）
+2. **"speech recognition"**
+   - checkfile（<100MB）
+   - settings
+   - usemodel（tiny/base）
 
-3. **"EN"**
-   - ENWhisperEN
-   - EN
-   - ENWhisperEN
+3. **"subtitlesfile"**
+   - checkWhisperinstall
+   - viewbackenderror
+   - Whispertest
 
-### EN
+### step
 
-1. **EN**
+1. **checkservicestatus**
    ```bash
    curl http://localhost:8000/api/v1/speech-recognition/status
    ```
 
-2. **EN**
+2. **viewbackend**
    ```bash
    tail -f backend/backend.log
    ```
 
-3. **ENWhisperEN**
+3. **testWhisperinstall**
    ```bash
    whisper --help
    ffmpeg -version
    ```
 
-## EN
+## changelog
 
 ### v1.0.0
-- ✅ SupportENSRTENUpload
-- ✅ EN
-- ✅ ENLanguageEN
-- ✅ EN
-- ✅ ENInterfaceEN
+- ✅ supportoptionalSRTfile upload
+- ✅ integrationspeech recognitionservice
+- ✅ select
+- ✅ error handling
+- ✅ 
 
 ---
 
-## EN
+## related docs
 
-- [EN](./SPEECH_RECOGNITION_REDESIGN.md)
-- [EN](./SPEECH_RECOGNITION_SETUP.md)
-- [EN](./BACKEND_ARCHITECTURE.md)
+- [speech recognitiondocs](./SPEECH_RECOGNITION_REDESIGN.md)
+- [speech recognitionsettings](./SPEECH_RECOGNITION_SETUP.md)
+- [backenddocs](./BACKEND_ARCHITECTURE.md)
 

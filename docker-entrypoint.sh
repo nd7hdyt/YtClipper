@@ -1,20 +1,20 @@
 #!/bin/bash
 
-# DockerENStartScript
-# ENDockerEnvironmentEN，ENConfigEN
+# Dockertranslatedstarttranslated
+# translatedDockertranslated，translatedAndconfigissue
 
 set -euo pipefail
 
-# ENEnvironmentEN
+# settingstranslated
 export PYTHONPATH=/app
 export PYTHONUNBUFFERED=1
 
-# EN
+# ensuretranslateddirectorytranslatedintranslated
 mkdir -p /app/data/projects /app/data/uploads /app/data/temp /app/data/output /app/logs
 
-# IfEN，EN
+# iftranslateddirectorytranslated，createtranslated'sfile
 if [[ ! -f /app/data/autoclip.db ]]; then
-    echo "EN..."
+    echo "translateddatabase..."
     python -c "
 import sys
 sys.path.insert(0, '/app')
@@ -22,15 +22,15 @@ from backend.core.database import engine, Base
 from backend.models import project, task, clip, collection, bilibili
 try:
     Base.metadata.create_all(bind=engine)
-    print('ENSuccess')
+    print('databasetranslatedsucceeded')
 except Exception as e:
-    print(f'ENFailed: {e}')
+    print(f'databasetranslatedfailed: {e}')
     sys.exit(1)
 "
 fi
 
-# CheckRedisEN
-echo "CheckRedisEN..."
+# checkRedisconnect
+echo "checkRedisconnect..."
 python -c "
 import os
 import redis
@@ -38,12 +38,12 @@ try:
     redis_url = os.getenv('REDIS_URL', 'redis://redis:6379/0')
     r = redis.Redis.from_url(redis_url, decode_responses=True)
     r.ping()
-    print(f'RedisENSuccess: {redis_url}')
+    print(f'Redisconnectsucceeded: {redis_url}')
 except Exception as e:
-    print(f'RedisENFailed: {e}')
-    print('ENSQLiteEN')
+    print(f'Redisconnectfailed: {e}')
+    print('translateduseSQLitetranslatedSelecttranslated')
 "
 
-# StartEN
-echo "StartAutoClipEN..."
+# starttranslateduse
+echo "startAutoCliptranslateduse..."
 exec "$@"

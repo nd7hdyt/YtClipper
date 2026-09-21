@@ -19,14 +19,14 @@ export const useFirstRun = () => {
 
   const checkFirstRun = async () => {
     try {
-      console.log('🔍 ENcheckENStatus...')
+      console.log('🔍 translatedchecktranslatedstatus...')
       
-      // ENfetchrequest
+      // createtranslated'sfetchtranslated
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 5000) // 5EN
+      const timeoutId = setTimeout(() => controller.abort(), 5000) // 5secondstranslated
       
       try {
-        // checkENconfig
+        // checkIstranslatedconfig
         const response = await fetch('/api/v1/settings/', {
           signal: controller.signal
         })
@@ -34,27 +34,27 @@ export const useFirstRun = () => {
         
         if (response.ok) {
           const settings = await response.json()
-          console.log('📋 fetchtosettings:', settings)
+          console.log('📋 fetchtranslatedsettings:', settings)
           
-          // checkENAPI Keyconfig
+          // checkIstranslatedAPI Keyconfig
           const hasApiKey = settings.api?.api_keys?.dashscope || 
                            settings.api?.api_keys?.openai ||
                            settings.api?.api_keys?.gemini ||
                            settings.api?.api_keys?.siliconflow ||
-                           // EN / EN OpenAI ENserviceEN key，EN
+                           // local / translated OpenAI translatedservicecantranslated key，translated
                            (settings.api?.api_provider === 'openai' && settings.api?.api_base_url)
           
-          console.log('🔑 API KeyStatus:', hasApiKey)
+          console.log('🔑 API Keystatus:', hasApiKey)
           
-          // ENcheckAPI Keyconfig，ENproject
+          // translatedcheckAPI Keyconfig，No needtranslatedproject
           setState({
             isFirstRun: !hasApiKey,
             isLoading: false,
             hasCompleted: hasApiKey
           })
         } else {
-          console.log('❌ settingsAPIENFailed:', response.status)
-          // ENfetchsettings，EN
+          console.log('❌ settingsAPItranslatedfailed:', response.status)
+          // iftranslatedfetchsettings，translatedIstranslated
           setState({
             isFirstRun: true,
             isLoading: false,
@@ -64,9 +64,9 @@ export const useFirstRun = () => {
       } catch (fetchError) {
         clearTimeout(timeoutId)
         if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-          console.log('⏰ APIRequest timed out，EN')
+          console.log('⏰ APItranslated，translated')
         } else {
-          console.log('❌ APIrequestFailed:', fetchError)
+          console.log('❌ APItranslatedfailed:', fetchError)
         }
         setState({
           isFirstRun: true,
@@ -75,7 +75,7 @@ export const useFirstRun = () => {
         })
       }
     } catch (error) {
-      console.error('❌ checkENStatusFailed:', error)
+      console.error('❌ checktranslatedstatusfailed:', error)
       setState({
         isFirstRun: true,
         isLoading: false,

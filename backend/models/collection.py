@@ -1,6 +1,6 @@
 """
-collectionEN
-ENvideocollectionEN
+collectionmodel
+translatedvideocollection'stranslatedinfoAndtranslated
 """
 
 import enum
@@ -10,40 +10,40 @@ from sqlalchemy.orm import relationship
 from .base import BaseModel
 
 class CollectionStatus(str, enum.Enum):
-    """collectionstatusEN"""
-    CREATED = "created"           # created
+    """collectionstatustranslated"""
+    CREATED = "created"           # translatedcreate
     PROCESSING = "processing"     # processing
     COMPLETED = "completed"       # completed
     ERROR = "error"              # error
-    DELETED = "deleted"          # deleted
+    DELETED = "deleted"          # translateddelete
 
-# clipENcollectionEN
+# clipAndcollection'smultitranslatedmultitranslated
 clip_collection = Table(
     'clip_collection',
     BaseModel.metadata,
     Column('clip_id', String(36), ForeignKey('clips.id', ondelete='CASCADE'), primary_key=True),
     Column('collection_id', String(36), ForeignKey('collections.id', ondelete='CASCADE'), primary_key=True),
-    Column('order_index', Integer, nullable=False, default=0, comment="ENcollectionEN")
+    Column('order_index', Integer, nullable=False, default=0, comment="incollectiontranslated'stranslated")
 )
 
 class Collection(BaseModel):
-    """collectionEN"""
+    """collectionmodel"""
     
     __tablename__ = "collections"
     
-    # EN
+    # translatedinfo
     name = Column(
         String(255), 
         nullable=False, 
-        comment="collectionEN"
+        comment="collectiontranslated"
     )
     description = Column(
         Text, 
         nullable=True, 
-        comment="collectiondescription"
+        comment="collectiontranslated"
     )
     
-    # statusEN
+    # statusinfo
     status = Column(
         Enum(CollectionStatus), 
         default=CollectionStatus.CREATED,
@@ -51,92 +51,92 @@ class Collection(BaseModel):
         comment="collectionstatus"
     )
     
-    # EN
+    # translatedinfo
     theme = Column(
         String(255), 
         nullable=True, 
-        comment="collectionEN"
+        comment="collectiontranslated"
     )
     tags = Column(
         JSON, 
         nullable=True, 
-        comment="collectiontags"
+        comment="collectiontranslated"
     )
     
-    # EN
+    # translatedinfo
     total_duration = Column(
         Integer, 
         nullable=True, 
-        comment="collectionENduration（EN）"
+        comment="collectiontranslated（seconds）"
     )
     clips_count = Column(
         Integer, 
         default=0, 
-        comment="clipEN"
+        comment="cliptranslated"
     )
     
-    # fileEN
+    # fileinfo
     video_path = Column(
         String(500), 
         nullable=True, 
-        comment="collectionvideofilepath"
+        comment="collectionvideofile path"
     )
     thumbnail_path = Column(
         String(500), 
         nullable=True, 
-        comment="collectionENpath"
+        comment="collectiontranslatedpath"
     )
     
-    # processingEN
+    # processinfo
     processing_result = Column(
         JSON, 
         nullable=True, 
-        comment="processingresultEN"
+        comment="processtranslated"
     )
     
-    # EN
+    # exportinfo
     export_path = Column(
         String(500), 
         nullable=True, 
-        comment="collectionENfilepath"
+        comment="collectionexportfile path"
     )
     
-    # EN
+    # translated
     collection_metadata = Column(
         JSON, 
         nullable=True, 
-        comment="collectionEN（EN，ENfilesystem）"
+        comment="collectiontranslated（translated，translatedinfileSystem）"
     )
     
-    # EN
+    # addtranslated
     @property
     def metadata_file_path(self) -> Optional[str]:
-        """fetchENfilepath"""
+        """fetchtranslatedfile path"""
         if self.collection_metadata and 'metadata_file' in self.collection_metadata:
             return self.collection_metadata['metadata_file']
         return None
     
     @property
     def has_full_content(self) -> bool:
-        """ENfile"""
+        """Istranslatedfile"""
         return self.metadata_file_path is not None
     
     @property
     def clip_ids(self) -> List[str]:
-        """fetchclipIDEN"""
+        """fetchclipIDlist"""
         if self.collection_metadata and 'clip_ids' in self.collection_metadata:
             return self.collection_metadata['clip_ids']
         return []
     
-    # EN
+    # translated
     project_id = Column(
         String(36), 
         ForeignKey("projects.id", ondelete="CASCADE"),
         nullable=False,
-        comment="ENprojectID"
+        comment="translatedprojectID"
     )
     
-    # EN
+    # translated
     project = relationship(
         "Project", 
         back_populates="collections"
@@ -153,36 +153,36 @@ class Collection(BaseModel):
     
     @property
     def is_processing(self):
-        """ENcurrentlyprocessing"""
+        """Istranslatedinprocess"""
         return self.status == CollectionStatus.PROCESSING
     
     @property
     def is_completed(self):
-        """ENcompleted"""
+        """Istranslatedcompleted"""
         return self.status == CollectionStatus.COMPLETED
     
     @property
     def has_error(self):
-        """ENerror"""
+        """Istranslatederror"""
         return self.status == CollectionStatus.ERROR
     
     def add_clip(self, clip, order_index=None):
-        """ENclipENcollection"""
+        """addcliptranslatedcollection"""
         if order_index is None:
             order_index = self.clips_count
         
-        # useENclip
+        # usetranslatedaddclip
         stmt = clip_collection.insert().values(
             clip_id=clip.id,
             collection_id=self.id,
             order_index=order_index
         )
-        # ENneedENdatabaseENexecute
+        # thistranslatedindatabasetranslated
         self.clips_count += 1
         return stmt
     
     def remove_clip(self, clip):
-        """ENcollectionENclip"""
+        """fromcollectiontranslatedclip"""
         stmt = clip_collection.delete().where(
             clip_collection.c.clip_id == clip.id,
             clip_collection.c.collection_id == self.id
@@ -192,7 +192,7 @@ class Collection(BaseModel):
         return stmt
     
     def calculate_total_duration(self):
-        """ENcollectionENduration"""
+        """translatedcollectiontranslated"""
         total = 0
         for clip in self.clips:
             if clip.duration:

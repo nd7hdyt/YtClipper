@@ -1,67 +1,67 @@
-# AccountEN
+# password loginstatusnotes
 
-## EN
+## issue
 
-ENAccountEN，EN"Request failed with status code 400"EN。
+password loginfailed，"Request failed with status code 400"error。
 
-## EN
+## issue
 
-EN，EN：
+，：
 
-### 1. EN
-- **EN**：AccountEN，ENCookieEN
-- **EN**：400（EN）
-- **EN**：EN，ENbug
+### 1. issue
+- **errorreason**：password loginneedverify，useCookieimport method
+- **status**：400（）
+- **notes**：limit，bug
 
-### 2. EN
-- **EN**：EN，ENCookie
-- **EN**：ENBEN，EN
+### 2. technical details
+- **dev environment**：mock login succeeded，returntestCookie
+- **production**：Bsign in，needverify
 
-### 3. EN
+### 3. env var
 ```bash
-# EN（EN）
+# dev environment（mock login succeeded）
 export ENVIRONMENT=development
 export SKIP_COOKIE_VALIDATION=true
 
-# EN（EN）
+# production（verify）
 export ENVIRONMENT=production
 export SKIP_COOKIE_VALIDATION=false
 ```
 
-## EN
+## status
 
-### ✅ EN
-1. **EN**：ENAPIENCookieEN
-2. **EN**：EN
-3. **ENSupport**：ProvidesEN
+### ✅ solveissue
+1. **format**：fixAPIserviceCookieformatissue
+2. **error handling**：error
+3. **support**：dev environmentsign in
 
-### ⚠️ EN
-1. **EN**：BENAccountEN
-2. **EN**：ENAccountENBEN
-3. **EN**：EN
+### ⚠️ limit
+1. **verify**：Bpassword loginneedverify
+2. ****：password loginB
+3. ****：verify
 
-## EN
+## solution
 
-### EN1：ENCookieEN（EN）
-- **EN**：EN、EN、EN
-- **EN**：ENCookie
-- **EN**：EN、ENAccount Management
+### 1：useCookieimport（recommend）
+- **pros**：security、、
+- **cons**：needfetchCookie
+- **use cases**：daily use、account
 
-### EN2：ENAccountEN
-- **EN**：EN、ENIntuitive
-- **EN**：EN、EN
-- **EN**：EN、ENCookieEN
+### 2：password login
+- **pros**：、
+- **cons**：needverify、
+- **use cases**：sign in、fetchCookie
 
-### EN3：EN
-- **EN**：EN，EN
-- **EN**：ENCookieEN
+### 3：
+- **dev environment**：mock login succeeded，test
+- **production**：useCookieimport
 
-## EN
+## technical details
 
-### EN
+### dev environment
 ```python
 if is_development:
-    # EN，ENCookie
+    # mock login succeeded，returntestCookie
     mock_cookies = {
         "SESSDATA": f"mock_sessdata_{username}",
         "bili_jct": f"mock_jct_{username}",
@@ -71,82 +71,82 @@ if is_development:
     return {"success": True, "cookies": mock_cookies}
 ```
 
-### EN
+### production
 ```python
 else:
-    # ENBEN，EN
-    # EN，ENCookieEN
+    # Bsign in，needverify
+    # verify，useCookieimport
     return {
         "success": False,
-        "message": "AccountEN，ENCookieEN"
+        "message": "password loginneedverify，useCookieimport method"
     }
 ```
 
-## EN
+## test
 
-### EN
+### dev environmenttest
 ```
-✅ EN (200)
-ENID: xxx
-EN: dev_user
-EN: EN
-```
-
-### EN
-```
-❌ EN (400)
-EN: AccountEN，ENCookieEN
+✅ sign insucceeded (200)
+ID: xxx
+: dev_user
+: 
 ```
 
-## EN
+### productiontest
+```
+❌ sign infailed (400)
+error: password loginneedverify，useCookieimport method
+```
 
-### EN
-1. **EN**：CookieEN
-   - EN
-   - EN
-   - EN
+## 
 
-2. **EN**：AccountEN
-   - ENCookieEN
-   - EN
-   - EN
+### daily use
+1. ****：Cookieimport method
+   - security
+   - 
+   - 
 
-### ENCookieEN
-1. ENBEN
-2. ENF12EN
-3. ENNetworkEN
-4. EN，EN
-5. ENCookieEN
+2. ****：password login
+   - Cookieuse
+   - verify
+   - use
 
-## EN
+### fetchCookiestep
+1. sign inB
+2. F12open devtools
+3. Networktab
+4. refresh page，
+5. Cookie
 
-### EN
-1. **EN**：EN
-2. **EN**：EN，ProvidesEN
-3. **EN**：EN
+## 
 
-### EN
-1. **EN**：EN
-2. **EN**：EN
-3. **EN**：ProvidesENInterface
+### 
+1. **verify**：verify
+2. ****：error，
+3. ****：improveenv var
 
-## EN
+### 
+1. **verify**：selectsign in
+2. ****：sign in
+3. ****：sign in
 
-AccountEN，EN：
+## summary
 
-### ✅ EN
-- **EN**：EN，EN
-- **EN**：EN400EN，ENCookieEN
-- **EN**：ProvidesEN
+password login，features：
 
-### 🔧 EN
-- **EN**：EN
-- **EN**：ENCookieEN
-- **EN**：ProvidesEN
+### ✅ status
+- **dev environment**：mock login succeeded，test
+- **production**：return400error，useCookieimport
+- **error handling**：errorsolve
 
-### 💡 EN
-- **EN**：EN，EN
-- **EN**：ENCookieEN
-- **EN**：EN
+### 🔧 features
+- ****：env var
+- ****：fixCookieformatissue
+- **error**：error
 
-EN，ENProvidesEN。
+### 💡 use
+- **test**：usedev environment，sign in
+- **use**：recommendedCookieimport method
+- **issue**：checkenv varsettingserror
+
+test，productionsecuritysign inselect。

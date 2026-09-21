@@ -1,6 +1,6 @@
 """
-ENerrorresponseEN
-ENerrorresponseENuserENerrorEN
+translatedoneerrortranslatedformat
+Providestranslated'serrortranslatedAndusertranslated'serrortranslated
 """
 
 from typing import Any, Dict, Optional, Union
@@ -13,42 +13,42 @@ from fastapi.responses import JSONResponse
 
 
 class ErrorCode(Enum):
-    """errorEN"""
-    # ENerror
+    """errortranslated"""
+    # translateduseerror
     UNKNOWN_ERROR = "UNKNOWN_ERROR"
     INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR"
     SERVICE_UNAVAILABLE = "SERVICE_UNAVAILABLE"
     
-    # requesterror
+    # translatederror
     INVALID_REQUEST = "INVALID_REQUEST"
     MISSING_PARAMETER = "MISSING_PARAMETER"
     INVALID_PARAMETER = "INVALID_PARAMETER"
     REQUEST_TOO_LARGE = "REQUEST_TOO_LARGE"
     UNSUPPORTED_MEDIA_TYPE = "UNSUPPORTED_MEDIA_TYPE"
     
-    # ENerror
+    # translatederror
     UNAUTHORIZED = "UNAUTHORIZED"
-    FORBIDDEN = "FORBIDDEN"
-    TOKEN_EXPIRED = "TOKEN_EXPIRED"
-    INVALID_CREDENTIALS = "INVALID_CREDENTIALS"
+    FORBIDDtranslated = "FORBIDDtranslated"
+    TOKtranslated_EXPIRED = "TOKtranslated_EXPIRED"
+    INVALID_CREDtranslatedTIALS = "INVALID_CREDtranslatedTIALS"
     
-    # ENerror
+    # translatederror
     RESOURCE_NOT_FOUND = "RESOURCE_NOT_FOUND"
     RESOURCE_ALREADY_EXISTS = "RESOURCE_ALREADY_EXISTS"
     RESOURCE_CONFLICT = "RESOURCE_CONFLICT"
     
-    # ENerror
+    # translatederror
     VALIDATION_ERROR = "VALIDATION_ERROR"
     PROCESSING_ERROR = "PROCESSING_ERROR"
     QUOTA_EXCEEDED = "QUOTA_EXCEEDED"
     RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED"
     
-    # ENserviceerror
+    # translatedserviceerror
     EXTERNAL_API_ERROR = "EXTERNAL_API_ERROR"
     NETWORK_ERROR = "NETWORK_ERROR"
     TIMEOUT_ERROR = "TIMEOUT_ERROR"
     
-    # fileprocessingerror
+    # fileprocesserror
     FILE_NOT_FOUND = "FILE_NOT_FOUND"
     FILE_TOO_LARGE = "FILE_TOO_LARGE"
     UNSUPPORTED_FILE_FORMAT = "UNSUPPORTED_FILE_FORMAT"
@@ -56,7 +56,7 @@ class ErrorCode(Enum):
 
 
 class ErrorLevel(Enum):
-    """errorEN"""
+    """errortranslated"""
     INFO = "INFO"
     WARNING = "WARNING"
     ERROR = "ERROR"
@@ -64,7 +64,7 @@ class ErrorLevel(Enum):
 
 
 class ErrorResponse:
-    """ENerrorresponseEN"""
+    """translatedoneerrortranslated"""
     
     def __init__(
         self,
@@ -85,46 +85,46 @@ class ErrorResponse:
         self.timestamp = timestamp or datetime.utcnow()
     
     def _get_user_friendly_message(self, error_code: ErrorCode, message: str) -> str:
-        """fetchuserENerrorEN"""
+        """fetchusertranslated'serrortranslated"""
         friendly_messages = {
-            ErrorCode.UNKNOWN_ERROR: "ENUnknown error，pleaseENretry",
-            ErrorCode.INTERNAL_SERVER_ERROR: "serviceENerror，pleaseENretry",
-            ErrorCode.SERVICE_UNAVAILABLE: "serviceEN，pleaseENretry",
+            ErrorCode.UNKNOWN_ERROR: "translatederror，translated",
+            ErrorCode.INTERNAL_SERVER_ERROR: "servicetranslatederror，translated",
+            ErrorCode.SERVICE_UNAVAILABLE: "servicetranslatedcanuse，translated",
             
-            ErrorCode.INVALID_REQUEST: "requestEN，pleasecheckENretry",
-            ErrorCode.MISSING_PARAMETER: "ENparameters，pleasecheckrequest",
-            ErrorCode.INVALID_PARAMETER: "parametersEN，pleasecheckENretry",
-            ErrorCode.REQUEST_TOO_LARGE: "requestEN，pleaseENretry",
-            ErrorCode.UNSUPPORTED_MEDIA_TYPE: "ENfileEN，pleaseENfileEN",
+            ErrorCode.INVALID_REQUEST: "translatedformattranslated，translatedchecktranslated",
+            ErrorCode.MISSING_PARAMETER: "translated，translatedchecktranslated",
+            ErrorCode.INVALID_PARAMETER: "translatedformattranslated，translatedchecktranslated",
+            ErrorCode.REQUEST_TOO_LARGE: "translated，translated",
+            ErrorCode.UNSUPPORTED_MEDIA_TYPE: "translatedsupport'sfileformat，translatedSelectselectsupport'sfiletranslated",
             
-            ErrorCode.UNAUTHORIZED: "EN，pleaseENlogin",
-            ErrorCode.FORBIDDEN: "permission denied，cannotexecuteEN",
-            ErrorCode.TOKEN_EXPIRED: "loginEN，pleaseENlogin",
-            ErrorCode.INVALID_CREDENTIALS: "EN，pleasecheckENretry",
+            ErrorCode.UNAUTHORIZED: "translated，translated",
+            ErrorCode.FORBIDDtranslated: "translated，translated",
+            ErrorCode.TOKtranslated_EXPIRED: "translated，translated",
+            ErrorCode.INVALID_CREDtranslatedTIALS: "translatedinfotranslated，translatedchecktranslated",
             
-            ErrorCode.RESOURCE_NOT_FOUND: "requestENdoes not exist",
-            ErrorCode.RESOURCE_ALREADY_EXISTS: "ENalready exists，pleaseuseEN",
-            ErrorCode.RESOURCE_CONFLICT: "EN，pleasecheckENretry",
+            ErrorCode.RESOURCE_NOT_FOUND: "translated'stranslatednot found",
+            ErrorCode.RESOURCE_ALREADY_EXISTS: "translatedin，translatedusetranslated",
+            ErrorCode.RESOURCE_CONFLICT: "translated，translatedchecktranslated",
             
-            ErrorCode.VALIDATION_ERROR: "ENvalidatefailed，pleasecheckEN",
-            ErrorCode.PROCESSING_ERROR: "processingENerror，pleaseretry",
-            ErrorCode.QUOTA_EXCEEDED: "ENuseEN，pleaseENretry",
-            ErrorCode.RATE_LIMIT_EXCEEDED: "requestEN，pleaseEN",
+            ErrorCode.VALIDATION_ERROR: "translatedverifyfailed，translatedchecktranslated",
+            ErrorCode.PROCESSING_ERROR: "processtranslatederror，translated",
+            ErrorCode.QUOTA_EXCEEDED: "translatedusetranslated，translated",
+            ErrorCode.RATE_LIMIT_EXCEEDED: "translated，translated",
             
-            ErrorCode.EXTERNAL_API_ERROR: "ENserviceEN，pleaseENretry",
-            ErrorCode.NETWORK_ERROR: "ENconnectfailed，pleasecheckENconnect",
-            ErrorCode.TIMEOUT_ERROR: "requesttimeout，pleaseretry",
+            ErrorCode.EXTERNAL_API_ERROR: "translatedservicetranslatedcanuse，translated",
+            ErrorCode.NETWORK_ERROR: "translatedconnectfailed，translatedchecktranslatedconnect",
+            ErrorCode.TIMEOUT_ERROR: "translated，translated",
             
-            ErrorCode.FILE_NOT_FOUND: "filedoes not exist，pleasecheckfilepath",
-            ErrorCode.FILE_TOO_LARGE: "fileEN，pleaseENfile",
-            ErrorCode.UNSUPPORTED_FILE_FORMAT: "ENfileEN，pleaseENfileEN",
-            ErrorCode.FILE_PROCESSING_ERROR: "fileprocessingfailed，pleasecheckfileEN",
+            ErrorCode.FILE_NOT_FOUND: "file not found，translatedcheckfile path",
+            ErrorCode.FILE_TOO_LARGE: "filetranslated，translatedSelectselecttranslated'sfile",
+            ErrorCode.UNSUPPORTED_FILE_FORMAT: "translatedsupport'sfileformat，translatedSelectselectsupport'sfiletranslated",
+            ErrorCode.FILE_PROCESSING_ERROR: "fileprocessing failed，translatedcheckfiletranslated",
         }
         
         return friendly_messages.get(error_code, message)
     
     def to_dict(self) -> Dict[str, Any]:
-        """EN"""
+        """translatedformat"""
         return {
             "error": {
                 "code": self.error_code.value,
@@ -138,7 +138,7 @@ class ErrorResponse:
         }
     
     def to_json_response(self, status_code: int = 500) -> JSONResponse:
-        """ENJSONresponse"""
+        """translatedJSONtranslated"""
         return JSONResponse(
             status_code=status_code,
             content=self.to_dict()
@@ -146,18 +146,18 @@ class ErrorResponse:
 
 
 def get_http_status_code(error_code: ErrorCode) -> int:
-    """ENerrorENfetchHTTPstatusEN"""
+    """translatederrortranslatedfetchHTTPstatustranslated"""
     status_mapping = {
-        # 4xx ENerror
+        # 4xx translatederror
         ErrorCode.INVALID_REQUEST: 400,
         ErrorCode.MISSING_PARAMETER: 400,
         ErrorCode.INVALID_PARAMETER: 400,
         ErrorCode.REQUEST_TOO_LARGE: 413,
         ErrorCode.UNSUPPORTED_MEDIA_TYPE: 415,
         ErrorCode.UNAUTHORIZED: 401,
-        ErrorCode.FORBIDDEN: 403,
-        ErrorCode.TOKEN_EXPIRED: 401,
-        ErrorCode.INVALID_CREDENTIALS: 401,
+        ErrorCode.FORBIDDtranslated: 403,
+        ErrorCode.TOKtranslated_EXPIRED: 401,
+        ErrorCode.INVALID_CREDtranslatedTIALS: 401,
         ErrorCode.RESOURCE_NOT_FOUND: 404,
         ErrorCode.RESOURCE_ALREADY_EXISTS: 409,
         ErrorCode.RESOURCE_CONFLICT: 409,
@@ -168,7 +168,7 @@ def get_http_status_code(error_code: ErrorCode) -> int:
         ErrorCode.FILE_TOO_LARGE: 413,
         ErrorCode.UNSUPPORTED_FILE_FORMAT: 415,
         
-        # 5xx serviceENerror
+        # 5xx servicetranslatederror
         ErrorCode.INTERNAL_SERVER_ERROR: 500,
         ErrorCode.SERVICE_UNAVAILABLE: 503,
         ErrorCode.EXTERNAL_API_ERROR: 502,
@@ -190,7 +190,7 @@ def create_error_response(
     level: ErrorLevel = ErrorLevel.ERROR,
     request_id: Optional[str] = None
 ) -> JSONResponse:
-    """createENerrorresponse"""
+    """createtranslatederrortranslated"""
     error_response = ErrorResponse(
         error_code=error_code,
         message=message,
@@ -208,7 +208,7 @@ def create_validation_error_response(
     errors: list,
     request_id: Optional[str] = None
 ) -> JSONResponse:
-    """createvalidateerrorresponse"""
+    """createverifyerrortranslated"""
     error_details = []
     for error in errors:
         if hasattr(error, 'loc') and hasattr(error, 'msg'):
@@ -225,7 +225,7 @@ def create_validation_error_response(
     
     return create_error_response(
         error_code=ErrorCode.VALIDATION_ERROR,
-        message="ENvalidatefailed",
+        message="translatedverifyfailed",
         details={"validation_errors": error_details},
         request_id=request_id
     )
@@ -236,12 +236,12 @@ def create_exception_error_response(
     request_id: Optional[str] = None,
     context: Optional[str] = None
 ) -> JSONResponse:
-    """ENexceptioncreateerrorresponse"""
-    # ENexceptionENerrorEN
+    """fromtranslatedcreateerrortranslated"""
+    # translatederrortranslated
     if isinstance(exception, FileNotFoundError):
         error_code = ErrorCode.FILE_NOT_FOUND
     elif isinstance(exception, PermissionError):
-        error_code = ErrorCode.FORBIDDEN
+        error_code = ErrorCode.FORBIDDtranslated
     elif isinstance(exception, ValueError):
         error_code = ErrorCode.INVALID_PARAMETER
     elif isinstance(exception, TimeoutError):
@@ -251,7 +251,7 @@ def create_exception_error_response(
     else:
         error_code = ErrorCode.UNKNOWN_ERROR
     
-    # EN
+    # translatedinfo
     details = {
         "exception_type": type(exception).__name__,
         "traceback": traceback.format_exc()
@@ -272,8 +272,8 @@ def create_http_exception_response(
     exc: HTTPException,
     request_id: Optional[str] = None
 ) -> JSONResponse:
-    """ENHTTPexceptioncreateerrorresponse"""
-    # ENstatusENerrorEN
+    """fromHTTPtranslatedcreateerrortranslated"""
+    # translatedstatustranslatederrortranslated
     status_code = exc.status_code
     
     if status_code == 400:
@@ -281,7 +281,7 @@ def create_http_exception_response(
     elif status_code == 401:
         error_code = ErrorCode.UNAUTHORIZED
     elif status_code == 403:
-        error_code = ErrorCode.FORBIDDEN
+        error_code = ErrorCode.FORBIDDtranslated
     elif status_code == 404:
         error_code = ErrorCode.RESOURCE_NOT_FOUND
     elif status_code == 409:

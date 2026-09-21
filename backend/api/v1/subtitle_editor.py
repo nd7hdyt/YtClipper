@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
-# requestENresponseEN
+# translatedAndtranslatedmodel
 class SubtitleEditRequest(BaseModel):
     project_id: str
     clip_id: str
@@ -39,12 +39,12 @@ class EditPreviewRequest(BaseModel):
     clip_id: str
     deleted_segments: List[str]
 
-# EN
+# dependenciestranslated
 def get_subtitle_processor() -> SubtitleProcessor:
     return SubtitleProcessor()
 
 def get_video_editor() -> VideoEditor:
-    # subtitlesENuseENpathEN（EN）
+    # Subtitle Editingtranslatedusetranslatedpathtranslated（translated）
     from ...core.shared_config import CLIPS_DIR, COLLECTIONS_DIR
     return VideoEditor(clips_dir=str(CLIPS_DIR), collections_dir=str(COLLECTIONS_DIR))
 
@@ -59,32 +59,32 @@ async def get_clip_subtitles(
     subtitle_processor: SubtitleProcessor = Depends(get_subtitle_processor),
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """fetchENsubtitlesEN"""
+    """fetchtranslated'stranslatedsubtitlestranslated"""
     try:
-        # fetchprojectEN
+        # fetchprojectinfo
         project = project_service.get(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="projectdoes not exist")
+            raise HTTPException(status_code=404, detail="project not found")
         
-        # fetchEN
+        # fetchtranslatedinfo
         from ...models.clip import Clip
         clip = project_service.db.query(Clip).filter(Clip.id == clip_id, Clip.project_id == project_id).first()
         if not clip:
-            raise HTTPException(status_code=404, detail="ENdoes not exist")
+            raise HTTPException(status_code=404, detail="translatednot found")
         
-        # ENSRTfile
+        # translatedSRTfile
         projects_dir = get_projects_directory()
         project_dir = projects_dir / project_id
         srt_file = project_dir / "raw" / "input.srt"
         
         if not srt_file.exists():
-            raise HTTPException(status_code=404, detail="subtitlesfiledoes not exist")
+            raise HTTPException(status_code=404, detail="subtitlesfile not found")
         
-        # parsesubtitlesEN
+        # translatedsubtitlestranslated
         subtitle_data = subtitle_processor.parse_srt_to_word_level(srt_file)
         
-        # ENcurrentENtimeEN
-        # ifstart_timeENend_timeEN（EN），ENuse
+        # translated'stranslated
+        # iftranslatedstart_timeAndend_timeIstranslated（seconds），translateduse
         if isinstance(clip.start_time, int):
             clip_start = clip.start_time
         else:
@@ -99,13 +99,13 @@ async def get_clip_subtitles(
                 subtitle_processor._seconds_to_srt_time_object(clip.end_time)
             )
         
-        # ENsubtitlesEN
+        # translatedsubtitlestranslated
         clip_subtitles = [
             seg for seg in subtitle_data 
             if seg['startTime'] >= clip_start and seg['endTime'] <= clip_end
         ]
         
-        # ENtimeEN
+        # translated's
         for seg in clip_subtitles:
             seg['startTime'] -= clip_start
             seg['endTime'] -= clip_start
@@ -113,7 +113,7 @@ async def get_clip_subtitles(
                 word['startTime'] -= clip_start
                 word['endTime'] -= clip_start
         
-        # fetchEN
+        # fetchtranslatedinfo
         stats = subtitle_processor.get_subtitle_statistics(clip_subtitles)
         
         return SubtitleDataResponse(
@@ -125,9 +125,9 @@ async def get_clip_subtitles(
         
     except Exception as e:
         import traceback
-        logger.error(f"fetchsubtitlesENfailed: {e}")
-        logger.error(f"errorEN: {traceback.format_exc()}")
-        raise HTTPException(status_code=500, detail=f"fetchsubtitlesENfailed: {str(e)}")
+        logger.error(f"fetchsubtitlestranslatedfailed: {e}")
+        logger.error(f"errortranslated: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"fetchsubtitlestranslatedfailed: {str(e)}")
 
 @router.post("/{project_id}/clips/{clip_id}/edit")
 async def edit_clip_by_subtitles(
@@ -138,39 +138,39 @@ async def edit_clip_by_subtitles(
     video_editor: VideoEditor = Depends(get_video_editor),
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """ENsubtitlesdeleteENvideoEN"""
+    """Based onsubtitlesdeletetranslatedvideotranslated"""
     try:
-        # fetchprojectEN
+        # fetchprojectinfo
         project = project_service.get(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="projectdoes not exist")
+            raise HTTPException(status_code=404, detail="project not found")
         
-        # fetchEN
+        # fetchtranslatedinfo
         from ...models.clip import Clip
         clip = project_service.db.query(Clip).filter(Clip.id == clip_id, Clip.project_id == project_id).first()
         if not clip:
-            raise HTTPException(status_code=404, detail="ENdoes not exist")
+            raise HTTPException(status_code=404, detail="translatednot found")
         
-        # fetchENvideoENsubtitlesfilepath
+        # fetchtranslatedvideoAndsubtitlesfile path
         projects_dir = get_projects_directory()
         project_dir = projects_dir / project_id
         
-        # ENvideofile
+        # translatedvideofile
         video_files = list(project_dir.glob("raw/*.mp4"))
         if not video_files:
-            raise HTTPException(status_code=404, detail="ENvideofiledoes not exist")
+            raise HTTPException(status_code=404, detail="translatedvideofile not found")
         original_video = video_files[0]
         
-        # ENsubtitlesfile
+        # translatedsubtitlesfile
         srt_file = project_dir / "raw" / "input.srt"
         if not srt_file.exists():
-            raise HTTPException(status_code=404, detail="subtitlesfiledoes not exist")
+            raise HTTPException(status_code=404, detail="subtitlesfile not found")
         
-        # parsesubtitlesEN
+        # translatedsubtitlestranslated
         subtitle_data = subtitle_processor.parse_srt_to_word_level(srt_file)
         
-        # ENcurrentENtimeEN
-        # ifstart_timeENend_timeEN（EN），ENuse
+        # translated'stranslated
+        # iftranslatedstart_timeAndend_timeIstranslated（seconds），translateduse
         if isinstance(clip.start_time, int):
             clip_start = clip.start_time
         else:
@@ -190,7 +190,7 @@ async def edit_clip_by_subtitles(
             if seg['startTime'] >= clip_start and seg['endTime'] <= clip_end
         ]
         
-        # validateEN
+        # verifytranslated
         validation = video_editor.validate_edit_operations(
             clip_subtitles, request.deleted_segments
         )
@@ -198,15 +198,15 @@ async def edit_clip_by_subtitles(
         if not validation['valid']:
             raise HTTPException(status_code=400, detail=validation['error'])
         
-        # createENdirectory
+        # createtranslateddirectory
         output_dir = project_dir / "edited_clips"
         output_dir.mkdir(exist_ok=True)
         
-        # generateENvideofileEN
+        # translated'svideofiletranslated
         edited_video_name = f"{clip_id}_edited.mp4"
         edited_video_path = output_dir / edited_video_name
         
-        # executevideoEN
+        # translatedvideotranslated
         edit_result = video_editor.edit_video_by_subtitle_deletion(
             original_video,
             clip_subtitles,
@@ -215,9 +215,9 @@ async def edit_clip_by_subtitles(
         )
         
         if not edit_result['success']:
-            raise HTTPException(status_code=500, detail=f"videoENfailed: {edit_result['error']}")
+            raise HTTPException(status_code=500, detail=f"videotranslatedfailed: {edit_result['error']}")
         
-        # ENsubtitlesfile
+        # exporttranslated'ssubtitlesfile
         edited_srt_path = output_dir / f"{clip_id}_edited.srt"
         subtitle_processor.export_edited_srt(
             clip_subtitles,
@@ -227,7 +227,7 @@ async def edit_clip_by_subtitles(
         
         return SubtitleEditResponse(
             success=True,
-            message="videoENsucceeded",
+            message="videotranslatedsucceeded",
             edited_video_path=str(edited_video_path),
             deleted_duration=edit_result['totalDeletedDuration'],
             final_duration=edit_result['finalDuration']
@@ -236,8 +236,8 @@ async def edit_clip_by_subtitles(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"ENvideoENfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"ENvideoENfailed: {str(e)}")
+        logger.error(f"translatedvideotranslatedfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"translatedvideotranslatedfailed: {str(e)}")
 
 @router.get("/{project_id}/clips/{clip_id}/edited-video")
 async def get_edited_video(
@@ -245,19 +245,19 @@ async def get_edited_video(
     clip_id: str,
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """fetchENvideofile"""
+    """fetchtranslated'svideofile"""
     try:
-        # checkprojectEN
+        # checkprojectIstranslatedin
         project = await project_service.get_project(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="projectdoes not exist")
+            raise HTTPException(status_code=404, detail="project not found")
         
-        # ENvideofile
+        # translated'svideofile
         projects_dir = get_projects_directory()
         edited_video_path = projects_dir / project_id / "edited_clips" / f"{clip_id}_edited.mp4"
         
         if not edited_video_path.exists():
-            raise HTTPException(status_code=404, detail="ENvideofiledoes not exist")
+            raise HTTPException(status_code=404, detail="translated'svideofile not found")
         
         # returnvideofile
         return FileResponse(
@@ -269,8 +269,8 @@ async def get_edited_video(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"fetchENvideofailed: {e}")
-        raise HTTPException(status_code=500, detail=f"fetchENvideofailed: {str(e)}")
+        logger.error(f"fetchtranslated'svideofailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchtranslated'svideofailed: {str(e)}")
 
 @router.post("/{project_id}/clips/{clip_id}/preview")
 async def create_edit_preview(
@@ -281,37 +281,37 @@ async def create_edit_preview(
     video_editor: VideoEditor = Depends(get_video_editor),
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """createEN"""
+    """createtranslated"""
     try:
-        # fetchprojectEN
+        # fetchprojectinfo
         project = project_service.get(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="projectdoes not exist")
+            raise HTTPException(status_code=404, detail="project not found")
         
-        # fetchEN
+        # fetchtranslatedinfo
         from ...models.clip import Clip
         clip = project_service.db.query(Clip).filter(Clip.id == clip_id, Clip.project_id == project_id).first()
         if not clip:
-            raise HTTPException(status_code=404, detail="ENdoes not exist")
+            raise HTTPException(status_code=404, detail="translatednot found")
         
-        # fetchENvideoENsubtitlesfilepath
+        # fetchtranslatedvideoAndsubtitlesfile path
         projects_dir = get_projects_directory()
         project_dir = projects_dir / project_id
         
         video_files = list(project_dir.glob("raw/*.mp4"))
         if not video_files:
-            raise HTTPException(status_code=404, detail="ENvideofiledoes not exist")
+            raise HTTPException(status_code=404, detail="translatedvideofile not found")
         original_video = video_files[0]
         
         srt_file = project_dir / "raw" / "input.srt"
         if not srt_file.exists():
-            raise HTTPException(status_code=404, detail="subtitlesfiledoes not exist")
+            raise HTTPException(status_code=404, detail="subtitlesfile not found")
         
-        # parsesubtitlesEN
+        # translatedsubtitlestranslated
         subtitle_data = subtitle_processor.parse_srt_to_word_level(srt_file)
         
-        # ENcurrentENtimeEN
-        # ifstart_timeENend_timeEN（EN），ENuse
+        # translated'stranslated
+        # iftranslatedstart_timeAndend_timeIstranslated（seconds），translateduse
         if isinstance(clip.start_time, int):
             clip_start = clip.start_time
         else:
@@ -331,11 +331,11 @@ async def create_edit_preview(
             if seg['startTime'] >= clip_start and seg['endTime'] <= clip_end
         ]
         
-        # createENdirectory
+        # createtranslateddirectory
         preview_dir = project_dir / "edit_previews" / clip_id
         preview_dir.mkdir(parents=True, exist_ok=True)
         
-        # createEN
+        # createtranslated
         preview_files = video_editor.create_preview_clips(
             original_video,
             clip_subtitles,
@@ -350,8 +350,8 @@ async def create_edit_preview(
         }
         
     except Exception as e:
-        logger.error(f"createENfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"createENfailed: {str(e)}")
+        logger.error(f"createtranslatedfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"createtranslatedfailed: {str(e)}")
 
 @router.get("/{project_id}/clips/{clip_id}/preview/{segment_id}")
 async def get_preview_segment(
@@ -360,21 +360,21 @@ async def get_preview_segment(
     segment_id: str,
     project_service: ProjectService = Depends(get_project_service)
 ):
-    """fetchENfile"""
+    """fetchtranslatedfile"""
     try:
-        # checkprojectEN
+        # checkprojectIstranslatedin
         project = project_service.get(project_id)
         if not project:
-            raise HTTPException(status_code=404, detail="projectdoes not exist")
+            raise HTTPException(status_code=404, detail="project not found")
         
-        # ENfile
+        # translatedfile
         projects_dir = get_projects_directory()
         preview_file = projects_dir / project_id / "edit_previews" / clip_id / f"preview_{segment_id}.mp4"
         
         if not preview_file.exists():
-            raise HTTPException(status_code=404, detail="ENfiledoes not exist")
+            raise HTTPException(status_code=404, detail="translatedfile not found")
         
-        # returnENfile
+        # returntranslatedfile
         return FileResponse(
             path=str(preview_file),
             media_type="video/mp4",
@@ -384,5 +384,5 @@ async def get_preview_segment(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"fetchENfilefailed: {e}")
-        raise HTTPException(status_code=500, detail=f"fetchENfilefailed: {str(e)}")
+        logger.error(f"fetchtranslatedfilefailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchtranslatedfilefailed: {str(e)}")

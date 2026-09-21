@@ -1,32 +1,32 @@
-# EN
+# progress
 
-## EN
+## overview
 
-ENAutoClipEN，EN"EN"EN，ProvidesENProgress Feedback。
+docsAutoClipprojectprogress，"processing"status，progress。
 
-## EN
+## target
 
-1. **EN**：EN"EN"EN
-2. **EN**：EN
-3. **EN**：Based onWebSocketEN
-4. **EN**：EN
+1. ****："processing"
+2. **progress**：progressprogress
+3. **status**：based onWebSocketprogressupdate
+4. **step**：stepprogress
 
-## EN
+## technical details
 
-### EN
+### frontend
 
-#### 1. InlineProgressBar EN
+#### 1. InlineProgressBar 
 
-**EN**: `frontend/src/components/InlineProgressBar.tsx`
+**location**: `frontend/src/components/InlineProgressBar.tsx`
 
-**EN**:
-- EN，EN
-- EN
-- EN
-- EN
-- WebSocketEN
+****:
+- ，
+- 
+- progress
+- step
+- WebSocketupdate
 
-**EN**:
+****:
 ```typescript
 interface InlineProgressBarProps {
   projectId: string;
@@ -37,50 +37,50 @@ interface InlineProgressBarProps {
 }
 ```
 
-**VisualEN**:
-- EN：EN
-- EN：EN
-- EN：EN → EN → EN → EN
+****:
+- ：progress
+- ：progress
+- ：status → step → progress → progress
 
-#### 2. EN
+#### 2. stepconfig
 
 ```typescript
 const PIPELINE_STEPS = [
-  { id: 1, name: 'EN', description: 'EN' },
-  { id: 2, name: 'EN', description: 'Based onSRTEN' },
-  { id: 3, name: 'EN', description: 'EN' },
-  { id: 4, name: 'EN', description: 'EN' },
-  { id: 5, name: 'EN', description: 'EN' },
-  { id: 6, name: 'EN', description: 'ENFFmpegEN' }
+  { id: 1, name: 'outline', description: 'outline' },
+  { id: 2, name: '', description: 'based onSRTsubtitles' },
+  { id: 3, name: 'content scoring', description: '' },
+  { id: 4, name: 'title generation', description: 'generate' },
+  { id: 5, name: '', description: 'recommend' },
+  { id: 6, name: '', description: 'useFFmpeggenerateclip' }
 ];
 ```
 
-### EN
+### backendintegration
 
-#### 1. EN
+#### 1. progress
 
-**EN**: `backend/services/processing_orchestrator.py`
+**location**: `backend/services/processing_orchestrator.py`
 
-**EN**:
+**addedmethod**:
 ```python
 def _send_realtime_progress_update(self, status: TaskStatus, progress: Optional[float] = None, 
                                  error_message: Optional[str] = None):
-    """EN"""
+    """progressupdatefrontend"""
 ```
 
-**EN**:
-- EN1 (EN): 0-10%
-- EN2 (EN): 10-30%
-- EN3 (EN): 30-50%
-- EN4 (EN): 50-70%
-- EN5 (EN): 70-85%
-- EN6 (EN): 85-100%
+**progress**:
+- step1 (outline): 0-10%
+- step2 (): 10-30%
+- step3 (content scoring): 30-50%
+- step4 (title generation): 50-70%
+- step5 (): 70-85%
+- step6 (): 85-100%
 
-#### 2. WebSocketEN
+#### 2. WebSocketformat
 
-**EN**: `backend/services/websocket_notification_service.py`
+**location**: `backend/services/websocket_notification_service.py`
 
-**EN**:
+****:
 ```json
 {
   "type": "task_progress_update",
@@ -90,114 +90,114 @@ def _send_realtime_progress_update(self, status: TaskStatus, progress: Optional[
   "progress": 45,
   "current_step": 3,
   "total_steps": 6,
-  "step_name": "EN",
-  "message": "EN...",
+  "step_name": "content scoring",
+  "message": "content scoring...",
   "timestamp": "2024-01-01T12:00:00Z"
 }
 ```
 
-### EN
+### integration
 
-#### 1. ProjectCard EN
+#### 1. ProjectCard update
 
-**EN**: `frontend/src/components/ProjectCard.tsx`
+**location**: `frontend/src/components/ProjectCard.tsx`
 
-**EN**:
+****:
 ```typescript
-// EN
+// 
 <div style={{...}}>
   <LoadingOutlined />
-  EN
+  processing
 </div>
 
-// EN
+// progress
 <InlineProgressBar
   projectId={project.id}
   currentStep={project.current_step}
   totalSteps={project.total_steps}
   status={normalizedStatus}
   onProgressUpdate={(progress, stepName) => {
-    console.log(`EN ${project.id} EN: ${progress}% - ${stepName}`);
+    console.log(`project ${project.id} progressupdate: ${progress}% - ${stepName}`);
   }}
 />
 ```
 
-## EN
+## improve
 
-### 1. VisualEN
-- **EN**：EN
-- **EN**：EN
-- **EN**：EN
+### 1. 
+- ****：progressprogress
+- ****：progress
+- **status**：stepprogress
 
-### 2. EN
-- **EN**：EN（EN"EN"）
-- **EN**：EN
-- **EN**：ENVisual
-- **EN**：EN
+### 2. 
+- **status**：step（"outline"）
+- **progress**：step
+- **progress**：progress
+- **step**：optional
 
-### 3. EN
-- **WebSocketEN**：EN
-- **EN**：ENUIEN
-- **EN**：EN
+### 3. 
+- **WebSocket**：backendprogressupdate
+- ****：progressUI
+- **status**：status
 
-## EN
+## tech advantages
 
-### 1. Performance
-- **EN**：EN
-- **WebSocketEN**：ENHTTPEN
-- **EN**：EN
+### 1. performance
+- ****：
+- **WebSocket**：HTTP
+- **state management**：statusupdate
 
-### 2. EN
-- **EN**：EN
-- **EN**：EN
-- **ENSupport**：EN
+### 2. 
+- ****：use
+- **configstep**：step
+- **support**：
 
-### 3. EN
-- **EN**：WebSocketEN
-- **EN**：EN
-- **EN**：EN
+### 3. error handling
+- **connection failed**：WebSocket
+- **verify**：progresscheck
+- ****：status
 
-## EN
+## deploynotes
 
-### 1. EN
-- ENWebSocketEN
-- EN
-- EN
+### 1. frontenddeploy
+- WebSocketconfig
+- verifyimport
+- test
 
-### 2. EN
-- ENWebSocketEN
-- EN
-- ENWebSocketEN
+### 2. backenddeploy
+- WebSocketservice
+- verifyprogress
+- monitorWebSocketstatus
 
-### 3. EN
-- EN：EN
-- EN：EN
-- EN：ENSupport
+### 3. testverify
+- test：verifyprogress
+- test：verifyupdate
+- test：verifysupport
 
-## EN
+## 
 
-### 1. EN
-- **EN/EN**：SupportEN
-- **EN**：SupportEN
-- **EN**：EN
+### 1. 
+- **/**：support
+- ****：support
+- ****：
 
-### 2. EN
-- **EN**：EN
-- **EN**：EN
-- **EN**：Responsive DesignEN
+### 2. 
+- **settings**：progress
+- ****：completed
+- ****：responsive design
 
-### 3. EN
-- **EN**：EN
-- **ENSupport**：EN
-- **EN**：EN
+### 3. 
+- **cache**：progresslocalcache
+- **support**：
+- **perf monitor**：monitor
 
-## EN
+## summary
 
-EN：
+progresssucceededtarget：
 
-1. ✅ **EN**：EN
-2. ✅ **EN**：EN
-3. ✅ **EN**：Based onWebSocketEN
-4. ✅ **EN**：ProvidesENVisualEN
+1. ✅ ****：progress
+2. ✅ **progress**：progressstep
+3. ✅ **status**：based onWebSocketupdate
+4. ✅ ****：
 
-ENAutoClipENProvidesEN，EN。
+AutoClipprojectstatus，。

@@ -1,6 +1,6 @@
 /**
- * API configEN
- * ENportconfig
+ * API configtranslated
+ * processtranslatedbackendtranslatedAndtranslatedconfig
  */
 
 interface ApiConfig {
@@ -30,10 +30,10 @@ class ApiConfigManager {
   }
 
   private async initializeConfig() {
-    // checkEN Tauri in environment
+    // checkIstranslatedin Tauri translated
     if (typeof window !== 'undefined' && ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)) {
       try {
-        // EN
+        // translatedbackendstarttranslated
         const { listen } = await import('@tauri-apps/api/event');
         const { invoke } = await import('@tauri-apps/api/core');
         
@@ -49,16 +49,16 @@ class ApiConfigManager {
           this.updateFromPort(backendStatus.port);
         }
 
-        // ENfetchconfig
-        if ((window as any).__BACKEND_BASE__) {
+        // translatedfromtranslatedfetchconfig
+        if ((window as any).__BACKtranslatedD_BASE__) {
           this.updateConfig({
-            baseUrl: (window as any).__BACKEND_BASE__,
-            port: this.extractPortFromUrl((window as any).__BACKEND_BASE__),
+            baseUrl: (window as any).__BACKtranslatedD_BASE__,
+            port: this.extractPortFromUrl((window as any).__BACKtranslatedD_BASE__),
             isReady: true
           });
         }
       } catch (error) {
-        console.warn('EN Tauri EN:', error);
+        console.warn('translated Tauri translated:', error);
       }
     }
   }
@@ -82,34 +82,34 @@ class ApiConfigManager {
   }
 
   private notifyListeners() {
-    // waitForReady ENremove；EN forEach EN，
-    // EN 2、4… ENrequestEN 30s EN（settingsEN）
+    // waitForReady 'stranslatedintranslated translated；translated forEach translatedskiptranslatedone translated，
+    // translatedstarttranslated'sNo. 2、4…  translatedetc. 30s translated（Settings pagetranslatedIsthis translated）
     [...this.listeners].forEach(listener => listener(this.config));
   }
 
   /**
-   * fetchEN API config
+   * fetchtranslated API config
    */
   getConfig(): ApiConfig {
     return { ...this.config };
   }
 
   /**
-   * fetch API EN URL
+   * fetch API translated URL
    */
   getBaseUrl(): string {
     return this.config.baseUrl;
   }
 
   /**
-   * check API EN
+   * check API Istranslated
    */
   isReady(): boolean {
     return this.config.isReady;
   }
 
   /**
-   * addconfigChangeEN
+   * addconfigtranslated
    */
   addListener(listener: (config: ApiConfig) => void): () => void {
     this.listeners.push(listener);
@@ -122,7 +122,7 @@ class ApiConfigManager {
   }
 
   /**
-   * waiting API EN
+   * etc.translated API translated
    */
   async waitForReady(timeout: number = 30000): Promise<boolean> {
     if (this.isReady()) {
@@ -145,7 +145,7 @@ class ApiConfigManager {
   }
 
   /**
-   * EN API URL
+   * translated's API URL
    */
   buildUrl(path: string): string {
     const normalizedPath = path.startsWith('/') ? path : `/${path}`;
@@ -153,7 +153,7 @@ class ApiConfigManager {
   }
 
   /**
-   * Health check
+   * Health Check
    */
   async healthCheck(): Promise<boolean> {
     try {
@@ -163,16 +163,16 @@ class ApiConfigManager {
       } as any);
       return response.ok;
     } catch (error) {
-      console.warn('API Health checkFailed:', error);
+      console.warn('API Health Checkfailed:', error);
       return false;
     }
   }
 }
 
-// EN
+// exporttranslated
 export const apiConfigManager = ApiConfigManager.getInstance();
 
-// EN
+// exporttranslated
 export const getApiBaseUrl = () => apiConfigManager.getBaseUrl();
 export const isApiReady = () => apiConfigManager.isReady();
 export const waitForApiReady = (timeout?: number) => apiConfigManager.waitForReady(timeout);

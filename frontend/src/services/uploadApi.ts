@@ -1,10 +1,10 @@
 /**
- * submissionENAPIservice
+ * translatedAPIservice
  */
 
 import api from './api'
 
-// Type definitions
+// translated
 export interface BilibiliAccount {
   id: string
   username: string
@@ -56,48 +56,48 @@ export interface UploadStatus {
   created_at: string
 }
 
-// BENPartitioninfo - Per officialAPIDocs updated，L1 mainPartition
+// Bsitetranslatedinfo - translatedAPIdocsupdate，onetranslated
 export const BILIBILI_PARTITIONS = [
-  { id: 1, name: "animation" },
-  { id: 4, name: "gaming" },
-  { id: 8, name: "MAD" },
-  { id: 3, name: "music" },
-  { id: 129, name: "Dance" },
-  { id: 181, name: "Film & TV" },
-  { id: 5, name: "entertainment" },
-  { id: 36, name: "knowledge" },
-  { id: 188, name: "Tech" },
-  { id: 202, name: "EN" },
-  { id: 76, name: "EN" },
-  { id: 138, name: "EN" },
-  { id: 176, name: "EN" },
-  { id: 155, name: "EN" },
-  { id: 235, name: "EN" },
-  { id: 75, name: "EN" },
+  { id: 1, name: "translated" },
+  { id: 4, name: "translated" },
+  { id: 8, name: "translated" },
+  { id: 3, name: "translated" },
+  { id: 129, name: "translated" },
+  { id: 181, name: "translated" },
+  { id: 5, name: "translated" },
+  { id: 36, name: "translated" },
+  { id: 188, name: "translated" },
+  { id: 202, name: "translated" },
+  { id: 76, name: "translated" },
+  { id: 138, name: "translated" },
+  { id: 176, name: "translated" },
+  { id: 155, name: "translated" },
+  { id: 235, name: "translated" },
+  { id: 75, name: "translated" },
   { id: 21, name: "vlog" },
-  { id: 162, name: "EN" },
-  { id: 207, name: "EN" },
-  { id: 208, name: "EN" },
-  { id: 209, name: "EN" },
-  { id: 164, name: "EN" },
-  { id: 161, name: "EN" },
-  { id: 165, name: "EN" },
-  { id: 158, name: "EN" },
-  { id: 159, name: "EN" },
-  { id: 160, name: "health" },
-  { id: 163, name: "EN" },
-  { id: 22, name: "EN" },
-  { id: 23, name: "EN" }
+  { id: 162, name: "translated" },
+  { id: 207, name: "translated" },
+  { id: 208, name: "translated" },
+  { id: 209, name: "translated" },
+  { id: 164, name: "translated" },
+  { id: 161, name: "translated" },
+  { id: 165, name: "translated" },
+  { id: 158, name: "translated" },
+  { id: 159, name: "translated" },
+  { id: 160, name: "translated" },
+  { id: 163, name: "translated" },
+  { id: 22, name: "translated" },
+  { id: 23, name: "translated" }
 ]
 
-// submissionAPI
+// translatedAPI
 export const uploadApi = {
-  // Accounts
+  // Account Management
   createAccount: async (username: string, password: string, nickname?: string, cookieContent?: string): Promise<BilibiliAccount> => {
     return api.post('/upload/accounts', { username, password, nickname, cookie_content: cookieContent })
   },
 
-  // fetchEN
+  // fetchsupport'stranslated
   getLoginMethods: async (): Promise<{methods: Array<{
     id: string,
     name: string,
@@ -109,17 +109,17 @@ export const uploadApi = {
     return api.get('/upload/login-methods')
   },
 
-  // accountEN
+  // Accounttranslated
   passwordLogin: async (username: string, password: string, nickname?: string): Promise<BilibiliAccount> => {
     return api.post('/upload/password-login', { username, password, nickname })
   },
 
-  // CookieImportEN
+  // Cookieimporttranslated
   cookieLogin: async (cookies: Record<string, string>, nickname?: string): Promise<BilibiliAccount> => {
     return api.post('/upload/cookie-login', { cookies, nickname })
   },
 
-  // EN
+  // No.translated
   thirdPartyLogin: async (type: 'wechat' | 'qq', nickname?: string): Promise<{login_url: string, message: string}> => {
     return api.post('/upload/third-party-login', { type, nickname })
   },
@@ -148,7 +148,7 @@ export const uploadApi = {
     return api.post(`/upload/accounts/${accountId}/check`)
   },
 
-  // submissionEN
+  // translated
   createUploadTask: async (projectId: string, uploadData: UploadRequest): Promise<{message: string, record_id: string, clip_count: number}> => {
     return api.post(`/upload/projects/${projectId}/upload`, uploadData)
   },
@@ -174,7 +174,7 @@ export const uploadApi = {
     return api.get('/upload/accounts')
   },
 
-  // submissionTask management
+  // translatedtasktranslated
   retryUpload: async (recordId: string | number): Promise<{message: string}> => {
     return api.post(`/upload/records/${recordId}/retry`)
   },

@@ -1,5 +1,5 @@
 """
-#45 EN + EN「EN」EN step3。
+#45 translatedsite + Settings page「translated」translated step3。
 """
 
 import json
@@ -80,7 +80,7 @@ def _write(path, api=None, processing=None):
 
 @pytest.fixture
 def manager_env(monkeypatch, tmp_path, fake_dashscope_sdk):
-    for name in ("LLM_PROVIDER", "API_MODEL_NAME", "OPENAI_BASE_URL", "API_DASHSCOPE_API_KEY", "DASHSCOPE_API_KEY"):
+    for name in ("LLM_PROVIDER", "API_MODEL_NAME", "OPtranslatedAI_BASE_URL", "API_DASHSCOPE_API_KEY", "DASHSCOPE_API_KEY"):
         monkeypatch.delenv(name, raising=False)
     from backend.core import llm_manager as m
     monkeypatch.setattr(m.config_sync_service, "is_sync_needed", lambda: False)
@@ -94,16 +94,16 @@ def test_manager_routes_dashscope_intl_via_api_base_url(manager_env):
     mgr = LLMManager(settings_file=manager_env)
 
     assert mgr.settings["dashscope_base_url"] == DASHSCOPE_INTL_COMPATIBLE_BASE_URL
-    assert mgr.settings["openai_base_url"] == ""  # EN openai EN
+    assert mgr.settings["openai_base_url"] == ""  # translated openai translated
     assert mgr.current_provider.mode == "compatible"
     assert mgr.get_current_provider_info()["base_url"] == DASHSCOPE_INTL_COMPATIBLE_BASE_URL
 
 
 def test_manager_openai_base_url_env_does_not_leak_into_dashscope(manager_env, monkeypatch):
-    """Docker .env EN OPENAI_BASE_URL EN provider EN dashscope：EN"""
+    """Docker .env translated OPtranslatedAI_BASE_URL translated provider Is dashscope：translated translated'stranslated"""
     from backend.core.llm_manager import LLMManager
 
-    monkeypatch.setenv("OPENAI_BASE_URL", "https://api.deepseek.com/v1")
+    monkeypatch.setenv("OPtranslatedAI_BASE_URL", "https://api.deepseek.com/v1")
     _write(manager_env, api={"api_provider": "dashscope"})
     mgr = LLMManager(settings_file=manager_env)
 
@@ -119,7 +119,7 @@ def test_manager_reads_processing_settings_from_settings_json(manager_env):
 
     assert mgr.get_processing_setting("min_score_threshold") == 0.55
     assert mgr.get_processing_setting("chunk_size") == 3000
-    assert mgr.get_processing_setting("max_clips_per_collection") == 5  # EN
+    assert mgr.get_processing_setting("max_clips_per_collection") == 5  # translateddefault
 
 
 # ------------------------------------------------------------------ step3 ---
@@ -133,13 +133,13 @@ def test_step3_threshold_priority(monkeypatch, manager_env):
     monkeypatch.setattr(m, "get_llm_manager", lambda: mgr)
     monkeypatch.setattr(step3, "MIN_SCORE_OVERRIDE", None)
 
-    assert step3.resolve_min_score_threshold() == 0.6          # EN
+    assert step3.resolve_min_score_threshold() == 0.6          # Settings page'stranslated
 
     monkeypatch.setattr(step3, "MIN_SCORE_OVERRIDE", 0.35)
-    assert step3.resolve_min_score_threshold() == 0.35         # CLI EN
+    assert step3.resolve_min_score_threshold() == 0.35         # CLI translated
 
     monkeypatch.setattr(step3, "MIN_SCORE_OVERRIDE", None)
     _write(manager_env, api={"api_provider": "dashscope"}, processing={"processing_min_score": 7})
     import os
     os.utime(manager_env, (manager_env.stat().st_atime, manager_env.stat().st_mtime + 5))
-    assert step3.resolve_min_score_threshold() == step3.MIN_SCORE_THRESHOLD  # EN
+    assert step3.resolve_min_score_threshold() == step3.MIN_SCORE_THRESHOLD  # translateddefault

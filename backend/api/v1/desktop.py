@@ -1,6 +1,6 @@
 """
-ENAPIEN
-ENneedEN
+translateduseAPItranslated
+Providestranslatedusetranslated'stranslatedfeature
 """
 import os
 import psutil
@@ -14,13 +14,13 @@ from backend.core.desktop_config import get_desktop_config, is_desktop_mode
 
 router = APIRouter()
 
-# checkEN
+# checktranslated
 def check_desktop_mode():
     if not is_desktop_mode():
-        raise HTTPException(status_code=400, detail="EN")
+        raise HTTPException(status_code=400, detail="translatedOnlyintranslatedcanuse")
 
 class SystemInfo(BaseModel):
-    """systemEN"""
+    """Systeminfomodel"""
     platform: str
     platform_version: str
     architecture: str
@@ -33,7 +33,7 @@ class SystemInfo(BaseModel):
     app_version: str
 
 class ServiceStatus(BaseModel):
-    """servicestatusEN"""
+    """servicestatusmodel"""
     is_running: bool
     port: int
     uptime: str
@@ -43,11 +43,11 @@ class ServiceStatus(BaseModel):
 
 @router.get("/system/info", response_model=SystemInfo)
 async def get_system_info():
-    """fetchsystemEN"""
+    """fetchSysteminfo"""
     check_desktop_mode()
     
     try:
-        # fetchsystemEN
+        # fetchSysteminfo
         memory = psutil.virtual_memory()
         disk = psutil.disk_usage('/')
         
@@ -64,7 +64,7 @@ async def get_system_info():
             app_version=get_desktop_config().app_version
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"fetchsystemENfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"fetchSysteminfofailed: {str(e)}")
 
 @router.get("/service/status", response_model=ServiceStatus)
 async def get_service_status():
@@ -88,7 +88,7 @@ async def get_service_status():
 
 @router.get("/logs")
 async def get_logs(lines: int = 100):
-    """fetchENlog"""
+    """fetchtranslateduselogs"""
     check_desktop_mode()
     
     try:
@@ -96,9 +96,9 @@ async def get_logs(lines: int = 100):
         log_file = config.data_dir / "logs" / "autoclip.log"
         
         if not log_file.exists():
-            return {"logs": [], "message": "logfiledoes not exist"}
+            return {"logs": [], "message": "logsfile not found"}
         
-        # readENNENlog
+        # translatedNtranslatedlogs
         with open(log_file, 'r', encoding='utf-8') as f:
             all_lines = f.readlines()
             recent_lines = all_lines[-lines:] if len(all_lines) > lines else all_lines
@@ -109,21 +109,21 @@ async def get_logs(lines: int = 100):
             "returned_lines": len(recent_lines)
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"readlogfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"translatedlogsfailed: {str(e)}")
 
 @router.post("/service/restart")
 async def restart_service():
-    """restartservice（ENreturnsucceeded，ENrestartENTauriprocessing）"""
+    """translatedservice（Onlyreturnsucceeded，translatedTauriprocess）"""
     check_desktop_mode()
     
     return {
-        "message": "servicerestartrequestENsend",
+        "message": "servicetranslated",
         "timestamp": datetime.now().isoformat()
     }
 
 @router.get("/config")
 async def get_config():
-    """fetchcurrentconfig"""
+    """fetchtranslatedconfig"""
     check_desktop_mode()
     
     try:
@@ -147,21 +147,21 @@ async def update_config(config_data: Dict[str, Any]):
     try:
         from backend.core.desktop_config import save_desktop_config, DesktopConfig
         
-        # validateconfigEN
+        # verifyconfigtranslated
         config = DesktopConfig(**config_data)
         
-        # saveconfig
+        # translatedconfig
         if save_desktop_config(config):
             return {"message": "configupdatesucceeded", "config": config.dict()}
         else:
-            raise HTTPException(status_code=500, detail="configsavefailed")
+            raise HTTPException(status_code=500, detail="configtranslatedfailed")
             
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"configupdatefailed: {str(e)}")
 
 @router.get("/health/detailed")
 async def detailed_health_check():
-    """ENcheck"""
+    """translatedHealth Check"""
     check_desktop_mode()
     
     try:
@@ -171,7 +171,7 @@ async def detailed_health_check():
         db_status = "healthy"
         try:
             from backend.core.database import get_db
-            # ENdatabaseconnectEN
+            # translated'sdatabaseconnecttest
             db_status = "healthy"
         except Exception:
             db_status = "unhealthy"
@@ -202,4 +202,4 @@ async def detailed_health_check():
             }
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"ENcheckfailed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Health Checkfailed: {str(e)}")

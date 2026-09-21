@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-ENprojectEN
-processingENfileENprojectEN
+fixedprojecttranslated
+processtranslatedimportAndfileimportproject'stranslatedissue
 """
 
 import sys
 from pathlib import Path
 
-# ENprojectENdirectoryENPythonpath
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
@@ -23,56 +23,56 @@ import logging
 logger = logging.getLogger(__name__)
 
 def fix_project_thumbnail(project_id: str):
-    """ENprojectEN"""
+    """fixedtranslatedproject'stranslated"""
     db = SessionLocal()
     try:
         project = db.query(Project).filter(Project.id == project_id).first()
         
         if not project:
-            print(f"❌ project {project_id} does not exist")
+            print(f"❌ project {project_id} not found")
             return False
         
         if project.thumbnail:
-            print(f"✅ project {project_id} EN，EN")
+            print(f"✅ project {project_id} translated，skip")
             return True
         
-        print(f"🔧 ENproject {project_id} EN...")
+        print(f"🔧 fixedproject {project_id} 'stranslated...")
         
-        # checkprojectEN
+        # checkprojecttranslatedAndtranslated
         source_url = project.project_metadata.get('source_url') if project.project_metadata else None
         is_bilibili_project = source_url and 'bilibili.com' in source_url
         has_video_file = project.video_path and Path(project.video_path).exists()
         
         if is_bilibili_project:
-            # ENproject - ENBENfetchEN
-            print(f"📺 ENBENproject，ENfetchENvideoEN...")
+            # translatedimportproject - translatedfromBsitefetchtranslated
+            print(f"📺 translatedBsiteproject，translatedfetchtranslatedvideotranslated...")
             success = fix_bilibili_thumbnail(project, db)
         elif has_video_file:
-            # fileENproject - ENvideofilegenerateEN
-            print(f"📁 ENfileENproject，ENvideofilegenerateEN...")
+            # fileimportproject - fromvideofiletranslated
+            print(f"📁 translatedfileimportproject，fromvideofiletranslated...")
             success = fix_file_import_thumbnail(project, db)
         else:
-            # ENvideofile，ENclipgenerateEN
-            print(f"🎬 ENvideofile，ENclipgenerateEN...")
+            # translatedvideofile，translatedfromcliptranslated
+            print(f"🎬 translatedvideofile，translatedfromcliptranslated...")
             success = fix_clip_thumbnail(project, db)
         
         if success:
-            print(f"✅ project {project_id} ENsucceeded")
+            print(f"✅ project {project_id} translatedfixedsucceeded")
         else:
-            print(f"❌ project {project_id} ENfailed")
+            print(f"❌ project {project_id} translatedfixedfailed")
         
         return success
         
     except Exception as e:
-        print(f"❌ ENproject {project_id} ENerror: {e}")
+        print(f"❌ fixedproject {project_id} translatederror: {e}")
         return False
     finally:
         db.close()
 
 def fix_bilibili_thumbnail(project, db):
-    """ENBENprojectEN"""
+    """fixedBsiteproject'stranslated"""
     try:
-        # ENprojectsettingsENfetchBEN
+        # fromprojectsettingstranslatedfetchBsiteinfo
         if not project.processing_config:
             return False
         
@@ -80,121 +80,121 @@ def fix_bilibili_thumbnail(project, db):
         if not bilibili_info:
             return False
         
-        # ENBENAPIfetchEN
-        # ENneedENBENAPIEN
-        # ENreturnFalse，ENneedENprocessing
-        print("⚠️  BENfetchneedAPIEN，EN")
+        # translatedfromBsiteAPIfetchtranslated
+        # thistranslated'sBsiteAPItranslated
+        # translatedreturnFalse，translatedprocess
+        print("⚠️  BsitetranslatedfetchtranslatedAPIsupport，translatedskip")
         return False
         
     except Exception as e:
-        logger.error(f"ENBENfailed: {e}")
+        logger.error(f"fixedBsitetranslatedfailed: {e}")
         return False
 
 def fix_file_import_thumbnail(project, db):
-    """ENfileENprojectEN"""
+    """fixedfileimportproject'stranslated"""
     try:
         video_path = Path(project.video_path)
         if not video_path.exists():
-            print(f"⚠️  videofiledoes not exist: {video_path}")
+            print(f"⚠️  videofile not found: {video_path}")
             return False
         
-        # generateEN
+        # translated
         thumbnail_data = generate_project_thumbnail(project.id, video_path)
         
         if thumbnail_data:
-            # saveENdatabase
+            # translateddatabase
             project.thumbnail = thumbnail_data
             db.commit()
             return True
         else:
-            print("⚠️  ENgeneratefailed")
+            print("⚠️  translatedfailed")
             return False
             
     except Exception as e:
-        logger.error(f"ENfileENfailed: {e}")
+        logger.error(f"fixedfileimporttranslatedfailed: {e}")
         return False
 
 def fix_clip_thumbnail(project, db):
-    """ENclipgenerateEN"""
+    """fromcliptranslated"""
     try:
-        # ENprojectdirectoryENclipfile
+        # translatedprojectdirectorytranslated'sclipfile
         project_dir = get_projects_directory() / str(project.id)
         clips_dir = project_dir / "output" / "clips"
         
         if not clips_dir.exists():
-            print(f"⚠️  clipdirectorydoes not exist: {clips_dir}")
+            print(f"⚠️  clipdirectorynot found: {clips_dir}")
             return False
         
-        # fetchENclipfile
+        # fetchNo.one clipfile
         clip_files = list(clips_dir.glob("*.mp4"))
         if not clip_files:
-            print(f"⚠️  ENclipfile")
+            print(f"⚠️  translatedclipfile")
             return False
         
         first_clip = clip_files[0]
-        print(f"🎬 useclipfilegenerateEN: {first_clip.name}")
+        print(f"🎬 useclipfiletranslated: {first_clip.name}")
         
-        # generateEN
+        # translated
         thumbnail_data = generate_project_thumbnail(project.id, first_clip)
         
         if thumbnail_data:
-            # saveENdatabase
+            # translateddatabase
             project.thumbnail = thumbnail_data
             db.commit()
             return True
         else:
-            print("⚠️  ENclipgenerateENfailed")
+            print("⚠️  fromcliptranslatedfailed")
             return False
             
     except Exception as e:
-        logger.error(f"ENclipgenerateENfailed: {e}")
+        logger.error(f"fromcliptranslatedfailed: {e}")
         return False
 
 def fix_all_project_thumbnails():
-    """ENallprojectEN"""
+    """fixedtranslatedproject'stranslated"""
     db = SessionLocal()
     try:
-        # ENallENproject
+        # translated'sproject
         projects = db.query(Project).filter(Project.thumbnail.is_(None)).all()
         
         if not projects:
-            print("✅ allprojectEN")
+            print("✅ translatedprojecttranslated")
             return True
         
-        print(f"📋 EN {len(projects)} ENneedENproject")
+        print(f"📋 translated {len(projects)}  translatedfixedtranslated'sproject")
         
         success_count = 0
         for project in projects:
             if fix_project_thumbnail(project.id):
                 success_count += 1
         
-        print(f"🎉 EN！succeededEN {success_count}/{len(projects)} ENprojectEN")
+        print(f"🎉 translated！succeededfixed {success_count}/{len(projects)}  project'stranslated")
         return True
         
     except Exception as e:
-        print(f"❌ ENallprojectENerror: {e}")
+        print(f"❌ fixedtranslatedprojecttranslatederror: {e}")
         return False
     finally:
         db.close()
 
 def main():
-    """EN"""
+    """translated"""
     if len(sys.argv) > 1:
-        # ENproject
+        # fixedtranslatedproject
         project_id = sys.argv[1]
-        print(f"🚀 startENproject {project_id} EN...")
+        print(f"🚀 translatedfixedproject {project_id} 'stranslated...")
         if fix_project_thumbnail(project_id):
-            print("🎉 EN！")
+            print("🎉 translatedfixedtranslated！")
         else:
-            print("❌ ENfailed")
+            print("❌ translatedfixedfailed")
             sys.exit(1)
     else:
-        # ENallproject
-        print("🚀 startENallprojectEN...")
+        # fixedtranslatedproject
+        print("🚀 translatedfixedtranslatedproject'stranslated...")
         if fix_all_project_thumbnails():
-            print("🎉 allEN！")
+            print("🎉 translatedfixedtranslated！")
         else:
-            print("❌ ENfailed")
+            print("❌ translatedfixedfailed")
             sys.exit(1)
 
 if __name__ == "__main__":

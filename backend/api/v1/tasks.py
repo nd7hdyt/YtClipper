@@ -1,5 +1,5 @@
 """
-taskENAPIEN
+tasktranslatedAPItranslated
 """
 import logging
 from fastapi import APIRouter, HTTPException, Depends, Query
@@ -27,7 +27,7 @@ async def get_tasks(
     project_id: Optional[str] = Query(None),
     db: Session = Depends(get_db)
 ):
-    """fetchtaskEN"""
+    """fetchtasklist"""
     try:
         task_service = TaskService(db)
         tasks = task_service.get_tasks(
@@ -38,54 +38,54 @@ async def get_tasks(
         )
         return tasks
     except Exception as e:
-        logger.exception("fetchtaskENfailed")
-        raise HTTPException(status_code=500, detail="fetchtaskENfailed，pleaseENretry")
+        logger.exception("fetchtasklistfailed")
+        raise HTTPException(status_code=500, detail="fetchtasklistfailed，translated")
 
 @router.get("/project/{project_id}", response_model=List[TaskResponse])
 async def get_project_tasks(
     project_id: str,
     db: Session = Depends(get_db)
 ):
-    """fetchENprojectENtaskEN"""
+    """fetchtranslatedproject'stasklist"""
     try:
         task_service = TaskService(db)
         tasks = task_service.get_tasks_by_project_id(project_id)
         return tasks
     except Exception as e:
         logger.exception("fetchprojecttaskfailed: %s", project_id)
-        raise HTTPException(status_code=500, detail="fetchprojecttaskfailed，pleaseENretry")
+        raise HTTPException(status_code=500, detail="fetchprojecttaskfailed，translated")
 
 @router.get("/{task_id}", response_model=TaskResponse)
 async def get_task(
     task_id: str,
     db: Session = Depends(get_db)
 ):
-    """fetchENtaskEN"""
+    """fetchtranslated tasktranslated"""
     try:
         task_service = TaskService(db)
         task = task_service.get_task_by_id(task_id)
         if not task:
-            raise HTTPException(status_code=404, detail="taskdoes not exist")
+            raise HTTPException(status_code=404, detail="tasknot found")
         return task
     except HTTPException:
         raise
     except Exception as e:
-        logger.exception("fetchtaskENfailed: %s", task_id)
-        raise HTTPException(status_code=500, detail="fetchtaskENfailed，pleaseENretry")
+        logger.exception("fetchtasktranslatedfailed: %s", task_id)
+        raise HTTPException(status_code=500, detail="fetchtasktranslatedfailed，translated")
 
 @router.post("/", response_model=TaskResponse)
 async def create_task(
     task_data: TaskCreate,
     db: Session = Depends(get_db)
 ):
-    """createENtask"""
+    """createtranslatedtask"""
     try:
         task_service = TaskService(db)
         task = task_service.create_task(task_data)
         return task
     except Exception as e:
         logger.exception("createtaskfailed")
-        raise HTTPException(status_code=500, detail="createtaskfailed，pleaseENretry")
+        raise HTTPException(status_code=500, detail="createtaskfailed，translated")
 
 @router.put("/{task_id}", response_model=TaskResponse)
 async def update_task(
@@ -98,13 +98,13 @@ async def update_task(
         task_service = TaskService(db)
         task = task_service.update_task(task_id, task_data)
         if not task:
-            raise HTTPException(status_code=404, detail="taskdoes not exist")
+            raise HTTPException(status_code=404, detail="tasknot found")
         return task
     except HTTPException:
         raise
     except Exception as e:
         logger.exception("updatetaskfailed: %s", task_id)
-        raise HTTPException(status_code=500, detail="updatetaskfailed，pleaseENretry")
+        raise HTTPException(status_code=500, detail="updatetaskfailed，translated")
 
 @router.delete("/{task_id}")
 async def delete_task(
@@ -116,25 +116,25 @@ async def delete_task(
         task_service = TaskService(db)
         success = task_service.delete_task(task_id)
         if not success:
-            raise HTTPException(status_code=404, detail="taskdoes not exist")
+            raise HTTPException(status_code=404, detail="tasknot found")
         return {"message": "taskdeletesucceeded"}
     except HTTPException:
         raise
     except Exception as e:
         logger.exception("deletetaskfailed: %s", task_id)
-        raise HTTPException(status_code=500, detail="deletetaskfailed，pleaseENretry")
+        raise HTTPException(status_code=500, detail="deletetaskfailed，translated")
 
 @router.post("/{task_id}/submit")
 async def submit_task(
     task_id: str,
     db: Session = Depends(get_db)
 ):
-    """ENtaskENqueue"""
+    """translatedtasktranslated"""
     try:
         task_service = TaskService(db)
         task = task_service.get_task_by_id(task_id)
         if not task:
-            raise HTTPException(status_code=404, detail="taskdoes not exist")
+            raise HTTPException(status_code=404, detail="tasknot found")
         
         queue_service = TaskQueueService(db)
         task_type = str(task.task_type.value if hasattr(task.task_type, "value") else task.task_type)
@@ -143,7 +143,7 @@ async def submit_task(
             input_video_path = _get_task_config_value(task, "input_video_path")
             input_srt_path = _get_task_config_value(task, "input_srt_path")
             if not input_video_path:
-                raise HTTPException(status_code=400, detail="taskEN input_video_path config")
+                raise HTTPException(status_code=400, detail="tasktranslated input_video_path config")
             result = queue_service.submit_video_processing_task(
                 project_id=task.project_id,
                 input_video_path=input_video_path,
@@ -156,10 +156,10 @@ async def submit_task(
             collection_data = _get_task_config_value(task, "collection_data", [])
             result = queue_service.submit_collection_generation_task(task.project_id, collection_data)
         else:
-            raise HTTPException(status_code=400, detail=f"ENtaskEN: {task_type}")
+            raise HTTPException(status_code=400, detail=f"translatedsupport'stasktranslated: {task_type}")
         
         return {
-            "message": "taskENqueue",
+            "message": "tasktranslated",
             "task_id": task_id,
             "queue_task_id": result.get("task_id"),
             "celery_task_id": result.get("celery_task_id"),
@@ -167,22 +167,22 @@ async def submit_task(
     except HTTPException:
         raise
     except Exception as e:
-        logger.exception("ENtaskfailed: %s", task_id)
-        raise HTTPException(status_code=500, detail="ENtaskfailed，pleaseENretry")
+        logger.exception("translatedtaskfailed: %s", task_id)
+        raise HTTPException(status_code=500, detail="translatedtaskfailed，translated")
 
 @router.post("/{task_id}/retry")
 async def retry_task(
     task_id: str,
     db: Session = Depends(get_db)
 ):
-    """retryfailedENtask"""
+    """translatedfailed'stask"""
     try:
         task_service = TaskService(db)
         task = task_service.get_task_by_id(task_id)
         if not task:
-            raise HTTPException(status_code=404, detail="taskdoes not exist")
+            raise HTTPException(status_code=404, detail="tasknot found")
         
-        # ENtaskstatusEN
+        # translatedtaskstatustranslated
         task_service.update_task(task_id, TaskUpdate(status="pending", progress=0))
         
         queue_service = TaskQueueService(db)
@@ -192,7 +192,7 @@ async def retry_task(
             input_video_path = _get_task_config_value(task, "input_video_path")
             input_srt_path = _get_task_config_value(task, "input_srt_path")
             if not input_video_path:
-                raise HTTPException(status_code=400, detail="taskEN input_video_path config")
+                raise HTTPException(status_code=400, detail="tasktranslated input_video_path config")
             result = queue_service.submit_video_processing_task(
                 project_id=task.project_id,
                 input_video_path=input_video_path,
@@ -205,10 +205,10 @@ async def retry_task(
             collection_data = _get_task_config_value(task, "collection_data", [])
             result = queue_service.submit_collection_generation_task(task.project_id, collection_data)
         else:
-            raise HTTPException(status_code=400, detail=f"ENtaskEN: {task_type}")
+            raise HTTPException(status_code=400, detail=f"translatedsupport'stasktranslated: {task_type}")
         
         return {
-            "message": "taskEN",
+            "message": "tasktranslated",
             "task_id": task_id,
             "queue_task_id": result.get("task_id"),
             "celery_task_id": result.get("celery_task_id"),
@@ -216,8 +216,8 @@ async def retry_task(
     except HTTPException:
         raise
     except Exception as e:
-        logger.exception("retrytaskfailed: %s", task_id)
-        raise HTTPException(status_code=500, detail="retrytaskfailed，pleaseENretry")
+        logger.exception("translatedtaskfailed: %s", task_id)
+        raise HTTPException(status_code=500, detail="translatedtaskfailed，translated")
 
 @router.get("/{task_id}/status")
 async def get_task_status(
@@ -229,7 +229,7 @@ async def get_task_status(
         task_service = TaskService(db)
         task = task_service.get_task_by_id(task_id)
         if not task:
-            raise HTTPException(status_code=404, detail="taskdoes not exist")
+            raise HTTPException(status_code=404, detail="tasknot found")
         
         return {
             "task_id": task_id,
@@ -243,5 +243,5 @@ async def get_task_status(
         raise
     except Exception as e:
         logger.exception("fetchtaskstatusfailed: %s", task_id)
-        raise HTTPException(status_code=500, detail="fetchtaskstatusfailed，pleaseENretry")
+        raise HTTPException(status_code=500, detail="fetchtaskstatusfailed，translated")
 

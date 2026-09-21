@@ -1,6 +1,6 @@
 """
-clipEN
-ENvideoclipENstatus
+clipmodel
+translatedvideoclip'stranslatedinfoAndstatus
 """
 
 import enum
@@ -10,119 +10,119 @@ from sqlalchemy.orm import relationship
 from .base import BaseModel
 
 class ClipStatus(str, enum.Enum):
-    """clipstatusEN"""
-    PENDING = "pending"           # ENprocessing
+    """clipstatustranslated"""
+    PtranslatedDING = "pending"           # translatedprocess
     PROCESSING = "processing"     # processing
     COMPLETED = "completed"       # completed
     FAILED = "failed"            # failed
 
 class Clip(BaseModel):
-    """clipEN"""
+    """clipmodel"""
     
     __tablename__ = "clips"
     
-    # EN
+    # translatedinfo
     title = Column(
         String(255), 
         nullable=False, 
-        comment="cliptitle"
+        comment="cliptranslated"
     )
     description = Column(
         Text, 
         nullable=True, 
-        comment="clipdescription"
+        comment="cliptranslated"
     )
     
-    # statusEN
+    # statusinfo
     status = Column(
         Enum(ClipStatus), 
-        default=ClipStatus.PENDING,
+        default=ClipStatus.PtranslatedDING,
         nullable=False,
         comment="clipstatus"
     )
     
-    # timeEN
+    # translatedinfo
     start_time = Column(
         Integer, 
         nullable=False, 
-        comment="starttime（EN）"
+        comment="translated（seconds）"
     )
     end_time = Column(
         Integer, 
         nullable=False, 
-        comment="endtime（EN）"
+        comment="translated（seconds）"
     )
     duration = Column(
         Integer, 
         nullable=False, 
-        comment="clipduration（EN）"
+        comment="cliptranslated（seconds）"
     )
     
-    # scoringEN
+    # translatedinfo
     score = Column(
         Float, 
         nullable=True, 
-        comment="clipscoring"
+        comment="cliptranslated"
     )
     recommendation_reason = Column(
         Text, 
         nullable=True, 
-        comment="EN"
+        comment="recommendtranslated"
     )
     
-    # fileEN
+    # fileinfo
     video_path = Column(
         String(500), 
         nullable=True, 
-        comment="clipvideofilepath"
+        comment="clipvideofile path"
     )
     thumbnail_path = Column(
         String(500), 
         nullable=True, 
-        comment="ENfilepath"
+        comment="translatedfile path"
     )
     
-    # processingEN
+    # processinfo
     processing_step = Column(
         Integer, 
         nullable=True, 
-        comment="processingEN（1-6）"
+        comment="processstep（1-6）"
     )
     
-    # tagsEN
+    # translatedAndtranslated
     tags = Column(
         JSON, 
         nullable=True, 
-        comment="cliptags"
+        comment="cliptranslated"
     )
     clip_metadata = Column(
         JSON, 
         nullable=True, 
-        comment="clipEN（EN，ENfilesystem）"
+        comment="cliptranslated（translated，translatedinfileSystem）"
     )
     
-    # EN
+    # addtranslated
     @property
     def metadata_file_path(self) -> Optional[str]:
-        """fetchENfilepath"""
+        """fetchtranslatedfile path"""
         if self.clip_metadata and 'metadata_file' in self.clip_metadata:
             return self.clip_metadata['metadata_file']
         return None
     
     @property
     def has_full_content(self) -> bool:
-        """ENfile"""
+        """Istranslatedfile"""
         return self.metadata_file_path is not None
     
-    # EN
+    # translated
     project_id = Column(
         String(36), 
         ForeignKey("projects.id", ondelete="CASCADE"),
         nullable=False,
-        comment="ENprojectID"
+        comment="translatedprojectID"
     )
     
-    # EN
+    # translated
     project = relationship(
         "Project", 
         back_populates="clips"
@@ -138,21 +138,21 @@ class Clip(BaseModel):
     
     @property
     def is_processing(self):
-        """ENcurrentlyprocessing"""
+        """Istranslatedinprocess"""
         return self.status == ClipStatus.PROCESSING
     
     @property
     def is_completed(self):
-        """ENcompleted"""
+        """Istranslatedcompleted"""
         return self.status == ClipStatus.COMPLETED
     
     @property
     def has_error(self):
-        """ENerror"""
+        """Istranslatederror"""
         return self.status == ClipStatus.FAILED
     
     def get_time_range(self) -> str:
-        """fetchtimeEN"""
+        """fetchtranslated"""
         try:
             start_time = int(self.start_time) if self.start_time else 0
             end_time = int(self.end_time) if self.end_time else 0
@@ -163,6 +163,6 @@ class Clip(BaseModel):
             return "00:00 - 00:00"
     
     def calculate_duration(self):
-        """ENclipduration"""
+        """translatedcliptranslated"""
         self.duration = self.end_time - self.start_time
         return self.duration

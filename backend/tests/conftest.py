@@ -1,6 +1,6 @@
 """
-pytestEN
-ENfixturesEN
+pytestconfigfile
+Providestranslated'sfixturesAndtesttool
 """
 
 import pytest
@@ -12,32 +12,32 @@ from unittest.mock import Mock, MagicMock
 import sys
 import os
 
-# ENPythonEN
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent.parent
 sys.path.append(str(project_root))
 
 
 @pytest.fixture(scope="session")
 def test_data_dir(tmp_path_factory):
-    """EN"""
+    """createtesttranslateddirectory"""
     return tmp_path_factory.mktemp("test_data")
 
 
 @pytest.fixture
 def sample_srt_file(test_data_dir):
-    """ENSRTEN"""
+    """createtranslatedSRTfile"""
     srt_file = test_data_dir / "sample.srt"
     srt_content = """1
 00:00:01,000 --> 00:00:05,000
-EN
+thisIsNo.onetranslatedsubtitlestranslated
 
 2
 00:00:05,000 --> 00:00:10,000
-EN
+thisIsNo.translatedsubtitlestranslated
 
 3
 00:00:10,000 --> 00:00:15,000
-EN
+thisIsNo.translatedsubtitlestranslated
 """
     srt_file.write_text(srt_content, encoding='utf-8')
     return srt_file
@@ -45,7 +45,7 @@ EN
 
 @pytest.fixture
 def mock_db_session():
-    """EN"""
+    """createtranslateddatabasetranslated"""
     session = Mock()
     session.commit = Mock()
     session.rollback = Mock()
@@ -55,7 +55,7 @@ def mock_db_session():
 
 @pytest.fixture
 def mock_task_repository():
-    """EN"""
+    """createtranslatedtasktranslated"""
     mock_repo = Mock()
     mock_task = Mock()
     mock_task.id = "test_task_001"
@@ -70,7 +70,7 @@ def mock_task_repository():
 
 @pytest.fixture
 def temp_project_dir(tmp_path):
-    """EN"""
+    """createtranslatedprojectdirectory"""
     project_dir = tmp_path / "test_project"
     project_dir.mkdir()
     return project_dir
@@ -78,15 +78,15 @@ def temp_project_dir(tmp_path):
 
 @pytest.fixture
 def mock_srt_file(tmp_path):
-    """ENSRTEN"""
+    """createtranslatedSRTfile"""
     srt_file = tmp_path / "test.srt"
     srt_content = """1
 00:00:01,000 --> 00:00:05,000
-EN
+thisIsNo.onetranslatedsubtitles
 
 2
 00:00:05,000 --> 00:00:10,000
-EN
+thisIsNo.translatedsubtitles
 """
     srt_file.write_text(srt_content, encoding='utf-8')
     return srt_file
@@ -94,15 +94,15 @@ EN
 
 @pytest.fixture
 def invalid_srt_file(tmp_path):
-    """ENSRTEN"""
+    """createtranslated'sSRTfile"""
     srt_file = tmp_path / "invalid.srt"
-    srt_file.write_text("ENSRTEN")
+    srt_file.write_text("thistranslatedIstranslated'sSRTformat")
     return srt_file
 
 
 @pytest.fixture
 def mock_config():
-    """EN"""
+    """createtranslatedconfig"""
     return {
         "processing_params": {
             "max_clips": 50,
@@ -123,7 +123,7 @@ def mock_config():
 
 @pytest.fixture
 def mock_pipeline_result():
-    """EN"""
+    """createtranslated"""
     return {
         "success": True,
         "output_files": {
@@ -141,7 +141,7 @@ def mock_pipeline_result():
 
 @pytest.fixture
 def mock_orchestrator_status():
-    """EN"""
+    """createtranslatedstatus"""
     return {
         "project_id": "test_project",
         "task_id": "test_task",
@@ -158,7 +158,7 @@ def mock_orchestrator_status():
 
 
 class TestDataManager:
-    """EN"""
+    """testtranslated"""
     
     def __init__(self, base_dir: Path):
         self.base_dir = base_dir
@@ -166,15 +166,15 @@ class TestDataManager:
         self.created_dirs = []
     
     def create_srt_file(self, name: str, content: Optional[str] = None) -> Path:
-        """ENSRTEN"""
+        """createSRTfile"""
         if content is None:
             content = f"""1
 00:00:01,000 --> 00:00:05,000
-{name} EN
+{name} No.onetranslatedsubtitles
 
 2
 00:00:05,000 --> 00:00:10,000
-{name} EN
+{name} No.translatedsubtitles
 """
         
         srt_file = self.base_dir / f"{name}.srt"
@@ -183,11 +183,11 @@ class TestDataManager:
         return srt_file
     
     def create_project_structure(self, project_id: str) -> Path:
-        """EN"""
+        """createprojectdirectorytranslated"""
         project_dir = self.base_dir / project_id
         project_dir.mkdir(exist_ok=True)
         
-        # EN
+        # createtranslateddirectory
         subdirs = ["srt", "output", "logs", "temp"]
         for subdir in subdirs:
             (project_dir / subdir).mkdir(exist_ok=True)
@@ -197,7 +197,7 @@ class TestDataManager:
         return project_dir
     
     def create_config_file(self, project_dir: Path, config: dict) -> Path:
-        """EN"""
+        """createconfigfile"""
         config_file = project_dir / "config.yaml"
         import yaml
         with open(config_file, 'w', encoding='utf-8') as f:
@@ -207,7 +207,7 @@ class TestDataManager:
         return config_file
     
     def cleanup(self):
-        """EN"""
+        """cleancreate'stesttranslated"""
         for file_path in self.created_files:
             if file_path.exists():
                 file_path.unlink()
@@ -219,32 +219,32 @@ class TestDataManager:
 
 @pytest.fixture
 def test_data_manager(tmp_path):
-    """EN"""
+    """createtesttranslated"""
     manager = TestDataManager(tmp_path)
     yield manager
     manager.cleanup()
 
 
 def assert_file_exists(file_path: Path, description: str = ""):
-    """EN"""
-    assert file_path.exists(), f"EN: {file_path} {description}"
+    """translatedfiletranslatedin"""
+    assert file_path.exists(), f"file not found: {file_path} {description}"
 
 
 def assert_file_content(file_path: Path, expected_content: str, description: str = ""):
-    """EN"""
+    """translatedfiletranslated"""
     assert_file_exists(file_path, description)
     actual_content = file_path.read_text(encoding='utf-8')
     assert actual_content.strip() == expected_content.strip(), \
-        f"EN: {file_path} {description}"
+        f"filetranslated: {file_path} {description}"
 
 
 def assert_dict_contains(dict_obj: dict, expected_keys: list, description: str = ""):
-    """EN"""
+    """translatedPackageincludetranslated"""
     for key in expected_keys:
-        assert key in dict_obj, f"EN: {key} {description}"
+        assert key in dict_obj, f"translated: {key} {description}"
 
 
 def assert_error_contains(error: Exception, expected_message: str, description: str = ""):
-    """EN"""
+    """translatederrorinfoPackageincludetranslated"""
     assert expected_message in str(error), \
-        f"EN: {expected_message} {description}" 
+        f"errorinfotranslatedPackageincludetranslated: {expected_message} {description}" 

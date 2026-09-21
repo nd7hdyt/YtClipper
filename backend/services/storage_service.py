@@ -1,5 +1,5 @@
 """
-ENservice
+translatedonetranslatedservice
 """
 
 import json
@@ -13,18 +13,18 @@ from ..core.config import get_data_directory
 logger = logging.getLogger(__name__)
 
 class StorageService:
-    """ENservice"""
+    """translatedonetranslatedservice"""
     
     def __init__(self, project_id: str):
         self.project_id = project_id
         self.data_dir = get_data_directory()
         self.project_dir = self.data_dir / "projects" / project_id
         
-        # ENprojectdirectoryEN
+        # ensureprojectdirectorytranslatedin
         self._ensure_project_structure()
     
     def _ensure_project_structure(self):
-        """ENprojectdirectoryEN"""
+        """ensureprojectdirectorytranslatedin"""
         directories = [
             self.project_dir / "raw",
             self.project_dir / "processing",
@@ -36,15 +36,15 @@ class StorageService:
             directory.mkdir(parents=True, exist_ok=True)
     
     def save_metadata(self, metadata: Dict[str, Any], step: str) -> str:
-        """saveprocessingENfilesystem"""
+        """translatedprocesstranslatedfileSystem"""
         metadata_file = self.project_dir / "processing" / f"{step}.json"
         self._atomic_write_json(metadata_file, metadata)
         
-        logger.info(f"saveEN: {metadata_file}")
+        logger.info(f"translated: {metadata_file}")
         return str(metadata_file)
     
     def get_metadata(self, step: str) -> Optional[Dict[str, Any]]:
-        """fetchprocessingEN"""
+        """fetchprocesstranslated"""
         metadata_file = self.project_dir / "processing" / f"{step}.json"
         
         if metadata_file.exists():
@@ -53,7 +53,7 @@ class StorageService:
         return None
     
     def save_file(self, file_path: Path, target_name: str, file_type: str = "raw") -> str:
-        """savefileENprojectdirectory"""
+        """translatedfiletranslatedprojectdirectory"""
         if file_type == "raw":
             target_path = self.project_dir / "raw" / target_name
         elif file_type == "clip":
@@ -61,52 +61,52 @@ class StorageService:
         elif file_type == "collection":
             target_path = self.project_dir / "output" / "collections" / target_name
         else:
-            raise ValueError(f"ENfileEN: {file_type}")
+            raise ValueError(f"translatedsupport'sfiletranslated: {file_type}")
         
-        # ENdirectoryEN
+        # ensuretranslateddirectorytranslatedin
         target_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # ENfile
+        # translatedfile
         shutil.copy2(file_path, target_path)
-        logger.info(f"savefile: {target_path}")
+        logger.info(f"translatedfile: {target_path}")
         return str(target_path)
     
     def save_processing_result(self, step: str, result: Dict[str, Any]) -> str:
-        """saveprocessingresultENfilesystem"""
+        """translatedprocesstranslatedfileSystem"""
         return self.save_metadata(result, step)
     
     def save_clip_file(self, clip_data: Dict[str, Any], clip_id: str) -> str:
-        """saveclipfileENreturnpath"""
-        # fetchtitleENfileEN
+        """translatedclipfiletranslatedreturnpath"""
+        # fetchtranslatedcleanfiletranslated
         title = clip_data.get('title', f'clip_{clip_id}')
         from ..utils.video_processor import VideoProcessor
         safe_title = VideoProcessor.sanitize_filename(title)
         
-        # useEN：{clip_id}_{safe_title}.mp4
+        # usetranslatedone'stranslatedformat：{clip_id}_{safe_title}.mp4
         clip_file = f"{clip_id}_{safe_title}.mp4"
         target_path = self.project_dir / "output" / "clips" / clip_file
         target_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # createENfile（useEN/ENwrite）
+        # createtranslatedfile（usetranslated/translated）
         self._atomic_touch_file(target_path)
-        logger.info(f"saveclipfile: {target_path}")
+        logger.info(f"translatedclipfile: {target_path}")
         return str(target_path)
     
     def save_collection_file(self, collection_data: Dict[str, Any], collection_id: str) -> str:
-        """savecollectionfileENreturnpath"""
-        # ENshouldENcollectionfilesaveEN
-        # ENreturnENpath
+        """translatedcollectionfiletranslatedreturnpath"""
+        # thistranslatedPackageincludetranslated'scollectionfiletranslated
+        # translatedreturntranslatedpath
         collection_file = f"collection_{collection_id}.mp4"
         target_path = self.project_dir / "output" / "collections" / collection_file
         target_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # createENfile（useEN/ENwrite）
+        # createtranslatedfile（usetranslated/translated）
         self._atomic_touch_file(target_path)
-        logger.info(f"savecollectionfile: {target_path}")
+        logger.info(f"translatedcollectionfile: {target_path}")
         return str(target_path)
 
     def _atomic_write_json(self, target_path: Path, payload: Dict[str, Any]) -> None:
-        """ENwriteJSON，ENfile。"""
+        """translatedJSON，translatedfile。"""
         target_path.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.NamedTemporaryFile(
             mode='w',
@@ -120,7 +120,7 @@ class StorageService:
         temp_path.replace(target_path)
 
     def _atomic_touch_file(self, target_path: Path) -> None:
-        """ENcreateENfile。"""
+        """translatedcreatetranslatedfile。"""
         target_path.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.NamedTemporaryFile(
             mode='wb',
@@ -131,7 +131,7 @@ class StorageService:
         temp_path.replace(target_path)
     
     def get_file_content(self, file_path: str) -> Optional[Dict[str, Any]]:
-        """fetchfileEN"""
+        """fetchfiletranslated"""
         try:
             file_path_obj = Path(file_path)
             if file_path_obj.exists() and file_path_obj.suffix == '.json':
@@ -139,11 +139,11 @@ class StorageService:
                     return json.load(f)
             return None
         except Exception as e:
-            logger.error(f"readfileENfailed: {e}")
+            logger.error(f"translatedfiletranslatedfailed: {e}")
             return None
     
     def get_file_path(self, file_type: str, file_name: str) -> Optional[Path]:
-        """fetchfilepath"""
+        """fetchfile path"""
         if file_type == "raw":
             return self.project_dir / "raw" / file_name
         elif file_type == "clip":
@@ -154,16 +154,16 @@ class StorageService:
             return None
     
     def cleanup_temp_files(self):
-        """ENfile"""
+        """clean temp files"""
         temp_dir = self.data_dir / "temp"
         if temp_dir.exists():
             for temp_file in temp_dir.iterdir():
                 if temp_file.is_file():
                     temp_file.unlink()
-                    logger.info(f"ENfile: {temp_file}")
+                    logger.info(f"clean temp files: {temp_file}")
     
     def cleanup_old_files(self, project_id: str, keep_days: int = 30):
-        """ENfile"""
+        """cleantranslatedfile"""
         try:
             from datetime import datetime, timedelta
             cutoff_date = datetime.now() - timedelta(days=keep_days)
@@ -172,7 +172,7 @@ class StorageService:
             if not project_dir.exists():
                 return
             
-            # ENprocessingENfile
+            # cleanprocessingtranslatedfile
             processing_dir = project_dir / "processing"
             if processing_dir.exists():
                 for file_path in processing_dir.iterdir():
@@ -180,15 +180,15 @@ class StorageService:
                         file_time = datetime.fromtimestamp(file_path.stat().st_mtime)
                         if file_time < cutoff_date:
                             file_path.unlink()
-                            logger.info(f"ENfile: {file_path}")
+                            logger.info(f"cleantranslatedfile: {file_path}")
             
-            logger.info(f"project {project_id} ENfileEN")
+            logger.info(f"project {project_id} translatedfilecleantranslated")
             
         except Exception as e:
-            logger.error(f"ENfilefailed: {e}")
+            logger.error(f"cleantranslatedfilefailed: {e}")
     
     def get_project_storage_info(self) -> Dict[str, Any]:
-        """fetchprojectEN"""
+        """fetchprojecttranslatedinfo"""
         try:
             total_size = 0
             file_count = 0
@@ -206,5 +206,5 @@ class StorageService:
             }
             
         except Exception as e:
-            logger.error(f"fetchENfailed: {e}")
+            logger.error(f"fetchtranslatedinfofailed: {e}")
             return {}

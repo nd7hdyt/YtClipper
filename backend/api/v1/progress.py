@@ -1,6 +1,6 @@
 """
-taskprogressENAPI
-ENtaskprogressEN
+taskprogresstranslatedAPI
+Providestranslatedtaskprogresstranslatedfeature
 """
 
 from fastapi import APIRouter, HTTPException, Depends
@@ -15,14 +15,14 @@ router = APIRouter()
 
 @router.get("/task/{task_id}")
 async def get_task_progress(task_id: str, db: Session = Depends(get_db)):
-    """fetchENtaskENprogress"""
+    """fetchtranslatedtask'sprogress"""
     try:
-        # ENdatabasefetchtaskEN
+        # fromdatabasefetchtaskinfo
         task = db.query(Task).filter(Task.id == task_id).first()
         if not task:
             raise HTTPException(status_code=404, detail="Task not found")
         
-        # fetchENprogressEN
+        # fetchtranslatedprogressinfo
         realtime_progress = progress_update_service.get_task_progress(task_id)
         
         response = {
@@ -38,7 +38,7 @@ async def get_task_progress(task_id: str, db: Session = Depends(get_db)):
             'updated_at': task.updated_at.isoformat() if task.updated_at else None
         }
         
-        # ifENprogressEN，EN
+        # iftranslatedprogressinfo，translated
         if realtime_progress:
             response.update({
                 'realtime_progress': realtime_progress['progress'],
@@ -56,14 +56,14 @@ async def get_task_progress(task_id: str, db: Session = Depends(get_db)):
 
 @router.get("/project/{project_id}")
 async def get_project_tasks_progress(project_id: str, db: Session = Depends(get_db)):
-    """fetchENprojectENalltaskprogress"""
+    """fetchtranslatedproject'stranslatedtaskprogress"""
     try:
-        # fetchprojectENalltask
+        # fetchproject'stranslatedtask
         tasks = db.query(Task).filter(Task.project_id == project_id).all()
         
         tasks_progress = []
         for task in tasks:
-            # fetchENprogressEN
+            # fetchtranslatedprogressinfo
             realtime_progress = progress_update_service.get_task_progress(task.id)
             
             task_info = {
@@ -78,7 +78,7 @@ async def get_project_tasks_progress(project_id: str, db: Session = Depends(get_
                 'updated_at': task.updated_at.isoformat() if task.updated_at else None
             }
             
-            # ifENprogressEN，EN
+            # iftranslatedprogressinfo，translated
             if realtime_progress:
                 task_info.update({
                     'realtime_progress': realtime_progress['progress'],
@@ -103,11 +103,11 @@ async def get_project_tasks_progress(project_id: str, db: Session = Depends(get_
 
 @router.get("/active")
 async def get_active_tasks():
-    """fetchallENtaskENprogress"""
+    """fetchtranslatedtask'sprogress"""
     try:
         active_tasks = progress_update_service.get_all_active_tasks()
         
-        # EN
+        # translatedfrontendtranslated'sformat
         formatted_tasks = []
         for task_id, progress_info in active_tasks.items():
             formatted_tasks.append({
@@ -129,16 +129,16 @@ async def get_active_tasks():
 
 @router.get("/summary")
 async def get_progress_summary(db: Session = Depends(get_db)):
-    """fetchprogressEN"""
+    """fetchprogresstranslatedinfo"""
     try:
-        # ENstatusENtaskEN
+        # translatedstatus'stasktranslated
         total_tasks = db.query(Task).count()
         running_tasks = db.query(Task).filter(Task.status == TaskStatus.RUNNING).count()
         completed_tasks = db.query(Task).filter(Task.status == TaskStatus.COMPLETED).count()
         failed_tasks = db.query(Task).filter(Task.status == TaskStatus.FAILED).count()
-        pending_tasks = db.query(Task).filter(Task.status == TaskStatus.PENDING).count()
+        pending_tasks = db.query(Task).filter(Task.status == TaskStatus.PtranslatedDING).count()
         
-        # fetchENtaskENprogress
+        # fetchtranslatedtask'stranslatedprogress
         active_tasks = progress_update_service.get_all_active_tasks()
         
         return {

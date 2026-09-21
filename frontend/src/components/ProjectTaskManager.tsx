@@ -19,7 +19,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
   const [selectedTask, setSelectedTask] = useState<TaskStatusType | null>(null)
   const [taskDetailVisible, setTaskDetailVisible] = useState(false)
 
-  // fetchENproject tasks
+  // fetchtranslatedproject'stask
   const allTasks = tasks || []
   const projectTasks = allTasks.filter((task: TaskStatusType) => task.project_id === projectId)
   const activeTasks = projectTasks.filter((task: TaskStatusType) => 
@@ -28,34 +28,34 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
   const completedTasks = projectTasks.filter((task: TaskStatusType) => task.status === 'completed')
   const failedTasks = projectTasks.filter((task: TaskStatusType) => task.status === 'failed')
 
-  // RefreshTask list
+  // translatedtasklist
   const handleRefresh = () => {
     loadProjectTasks(projectId)
-    message.success('Task listENRefresh')
+    message.success('tasklisttranslated')
   }
 
-  // View tasksDetails
+  // translatedtasktranslated
   const handleViewTask = (task: TaskStatusType) => {
     setSelectedTask(task)
     setTaskDetailVisible(true)
   }
 
-  // Deletetask
+  // deletetask
   const handleDeleteTask = (taskId: string) => {
     confirm({
-      title: 'ENDelete',
+      title: 'Confirmdelete',
       icon: <ExclamationCircleOutlined />,
-      content: 'DeleteENDeleteEN tasksEN？DeleteEN。',
-      okText: 'Delete',
+      content: 'translateddeletethis tasktranslated？deletetranslated。',
+      okText: 'delete',
       okType: 'danger',
-      cancelText: 'Cancel',
+      cancelText: 'cancel',
       onOk() {
-        message.success(`taskENDelete: ${taskId}`)
+        message.success(`tasktranslateddelete: ${taskId}`)
       }
     })
   }
 
-  // fetchStatusIcon
+  // fetchstatustranslated
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'completed':
@@ -71,10 +71,10 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     }
   }
 
-  // Table columns
+  // translated
   const columns = [
     {
-      title: 'taskEN',
+      title: 'tasktranslated',
       dataIndex: 'name',
       key: 'name',
       render: (text: string, record: TaskStatusType) => (
@@ -85,20 +85,20 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       )
     },
     {
-      title: 'Status',
+      title: 'status',
       dataIndex: 'status',
       key: 'status',
       render: (status: string) => (
         <Tag color={status === 'completed' ? 'success' : status === 'running' ? 'processing' : status === 'failed' ? 'error' : status === 'pending' ? 'warning' : 'default'}>
-          {status === 'completed' ? 'Completed' :
-           status === 'running' ? 'Running' :
-           status === 'failed' ? 'Failed' :
-           status === 'pending' ? 'Pending' : status}
+          {status === 'completed' ? 'completed' :
+           status === 'running' ? 'translated' :
+           status === 'failed' ? 'failed' :
+           status === 'pending' ? 'etc.translated' : status}
         </Tag>
       )
     },
     {
-      title: 'Progress',
+      title: 'progress',
       dataIndex: 'progress',
       key: 'progress',
       render: (progress: number, record: TaskStatusType) => (
@@ -110,13 +110,13 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       )
     },
     {
-      title: 'ENStep',
+      title: 'translatedstep',
       dataIndex: 'current_step',
       key: 'current_step',
       render: (step: string) => step || '-'
     },
     {
-      title: 'Created',
+      title: 'createtranslated',
       dataIndex: 'created_at',
       key: 'created_at',
       render: (timestamp: string) => (
@@ -126,7 +126,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
       )
     },
     {
-      title: 'Actions',
+      title: 'translated',
       key: 'actions',
       width: 120,
       render: (_: any, record: TaskStatusType) => (
@@ -136,14 +136,14 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
             size="small"
             icon={<EyeOutlined />}
             onClick={() => handleViewTask(record)}
-            title="ViewDetails"
+            title="translated"
           />
           <Button
             type="text"
             size="small"
             icon={<ExclamationCircleOutlined />}
             onClick={() => handleDeleteTask(record.id)}
-            title="Deletetask"
+            title="deletetask"
             danger
           />
         </Space>
@@ -153,9 +153,9 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
 
   if (projectTasks.length === 0) {
     return (
-      <Card title="Task management" size="small">
+      <Card title="tasktranslated" size="small">
         <div style={{ textAlign: 'center', padding: '20px' }}>
-          <Text type="secondary">ENprojectENtaskEN</Text>
+          <Text type="secondary">translatedprojectNot yettasktranslated</Text>
         </div>
       </Card>
     )
@@ -165,7 +165,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
     <Card 
       title={
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>Task management</span>
+          <span>tasktranslated</span>
           <Button 
             type="primary" 
             size="small"
@@ -173,24 +173,24 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
             onClick={handleRefresh}
             loading={loading}
           >
-            Refresh
+            translated
           </Button>
         </div>
       }
       size="small"
     >
-      {/* Task stats */}
+      {/* tasktranslated */}
       <Row gutter={16} style={{ marginBottom: '16px' }}>
         <Col span={6}>
           <Statistic
-            title="Total tasks"
+            title="translatedtasktranslated"
             value={projectTasks.length}
             prefix={<ClockCircleOutlined />}
           />
         </Col>
         <Col span={6}>
           <Statistic
-            title="Active tasks"
+            title="translatedtask"
             value={activeTasks.length}
             valueStyle={{ color: '#1890ff' }}
             prefix={<ClockCircleOutlined />}
@@ -198,7 +198,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         </Col>
         <Col span={6}>
           <Statistic
-            title="Completed"
+            title="completed"
             value={completedTasks.length}
             valueStyle={{ color: '#52c41a' }}
             prefix={<CheckCircleOutlined />}
@@ -206,7 +206,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         </Col>
         <Col span={6}>
           <Statistic
-            title="Failedtask"
+            title="failedtask"
             value={failedTasks.length}
             valueStyle={{ color: '#ff4d4f' }}
             prefix={<CloseCircleOutlined />}
@@ -214,12 +214,12 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         </Col>
       </Row>
 
-      {/* Active tasks */}
+      {/* translatedtask */}
       {activeTasks.length > 0 && (
         <Card 
           size="small" 
           style={{ marginBottom: '16px' }}
-          title={`Active tasks (${activeTasks.length})`}
+          title={`translatedtask (${activeTasks.length})`}
         >
           <Space wrap>
             {activeTasks.map((task: TaskStatusType) => (
@@ -232,7 +232,7 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
         </Card>
       )}
 
-      {/* Task list */}
+      {/* tasklist */}
       <Table
         columns={columns}
         dataSource={projectTasks}
@@ -241,33 +241,33 @@ export const ProjectTaskManager: React.FC<ProjectTaskManagerProps> = ({
           pageSize: 5,
           showSizeChanger: false,
           showTotal: (total, range) => 
-            `EN ${range[0]}-${range[1]} EN，Total ${total} EN`
+            `No. ${range[0]}-${range[1]} translated，translated ${total} translated`
         }}
         size="small"
         loading={loading}
       />
 
-      {/* taskDetailsdialog */}
+      {/* tasktranslated */}
       <Modal
-        title="taskDetails"
+        title="tasktranslated"
         open={taskDetailVisible}
         onCancel={() => setTaskDetailVisible(false)}
         footer={[
           <Button key="close" onClick={() => setTaskDetailVisible(false)}>
-            Close
+            translated
           </Button>
         ]}
         width={800}
       >
         {selectedTask && (
           <div>
-            <Text>Task ID: {selectedTask.id}</Text>
+            <Text>taskID: {selectedTask.id}</Text>
             <br />
-            <Text>Status: {selectedTask.status}</Text>
+            <Text>status: {selectedTask.status}</Text>
             <br />
-            <Text>Progress: {selectedTask.progress}%</Text>
+            <Text>progress: {selectedTask.progress}%</Text>
             <br />
-            <Text>message: {selectedTask.message}</Text>
+            <Text>translated: {selectedTask.message}</Text>
           </div>
         )}
       </Modal>

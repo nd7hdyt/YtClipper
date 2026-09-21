@@ -1,5 +1,5 @@
 """
-ENcheckAPIEN
+Health CheckAPItranslated
 """
 
 from fastapi import APIRouter
@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.get("/")
 async def health_check() -> Dict[str, Any]:
-    """ENcheckEN."""
+    """Health Checktranslated."""
     return {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
@@ -21,48 +21,48 @@ async def health_check() -> Dict[str, Any]:
 
 @router.get("/video-categories")
 async def get_video_categories() -> Dict[str, Any]:
-    """fetchvideocategoryconfig."""
+    """fetchvideotranslatedconfig."""
     return {
         "categories": [
             {
                 "value": "knowledge",
-                "name": "EN",
-                "description": "EN、EN、EN、EN",
+                "name": "translated",
+                "description": "translated、translated、translated、translatedetc.translated",
                 "icon": "book",
                 "color": "#1890ff"
             },
             {
                 "value": "entertainment", 
-                "name": "EN",
-                "description": "EN、EN、EN、EN",
+                "name": "translated",
+                "description": "translated、translated、translated、translatedetc.translated",
                 "icon": "play-circle",
                 "color": "#52c41a"
             },
             {
                 "value": "experience",
-                "name": "EN",
-                "description": "EN、EN、EN、EN",
+                "name": "translated",
+                "description": "translated、translated、translated、translatedetc.translatedusetranslated",
                 "icon": "heart",
                 "color": "#fa8c16"
             },
             {
                 "value": "opinion",
-                "name": "EN",
-                "description": "EN、EN、EN",
+                "name": "translated",
+                "description": "translated、translated、translatedetc.",
                 "icon": "message",
                 "color": "#722ed1"
             },
             {
                 "value": "business",
-                "name": "EN",
-                "description": "ENanalysis、EN、EN",
+                "name": "providertranslated",
+                "description": "providertranslated、translated、translatedetc.",
                 "icon": "dollar",
                 "color": "#13c2c2"
             },
             {
                 "value": "speech",
-                "name": "EN",
-                "description": "EN、EN、EN",
+                "name": "translated",
+                "description": "translated、translated、translatedetc.translated",
                 "icon": "sound",
                 "color": "#eb2f96"
             }

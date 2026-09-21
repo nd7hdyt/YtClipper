@@ -1,5 +1,5 @@
 """
-WebSocket APIEN
+WebSocket APItranslated
 """
 
 import json
@@ -20,199 +20,199 @@ router = APIRouter()
 
 @router.websocket("/ws/{user_id}")
 async def websocket_endpoint(websocket: WebSocket, user_id: str):
-    """WebSocketconnectEN"""
+    """WebSocketconnecttranslated"""
     await manager.connect(websocket, user_id)
     
     try:
-        # sendconnectEN
+        # translatedconnectConfirmtranslated
         welcome_message = WebSocketMessage.create_system_notification(
             "connection",
             "connectsucceeded",
-            f"user {user_id} ENsucceededconnectENWebSocketservice",
+            f"user {user_id} translatedsucceededconnecttranslatedWebSocketservice",
             "success"
         )
         await manager.send_personal_message(welcome_message, user_id)
         
-        # processingEN - EN
+        # processtranslated - translated
         while True:
             try:
-                # receiveEN
+                # translated
                 data = await websocket.receive_text()
                 message = json.loads(data)
                 
-                # processingEN
+                # processtranslated'stranslated
                 await handle_client_message(user_id, message)
                 
             except WebSocketDisconnect:
-                logger.info(f"user {user_id} ENdisconnectconnect")
+                logger.info(f"user {user_id} translatedconnect")
                 break
             except json.JSONDecodeError:
-                logger.error(f"user {user_id} sendENerror")
+                logger.error(f"user {user_id} translated'stranslatedformaterror")
                 try:
                     error_message = WebSocketMessage.create_error_notification(
                         "message_format_error",
-                        "ENerror",
-                        {"message": "pleasesendENJSONEN"}
+                        "translatedformaterror",
+                        {"message": "translated'sJSONformattranslated"}
                     )
                     await manager.send_personal_message(error_message, user_id)
                 except:
-                    # ifsendfailed，ENconnectENdisconnect，ENlogout
+                    # iftranslatedfailed，translatedconnecttranslated，translated
                     break
             except Exception as e:
-                logger.error(f"processinguser {user_id} EN: {e}")
+                logger.error(f"processuser {user_id} translated: {e}")
                 try:
                     error_message = WebSocketMessage.create_error_notification(
                         "processing_error",
-                        "ENprocessingerror",
+                        "translatedprocesserror",
                         {"error": str(e)}
                     )
                     await manager.send_personal_message(error_message, user_id)
                 except:
-                    # ifsendfailed，ENconnectENdisconnect，ENlogout
+                    # iftranslatedfailed，translatedconnecttranslated，translated
                     break
     
     except WebSocketDisconnect:
-        logger.info(f"user {user_id} disconnectconnect")
+        logger.info(f"user {user_id} translatedconnect")
     except Exception as e:
-        logger.error(f"WebSocketconnectexception: {e}")
+        logger.error(f"WebSocketconnecttranslated: {e}")
     finally:
-        # EN：ENcancelEN，ENdisconnectconnect
+        # bytranslatedclean：translatedcanceltranslated，translatedconnect
         try:
             await websocket_gateway_service.unsubscribe_user_from_all_tasks(user_id)
         except Exception as e:
-            logger.error(f"ENuserENfailed: {e}")
+            logger.error(f"cleanusertranslatedfailed: {e}")
         
         try:
             await manager.disconnect(user_id)
         except Exception as e:
-            logger.error(f"disconnectuserconnectfailed: {e}")
+            logger.error(f"translateduserconnectfailed: {e}")
 
 async def handle_client_message(user_id: str, message: Dict[str, Any]):
-    """processingEN"""
+    """processtranslated"""
     message_type = message.get("type")
     
     if message_type == "sync_subscriptions":
-        # EN
+        # translated'stranslatedetc.translated
         project_ids = message.get("project_ids", [])
-        # ENprojectID，ENserviceEN
+        # translatedprojectID，translatedservicetranslated
         channels = set(project_ids)
         
         stats = await websocket_gateway_service.sync_user_subscriptions(user_id, channels)
         
         response = WebSocketMessage.create_system_notification(
             "subscription_sync",
-            "EN",
-            f"EN {stats['added']} / EN {stats['removed']} / EN {stats['unchanged']}",
+            "translated",
+            f"added {stats['added']} / translated {stats['removed']} / translated {stats['unchanged']}",
             "success"
         )
         await manager.send_personal_message(response, user_id)
         
     elif message_type == "subscribe":
-        # EN（EN）
+        # translated（translatedversion）
         topic = message.get("topic")
         if topic:
             manager.subscribe_to_topic(user_id, topic)
             response = WebSocketMessage.create_system_notification(
                 "subscription",
-                "ENsucceeded",
-                f"ENsucceededEN: {topic}",
+                "translatedsucceeded",
+                f"translatedsucceededtranslated: {topic}",
                 "success"
             )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "subscribe_task":
-        # ENtaskprogress（EN）
+        # translatedtaskprogress（translatedversion）
         task_id = message.get("task_id")
         if task_id:
             success = await websocket_gateway_service.subscribe_user_to_task(user_id, task_id)
             if success:
                 response = WebSocketMessage.create_system_notification(
                     "task_subscription",
-                    "taskENsucceeded",
-                    f"ENsucceededENtask {task_id} ENprogressupdate",
+                    "tasktranslatedsucceeded",
+                    f"translatedsucceededtranslatedtask {task_id} 'sprogressupdate",
                     "success"
                 )
             else:
                 response = WebSocketMessage.create_error_notification(
                     "task_subscription_failed",
-                    "taskENfailed",
+                    "tasktranslatedfailed",
                     {"task_id": task_id}
                 )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "unsubscribe":
-        # cancelEN（EN）
+        # canceltranslated（translatedversion）
         topic = message.get("topic")
         if topic:
             manager.unsubscribe_from_topic(user_id, topic)
             response = WebSocketMessage.create_system_notification(
                 "unsubscription",
-                "cancelENsucceeded",
-                f"ENcancelEN: {topic}",
+                "canceltranslatedsucceeded",
+                f"translatedcanceltranslated: {topic}",
                 "info"
             )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "unsubscribe_task":
-        # cancelENtaskprogress（EN）
+        # canceltranslatedtaskprogress（translatedversion）
         task_id = message.get("task_id")
         if task_id:
             success = await websocket_gateway_service.unsubscribe_user_from_task(user_id, task_id)
             if success:
                 response = WebSocketMessage.create_system_notification(
                     "task_unsubscription",
-                    "taskcancelENsucceeded",
-                    f"ENcancelENtask {task_id} ENprogressupdate",
+                    "taskcanceltranslatedsucceeded",
+                    f"translatedcanceltranslatedtask {task_id} 'sprogressupdate",
                     "info"
                 )
             else:
                 response = WebSocketMessage.create_error_notification(
                     "task_unsubscription_failed",
-                    "taskcancelENfailed",
+                    "taskcanceltranslatedfailed",
                     {"task_id": task_id}
                 )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "subscribe_many":
-        # ENtask
+        # translatedtask
         task_ids = message.get("channels", [])
         if task_ids:
             results = await websocket_gateway_service.subscribe_user_to_many_tasks(user_id, task_ids)
             response = WebSocketMessage.create_system_notification(
                 "batch_subscription",
-                "EN",
-                f"EN: {len(results['added'])}, already exists: {len(results['already_subscribed'])}",
+                "translated",
+                f"addedtranslated: {len(results['added'])}, translatedin: {len(results['already_subscribed'])}",
                 "success"
             )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "unsubscribe_many":
-        # ENcancelENtask
+        # translatedcanceltranslatedtask
         task_ids = message.get("channels", [])
         if task_ids:
             results = await websocket_gateway_service.unsubscribe_user_from_many_tasks(user_id, task_ids)
             response = WebSocketMessage.create_system_notification(
                 "batch_unsubscription",
-                "ENcancelEN",
-                f"EN: {len(results['removed'])}, EN: {len(results['not_subscribed'])}",
+                "translatedcanceltranslated",
+                f"translated: {len(results['removed'])}, translated: {len(results['not_subscribed'])}",
                 "success"
             )
             await manager.send_personal_message(response, user_id)
     
     elif message_type == "sync_subscriptions":
-        # EN
+        # translated
         task_ids = message.get("channels", [])
         results = await websocket_gateway_service.sync_user_subscriptions(user_id, task_ids)
         response = WebSocketMessage.create_system_notification(
             "subscription_sync",
-            "EN",
-            f"EN: {len(results['added'])}, EN: {len(results['removed'])}, EN: {len(results['unchanged'])}",
+            "translated",
+            f"added: {len(results['added'])}, translated: {len(results['removed'])}, translated: {len(results['unchanged'])}",
             "success"
         )
         await manager.send_personal_message(response, user_id)
     
     elif message_type == "ping":
-        # EN
+        # translated
         response = {
             "type": "pong",
             "timestamp": WebSocketMessage.create_system_notification(
@@ -220,7 +220,7 @@ async def handle_client_message(user_id: str, message: Dict[str, Any]):
             )["timestamp"]
         }
         await manager.send_personal_message(response, user_id)
-        logger.debug(f"user {user_id} EN - ENpong")
+        logger.debug(f"user {user_id} translated - translatedpong")
     
     elif message_type == "get_status":
         # fetchconnectstatus
@@ -239,10 +239,10 @@ async def handle_client_message(user_id: str, message: Dict[str, Any]):
         await manager.send_personal_message(status, user_id)
     
     else:
-        # EN
+        # translated
         error_message = WebSocketMessage.create_error_notification(
             "unknown_message_type",
-            "EN",
+            "translated",
             {"message_type": message_type, "supported_types": ["subscribe", "subscribe_task", "unsubscribe", "unsubscribe_task", "ping", "get_status"]}
         )
         await manager.send_personal_message(error_message, user_id)
@@ -261,30 +261,30 @@ async def get_websocket_status():
 
 @router.post("/ws/broadcast")
 async def broadcast_message(message: Dict[str, Any]):
-    """ENallconnectENuser"""
+    """translatedconnect'suser"""
     try:
         await manager.broadcast(message)
-        return {"status": "success", "message": "ENsucceeded"}
+        return {"status": "success", "message": "translatedsucceeded"}
     except Exception as e:
-        logger.error(f"ENfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"ENfailed: {e}")
+        logger.error(f"translatedfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"translatedfailed: {e}")
 
 @router.post("/ws/broadcast/{topic}")
 async def broadcast_to_topic(topic: str, message: Dict[str, Any]):
-    """EN"""
+    """translated'stranslated"""
     try:
         await manager.broadcast_to_topic(message, topic)
-        return {"status": "success", "message": f"EN {topic} EN"}
+        return {"status": "success", "message": f"translated {topic} 'stranslated"}
     except Exception as e:
-        logger.error(f"EN {topic} failed: {e}")
-        raise HTTPException(status_code=500, detail=f"ENfailed: {e}")
+        logger.error(f"translated {topic} failed: {e}")
+        raise HTTPException(status_code=500, detail=f"translatedfailed: {e}")
 
 @router.post("/ws/send/{user_id}")
 async def send_to_user(user_id: str, message: Dict[str, Any]):
-    """sendENuser"""
+    """translateduser"""
     try:
         await manager.send_personal_message(message, user_id)
-        return {"status": "success", "message": f"ENsendENuser {user_id}"}
+        return {"status": "success", "message": f"translateduser {user_id}"}
     except Exception as e:
-        logger.error(f"sendENuser {user_id} failed: {e}")
-        raise HTTPException(status_code=500, detail=f"sendENfailed: {e}")
+        logger.error(f"translateduser {user_id} failed: {e}")
+        raise HTTPException(status_code=500, detail=f"translatedfailed: {e}")

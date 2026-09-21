@@ -1,59 +1,59 @@
 """
-ENprogressEN
-EN
+translatedone'sprogresstranslated
+translatedonetranslated'stranslatedissue
 """
 
 def project_progress_channel(project_id: str) -> str:
     """
-    generateprojectprogressEN
+    translatedprojectprogresstranslated
     
     Args:
         project_id: projectID
         
     Returns:
-        EN: progress:project:<project_id>
+        translatedone'stranslated: progress:project:<project_id>
     """
-    # EN，EN"project_"
+    # translatedoneusetranslated，translated"project_"
     return f"progress:project:{project_id}"
 
 def task_progress_channel(task_id: str) -> str:
     """
-    generatetaskprogressEN
+    translatedtaskprogresstranslated
     
     Args:
         task_id: taskID
         
     Returns:
-        EN: progress:task:<task_id>
+        translatedone'stranslated: progress:task:<task_id>
     """
     return f"progress:task:{task_id}"
 
 def normalize_channel(raw: str) -> str:
     """
-    EN，EN
+    translated，translatedoneformat
     
     Args:
-        raw: EN
+        raw: translated
         
     Returns:
-        EN
+        translated'stranslated
     """
     if not raw:
         return ""
     
     s = raw.strip()
     
-    # ifENprojectIDEN，ENprojectprogressEN
+    # iftranslatedIsprojectIDformat，translatedprojectprogresstranslated
     if s.startswith("progress:project:"):
         return s
     elif s.startswith("project_"):
-        # ENproject_EN，ENID
-        project_id = s[8:]  # EN"project_"EN
+        # translatedproject_translated，translatedID
+        project_id = s[8:]  # translated"project_"translated
         return project_progress_channel(project_id)
     elif s.startswith("progress:project_"):
-        # processingprogress:project_<id>EN
-        project_id = s[17:]  # EN"progress:project_"EN
+        # processprogress:project_<id>format
+        project_id = s[17:]  # translated"progress:project_"translated
         return project_progress_channel(project_id)
     else:
-        # ENprojectID
+        # translatedIstranslatedprojectID
         return project_progress_channel(s)

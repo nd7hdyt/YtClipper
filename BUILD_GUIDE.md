@@ -1,71 +1,71 @@
-# 🚀 AutoClip Desktop EN
+# 🚀 AutoClip Desktop 
 
-EN**EN**EN：python-build-standalone（PBS）。EN Python EN、
-EN、EN ffmpeg/ffprobe EN `.app`，EN**EN Python EN ffmpeg**。
+Desktop client has only****Package：python-build-standalone（PBS）。It bundles portable Python Runtime、
+Backend source、Static ffmpeg/ffprobe all packaged into `.app`，User machine**No need to pre-install Python  ffmpeg**。
 
-> EN PyInstaller / prepare_resources EN（EN 6+ EN CI EN）EN，EN。
+> Historical PyInstaller / prepare_resources （And corresponding 6+   CI Workflow）Never produced a usable package and has been removed。
 
-## EN（macOS Apple Silicon）
+## Local Build（macOS Apple Silicon）
 
 ```bash
 ./scripts/build_macos_arm.sh
 ```
 
-EN：
+Artifacts：
 ```
 src-tauri/target/release/bundle/macos/
-├── AutoClip Desktop.app                    # EN（~550M）
-└── AutoClip Desktop_1.0.0_aarch64.dmg      # DMG EN（~260M）
+├── AutoClip Desktop.app                    # Package（~550M）
+└── AutoClip Desktop_1.0.0_aarch64.dmg      # DMG InstallationPackage（~260M）
 ```
 
-EN [`scripts/README.md`](scripts/README.md)。
+See script steps in [`scripts/README.md`](scripts/README.md)。
 
-### EN
+### Prerequisites
 
-| EN | EN | EN |
+|  |  |  |
 |------|------|------|
-| Node.js | 18+ | EN |
-| Rust | stable | EN `aarch64-apple-darwin` target |
+| Node.js | 18+ |  |
+| Rust | stable |  `aarch64-apple-darwin` target |
 | cargo-tauri | 2.x | `cargo install tauri-cli` |
 
-EN **EN** EN Python / ffmpeg —— EN（EN `build/`）。
+System **No need** Pre-install Python / ffmpeg —— Script comes with portable version（First build will download and cache to `build/`）。
 
-## CI / EN（GitHub Actions）
+## CI / Release（GitHub Actions）
 
-`.github/workflows/desktop-build.yml` EN `build_macos_arm.sh`：
+`.github/workflows/desktop-build.yml` Run the same `build_macos_arm.sh`：
 
 ```bash
-# EN：EN → Actions → "Desktop Build (macOS arm64)" → Run workflow
+# Manual trigger：Repo page → Actions → "Desktop Build (macOS arm64)" → Run workflow
 
-# EN tag EN，EN DMG EN GitHub Release：
+# Or tag tag trigger and automatically attach DMG To GitHub Release：
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-## EN
+## Installation & First Run
 
-DMG EN ad-hoc EN（EN Apple EN），EN：
+DMG Is ad-hoc Signature（Not done Apple Notarization），So：
 
-1. EN DMG，EN `AutoClip Desktop` EN Applications
-2. **EN → EN「EN」** EN Gatekeeper
-3. EN `~/Library/Application Support/AutoClip` EN
+1. Double-click DMG，  `AutoClip Desktop` Drag to Applications
+2. **First launch: right-click the app → Select「Open」** To bypass Gatekeeper
+3. Backend will auto-start at `~/Library/Application Support/AutoClip` Create data directory
 
 ## Troubleshooting
 
-EN app EN：
+ app Backend：
 ```bash
 '/Applications/AutoClip Desktop.app/Contents/MacOS/autoclip-desktop'
 ```
-EN `Backend started on port: XXXXX` EN `Application startup complete`。
+Should see `Backend started on port: XXXXX`  `Application startup complete`。
 
-| EN | EN |
+| Symptom | Troubleshoot |
 |------|------|
-| `ModuleNotFoundError: No module named 'X'` | EN `X` EN `requirements.txt` EN（EN，EN）|
-| EN | EN，EN WebView EN；EN/EN |
-| EN | EN `Contents/Resources/resources/ffmpeg/{ffmpeg,ffprobe}` EN |
-| EN | `rm -rf src-tauri/target build/pbs-cache build/ffmpeg-cache` EN（EN）|
+| `ModuleNotFoundError: No module named 'X'` |   `X` Add to `requirements.txt` Rebuild（Build-time dependency check should have caught it; normally won't happen）|
+| Black screen | Frontend not mounted, check WebView Console；Usually packaging/Resource issue |
+| Video processing failed | Confirm `Contents/Resources/resources/ffmpeg/{ffmpeg,ffprobe}` Exists and is executable |
+| To retry a failed build | `rm -rf src-tauri/target build/pbs-cache build/ffmpeg-cache` Then rerun（Will re-download）|
 
-## EN
+## Known Limitations
 
-- EN Apple Silicon (arm64)，EN Intel / Windows / Linux EN
-- ad-hoc EN、EN，EN
+- Only Apple Silicon (arm64)，Not yet Intel / Windows / Linux Package
+- ad-hoc Signature、Notarization，FirstRight-clickOpen

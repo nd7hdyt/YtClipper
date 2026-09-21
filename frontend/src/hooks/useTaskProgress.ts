@@ -32,18 +32,18 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
   const [lastTs, setLastTs] = useState(0);
   const finalStateChecked = useRef(false);
 
-  // ENWebSocketmessage
+  // processWebSockettranslated
   const handleWebSocketMessage = useCallback((message: any) => {
     if (message.type === 'task_progress_update' && message.task_id === taskId) {
       const progressMessage = message as TaskProgressUpdateMessage;
       
-      // messageENcheck
+      // translatedAndtranslatedcheck
       if (progressMessage.seq <= lastSeq && progressMessage.ts <= lastTs) {
-        console.log(`ENmessage: seq=${progressMessage.seq}, ts=${progressMessage.ts}`);
+        console.log(`translated: seq=${progressMessage.seq}, ts=${progressMessage.ts}`);
         return;
       }
       
-      // Update status
+      // updatestatus
       const newState: TaskProgressState = {
         task_id: progressMessage.task_id || taskId,
         progress: progressMessage.progress,
@@ -61,23 +61,23 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
       setLastSeq((prev) => prev + 1);
       setLastTs(Math.floor(Date.now() / 1000));
       
-      // EN
+      // translated
       onProgressUpdate?.(newState);
       
-      // checkEN
+      // checktranslated
       if (progressMessage.status === 'completed') {
         onTaskComplete?.(newState);
-        // ENTerminal state calibration
+        // translated
         setTimeout(() => performFinalStateCheck(), 1000);
       } else if (progressMessage.status === 'failed') {
         onTaskFailed?.(newState);
-        // ENTerminal state calibration
+        // translated
         setTimeout(() => performFinalStateCheck(), 1000);
       }
     }
   }, [taskId, lastSeq, lastTs, onProgressUpdate, onTaskComplete, onTaskFailed]);
 
-  // WebSocketEN
+  // WebSocketconnect
   const { 
     isConnected, 
     subscribeToTask, 
@@ -87,14 +87,14 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
     onMessage: handleWebSocketMessage
   });
 
-  // Terminal state calibration：ENHTTP APIfetchENStatus
+  // translated：fromHTTP APIfetchtranslatedstatus
   const performFinalStateCheck = useCallback(async () => {
     if (finalStateChecked.current) return;
     finalStateChecked.current = true;
     
     try {
-      console.log(`ENTerminal state calibration: ${taskId}`);
-      // ENAPIEN，ENgetTaskProgressEN
+      console.log(`translated: ${taskId}`);
+      // translatedAPIcall，translatedgetTaskProgresstranslatednot found
       // const response = await projectApi.getTaskProgress(taskId);
       
       // if (response.data) {
@@ -104,7 +104,7 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
       //     step: response.data.current_step || 0,
       //     total: 6,
       //     phase: 'unknown',
-      //     message: response.data.current_step || 'unknownStatus',
+      //     message: response.data.current_step || 'translatedstatus',
       //     status: response.data.status || 'unknown',
       //     seq: lastSeq + 1,
       //     ts: Date.now() / 1000,
@@ -112,36 +112,36 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
       //   };
       //   
       //   setTaskState(apiState);
-      //   console.log('Terminal state calibrationCompleted:', apiState);
+      //   console.log('translated:', apiState);
       // }
     } catch (error) {
-      console.error('Terminal state calibrationFailed:', error);
+      console.error('translatedfailed:', error);
     }
   }, [taskId, lastSeq]);
 
-  // Subscribe tasksProgress
+  // translatedtaskprogress
   const subscribe = useCallback(() => {
     if (isConnected && !isSubscribed) {
       const success = subscribeToTask(taskId);
       if (success) {
         setIsSubscribed(true);
-        console.log(`ENSubscribe tasksProgress: ${taskId}`);
+        console.log(`translatedtaskprogress: ${taskId}`);
       }
     }
   }, [isConnected, isSubscribed, subscribeToTask, taskId]);
 
-  // CancelSubscribe tasksProgress
+  // canceltranslatedtaskprogress
   const unsubscribe = useCallback(() => {
     if (isConnected && isSubscribed) {
       const success = unsubscribeFromTask(taskId);
       if (success) {
         setIsSubscribed(false);
-        console.log(`CancelledSubscribe tasksProgress: ${taskId}`);
+        console.log(`translatedcanceltranslatedtaskprogress: ${taskId}`);
       }
     }
   }, [isConnected, isSubscribed, unsubscribeFromTask, taskId]);
 
-  // EN/CancelEN
+  // translated/canceltranslated
   useEffect(() => {
     if (isConnected) {
       subscribe();
@@ -156,7 +156,7 @@ export const useTaskProgress = (options: UseTaskProgressOptions) => {
     };
   }, [isConnected, subscribe, unsubscribe, isSubscribed]);
 
-  // ENuninstallEN
+  // translatedclean
   useEffect(() => {
     return () => {
       if (isSubscribed) {

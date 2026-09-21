@@ -1,6 +1,6 @@
 """
-ENprogressENservice
-ENprogressENAPI
+translatedone'sprogressReleaseservice
+Providestranslated'sprogresstranslatedReleasetranslated
 """
 
 import json
@@ -15,14 +15,14 @@ from ..core.config import get_redis_url
 logger = logging.getLogger(__name__)
 
 class ProgressPublisher:
-    """ENprogressEN"""
+    """translatedone'sprogressReleasetranslated"""
     
     def __init__(self):
         self.redis_url = get_redis_url()
         self.redis_client: Optional[redis.Redis] = None
     
     async def _get_redis_client(self) -> redis.Redis:
-        """fetchRedisEN"""
+        """fetchRedistranslated"""
         if self.redis_client is None:
             self.redis_client = redis.from_url(self.redis_url, decode_responses=True)
         return self.redis_client
@@ -38,19 +38,19 @@ class ProgressPublisher:
         task_id: Optional[str] = None
     ) -> bool:
         """
-        ENprojectprogressEN
+        Releaseprojectprogresstranslated
         
         Args:
             project_id: projectID
-            step: currentEN
-            total_steps: EN
-            percent: progressEN (0-100)
-            message: progressEN
+            step: translatedstep
+            total_steps: translatedsteptranslated
+            percent: progresstranslated (0-100)
+            message: progresstranslated
             status: status (running/succeeded/failed)
-            task_id: taskID（EN）
+            task_id: taskID（canSelect）
             
         Returns:
-            ENsucceeded
+            IstranslatedReleasesucceeded
         """
         try:
             channel = project_progress_channel(project_id)
@@ -71,22 +71,22 @@ class ProgressPublisher:
             redis_client = await self._get_redis_client()
             await redis_client.publish(channel, json.dumps(payload, ensure_ascii=False))
             
-            logger.info(f"progressEN: {project_id} - {percent}% - {message}")
+            logger.info(f"progresstranslatedRelease: {project_id} - {percent}% - {message}")
             return True
             
         except Exception as e:
-            logger.error(f"ENprogressENfailed: {e}")
+            logger.error(f"Releaseprogresstranslatedfailed: {e}")
             return False
     
     async def close(self):
-        """ENRedisconnect"""
+        """translatedRedisconnect"""
         if self.redis_client:
             await self.redis_client.close()
 
-# EN
+# translated
 progress_publisher = ProgressPublisher()
 
-# EN
+# translated
 async def publish_project_progress(
     project_id: str, 
     step: int, 
@@ -96,7 +96,7 @@ async def publish_project_progress(
     status: str = "running",
     task_id: Optional[str] = None
 ) -> bool:
-    """ENprojectprogressEN"""
+    """Releaseprojectprogress'stranslated"""
     return await progress_publisher.publish_project_progress(
         project_id, step, total_steps, percent, message, status, task_id
     )

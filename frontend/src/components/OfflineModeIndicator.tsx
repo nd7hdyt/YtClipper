@@ -27,12 +27,12 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
   });
   const [isChecking, setIsChecking] = useState(false);
 
-  // checkEN
+  // checktranslatedconnecttranslated
   const checkConnectionQuality = async (): Promise<NetworkStatus> => {
     const startTime = Date.now();
     
     try {
-      // ENHealth checkEN
+      // translatedHealth Checktranslated
       const response = await fetch('/health', {
         method: 'GET',
         timeout: 5000
@@ -67,7 +67,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
     }
   };
 
-  // ENcheckENStatus
+  // translatedchecktranslatedstatus
   const handleCheckNetwork = async () => {
     setIsChecking(true);
     try {
@@ -75,13 +75,13 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
       setNetworkStatus(status);
       onStatusChange?.(status);
     } catch (error) {
-      console.error('ENcheckFailed:', error);
+      console.error('translatedcheckfailed:', error);
     } finally {
       setIsChecking(false);
     }
   };
 
-  // ENStatusChange
+  // translatedstatustranslated
   useEffect(() => {
     const handleOnline = () => {
       setNetworkStatus(prev => ({
@@ -104,7 +104,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
-    // ENcheckEN
+    // translatedchecktranslated
     const interval = setInterval(() => {
       if (navigator.onLine) {
         checkConnectionQuality().then(status => {
@@ -112,7 +112,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
           onStatusChange?.(status);
         });
       }
-    }, 30000); // EN30ENcheckonce
+    }, 30000); // per30secondscheckonetranslated
 
     return () => {
       window.removeEventListener('online', handleOnline);
@@ -121,7 +121,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
     };
   }, [onStatusChange]);
 
-  // fetchStatusIconEN
+  // fetchstatustranslatedAndtranslated
   const getStatusIcon = () => {
     if (!networkStatus.isOnline) {
       return <WifiDisconnectedOutlined style={{ color: '#ff4d4f' }} />;
@@ -139,34 +139,34 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
     }
   };
 
-  // fetchStatusText
+  // fetchstatustranslated
   const getStatusText = () => {
     if (!networkStatus.isOnline) {
-      return 'EN';
+      return 'translated';
     }
     
     switch (networkStatus.connectionQuality) {
       case 'excellent':
-        return 'EN';
+        return 'translated';
       case 'good':
-        return 'EN';
+        return 'translated';
       case 'poor':
-        return 'EN';
+        return 'translated';
       default:
-        return 'ENunknown';
+        return 'translated';
     }
   };
 
-  // fetchStatusDescription
+  // fetchstatustranslated
   const getStatusDescription = () => {
     if (!networkStatus.isOnline) {
-      return 'EN，EN';
+      return 'translated，translatedfeaturecantranslated';
     }
     
-    const latencyText = networkStatus.latency ? `EN: ${networkStatus.latency}ms` : '';
+    const latencyText = networkStatus.latency ? `translated: ${networkStatus.latency}ms` : '';
     const lastCheck = new Date(networkStatus.lastCheck).toLocaleTimeString();
     
-    return `Last check: ${lastCheck} ${latencyText}`.trim();
+    return `translatedcheck: ${lastCheck} ${latencyText}`.trim();
   };
 
   return (
@@ -191,7 +191,7 @@ const OfflineModeIndicator: React.FC<OfflineModeIndicatorProps> = ({ onStatusCha
         icon={<ReloadOutlined spin={isChecking} />}
         onClick={handleCheckNetwork}
         loading={isChecking}
-        title="checkENStatus"
+        title="checktranslatedstatus"
         style={{
           color: '#ffffff',
           border: '1px solid transparent',

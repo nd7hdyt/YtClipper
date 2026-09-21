@@ -1,6 +1,6 @@
 """
-ENprocessingtask
-processingvideofileuploadENtask：subtitlesgenerate、ENgenerate、processingENstart
+localimportprocesstask
+processvideofileUploadtranslated'stranslatedtask：subtitlestranslated、translated、processtranslatedstart
 """
 
 import logging
@@ -14,87 +14,87 @@ from backend.utils.task_submission_utils import submit_video_pipeline_task
 
 logger = logging.getLogger(__name__)
 
-# fetchCeleryEN
+# fetchCelerytranslatedusetranslated
 from backend.core.celery_app import celery_app
 
 @celery_app.task(bind=True)
 def process_import_task(self, project_id: str, video_path: str, srt_file_path: Optional[str] = None):
     """
-    processingENtask
+    processlocalimport'stranslatedtask
     
     Args:
         project_id: projectID
-        video_path: videofilepath
-        srt_file_path: subtitlesfilepath（EN）
+        video_path: videofile path
+        srt_file_path: subtitlesfile path（canSelect）
     """
     try:
-        logger.info(f"startprocessingENtask: {project_id}")
+        logger.info(f"translatedprocessimporttask: {project_id}")
         
-        # fetchdatabaseEN
+        # fetchdatabasetranslated
         db = next(get_db())
         project_service = ProjectService(db)
         
-        # checkENprojectcurrentlyprocessing（ENprocessing）
+        # checkIstranslatedprojecttranslatedinprocessing（translatedprocess）
         from backend.models.task import Task, TaskStatus
         existing_task = db.query(Task).filter(
             Task.project_id == project_id,
             Task.status == TaskStatus.RUNNING,
-            Task.name.like('%EN%')
+            Task.name.like('%import%')
         ).first()
         
         if existing_task and existing_task.celery_task_id != self.request.id:
-            logger.warning(f"project {project_id} ENprocessingtaskENrun (taskID: {existing_task.celery_task_id})，ENprocessing")
+            logger.warning(f"project {project_id} translatedprocesstaskintranslated (taskID: {existing_task.celery_task_id})，skiptranslatedprocess")
             return {
                 'success': False,
-                'error': 'projectcurrentlyprocessing，ENprocessing',
+                'error': 'projecttranslatedinprocessing，translatedprocess',
                 'existing_task_id': existing_task.celery_task_id
             }
         
         # updatetaskprogress
-        self.update_state(state='PROGRESS', meta={'progress': 10, 'message': 'startprocessing...'})
+        self.update_state(state='PROGRESS', meta={'progress': 10, 'message': 'translatedprocess...'})
         
-        # 1. checkENgenerateEN（ifEN）
-        logger.info(f"checkproject {project_id} EN...")
-        self.update_state(state='PROGRESS', meta={'progress': 20, 'message': 'checkEN...'})
+        # 1. checktranslated（iftranslated）
+        logger.info(f"checkproject {project_id} translated...")
+        self.update_state(state='PROGRESS', meta={'progress': 20, 'message': 'checktranslated...'})
         
         project = project_service.get(project_id)
         if project and not project.thumbnail:
-            logger.info(f"project {project_id} EN，startgenerate...")
-            self.update_state(state='PROGRESS', meta={'progress': 25, 'message': 'generateEN...'})
+            logger.info(f"project {project_id} translated，translated...")
+            self.update_state(state='PROGRESS', meta={'progress': 25, 'message': 'translated...'})
             
             try:
                 thumbnail_data = generate_project_thumbnail(project_id, Path(video_path))
                 if thumbnail_data:
                     project.thumbnail = thumbnail_data
                     db.commit()
-                    logger.info(f"project {project_id} ENgenerateENsavesucceeded")
+                    logger.info(f"project {project_id} translatedsucceeded")
                 else:
-                    logger.warning(f"project {project_id} ENgeneratefailed")
+                    logger.warning(f"project {project_id} translatedfailed")
             except Exception as e:
-                logger.error(f"generateprojectENerror: {e}")
-                # ENgeneratefailedEN
+                logger.error(f"translatedprojecttranslatederror: {e}")
+                # translatedfailedtranslated
         else:
-            logger.info(f"project {project_id} EN，ENgenerate")
+            logger.info(f"project {project_id} translated，skiptranslated")
         
-        # 2. generatesubtitles（ifEN）
+        # 2. generate subtitles（iftranslatedProvides）
         srt_path = srt_file_path
         if not srt_path:
-            logger.info(f"startENproject {project_id} generatesubtitles...")
-            self.update_state(state='PROGRESS', meta={'progress': 40, 'message': 'generatesubtitles...'})
+            logger.info(f"translatedproject {project_id} generate subtitles...")
+            self.update_state(state='PROGRESS', meta={'progress': 40, 'message': 'generate subtitles...'})
             
             try:
                 from backend.utils.speech_recognizer import generate_subtitle_for_video
                 from backend.core.desktop_config import get_desktop_config
                 
-                # fetchuserconfigENtranscriptionsettings
+                # fetchuserconfig'stranslatedsettings
                 config = get_desktop_config()
                 speech_config = config.speech_recognition
                 
-                logger.info(f"useENtranscriptionconfig - EN: {speech_config.method}")
+                logger.info(f"usetranslatedconfig - translated: {speech_config.method}")
                 
-                # ENconfigENparameters
+                # translatedconfigSelectselecttranslated
                 if speech_config.method == "whisper_local":
-                    # useuserconfigENWhisperparameters
+                    # useuserconfig'sWhispertranslated
                     model = speech_config.whisper_config.model_name
                     language = speech_config.whisper_config.language
                     enable_timestamps = speech_config.whisper_config.enable_timestamps
@@ -102,7 +102,7 @@ def process_import_task(self, project_id: str, video_path: str, srt_file_path: O
                     enable_speaker_diarization = speech_config.whisper_config.enable_speaker_diarization
                     timeout = speech_config.whisper_config.timeout
                     
-                    logger.info(f"Whisperconfig - EN: {model}, EN: {language}, timeEN: {enable_timestamps}")
+                    logger.info(f"Whisperconfig - model: {model}, Language: {language}, translated: {enable_timestamps}")
                     
                     generated_subtitle = generate_subtitle_for_video(
                         Path(video_path),
@@ -118,7 +118,7 @@ def process_import_task(self, project_id: str, video_path: str, srt_file_path: O
                     # useAPIservice
                     logger.info(f"useAPIservice - {speech_config.method}")
                     
-                    # ENserviceENfetchAPIconfig
+                    # translatedservicetranslatedfetchAPIconfig
                     if speech_config.method == "openai_api":
                         api_config = speech_config.openai_config
                     elif speech_config.method == "azure_speech":
@@ -130,7 +130,7 @@ def process_import_task(self, project_id: str, video_path: str, srt_file_path: O
                     elif speech_config.method == "custom_api":
                         api_config = speech_config.custom_api_config
                     else:
-                        raise ValueError(f"EN: {speech_config.method}")
+                        raise ValueError(f"translatedsupport'stranslated: {speech_config.method}")
                     
                     generated_subtitle = generate_subtitle_for_video(
                         Path(video_path),
@@ -142,15 +142,15 @@ def process_import_task(self, project_id: str, video_path: str, srt_file_path: O
                     )
                 
                 srt_path = str(generated_subtitle)
-                logger.info(f"ENtranscriptionsucceeded: {srt_path}")
+                logger.info(f"translatedsucceeded: {srt_path}")
                 
             except Exception as e:
-                logger.error(f"ENtranscriptionfailed: {str(e)}")
+                logger.error(f"translatedfailed: {str(e)}")
                 
-                # ifEN，ENuseEN
+                # iftranslatedusetranslated，translatedusetranslated
                 if speech_config.enable_fallback and speech_config.fallback_method != speech_config.method:
                     try:
-                        logger.info(f"EN: {speech_config.fallback_method}")
+                        logger.info(f"translated: {speech_config.fallback_method}")
                         
                         if speech_config.fallback_method == "whisper_local":
                             fallback_config = speech_config.whisper_config
@@ -161,28 +161,28 @@ def process_import_task(self, project_id: str, video_path: str, srt_file_path: O
                                 method=speech_config.fallback_method
                             )
                         else:
-                            # EN
+                            # translated
                             generated_subtitle = generate_subtitle_for_video(
                                 Path(video_path),
                                 method=speech_config.fallback_method
                             )
                         
                         srt_path = str(generated_subtitle)
-                        logger.info(f"ENsucceeded: {srt_path}")
+                        logger.info(f"translatedsucceeded: {srt_path}")
                         
                     except Exception as fallback_error:
-                        logger.error(f"ENfailed: {str(fallback_error)}")
+                        logger.error(f"translatedfailed: {str(fallback_error)}")
                         srt_path = None
                 else:
                     srt_path = None
         
-        # 3. updateprojectstatusENprocessing
-        logger.info(f"updateproject {project_id} statusENprocessing...")
-        self.update_state(state='PROGRESS', meta={'progress': 80, 'message': 'startprocessingEN...'})
+        # 3. updateprojectstatustranslatedprocessing
+        logger.info(f"updateproject {project_id} statustranslatedprocessing...")
+        self.update_state(state='PROGRESS', meta={'progress': 80, 'message': 'startprocesstranslated...'})
         
         project_service.update_project_status(project_id, "processing")
         
-        # 4. startprocessingEN
+        # 4. startprocesstranslated
         if srt_path and Path(srt_path).exists():
             try:
                 task_result = submit_video_pipeline_task(
@@ -192,36 +192,36 @@ def process_import_task(self, project_id: str, video_path: str, srt_file_path: O
                 )
                 
                 if task_result['success']:
-                    logger.info(f"project {project_id} processingtaskENstart，CelerytaskID: {task_result['task_id']}")
-                    self.update_state(state='PROGRESS', meta={'progress': 100, 'message': 'processingENstart'})
+                    logger.info(f"project {project_id} processtasktranslatedstart，CelerytaskID: {task_result['task_id']}")
+                    self.update_state(state='PROGRESS', meta={'progress': 100, 'message': 'processtranslatedstart'})
                 else:
-                    logger.error(f"CelerytaskENfailed: {task_result['error']}")
+                    logger.error(f"Celerytasktranslatedfailed: {task_result['error']}")
                     project_service.update_project_status(project_id, "failed")
                     self.update_state(state='FAILURE', meta={'error': task_result['error']})
                     return
                     
             except Exception as e:
-                logger.error(f"startproject {project_id} processingfailed: {str(e)}")
+                logger.error(f"startproject {project_id} processing failed: {str(e)}")
                 project_service.update_project_status(project_id, "failed")
                 self.update_state(state='FAILURE', meta={'error': str(e)})
                 return
         else:
-            logger.error(f"subtitlesfiledoes not exist: {srt_path}")
+            logger.error(f"subtitlesfile not found: {srt_path}")
             project_service.update_project_status(project_id, "failed")
-            self.update_state(state='FAILURE', meta={'error': 'subtitlesfiledoes not exist'})
+            self.update_state(state='FAILURE', meta={'error': 'subtitlesfile not found'})
             return
         
-        logger.info(f"ENtaskEN: {project_id}")
+        logger.info(f"importtasktranslated: {project_id}")
         return {
             'status': 'completed',
             'project_id': project_id,
-            'message': 'ENprocessingEN'
+            'message': 'importprocessing completed'
         }
         
     except Exception as e:
-        logger.error(f"ENtaskfailed: {project_id}, error: {e}")
+        logger.error(f"importtaskfailed: {project_id}, error: {e}")
         
-        # updateprojectstatusENfailed
+        # updateprojectstatustranslatedfailed
         try:
             db = next(get_db())
             project_service = ProjectService(db)

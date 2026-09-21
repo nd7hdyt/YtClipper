@@ -1,6 +1,6 @@
 """
-pathEN
-ENprojectENpathEN
+pathtranslated
+translatedprojecttranslated'spathtranslated
 """
 
 import logging
@@ -11,16 +11,16 @@ logger = logging.getLogger(__name__)
 
 
 class PathManager:
-    """pathEN，ENprojectpathEN"""
+    """pathtranslated，translatedprojectpath'stranslatedonetranslated"""
     
     def __init__(self, project_id: str, base_dir: str = "data/projects"):
         self.project_id = project_id
-        # useENpath
+        # usetranslatedpath
         project_root = Path(__file__).parent.parent.parent
         self.base_dir = project_root / base_dir
         self.project_dir = self.base_dir / project_id
         
-        # ENprojectdirectoryEN
+        # translatedprojectdirectorytranslated
         self.directory_structure = {
             "project_dir": self.project_dir,
             "metadata_dir": self.project_dir / "metadata",
@@ -31,28 +31,28 @@ class PathManager:
             "temp_dir": self.project_dir / "temp"
         }
         
-        # ENdirectoryEN
+        # ensuredirectorytranslatedin
         self.ensure_directories()
     
     def ensure_directories(self):
-        """ENallENdirectoryEN"""
+        """ensuretranslated'sdirectorytranslatedin"""
         for dir_name, dir_path in self.directory_structure.items():
             dir_path.mkdir(parents=True, exist_ok=True)
-            logger.debug(f"ENdirectoryEN: {dir_name} -> {dir_path}")
+            logger.debug(f"ensuredirectorytranslatedin: {dir_name} -> {dir_path}")
     
     def get_project_paths(self) -> Dict[str, Path]:
-        """fetchprojectENpath"""
+        """fetchprojecttranslatedpath"""
         return self.directory_structure.copy()
     
     def get_step_paths(self, step_name: str) -> Dict[str, Path]:
         """
-        fetchENpath
+        fetchsteptranslated'spath
         
         Args:
-            step_name: EN
+            step_name: steptranslated
             
         Returns:
-            ENpath
+            steptranslatedpath
         """
         metadata_dir = self.directory_structure["metadata_dir"]
         
@@ -64,36 +64,36 @@ class PathManager:
         }
     
     def get_step_input_path(self, step_name: str) -> Path:
-        """fetchENfilepath"""
+        """fetchsteptranslatedfile path"""
         return self.get_step_paths(step_name)["input_path"]
     
     def get_step_output_path(self, step_name: str) -> Path:
-        """fetchENfilepath"""
+        """fetchsteptranslatedfile path"""
         return self.get_step_paths(step_name)["output_path"]
     
     def get_step_intermediate_dir(self, step_name: str) -> Path:
-        """fetchENfiledirectory"""
+        """fetchsteptranslatedfiledirectory"""
         return self.get_step_paths(step_name)["intermediate_dir"]
     
     def get_step_log_path(self, step_name: str) -> Path:
-        """fetchENlogfilepath"""
+        """fetchsteplogsfile path"""
         return self.get_step_paths(step_name)["log_path"]
     
     def get_backup_path(self, filename: str) -> Path:
-        """fetchENfilepath"""
+        """fetchtranslatedfile path"""
         return self.directory_structure["backups_dir"] / filename
     
     def get_temp_path(self, filename: str) -> Path:
-        """fetchENfilepath"""
+        """fetchtranslatedfile path"""
         return self.directory_structure["temp_dir"] / filename
     
     def get_config_path(self) -> Path:
-        """fetchconfigfilepath"""
+        """fetchconfigfile path"""
         return self.project_dir / "config.yaml"
     
     def get_srt_path(self) -> Path:
-        """fetchSRTfilepath"""
-        # ENprojectconfigENfetchSRTfileEN
+        """fetchSRTfile path"""
+        # translatedfromprojectconfigtranslatedfetchSRTfiletranslated
         try:
             from .config_manager import ProjectConfigManager
             config_manager = ProjectConfigManager(self.project_id)
@@ -104,7 +104,7 @@ class PathManager:
                 if srt_file:
                     return self.directory_structure["raw_dir"] / srt_file
             
-            # ifconfigEN，ENrawdirectoryENSRTfile
+            # iftranslatedconfigtranslated，translatedrawdirectorytranslated'sSRTfile
             raw_dir = self.directory_structure["raw_dir"]
             srt_files = list(raw_dir.glob("*.srt"))
             if srt_files:
@@ -116,8 +116,8 @@ class PathManager:
             return self.directory_structure["raw_dir"] / "transcript.srt"
     
     def get_video_path(self) -> Path:
-        """fetchvideofilepath"""
-        # ENprojectconfigENfetchvideofileEN
+        """fetchvideofile path"""
+        # translatedfromprojectconfigtranslatedfetchvideofiletranslated
         try:
             from .config_manager import ProjectConfigManager
             config_manager = ProjectConfigManager(self.project_id)
@@ -128,7 +128,7 @@ class PathManager:
                 if video_file:
                     return self.directory_structure["raw_dir"] / video_file
             
-            # ifconfigEN，ENrawdirectoryENvideofile
+            # iftranslatedconfigtranslated，translatedrawdirectorytranslated'svideofile
             raw_dir = self.directory_structure["raw_dir"]
             video_extensions = [".mp4", ".avi", ".mov", ".mkv", ".flv"]
             for ext in video_extensions:
@@ -145,69 +145,69 @@ class PathManager:
                 srt_filename = project_config["srt_file"]
                 return self.directory_structure["raw_dir"] / srt_filename
         except Exception as e:
-            logger.warning(f"cannotENprojectconfigfetchSRTfileEN: {e}")
+            logger.warning(f"translatedfromprojectconfigfetchSRTfiletranslated: {e}")
         
-        # ENfileEN
+        # translateddefaultfiletranslated
         return self.directory_structure["raw_dir"] / "transcript.srt"
     
     def get_prompt_dir(self) -> Path:
         """fetchpromptdirectorypath"""
-        # useENpathENprojectENdirectoryENpromptfileEN
+        # usetranslatedpathtranslatedprojecttranslateddirectory'spromptfiletranslated
         project_root = Path(__file__).parent.parent.parent
         return project_root / "prompt"
     
     def create_step_directories(self, step_name: str):
-        """ENcreateENdirectory"""
+        """translatedstepcreatetranslated'sdirectory"""
         step_paths = self.get_step_paths(step_name)
         
-        # createENfiledirectory
+        # createtranslatedfiledirectory
         step_paths["intermediate_dir"].mkdir(parents=True, exist_ok=True)
         
-        # ENlogdirectoryEN
+        # ensurelogsdirectorytranslatedin
         step_paths["log_path"].parent.mkdir(parents=True, exist_ok=True)
         
-        logger.debug(f"EN {step_name} createdirectoryEN")
+        logger.debug(f"translatedstep {step_name} createdirectorytranslated")
     
     def cleanup_step_files(self, step_name: str, keep_output: bool = True):
         """
-        ENfile
+        cleanstep'stranslatedfile
         
         Args:
-            step_name: EN
-            keep_output: ENfile
+            step_name: steptranslated
+            keep_output: Istranslatedfile
         """
         step_paths = self.get_step_paths(step_name)
         
-        # ENfiledirectory
+        # cleantranslatedfiledirectory
         if step_paths["intermediate_dir"].exists():
             import shutil
             shutil.rmtree(step_paths["intermediate_dir"])
-            logger.info(f"EN {step_name} ENfile")
+            logger.info(f"translatedcleanstep {step_name} 'stranslatedfile")
         
-        # ENfile（EN）
+        # cleantranslatedfile（canSelect）
         if step_paths["input_path"].exists():
             step_paths["input_path"].unlink()
-            logger.debug(f"EN {step_name} ENfile")
+            logger.debug(f"translatedcleanstep {step_name} 'stranslatedfile")
         
-        # ENfile（EN）
+        # cleantranslatedfile（canSelect）
         if not keep_output and step_paths["output_path"].exists():
             step_paths["output_path"].unlink()
-            logger.info(f"EN {step_name} ENfile")
+            logger.info(f"translatedcleanstep {step_name} 'stranslatedfile")
     
     def get_directory_size(self, dir_path: Path) -> int:
-        """fetchdirectoryEN（EN）"""
+        """fetchdirectorytranslated（translated）"""
         total_size = 0
         try:
             for file_path in dir_path.rglob("*"):
                 if file_path.is_file():
                     total_size += file_path.stat().st_size
         except Exception as e:
-            logger.warning(f"ENdirectoryEN: {dir_path}, error: {e}")
+            logger.warning(f"translateddirectorytranslated: {dir_path}, error: {e}")
         
         return total_size
     
     def get_project_size_info(self) -> Dict[str, Any]:
-        """fetchprojectEN"""
+        """fetchprojecttranslatedinfo"""
         size_info = {}
         
         for dir_name, dir_path in self.directory_structure.items():
@@ -228,35 +228,35 @@ class PathManager:
         return size_info
     
     def validate_paths(self) -> List[str]:
-        """validatepathEN"""
+        """verifypath'stranslated"""
         errors = []
         
-        # checkprojectdirectoryEN
+        # checkprojectdirectoryIstranslatedcantranslated
         if not self.project_dir.exists():
             try:
                 self.project_dir.mkdir(parents=True, exist_ok=True)
             except Exception as e:
-                errors.append(f"cannotcreateprojectdirectory: {self.project_dir}, error: {e}")
+                errors.append(f"translatedcreateprojectdirectory: {self.project_dir}, error: {e}")
         
-        # checkENdirectory
+        # checktranslated translateddirectory
         for dir_name, dir_path in self.directory_structure.items():
             if not dir_path.exists():
                 try:
                     dir_path.mkdir(parents=True, exist_ok=True)
                 except Exception as e:
-                    errors.append(f"cannotcreatedirectory {dir_name}: {dir_path}, error: {e}")
+                    errors.append(f"translatedcreatedirectory {dir_name}: {dir_path}, error: {e}")
             elif not dir_path.is_dir():
-                errors.append(f"pathENdirectory: {dir_name} -> {dir_path}")
+                errors.append(f"pathtranslatedIsdirectory: {dir_name} -> {dir_path}")
         
         return errors
     
     def get_relative_path(self, absolute_path: Path) -> str:
-        """fetchENprojectdirectoryENpath"""
+        """fetchtranslatedprojectdirectory'spath"""
         try:
             return str(absolute_path.relative_to(self.project_dir))
         except ValueError:
             return str(absolute_path)
     
     def get_absolute_path(self, relative_path: str) -> Path:
-        """fetchENpath"""
+        """fetchtranslatedpath"""
         return self.project_dir / relative_path 

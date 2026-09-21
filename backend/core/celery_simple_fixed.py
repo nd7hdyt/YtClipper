@@ -1,17 +1,17 @@
 """
-ENCeleryENconfig
-ENtaskENstatusupdateEN
+fixed'stranslatedCelerytranslateduseconfig
+translatedtasktranslatedAndstatusupdateissue
 """
 
 import os
 from celery import Celery
 
-# createCeleryEN
+# createCelerytranslateduse
 celery_app = Celery('autoclip')
 
-# ENconfig
+# translatedconfig
 celery_app.conf.update(
-    # EN
+    # translatedformat
     task_serializer='json',
     accept_content=['json'],
     result_serializer='json',
@@ -24,12 +24,12 @@ celery_app.conf.update(
     broker_transport='redis',
     broker_transport_options={},
     
-    # queueconfig
+    # translatedconfig
     task_default_queue='processing',
     task_default_exchange='processing',
     task_default_routing_key='processing',
     
-    # EN
+    # translated
     timezone='Asia/Shanghai',
     enable_utc=True,
     
@@ -37,16 +37,16 @@ celery_app.conf.update(
     task_always_eager=False,
     task_eager_propagates=True,
     
-    # ENconfig
+    # translatedprocessconfig
     worker_prefetch_multiplier=1,
     worker_max_tasks_per_child=1000,
     worker_disable_rate_limits=True,
     
-    # resultconfig
+    # translatedconfig
     result_expires=3600,
     task_ignore_result=False,
     
-    # taskENconfig
+    # tasktranslatedconfig
     task_routes={
         'backend.tasks.processing.*': {'queue': 'processing'},
         'backend.tasks.video.*': {'queue': 'upload'},
@@ -55,69 +55,69 @@ celery_app.conf.update(
         'backend.tasks.upload.*': {'queue': 'upload'},
     },
     
-    # EN，ENregistertask
+    # translatedusetranslated，translatedtask
     autodiscover_tasks=False,
 )
 
-# ENregistertask，EN
+# translatedtask，translated
 @celery_app.task(bind=True, name='tasks.processing.process_video_pipeline')
 def process_video_pipeline(self, project_id: str, input_video_path: str, input_srt_path: str, *args, **kwargs):
-    """videoprocessingENtask"""
-    # ENcallENprogressupdateserviceEN
+    """videoprocesstranslatedtask"""
+    # translatedcalltranslatedprogressupdateservice'sversion
     return backend_process_video_pipeline(self, project_id, input_video_path, input_srt_path, *args, **kwargs)
 
 @celery_app.task(bind=True, name='tasks.processing.process_single_step')
 def process_single_step(self, project_id: str, step: str, config: dict, *args, **kwargs):
-    """ENprocessingtask"""
-    print(f"🔧 startprocessingproject {project_id} EN: {step}")
+    """translated stepprocesstask"""
+    print(f"🔧 translatedprocessproject {project_id} 'sstep: {step}")
     if args:
-        print(f"⚠️  ENparameters: {args}")
+        print(f"⚠️  translated: {args}")
     if kwargs:
-        print(f"⚠️  ENparameters: {kwargs}")
+        print(f"⚠️  translated: {kwargs}")
     
-    # ENprocessingEN
+    # translatedprocesstranslated
     import time
     time.sleep(3)
     
-    print(f"✅ EN {step} processingEN")
+    print(f"✅ step {step} processing completed")
     return {
         "success": True,
         "project_id": project_id,
         "step": step,
-        "message": f"EN {step} processingEN"
+        "message": f"step {step} processing completed"
     }
 
-# ENtaskEN
+# translatedtasktranslated
 @celery_app.task(bind=True, name='backend.tasks.processing.process_video_pipeline')
 def backend_process_video_pipeline(self, project_id: str, input_video_path: str, input_srt_path: str, *args, **kwargs):
-    """ENvideoprocessingENtask（EN）"""
-    # ENtaskEN，EN
-    print(f"🎬 startprocessingproject: {project_id}")
+    """backendvideoprocesstranslatedtask（translated）"""
+    # translatedtasktranslated，translateduseissue
+    print(f"🎬 translatedprocessproject: {project_id}")
     print(f"📹 videopath: {input_video_path}")
     print(f"📝 subtitlespath: {input_srt_path}")
     if args:
-        print(f"⚠️  ENparameters: {args}")
+        print(f"⚠️  translated: {args}")
     if kwargs:
-        print(f"⚠️  ENparameters: {kwargs}")
+        print(f"⚠️  translated: {kwargs}")
     
     # fetchtaskID
     task_id = self.request.id
     print(f"🔑 CelerytaskID: {task_id}")
     
-    # ENprocessingEN
+    # translatedprocesstranslated
     import time
     steps = [
-        "EN",
-        "timeEN", 
-        "ENscoring",
-        "titlegenerate",
-        "EN",
-        "videoEN"
+        "translated",
+        "translated", 
+        "translated",
+        "translated",
+        "translated",
+        "videotranslated"
     ]
     
     for i, step in enumerate(steps):
-        progress = (i + 1) * 16  # EN16%
-        print(f"📊 EN {i+1}/6: {step} - {progress}%")
+        progress = (i + 1) * 16  # pertranslated16%
+        print(f"📊 step {i+1}/6: {step} - {progress}%")
         
         # updatetaskstatus
         try:
@@ -126,25 +126,25 @@ def backend_process_video_pipeline(self, project_id: str, input_video_path: str,
                 meta={
                     'current': i + 1,
                     'total': 6,
-                    'status': f'currentlyexecute: {step}',
+                    'status': f'translatedintranslated: {step}',
                     'progress': progress
                 }
             )
         except Exception as e:
             print(f"⚠️  updatetaskstatusfailed: {e}")
         
-        time.sleep(2)  # ENprocessingtime
+        time.sleep(2)  # translatedprocesstranslated
     
-    print(f"✅ project {project_id} processingEN")
+    print(f"✅ project {project_id} processing completed")
     
-    # ENupdatedatabaseENtaskENprojectstatus
+    # translatedupdatedatabasetranslated'staskAndprojectstatus
     try:
         from ..core.database import SessionLocal
         from ..models.task import Task, TaskStatus
         from ..models.project import Project, ProjectStatus
         from datetime import datetime
         
-        # ENupdatedatabase，ENcallEN
+        # translatedupdatedatabase，translatedcallissue
         db = SessionLocal()
         try:
             # updatetaskstatus
@@ -152,12 +152,12 @@ def backend_process_video_pipeline(self, project_id: str, input_video_path: str,
             if task:
                 task.status = TaskStatus.COMPLETED
                 task.progress = 100.0
-                task.current_step = 'EN'
+                task.current_step = 'translated'
                 task.completed_at = datetime.utcnow()
                 task.updated_at = datetime.utcnow()
-                print(f"✅ taskstatusupdatedENdatabase")
+                print(f"✅ taskstatustranslatedupdatetranslateddatabase")
             else:
-                print(f"⚠️  ENtask: {task_id}")
+                print(f"⚠️  translatedtask: {task_id}")
             
             # updateprojectstatus
             project = db.query(Project).filter(Project.id == project_id).first()
@@ -165,9 +165,9 @@ def backend_process_video_pipeline(self, project_id: str, input_video_path: str,
                 project.status = ProjectStatus.COMPLETED
                 project.completed_at = datetime.utcnow()
                 project.updated_at = datetime.utcnow()
-                print(f"✅ projectstatusupdatedENcompleted: {project_id}")
+                print(f"✅ projectstatustranslatedupdatetranslatedcompleted: {project_id}")
             else:
-                print(f"⚠️  ENproject: {project_id}")
+                print(f"⚠️  translatedproject: {project_id}")
             
             db.commit()
             
@@ -180,13 +180,13 @@ def backend_process_video_pipeline(self, project_id: str, input_video_path: str,
     return {
         "success": True,
         "project_id": project_id,
-        "message": "videoprocessingEN",
+        "message": "videoprocessing completed",
         "steps": steps
     }
 
 @celery_app.task(bind=True, name='backend.tasks.processing.process_single_step')
 def backend_process_single_step(self, project_id: str, step: str, config: dict, *args, **kwargs):
-    """ENprocessingtask（EN）"""
+    """backendtranslated stepprocesstask（translated）"""
     return process_single_step(self, project_id, step, config, *args, **kwargs)
 
 if __name__ == '__main__':

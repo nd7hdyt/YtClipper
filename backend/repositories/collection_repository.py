@@ -1,6 +1,6 @@
 """
 collectionRepository
-ENcollectionEN
+Providescollectiontranslated'stranslated
 """
 
 from typing import List, Optional, Dict, Any
@@ -11,83 +11,83 @@ from .base import BaseRepository
 from ..models.collection import Collection, CollectionStatus
 
 class CollectionRepository(BaseRepository[Collection]):
-    """collectionRepositoryEN"""
+    """collectionRepositorytranslated"""
     
     def __init__(self, db: Session):
         super().__init__(Collection, db)
     
     def get_by_project(self, project_id: str) -> List[Collection]:
         """
-        fetchprojectENallcollection
+        fetchproject'stranslatedcollection
         
         Args:
             project_id: projectID
             
         Returns:
-            collectionEN
+            collectionlist
         """
         return self.find_by(project_id=project_id)
     
     def get_by_status(self, status: CollectionStatus) -> List[Collection]:
         """
-        ENstatusfetchcollectionEN
+        translatedstatusfetchcollectionlist
         
         Args:
             status: collectionstatus
             
         Returns:
-            collectionEN
+            collectionlist
         """
         return self.find_by(status=status)
     
     def get_by_project_and_status(self, project_id: str, status: CollectionStatus) -> List[Collection]:
         """
-        ENprojectENstatusfetchcollectionEN
+        translatedprojectAndstatusfetchcollectionlist
         
         Args:
             project_id: projectID
             status: collectionstatus
             
         Returns:
-            collectionEN
+            collectionlist
         """
         return self.find_by(project_id=project_id, status=status)
     
     def get_by_theme(self, project_id: str, theme: str) -> List[Collection]:
         """
-        ENfetchcollectionEN
+        translatedfetchcollectionlist
         
         Args:
             project_id: projectID
-            theme: EN
+            theme: translated
             
         Returns:
-            collectionEN
+            collectionlist
         """
         return self.find_by(project_id=project_id, theme=theme)
     
     def get_completed_collections(self, project_id: str) -> List[Collection]:
         """
-        fetchcompletedENcollection
+        fetchcompleted'scollection
         
         Args:
             project_id: projectID
             
         Returns:
-            completedENcollectionEN
+            completed'scollectionlist
         """
         return self.find_by(project_id=project_id, status=CollectionStatus.COMPLETED)
     
     def search_collections(self, project_id: str, keyword: str) -> List[Collection]:
         """
-        ENcollection
+        translatedcollection
         
         Args:
             project_id: projectID
-            keyword: EN
+            keyword: translated
             
         Returns:
-            ENcollectionEN
+            translated'scollectionlist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -98,14 +98,14 @@ class CollectionRepository(BaseRepository[Collection]):
     
     def get_collections_by_clips_count(self, project_id: str, min_clips: int = 1) -> List[Collection]:
         """
-        ENclipENfetchcollection
+        translatedcliptranslatedfetchcollection
         
         Args:
             project_id: projectID
-            min_clips: ENclipEN
+            min_clips: translatedcliptranslated
             
         Returns:
-            collectionEN
+            collectionlist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -113,22 +113,22 @@ class CollectionRepository(BaseRepository[Collection]):
         ).order_by(desc(self.model.clips_count)).all()
     
     def create_collection(self, collection_data: Dict[str, Any]) -> Collection:
-        """createcollectionEN（EN）"""
+        """createcollectiontranslated（translated）"""
         from ..services.storage_service import StorageService
         import uuid
         
-        # generatecollectionID（ifEN）
+        # translatedcollectionID（iftranslatedProvides）
         if "id" not in collection_data:
             collection_data["id"] = str(uuid.uuid4())
         
-        # 1. savecollectionfileENfilesystem
+        # 1. translatedcollectionfiletranslatedfileSystem
         storage_service = StorageService(collection_data["project_id"])
         export_path = storage_service.save_collection_file(collection_data, collection_data["id"])
         
-        # 2. saveENfilesystem
+        # 2. translatedfileSystem
         metadata_path = storage_service.save_metadata(collection_data, f"collection_{collection_data['id']}")
         
-        # 3. saveENdatabase（ENpathEN）
+        # 3. translateddatabase（translatedpathtranslateduse）
         collection = Collection(
             id=collection_data["id"],
             project_id=collection_data["project_id"],
@@ -138,9 +138,9 @@ class CollectionRepository(BaseRepository[Collection]):
             tags=collection_data.get("tags"),
             total_duration=collection_data.get("total_duration"),
             clips_count=collection_data.get("clips_count", 0),
-            export_path=export_path,  # ENpath
+            export_path=export_path,  # translatedpath
             collection_metadata={
-                'metadata_file': metadata_path,  # ENfilepath
+                'metadata_file': metadata_path,  # translatedfile path
                 'clip_ids': collection_data.get('clip_ids', []),
                 'collection_type': collection_data.get('collection_type', 'ai_recommended'),
                 'collection_id': collection_data["id"],
@@ -153,19 +153,19 @@ class CollectionRepository(BaseRepository[Collection]):
         return collection
     
     def get_collection_file(self, collection_id: str) -> Optional[Path]:
-        """fetchcollectionfilepath"""
+        """fetchcollectionfile path"""
         collection = self.get_by_id(collection_id)
         if collection and collection.export_path:
             return Path(collection.export_path)
         return None
     
     def get_collection_content(self, collection_id: str) -> Optional[Dict[str, Any]]:
-        """fetchcollectionEN"""
+        """fetchcollectiontranslated"""
         collection = self.get_by_id(collection_id)
         if not collection:
             return None
         
-        # ENfilesystemfetchEN
+        # fromfileSystemfetchtranslated
         if collection.collection_metadata and 'metadata_file' in collection.collection_metadata:
             from ..services.storage_service import StorageService
             storage_service = StorageService(collection.project_id)
@@ -175,15 +175,15 @@ class CollectionRepository(BaseRepository[Collection]):
     
     def get_collections_by_duration_range(self, project_id: str, min_duration: int, max_duration: int) -> List[Collection]:
         """
-        ENdurationENfetchcollection
+        translatedfetchcollection
         
         Args:
             project_id: projectID
-            min_duration: ENduration（EN）
-            max_duration: ENduration（EN）
+            min_duration: translated（seconds）
+            max_duration: translated（seconds）
             
         Returns:
-            collectionEN
+            collectionlist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -193,13 +193,13 @@ class CollectionRepository(BaseRepository[Collection]):
     
     def get_collections_statistics(self, project_id: str) -> dict:
         """
-        fetchcollectionEN
+        fetchcollectiontranslatedinfo
         
         Args:
             project_id: projectID
             
         Returns:
-            EN
+            translatedinfotranslated
         """
         total_collections = self.db.query(self.model).filter(
             self.model.project_id == project_id
@@ -232,48 +232,48 @@ class CollectionRepository(BaseRepository[Collection]):
         
         Args:
             collection_id: collectionID
-            status: ENstatus
+            status: translatedstatus
             
         Returns:
-            updateENcollectionENNone
+            updatetranslated'scollectiontranslatedorNone
         """
         return self.update(collection_id, status=status)
     
     def update_collection_clips_count(self, collection_id: str, clips_count: int) -> Optional[Collection]:
         """
-        updatecollectionclipEN
+        updatecollectioncliptranslated
         
         Args:
             collection_id: collectionID
-            clips_count: clipEN
+            clips_count: cliptranslated
             
         Returns:
-            updateENcollectionENNone
+            updatetranslated'scollectiontranslatedorNone
         """
         return self.update(collection_id, clips_count=clips_count)
     
     def update_collection_duration(self, collection_id: str, total_duration: int) -> Optional[Collection]:
         """
-        updatecollectionENduration
+        updatecollectiontranslated
         
         Args:
             collection_id: collectionID
-            total_duration: ENduration（EN）
+            total_duration: translated（seconds）
             
         Returns:
-            updateENcollectionENNone
+            updatetranslated'scollectiontranslatedorNone
         """
         return self.update(collection_id, total_duration=total_duration)
     
     def get_collections_with_clips(self, project_id: str) -> List[Collection]:
         """
-        fetchENclipENcollectionEN
+        fetchPackageincludeclip'scollectiontranslated
         
         Args:
             project_id: projectID
             
         Returns:
-            collectionEN
+            collectionlist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id
@@ -281,15 +281,15 @@ class CollectionRepository(BaseRepository[Collection]):
     
     def get_collection_by_theme_and_size(self, project_id: str, theme: str, target_size: int = 5) -> Optional[Collection]:
         """
-        ENfetchcollection
+        translatedAndtranslatedfetchcollection
         
         Args:
             project_id: projectID
-            theme: EN
-            target_size: EN
+            theme: translated
+            target_size: translated
             
         Returns:
-            collectionENNone
+            collectiontranslatedorNone
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,

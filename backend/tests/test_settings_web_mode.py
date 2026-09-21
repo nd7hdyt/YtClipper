@@ -1,8 +1,8 @@
 """
-EN（Docker / EN）EN（issue #100）。
+settingstranslatedintranslated（Docker / localtranslated）translatedcanuse（issue #100）。
 
-EN GET/PUT /settings、/test-api、/current-provider EN check_desktop_mode() EN 400，
-Docker EN .env。EN：EN、EN、EN、EN。
+translated GET/PUT /settings、/test-api、/current-provider etc.translated check_desktop_mode() translated 400，
+Docker usertranslated .env。thistranslatedcalltranslatedverify：translated、translated、translated、translated。
 """
 
 import asyncio
@@ -18,8 +18,8 @@ from backend.core.desktop_config import DesktopPaths
 def web_mode(monkeypatch, tmp_path):
     for name in (
         "AUTOCLIP_DESKTOP_MODE", "AUTOCLIP_MODE", "TAURI_PLATFORM",
-        "LLM_PROVIDER", "API_MODEL_NAME", "LLM_MODEL", "OPENAI_BASE_URL",
-        "API_DASHSCOPE_API_KEY", "DASHSCOPE_API_KEY", "API_OPENAI_API_KEY", "OPENAI_API_KEY",
+        "LLM_PROVIDER", "API_MODEL_NAME", "LLM_MODEL", "OPtranslatedAI_BASE_URL",
+        "API_DASHSCOPE_API_KEY", "DASHSCOPE_API_KEY", "API_OPtranslatedAI_API_KEY", "OPtranslatedAI_API_KEY",
         "API_GEMINI_API_KEY", "GEMINI_API_KEY", "API_SILICONFLOW_API_KEY", "SILICONFLOW_API_KEY",
     ):
         monkeypatch.delenv(name, raising=False)
@@ -35,7 +35,7 @@ def web_mode(monkeypatch, tmp_path):
         database_url=f"sqlite:///{tmp_path / 'autoclip.db'}",
     ))
 
-    # LLM EN settings.json，EN
+    # LLM translatedonetranslated settings.json，translateduserdirectory
     monkeypatch.setattr(manager_module.config_sync_service, "is_sync_needed", lambda: False)
     manager = manager_module.LLMManager(settings_file=tmp_path / "settings.json")
     monkeypatch.setattr(manager_module, "get_llm_manager", lambda: manager)
@@ -72,7 +72,7 @@ def test_get_settings_works_without_desktop_mode(web_mode):
 
 
 def test_get_settings_reflects_env_config_before_first_save(web_mode, monkeypatch):
-    """Docker EN .env EN LLM_PROVIDER=gemini，EN Gemini，EN"""
+    """Docker userin .env translated LLM_PROVIDER=gemini，Settings pagetranslated Gemini，translatedIstranslated"""
     settings_api, _, manager = web_mode
     monkeypatch.setenv("LLM_PROVIDER", "gemini")
     monkeypatch.setenv("API_MODEL_NAME", "gemini-2.5-flash")
@@ -99,7 +99,7 @@ def test_update_then_get_roundtrip_and_manager_reload(web_mode):
     assert reloaded.api.api_provider == "gemini"
     assert reloaded.api.api_model == "gemini-2.5-flash"
 
-    # API EN LLM EN；worker EN mtime EN
+    # API processtranslated's LLM translated；worker processtranslated mtime translatedonetranslated
     info = manager.get_current_provider_info()
     assert info["provider"] == "gemini"
     assert info["model"] == "gemini-2.5-flash"
@@ -119,8 +119,8 @@ def test_test_api_endpoint_no_longer_requires_desktop_mode(web_mode):
     settings_api, _, _ = web_mode
     request = settings_api.TestApiRequest(provider="gemini", api_key="short")
 
-    # EN（key EN），EN 400 EN
+    # translated（key translated），translatedIstranslated 400 translatedintranslated
     result = asyncio.run(settings_api.test_api_connection(request))
 
     assert result["success"] is False
-    assert "EN" in result["error"]
+    assert "translated" in result["error"]

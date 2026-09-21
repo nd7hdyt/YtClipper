@@ -1,275 +1,275 @@
-# AutoClip EN
+# AutoClip start
 
-## 📋 EN
+## 📋 overview
 
-AutoClip ENBased onAIENProcessing System，AdoptsFrontend-Backend SeparationEN。EN。
+AutoClip based onAIclip，backend。start。
 
-## 🚀 Quick Start
+## 🚀 quick start
 
-### 1. One-Click Start（EN）
+### 1. start（recommend）
 
 ```bash
-# EN（EN）
+# start（checkmonitor）
 ./start_autoclip.sh
 
-# EN（EN，EN）
+# start（dev environment，check）
 ./quick_start.sh
 ```
 
-### 2. EN
+### 2. 
 
 ```bash
-# EN
+# checkstatus
 ./status_autoclip.sh
 
-# EN
+# service
 ./stop_autoclip.sh
 ```
 
-## 📊 System Architecture
+## 📊 
 
-### EN
-- **FastAPI**: RESTful API EN WebSocket Support
-- **Celery**: ENTask Queue
-- **Redis**: EN
-- **SQLite**: EN
+### backendservice
+- **FastAPI**: RESTful API  WebSocket support
+- **Celery**: 
+- **Redis**: proxycache
+- **SQLite**: 
 
-### EN
-- **React**: ENInterface
-- **Vite**: EN
-- **TypeScript**: EN
+### frontendservice
+- **React**: 
+- **Vite**: server
+- **TypeScript**: security
 
-## 🔧 Requirements
+## 🔧 
 
-### EN
-- macOS EN Linux
+### 
+- macOS  Linux
 - Python 3.8+
 - Node.js 16+
-- Redis EN
+- Redis server
 
-### EN
+### dependenciesinstall
 
 ```bash
-# 1. EN
+# 1. create
 python3 -m venv venv
 source venv/bin/activate
 
-# 2. ENPythonEN
+# 2. installPythondependencies
 pip install -r requirements.txt
 
-# 3. EN
+# 3. installfrontenddependencies
 cd frontend
 npm install
 cd ..
 
-# 4. ENRedis（macOS）
+# 4. installRedis（macOS）
 brew install redis
 brew services start redis
 
-# 5. EN
+# 5. configenv var
 cp env.example .env
-# EN .env EN，EN
+# edit .env file，config
 ```
 
-## 📝 EN
+## 📝 configfile
 
-### EN (.env)
+### env var (.env)
 
 ```bash
-# EN
+# databaseconfig
 DATABASE_URL=sqlite:///./data/autoclip.db
 
-# RedisEN
+# Redisconfig
 REDIS_URL=redis://localhost:6379/0
 
-# APIEN
+# APIconfig
 API_DASHSCOPE_API_KEY=your_api_key_here
 API_MODEL_NAME=qwen-plus
 
-# EN
+# config
 LOG_LEVEL=INFO
 ENVIRONMENT=development
 DEBUG=true
 ```
 
-## 🌐 EN
+## 🌐 serviceport
 
-| EN | EN | EN |
+| service | port |  |
 |------|------|------|
-| ENInterface | 3000 | React EN |
-| ENAPI | 8000 | FastAPI EN |
-| Redis | 6379 | EN |
-| APIEN | 8000/docs | Swagger UI |
+| frontend | 3000 | React server |
+| backendAPI | 8000 | FastAPI server |
+| Redis | 6379 | proxy |
+| APIdocs | 8000/docs | Swagger UI |
 
-## 📁 EN
+## 📁 
 
 ```
 autoclip/
-├── backend/                 # EN
-│   ├── api/                # APIEN
-│   ├── core/               # EN
-│   ├── models/             # EN
-│   ├── services/           # EN
-│   └── tasks/              # CeleryEN
-├── frontend/               # EN
-│   ├── src/                # EN
-│   └── public/             # EN
-├── data/                   # EN
-│   ├── projects/           # EN
-│   └── uploads/            # UploadEN
-├── logs/                   # EN
-├── scripts/                # EN
-└── *.sh                    # EN
+├── backend/                 # backend
+│   ├── api/                # APIroute
+│   ├── core/               # config
+│   ├── models/             # model
+│   ├── services/           # 
+│   └── tasks/              # Celery
+├── frontend/               # frontend
+│   ├── src/                # 
+│   └── public/             # 
+├── data/                   # 
+│   ├── projects/           # project
+│   └── uploads/            # upload file
+├── logs/                   # file
+├── scripts/                # tool
+└── *.sh                    # start
 ```
 
-## 🔍 Troubleshooting
+## 🔍 troubleshooting
 
 ### FAQ
 
-1. **EN**
+1. **port**
    ```bash
-   # EN
+   # checkport
    lsof -i :8000
    lsof -i :3000
    
-   # EN
+   # 
    kill -9 <PID>
    ```
 
-2. **RedisEN**
+2. **Redisconnection failed**
    ```bash
-   # ENRedisEN
+   # checkRedisstatus
    redis-cli ping
    
-   # ENRedis
+   # startRedis
    brew services start redis  # macOS
    systemctl start redis      # Linux
    ```
 
-3. **PythonEN**
+3. **Pythondependenciesissue**
    ```bash
-   # EN
+   # installdependencies
    pip install -r requirements.txt --force-reinstall
    ```
 
-4. **EN**
+4. **frontenddependenciesissue**
    ```bash
-   # EN
+   # install
    cd frontend
    rm -rf node_modules package-lock.json
    npm install
    ```
 
-### EN
+### view
 
 ```bash
-# EN
+# view
 tail -f logs/*.log
 
-# EN
+# viewservice
 tail -f logs/backend.log
 tail -f logs/frontend.log
 tail -f logs/celery.log
 ```
 
-### EN
+### statuscheck
 
 ```bash
-# EN
+# statuscheck
 ./status_autoclip.sh
 
-# EN
+# checkservice
 curl http://localhost:8000/api/v1/health/
 curl http://localhost:3000/
 redis-cli ping
 ```
 
-## 🛠️ EN
+## 🛠️ dev mode
 
-### EN
+### backend dev
 
 ```bash
-# EN
+# 
 source venv/bin/activate
 
-# ENPythonEN
+# settingsPython
 export PYTHONPATH="${PWD}:${PYTHONPATH}"
 
-# EN（EN）
+# startbackend（dev mode）
 python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### EN
+### frontend dev
 
 ```bash
-# EN
+# frontend
 cd frontend
 
-# EN
+# startserver
 npm run dev
 ```
 
 ### Celery Worker
 
 ```bash
-# ENWorker（EN -Q：EN celery_app.task_routes EN，
-# EN -Q EN worker EN `celery` EN，EN `processing` EN）
+# startWorker（ -Q： celery_app.task_routes route，
+#  -Q  worker default `celery` ， `processing` ）
 celery -A backend.core.celery_app worker --loglevel=info -Q celery,processing,video,notification,upload
 
-# ENBeatEN
+# startBeat
 celery -A backend.core.celery_app beat --loglevel=info
 
-# ENFlowerEN
+# startFlowermonitor
 celery -A backend.core.celery_app flower --port=5555
 ```
 
-## 📈 Performance
+## 📈 performance
 
-### EN
+### productionconfig
 
-1. **EN**
-   - ENPostgreSQLENSQLite
-   - EN
-   - EN
+1. **database**
+   - usePostgreSQLSQLite
+   - config
+   - cache
 
-2. **RedisEN**
-   - EN
-   - EN
-   - EN
+2. **Redis**
+   - configmemorylimit
+   - 
+   - settings
 
-3. **CeleryEN**
-   - EN
-   - EN
-   - EN
+3. **Celery**
+   - 
+   - configroute
+   - backend
 
-## 🔒 Security
+## 🔒 securityconfig
 
-### EN
+### productionsecurity
 
-1. **EN**
-   - EN
-   - EN
-   - ENAPIEN
+1. **env var**
+   - use
+   - key
+   - limitAPIaccess
 
-2. **EN**
-   - EN
-   - ENHTTPS
-   - ENCORS
+2. **security**
+   - config
+   - useHTTPS
+   - limitCORS
 
-3. **EN**
-   - EN
-   - EN
-   - EN
+3. **security**
+   - 
+   - 
+   - access
 
-## 📞 Support
+## 📞 support
 
-EN，EN：
+if you encounter issues，：
 
-1. EN
-2. EN
-3. EN
-4. ReferenceTroubleshootingEN
+1. viewfile
+2. statuscheck
+3. checkconfig
+4. troubleshooting
 
-## 📄 License
+## 📄 
 
-ENAdopts MIT License。
+project MIT 。

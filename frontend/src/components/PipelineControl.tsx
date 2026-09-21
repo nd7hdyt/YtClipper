@@ -51,7 +51,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [statusModalVisible, setStatusModalVisible] = useState(false);
 
-  // Fetch pipelineStatus
+  // fetchtranslatedstatus
   const fetchPipelineStatus = async () => {
     try {
       setLoading(true);
@@ -59,25 +59,25 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       
       const response = await fetch(`/api/v1/pipeline/status/${projectId}`);
       if (!response.ok) {
-        throw new Error('Fetch pipelineStatusFailed');
+        throw new Error('fetchtranslatedstatusfailed');
       }
       
       const data = await response.json();
       setPipelineStatus(data);
       
-      // ENStatusChange
+      // translatedstatustranslated
       if (onStatusChange) {
         onStatusChange(data.project_status);
       }
       
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setError(err instanceof Error ? err.message : 'translatederror');
     } finally {
       setLoading(false);
     }
   };
 
-  // Start pipeline
+  // starttranslated
   const startPipeline = async () => {
     try {
       setActionLoading(true);
@@ -87,23 +87,23 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       });
       
       if (!response.ok) {
-        throw new Error('Start pipelineFailed');
+        throw new Error('starttranslatedfailed');
       }
       
       const result = await response.json();
       message.success(result.message);
       
-      // RefreshStatus
+      // translatedstatus
       await fetchPipelineStatus();
       
     } catch (err) {
-      message.error(err instanceof Error ? err.message : 'ENFailed');
+      message.error(err instanceof Error ? err.message : 'startfailed');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // Stop pipeline
+  // translated
   const stopPipeline = async () => {
     try {
       setActionLoading(true);
@@ -113,23 +113,23 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       });
       
       if (!response.ok) {
-        throw new Error('Stop pipelineFailed');
+        throw new Error('translatedfailed');
       }
       
       const result = await response.json();
       message.success(result.message);
       
-      // RefreshStatus
+      // translatedstatus
       await fetchPipelineStatus();
       
     } catch (err) {
-      message.error(err instanceof Error ? err.message : 'ENFailed');
+      message.error(err instanceof Error ? err.message : 'translatedfailed');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // Restart pipeline
+  // translated
   const restartPipeline = async () => {
     try {
       setActionLoading(true);
@@ -139,64 +139,64 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
       });
       
       if (!response.ok) {
-        throw new Error('Restart pipelineFailed');
+        throw new Error('translatedfailed');
       }
       
       const result = await response.json();
       message.success(result.message);
       
-      // RefreshStatus
+      // translatedstatus
       await fetchPipelineStatus();
       
     } catch (err) {
-      message.error(err instanceof Error ? err.message : 'ENFailed');
+      message.error(err instanceof Error ? err.message : 'translatedfailed');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // ENRefreshStatus
+  // translatedstatus
   useEffect(() => {
     if (projectId) {
       fetchPipelineStatus();
       
-      // EN10ENRefreshonce
+      // per10secondstranslatedonetranslated
       const interval = setInterval(fetchPipelineStatus, 10000);
       return () => clearInterval(interval);
     }
   }, [projectId]);
 
-  // fetchStatusconfig
+  // fetchstatusconfig
   const getStatusConfig = (status: string) => {
     switch (status) {
       case 'processing':
-        return { color: 'processing', text: 'Processing', icon: <PlayCircleOutlined /> };
+        return { color: 'processing', text: 'processing', icon: <PlayCircleOutlined /> };
       case 'completed':
-        return { color: 'success', text: 'Completed', icon: <CheckCircleOutlined /> };
+        return { color: 'success', text: 'completed', icon: <CheckCircleOutlined /> };
       case 'failed':
-        return { color: 'error', text: 'Failed', icon: <CloseCircleOutlined /> };
+        return { color: 'error', text: 'failed', icon: <CloseCircleOutlined /> };
       case 'pending':
-        return { color: 'default', text: 'Pending', icon: <ClockCircleOutlined /> };
+        return { color: 'default', text: 'etc.translated', icon: <ClockCircleOutlined /> };
       case 'paused':
-        return { color: 'warning', text: 'EN', icon: <PauseCircleOutlined /> };
+        return { color: 'warning', text: 'translated', icon: <PauseCircleOutlined /> };
       default:
         return { color: 'default', text: status, icon: <ClockCircleOutlined /> };
     }
   };
 
-  // Fetch tasksStatusconfig
+  // fetchtaskstatusconfig
   const getTaskStatusConfig = (status: string) => {
     switch (status) {
       case 'running':
-        return { color: 'processing', text: 'running' };
+        return { color: 'processing', text: 'translated' };
       case 'completed':
-        return { color: 'success', text: 'Completed' };
+        return { color: 'success', text: 'completed' };
       case 'failed':
-        return { color: 'error', text: 'Failed' };
+        return { color: 'error', text: 'failed' };
       case 'pending':
-        return { color: 'default', text: 'Pending' };
+        return { color: 'default', text: 'etc.translated' };
       case 'cancelled':
-        return { color: 'warning', text: 'Cancelled' };
+        return { color: 'warning', text: 'translatedcancel' };
       default:
         return { color: 'default', text: status };
     }
@@ -208,7 +208,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
         <div style={{ textAlign: 'center', padding: '20px' }}>
           <Spin size="large" />
           <div style={{ marginTop: 16 }}>
-            <Text>ENFetch pipelineStatus...</Text>
+            <Text>translatedinfetchtranslatedstatus...</Text>
           </div>
         </div>
       </Card>
@@ -219,13 +219,13 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
     return (
       <Card size="small" style={{ marginBottom: 16 }}>
         <Alert
-          message="Fetch pipelineStatusFailed"
+          message="fetchtranslatedstatusfailed"
           description={error}
           type="error"
           showIcon
           action={
             <Button size="small" onClick={fetchPipelineStatus}>
-              Retry
+              translated
             </Button>
           }
         />
@@ -249,7 +249,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
           <Space>
             {statusConfig.icon}
             <Title level={5} style={{ margin: 0 }}>
-              EN
+              translated
             </Title>
             <Tag color={statusConfig.color}>
               {statusConfig.text}
@@ -257,7 +257,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
           </Space>
         </div>
 
-        {/* EN */}
+        {/* translatedbytranslated */}
         <Space style={{ marginBottom: 16 }}>
           {canStart && (
             <Button
@@ -266,7 +266,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
               onClick={startPipeline}
               loading={actionLoading}
             >
-              Start pipeline
+              starttranslated
             </Button>
           )}
           
@@ -277,7 +277,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
               onClick={stopPipeline}
               loading={actionLoading}
             >
-              Stop pipeline
+              translated
             </Button>
           )}
           
@@ -287,7 +287,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
               onClick={restartPipeline}
               loading={actionLoading}
             >
-              Restart pipeline
+              translated
             </Button>
           )}
           
@@ -295,45 +295,45 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
             icon={<EyeOutlined />}
             onClick={() => setStatusModalVisible(true)}
           >
-            ViewDetails
+            translated
           </Button>
         </Space>
 
-        {/* Task stats */}
+        {/* tasktranslated */}
         <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 16 }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#1890ff' }}>
               {pipelineStatus.total_tasks}
             </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>ENtask</div>
+            <div style={{ fontSize: '12px', color: '#666' }}>translatedtask</div>
           </div>
           
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#52c41a' }}>
               {pipelineStatus.running_tasks}
             </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>running</div>
+            <div style={{ fontSize: '12px', color: '#666' }}>translated</div>
           </div>
           
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#faad14' }}>
               {pipelineStatus.completed_tasks}
             </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>Completed</div>
+            <div style={{ fontSize: '12px', color: '#666' }}>completed</div>
           </div>
           
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#ff4d4f' }}>
               {pipelineStatus.failed_tasks}
             </div>
-            <div style={{ fontSize: '12px', color: '#666' }}>Failed</div>
+            <div style={{ fontSize: '12px', color: '#666' }}>failed</div>
           </div>
         </div>
 
-        {/* Current taskProgress */}
+        {/* translatedtaskprogress */}
         {pipelineStatus.tasks.length > 0 && (
           <div>
-            <Text strong>Current task:</Text>
+            <Text strong>translatedtask:</Text>
             {pipelineStatus.tasks.map((task) => (
               <div key={task.id} style={{ marginTop: 8 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
@@ -350,7 +350,7 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
                 />
                 
                 <div style={{ fontSize: '12px', color: '#666', marginTop: 4 }}>
-                  Step: {task.realtime_step || task.current_step}
+                  step: {task.realtime_step || task.current_step}
                 </div>
               </div>
             ))}
@@ -358,13 +358,13 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
         )}
 
         <div style={{ marginTop: 16, textAlign: 'center' }}>
-          <Text type="secondary">StatusEN10ENupdate</Text>
+          <Text type="secondary">statusper10secondstranslatedupdate</Text>
         </div>
       </Card>
 
-      {/* StatusDetailsmodal */}
+      {/* statustranslated */}
       <Modal
-        title="ENStatusDetails"
+        title="translatedstatustranslated"
         open={statusModalVisible}
         onCancel={() => setStatusModalVisible(false)}
         footer={null}
@@ -373,12 +373,12 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
         {pipelineStatus && (
           <div>
             <div style={{ marginBottom: 16 }}>
-              <Text strong>projectStatus: </Text>
+              <Text strong>projectstatus: </Text>
               <Tag color={statusConfig.color}>{statusConfig.text}</Tag>
             </div>
             
             <List
-              header={<Text strong>Task list</Text>}
+              header={<Text strong>tasklist</Text>}
               dataSource={pipelineStatus.tasks}
               renderItem={(task) => (
                 <List.Item>
@@ -393,14 +393,14 @@ const PipelineControl: React.FC<PipelineControlProps> = ({
                     }
                     description={
                       <div>
-                        <div>Step: {task.realtime_step || task.current_step}</div>
-                        {task.step_details && <div>Details: {task.step_details}</div>}
-                        <div>Created: {new Date(task.created_at).toLocaleString()}</div>
+                        <div>step: {task.realtime_step || task.current_step}</div>
+                        {task.step_details && <div>translated: {task.step_details}</div>}
+                        <div>createtranslated: {new Date(task.created_at).toLocaleString()}</div>
                         {task.started_at && (
-                          <div>Start time: {new Date(task.started_at).toLocaleString()}</div>
+                          <div>translated: {new Date(task.started_at).toLocaleString()}</div>
                         )}
                         {task.completed_at && (
-                          <div>CompletedEN: {new Date(task.completed_at).toLocaleString()}</div>
+                          <div>translated: {new Date(task.completed_at).toLocaleString()}</div>
                         )}
                       </div>
                     }

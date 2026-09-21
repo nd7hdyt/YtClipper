@@ -1,6 +1,6 @@
 """
-taskqueueENservice
-ENCelerytaskEN、ENstatusEN
+Task Queuetranslatedservice
+translatedCelerytask'stranslated、monitorAndstatustranslated
 """
 
 import logging
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class TaskQueueService:
-    """taskqueueENservice"""
+    """Task Queuetranslatedservice"""
     
     def __init__(self, db: Session):
         self.db = db
@@ -34,52 +34,52 @@ class TaskQueueService:
         input_srt_path: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        ENvideoprocessingtask
+        translatedvideoprocesstask
         
         Args:
             project_id: projectID
-            input_video_path: ENvideopath
-            input_srt_path: ENSRTpath
+            input_video_path: translatedvideopath
+            input_srt_path: translatedSRTpath
             
         Returns:
-            taskENresult
+            tasktranslated
         """
-        logger.info(f"ENvideoprocessingtask: {project_id}")
+        logger.info(f"translatedvideoprocesstask: {project_id}")
         
         try:
-            # createENsavetaskEN
+            # createtranslatedtasktranslated
             task = self.task_repo.create(
                 project_id=project_id,
-                name="videoENprocessing",
-                description=f"processingproject {project_id} ENvideoEN",
+                name="videotranslatedprocess",
+                description=f"processproject {project_id} 'svideotranslated",
                 task_type=TaskType.VIDEO_PROCESSING,
-                status=TaskStatus.PENDING,
+                status=TaskStatus.PtranslatedDING,
                 priority=1
             )
             
-            # ENCelerytask
+            # translatedCelerytask
             celery_task = process_video_pipeline.delay(
                 project_id=project_id,
                 input_video_path=input_video_path,
                 input_srt_path=input_srt_path,
             )
             
-            # updatetaskEN
+            # updatetasktranslated
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"videoprocessingtaskEN: {task.id}, CelerytaskID: {celery_task.id}")
+            logger.info(f"videoprocesstasktranslated: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': task.id,
                 'celery_task_id': celery_task.id,
-                'status': 'PENDING',
-                'message': 'videoprocessingtaskEN'
+                'status': 'PtranslatedDING',
+                'message': 'videoprocesstasktranslated'
             }
             
         except Exception as e:
-            logger.error(f"ENvideoprocessingtaskfailed: {project_id}, error: {e}")
+            logger.error(f"translatedvideoprocesstaskfailed: {project_id}, error: {e}")
             raise
     
     def submit_single_step_task(
@@ -89,49 +89,49 @@ class TaskQueueService:
         config: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
-        ENprocessingtask
+        translated stepprocesstask
         
         Args:
             project_id: projectID
-            step_name: EN
-            config: ENconfigparameters
+            step_name: steptranslated
+            config: stepconfigtranslated
             
         Returns:
-            taskENresult
+            tasktranslated
         """
-        logger.info(f"ENtask: {project_id}, {step_name}")
+        logger.info(f"translated steptask: {project_id}, {step_name}")
         
         try:
-            # createENsavetaskEN
+            # createtranslatedtasktranslated
             task = self.task_repo.create(
                 project_id=project_id,
-                name=f"ENprocessing: {step_name}",
-                description=f"processingproject {project_id} EN {step_name}",
+                name=f"stepprocess: {step_name}",
+                description=f"processproject {project_id} 'sstep {step_name}",
                 task_type=TaskType.VIDEO_PROCESSING,
-                status=TaskStatus.PENDING,
+                status=TaskStatus.PtranslatedDING,
                 priority=2
             )
             
-            # ENCelerytask
+            # translatedCelerytask
             celery_task = process_single_step.delay(project_id, step_name, config or {})
             
-            # updatetaskEN
+            # updatetasktranslated
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"ENtaskEN: {task.id}, CelerytaskID: {celery_task.id}")
+            logger.info(f"translated steptasktranslated: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': task.id,
                 'celery_task_id': celery_task.id,
                 'step': step_name,
-                'status': 'PENDING',
-                'message': f'EN {step_name} processingtaskEN'
+                'status': 'PtranslatedDING',
+                'message': f'step {step_name} processtasktranslated'
             }
             
         except Exception as e:
-            logger.error(f"ENtaskfailed: {project_id}, {step_name}, error: {e}")
+            logger.error(f"translated steptaskfailed: {project_id}, {step_name}, error: {e}")
             raise
     
     def submit_retry_task(
@@ -142,38 +142,38 @@ class TaskQueueService:
         config: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
-        ENretrytask
+        translatedtask
         
         Args:
             project_id: projectID
             task_id: taskID
-            step_name: EN
-            config: ENconfigparameters
+            step_name: steptranslated
+            config: stepconfigtranslated
             
         Returns:
-            taskENresult
+            tasktranslated
         """
-        logger.info(f"ENretrytask: {project_id}, {task_id}, {step_name}")
+        logger.info(f"translatedtask: {project_id}, {task_id}, {step_name}")
         
         try:
-            # createENsavetaskEN
+            # createtranslatedtasktranslated
             task = self.task_repo.create(
                 project_id=project_id,
-                name=f"retryEN: {step_name}",
-                description=f"retryproject {project_id} EN {step_name}",
+                name=f"translatedstep: {step_name}",
+                description=f"translatedproject {project_id} 'sstep {step_name}",
                 task_type=TaskType.VIDEO_PROCESSING,
-                status=TaskStatus.PENDING,
+                status=TaskStatus.PtranslatedDING,
                 priority=3
             )
             
-            # ENCelerytask
+            # translatedCelerytask
             celery_task = retry_processing_step.delay(project_id, step_name, config or {}, task_id)
             
-            # updatetaskEN
+            # updatetasktranslated
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"retrytaskEN: {task.id}, CelerytaskID: {celery_task.id}")
+            logger.info(f"translatedtasktranslated: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
@@ -181,12 +181,12 @@ class TaskQueueService:
                 'celery_task_id': celery_task.id,
                 'original_task_id': task_id,
                 'step': step_name,
-                'status': 'PENDING',
-                'message': f'EN {step_name} retrytaskEN'
+                'status': 'PtranslatedDING',
+                'message': f'step {step_name} translatedtasktranslated'
             }
             
         except Exception as e:
-            logger.error(f"ENretrytaskfailed: {project_id}, {task_id}, {step_name}, error: {e}")
+            logger.error(f"translatedtaskfailed: {project_id}, {task_id}, {step_name}, error: {e}")
             raise
     
     def get_task_status(self, task_id: str) -> Dict[str, Any]:
@@ -197,13 +197,13 @@ class TaskQueueService:
             task_id: taskID
             
         Returns:
-            taskstatusEN
+            taskstatusinfo
         """
         try:
-            # fetchdatabasetaskEN
+            # fetchdatabasetasktranslated
             task = self.task_repo.get_by_id(task_id)
             if not task:
-                return {'error': 'taskdoes not exist'}
+                return {'error': 'tasknot found'}
             
             # fetchCelerytaskstatus
             celery_status = {}
@@ -236,13 +236,13 @@ class TaskQueueService:
     
     def get_project_tasks(self, project_id: str) -> List[Dict[str, Any]]:
         """
-        fetchprojectENalltask
+        fetchproject'stranslatedtask
         
         Args:
             project_id: projectID
             
         Returns:
-            taskEN
+            tasklist
         """
         try:
             tasks = self.task_repo.get_by_project(project_id)
@@ -271,12 +271,12 @@ class TaskQueueService:
             task_id: taskID
             
         Returns:
-            cancelresult
+            canceltranslated
         """
         try:
             task = self.task_repo.get_by_id(task_id)
             if not task:
-                return {'error': 'taskdoes not exist'}
+                return {'error': 'tasknot found'}
             
             # cancelCelerytask
             if task.celery_task_id:
@@ -287,12 +287,12 @@ class TaskQueueService:
             task.status = TaskStatus.CANCELLED
             self.db.commit()
             
-            logger.info(f"taskENcancel: {task_id}")
+            logger.info(f"tasktranslatedcancel: {task_id}")
             return {
                 'success': True,
                 'task_id': task_id,
                 'status': 'CANCELLED',
-                'message': 'taskENcancel'
+                'message': 'tasktranslatedcancel'
             }
             
         except Exception as e:
@@ -301,92 +301,92 @@ class TaskQueueService:
     
     def submit_video_clips_task(self, project_id: str, clip_data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        ENvideoENtask
+        translatedvideotranslatedtask
         
         Args:
             project_id: projectID
-            clip_data: EN
+            clip_data: translated
             
         Returns:
-            taskENresult
+            tasktranslated
         """
-        logger.info(f"ENvideoENtask: {project_id}")
+        logger.info(f"translatedvideotranslatedtask: {project_id}")
         
         try:
-            # createENsavetaskEN
+            # createtranslatedtasktranslated
             task = self.task_repo.create(
                 project_id=project_id,
-                name="videoEN",
-                description=f"ENproject {project_id} ENvideoEN",
+                name="videotranslated",
+                description=f"translatedproject {project_id} 'svideotranslated",
                 task_type=TaskType.VIDEO_PROCESSING,
-                status=TaskStatus.PENDING,
+                status=TaskStatus.PtranslatedDING,
                 priority=2
             )
             
-            # ENCelerytask
+            # translatedCelerytask
             celery_task = extract_video_clips.delay(project_id, clip_data)
             
-            # updatetaskEN
+            # updatetasktranslated
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"videoENtaskEN: {task.id}, CelerytaskID: {celery_task.id}")
+            logger.info(f"videotranslatedtasktranslated: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': task.id,
                 'celery_task_id': celery_task.id,
                 'clip_count': len(clip_data),
-                'status': 'PENDING',
-                'message': f'videoENtaskEN，EN {len(clip_data)} EN'
+                'status': 'PtranslatedDING',
+                'message': f'videotranslatedtasktranslated，translated {len(clip_data)}  translated'
             }
             
         except Exception as e:
-            logger.error(f"ENvideoENtaskfailed: {project_id}, error: {e}")
+            logger.error(f"translatedvideotranslatedtaskfailed: {project_id}, error: {e}")
             raise
     
     def submit_collection_generation_task(self, project_id: str, collection_data: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        ENcollectiongeneratetask
+        translatedcollectiontranslatedtask
         
         Args:
             project_id: projectID
-            collection_data: collectionEN
+            collection_data: collectiontranslated
             
         Returns:
-            taskENresult
+            tasktranslated
         """
-        logger.info(f"ENcollectiongeneratetask: {project_id}")
+        logger.info(f"translatedcollectiontranslatedtask: {project_id}")
         
         try:
-            # createENsavetaskEN
+            # createtranslatedtasktranslated
             task = self.task_repo.create(
                 project_id=project_id,
-                name="videocollectiongenerate",
-                description=f"generateproject {project_id} ENvideocollection",
+                name="videocollectiontranslated",
+                description=f"translatedproject {project_id} 'svideocollection",
                 task_type=TaskType.VIDEO_PROCESSING,
-                status=TaskStatus.PENDING,
+                status=TaskStatus.PtranslatedDING,
                 priority=2
             )
             
-            # ENCelerytask
+            # translatedCelerytask
             celery_task = generate_video_collections.delay(project_id, collection_data)
             
-            # updatetaskEN
+            # updatetasktranslated
             task.celery_task_id = celery_task.id
             self.db.commit()
             
-            logger.info(f"collectiongeneratetaskEN: {task.id}, CelerytaskID: {celery_task.id}")
+            logger.info(f"collectiontranslatedtasktranslated: {task.id}, CelerytaskID: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': task.id,
                 'celery_task_id': celery_task.id,
                 'collection_count': len(collection_data),
-                'status': 'PENDING',
-                'message': f'videocollectiongeneratetaskEN，EN {len(collection_data)} ENcollection'
+                'status': 'PtranslatedDING',
+                'message': f'videocollectiontranslatedtasktranslated，translated {len(collection_data)}  collection'
             }
             
         except Exception as e:
-            logger.error(f"ENcollectiongeneratetaskfailed: {project_id}, error: {e}")
+            logger.error(f"translatedcollectiontranslatedtaskfailed: {project_id}, error: {e}")
             raise 

@@ -1,6 +1,6 @@
 """
-EN
-processingtaskEN
+translated
+processtasktranslatedAndtranslated
 """
 
 import logging
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class LockInfo:
-    """EN"""
+    """translatedinfo"""
     resource_id: str
     task_id: str
     acquired_at: datetime
@@ -27,43 +27,43 @@ class LockInfo:
 
 
 class ConcurrencyManager:
-    """EN"""
+    """translated"""
     
     def __init__(self):
         self._locks: Dict[str, LockInfo] = {}
-        self._lock = threading.RLock()  # ENstatus
+        self._lock = threading.RLock()  # usetranslatedstatus
     
     def acquire_lock(self, resource_id: str, task_id: str, timeout_seconds: int = 30) -> bool:
         """
-        fetchEN
+        fetchtranslated
         
         Args:
-            resource_id: ENID
+            resource_id: translatedID
             task_id: taskID
-            timeout_seconds: timeouttime（EN）
+            timeout_seconds: translated（seconds）
             
         Returns:
-            ENsucceededfetchEN
+            Istranslatedsucceededfetchtranslated
         """
         with self._lock:
-            # checkEN
+            # checktranslatedIstranslated
             if resource_id in self._locks:
                 existing_lock = self._locks[resource_id]
                 
-                # checkENtimeout
+                # checktranslatedIstranslated
                 if datetime.now() - existing_lock.acquired_at > existing_lock.timeout:
-                    logger.warning(f"ENtimeout，EN: {resource_id}")
+                    logger.warning(f"translated，translated: {resource_id}")
                     self._release_lock_internal(resource_id)
                 else:
-                    # checkENtask
+                    # checkIstranslatedonetask
                     if existing_lock.task_id == task_id:
-                        logger.debug(f"task {task_id} EN: {resource_id}")
+                        logger.debug(f"task {task_id} translated: {resource_id}")
                         return True
                     else:
-                        logger.warning(f"EN {resource_id} ENtask {existing_lock.task_id} EN")
+                        logger.warning(f"translated {resource_id} translatedtask {existing_lock.task_id} translated")
                         return False
             
-            # createEN
+            # createtranslated
             lock_info = LockInfo(
                 resource_id=resource_id,
                 task_id=task_id,
@@ -72,50 +72,50 @@ class ConcurrencyManager:
             )
             
             self._locks[resource_id] = lock_info
-            logger.info(f"task {task_id} succeededfetchEN: {resource_id}")
+            logger.info(f"task {task_id} succeededfetchtranslated: {resource_id}")
             return True
     
     def release_lock(self, resource_id: str, task_id: str) -> bool:
         """
-        EN
+        translated
         
         Args:
-            resource_id: ENID
+            resource_id: translatedID
             task_id: taskID
             
         Returns:
-            ENsucceededEN
+            Istranslatedsucceededtranslated
         """
         with self._lock:
             if resource_id not in self._locks:
-                logger.warning(f"ENdoes not existEN: {resource_id}")
+                logger.warning(f"translatednot found'stranslated: {resource_id}")
                 return False
             
             lock_info = self._locks[resource_id]
             if lock_info.task_id != task_id:
-                logger.warning(f"task {task_id} EN: {resource_id}")
+                logger.warning(f"task {task_id} translated'stranslated: {resource_id}")
                 return False
             
             return self._release_lock_internal(resource_id)
     
     def _release_lock_internal(self, resource_id: str) -> bool:
-        """EN"""
+        """translated"""
         if resource_id in self._locks:
             lock_info = self._locks[resource_id]
             lock_info.is_released = True
             del self._locks[resource_id]
-            logger.info(f"EN: {resource_id}")
+            logger.info(f"translated: {resource_id}")
             return True
         return False
     
     def is_locked(self, resource_id: str) -> bool:
-        """checkEN"""
+        """checktranslatedIstranslated"""
         with self._lock:
             if resource_id not in self._locks:
                 return False
             
             lock_info = self._locks[resource_id]
-            # checkENtimeout
+            # checkIstranslated
             if datetime.now() - lock_info.acquired_at > lock_info.timeout:
                 self._release_lock_internal(resource_id)
                 return False
@@ -123,7 +123,7 @@ class ConcurrencyManager:
             return True
     
     def get_lock_info(self, resource_id: str) -> Optional[Dict[str, Any]]:
-        """fetchEN"""
+        """fetchtranslatedinfo"""
         with self._lock:
             if resource_id not in self._locks:
                 return None
@@ -138,7 +138,7 @@ class ConcurrencyManager:
             }
     
     def cleanup_expired_locks(self):
-        """EN"""
+        """cleantranslated'stranslated"""
         with self._lock:
             current_time = datetime.now()
             expired_resources = []
@@ -149,10 +149,10 @@ class ConcurrencyManager:
             
             for resource_id in expired_resources:
                 self._release_lock_internal(resource_id)
-                logger.info(f"EN: {resource_id}")
+                logger.info(f"cleantranslated: {resource_id}")
     
     def get_all_locks(self) -> Dict[str, Dict[str, Any]]:
-        """fetchallEN"""
+        """fetchtranslatedinfo"""
         with self._lock:
             return {
                 resource_id: self.get_lock_info(resource_id)
@@ -162,17 +162,17 @@ class ConcurrencyManager:
     @contextmanager
     def lock_context(self, resource_id: str, task_id: str, timeout_seconds: int = 30):
         """
-        EN
+        translated
         
         Usage:
             with concurrency_manager.lock_context("project_123", "task_456"):
-                # executeneedEN
+                # translated'stranslated
                 pass
         """
         try:
             if not self.acquire_lock(resource_id, task_id, timeout_seconds):
                 raise ConcurrentError(
-                    f"cannotfetchEN: {resource_id}",
+                    f"translatedfetchtranslated: {resource_id}",
                     resource=resource_id,
                     details={"task_id": task_id, "timeout": timeout_seconds}
                 )
@@ -182,7 +182,7 @@ class ConcurrencyManager:
 
 
 class TaskScheduler:
-    """taskEN"""
+    """tasktranslated"""
     
     def __init__(self, concurrency_manager: ConcurrencyManager):
         self.concurrency_manager = concurrency_manager
@@ -190,14 +190,14 @@ class TaskScheduler:
         self._lock = threading.RLock()
     
     def can_start_task(self, project_id: str, task_id: str) -> bool:
-        """checkENcanstarttask"""
+        """checkIstranslatedcantranslatedstarttask"""
         resource_id = f"project_{project_id}"
         
-        # checkprojectEN
+        # checkprojectIstranslated
         if self.concurrency_manager.is_locked(resource_id):
             return False
         
-        # checktaskENrun
+        # checktaskIstranslatedintranslated
         with self._lock:
             if task_id in self._running_tasks:
                 return False
@@ -211,11 +211,11 @@ class TaskScheduler:
         if not self.can_start_task(project_id, task_id):
             return False
         
-        # fetchEN
+        # fetchtranslated
         if not self.concurrency_manager.acquire_lock(resource_id, task_id):
             return False
         
-        # ENrunENtask
+        # translated'stask
         with self._lock:
             self._running_tasks[task_id] = {
                 "project_id": project_id,
@@ -224,17 +224,17 @@ class TaskScheduler:
                 "task_info": task_info
             }
         
-        logger.info(f"taskENstart: {task_id} (project: {project_id})")
+        logger.info(f"tasktranslatedstart: {task_id} (project: {project_id})")
         return True
     
     def finish_task(self, project_id: str, task_id: str):
-        """ENtask"""
+        """translatedtask"""
         resource_id = f"project_{project_id}"
         
-        # EN
+        # translated
         self.concurrency_manager.release_lock(resource_id, task_id)
         
-        # ENrunENtaskEN
+        # translated'stasktranslated
         with self._lock:
             if task_id in self._running_tasks:
                 del self._running_tasks[task_id]
@@ -242,47 +242,47 @@ class TaskScheduler:
         logger.info(f"taskcompleted: {task_id} (project: {project_id})")
     
     def get_running_tasks(self) -> Dict[str, Dict[str, Any]]:
-        """fetchrunENtask"""
+        """fetchtranslated'stask"""
         with self._lock:
             return self._running_tasks.copy()
     
     def is_task_running(self, task_id: str) -> bool:
-        """checktaskENrun"""
+        """checktaskIstranslatedintranslated"""
         with self._lock:
             return task_id in self._running_tasks
 
 
-# EN
+# translated
 concurrency_manager = ConcurrencyManager()
 task_scheduler = TaskScheduler(concurrency_manager)
 
 
 def with_concurrency_control(resource_id_func: Callable = None):
     """
-    EN
+    translated
     
     Args:
-        resource_id_func: generateENIDEN，ENuseproject_id
+        resource_id_func: translatedID'stranslated，defaulttranslateduseproject_id
         
     Usage:
         @with_concurrency_control()
         def process_project(project_id: str, task_id: str, ...):
-            # EN
+            # translated
             pass
         
         @with_concurrency_control(lambda ctx: f"custom_{ctx.project_id}")
         def custom_process(ctx: ProcessingContext):
-            # EN
+            # translated
             pass
     """
     def decorator(func):
         def wrapper(*args, **kwargs):
-            # ENparametersENproject_idENtask_id
+            # translatedfromtranslatedproject_idAndtask_id
             project_id = None
             task_id = None
             context = None
             
-            # checkENProcessingContextparameters
+            # checkIstranslatedProcessingContexttranslated
             for arg in args:
                 if hasattr(arg, 'project_id') and hasattr(arg, 'task_id'):
                     context = arg
@@ -290,30 +290,30 @@ def with_concurrency_control(resource_id_func: Callable = None):
                     task_id = context.task_id
                     break
             
-            # ifENcontext，ENkwargsENfetch
+            # iftranslatedcontext，translatedfromkwargstranslatedfetch
             if not project_id:
                 project_id = kwargs.get('project_id')
                 task_id = kwargs.get('task_id')
             
-            # ifEN，ENfetchENparametersENproject_id
+            # iftranslatedIstranslated，translatedfromtranslatedSignaturetranslatedfetchNo.one translatedproject_id
             if not project_id and len(args) > 0:
                 project_id = str(args[0])
-                # generateENtask_id
+                # translatedone translated'stask_id
                 task_id = f"temp_task_{project_id}"
             
             if not project_id:
-                raise ValueError("cannotENproject_idENtask_id")
+                raise ValueError("translatedproject_idAndtask_id")
             
-            # generateENID
+            # translatedID
             if resource_id_func:
                 resource_id = resource_id_func(context or project_id)
             else:
                 resource_id = f"project_{project_id}"
             
-            # checkENcanstarttask
+            # checkIstranslatedcantranslatedstarttask
             if not task_scheduler.can_start_task(project_id, task_id):
                 raise ConcurrentError(
-                    f"project {project_id} currentlyENtaskprocessing",
+                    f"project {project_id} translatedintranslatedtaskprocess",
                     resource=resource_id,
                     details={"project_id": project_id, "task_id": task_id}
                 )
@@ -321,17 +321,17 @@ def with_concurrency_control(resource_id_func: Callable = None):
             # starttask
             if not task_scheduler.start_task(project_id, task_id, {"function": func.__name__}):
                 raise ConcurrentError(
-                    f"cannotstarttask: {task_id}",
+                    f"translatedstarttask: {task_id}",
                     resource=resource_id,
                     details={"project_id": project_id, "task_id": task_id}
                 )
             
             try:
-                # executeEN
+                # translated
                 result = func(*args, **kwargs)
                 return result
             finally:
-                # ENtask
+                # translatedtask
                 task_scheduler.finish_task(project_id, task_id)
         
         return wrapper

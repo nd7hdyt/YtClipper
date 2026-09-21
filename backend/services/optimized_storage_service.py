@@ -1,6 +1,6 @@
 """
-ENservice - EN
-databaseEN，filesystemENfile
+translatedservice - translatedissue
+databasetranslated，fileSystemtranslatedfile
 """
 
 import json
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class OptimizedStorageService:
-    """ENservice - databaseEN，filesystemENfile"""
+    """translatedservice - databasetranslated，fileSystemtranslatedfile"""
     
     def __init__(self, db: Session, project_id: str):
         self.db = db
@@ -28,14 +28,14 @@ class OptimizedStorageService:
         self.data_dir = get_data_directory()
         self.project_dir = self.data_dir / "projects" / project_id
         
-        # ENprojectdirectoryEN
+        # ensureprojectdirectorytranslatedin
         self._ensure_project_structure()
     
     def _ensure_project_structure(self):
-        """ENprojectdirectoryEN"""
+        """ensureprojectdirectorytranslatedin"""
         directories = [
-            self.project_dir / "raw",           # ENfile
-            self.project_dir / "processing",    # processingENfile
+            self.project_dir / "raw",           # translatedfile
+            self.project_dir / "processing",    # processingtranslatedfile
             self.project_dir / "output" / "clips",      # clipfile
             self.project_dir / "output" / "collections" # collectionfile
         ]
@@ -43,10 +43,10 @@ class OptimizedStorageService:
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
     
-    # ==================== projectfileEN ====================
+    # ==================== projectfiletranslated ====================
     
     def save_project_file(self, file_path: Path, file_type: str = "video") -> str:
-        """saveprojectfileENfilesystem，returnENpath"""
+        """translatedprojectfiletranslatedfileSystem，returntranslatedpath"""
         try:
             if file_type == "video":
                 target_dir = self.project_dir / "raw"
@@ -61,46 +61,46 @@ class OptimizedStorageService:
             target_path = target_dir / target_name
             shutil.copy2(file_path, target_path)
             
-            # returnENpath，ENdatabaseEN
+            # returntranslatedpath，usetranslatedindatabasetranslated
             relative_path = f"projects/{self.project_id}/raw/{target_name}"
-            logger.info(f"projectfileENsave: {relative_path}")
+            logger.info(f"projectfiletranslated: {relative_path}")
             return relative_path
             
         except Exception as e:
-            logger.error(f"saveprojectfilefailed: {e}")
+            logger.error(f"translatedprojectfilefailed: {e}")
             raise
     
     def get_project_file_path(self, relative_path: str) -> Path:
-        """ENpathfetchENfilepath"""
+        """translatedpathfetchtranslatedfile path"""
         return self.data_dir / relative_path
     
-    # ==================== clipfileEN ====================
+    # ==================== clipfiletranslated ====================
     
     def save_clip_file(self, clip_data: Dict[str, Any], clip_id: str) -> str:
-        """saveclipfileENfilesystem，returnENpath"""
+        """translatedclipfiletranslatedfileSystem，returntranslatedpath"""
         try:
-            # ENshouldENclipfilesaveEN
-            # ENreturnENpath
+            # thistranslatedPackageincludetranslated'sclipfiletranslated
+            # translatedreturntranslatedpath
             clip_file = f"clip_{clip_id}.mp4"
             target_path = self.project_dir / "output" / "clips" / clip_file
             target_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # createENfile（ENshouldsaveENclipfile）
+            # createtranslatedfile（translated'sclipfile）
             target_path.touch()
             
-            # returnENpath
+            # returntranslatedpath
             relative_path = f"projects/{self.project_id}/output/clips/{clip_file}"
-            logger.info(f"clipfileENsave: {relative_path}")
+            logger.info(f"clipfiletranslated: {relative_path}")
             return relative_path
             
         except Exception as e:
-            logger.error(f"saveclipfilefailed: {e}")
+            logger.error(f"translatedclipfilefailed: {e}")
             raise
     
     def save_clip_metadata(self, clip_data: Dict[str, Any], clip_id: str) -> Clip:
-        """saveclipENdatabase"""
+        """translatedcliptranslateddatabase"""
         try:
-            # createclipEN，EN
+            # createcliptranslated，translated
             clip = Clip(
                 id=clip_id,
                 project_id=self.project_id,
@@ -111,95 +111,95 @@ class OptimizedStorageService:
                 duration=clip_data.get('duration', 0),
                 score=clip_data.get('score', 0.0),
                 recommendation_reason=clip_data.get('recommendation_reason', ''),
-                video_path=self.save_clip_file(clip_data, clip_id),  # ENpath
+                video_path=self.save_clip_file(clip_data, clip_id),  # translatedpath
                 thumbnail_path=clip_data.get('thumbnail_path', ''),
                 processing_step=clip_data.get('processing_step', 6),
                 tags=clip_data.get('tags', []),
-                clip_metadata=clip_data.get('metadata', {})  # EN
+                clip_metadata=clip_data.get('metadata', {})  # translated
             )
             
             self.db.add(clip)
             self.db.commit()
             self.db.refresh(clip)
             
-            logger.info(f"clipENsaveENdatabase: {clip_id}")
+            logger.info(f"cliptranslateddatabase: {clip_id}")
             return clip
             
         except Exception as e:
-            logger.error(f"saveclipENfailed: {e}")
+            logger.error(f"translatedcliptranslatedfailed: {e}")
             self.db.rollback()
             raise
     
-    # ==================== collectionfileEN ====================
+    # ==================== collectionfiletranslated ====================
     
     def save_collection_file(self, collection_data: Dict[str, Any], collection_id: str) -> str:
-        """savecollectionfileENfilesystem，returnENpath"""
+        """translatedcollectionfiletranslatedfileSystem，returntranslatedpath"""
         try:
-            # ENshouldENcollectionfilesaveEN
-            # ENreturnENpath
+            # thistranslatedPackageincludetranslated'scollectionfiletranslated
+            # translatedreturntranslatedpath
             collection_file = f"collection_{collection_id}.mp4"
             target_path = self.project_dir / "output" / "collections" / collection_file
             target_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # createENfile（ENshouldsaveENcollectionfile）
+            # createtranslatedfile（translated'scollectionfile）
             target_path.touch()
             
-            # returnENpath
+            # returntranslatedpath
             relative_path = f"projects/{self.project_id}/output/collections/{collection_file}"
-            logger.info(f"collectionfileENsave: {relative_path}")
+            logger.info(f"collectionfiletranslated: {relative_path}")
             return relative_path
             
         except Exception as e:
-            logger.error(f"savecollectionfilefailed: {e}")
+            logger.error(f"translatedcollectionfilefailed: {e}")
             raise
     
     def save_collection_metadata(self, collection_data: Dict[str, Any], collection_id: str) -> Collection:
-        """savecollectionENdatabase"""
+        """translatedcollectiontranslateddatabase"""
         try:
-            # createcollectionEN，EN
+            # createcollectiontranslated，translated
             collection = Collection(
                 id=collection_id,
                 project_id=self.project_id,
                 name=collection_data.get('name', ''),
                 description=collection_data.get('description', ''),
                 clip_ids=collection_data.get('clip_ids', []),
-                video_path=self.save_collection_file(collection_data, collection_id),  # ENpath
+                video_path=self.save_collection_file(collection_data, collection_id),  # translatedpath
                 thumbnail_path=collection_data.get('thumbnail_path', ''),
                 tags=collection_data.get('tags', []),
-                collection_metadata=collection_data.get('metadata', {})  # EN
+                collection_metadata=collection_data.get('metadata', {})  # translated
             )
             
             self.db.add(collection)
             self.db.commit()
             self.db.refresh(collection)
             
-            logger.info(f"collectionENsaveENdatabase: {collection_id}")
+            logger.info(f"collectiontranslateddatabase: {collection_id}")
             return collection
             
         except Exception as e:
-            logger.error(f"savecollectionENfailed: {e}")
+            logger.error(f"translatedcollectiontranslatedfailed: {e}")
             self.db.rollback()
             raise
     
-    # ==================== processingENfileEN ====================
+    # ==================== processingtranslatedfiletranslated ====================
     
     def save_processing_metadata(self, metadata: Dict[str, Any], step: str) -> str:
-        """saveprocessingENfilesystem"""
+        """translatedprocessingtranslatedfileSystem"""
         try:
             metadata_file = self.project_dir / "processing" / f"{step}.json"
             
             with open(metadata_file, 'w', encoding='utf-8') as f:
                 json.dump(metadata, f, ensure_ascii=False, indent=2)
             
-            logger.info(f"processingENsave: {metadata_file}")
+            logger.info(f"processtranslated: {metadata_file}")
             return str(metadata_file)
             
         except Exception as e:
-            logger.error(f"saveprocessingENfailed: {e}")
+            logger.error(f"translatedprocesstranslatedfailed: {e}")
             raise
     
     def get_processing_metadata(self, step: str) -> Optional[Dict[str, Any]]:
-        """fetchprocessingEN"""
+        """fetchprocessingtranslated"""
         try:
             metadata_file = self.project_dir / "processing" / f"{step}.json"
             
@@ -209,78 +209,78 @@ class OptimizedStorageService:
             return None
             
         except Exception as e:
-            logger.error(f"fetchprocessingENfailed: {e}")
+            logger.error(f"fetchprocesstranslatedfailed: {e}")
             return None
     
-    # ==================== EN ====================
+    # ==================== translated ====================
     
     def get_project_clips(self) -> List[Clip]:
-        """fetchprojectENallclip（ENdatabase）"""
+        """fetchproject'stranslatedclip（fromdatabase）"""
         return self.db.query(Clip).filter(Clip.project_id == self.project_id).all()
     
     def get_project_collections(self) -> List[Collection]:
-        """fetchprojectENallcollection（ENdatabase）"""
+        """fetchproject'stranslatedcollection（fromdatabase）"""
         return self.db.query(Collection).filter(Collection.project_id == self.project_id).all()
     
     def get_clip_file_path(self, clip: Clip) -> Path:
-        """fetchclipENfilepath"""
+        """fetchclip'stranslatedfile path"""
         if clip.video_path:
             return self.data_dir / clip.video_path
         return None
     
     def get_collection_file_path(self, collection: Collection) -> Path:
-        """fetchcollectionENfilepath"""
+        """fetchcollection'stranslatedfile path"""
         if collection.video_path:
             return self.data_dir / collection.video_path
         return None
     
-    # ==================== EN ====================
+    # ==================== cleantranslated ====================
     
     def cleanup_temp_files(self):
-        """ENfile"""
+        """clean temp files"""
         temp_dir = self.data_dir / "temp"
         if temp_dir.exists():
             for temp_file in temp_dir.iterdir():
                 if temp_file.is_file():
                     temp_file.unlink()
-                    logger.info(f"ENfile: {temp_file}")
+                    logger.info(f"clean temp files: {temp_file}")
     
     def cleanup_old_files(self, keep_days: int = 30):
-        """ENfile"""
+        """cleantranslatedfile"""
         try:
             cutoff_date = datetime.utcnow() - timedelta(days=keep_days)
             
-            # ENfile
+            # cleantranslated'stranslatedfile
             temp_dir = self.data_dir / "temp"
             if temp_dir.exists():
                 for temp_file in temp_dir.iterdir():
                     if temp_file.is_file() and temp_file.stat().st_mtime < cutoff_date.timestamp():
                         temp_file.unlink()
-                        logger.info(f"ENfile: {temp_file}")
+                        logger.info(f"cleantranslatedfile: {temp_file}")
             
-            logger.info(f"EN，EN {keep_days} ENfile")
+            logger.info(f"cleantranslated，translated {keep_days} translated'sfile")
             
         except Exception as e:
-            logger.error(f"ENfilefailed: {e}")
+            logger.error(f"cleantranslatedfilefailed: {e}")
     
-    # ==================== EN ====================
+    # ==================== translated ====================
     
     def migrate_from_old_storage(self, old_project_dir: Path) -> Dict[str, Any]:
-        """EN"""
+        """fromtranslatedformattranslated"""
         try:
-            logger.info(f"startENprojectEN: {self.project_id}")
+            logger.info(f"translatedprojecttranslated: {self.project_id}")
             
             migrated_files = []
             migrated_metadata = []
             
-            # ENfile
+            # translatedfile
             if (old_project_dir / "raw").exists():
                 for file_path in (old_project_dir / "raw").iterdir():
                     if file_path.is_file():
                         relative_path = self.save_project_file(file_path)
                         migrated_files.append(relative_path)
             
-            # ENprocessingEN
+            # translatedprocesstranslated
             if (old_project_dir / "processing").exists():
                 for metadata_file in (old_project_dir / "processing").iterdir():
                     if metadata_file.suffix == '.json':
@@ -291,9 +291,9 @@ class OptimizedStorageService:
                         self.save_processing_metadata(metadata, step_name)
                         migrated_metadata.append(step_name)
             
-            # ENfile
+            # translatedfile
             if (old_project_dir / "output").exists():
-                # ENclipfile
+                # translatedclipfile
                 clips_dir = old_project_dir / "output" / "clips"
                 if clips_dir.exists():
                     for clip_file in clips_dir.iterdir():
@@ -303,7 +303,7 @@ class OptimizedStorageService:
                             shutil.copy2(clip_file, target_path)
                             migrated_files.append(f"projects/{self.project_id}/output/clips/{clip_file.name}")
                 
-                # ENcollectionfile
+                # translatedcollectionfile
                 collections_dir = old_project_dir / "output" / "collections"
                 if collections_dir.exists():
                     for collection_file in collections_dir.iterdir():
@@ -313,7 +313,7 @@ class OptimizedStorageService:
                             shutil.copy2(collection_file, target_path)
                             migrated_files.append(f"projects/{self.project_id}/output/collections/{collection_file.name}")
             
-            logger.info(f"EN: {len(migrated_files)} ENfile, {len(migrated_metadata)} EN")
+            logger.info(f"translated: {len(migrated_files)}  file, {len(migrated_metadata)}  translated")
             
             return {
                 "success": True,
@@ -322,7 +322,7 @@ class OptimizedStorageService:
             }
             
         except Exception as e:
-            logger.error(f"ENfailed: {e}")
+            logger.error(f"translatedfailed: {e}")
             return {
                 "success": False,
                 "error": str(e)

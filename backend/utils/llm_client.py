@@ -1,5 +1,5 @@
 """
-EN - EN，useENLLMEN
+translatedmodeltranslated - translatedPackagetranslated，usetranslated'sLLMtranslated
 """
 import json
 import logging
@@ -8,11 +8,11 @@ import re
 from typing import Dict, Any, List
 from collections.abc import Generator
 
-# EN
+# fixedimportissue
 try:
     from ..core.shared_config import MODEL_NAME
 except ImportError:
-    # ifENfailed，EN
+    # iftranslatedimportfailed，translatedimport
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -20,11 +20,11 @@ except ImportError:
         sys.path.insert(0, str(backend_path))
     from core.shared_config import MODEL_NAME
 
-# ENLLMEN
+# importtranslated'sLLMtranslated
 try:
     from ..core.llm_manager import get_llm_manager
 except ImportError:
-    # ifENfailed，EN
+    # iftranslatedimportfailed，translatedimport
     import sys
     from pathlib import Path
     backend_path = Path(__file__).parent.parent
@@ -35,7 +35,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 class LLMClient:
-    """LLMEN - EN"""
+    """LLMtranslated - translatedPackagetranslated"""
     
     def __init__(self):
         self.model = MODEL_NAME
@@ -43,14 +43,14 @@ class LLMClient:
     
     def call(self, prompt: str, input_data: Any = None) -> str:
         """
-        callENAPI - useENLLMEN
+        calltranslatedmodelAPI - usetranslated'sLLMtranslated
         
         Args:
-            prompt: hintEN
-            input_data: EN
+            prompt: translated
+            input_data: translated
             
         Returns:
-            ENresponseEN
+            modeltranslated
         """
         try:
             return self.llm_manager.call(prompt, input_data)
@@ -60,27 +60,27 @@ class LLMClient:
     
     def call_with_retry(self, prompt: str, input_data: Any = None, max_retries: int = 3) -> str:
         """
-        ENretryENAPIcall
+        translated'sAPIcall
         
         Args:
-            prompt: hintEN
-            input_data: EN
-            max_retries: ENretryEN
+            prompt: translated
+            input_data: translated
+            max_retries: translated
             
         Returns:
-            ENresponseEN
+            modeltranslated
         """
         try:
             return self.llm_manager.call_with_retry(prompt, input_data, max_retries)
         except Exception as e:
-            logger.error(f"LLMretrycallfailed: {str(e)}")
+            logger.error(f"LLMtranslatedcallfailed: {str(e)}")
             raise
     
     def _preprocess_llm_response(self, response: str) -> str:
         """
-        ENprocessingLLMresponse，ENJSONEN
+        translatedprocessLLMtranslated，translated'stranslatedJSONtranslated
         """
-        # ENtitleEN
+        # translated'stranslatedAndtranslated
         lines = response.split('\n')
         json_start = -1
         
@@ -93,9 +93,9 @@ class LLMClient:
         if json_start >= 0:
             response = '\n'.join(lines[json_start:])
         
-        # ENJSONEN
+        # translated'stranslatedJSONtranslated
         if '```' in response:
-            # ifEN```，ENbeforeEN
+            # iftranslatedmulti ```，translatedNo.one translated'stranslated
             parts = response.split('```')
             if len(parts) > 1:
                 response = parts[0]
@@ -104,168 +104,168 @@ class LLMClient:
     
     def _auto_fix_response(self, response: str) -> str:
         """
-        ENresponseEN
+        translatedfixedtranslated'stranslatedissue
         """
-        # ENBOMEN
+        # translatedBOMAndtranslated
         response = response.lstrip('\ufeff')
         response = response.strip()
         
-        # EN
+        # fixedtranslated
         response = response.replace('"', '\"').replace('"', '\"')
         
         return response
     
     def _validate_json_structure(self, parsed_data: Any) -> bool:
         """
-        validateJSONEN
+        verifyJSONtranslated'stranslated
         """
         try:
             if not isinstance(parsed_data, list):
-                logger.error(f"responseEN，EN: {type(parsed_data)}")
+                logger.error(f"translatedIstranslatedformat，translated: {type(parsed_data)}")
                 return False
             
             for i, item in enumerate(parsed_data):
                 if not isinstance(item, dict):
-                    logger.error(f"EN{i}EN，EN: {type(item)}")
+                    logger.error(f"No.{i} translatedIstranslatedformat，translated: {type(item)}")
                     return False
                     
-                # checkEN（EN）
+                # checktranslated（cantranslated）
                 if 'outline' in item or 'start_time' in item or 'end_time' in item:
                     required_fields = ['outline', 'start_time', 'end_time']
                     for field in required_fields:
                         if field not in item:
-                            logger.error(f"EN{i}EN: {field}")
+                            logger.error(f"No.{i} translated: {field}")
                             return False
         except Exception as e:
-            logger.error(f"validateJSONEN: {e}")
+            logger.error(f"verifyJSONtranslated: {e}")
             return False
         
         return True
     
     def parse_json_response(self, response: str) -> Any:
         """
-        ENmayENMarkdownENparseJSONEN。
-        EN：
-        1. ENprocessingresponse，ENJSONEN
-        2. ENMarkdownEN。
-        3. iffailed，thenENparseENresponse（EN）。
-        4. ifENfailed，thenuseENthenENparseJSON。
-        5. ENJSONerrorENparse。
+        fromcantranslatedPackageincludeMarkdownformat'stranslatedJSONtranslated。
+        translatedmultitranslated：
+        1. translatedprocesstranslated，translatedJSONtranslated
+        2. translatedfromMarkdowntranslated。
+        3. iftranslatedfailed，translated translated（intranslated）。
+        4. iftranslatedfailed，translatedusetranslatedusetranslatedJSON。
+        5. translatedfixedtranslatedJSONerrortranslated。
         """
         
         def sanitize_string(s: str) -> str:
-            """EN，ENmayENJSONparsefailedEN"""
-            # ENBOMEN
+            """translated'stranslated，translatedcantranslatedJSONtranslatedfailed'stranslated"""
+            # translatedBOMtranslated
             s = s.lstrip('\ufeff')
-            # EN
+            # translated
             s = s.strip()
-            # ENmayEN（EN）
+            # translatedcantranslated'stranslated（translated'stranslatedAndtranslated）
             s = re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', '', s)
             return s
         
         def fix_common_json_errors(json_str: str) -> str:
-            """ENJSONENerror"""
-            # EN
+            """fixedtranslated'sJSONformaterror"""
+            # translatedusetranslated
             original_str = json_str
             
-            # 1. EN
+            # 1. fixedtranslated'sissue
             json_str = re.sub(r'}\s*{', '},{', json_str)
             json_str = re.sub(r']\s*\[', '],[', json_str)
             
-            # 2. EN（EN）
+            # 2. fixedtranslated'sissue（translated'stranslated）
             json_str = re.sub(r'}\s*\n\s*{', '},\n{', json_str)
             
-            # 3. EN
+            # 3. fixedmultitranslated'stranslated
             json_str = re.sub(r',\s*}', '}', json_str)
             json_str = re.sub(r',\s*]', ']', json_str)
             
-            # 4. EN
+            # 4. fixedtranslated
             json_str = re.sub(r"'([^']*?)'\s*:", r'"\1":', json_str)
             json_str = re.sub(r":\s*'([^']*?)'", r': "\1"', json_str)
             
-            # 5. EN
+            # 5. fixedtranslated'sissue
             json_str = re.sub(r'([a-zA-Z_][a-zA-Z0-9_]*)\s*:', r'"\1":', json_str)
             
-            # 6. ENmayEN
+            # 6. fixedcantranslated'stranslatedissue
             json_str = re.sub(r'\n\s*\n', '\n', json_str)
             
-            # 7. EN
-            # EN
+            # 7. ensuretranslatedAndtranslated'stranslated
+            # translatedAndtranslated'stranslated
             open_braces = json_str.count('{')
             close_braces = json_str.count('}')
             open_brackets = json_str.count('[')
             close_brackets = json_str.count(']')
             
-            # ifEN，EN
+            # iftranslated，translatedfixed
             if open_braces > close_braces:
                 json_str += '}' * (open_braces - close_braces)
             if open_brackets > close_brackets:
                 json_str += ']' * (open_brackets - close_brackets)
             
-            # EN
+            # translatedfixedtranslated
             if json_str != original_str:
-                logger.debug(f"JSONEN: {original_str[:100]}...")
-                logger.debug(f"JSONEN: {json_str[:100]}...")
+                logger.debug(f"JSONfixedtranslated: {original_str[:100]}...")
+                logger.debug(f"JSONfixedtranslated: {json_str[:100]}...")
             
             return json_str
 
         response = response.strip()
         
-        # 0. ENprocessingresponse，ENJSONEN
+        # 0. translatedprocesstranslated，translatedJSONtranslated
         response = self._preprocess_llm_response(response)
-        logger.debug(f"ENprocessingENresponse: {response[:200]}...")
+        logger.debug(f"translatedprocesstranslated'stranslated: {response[:200]}...")
         
-        # 1. ENMarkdownEN
+        # 1. translatedfromMarkdowntranslated
         match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', response, re.DOTALL)
         if match:
             json_str = sanitize_string(match.group(1))
             try:
                 return json.loads(json_str)
             except json.JSONDecodeError as e:
-                # ENerrorEN
+                # translated'serrortranslatedAndtranslated
                 error_pos = e.pos if hasattr(e, 'pos') else 0
                 context_start = max(0, error_pos - 50)
                 context_end = min(len(json_str), error_pos + 50)
                 context = json_str[context_start:context_end]
-                logger.error(f"JSONparsefailedEN{error_pos}，EN: ...{context}...")
-                logger.warning(f"ENMarkdownENparsefailed: {e}。ENparse。")
+                logger.error(f"JSONtranslatedfailedintranslated{error_pos}，translated: ...{context}...")
+                logger.warning(f"fromMarkdowntranslated'stranslatedfailed: {e}。translatedfixedtranslated。")
                 
-                # ENerrorENparse
+                # translatedfixedtranslatederrortranslated
                 try:
                     fixed_json = fix_common_json_errors(json_str)
                     return json.loads(fixed_json)
                 except json.JSONDecodeError:
-                    logger.warning("ENparsefailed，ENparseENresponse。")
+                    logger.warning("fixedtranslatedfailed，translated translated。")
         
-        # 2. ifENMarkdown，ENMarkdownparsefailed，ENresponse
+        # 2. iftranslatedMarkdown，orMarkdowntranslatedfailed，translated translated
         try:
             sanitized_response = sanitize_string(response)
             return json.loads(sanitized_response)
         except json.JSONDecodeError:
-            # 3. ifENresponseENparseENfailed，EN，ENthenEN
-            logger.warning("ENparseresponsefailed，ENuseENthenENJSON...")
+            # 3. iftranslated translatedfailed，translatedonetranslated，usetranslatedusetranslated
+            logger.warning("translatedfailed，translatedusetranslatedusetranslatedJSON...")
             json_match = re.search(r'\[[\s\S]*\]|\{[\s\S]*\}', response, re.DOTALL)
             if json_match:
                 json_str = sanitize_string(json_match.group())
                 try:
                     return json.loads(json_str)
                 except json.JSONDecodeError as e:
-                    # 4. ENerror
+                    # 4. translatedfixedtranslatederror
                     try:
                         fixed_json = fix_common_json_errors(json_str)
                         return json.loads(fixed_json)
                     except json.JSONDecodeError as final_e:
-                        logger.error(f"ENparsefailed: {final_e}")
-                        # saveENresponseEN
+                        logger.error(f"translatedfailed: {final_e}")
+                        # translated
                         import tempfile
                         with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False, encoding='utf-8') as f:
                             f.write(response)
-                            logger.error(f"ENresponseENsaveEN {f.name} EN")
-                        raise ValueError(f"cannotENresponseENparseENJSON: {response[:200]}...") from final_e
+                            logger.error(f"translated {f.name} translated")
+                        raise ValueError(f"translatedfromtranslated'sJSON: {response[:200]}...") from final_e
             
-            # ifENthenEN，ENfailed
-            raise ValueError(f"cannotENresponseENparseENJSON: {response[:200]}...")
+            # iftranslatedusetranslated，translatedfailed
+            raise ValueError(f"translatedfromtranslated'sJSON: {response[:200]}...")
     
     def get_current_provider_info(self) -> Dict[str, Any]:
-        """fetchcurrentEN"""
+        """fetchtranslatedProvidesproviderinfo"""
         return self.llm_manager.get_current_provider_info()

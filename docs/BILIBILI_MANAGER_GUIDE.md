@@ -1,125 +1,125 @@
-# BENUsage Guide
+# Buse
 
-## 📋 EN
+## 📋 overview
 
-ENBEN，ProvidesEN、ENIntuitiveENAccount ManagementEN。
+B，、account。
 
-## 🎯 EN
+## 🎯 
 
-### 1. Account Management
-- **ENAccount**: SupportCookieEN，EN
-- **ENAccountSupport**: ENBENAccount
-- **AccountEN**: ENAccountEN
-- **EN**: ENAccount
+### 1. account
+- **add account**: supportCookieimport method，security
+- **accountsupport**: canBsite account
+- **accountstatus**: accountstatus
+- ****: needaccount
 
-### 2. ENUpload
-- **EN**: EN
-- **EN**: SupportENUploadEN
-- **AccountEN**: ENAccount
-- **EN**: SupportBEN
+### 2. 
+- **clip**: clip
+- ****: supportclip
+- **accountselect**: selectaccount
+- **settings**: supportB
 
-## 🚀 EN
+## 🚀 use
 
-### EN：ENBENAccount
+### ：Bsite account
 
-1. **EN**
-   - EN"EN"
-   - EN"BENAccount Management"EN
+1. **Settings page**
+   - click"settings"
+   - select"Bsite account"tab
 
-2. **ENAccount**
-   - EN"ENBENAccount"EN
-   - EN"Account Management"EN
-   - EN"ENAccount"EN
+2. **add account**
+   - click"Bsite account"button
+   - select"account"tab
+   - click"add account"button
 
-3. **ENCookie**
-   - ENBEN
-   - ENF12EN
-   - ENNetworkEN
-   - EN
-   - EN，EN
-   - ENRequest HeadersENCookieEN
-   - ENCookieEN（EN"Cookie: "EN）
+3. **fetchCookie**
+   - openBsign in
+   - F12open devtools
+   - clickNetworktab
+   - refresh page
+   - ，clickview
+   - Request HeadersCookie
+   - Cookie（"Cookie: "）
 
-4. **ENAccount**
-   - ENAccountEN（EN）
-   - ENCookieEN
-   - EN"ENAccount"
+4. **importaccount**
+   - account（）
+   - Cookie
+   - click"add account"
 
-### EN：EN
+### ：clip
 
-1. **EN**
-   - EN
-   - EN
-   - EN"EN"EN
+1. **selectclip**
+   - project
+   - clip
+   - clickclip""button
 
-2. **EN**
-   - ENBENAccount
-   - EN
-   - EN
-   - EN（EN）
+2. **config**
+   - selectuseBsite account
+   - select
+   - 
+   - （optional）
 
-3. **EN**
-   - EN"EN"EN
-   - EN
-   - EN
+3. ****
+   - click""button
+   - 
+   - completedsucceeded
 
-## 💡 EN
+## 💡 use
 
-### CookieEN
-- **EN**: Chrome、Edge、Firefox
-- **EN**: EN → Network → EN → Request Headers
-- **EN**: ENCookieEN，EN
-- **EN**: CookieEN7-30EN，EN
+### Cookiefetch
+- **recommend**: Chrome、Edge、Firefox
+- **fetchlocation**: tool → Network →  → Request Headers
+- **format**: Cookie，
+- ****: Cookie7-30，needfetch
 
-### Account ManagementEN
-- **EN**: EN，EN"ENAccount"、"ENAccount"
-- **EN**: ENAccountEN，ENCookie
-- **ENAccountEN**: ENAccount，EN"ENAccount"、"ENAccount"
+### account
+- **settings**: use，"account"、"account"
+- **check**: checkaccountstatus，updateCookie
+- **account**: cansettingsaccount，"testaccount"、"account"
 
-### EN
-- **EN**: EN，EN
-- **EN**: EN，EN
-- **EN**: EN，EN
-- **EN**: EN，EN
+### 
+- ****: use，
+- **select**: select，recommend
+- **settings**: ，
+- ****: clip，can
 
-## ⚠️ EN
+## ⚠️ 
 
-### EN
-- **CookieEN**: CookieEN，EN
-- **AccountEN**: Do notEN
-- **EN**: ENCookie，EN
+### security
+- **Cookiesecurity**: Cookiesign in，
+- **accountsecurity**: sign in
+- **update**: updateCookie，
 
-### EN
-- **UploadEN**: ENBENUploadEN
-- **EN**: ENBEN
-- **EN**: EN，EN
+### uselimit
+- **limit**: Blimit
+- ****: B
+- ****: ，
 
-### Troubleshooting
-- **CookieEN**: ENCookieEN
-- **UploadEN**: ENAccountEN
-- **EN**: ENIDEN
+### troubleshooting
+- **Cookie**: checkCookieformat
+- **failed**: check network connectionaccountstatus
+- **error**: confirmID
 
-## 🔧 EN
+## 🔧 notes
 
-### SupportEN
-- **CookieEN** (EN): EN，EN
-- **AccountEN**: EN，EN
-- **EN**: ENBENAPP，EN
+### supportsign in
+- **Cookieimport** (recommend): security，
+- **password login**: ，verify
+- **sign in**: needBAPP，
 
-### UploadEN
-- **ENAPIEN**: ENBENAPI，EN
-- **ENUpload**: SupportENUpload
-- **EN**: ENUpload
-- **EN**: ENUploadEN
+### 
+- **APIcall**: useBAPI，
+- ****: supportfile
+- ****: failed
+- **progress**: progress
 
-## 📞 ENSupport
+## 📞 tech support
 
-EN，EN：
-1. EN
-2. ENAccountEN
-3. ENCookieENAccount
-4. ContactENSupportEN
+if you encounter issues，can：
+1. viewfetcherror
+2. check network connectionaccountstatus
+3. fetchCookieupdateaccount
+4. tech supportget help
 
 ---
 
-*EN: 2024EN12EN*
+*last updated: 202412*

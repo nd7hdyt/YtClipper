@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-ENprojectgenerateEN
+translatedprojecttranslated'stranslated
 """
 
 import sys
 from pathlib import Path
 
-# ENprojectENdirectoryENPythonpath
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent.parent
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
@@ -17,119 +17,119 @@ from backend.utils.thumbnail_generator import generate_project_thumbnail
 from sqlalchemy import text
 
 def generate_thumbnails_for_projects():
-    """ENallENprojectgenerateEN"""
+    """translated'sprojecttranslated"""
     db = SessionLocal()
     try:
-        # ENallENvideofileENproject
+        # translatedvideofile'sproject
         projects = db.query(Project).filter(
             Project.thumbnail.is_(None),
             Project.video_path.isnot(None)
         ).all()
         
         if not projects:
-            print("✅ allprojectEN")
+            print("✅ translatedprojecttranslated")
             return True
         
-        print(f"📋 EN {len(projects)} ENneedgenerateENproject")
+        print(f"📋 translated {len(projects)}  translated'sproject")
         
         success_count = 0
         for project in projects:
             try:
-                print(f"🎬 currentlyENproject '{project.name}' ({project.id}) generateEN...")
+                print(f"🎬 translatedintranslatedproject '{project.name}' ({project.id}) translated...")
                 
-                # checkvideofileEN
+                # checkvideofileIstranslatedin
                 video_path = Path(project.video_path)
                 if not video_path.exists():
-                    print(f"⚠️  videofiledoes not exist: {video_path}")
+                    print(f"⚠️  videofile not found: {video_path}")
                     continue
                 
-                # generateEN
+                # translated
                 thumbnail_data = generate_project_thumbnail(project.id, video_path)
                 
                 if thumbnail_data:
-                    # saveENdatabase
+                    # translateddatabase
                     project.thumbnail = thumbnail_data
                     db.commit()
-                    print(f"✅ project '{project.name}' ENgeneratesucceeded")
+                    print(f"✅ project '{project.name}' translatedsucceeded")
                     success_count += 1
                 else:
-                    print(f"❌ project '{project.name}' ENgeneratefailed")
+                    print(f"❌ project '{project.name}' translatedfailed")
                     
             except Exception as e:
-                print(f"❌ project '{project.name}' processingfailed: {e}")
+                print(f"❌ project '{project.name}' processing failed: {e}")
                 db.rollback()
                 continue
         
-        print(f"🎉 EN！succeededEN {success_count}/{len(projects)} ENprojectgenerateEN")
+        print(f"🎉 translated！succeededtranslated {success_count}/{len(projects)}  projecttranslated")
         return True
         
     except Exception as e:
-        print(f"❌ generateENerror: {e}")
+        print(f"❌ translatederror: {e}")
         db.rollback()
         return False
     finally:
         db.close()
 
 def generate_thumbnail_for_project(project_id: str):
-    """ENprojectgenerateEN"""
+    """translatedprojecttranslated"""
     db = SessionLocal()
     try:
         project = db.query(Project).filter(Project.id == project_id).first()
         
         if not project:
-            print(f"❌ project {project_id} does not exist")
+            print(f"❌ project {project_id} not found")
             return False
         
         if not project.video_path:
-            print(f"❌ project {project_id} ENvideofile")
+            print(f"❌ project {project_id} translatedvideofile")
             return False
         
-        # checkvideofileEN
+        # checkvideofileIstranslatedin
         video_path = Path(project.video_path)
         if not video_path.exists():
-            print(f"❌ videofiledoes not exist: {video_path}")
+            print(f"❌ videofile not found: {video_path}")
             return False
         
-        print(f"🎬 currentlyENproject '{project.name}' ({project.id}) generateEN...")
+        print(f"🎬 translatedintranslatedproject '{project.name}' ({project.id}) translated...")
         
-        # generateEN
+        # translated
         thumbnail_data = generate_project_thumbnail(project.id, video_path)
         
         if thumbnail_data:
-            # saveENdatabase
+            # translateddatabase
             project.thumbnail = thumbnail_data
             db.commit()
-            print(f"✅ project '{project.name}' ENgeneratesucceeded")
+            print(f"✅ project '{project.name}' translatedsucceeded")
             return True
         else:
-            print(f"❌ project '{project.name}' ENgeneratefailed")
+            print(f"❌ project '{project.name}' translatedfailed")
             return False
             
     except Exception as e:
-        print(f"❌ processingproject {project_id} ENerror: {e}")
+        print(f"❌ processproject {project_id} translatederror: {e}")
         db.rollback()
         return False
     finally:
         db.close()
 
 def main():
-    """EN"""
+    """translated"""
     if len(sys.argv) > 1:
-        # ENprojectgenerateEN
+        # translatedprojecttranslated
         project_id = sys.argv[1]
-        print(f"🚀 startENproject {project_id} generateEN...")
+        print(f"🚀 translatedproject {project_id} translated...")
         if generate_thumbnail_for_project(project_id):
-            print("🎉 ENgenerateEN！")
+            print("🎉 translated！")
         else:
-            print("❌ ENgeneratefailed")
+            print("❌ translatedfailed")
             sys.exit(1)
     else:
-        # ENallprojectgenerateEN
-        print("🚀 startENallprojectgenerateEN...")
+        # translatedprojecttranslated
+        print("🚀 translatedprojecttranslated...")
         if generate_thumbnails_for_projects():
-            print("🎉 allENgenerateEN！")
+            print("🎉 translated！")
         else:
-            print("❌ ENgeneratefailed")
+            print("❌ translatedfailed")
             sys.exit(1)
 
 if __name__ == "__main__":

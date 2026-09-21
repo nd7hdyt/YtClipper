@@ -1,76 +1,76 @@
-# EN
+# progress
 
-## EN
+## overview
 
-ENBased on"EN"EN，EN + EN，EN。
+based on""progress，usestage + progress，dependencies。
 
-## Core Features
+## 
 
-- **EN**: 6EN，EN
-- **EN**: ENHTTP APIEN，ENWebSocket
-- **RedisEN**: ENRedisEN，SupportEN
-- **EN**: EN，EN6EN
+- **stage**: 6stage，stage
+- ****: frontendHTTP APIfetchprogress，no needWebSocket
+- **Redis**: backenduseRedisprogress，support
+- **event**: stageevent，6
 
-## System Architecture
+## 
 
-### EN
+### backend
 
-1. **`backend/services/simple_progress.py`** - EN
-   - EN
-   - RedisEN
-   - EN
+1. **`backend/services/simple_progress.py`** - progressservice
+   - stage
+   - Redisevent
+   - progress
 
-2. **`backend/api/v1/simple_progress.py`** - APIEN
-   - `/api/v1/simple-progress/snapshot` - EN
-   - `/api/v1/simple-progress/snapshot/{project_id}` - EN
-   - `/api/v1/simple-progress/stages` - EN
+2. **`backend/api/v1/simple_progress.py`** - APIAPI
+   - `/api/v1/simple-progress/snapshot` - fetchprogress
+   - `/api/v1/simple-progress/snapshot/{project_id}` - projectprogress
+   - `/api/v1/simple-progress/stages` - fetchstageconfig
 
-3. **`backend/services/simple_pipeline_adapter.py`** - EN
-   - EN
-   - EN
+3. **`backend/services/simple_pipeline_adapter.py`** - 
+   - integrationprogress
+   - stageevent
 
-### EN
+### frontend
 
-1. **`frontend/src/stores/useSimpleProgressStore.ts`** - EN
-   - ZustandEN
-   - EN
-   - EN
+1. **`frontend/src/stores/useSimpleProgressStore.ts`** - state management
+   - Zustandstate management
+   - 
+   - progresscache
 
-2. **`frontend/src/components/SimpleProgressBar.tsx`** - EN
-   - EN
-   - EN
-   - EN
+2. **`frontend/src/components/SimpleProgressBar.tsx`** - progress
+   - projectprogress
+   - projectprogress
+   - integration
 
-3. **`frontend/src/components/SimpleProjectCard.tsx`** - EN
-   - EN
-   - EN
-   - EN
+3. **`frontend/src/components/SimpleProjectCard.tsx`** - project
+   - integrationprogress
+   - state management
+   - button
 
-## EN
+## stage
 
 ```python
 STAGES = [
-    ("INGEST", 10),        # EN/EN
-    ("SUBTITLE", 15),      # EN/EN  
-    ("ANALYZE", 20),       # EN/EN
-    ("HIGHLIGHT", 25),     # EN/EN
-    ("EXPORT", 20),        # EN/EN
-    ("DONE", 10),          # EN/EN
+    ("INGEST", 10),        # download/
+    ("SUBTITLE", 15),      # subtitles/  
+    ("ANALYZE", 20),       # /outline
+    ("HIGHLIGHT", 25),     # /
+    ("EXPORT", 20),        # export/
+    ("DONE", 10),          # validate/archive
 ]
 ```
 
-## EN
+## progress
 
 ```python
 def compute_percent(stage: str, subpercent: Optional[float] = None) -> int:
-    # EN
+    # stage
     done = 0
     for s in ORDER:
         if s == stage:
             break
         done += WEIGHTS[s]
     
-    # Current Stage
+    # current stage
     cur = WEIGHTS.get(stage, 0)
     
     if subpercent is None:
@@ -79,34 +79,34 @@ def compute_percent(stage: str, subpercent: Optional[float] = None) -> int:
         return min(99, done + int(cur * subpercent / 100))
 ```
 
-## EN
+## eventformat
 
 ```json
 {
   "project_id": "46ab50a6-....",
   "stage": "HIGHLIGHT", 
   "percent": 70,
-  "message": "EN，EN 12 EN",
+  "message": "completed， 12 ",
   "ts": 1640995200
 }
 ```
 
-## EN
+## usage
 
-### EN
+### backendintegration
 
-1. **EN**:
+1. **progressevent**:
 ```python
 from backend.services.simple_progress import emit_progress
 
-# EN
-emit_progress(project_id, "ANALYZE", "EN")
+# stage
+emit_progress(project_id, "ANALYZE", "")
 
-# EN
-emit_progress(project_id, "ANALYZE", "EN(50%)", subpercent=50)
+# progress
+emit_progress(project_id, "ANALYZE", "(50%)", subpercent=50)
 ```
 
-2. **EN**:
+2. **use**:
 ```python
 from backend.services.simple_pipeline_adapter import create_simple_pipeline_adapter
 
@@ -114,22 +114,22 @@ adapter = create_simple_pipeline_adapter(project_id, task_id)
 result = adapter.process_project_sync(video_path, srt_path)
 ```
 
-### EN
+### frontendintegration
 
-1. **EN**:
+1. **useprogressstate management**:
 ```typescript
 import { useSimpleProgressStore } from '../stores/useSimpleProgressStore'
 
 const { startPolling, stopPolling, getProgress } = useSimpleProgressStore()
 
-// EN
+// 
 startPolling(['project-1', 'project-2'], 2000)
 
-// EN
+// fetchprogress
 const progress = getProgress('project-1')
 ```
 
-2. **EN**:
+2. **useprogress**:
 ```tsx
 import { SimpleProgressBar } from '../components/SimpleProgressBar'
 
@@ -142,7 +142,7 @@ import { SimpleProgressBar } from '../components/SimpleProgressBar'
 />
 ```
 
-3. **EN**:
+3. **useproject**:
 ```tsx
 import { SimpleProjectCard } from '../components/SimpleProjectCard'
 
@@ -155,101 +155,101 @@ import { SimpleProjectCard } from '../components/SimpleProjectCard'
 />
 ```
 
-## APIEN
+## APIAPI
 
-### EN
+### fetchprogress
 
 ```bash
-# EN
+# fetch
 GET /api/v1/simple-progress/snapshot?project_ids=project-1&project_ids=project-2
 
-# EN
+# fetch
 GET /api/v1/simple-progress/snapshot/project-1
 ```
 
-### EN
+### fetchstageconfig
 
 ```bash
 GET /api/v1/simple-progress/stages
 ```
 
-## EN
+## config
 
-### EN
-- EN: 2000ms (2EN)
-- EN: 1000-5000ms
-- EN
+### 
+- default: 2000ms (2)
+- : 1000-5000ms
+- 
 
-### EN
-- EN: 100
-- EN
-- EN
+### stage
+- : 100
+- stage
+- stage
 
-## EN
+## 
 
-### RedisEN
-- EN
-- EN
-- EN
+### Redisconnection failed
+- 
+- progressevent
+- frontendreturn
 
-### EN
-- EN
-- EN
-- EN
+### 
+- frontend
+- progresscachelocalstatus
+- 
 
-### EN
-- SupportEN
-- EN
-- ProvidesEN
+### stage
+- supportfailedstatus
+- failedstatus
+- 
 
-## Performance
+## performance
 
-1. **EN**: EN
-2. **EN**: EN
-3. **EN**: EN
-4. **EN**: EN
+1. ****: fetchprojectprogress
+2. **cache**: 
+3. ****: needstart
+4. ****: progress
 
-## EN
+## 
 
-1. **EN**: ENSTAGESEN
-2. **EN**: EN
-3. **EN**: SupportEN
-4. **ENSupport**: ENSupportEN
+1. **addedstage**: STAGESconfig
+2. ****: stage
+3. ****: supportstageformat
+4. **support**: configsupport
 
-## EN
+## monitor
 
-1. **EN**: EN
-2. **EN**: EN
-3. **EN**: EN
-4. **EN**: EN
+1. ****: progressevent
+2. **statuscheck**: progressstatus
+3. **error**: error
+4. ****: monitor
 
-## EN
+## 
 
-EN：
+progress：
 
-1. **EN**:
-   - ENemit_progressEN
-   - ENSimplePipelineAdapterEN
-   - ENWebSocketEN
+1. **backend**:
+   - progressemit_progresscall
+   - useSimplePipelineAdapter
+   - WebSocketprogress
 
-2. **EN**:
-   - ENuseSimpleProgressStoreEN
-   - ENSimpleProgressBarEN
-   - ENWebSocketEN
+2. **frontend**:
+   - useuseSimpleProgressStorestate management
+   - useSimpleProgressBarprogress
+   - configWebSocket
 
-3. **EN**:
-   - EN
-   - ENRedisEN
-   - EN
+3. ****:
+   - progress
+   - Redisprogress
+   - updateproject status
 
-## EN
+## summary
 
-EN"EN"EN，ProvidesEN：
+progress""，：
 
-- ✅ **EN**: Based onHTTPEN，ENWebSocket
-- ✅ **EN**: EN，EN
-- ✅ **EN**: EN，EN
-- ✅ **EN**: EN
-- ✅ **EN**: EN
+- ✅ ****: based onHTTP，dependenciesWebSocket
+- ✅ ****: stage，
+- ✅ ****: ，cache
+- ✅ ****: stage
+- ✅ ****: status
 
-EN，EN，EN。
+，，。

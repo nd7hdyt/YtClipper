@@ -1,6 +1,6 @@
 """
-ENuploadEN
-ENfileENuploadEN
+translatedUploadtool
+supporttranslatedfile'stranslatedUploadAndtranslated
 """
 
 import os
@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 
 class UploadStatus(Enum):
-    """uploadstatus"""
-    PENDING = "pending"
+    """Uploadstatus"""
+    PtranslatedDING = "pending"
     UPLOADING = "uploading"
     COMPLETED = "completed"
     FAILED = "failed"
@@ -29,7 +29,7 @@ class UploadStatus(Enum):
 
 @dataclass
 class ChunkInfo:
-    """EN"""
+    """translatedinfo"""
     chunk_number: int
     chunk_size: int
     total_chunks: int
@@ -37,12 +37,12 @@ class ChunkInfo:
     chunk_hash: str
     upload_id: str
     created_at: datetime
-    status: UploadStatus = UploadStatus.PENDING
+    status: UploadStatus = UploadStatus.PtranslatedDING
 
 
 @dataclass
 class UploadSession:
-    """uploadEN"""
+    """Uploadtranslated"""
     upload_id: str
     filename: str
     file_size: int
@@ -50,7 +50,7 @@ class UploadSession:
     total_chunks: int
     file_hash: str
     created_at: datetime
-    status: UploadStatus = UploadStatus.PENDING
+    status: UploadStatus = UploadStatus.PtranslatedDING
     uploaded_chunks: List[int] = None
     temp_dir: str = None
     
@@ -62,7 +62,7 @@ class UploadSession:
 
 
 class ChunkedUploadManager:
-    """ENuploadEN"""
+    """translatedUploadtranslated"""
     
     def __init__(self, base_dir: str = "/tmp/uploads", max_file_size: int = 2 * 1024 * 1024 * 1024):
         self.base_dir = Path(base_dir)
@@ -70,17 +70,17 @@ class ChunkedUploadManager:
         self.active_sessions: Dict[str, UploadSession] = {}
         self.chunk_info_cache: Dict[str, List[ChunkInfo]] = {}
         
-        # ENdirectoryEN
+        # ensuretranslateddirectorytranslatedin
         self.base_dir.mkdir(parents=True, exist_ok=True)
     
     def _generate_upload_id(self, filename: str, file_size: int) -> str:
-        """generateuploadID"""
+        """translatedUploadID"""
         timestamp = datetime.now().isoformat()
         content = f"{filename}_{file_size}_{timestamp}"
         return hashlib.md5(content.encode()).hexdigest()
     
     def _calculate_file_hash(self, file_path: str) -> str:
-        """ENfileEN"""
+        """translatedfiletranslated"""
         hash_md5 = hashlib.md5()
         with open(file_path, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
@@ -88,15 +88,15 @@ class ChunkedUploadManager:
         return hash_md5.hexdigest()
     
     def _calculate_chunk_hash(self, chunk_data: bytes) -> str:
-        """EN"""
+        """translated"""
         return hashlib.md5(chunk_data).hexdigest()
     
     def _validate_file_size(self, file_size: int) -> bool:
-        """validatefileEN"""
+        """verifyfiletranslated"""
         return file_size <= self.max_file_size
     
     def _validate_file_type(self, filename: str) -> bool:
-        """validatefileEN"""
+        """verifyfiletranslated"""
         allowed_extensions = ['.mp4', '.avi', '.mov', '.mkv', '.webm', '.flv', '.wmv', '.srt', '.vtt', '.ass', '.ssa']
         return any(filename.lower().endswith(ext) for ext in allowed_extensions)
     
@@ -107,23 +107,23 @@ class ChunkedUploadManager:
         file_hash: str,
         chunk_size: int = 2 * 1024 * 1024  # 2MB
     ) -> UploadSession:
-        """createuploadEN"""
+        """createUploadtranslated"""
         
-        # validatefileEN
+        # verifyfiletranslated
         if not self._validate_file_size(file_size):
-            raise ValueError(f"fileEN: {file_size} > {self.max_file_size}")
+            raise ValueError(f"filetranslated: {file_size} > {self.max_file_size}")
         
-        # validatefileEN
+        # verifyfiletranslated
         if not self._validate_file_type(filename):
-            raise ValueError(f"ENfileEN: {filename}")
+            raise ValueError(f"translatedsupport'sfiletranslated: {filename}")
         
-        # generateuploadID
+        # translatedUploadID
         upload_id = self._generate_upload_id(filename, file_size)
         
-        # EN
+        # translated
         total_chunks = (file_size + chunk_size - 1) // chunk_size
         
-        # createuploadEN
+        # createUploadtranslated
         session = UploadSession(
             upload_id=upload_id,
             filename=filename,
@@ -134,14 +134,14 @@ class ChunkedUploadManager:
             created_at=datetime.now()
         )
         
-        # createENdirectory
+        # createtranslateddirectory
         session.temp_dir = str(self.base_dir / upload_id)
         Path(session.temp_dir).mkdir(parents=True, exist_ok=True)
         
-        # saveEN
+        # translated
         self.active_sessions[upload_id] = session
         
-        logger.info(f"createuploadEN: {upload_id}, file: {filename}, EN: {file_size}, EN: {total_chunks}")
+        logger.info(f"createUploadtranslated: {upload_id}, file: {filename}, translated: {file_size}, translated: {total_chunks}")
         
         return session
     
@@ -152,116 +152,116 @@ class ChunkedUploadManager:
         chunk_data: bytes,
         chunk_hash: str
     ) -> bool:
-        """uploadEN"""
+        """Uploadtranslated"""
         
-        # fetchuploadEN
+        # fetchUploadtranslated
         session = self.active_sessions.get(upload_id)
         if not session:
-            raise ValueError(f"uploadENdoes not exist: {upload_id}")
+            raise ValueError(f"Uploadtranslatednot found: {upload_id}")
         
-        # validateEN
+        # verifytranslated
         if chunk_number < 0 or chunk_number >= session.total_chunks:
-            raise ValueError(f"EN: {chunk_number}")
+            raise ValueError(f"translated'stranslated: {chunk_number}")
         
-        # validateEN
+        # verifytranslated
         expected_size = session.chunk_size
-        if chunk_number == session.total_chunks - 1:  # EN
+        if chunk_number == session.total_chunks - 1:  # translatedone translated
             expected_size = session.file_size - (session.total_chunks - 1) * session.chunk_size
         
         if len(chunk_data) != expected_size:
-            raise ValueError(f"EN: EN {expected_size}, EN {len(chunk_data)}")
+            raise ValueError(f"translated: translated {expected_size}, translated {len(chunk_data)}")
         
-        # validateEN
+        # verifytranslated
         calculated_hash = self._calculate_chunk_hash(chunk_data)
         if calculated_hash != chunk_hash:
-            raise ValueError(f"EN: EN {chunk_hash}, EN {calculated_hash}")
+            raise ValueError(f"translated: translated {chunk_hash}, translated {calculated_hash}")
         
-        # saveEN
+        # translated
         chunk_path = Path(session.temp_dir) / f"chunk_{chunk_number:06d}"
         
         async with aiofiles.open(chunk_path, 'wb') as f:
             await f.write(chunk_data)
         
-        # updateENstatus
+        # updatetranslatedstatus
         if chunk_number not in session.uploaded_chunks:
             session.uploaded_chunks.append(chunk_number)
         
-        # checkENallENupload
+        # checkIstranslatedUpload
         if len(session.uploaded_chunks) == session.total_chunks:
             session.status = UploadStatus.COMPLETED
         
-        logger.info(f"uploadENsucceeded: {upload_id}, EN: {chunk_number}, progress: {len(session.uploaded_chunks)}/{session.total_chunks}")
+        logger.info(f"Uploadtranslatedsucceeded: {upload_id}, translated: {chunk_number}, progress: {len(session.uploaded_chunks)}/{session.total_chunks}")
         
         return True
     
     async def merge_chunks(self, upload_id: str, output_path: str) -> bool:
-        """EN"""
+        """translated"""
         
-        # fetchuploadEN
+        # fetchUploadtranslated
         session = self.active_sessions.get(upload_id)
         if not session:
-            raise ValueError(f"uploadENdoes not exist: {upload_id}")
+            raise ValueError(f"Uploadtranslatednot found: {upload_id}")
         
-        # checkENallENupload
+        # checkIstranslatedUpload
         if len(session.uploaded_chunks) != session.total_chunks:
-            raise ValueError(f"ENuploadEN: {len(session.uploaded_chunks)}/{session.total_chunks}")
+            raise ValueError(f"translatedUploadtranslated: {len(session.uploaded_chunks)}/{session.total_chunks}")
         
-        # ENdirectoryEN
+        # ensuretranslateddirectorytranslatedin
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
-        # EN
-        logger.info(f"startEN: {upload_id}")
+        # translated
+        logger.info(f"translated: {upload_id}")
         
         with open(output_path, 'wb') as output_file:
             for chunk_number in range(session.total_chunks):
                 chunk_path = Path(session.temp_dir) / f"chunk_{chunk_number:06d}"
                 
                 if not chunk_path.exists():
-                    raise FileNotFoundError(f"ENfiledoes not exist: {chunk_path}")
+                    raise FileNotFoundError(f"translatedfile not found: {chunk_path}")
                 
                 with open(chunk_path, 'rb') as chunk_file:
                     shutil.copyfileobj(chunk_file, output_file)
         
-        # validateENfile
+        # verifytranslated'sfile
         if output_path.stat().st_size != session.file_size:
-            raise ValueError(f"ENfileEN: EN {session.file_size}, EN {output_path.stat().st_size}")
+            raise ValueError(f"translatedfiletranslated: translated {session.file_size}, translated {output_path.stat().st_size}")
         
-        # validatefileEN
+        # verifyfiletranslated
         merged_hash = self._calculate_file_hash(str(output_path))
         if merged_hash != session.file_hash:
-            raise ValueError(f"ENfileEN: EN {session.file_hash}, EN {merged_hash}")
+            raise ValueError(f"translatedfiletranslated: translated {session.file_hash}, translated {merged_hash}")
         
-        logger.info(f"EN: {upload_id}, EN: {output_path}")
+        logger.info(f"translated: {upload_id}, translated: {output_path}")
         
         return True
     
     async def cleanup_session(self, upload_id: str) -> bool:
-        """ENuploadEN"""
+        """cleanUploadtranslated"""
         
-        # fetchuploadEN
+        # fetchUploadtranslated
         session = self.active_sessions.get(upload_id)
         if not session:
             return False
         
-        # deleteENdirectory
+        # deletetranslateddirectory
         temp_dir = Path(session.temp_dir)
         if temp_dir.exists():
             shutil.rmtree(temp_dir)
         
-        # EN
+        # fromtranslated
         del self.active_sessions[upload_id]
         
-        logger.info(f"ENuploadEN: {upload_id}")
+        logger.info(f"cleanUploadtranslated: {upload_id}")
         
         return True
     
     def get_upload_progress(self, upload_id: str) -> Dict[str, Any]:
-        """fetchuploadprogress"""
+        """fetchUploadprogress"""
         
         session = self.active_sessions.get(upload_id)
         if not session:
-            return {"error": "uploadENdoes not exist"}
+            return {"error": "Uploadtranslatednot found"}
         
         progress = len(session.uploaded_chunks) / session.total_chunks * 100
         
@@ -277,7 +277,7 @@ class ChunkedUploadManager:
         }
     
     def get_active_sessions(self) -> List[Dict[str, Any]]:
-        """fetchallEN"""
+        """fetchtranslated"""
         
         sessions = []
         for session in self.active_sessions.values():
@@ -296,7 +296,7 @@ class ChunkedUploadManager:
         return sessions
     
     async def cancel_upload(self, upload_id: str) -> bool:
-        """cancelupload"""
+        """cancelUpload"""
         
         session = self.active_sessions.get(upload_id)
         if not session:
@@ -305,15 +305,15 @@ class ChunkedUploadManager:
         # updatestatus
         session.status = UploadStatus.CANCELLED
         
-        # ENfile
+        # clean temp files
         await self.cleanup_session(upload_id)
         
-        logger.info(f"cancelupload: {upload_id}")
+        logger.info(f"cancelUpload: {upload_id}")
         
         return True
     
     def cleanup_expired_sessions(self, max_age_hours: int = 24) -> int:
-        """EN"""
+        """cleantranslated"""
         
         from datetime import timedelta
         
@@ -324,14 +324,14 @@ class ChunkedUploadManager:
             if session.created_at < cutoff_time:
                 expired_sessions.append(upload_id)
         
-        # EN
+        # cleantranslated
         for upload_id in expired_sessions:
             asyncio.create_task(self.cleanup_session(upload_id))
         
-        logger.info(f"EN: {len(expired_sessions)} EN")
+        logger.info(f"cleantranslated: {len(expired_sessions)}  ")
         
         return len(expired_sessions)
 
 
-# ENuploadEN
+# translatedUploadtranslated
 chunked_upload_manager = ChunkedUploadManager()

@@ -1,40 +1,40 @@
-# AutoClip EN、MCP EN
+# AutoClip 、MCP localmodel
 
-EN，EN、EN：
+，、data directory：
 
-| EN | EN | EN |
+|  |  |  |
 |---|---|---|
-| CLI | `autoclip run video.mp4 --provider ollama` One command to produce clips | `backend/cli.py` |
-| MCP server | EN Cursor / Claude Code / EN MCP EN AutoClip | `backend/mcp_server.py` |
-| EN | EN / CLI EN Ollama、LM Studio，EN key | `backend/core/local_presets.py` |
+| CLI | `autoclip run video.mp4 --provider ollama`  | `backend/cli.py` |
+| MCP server |  Cursor / Claude Code /  MCP  AutoClip | `backend/mcp_server.py` |
+| localmodel | Settings page / CLI  Ollama、LM Studio， key | `backend/core/local_presets.py` |
 
-EN `backend/services/local_runner.py`：EN FastAPI / Celery，EN `SimplePipelineAdapter`，
-EN、metadata、SQLite EN——CLI EN，EN。
+ `backend/services/local_runner.py`： FastAPI / Celery， `SimplePipelineAdapter`，
+、metadata、SQLite ——CLI ，open。
 
 ---
 
-## 1. EN
+## 1. install
 
 ```bash
-git clone https://github.com/nd7hdyt/YtClipper.git && cd autoclip
+git clone https://github.com/zhouxiaoka/autoclip.git && cd autoclip
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-pip install -e .            # EN autoclip / autoclip-mcp EN
+pip install -e .            #  autoclip / autoclip-mcp 
 ```
 
-EN：`python -m backend.cli ...`（EN）。
+：`python -m backend.cli ...`（）。
 
-EN ffmpeg EN PATH（`brew install ffmpeg`）。EN Whisper：`pip install faster-whisper`，
-EN「EN → EN」EN（EN）。
+need ffmpeg  PATH（`brew install ffmpeg`）。subtitleslocal Whisper：`pip install faster-whisper`，
+「settings → speech recognition」install（model）。
 
-EN：
+：
 
 ```bash
 autoclip doctor
-# EN ~/Library/Application Support/AutoClip · Python 3.11.9
+# data directory ~/Library/Application Support/AutoClip · Python 3.11.9
 # ✓ ffmpeg   /opt/homebrew/bin/ffmpeg
-# ✓ whisper  faster-whisper EN
-# ✓ EN     ollama · qwen2.5:7b · http://localhost:11434/v1
+# ✓ whisper  faster-whisper install
+# ✓ model     ollama · qwen2.5:7b · http://localhost:11434/v1
 ```
 
 ---
@@ -42,33 +42,33 @@ autoclip doctor
 ## 2. CLI
 
 ```bash
-autoclip run talk.mp4                                  # EN
-autoclip run talk.mp4 --provider ollama                # EN Ollama（EN qwen2.5:7b，EN key）
+autoclip run talk.mp4                                  # Settings pagemodel
+autoclip run talk.mp4 --provider ollama                # local Ollama（default qwen2.5:7b，no need key）
 autoclip run talk.mp4 --provider lmstudio --model qwen2.5-7b-instruct
 autoclip run talk.mp4 --provider openai --base-url https://api.deepseek.com/v1 --model deepseek-chat --api-key sk-...
 autoclip run talk.mp4 --srt talk.srt --category knowledge --min-score 0.6
-autoclip run talk.mp4 --json                           # EN / agent：stdout EN JSON
+autoclip run talk.mp4 --json                           #  / agent：stdout  JSON
 
-autoclip list                                          # EN
-autoclip show <project_id>                             # EN、EN、EN
-autoclip providers                                     # ProvidesEN，EN
-autoclip doctor --provider ollama                      # EN provider EN
-autoclip mcp                                           # EN MCP server EN（EN）
-autoclip export <project_id> --preset douyin           # EN 9:16 + EN + EN
+autoclip list                                          # project
+autoclip show <project_id>                             # clip、、file
+autoclip providers                                     # providerlocal，
+autoclip doctor --provider ollama                      #  provider 
+autoclip mcp                                           #  MCP server （）
+autoclip export <project_id> --preset douyin           #  9:16 + subtitles + 
 autoclip export <project_id> --clip 2 --clip 5 --preset shorts --no-title
 ```
 
-EN：
-- EN、EN **stderr**；**stdout** EN `project_id`（EN `--json` EN JSON），EN。
-- EN：`0` EN · `1` EN · `2` EN / EN。
-- `--provider` EN，EN `cli-settings.json`。
-- EN**EN**EN（EN），EN；`--copy` EN。
-- `--no-db` EN SQLite（EN）。
-- EN：EN（mac `~/Library/Application Support/AutoClip`、Windows `%APPDATA%\AutoClip`、Linux `~/.local/share/AutoClip`），
-  `--data-dir` EN `AUTOCLIP_DATA_DIR` EN。EN `<EN>/logs/cli.log`，`-v` EN。
-- `--min-score` EN step3 EN（0–1，EN 0.7）；**EN 0 EN 0.5**。
+：
+- progress、notes **stderr**；**stdout**  `project_id`（ `--json`  JSON），。
+- ：`0` succeeded · `1` failed · `2`  / error。
+- `--provider` modelsettings，data directory `cli-settings.json`。
+- default****project（），；`--copy` 。
+- `--no-db`  SQLite（project）。
+- data directory：default（mac `~/Library/Application Support/AutoClip`、Windows `%APPDATA%\AutoClip`、Linux `~/.local/share/AutoClip`），
+  `--data-dir`  `AUTOCLIP_DATA_DIR` 。 `<data directory>/logs/cli.log`，`-v` 。
+- `--min-score`  step3 （0–1，default 0.7）；**clips as 0  0.5**。
 
-`--json` EN（EN）：
+`--json` （）：
 
 ```json
 {
@@ -77,10 +77,10 @@ EN：
   "name": "talk",
   "clips_dir": "…/projects/3f9c…/output/clips",
   "clips": [
-    {"id": "2", "title": "EN", "start_time": "00:12:03,000", "end_time": "00:14:40,000",
-     "score": 0.91, "score_100": 91, "reason": "…", "file": "…/2_EN.mp4"}
+    {"id": "2", "title": "local", "start_time": "00:12:03,000", "end_time": "00:14:40,000",
+     "score": 0.91, "score_100": 91, "reason": "…", "file": "…/2_local.mp4"}
   ],
-  "collections": [{"id": "1", "title": "EN", "clip_ids": ["2", "5"], "file": "…/EN.mp4"}],
+  "collections": [{"id": "1", "title": "", "clip_ids": ["2", "5"], "file": "…/.mp4"}],
   "counts": {"clips": 6, "collections": 2},
   "elapsed_sec": 412.3,
   "llm": {"provider": "ollama", "model": "qwen2.5:7b", "base_url": "http://localhost:11434/v1"}
@@ -91,9 +91,9 @@ EN：
 
 ## 3. MCP server
 
-stdio EN，EN `mcp` Python SDK（`requirements.txt` EN；EN 1.x `FastMCP` EN 2.x `MCPServer`）。
+stdio ，dependencies `mcp` Python SDK（`requirements.txt` ； 1.x `FastMCP`  2.x `MCPServer`）。
 
-**Cursor**（`~/.cursor/mcp.json`）EN **Claude Desktop**（`claude_desktop_config.json`）：
+**Cursor**（`~/.cursor/mcp.json`） **Claude Desktop**（`claude_desktop_config.json`）：
 
 ```json
 {
@@ -109,72 +109,72 @@ stdio EN，EN `mcp` Python SDK（`requirements.txt` EN；EN 1.x `FastMCP` EN 2.x
 claude mcp add autoclip -- /path/to/autoclip/venv/bin/autoclip mcp
 ```
 
-EN `command` EN `/path/to/autoclip/venv/bin/python`，`args` EN `["-m", "backend.mcp_server"]`，
-EN `"env": {"PYTHONPATH": "/path/to/autoclip"}`。
+ `command`  `/path/to/autoclip/venv/bin/python`，`args`  `["-m", "backend.mcp_server"]`，
+ `"env": {"PYTHONPATH": "/path/to/autoclip"}`。
 
-EN：
+tool：
 
-| EN | EN |
+| tool | notes |
 |---|---|
-| `clip_video(video_path, srt_path?, name?, category?, min_score?, provider?, model?, base_url?, api_key?)` | EN，EN MCP progress EN；EN / EN / EN |
-| `start_clip_job(EN)` | EN，EN `project_id`（EN） |
-| `get_job_status(project_id)` | `status` queued / running / completed / failed，`percent` / `stage` / `message`，EN `result` |
-| `get_project(project_id)` | EN（EN） |
-| `list_projects(limit=20)` | EN |
-| `list_providers()` | EN provider + EN + EN |
-| `check_environment(provider?, …)` | ffmpeg / Whisper / EN |
-| `export_clip(project_id, clip_id, preset?, subtitles?, title_card?)` | EN（douyin / xiaohongshu / shorts / bilibili / original） |
+| `clip_video(video_path, srt_path?, name?, category?, min_score?, provider?, model?, base_url?, api_key?)` | ， MCP progress progress；returnclip /  / file |
+| `start_clip_job()` | ，return `project_id`（call） |
+| `get_job_status(project_id)` | `status` queued / running / completed / failed，`percent` / `stage` / `message`，completed `result` |
+| `get_project(project_id)` | project（） |
+| `list_projects(limit=20)` | project |
+| `list_providers()` | cloud provider + local + config |
+| `check_environment(provider?, …)` | ffmpeg / Whisper / model |
+| `export_clip(project_id, clip_id, preset?, subtitles?, title_card?)` | （douyin / xiaohongshu / shorts / bilibili / original） |
 
-EN：
-- EN `print()`，EN stdout EN；server EN `sys.stdout` EN stderr，EN stdout EN MCP EN。
-- EN LLM EN，EN `threading.Lock` EN；`start_clip_job` EN。
-- EN；server EN `get_job_status` EN。
+：
+-  `print()`， stdout ；server start `sys.stdout`  stderr， stdout  MCP 。
+-  LLM config， `threading.Lock` ；`start_clip_job` 。
+- statusmemory；server  `get_job_status` project。
 
-**Agent skill**：`skills/autoclip/SKILL.md` EN agent EN、EN、EN、EN 0 EN。
-EN `~/.cursor/skills/autoclip/` EN `~/.claude/skills/autoclip/` EN。
+**Agent skill**：`skills/autoclip/SKILL.md`  agent tool、、、clips as 0 。
+ `~/.cursor/skills/autoclip/`  `~/.claude/skills/autoclip/` 。
 
 ---
 
-## 4. EN（Ollama / LM Studio）
+## 4. localmodel（Ollama / LM Studio）
 
-EN OpenAI EN + `base_url`，EN、EN key EN：
+ OpenAI API + `base_url`，defaultmodel、 key optional：
 
-| EN | EN | EN | EN |
+|  |  | defaultmodel | notes |
 |---|---|---|---|
-| `ollama` | `http://localhost:11434/v1` | `qwen2.5:7b` | `ollama pull qwen2.5:7b`；ChineseEN |
-| `lmstudio` | `http://localhost:1234/v1` | （ENAs Standard） | LM Studio EN Local Server |
+| `ollama` | `http://localhost:11434/v1` | `qwen2.5:7b` | `ollama pull qwen2.5:7b`；Chinesesubtitles |
+| `lmstudio` | `http://localhost:1234/v1` | （service） | LM Studio modelstart Local Server |
 
-**EN**：ENProvidesEN「Ollama（EN）」「LM Studio（EN）」；EN（EN / EN）、
-EN `/v1/models` EN，EN API Key。EN provider EN provider EN。
+**Settings page**：modelprovider「Ollama（local）」「LM Studio（local）」；service（port / ）、
+ `/v1/models` optionalmodel， API Key。cloud provider model provider default。
 
-**EN**：`settings.json` EN `llm_provider` EN `ollama` / `lmstudio`，`LLMManager._apply_local_preset` EN
-`openai` + `base_url`，API key EN `EMPTY`（EN OpenAI key EN）。
-`get_current_provider_info()` EN `provider`（EN）EN `backend_provider`（`openai`）。
+**backend**：`settings.json`  `llm_provider`  `ollama` / `lmstudio`，`LLMManager._apply_local_preset` 
+`openai` + `base_url`，API key  `EMPTY`（ OpenAI key localservice）。
+`get_current_provider_info()` return `provider`（） `backend_provider`（`openai`）。
 
-Docker / CLI EN：`LLM_PROVIDER=ollama LLM_MODEL=qwen2.5:7b`（EN
+Docker / CLI env varavailable：`LLM_PROVIDER=ollama LLM_MODEL=qwen2.5:7b`（access
 `OPENAI_BASE_URL=http://host.docker.internal:11434/v1`）。
 
-**EN**：macOS EN Clash EN，`httpx` EN `localhost` EN，EN 502 / EN。
-`llm_providers.is_local_url()` EN loopback / EN / `*.local` / `host.docker.internal` EN，
-EN `trust_env=False` EN `httpx.Client`，EN。
+**proxyissue**：macOS  Clash proxy，`httpx`  `localhost` proxy， 502 / 。
+`llm_providers.is_local_url()`  loopback /  / `*.local` / `host.docker.internal` ，
+create `trust_env=False`  `httpx.Client`，no needproxy。
 
-EN API（EN）：
-- `GET /api/v1/settings/local-presets` — EN
-- `GET /api/v1/settings/compatible-models?base_url=…` — EN
-- `POST /api/v1/settings/test-api` — `provider` EN `ollama` / `lmstudio`
+ API（）：
+- `GET /api/v1/settings/local-presets` — 
+- `GET /api/v1/settings/compatible-models?base_url=…` — servicemodel
+- `POST /api/v1/settings/test-api` — `provider`  `ollama` / `lmstudio`
 
 ---
 
-## 5. EN
+## 5. test
 
 ```bash
 cd backend && python -m pytest tests/test_local_presets.py tests/test_cli.py -q
 ```
 
-- `test_local_presets.py`：EN、LLMManager EN、`test-api` EN、EN、`is_local_url`
-- `test_cli.py`：EN、`--help` EN、EN SQLite EN（EN）、EN、EN、MCP EN
+- `test_local_presets.py`：、LLMManager 、`test-api` 、localproxy、`is_local_url`
+- `test_cli.py`：、`--help` 、project SQLite （）、、progress、MCP tool
 
-EN（EN Ollama EN key）：
+（need Ollama cloud key）：
 
 ```bash
 autoclip run /path/to/talk.mp4 --provider ollama --min-score 0.5 --json

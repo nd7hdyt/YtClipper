@@ -1,104 +1,104 @@
-# 🎤 EN
+# 🎤 speech recognitionsettings
 
-## 📋 EN
+## 📋 overview
 
-AutoClipSupportEN，EN，EN。
+AutoClipsupportspeech recognitiongeneratesubtitlesfile，subtitles，generatesubtitles。
 
-## 🔧 SupportEN
+## 🔧 supportspeech recognition
 
-### 1. ENWhisper（EN）
+### 1. localWhisper（recommend）
 
-**EN：**
-- ✅ EN，EN
-- ✅ ENAPIEN
-- ✅ EN
-- ✅ SupportENLanguage
-- ✅ EN
+**features：**
+- ✅ local，no need
+- ✅ no needAPIkey
+- ✅ free use
+- ✅ support
+- ✅ 
 
-**EN：**
+**installmethod：**
 
 ```bash
-# EN1：ENpipEN
+# method1：usepipinstall
 pip install openai-whisper
 
-# EN2：ENcondaEN
+# method2：usecondainstall
 conda install -c conda-forge openai-whisper
 
-# EN3：EN
+# method3：install
 git clone https://github.com/openai/whisper.git
 cd whisper
 pip install -e .
 ```
 
-**EN：**
+**verifyinstall：**
 ```bash
 whisper --help
 ```
 
-**EN：**
-- `tiny`: 39MB，EN，EN
-- `base`: 74MB，EN，EN（EN）
-- `small`: 244MB，EN，EN
-- `medium`: 769MB，EN，EN
-- `large`: 1550MB，EN，EN
+**model selection：**
+- `tiny`: 39MB，，
+- `base`: 74MB，，medium（default）
+- `small`: 244MB，medium，
+- `medium`: 769MB，，
+- `large`: 1550MB，，
 
-### 2. OpenAI API（EN）
+### 2. OpenAI API（）
 
-**EN：**
-- ✅ EN
-- ✅ SupportENLanguage
-- ❌ ENAPIEN
-- ❌ EN
-- ❌ EN
+**features：**
+- ✅ 
+- ✅ support
+- ❌ needAPIkey
+- ❌ need
+- ❌ usecost
 
-**EN：**
+**settingsmethod：**
 ```bash
-# EN
+# settingsenv var
 export OPENAI_API_KEY="your-api-key-here"
 ```
 
-### 3. EN（EN）
+### 3. testsubtitles（）
 
-**EN：**
-- ✅ EN
-- ✅ EN
-- ❌ EN，EN
-- ❌ EN
+**features：**
+- ✅ no needinstalldependencies
+- ✅ available
+- ❌ test，subtitles
+- ❌ 
 
-## 🚀 EN
+## 🚀 use
 
-### EN（EN）
+### （default）
 
-EN：
+selectavailablemethod：
 
 ```python
 from shared.utils.speech_recognizer import generate_subtitle_for_video
 
-# EN
+# selectmethod
 result = generate_subtitle_for_video(video_path, method="auto")
 ```
 
-### EN
+### method
 
 ```python
-# ENWhisper
+# uselocalWhisper
 result = generate_subtitle_for_video(video_path, method="whisper_local")
 
-# ENOpenAI API
+# useOpenAI API
 result = generate_subtitle_for_video(video_path, method="openai_api")
 
-# EN
+# usetestsubtitles
 result = generate_subtitle_for_video(video_path, method="simple")
 ```
 
-### EN
+### checkavailablemethod
 
 ```python
 from shared.utils.speech_recognizer import get_available_speech_recognition_methods
 
 methods = get_available_speech_recognition_methods()
 print(methods)
-# EN：
+# ：
 # {
 #     "whisper_local": True,
 #     "openai_api": False,
@@ -106,11 +106,11 @@ print(methods)
 # }
 ```
 
-## 📝 EN
+## 📝 config
 
-### ENWhisperEN
+### Whisper
 
-EN `shared/utils/speech_recognizer.py` ENWhisperEN：
+ `shared/utils/speech_recognizer.py` canWhisper：
 
 ```python
 cmd = [
@@ -118,109 +118,109 @@ cmd = [
     str(video_path),
     '--output_dir', str(output_path.parent),
     '--output_format', 'srt',
-    '--language', 'zh',  # Language：zh(Chinese), en(English), auto(EN)
-    '--model', 'base'    # EN：tiny, base, small, medium, large
+    '--language', 'zh',  # ：zh(Chinese), en(English), auto(auto-detect)
+    '--model', 'base'    # model：tiny, base, small, medium, large
 ]
 ```
 
-### EN
+### notes
 
-- `--language`: ENLanguage，EN
-- `--model`: EN，EN
-- `--output_format`: EN，Supportsrt, vtt, txtEN
-- `--task`: EN，transcribe(EN)ENtranslate(EN)
+- `--language`: ，
+- `--model`: selectmodel，impact
+- `--output_format`: format，supportsrt, vtt, txt
+- `--task`: ，transcribe()translate()
 
-## 🔍 Troubleshooting
+## 🔍 troubleshooting
 
-### WhisperEN
+### Whisperinstallissue
 
-**EN：** `whisper: command not found`
+**issue：** `whisper: command not found`
 
-**EN：**
+**solution：**
 ```bash
-# EN
+# checkinstallsucceeded
 pip list | grep whisper
 
-# EN
+# install
 pip uninstall openai-whisper
 pip install openai-whisper
 
-# ENPATH
+# checkPATH
 which whisper
 ```
 
-**EN：** EN
+**issue：** dependencies
 
-**EN：**
+**solution：**
 ```bash
-# EN（Ubuntu/Debian）
+# installdependencies（Ubuntu/Debian）
 sudo apt update
 sudo apt install ffmpeg
 
-# EN（macOS）
+# installdependencies（macOS）
 brew install ffmpeg
 
-# ENPythonEN
+# installPythondependencies
 pip install torch torchvision torchaudio
 ```
 
-### Performance
+### performance
 
-**EN：** WhisperEN
+**issue：** Whisper
 
-**EN：**
-1. EN：`--model tiny`
-2. ENGPUEN（EN）
-3. EN
+**solution：**
+1. use a smaller model：`--model tiny`
+2. useGPU（available）
+3. 
 
-**EN：** EN
+**issue：** out of memory
 
-**EN：**
-1. EN
-2. EN
-3. ENCPUEN
+**solution：**
+1. use a smaller model
+2. memory
+3. useCPU
 
-## 📊 EN
+## 📊 
 
-| EN | EN | EN | EN | EN | EN |
+| method |  |  |  | dependencies | install |
 |------|------|--------|------|----------|----------|
-| Whisper tiny | ⭐⭐⭐⭐⭐ | ⭐⭐ | EN | EN | EN |
-| Whisper base | ⭐⭐⭐⭐ | ⭐⭐⭐ | EN | EN | EN |
-| Whisper small | ⭐⭐⭐ | ⭐⭐⭐⭐ | EN | EN | EN |
-| Whisper medium | ⭐⭐ | ⭐⭐⭐⭐⭐ | EN | EN | EN |
-| OpenAI API | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | EN | EN | EN |
-| EN | ⭐⭐⭐⭐⭐ | ⭐ | EN | EN | EN |
+| Whisper tiny | ⭐⭐⭐⭐⭐ | ⭐⭐ | free |  |  |
+| Whisper base | ⭐⭐⭐⭐ | ⭐⭐⭐ | free |  |  |
+| Whisper small | ⭐⭐⭐ | ⭐⭐⭐⭐ | free |  |  |
+| Whisper medium | ⭐⭐ | ⭐⭐⭐⭐⭐ | free |  |  |
+| OpenAI API | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |  | need |  |
+| testsubtitles | ⭐⭐⭐⭐⭐ | ⭐ | free |  | no needinstall |
 
-## 🎯 EN
+## 🎯 recommended config
 
-### EN
+### dev environment
 ```bash
-# ENbaseEN（EN）
+# installbasemodel（）
 pip install openai-whisper
 ```
 
-### EN
+### production
 ```bash
-# ENsmallENmediumEN（EN）
+# installsmallmediummodel（）
 pip install openai-whisper
-# ENGPUEN
+# useGPU
 ```
 
-### EN
+### test
 ```bash
-# EN，EN
-# EN
+# no needinstall，usetestsubtitles
+# generatetestsubtitlesfile
 ```
 
-## 📞 ENSupport
+## 📞 tech support
 
-EN，EN：
+if you encounter issues，：
 
-1. EN
-2. ENWhisperEN
-3. ENSupport
-4. EN
+1. checkfileerror
+2. verifyWhisperinstall
+3. confirmfileformatsupport
+4. view
 
-ENReference：
-- [WhisperEN](https://github.com/openai/whisper)
-- [OpenAI APIEN](https://platform.openai.com/docs/api-reference)
+：
+- [Whisperdocs](https://github.com/openai/whisper)
+- [OpenAI APIdocs](https://platform.openai.com/docs/api-reference)

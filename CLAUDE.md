@@ -1,10 +1,10 @@
 # AutoClip
 
 ## Design System
-ENVisual/UI DecisionsEN，EN `DESIGN.md`。ENColors、Typography、Spacing、Border Radius、State Expression、Button StylesENAs Standard。
-Do not deviate without explicit consent。Code ReviewEN，Found non-compliant `DESIGN.md` ENImplementation should be flagged。
+contentVisual/UI Decisionscontent，content `DESIGN.md`。contentColors、Typography、Spacing、Border Radius、State Expression、Button StylescontentAs Standard。
+contentDo notcontent。content，content `DESIGN.md` 'scontent。
 
-EN：**Restrained Professional / Calm Premium（Reference Dia Browser）**——Quiet、Ample Whitespace、Near-Monochrome、Only one restrained blue for emphasis。Do notToy-like Contrasting Colors、Colorful chip、Purple Gradient、Neon、Pure Black。
+contentonecontent：**Restrained Professional / Calm Premium（Reference Dia Browser）**——Quiet、Ample Whitespace、Near-Monochrome、Only one restrained blue for emphasis。Do notToy-like Contrasting Colors、content chip、content、content、content。
 
 ## Roadmap
-ENLong-term PlanEN `ROADMAP.md`（Account / Analytics / Monetization Phases）。Current StageENStatusEN `HANDOFF.md`。
+contentLong-term Plancontent `ROADMAP.md`（Account / Analytics / Monetization Phases）。Current StageandStatuscontent `HANDOFF.md`。

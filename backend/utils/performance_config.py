@@ -1,6 +1,6 @@
 """
-ENconfigENsettings
-ENsystemENconfigENparameters
+translatedconfigAndtranslatedsettings
+ProvidesSystemtranslated'sconfigAndtranslated
 """
 
 from pydantic import BaseModel, Field, validator
@@ -9,126 +9,126 @@ from enum import Enum
 
 
 class PerformanceLevel(Enum):
-    """EN"""
-    LOW = "low"          # EN，EN
-    MEDIUM = "medium"    # EN，ENuse
-    HIGH = "high"        # EN，EN
-    CUSTOM = "custom"    # ENconfig
+    """translated"""
+    LOW = "low"          # translated，translated
+    MEDIUM = "medium"    # translatedetc.translated，translatedAndtranslateduse
+    HIGH = "high"        # translated，translated
+    CUSTOM = "custom"    # translatedconfig
 
 
 class FileUploadConfig(BaseModel):
-    """fileuploadconfig"""
-    # ENuploadconfig
-    chunk_size: int = Field(default=2 * 1024 * 1024, description="EN(EN)")  # 2MB
-    max_file_size: int = Field(default=2 * 1024 * 1024 * 1024, description="ENfileEN(EN)")  # 2GB
-    max_concurrent_uploads: int = Field(default=3, description="ENuploadEN")
-    upload_timeout: int = Field(default=1800, description="uploadtimeouttime(EN)")  # 30EN
+    """fileUploadconfig"""
+    # translatedUploadconfig
+    chunk_size: int = Field(default=2 * 1024 * 1024, description="translated(translated)")  # 2MB
+    max_file_size: int = Field(default=2 * 1024 * 1024 * 1024, description="translatedfiletranslated(translated)")  # 2GB
+    max_concurrent_uploads: int = Field(default=3, description="translatedUploadtranslated")
+    upload_timeout: int = Field(default=1800, description="Uploadtranslated(seconds)")  # 30minutes
     
-    # retryconfig
-    max_retries: int = Field(default=3, description="ENretryEN")
-    retry_delay: int = Field(default=5, description="retryEN(EN)")
+    # translatedconfig
+    max_retries: int = Field(default=3, description="translated")
+    retry_delay: int = Field(default=5, description="translated(seconds)")
     
-    # EN
+    # support'sformat
     supported_video_formats: list = Field(
         default=['.mp4', '.avi', '.mov', '.mkv', '.webm', '.flv', '.wmv'],
-        description="ENvideoEN"
+        description="support'svideoformat"
     )
     supported_subtitle_formats: list = Field(
         default=['.srt', '.vtt', '.ass', '.ssa'],
-        description="ENsubtitlesEN"
+        description="support'ssubtitlesformat"
     )
     
     @validator('chunk_size')
     def validate_chunk_size(cls, v):
-        if v <= 0 or v > 10 * 1024 * 1024:  # EN10MB
-            raise ValueError('ENmustEN1EN10MBEN')
+        if v <= 0 or v > 10 * 1024 * 1024:  # translated10MB
+            raise ValueError('translatedin1translated10MBtranslated')
         return v
     
     @validator('max_file_size')
     def validate_max_file_size(cls, v):
-        if v <= 0 or v > 10 * 1024 * 1024 * 1024:  # EN10GB
-            raise ValueError('ENfileENmustEN1EN10GBEN')
+        if v <= 0 or v > 10 * 1024 * 1024 * 1024:  # translated10GB
+            raise ValueError('translatedfiletranslatedin1translated10GBtranslated')
         return v
 
 
 class ProcessingConfig(BaseModel):
-    """processingconfig"""
-    # EN
-    max_concurrent_tasks: int = Field(default=2, description="ENprocessingtaskEN")
-    max_concurrent_workers: int = Field(default=4, description="EN")
+    """processconfig"""
+    # translated
+    max_concurrent_tasks: int = Field(default=2, description="translatedprocesstasktranslated")
+    max_concurrent_workers: int = Field(default=4, description="translatedprocesstranslated")
     
-    # EN
-    max_memory_usage: int = Field(default=4 * 1024 * 1024 * 1024, description="ENuse(EN)")  # 4GB
-    memory_check_interval: int = Field(default=30, description="ENcheckEN(EN)")
+    # translated
+    max_memory_usage: int = Field(default=4 * 1024 * 1024 * 1024, description="translateduse(translated)")  # 4GB
+    memory_check_interval: int = Field(default=30, description="translatedchecktranslated(seconds)")
     
-    # processingtimeout
-    video_processing_timeout: int = Field(default=3600, description="videoprocessingtimeout(EN)")  # 1EN
-    audio_processing_timeout: int = Field(default=1800, description="ENprocessingtimeout(EN)")  # 30EN
-    ai_processing_timeout: int = Field(default=300, description="AIprocessingtimeout(EN)")  # 5EN
+    # processtranslated
+    video_processing_timeout: int = Field(default=3600, description="videoprocesstranslated(seconds)")  # 1translated
+    audio_processing_timeout: int = Field(default=1800, description="translatedprocesstranslated(seconds)")  # 30minutes
+    ai_processing_timeout: int = Field(default=300, description="AIprocesstranslated(seconds)")  # 5minutes
     
-    # ENprocessingconfig
-    batch_size: int = Field(default=10, description="ENprocessingEN")
-    batch_timeout: int = Field(default=600, description="ENprocessingtimeout(EN)")  # 10EN
+    # translatedprocessconfig
+    batch_size: int = Field(default=10, description="translatedprocesstranslated")
+    batch_timeout: int = Field(default=600, description="translatedprocesstranslated(seconds)")  # 10minutes
     
     @validator('max_concurrent_tasks')
     def validate_max_concurrent_tasks(cls, v):
         if v <= 0 or v > 10:
-            raise ValueError('ENtaskENmustEN1EN10EN')
+            raise ValueError('translatedtasktranslatedin1translated10translated')
         return v
 
 
 class CacheConfig(BaseModel):
     """cacheconfig"""
-    # cacheEN
-    max_cache_size: int = Field(default=1024 * 1024 * 1024, description="ENcacheEN(EN)")  # 1GB
-    cache_ttl: int = Field(default=3600, description="cacheENtime(EN)")  # 1EN
+    # cachetranslated
+    max_cache_size: int = Field(default=1024 * 1024 * 1024, description="translatedcachetranslated(translated)")  # 1GB
+    cache_ttl: int = Field(default=3600, description="cachetranslated(seconds)")  # 1translated
     
-    # cacheEN
-    enable_file_cache: bool = Field(default=True, description="ENfilecache")
-    enable_result_cache: bool = Field(default=True, description="ENresultcache")
-    enable_metadata_cache: bool = Field(default=True, description="ENcache")
+    # cachetranslated
+    enable_file_cache: bool = Field(default=True, description="translatedusefilecache")
+    enable_result_cache: bool = Field(default=True, description="translatedusetranslatedcache")
+    enable_metadata_cache: bool = Field(default=True, description="translatedusetranslatedcache")
     
-    # EN
-    cache_cleanup_interval: int = Field(default=1800, description="cacheEN(EN)")  # 30EN
-    cache_cleanup_threshold: float = Field(default=0.8, description="cacheEN")  # 80%
+    # cleantranslated
+    cache_cleanup_interval: int = Field(default=1800, description="cachecleantranslated(seconds)")  # 30minutes
+    cache_cleanup_threshold: float = Field(default=0.8, description="cachecleantranslated")  # 80%
 
 
 class DatabaseConfig(BaseModel):
     """databaseconfig"""
-    # connectENconfig
-    pool_size: int = Field(default=10, description="connectEN")
-    max_overflow: int = Field(default=20, description="ENconnectEN")
-    pool_timeout: int = Field(default=30, description="connectENtimeout(EN)")
-    pool_recycle: int = Field(default=3600, description="connectENtime(EN)")
+    # connecttranslatedconfig
+    pool_size: int = Field(default=10, description="connecttranslated")
+    max_overflow: int = Field(default=20, description="translatedconnecttranslated")
+    pool_timeout: int = Field(default=30, description="connecttranslated(seconds)")
+    pool_recycle: int = Field(default=3600, description="connecttranslated(seconds)")
     
-    # EN
-    query_timeout: int = Field(default=30, description="ENtimeout(EN)")
-    enable_query_cache: bool = Field(default=True, description="ENcache")
+    # translated
+    query_timeout: int = Field(default=30, description="translated(seconds)")
+    enable_query_cache: bool = Field(default=True, description="translatedusetranslatedcache")
     
     @validator('pool_size')
     def validate_pool_size(cls, v):
         if v <= 0 or v > 100:
-            raise ValueError('connectENmustEN1EN100EN')
+            raise ValueError('connecttranslatedin1translated100translated')
         return v
 
 
 class PerformanceConfig(BaseModel):
-    """ENconfigEN"""
-    level: PerformanceLevel = Field(default=PerformanceLevel.MEDIUM, description="EN")
+    """translatedconfigtranslated"""
+    level: PerformanceLevel = Field(default=PerformanceLevel.MEDIUM, description="translated")
     
-    # ENconfig
+    # translatedconfig
     file_upload: FileUploadConfig = Field(default_factory=FileUploadConfig)
     processing: ProcessingConfig = Field(default_factory=ProcessingConfig)
     cache: CacheConfig = Field(default_factory=CacheConfig)
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     
-    # ENsettings
-    enable_monitoring: bool = Field(default=True, description="EN")
-    monitoring_interval: int = Field(default=60, description="EN(EN)")
-    log_performance_metrics: bool = Field(default=True, description="EN")
+    # translatedsettings
+    enable_monitoring: bool = Field(default=True, description="translatedusetranslatedmonitor")
+    monitoring_interval: int = Field(default=60, description="monitortranslated(seconds)")
+    log_performance_metrics: bool = Field(default=True, description="translated")
     
     def get_config_for_level(self, level: PerformanceLevel) -> 'PerformanceConfig':
-        """ENfetchconfig"""
+        """translatedfetchconfig"""
         if level == PerformanceLevel.LOW:
             return self._get_low_performance_config()
         elif level == PerformanceLevel.MEDIUM:
@@ -139,27 +139,27 @@ class PerformanceConfig(BaseModel):
             return self
     
     def _get_low_performance_config(self) -> 'PerformanceConfig':
-        """ENconfig"""
+        """translatedconfig"""
         return PerformanceConfig(
             level=PerformanceLevel.LOW,
             file_upload=FileUploadConfig(
                 chunk_size=1024 * 1024,  # 1MB
                 max_file_size=512 * 1024 * 1024,  # 512MB
                 max_concurrent_uploads=1,
-                upload_timeout=900,  # 15EN
+                upload_timeout=900,  # 15minutes
                 max_retries=2
             ),
             processing=ProcessingConfig(
                 max_concurrent_tasks=1,
                 max_concurrent_workers=2,
                 max_memory_usage=2 * 1024 * 1024 * 1024,  # 2GB
-                video_processing_timeout=1800,  # 30EN
-                audio_processing_timeout=900,  # 15EN
-                ai_processing_timeout=180  # 3EN
+                video_processing_timeout=1800,  # 30minutes
+                audio_processing_timeout=900,  # 15minutes
+                ai_processing_timeout=180  # 3minutes
             ),
             cache=CacheConfig(
                 max_cache_size=256 * 1024 * 1024,  # 256MB
-                cache_ttl=1800,  # 30EN
+                cache_ttl=1800,  # 30minutes
                 enable_file_cache=False,
                 enable_result_cache=True,
                 enable_metadata_cache=True
@@ -172,27 +172,27 @@ class PerformanceConfig(BaseModel):
         )
     
     def _get_medium_performance_config(self) -> 'PerformanceConfig':
-        """ENconfig"""
+        """translatedetc.translatedconfig"""
         return PerformanceConfig(
             level=PerformanceLevel.MEDIUM,
             file_upload=FileUploadConfig(
                 chunk_size=2 * 1024 * 1024,  # 2MB
                 max_file_size=2 * 1024 * 1024 * 1024,  # 2GB
                 max_concurrent_uploads=3,
-                upload_timeout=1800,  # 30EN
+                upload_timeout=1800,  # 30minutes
                 max_retries=3
             ),
             processing=ProcessingConfig(
                 max_concurrent_tasks=2,
                 max_concurrent_workers=4,
                 max_memory_usage=4 * 1024 * 1024 * 1024,  # 4GB
-                video_processing_timeout=3600,  # 1EN
-                audio_processing_timeout=1800,  # 30EN
-                ai_processing_timeout=300  # 5EN
+                video_processing_timeout=3600,  # 1translated
+                audio_processing_timeout=1800,  # 30minutes
+                ai_processing_timeout=300  # 5minutes
             ),
             cache=CacheConfig(
                 max_cache_size=1024 * 1024 * 1024,  # 1GB
-                cache_ttl=3600,  # 1EN
+                cache_ttl=3600,  # 1translated
                 enable_file_cache=True,
                 enable_result_cache=True,
                 enable_metadata_cache=True
@@ -205,27 +205,27 @@ class PerformanceConfig(BaseModel):
         )
     
     def _get_high_performance_config(self) -> 'PerformanceConfig':
-        """ENconfig"""
+        """translatedconfig"""
         return PerformanceConfig(
             level=PerformanceLevel.HIGH,
             file_upload=FileUploadConfig(
                 chunk_size=4 * 1024 * 1024,  # 4MB
                 max_file_size=5 * 1024 * 1024 * 1024,  # 5GB
                 max_concurrent_uploads=5,
-                upload_timeout=3600,  # 1EN
+                upload_timeout=3600,  # 1translated
                 max_retries=5
             ),
             processing=ProcessingConfig(
                 max_concurrent_tasks=4,
                 max_concurrent_workers=8,
                 max_memory_usage=8 * 1024 * 1024 * 1024,  # 8GB
-                video_processing_timeout=7200,  # 2EN
-                audio_processing_timeout=3600,  # 1EN
-                ai_processing_timeout=600  # 10EN
+                video_processing_timeout=7200,  # 2translated
+                audio_processing_timeout=3600,  # 1translated
+                ai_processing_timeout=600  # 10minutes
             ),
             cache=CacheConfig(
                 max_cache_size=2 * 1024 * 1024 * 1024,  # 2GB
-                cache_ttl=7200,  # 2EN
+                cache_ttl=7200,  # 2translated
                 enable_file_cache=True,
                 enable_result_cache=True,
                 enable_metadata_cache=True
@@ -238,7 +238,7 @@ class PerformanceConfig(BaseModel):
         )
     
     def to_dict(self) -> Dict[str, Any]:
-        """EN"""
+        """translated"""
         return {
             "level": self.level.value,
             "file_upload": self.file_upload.dict(),
@@ -251,10 +251,10 @@ class PerformanceConfig(BaseModel):
         }
 
 
-# ENconfigEN
+# translatedconfigtranslated
 performance_config = PerformanceConfig()
 
-# ENconfigEN
+# translatedconfigtranslated
 PERFORMANCE_LEVELS = {
     PerformanceLevel.LOW: performance_config._get_low_performance_config(),
     PerformanceLevel.MEDIUM: performance_config._get_medium_performance_config(),
@@ -263,12 +263,12 @@ PERFORMANCE_LEVELS = {
 
 
 def get_performance_config(level: PerformanceLevel = PerformanceLevel.MEDIUM) -> PerformanceConfig:
-    """fetchENconfig"""
+    """fetchtranslated'stranslatedconfig"""
     return PERFORMANCE_LEVELS.get(level, performance_config._get_medium_performance_config())
 
 
 def update_performance_config(config_dict: Dict[str, Any]) -> PerformanceConfig:
-    """updateENconfig"""
+    """updatetranslatedconfig"""
     global performance_config
     
     # updateconfig
@@ -276,7 +276,7 @@ def update_performance_config(config_dict: Dict[str, Any]) -> PerformanceConfig:
         level = PerformanceLevel(config_dict['level'])
         performance_config = performance_config.get_config_for_level(level)
     
-    # updateENconfig
+    # updatetranslatedconfig
     if 'file_upload' in config_dict:
         performance_config.file_upload = FileUploadConfig(**config_dict['file_upload'])
     
@@ -289,7 +289,7 @@ def update_performance_config(config_dict: Dict[str, Any]) -> PerformanceConfig:
     if 'database' in config_dict:
         performance_config.database = DatabaseConfig(**config_dict['database'])
     
-    # updateENsettings
+    # updatetranslatedsettings
     if 'enable_monitoring' in config_dict:
         performance_config.enable_monitoring = config_dict['enable_monitoring']
     

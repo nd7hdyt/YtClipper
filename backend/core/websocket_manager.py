@@ -1,6 +1,6 @@
 """
-WebSocketconnectEN
-ENWebSocketconnectEN
+WebSocketconnecttranslated
+translatedWebSocketconnectAndtranslated
 """
 
 import json
@@ -13,36 +13,36 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 class ConnectionManager:
-    """WebSocketconnectEN"""
+    """WebSocketconnecttranslated"""
     
     def __init__(self):
-        # ENallENconnect
+        # translatedconnect
         self.active_connections: Dict[str, WebSocket] = {}
-        # ENuserEN
+        # translatedusertranslated'stranslated
         self.user_subscriptions: Dict[str, Set[str]] = {}
-        # EN
+        # translated
         self.topic_subscribers: Dict[str, Set[str]] = {}
-        # sendqueueENtask
+        # translatedAndtask
         self.send_queues: Dict[str, asyncio.Queue] = {}
         self.send_tasks: Dict[str, asyncio.Task] = {}
     
     async def connect(self, websocket: WebSocket, user_id: str):
-        """ENWebSocketconnect"""
+        """translatedWebSocketconnect"""
         await websocket.accept()
         self.active_connections[user_id] = websocket
         self.user_subscriptions[user_id] = set()
         
-        # createsendqueueENtask
+        # createtranslatedAndtask
         self.send_queues[user_id] = asyncio.Queue()
         self.send_tasks[user_id] = asyncio.create_task(
             self._send_worker(user_id)
         )
         
-        logger.info(f"user {user_id} ENconnect")
+        logger.info(f"user {user_id} translatedconnect")
     
     async def disconnect(self, user_id: str):
-        """disconnectWebSocketconnect"""
-        # stopsendtask
+        """translatedWebSocketconnect"""
+        # translatedtask
         if user_id in self.send_tasks:
             task = self.send_tasks[user_id]
             task.cancel()
@@ -52,68 +52,68 @@ class ConnectionManager:
                 pass
             del self.send_tasks[user_id]
         
-        # ENqueue
+        # cleantranslated
         if user_id in self.send_queues:
             del self.send_queues[user_id]
         
-        # ENconnect
+        # cleanconnect
         if user_id in self.active_connections:
             del self.active_connections[user_id]
         if user_id in self.user_subscriptions:
             del self.user_subscriptions[user_id]
         
-        # ENallENuser
+        # fromtranslateduser
         for topic in self.topic_subscribers:
             self.topic_subscribers[topic].discard(user_id)
         
-        logger.info(f"user {user_id} ENdisconnectconnect")
+        logger.info(f"user {user_id} translatedconnect")
     
     async def _send_worker(self, user_id: str):
-        """sendEN - ENqueueENcancelENsend"""
+        """translated - fromtranslatedcanceltranslated"""
         try:
             while True:
                 message = await self.send_queues[user_id].get()
-                if message is None:  # stopEN
+                if message is None:  # translated
                     break
                 
                 if user_id in self.active_connections:
                     try:
                         await self.active_connections[user_id].send_text(json.dumps(message))
                     except Exception as e:
-                        logger.error(f"sendENuser {user_id} failed: {e}")
+                        logger.error(f"translateduser {user_id} failed: {e}")
                         break
                 
                 self.send_queues[user_id].task_done()
         except asyncio.CancelledError:
-            logger.debug(f"user {user_id} sendENcancel")
+            logger.debug(f"user {user_id} translatedcancel")
         except Exception as e:
-            logger.error(f"user {user_id} sendENexception: {e}")
+            logger.error(f"user {user_id} translated: {e}")
 
     async def send_personal_message(self, message: Dict[str, Any], user_id: str):
-        """sendEN - queueENsend"""
+        """translated translated - translated"""
         if user_id in self.send_queues:
             try:
                 await self.send_queues[user_id].put(message)
             except Exception as e:
-                logger.error(f"ENqueuefailed {user_id}: {e}")
+                logger.error(f"translatedfailed {user_id}: {e}")
                 await self.disconnect(user_id)
     
     async def broadcast(self, message: Dict[str, Any]):
-        """ENallconnect"""
+        """translatedconnect"""
         disconnected_users = []
         for user_id in list(self.active_connections.keys()):
             try:
                 await self.send_personal_message(message, user_id)
             except Exception as e:
-                logger.error(f"ENuser {user_id} failed: {e}")
+                logger.error(f"translateduser {user_id} failed: {e}")
                 disconnected_users.append(user_id)
         
-        # ENdisconnectENconnect
+        # cleantranslated'sconnect
         for user_id in disconnected_users:
             self.disconnect(user_id)
     
     async def broadcast_to_topic(self, message: Dict[str, Any], topic: str):
-        """EN"""
+        """translated'stranslated"""
         if topic not in self.topic_subscribers:
             return
         
@@ -123,15 +123,15 @@ class ConnectionManager:
                 try:
                     await self.send_personal_message(message, user_id)
                 except Exception as e:
-                    logger.error(f"sendENuser {user_id} failed: {e}")
+                    logger.error(f"translateduser {user_id} failed: {e}")
                     disconnected_users.append(user_id)
         
-        # ENdisconnectENconnect
+        # cleantranslated'sconnect
         for user_id in disconnected_users:
             self.disconnect(user_id)
     
     def subscribe_to_topic(self, user_id: str, topic: str):
-        """userEN"""
+        """usertranslated"""
         if user_id not in self.user_subscriptions:
             self.user_subscriptions[user_id] = set()
         
@@ -141,36 +141,36 @@ class ConnectionManager:
             self.topic_subscribers[topic] = set()
         
         self.topic_subscribers[topic].add(user_id)
-        logger.info(f"user {user_id} EN {topic}")
+        logger.info(f"user {user_id} translated {topic}")
     
     def unsubscribe_from_topic(self, user_id: str, topic: str):
-        """usercancelEN"""
+        """usercanceltranslated"""
         if user_id in self.user_subscriptions:
             self.user_subscriptions[user_id].discard(topic)
         
         if topic in self.topic_subscribers:
             self.topic_subscribers[topic].discard(user_id)
         
-        logger.info(f"user {user_id} cancelEN {topic}")
+        logger.info(f"user {user_id} canceltranslated {topic}")
     
     def get_connection_count(self) -> int:
-        """fetchcurrentconnectEN"""
+        """fetchtranslatedconnecttranslated"""
         return len(self.active_connections)
     
     def get_topic_subscriber_count(self, topic: str) -> int:
-        """fetchEN"""
+        """fetchtranslated"""
         return len(self.topic_subscribers.get(topic, set()))
 
-# ENconnectEN
+# translatedconnecttranslated
 manager = ConnectionManager()
 
 class WebSocketMessage:
-    """WebSocketEN"""
+    """WebSockettranslatedtooltranslated"""
     
     @staticmethod
     def create_task_update(task_id: str, status: str, progress: Optional[int] = None, 
                           message: Optional[str] = None, error: Optional[str] = None) -> Dict[str, Any]:
-        """createtaskupdateEN"""
+        """createtaskupdatetranslated"""
         return {
             "type": "task_update",
             "task_id": task_id,
@@ -184,7 +184,7 @@ class WebSocketMessage:
     @staticmethod
     def create_system_notification(notification_type: str, title: str, message: str, 
                                  level: str = "info") -> Dict[str, Any]:
-        """createsystemEN"""
+        """createSystemtranslated"""
         return {
             "type": "system_notification",
             "notification_type": notification_type,
@@ -197,7 +197,7 @@ class WebSocketMessage:
     @staticmethod
     def create_project_update(project_id: str, status: str, progress: Optional[int] = None,
                             message: Optional[str] = None) -> Dict[str, Any]:
-        """createprojectupdateEN"""
+        """createprojectupdatetranslated"""
         return {
             "type": "project_update",
             "project_id": project_id,
@@ -210,7 +210,7 @@ class WebSocketMessage:
     @staticmethod
     def create_error_notification(error_type: str, error_message: str, 
                                 details: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """createerrorEN"""
+        """createerrortranslated"""
         return {
             "type": "error_notification",
             "error_type": error_type,

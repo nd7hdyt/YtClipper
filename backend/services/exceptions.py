@@ -1,6 +1,6 @@
 """
-serviceexceptionEN
-ENexceptionprocessingEN
+servicetranslated
+translatedone'stranslatedprocesstranslated
 """
 
 import logging
@@ -11,46 +11,46 @@ logger = logging.getLogger(__name__)
 
 
 class ErrorCode(Enum):
-    """errorEN"""
-    # configENerror
+    """errortranslated"""
+    # configtranslatederror
     CONFIG_NOT_FOUND = "CONFIG_NOT_FOUND"
     CONFIG_INVALID = "CONFIG_INVALID"
     CONFIG_MISSING_REQUIRED = "CONFIG_MISSING_REQUIRED"
     
-    # fileENerror
+    # filetranslatederror
     FILE_NOT_FOUND = "FILE_NOT_FOUND"
-    FILE_PERMISSION_DENIED = "FILE_PERMISSION_DENIED"
+    FILE_PERMISSION_DtranslatedIED = "FILE_PERMISSION_DtranslatedIED"
     FILE_CORRUPTED = "FILE_CORRUPTED"
     
-    # processingENerror
+    # processtranslatederror
     PROCESSING_FAILED = "PROCESSING_FAILED"
     STEP_EXECUTION_FAILED = "STEP_EXECUTION_FAILED"
     PIPELINE_VALIDATION_FAILED = "PIPELINE_VALIDATION_FAILED"
     
-    # taskENerror
+    # tasktranslatederror
     TASK_NOT_FOUND = "TASK_NOT_FOUND"
     TASK_ALREADY_RUNNING = "TASK_ALREADY_RUNNING"
     TASK_CANCELLED = "TASK_CANCELLED"
     
-    # projectENerror
+    # projecttranslatederror
     PROJECT_NOT_FOUND = "PROJECT_NOT_FOUND"
     PROJECT_ALREADY_EXISTS = "PROJECT_ALREADY_EXISTS"
     
-    # systemENerror
+    # Systemtranslatederror
     SYSTEM_ERROR = "SYSTEM_ERROR"
     NETWORK_ERROR = "NETWORK_ERROR"
     TIMEOUT_ERROR = "TIMEOUT_ERROR"
     
-    # ENerror
-    CONCURRENT_ACCESS = "CONCURRENT_ACCESS"
+    # translatederror
+    CONCURRtranslatedT_ACCESS = "CONCURRtranslatedT_ACCESS"
     LOCK_ACQUISITION_FAILED = "LOCK_ACQUISITION_FAILED"
     
-    # Unknown error
+    # translatederror
     UNKNOWN_ERROR = "UNKNOWN_ERROR"
 
 
 class ServiceError(Exception):
-    """serviceexceptionEN"""
+    """servicetranslated"""
     
     def __init__(self, 
                  message: str,
@@ -62,13 +62,13 @@ class ServiceError(Exception):
         self.error_code = error_code
         self.details = details or {}
         self.cause = cause
-        self.timestamp = None  # ENsettings
+        self.timestamp = None  # translatedintranslatedsettings
         
-        # ENerrorlog
+        # translatederrorlogs
         self._log_error()
     
     def _log_error(self):
-        """ENerrorlog"""
+        """translatederrorlogs"""
         log_message = f"ServiceError: {self.error_code.value} - {self.message}"
         if self.details:
             log_message += f" | Details: {self.details}"
@@ -78,7 +78,7 @@ class ServiceError(Exception):
         logger.error(log_message)
     
     def to_dict(self) -> Dict[str, Any]:
-        """EN"""
+        """translatedformat"""
         return {
             "error_code": self.error_code.value,
             "message": self.message,
@@ -88,14 +88,14 @@ class ServiceError(Exception):
 
 
 class ConfigurationError(ServiceError):
-    """configENerror"""
+    """configtranslatederror"""
     
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         super().__init__(message, ErrorCode.CONFIG_INVALID, details, cause)
 
 
 class FileOperationError(ServiceError):
-    """fileENerror"""
+    """filetranslatederror"""
     
     def __init__(self, message: str, file_path: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if file_path:
@@ -105,7 +105,7 @@ class FileOperationError(ServiceError):
 
 
 class ProcessingError(ServiceError):
-    """processingENerror"""
+    """processtranslatederror"""
     
     def __init__(self, message: str, step_name: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if step_name:
@@ -115,7 +115,7 @@ class ProcessingError(ServiceError):
 
 
 class TaskError(ServiceError):
-    """taskENerror"""
+    """tasktranslatederror"""
     
     def __init__(self, message: str, task_id: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if task_id:
@@ -125,7 +125,7 @@ class TaskError(ServiceError):
 
 
 class ProjectError(ServiceError):
-    """projectENerror"""
+    """projecttranslatederror"""
     
     def __init__(self, message: str, project_id: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if project_id:
@@ -135,39 +135,39 @@ class ProjectError(ServiceError):
 
 
 class ConcurrentError(ServiceError):
-    """ENerror"""
+    """translatederror"""
     
     def __init__(self, message: str, resource: Optional[str] = None, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         if resource:
             details = details or {}
             details["resource"] = resource
-        super().__init__(message, ErrorCode.CONCURRENT_ACCESS, details, cause)
+        super().__init__(message, ErrorCode.CONCURRtranslatedT_ACCESS, details, cause)
 
 
 class SystemError(ServiceError):
-    """systemENerror"""
+    """Systemtranslatederror"""
     
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None, cause: Optional[Exception] = None):
         super().__init__(message, ErrorCode.SYSTEM_ERROR, details, cause)
 
 
 def handle_service_error(func):
-    """serviceerrorprocessingEN"""
+    """serviceerrorprocesstranslated"""
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except ServiceError:
-            # ENServiceError
+            # translatedServiceError
             raise
         except Exception as e:
-            # ENexceptionENServiceError
-            logger.error(f"ENprocessingENexception: {e}")
-            raise SystemError(f"systemerror: {str(e)}", cause=e)
+            # translatedPackagetranslatedServiceError
+            logger.error(f"translatedprocess'stranslated: {e}")
+            raise SystemError(f"Systemerror: {str(e)}", cause=e)
     return wrapper
 
 
 def create_error_response(error: ServiceError) -> Dict[str, Any]:
-    """createerrorresponse"""
+    """createerrortranslated"""
     return {
         "success": False,
         "error": error.to_dict()
@@ -175,5 +175,5 @@ def create_error_response(error: ServiceError) -> Dict[str, Any]:
 
 
 def is_service_error(exception: Exception) -> bool:
-    """checkENserviceexception"""
+    """checkIstranslatedservicetranslated"""
     return isinstance(exception, ServiceError) 

@@ -1,103 +1,103 @@
-# 🎤 EN
+# 🎤 speech recognition
 
-## 📋 EN
+## 📋 overview
 
-EN，EN，EN：
+，speech recognition，improve：
 
-1. **EN** - EN，ENmockEN
-2. **SupportEN** - SupportChinese、English、EN、ENLanguage
-3. **SupportENAPIEN** - SupportENWhisper、OpenAI API、Azure Speech ServicesEN
+1. **testsubtitles** - failedfailed，usemock
+2. **support** - supportChinese、English、Japanese、
+3. **supportAPIintegrate** - supportlocalWhisper、OpenAI API、Azure Speech Services
 
-## 🔧 EN
+## 🔧 improve
 
-### 1. EN
+### 1. testsubtitles
 
-**EN：**
-- EN，EN
-- EN，EN
-- EN
+**issue：**
+- speech recognition failed，generatetestsubtitlesfile
+- testsubtitles，impact
+- succeeded
 
-**EN：**
-- EN
-- EN
-- EN
+**nowimprove：**
+- testsubtitlesgenerate
+- speech recognition failed
+- production
 
 ```python
-# EN：ENNoneEN
+# ：returnNonetestsubtitles
 result = generate_subtitle_for_video(video_path)
 if result is None:
-    # EN...
+    # generatetestsubtitles...
 
-# EN：EN
+# now：failed
 try:
     result = generate_subtitle_for_video(video_path)
 except SpeechRecognitionError as e:
-    # EN
-    logger.error(f"EN: {e}")
+    # speech recognition failed
+    logger.error(f"speech recognition failed: {e}")
     raise
 ```
 
-### 2. ENSupport
+### 2. support
 
-**SupportENLanguage：**
-- Chinese（EN/EN）
-- English（EN/EN）
-- EN
-- EN
-- EN
-- EN
-- EN
-- EN
-- EN
-- EN
-- EN
-- EN
+**support：**
+- Chinese（/）
+- English（/）
+- Japanese
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+- auto-detect
 
-**EN：**
+**use：**
 ```python
 from shared.utils.speech_recognizer import generate_subtitle_for_video, LanguageCode
 
-# ENLanguage
+# 
 result = generate_subtitle_for_video(
     video_path, 
     language=LanguageCode.CHINESE_SIMPLIFIED
 )
 
-# ENLanguage
+# auto-detect
 result = generate_subtitle_for_video(
     video_path, 
     language=LanguageCode.AUTO
 )
 ```
 
-### 3. EN
+### 3. speech recognitionservice
 
-**SupportEN：**
+**supportservice：**
 
-| EN | EN | EN |
+| service | features | config |
 |------|------|----------|
-| ENWhisper | EN、EN、EN | ENwhisperENffmpeg |
-| OpenAI API | EN、SupportENLanguage | OpenAI APIEN |
-| Azure Speech | EN、EN | AzureENAPIEN |
-| Google Speech | EN、SupportEN | Google CloudEN |
-| EN | ChineseEN | ENAPIEN |
+| localWhisper | free、、 | installwhisperffmpeg |
+| OpenAI API | 、support | OpenAI APIkey |
+| Azure Speech | 、 | AzureAPIkey |
+| Google Speech | 、support | Google Cloud |
+|  | Chinese | APIkey |
 
-**EN：**
-1. ENWhisper（EN）
+**select：**
+1. localWhisper（recommend）
 2. OpenAI API
 3. Azure Speech Services
 4. Google Speech-to-Text
-5. EN
+5. Alibaba speech recognition
 
-## 🚀 ENAPIEN
+## 🚀 APIAPI
 
-### EN
+### speech recognitionstatus
 
 ```bash
 GET /api/v1/speech-recognition/status
 ```
 
-EN：
+return：
 ```json
 {
   "available_methods": {
@@ -118,13 +118,13 @@ EN：
 }
 ```
 
-### EN
+### configtest
 
 ```bash
 POST /api/v1/speech-recognition/test
 ```
 
-EN：
+：
 ```json
 {
   "method": "whisper_local",
@@ -134,30 +134,30 @@ EN：
 }
 ```
 
-### EN
+### install
 
 ```bash
 GET /api/v1/speech-recognition/install-guide?method=whisper_local
 ```
 
-## 📝 EN
+## 📝 config
 
-### EN
+### env varconfig
 
 ```bash
-# EN
+# speech recognitionmethod
 export SPEECH_RECOGNITION_METHOD="whisper_local"
 
-# LanguageEN
+# settings
 export SPEECH_RECOGNITION_LANGUAGE="zh"
 
-# WhisperEN
+# Whispermodel
 export SPEECH_RECOGNITION_MODEL="base"
 
-# EN
+# 
 export SPEECH_RECOGNITION_TIMEOUT="300"
 
-# APIEN（EN）
+# APIkey（selectservice）
 export OPENAI_API_KEY="your-openai-key"
 export AZURE_SPEECH_KEY="your-azure-key"
 export AZURE_SPEECH_REGION="your-region"
@@ -167,9 +167,9 @@ export ALIYUN_ACCESS_KEY_SECRET="your-secret-key"
 export ALIYUN_SPEECH_APP_KEY="your-app-key"
 ```
 
-### EN
+### configfile
 
-EN `data/settings.json` EN：
+ `data/settings.json` canconfig：
 
 ```json
 {
@@ -180,9 +180,9 @@ EN `data/settings.json` EN：
 }
 ```
 
-## 🔍 EN
+## 🔍 error handling
 
-### EN
+### 
 
 ```python
 from shared.utils.speech_recognizer import SpeechRecognitionError
@@ -190,46 +190,46 @@ from shared.utils.speech_recognizer import SpeechRecognitionError
 try:
     result = generate_subtitle_for_video(video_path)
 except SpeechRecognitionError as e:
-    # EN
-    logger.error(f"EN: {e}")
-    # EN
+    # speech recognitionerror
+    logger.error(f"speech recognition failed: {e}")
+    # canselectusemethod
 ```
 
-### EN
+### error
 
-1. **EN** - EN
-2. **EN** - EN
-3. **EN** - EN
-4. **EN** - EN
-5. **EN** - EN
+1. **serviceavailable** - speech recognitionservicenot installedconfig
+2. **file** - fileaccess
+3. **** - speech recognition
+4. **failed** - speech recognitionservicefailed
+5. **configerror** - config
 
-## 📊 Performance
+## 📊 performance
 
-### WhisperEN
+### Whispermodel selection
 
-| EN | EN | EN | EN | EN |
+| model |  |  |  | use cases |
 |------|------|------|--------|----------|
-| tiny | 39MB | ⭐⭐⭐⭐⭐ | ⭐⭐ | EN |
-| base | 74MB | ⭐⭐⭐⭐ | ⭐⭐⭐ | EN |
-| small | 244MB | ⭐⭐⭐ | ⭐⭐⭐⭐ | EN |
-| medium | 769MB | ⭐⭐ | ⭐⭐⭐⭐⭐ | EN |
-| large | 1550MB | ⭐ | ⭐⭐⭐⭐⭐ | EN |
+| tiny | 39MB | ⭐⭐⭐⭐⭐ | ⭐⭐ | test |
+| base | 74MB | ⭐⭐⭐⭐ | ⭐⭐⭐ | daily use |
+| small | 244MB | ⭐⭐⭐ | ⭐⭐⭐⭐ |  |
+| medium | 769MB | ⭐⭐ | ⭐⭐⭐⭐⭐ |  |
+| large | 1550MB | ⭐ | ⭐⭐⭐⭐⭐ |  |
 
-### EN
+### settings
 
-- EN（<5EN）：60EN
-- EN（5-30EN）：300EN
-- EN（>30EN）：600EN
+- （<5minutes）：60
+- medium（5-30minutes）：300
+- （>30minutes）：600
 
-## 🛠️ EN
+## 🛠️ install
 
-### ENWhisperEN
+### localWhisperinstall
 
 ```bash
-# ENPythonEN
+# installPythondependencies
 pip install openai-whisper
 
-# EN
+# installdependencies
 # Ubuntu/Debian
 sudo apt update && sudo apt install ffmpeg
 
@@ -237,13 +237,13 @@ sudo apt update && sudo apt install ffmpeg
 brew install ffmpeg
 
 # Windows
-# ENffmpegENPATH
+# downloadffmpegPATH
 
-# EN
+# verifyinstall
 whisper --help
 ```
 
-### APIEN
+### APIserviceconfig
 
 #### OpenAI API
 ```bash
@@ -261,23 +261,23 @@ export AZURE_SPEECH_REGION="your-region"
 export GOOGLE_APPLICATION_CREDENTIALS="path/to/credentials.json"
 ```
 
-#### EN
+#### Alibaba speech recognition
 ```bash
 export ALIYUN_ACCESS_KEY_ID="your-access-key"
 export ALIYUN_ACCESS_KEY_SECRET="your-secret-key"
 export ALIYUN_SPEECH_APP_KEY="your-app-key"
 ```
 
-## 🔄 EN
+## 🔄 
 
-### EN
+### version
 
-1. **EN**
+1. **updateimport**
 ```python
-# EN
+# version
 from shared.utils.speech_recognizer import generate_subtitle_for_video
 
-# EN
+# version
 from shared.utils.speech_recognizer import (
     generate_subtitle_for_video, 
     SpeechRecognitionError,
@@ -285,105 +285,105 @@ from shared.utils.speech_recognizer import (
 )
 ```
 
-2. **EN**
+2. **updateerror handling**
 ```python
-# EN
+# version
 result = generate_subtitle_for_video(video_path)
 if result is None:
-    # EN
+    # failed
 
-# EN
+# version
 try:
     result = generate_subtitle_for_video(video_path)
 except SpeechRecognitionError as e:
-    # EN
+    # failed
 ```
 
-3. **EN**
+3. **testsubtitles**
 ```python
-# EN
+# 
 if method == "simple":
     return recognizer.generate_subtitle_simple(video_path, output_path)
 ```
 
-## 📈 EN
+## 📈 monitor
 
-### EN
+### 
 
 ```python
 import logging
 logger = logging.getLogger(__name__)
 
-# EN
-logger.info(f"EN: {video_path}")
+# speech recognition
+logger.info(f"speech recognition: {video_path}")
 
-# EN
-logger.info(f"EN: {output_path}")
+# speech recognitionsucceeded
+logger.info(f"speech recognitionsucceeded: {output_path}")
 
-# EN
-logger.error(f"EN: {error}")
+# speech recognition failed
+logger.error(f"speech recognition failed: {error}")
 ```
 
-### EN
+### perf monitor
 
-EN：
-- EN
-- EN
-- EN
-- EN
+monitor：
+- speech recognitionsucceeded
+- 
+- error
+- serviceuse
 
-## 🎯 EN
+## 🎯 best practices
 
-1. **EN**
-   - EN `small` EN `medium` EN
-   - EN
-   - EN
+1. **production**
+   - use `small`  `medium` model
+   - settings
+   - configerror
 
-2. **ENLanguageEN**
-   - ENLanguageEN
-   - ENLanguageEN，ENLanguageEN
-   - EN
+2. ****
+   - prefer
+   - ，
+   - usespeech recognitionservice
 
-3. **EN**
-   - EN
-   - ProvidesEN
-   - EN
+3. **error handling**
+   - error handling
+   - error
+   - 
 
-4. **Performance**
-   - EN
-   - ENGPUEN（EN）
-   - EN
+4. **performance**
+   - selectmodel
+   - useGPU（available）
+   - 
 
-## 🔮 EN
+## 🔮 
 
-1. **ENAPIEN**
-   - EN
-   - EN
-   - EN
+1. **APIservice**
+   - speech recognition
+   - speech recognition
+   - speech recognition
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. ****
+   - 
+   - 
+   - 
 
-3. **Performance**
-   - EN
-   - EN
-   - EN
+3. **performance**
+   - 
+   - cache
+   - 
 
-## 📞 ENSupport
+## 📞 tech support
 
-EN，EN：
+if you encounter issues，：
 
-1. EN
-2. EN
-3. EN
-4. ENAPIEN
+1. checkfileerror
+2. verifyspeech recognitionserviceinstall
+3. confirmconfigfile
+4. viewAPIdocsinstall
 
-ENReference：
-- [WhisperEN](https://github.com/openai/whisper)
-- [OpenAI APIEN](https://platform.openai.com/docs/api-reference)
-- [Azure Speech ServicesEN](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/)
-- [Google Speech-to-TextEN](https://cloud.google.com/speech-to-text/docs)
-- [EN](https://help.aliyun.com/product/30413.html)
+：
+- [Whisperdocs](https://github.com/openai/whisper)
+- [OpenAI APIdocs](https://platform.openai.com/docs/api-reference)
+- [Azure Speech Servicesdocs](https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/)
+- [Google Speech-to-Textdocs](https://cloud.google.com/speech-to-text/docs)
+- [Alibaba speech recognitiondocs](https://help.aliyun.com/product/30413.html)
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-ENAllProjectEN
+translateddatabasetranslated'stranslatedprojecttranslated
 """
 import sys
 import os
 from pathlib import Path
 
-# ENProjectENPythonEN
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
@@ -18,38 +18,38 @@ from backend.models.task import Task
 from sqlalchemy.orm import Session
 
 def clean_database():
-    """ENAllProjectEN"""
-    print("🧹 EN...")
+    """translateddatabasetranslated'stranslatedprojecttranslated"""
+    print("🧹 translatedcleandatabase...")
     
-    # EN
+    # fetchdatabasetranslated
     db = next(get_db())
     
     try:
-        # ENAllEN（ENDependenciesEN）
-        print("EN...")
+        # deletetranslated（bydependenciestranslated）
+        print("deletetasktranslated...")
         deleted_tasks = db.query(Task).delete()
-        print(f"✅ EN {deleted_tasks} EN")
+        print(f"✅ deletetranslated {deleted_tasks}  task")
         
-        print("EN...")
+        print("deletecollectiontranslated...")
         deleted_collections = db.query(Collection).delete()
-        print(f"✅ EN {deleted_collections} EN")
+        print(f"✅ deletetranslated {deleted_collections}  collection")
         
-        print("EN...")
+        print("deletecliptranslated...")
         deleted_clips = db.query(Clip).delete()
-        print(f"✅ EN {deleted_clips} EN")
+        print(f"✅ deletetranslated {deleted_clips}  clip")
         
-        print("ENProjectEN...")
+        print("deleteprojecttranslated...")
         deleted_projects = db.query(Project).delete()
-        print(f"✅ EN {deleted_projects} ENProject")
+        print(f"✅ deletetranslated {deleted_projects}  project")
         
-        # EN
+        # translated
         db.commit()
         
-        print("\n🎉 ENCompleted!")
-        print("EN，ENProjectEN")
+        print("\n🎉 databasecleantranslated!")
+        print("translatedindatabaseIstranslated's，translatedprojecttranslated")
         
     except Exception as e:
-        print(f"❌ ENError: {e}")
+        print(f"❌ cleandatabasetranslatederror: {e}")
         db.rollback()
     finally:
         db.close()

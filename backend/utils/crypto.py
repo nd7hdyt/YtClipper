@@ -1,6 +1,6 @@
 """
-EN
-ENcookies
+translatedtool
+usetranslatedinfoifcookies
 """
 
 import os
@@ -12,15 +12,15 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# fetchEN
+# fetchtranslatedkey
 def get_encryption_key():
-    """fetchEN"""
-    # ENfetchEN，ifENthengenerateEN
-    key = os.getenv('ENCRYPTION_KEY')
+    """fetchtranslatedkey"""
+    # fromtranslatedfetchkey，iftranslatedone 
+    key = os.getenv('translatedCRYPTION_KEY')
     if not key:
-        # generateEN
+        # translatedkey
         key = Fernet.generate_key()
-        logger.warning("ENCRYPTION_KEYENsettings，useEN。pleasesettingsEN。")
+        logger.warning("translatedCRYPTION_KEYtranslatedsettings，usetranslatedkey。translatedsettingstranslated。")
     
     if isinstance(key, str):
         key = key.encode()
@@ -28,18 +28,18 @@ def get_encryption_key():
     return key
 
 def encrypt_data(data: str) -> str:
-    """EN"""
+    """translated"""
     try:
         key = get_encryption_key()
         f = Fernet(key)
         encrypted_data = f.encrypt(data.encode())
         return base64.b64encode(encrypted_data).decode()
     except Exception as e:
-        logger.error(f"ENfailed: {str(e)}")
+        logger.error(f"translatedfailed: {str(e)}")
         raise
 
 def decrypt_data(encrypted_data: str) -> str:
-    """EN"""
+    """translated"""
     try:
         key = get_encryption_key()
         f = Fernet(key)
@@ -47,6 +47,6 @@ def decrypt_data(encrypted_data: str) -> str:
         decrypted_data = f.decrypt(decoded_data)
         return decrypted_data.decode()
     except Exception as e:
-        logger.error(f"ENfailed: {str(e)}")
+        logger.error(f"translatedfailed: {str(e)}")
         raise
 

@@ -1,183 +1,183 @@
-# ENUploadEN v2.0 EN
+#  v2.0 
 
-## EN
+## overview
 
-Based on [biliup-rs](https://github.com/biliup/biliup-rs) EN，ENBENUploadEN，SupportENUploadEN、EN。
+based on [biliup-rs](https://github.com/biliup/biliup-rs) project，B，support、selecterror handling。
 
-## EN
+## features
 
-### 🚀 EN
-- **ENUploadEN**: Support bda2、qn、alia、bldsa、tx、txa、bda EN
-- **EN**: ENUploadEN
-- **ENUpload**: SupportENUpload，EN
-- **EN**: EN
-- **EN**: ENUploadEN
+### 🚀 
+- ****: support bda2、qn、alia、bldsa、tx、txa、bda 
+- **select**: select
+- ****: supportfile，
+- **error handling**: error
+- **progress**: progressstatusupdate
 
-### 🔧 EN
-- **Based on biliup-rs**: EN
-- **EN**: ENUploadEN
-- **CookieEN**: EN，SupportEN
-- **APIEN**: EN
+### 🔧 improve
+- **based on biliup-rs**: 
+- ****: 
+- **Cookie**: fix，supportkeyformat
+- **API**: 
 
-## EN
+## 
 
-### EN
+### file
 ```
 backend/services/
-├── bilibili_service.py          # EN（EN）
-├── bilibili_upload_v2.py        # ENv2.0UploadEN
-└── bilibili_service_backup.py   # EN
+├── bilibili_service.py          # service（update）
+├── bilibili_upload_v2.py        # v2.0
+└── bilibili_service_backup.py   # file
 ```
 
-### EN
-- `BilibiliUploaderV2`: ENUploadEN，ENUploadEN
-- `BilibiliUploadServiceV2`: UploadEN，ENUploadEN
+### 
+- `BilibiliUploaderV2`: ，
+- `BilibiliUploadServiceV2`: service，status
 
-## EN
+## usestep
 
-### 1. ENCookie
+### 1. importCookie
 
-EN，ENBENCookie：
+update，needimportBCookie：
 
-1. **ENCookie**:
-   - ENBEN
-   - EN (F12)
-   - ENNetworkEN
-   - ENCookieEN
+1. **fetchCookie**:
+   - sign inB
+   - open devtools (F12)
+   - Networktab
+   - Cookie
 
-2. **ENCookie**:
-   - EN: `http://localhost:3000/upload-status`
-   - EN"EN"ENBEN
-   - EN"Account Management"EN"ENAccount"
-   - EN"CookieEN"EN
-   - ENCookieEN
+2. **importCookie**:
+   - accessstatuspage: `http://localhost:3000/upload-status`
+   - click"status"buttonB
+   - "account"tabclick"add account"
+   - select"Cookiesign in"
+   - Cookie
 
-### 2. ENUploadEN
+### 2. test
 
-1. **ENAccountEN**:
-   - ENAccountEN"EN"
-   - ENCookieEN
+1. **checkaccountstatus**:
+   - accountstatus""
+   - checkCookie
 
-2. **EN**:
-   - EN
-   - EN"ENBEN"EN
-   - EN、EN、EN
-   - ENAccountEN
+2. **create**:
+   - projectselectclip
+   - click"B"button
+   - 、、
+   - selectaccount
 
-3. **ENUploadEN**:
-   - EN
-   - ENUploadEN
+3. **monitorprogress**:
+   - statuspageviewprogress
+   - monitorstatuserror
 
-## EN
+## 
 
-### UploadEN
+### 
 ```
-1. EN → 2. ENUploadENID → 3. EN
+1. verifysign instatus → 2. fetchID → 3. select
     ↓
-4. ENUpload → 5. EN → 6. EN → 7. ENBVEN
+4.  → 5.  → 6.  → 7. returnBV
 ```
 
-### UploadEN
-| EN | ProvidesEN | EN |
+### 
+|  | provider | features |
 |------|--------|------|
-| bda2 | EN | EN，EN |
-| qn | EN | EN |
-| alia | EN | EN |
-| bldsa | BEN | EN |
-| tx | EN | EN |
-| txa | EN | EN |
-| bda | EN | EN |
+| bda2 |  | default， |
+| qn |  |  |
+| alia |  | access |
+| bldsa | B |  |
+| tx |  |  |
+| txa |  |  |
+| bda |  |  |
 
-### EN
-- **EN**: EN，EN3EN
-- **EN**: EN
-- **EN**: EN
-- **APIEN**: EN
+### error handling
+- **error**: ，3
+- **error**: sign in
+- **fileerror**: checkfileformat
+- **APIerror**: error
 
-## Configuration
+## config notes
 
-### EN
+### env var
 ```bash
-# EN（EN）
+# key（generate）
 export ENCRYPTION_KEY="BekpMhcsOolyI_n9Hz9NxzLqMgll3vfa9qJYPOxtQXM="
 ```
 
-### UploadEN
+### 
 ```python
 metadata = {
-    'title': 'EN',           # EN80EN
-    'description': 'EN',     # EN2000EN
-    'tags': ['EN1', 'EN2'],   # EN
-    'partition_id': 3             # ENID
+    'title': '',           # max80
+    'description': '',     # max2000
+    'tags': ['1', '2'],   # 
+    'partition_id': 3             # ID
 }
 ```
 
-## Troubleshooting
+## troubleshooting
 
 ### FAQ
 
-1. **CookieEN**
-   - EN: EN
-   - EN: ENCookie
+1. **Cookiefailed**
+   - reason: usekey
+   - solve: importCookie
 
-2. **UploadEN**
-   - EN: ENAPIEN
-   - EN: EN，EN
+2. **failed**
+   - reason: issueAPIlimit
+   - solve: check network connection，
 
-3. **EN**
-   - EN: ENBEN8GBEN
-   - EN: EN
+3. **file**
+   - reason: B8GBlimit
+   - solve: file
 
-4. **AccountEN**
-   - EN: CookieEN
-   - EN: ENCookie
+4. **accountstatus**
+   - reason: Cookie
+   - solve: sign infetchCookie
 
-### EN
+### method
 
-1. **EN**:
+1. **view**:
    ```bash
    tail -f logs/celery.log
    ```
 
-2. **EN**:
+2. **checkdatabase**:
    ```sql
    SELECT * FROM bilibili_upload_records ORDER BY created_at DESC LIMIT 5;
    ```
 
-3. **ENAPI**:
+3. **testAPI**:
    ```bash
    curl -s http://localhost:8000/api/v1/upload/records | jq .
    ```
 
-## Performance
+## performance
 
-### UploadEN
-- **ENUpload**: SupportENUpload
-- **EN**: EN
-- **EN**: EN
+### 
+- ****: support
+- **select**: select
+- ****: failed
 
-### EN
-- **EN**: EN
-- **EN**: ENUploadEN
-- **EN**: ENUpload
+### 
+- **error**: 
+- **status**: updatestatus
+- ****: file
 
-## EN
+## changelog
 
 ### v2.0.0 (2025-09-11)
-- ✅ Based on biliup-rs ENUploadEN
-- ✅ SupportENUploadEN
-- ✅ ENCookieEN
-- ✅ EN
-- ✅ ENUploadEN
+- ✅ based on biliup-rs 
+- ✅ supportselect
+- ✅ fixCookie
+- ✅ error handling
+- ✅ progress
 
-### EN
-- 🔄 SupportENPEN
-- 🔄 ENUploadEN
-- 🔄 EN
-- 🔄 SupportEN
+### 
+- 🔄 supportP
+- 🔄 
+- 🔄 
+- 🔄 support
 
-## EN
+## 
 
-- [biliup-rs EN](https://github.com/biliup/biliup-rs)
-- [BENAPIEN](https://github.com/biliup/biliup-rs)
-- [ENUsage Guide](./UPLOAD_STATUS_PAGE_GUIDE.md)
+- [biliup-rs project](https://github.com/biliup/biliup-rs)
+- [BAPIdocs](https://github.com/biliup/biliup-rs)
+- [statuspageuse](./UPLOAD_STATUS_PAGE_GUIDE.md)

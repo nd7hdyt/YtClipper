@@ -1,6 +1,6 @@
 """
-progressENservice
-ENRedisEN
+progresstranslatedservice
+translatedRedistranslatedAndtranslated
 """
 
 import json
@@ -13,7 +13,7 @@ from ..core.config import get_redis_url
 logger = logging.getLogger(__name__)
 
 class ProgressSnapshotService:
-    """progressENservice"""
+    """progresstranslatedservice"""
     
     def __init__(self):
         self.redis_url = get_redis_url()
@@ -29,33 +29,33 @@ class ProgressSnapshotService:
             self.redis_client = redis.from_url(self.redis_url, decode_responses=True)
             await self.redis_client.ping()
             self._connected = True
-            logger.info("progressENserviceENconnectRedis")
+            logger.info("progresstranslatedservicetranslatedconnectRedis")
         except Exception as e:
             logger.error(f"connectRedisfailed: {e}")
             self._connected = False
     
     async def disconnect(self):
-        """disconnectRedisconnect"""
+        """translatedRedisconnect"""
         if self.redis_client:
             await self.redis_client.aclose()
             self.redis_client = None
         self._connected = False
-        logger.info("progressENserviceENdisconnectRedis")
+        logger.info("progresstranslatedservicetranslatedRedis")
     
     def _get_snapshot_key(self, channel: str) -> str:
-        """fetchEN"""
+        """fetchtranslated"""
         return f"progress:last:{channel}"
     
     async def save_snapshot(self, channel: str, payload: dict) -> bool:
         """
-        saveprogressEN
+        translatedprogresstranslated
         
         Args:
-            channel: EN
-            payload: EN
+            channel: translated
+            payload: translated
             
         Returns:
-            ENsavesucceeded
+            Istranslatedsucceeded
         """
         if not self._connected:
             await self.connect()
@@ -66,34 +66,34 @@ class ProgressSnapshotService:
         try:
             snapshot_key = self._get_snapshot_key(channel)
             
-            # ENtimeEN
+            # addtranslated
             payload_with_ts = {
                 **payload,
                 "snapshot_timestamp": datetime.utcnow().isoformat()
             }
             
-            # saveENRedis Hash
+            # translatedRedis Hash
             await self.redis_client.hset(snapshot_key, mapping=payload_with_ts)
             
-            # settingsENtime（24EN）
+            # settingstranslated（24translated）
             await self.redis_client.expire(snapshot_key, 86400)
             
-            logger.debug(f"ENsave: {channel} -> {snapshot_key}")
+            logger.debug(f"translated: {channel} -> {snapshot_key}")
             return True
             
         except Exception as e:
-            logger.error(f"saveENfailed: {e}")
+            logger.error(f"translatedfailed: {e}")
             return False
     
     async def get_snapshot(self, channel: str) -> Optional[dict]:
         """
-        fetchprogressEN
+        fetchprogresstranslated
         
         Args:
-            channel: EN
+            channel: translated
             
         Returns:
-            ENNone
+            translatedorNone
         """
         if not self._connected:
             await self.connect()
@@ -106,25 +106,25 @@ class ProgressSnapshotService:
             snapshot_data = await self.redis_client.hgetall(snapshot_key)
             
             if snapshot_data:
-                logger.debug(f"ENfetch: {channel} -> {snapshot_data}")
+                logger.debug(f"translatedfetch: {channel} -> {snapshot_data}")
                 return snapshot_data
             else:
-                logger.debug(f"ENdoes not exist: {channel}")
+                logger.debug(f"translatednot found: {channel}")
                 return None
                 
         except Exception as e:
-            logger.error(f"fetchENfailed: {e}")
+            logger.error(f"fetchtranslatedfailed: {e}")
             return None
     
     async def delete_snapshot(self, channel: str) -> bool:
         """
-        deleteprogressEN
+        deleteprogresstranslated
         
         Args:
-            channel: EN
+            channel: translated
             
         Returns:
-            ENdeletesucceeded
+            Istranslateddeletesucceeded
         """
         if not self._connected:
             await self.connect()
@@ -137,22 +137,22 @@ class ProgressSnapshotService:
             result = await self.redis_client.delete(snapshot_key)
             
             if result:
-                logger.debug(f"ENdeleted: {channel}")
+                logger.debug(f"translateddelete: {channel}")
             else:
-                logger.debug(f"ENdoes not exist，ENdelete: {channel}")
+                logger.debug(f"translatednot found，translateddelete: {channel}")
             
             return bool(result)
             
         except Exception as e:
-            logger.error(f"deleteENfailed: {e}")
+            logger.error(f"deletetranslatedfailed: {e}")
             return False
     
     async def cleanup_expired_snapshots(self) -> int:
         """
-        EN
+        cleantranslated'stranslated
         
         Returns:
-            EN
+            clean'stranslated
         """
         if not self._connected:
             await self.connect()
@@ -161,27 +161,27 @@ class ProgressSnapshotService:
             return 0
         
         try:
-            # ENallEN
+            # translated
             pattern = "progress:last:*"
             keys = await self.redis_client.keys(pattern)
             
             cleaned_count = 0
             for key in keys:
-                # checkEN
+                # checkIstranslated
                 ttl = await self.redis_client.ttl(key)
-                if ttl == -1:  # ENsettingsENtime
-                    await self.redis_client.expire(key, 86400)  # settings24EN
-                elif ttl == -2:  # ENdoes not exist
+                if ttl == -1:  # translatedsettingstranslated
+                    await self.redis_client.expire(key, 86400)  # settings24translated
+                elif ttl == -2:  # translatednot found
                     cleaned_count += 1
             
             if cleaned_count > 0:
-                logger.info(f"EN {cleaned_count} EN")
+                logger.info(f"cleantranslated {cleaned_count}  translated")
             
             return cleaned_count
             
         except Exception as e:
-            logger.error(f"ENfailed: {e}")
+            logger.error(f"cleantranslatedfailed: {e}")
             return 0
 
-# ENserviceEN
+# translatedservicetranslated
 snapshot_service = ProgressSnapshotService()

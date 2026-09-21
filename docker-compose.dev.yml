@@ -1,5 +1,5 @@
 services:
-  # RedisService
+  # Redisservice
   redis:
     image: redis:7-alpine
     container_name: autoclip-redis-dev
@@ -10,7 +10,7 @@ services:
       - redis_dev_data:/data
     command: redis-server --appendonly yes
 
-  # ENService（EN）
+  # translateduseservice（translated）
   autoclip-dev:
     build:
       context: .
@@ -18,23 +18,23 @@ services:
     container_name: autoclip-app-dev
     restart: unless-stopped
     ports:
-      - "8000:8000"  # ENAPI
-      - "3000:3000"  # EN
+      - "8000:8000"  # backendAPI
+      - "3000:3000"  # frontendInterface
     volumes:
       - ./backend:/app/backend
       - ./frontend:/app/frontend
       - ./data:/app/data
       - ./logs:/app/logs
       - ./uploads:/app/uploads
-      - /app/venv  # ENEnvironment
+      - /app/venv  # translated
     environment:
       - REDIS_URL=redis://redis:6379/0
       - DATABASE_URL=sqlite:///./data/autoclip.db
       - ENVIRONMENT=development
       - DEBUG=true
       - LOG_LEVEL=DEBUG
-      # LLM ConfigEN .env / shell EN（compose ENAutoENProjectEN .env EN）。
-      # EN DOCKER.md EN API_DASHSCOPE_API_KEY EN。
+      # LLM configfromtranslated .env / shell translated（compose translatedprojecttranslateddirectory's .env translated）。
+      # translatedthisonetranslated DOCKER.md translatedusertranslated's API_DASHSCOPE_API_KEY translated。
       - LLM_PROVIDER=${LLM_PROVIDER:-dashscope}
       - API_MODEL_NAME=${API_MODEL_NAME:-qwen-plus}
       - API_DASHSCOPE_API_KEY=${API_DASHSCOPE_API_KEY:-}
@@ -56,7 +56,7 @@ services:
         wait
       "
 
-  # Celery WorkerService（EN）
+  # Celery Workerservice（translated）
   celery-worker-dev:
     build:
       context: .
@@ -75,8 +75,8 @@ services:
       - ENVIRONMENT=development
       - DEBUG=true
       - LOG_LEVEL=DEBUG
-      # LLM ConfigEN .env / shell EN（compose ENAutoENProjectEN .env EN）。
-      # EN DOCKER.md EN API_DASHSCOPE_API_KEY EN。
+      # LLM configfromtranslated .env / shell translated（compose translatedprojecttranslateddirectory's .env translated）。
+      # translatedthisonetranslated DOCKER.md translatedusertranslated's API_DASHSCOPE_API_KEY translated。
       - LLM_PROVIDER=${LLM_PROVIDER:-dashscope}
       - API_MODEL_NAME=${API_MODEL_NAME:-qwen-plus}
       - API_DASHSCOPE_API_KEY=${API_DASHSCOPE_API_KEY:-}

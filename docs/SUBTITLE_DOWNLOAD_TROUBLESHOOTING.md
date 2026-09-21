@@ -1,74 +1,74 @@
-# 🎬 ENTroubleshootingEN
+# 🎬 subtitlesdownloadtroubleshooting
 
-## 📋 EN
+## 📋 overview
 
-ENBENYouTubeEN。EN，EN：
+solveBYouTubesubtitlesdownloadfailedissue。subtitlesdownloadfailedissue，：
 
-1. **BEN**
-2. **YouTubeEN**
-3. **EN**
-4. **EN**
+1. **Bsubtitlesneedsign in**
+2. **YouTubesubtitlesformat**
+3. **speech recognitionconfigissue**
+4. **issue**
 
-## 🔍 EN
+## 🔍 issue
 
-### EN
+### usetool
 
-ENProvidesEN：
+toolissue：
 
 ```bash
-# EN
+# checkspeech recognitionsettings
 python scripts/debug_subtitle_download.py --check-speech
 
-# ENBEN
+# Bsubtitlesdownload
 python scripts/debug_subtitle_download.py https://www.bilibili.com/video/BV1xx411c7mu chrome
 
-# ENYouTubeEN
+# YouTubesubtitlesdownload
 python scripts/debug_subtitle_download.py https://www.youtube.com/watch?v=dQw4w9WgXcQ chrome
 ```
 
-### EN
+### error
 
-#### BEN
+#### Berror
 
 1. **"Subtitles are only available when logged in"**
-   - **EN**: BEN（ENAIEN）EN
-   - **EN**: 
-     - ENBENAccount
-     - EN（Chrome、Firefox、SafariEN）
-     - ENBEN
+   - **reason**: Bsubtitles（AIsubtitles）needsign indownload
+   - **solution**: 
+     - sign inBsite account
+     - select（Chrome、Firefox、Safari）
+     - Bsign instatus
 
-2. **"EN"**
-   - **EN**: EN
-   - **EN**: 
-     - EN（ENBEN）
-     - ENLanguage
-     - EN
+2. **"subtitlesfile"**
+   - **reason**: subtitlessubtitlesdownloadfailed
+   - **solution**: 
+     - checksubtitles（Bview）
+     - subtitles
+     - usespeech recognitiongeneratesubtitles
 
-#### YouTubeEN
+#### YouTubeerror
 
 1. **"No subtitles available"**
-   - **EN**: EN
-   - **EN**: 
-     - EN
-     - EN
-     - EN
+   - **reason**: subtitlesgeneratesubtitles
+   - **solution**: 
+     - checksubtitles
+     - downloadgeneratesubtitles
+     - usespeech recognitiongeneratesubtitles
 
 2. **"VTT format not supported"**
-   - **EN**: YouTubeENVTTEN，ENSRT
-   - **EN**: EN，EN
+   - **reason**: YouTubedownloadVTTformatsubtitles，needSRT
+   - **solution**: ，failedcheckfile
 
-#### EN
+#### speech recognitionerror
 
 1. **"whisper: command not found"**
-   - **EN**: ENWhisperEN
-   - **EN**: 
+   - **reason**: not installedWhisperspeech recognitiontool
+   - **solution**: 
      ```bash
      pip install openai-whisper
      ```
 
 2. **"ffmpeg: command not found"**
-   - **EN**: ENffmpeg
-   - **EN**: 
+   - **reason**: not installedffmpeg
+   - **solution**: 
      ```bash
      # macOS
      brew install ffmpeg
@@ -77,36 +77,36 @@ python scripts/debug_subtitle_download.py https://www.youtube.com/watch?v=dQw4w9
      sudo apt update && sudo apt install ffmpeg
      
      # Windows
-     # ENffmpegENPATHEN
+     # downloadffmpegPATHenv var
      ```
 
-3. **"EN"**
-   - **EN**: EN
-   - **EN**: 
-     - ENWhisperEN（tiny、base）
-     - EN
-     - ENCPUEN
+3. **"speech recognition"**
+   - **reason**: 
+   - **solution**: 
+     - useWhispermodel（tiny、base）
+     - 
+     - checkmemoryCPUuse
 
-## 🛠️ EN
+## 🛠️ solution
 
-### 1. BEN
+### 1. Bsubtitlesdownload
 
-#### EN
+#### sign inconfig
 ```python
-# ENBEN
-# EN
-browser = "chrome"  # EN "firefox", "safari"
+# sign inB
+# select
+browser = "chrome"  #  "firefox", "safari"
 ```
 
-#### EN
-EN：
-1. **AIEN**: ENAIENChineseEN
-2. **ENLanguageEN**: ENChinese、EnglishENLanguage
-3. **ENcookiesEN**: ENcookiesEN
+#### subtitles
+：
+1. **AIsubtitles**: downloadAIgenerateChinesesubtitles
+2. ****: Chinese、English
+3. **cookies**: usecookiesdownloadsubtitles
 
-#### EN
+#### config
 ```python
-# ENLanguage
+# downloadsubtitles
 ydl_opts = {
     'subtitleslangs': ['ai-zh', 'zh-Hans', 'zh', 'en'],
     'writeautomaticsub': True,
@@ -114,188 +114,188 @@ ydl_opts = {
 }
 ```
 
-### 2. YouTubeEN
+### 2. YouTubesubtitlesdownload
 
-#### ENSupport
+#### subtitlesformatsupport
 ```python
-# SupportEN
+# supportsubtitlesformat
 formats = ['srt', 'vtt', 'json3']
 languages = ['en', 'zh-Hans', 'zh', 'ja', 'ko']
 ```
 
-#### EN
-ENVTTENSRTEN：
+#### format
+VTTformatSRTformat：
 ```python
-# VTTENSRTEN
+# VTTSRT
 async def _convert_vtt_to_srt(vtt_path: str, srt_path: str):
-    # EN
+    # formatsubtitles
 ```
 
-### 3. EN
+### 3. speech recognition
 
-#### ENWhisper
+#### installWhisper
 ```bash
-# ENWhisper
+# installWhisper
 pip install openai-whisper
 
-# EN
+# verifyinstall
 whisper --help
 ```
 
-#### EN
+#### model selection
 ```python
-# EN
+# selectmodel
 models = {
-    "tiny": "39MB, EN，EN",
-    "base": "74MB, EN，EN（EN）",
-    "small": "244MB, EN，EN",
-    "medium": "769MB, EN，EN",
-    "large": "1550MB, EN，EN"
+    "tiny": "39MB, ，",
+    "base": "74MB, ，medium（recommend）",
+    "small": "244MB, medium，",
+    "medium": "769MB, ，",
+    "large": "1550MB, ，"
 }
 ```
 
-#### LanguageEN
+#### config
 ```python
-# ENLanguageEN
+# 
 languages = {
     "zh": "Chinese",
     "en": "English",
-    "ja": "EN",
-    "ko": "EN",
-    "auto": "EN"
+    "ja": "Japanese",
+    "ko": "",
+    "auto": "auto-detect"
 }
 ```
 
-## 📊 PerformanceEN
+## 📊 performance
 
-### 1. EN
-- EN
-- EN
-- ENVPN
+### 1. 
+- use
+- download
+- useproxyVPN
 
-### 2. EN
-- EN
-- EN
-- ENSSDENI/OEN
+### 2. 
+- 
+- 
+- useSSDI/O
 
-### 3. EN
+### 3. config
 ```python
-# EN
+# downloadconfig
 ydl_opts = {
-    'format': 'best[ext=mp4]/best',  # EN
+    'format': 'best[ext=mp4]/best',  # select
     'writesubtitles': True,
     'writeautomaticsub': True,
     'subtitleslangs': ['ai-zh', 'zh-Hans', 'en'],
     'subtitlesformat': 'srt',
     'noplaylist': True,
     'quiet': True,
-    'no_warnings': False,  # EN
+    'no_warnings': False,  # 
 }
 ```
 
-## 🔧 ENTroubleshooting
+## 🔧 troubleshooting
 
-### 1. ENyt-dlpEN
+### 1. checkyt-dlpversion
 ```bash
-# EN
+# updateversion
 pip install --upgrade yt-dlp
 
-# EN
+# checkversion
 yt-dlp --version
 ```
 
-### 2. ENcookies
+### 2. checkcookies
 ```bash
-# ENcookies
-# ENBEN/YouTubeEN
-# ENcookiesEN
+# cookies
+# accessB/YouTubesign in
+# checkcookies
 ```
 
-### 3. EN
+### 3. test
 ```bash
-# EN
+# test
 ping www.bilibili.com
 ping www.youtube.com
 
-# ENDNSEN
+# testDNS
 nslookup www.bilibili.com
 nslookup www.youtube.com
 ```
 
-### 4. EN
+### 4. checkfile
 ```bash
-# EN
+# checkdownload
 ls -la /path/to/download/directory
 
-# EN
+# 
 chmod 755 /path/to/download/directory
 ```
 
-## 📞 EN
+## 📞 get help
 
-### 1. EN
+### 1. view
 ```bash
-# EN
+# view
 tail -f backend.log
 
-# EN
+# viewerror
 grep "ERROR" backend.log
 ```
 
-### 2. EN
+### 2. usetool
 ```bash
-# EN
+# 
 python scripts/debug_subtitle_download.py <url> <browser>
 
-# EN
+# checkspeech recognition
 python scripts/debug_subtitle_download.py --check-speech
 ```
 
 ### 3. FAQFAQ
 
-**Q: ENBEN？**
-A: BEN，ENBENAccountEN。
+**Q: Bsubtitlesdownloadfailed？**
+A: Bsubtitlesneedsign indownload，sign inBsite accountselect。
 
-**Q: YouTubeEN？**
-A: EN：
-1. EN
-2. ENLanguage
-3. EN
+**Q: YouTubesubtitlesdownloadfailed？**
+A: step：
+1. checksubtitles
+2. subtitles
+3. usespeech recognitiongeneratesubtitles
 
-**Q: EN？**
-A: EN：
-1. EN（tinyENbase）
-2. EN
-3. EN
+**Q: speech recognition？**
+A: can：
+1. use a smaller model（tinybase）
+2. 
+3. check
 
-**Q: EN？**
-A: EN：
-1. EN
-2. ENyt-dlp
-3. ENcookies
-4. ENWhisperEN
+**Q: subtitlesdownloadsucceeded？**
+A: ：
+1. 
+2. useversionyt-dlp
+3. configcookies
+4. installWhisper
 
-## 🎯 EN
+## 🎯 best practices
 
-### 1. EN
-- ENBEN/YouTubeEN
-- EN
-- ENyt-dlpENWhisper
-- EN
+### 1. daily use
+- preferB/YouTubesubtitles
+- configspeech recognition
+- updateyt-dlpWhisper
+- sign instatus
 
-### 2. EN
-- EN
-- EN
-- EN
-- EN
+### 2. 
+- 
+- monitoruse
+- settings
+- 
 
-### 3. EN
-- EN
-- EN
-- EN
-- EN
+### 3. error handling
+- error
+- usetoolissue
+- solution
+- issue
 
 ---
 
-EN，EN。EN，EN，ENContactENSupportEN。
+，solvesubtitlesdownloadissue。issue，usetoolgenerate，tech support。
 

@@ -14,19 +14,19 @@ export interface Notification {
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const notifiedKeys = useRef<Set<string>>(new Set()); // EN
-  const lastNotificationTime = useRef<number>(0); // EN
+  const notifiedKeys = useRef<Set<string>>(new Set()); // translated
+  const lastNotificationTime = useRef<number>(0); // translated
 
   const addNotification = useCallback((notification: Omit<Notification, 'id' | 'read'>, forceAdd = false) => {
     const now = Date.now();
     const key = `${notification.type}-${notification.title}-${notification.message}`;
     
-    // EN：EN，ENadd
+    // translated：iftranslated'stranslatedin，translatedadd
     if (!forceAdd && notifiedKeys.current.has(key)) {
       return;
     }
     
-    // EN：EN3EN
+    // translated：translated'stranslated3seconds
     if (!forceAdd && now - lastNotificationTime.current < 3000) {
       return;
     }
@@ -37,10 +37,10 @@ export const useNotifications = () => {
       read: false
     };
 
-    setNotifications(prev => [newNotification, ...prev.slice(0, 49)]); // EN50EN
+    setNotifications(prev => [newNotification, ...prev.slice(0, 49)]); // translatedmultitranslated50translated
     setUnreadCount(prev => prev + 1);
     
-    // ENkeyEN
+    // translated'skeyAndtranslated
     notifiedKeys.current.add(key);
     lastNotificationTime.current = now;
   }, []);
@@ -92,7 +92,7 @@ export const useNotifications = () => {
   const handleErrorNotification = useCallback((message: ErrorNotificationMessage) => {
     addNotification({
       type: 'error',
-      title: `Error: ${message.error_type}`,
+      title: `error: ${message.error_type}`,
       message: message.error_message,
       level: 'error',
       timestamp: message.timestamp

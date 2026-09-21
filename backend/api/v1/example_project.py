@@ -1,6 +1,6 @@
 """
-ENprojectAPI
-ENrunENcreateENproject
+translatedprojectAPI
+usetranslatedcreatetranslatedproject
 """
 
 import json
@@ -24,38 +24,38 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 def check_desktop_mode():
-    """checkENrun"""
+    """checkIstranslatedintranslated"""
     if not os.getenv("AUTOCLIP_DESKTOP_MODE"):
-        raise HTTPException(status_code=403, detail="EN")
+        raise HTTPException(status_code=403, detail="translatedfeatureOnlyintranslatedcanuse")
 
 @router.post("/example-project/create")
 async def create_example_project(
     db: Session = Depends(get_db),
     config: DesktopConfig = Depends(get_desktop_config)
 ):
-    """createENproject"""
+    """createtranslatedproject"""
     check_desktop_mode()
     
     try:
-        # checkENalready existsENproject
+        # checkIstranslatedintranslatedproject
         project_repo = ProjectRepository(db)
-        existing_project = project_repo.get_by_name("AutoClip ENproject")
+        existing_project = project_repo.get_by_name("AutoClip translatedproject")
         if existing_project:
             return {
                 "success": True,
-                "message": "ENprojectalready exists",
+                "message": "translatedprojecttranslatedin",
                 "project_id": existing_project.id
             }
         
-        # readENprojectEN
+        # translatedprojecttranslated
         example_data_path = Path(__file__).parent.parent.parent.parent / "data" / "example_project.json"
         if not example_data_path.exists():
-            raise HTTPException(status_code=404, detail="ENprojectENfiledoes not exist")
+            raise HTTPException(status_code=404, detail="translatedprojecttranslatedfile not found")
         
         with open(example_data_path, 'r', encoding='utf-8') as f:
             example_data = json.load(f)
         
-        # createENproject
+        # createtranslatedproject
         project_data = example_data["project"]
         project = Project(
             id=project_data["id"],
@@ -74,7 +74,7 @@ async def create_example_project(
         
         created_project = project_repo.create(project)
         
-        # createEN
+        # createtranslated
         clip_repo = ClipRepository(db)
         for clip_data in example_data["clips"]:
             clip = Clip(
@@ -90,7 +90,7 @@ async def create_example_project(
             )
             clip_repo.create(clip)
         
-        # createENcollection
+        # createtranslatedcollection
         collection_repo = CollectionRepository(db)
         for collection_data in example_data["collections"]:
             collection = Collection(
@@ -104,11 +104,11 @@ async def create_example_project(
             )
             collection_repo.create(collection)
         
-        logger.info(f"ENprojectcreatesucceeded: {created_project.id}")
+        logger.info(f"translatedprojectcreatesucceeded: {created_project.id}")
         
         return {
             "success": True,
-            "message": "ENprojectcreatesucceeded",
+            "message": "translatedprojectcreatesucceeded",
             "project_id": created_project.id,
             "project": {
                 "id": created_project.id,
@@ -121,19 +121,19 @@ async def create_example_project(
         }
         
     except Exception as e:
-        logger.error(f"createENprojectfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"createENprojectfailed: {str(e)}")
+        logger.error(f"createtranslatedprojectfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"createtranslatedprojectfailed: {str(e)}")
 
 @router.get("/example-project/info")
 async def get_example_project_info():
-    """fetchENprojectEN"""
+    """fetchtranslatedprojectinfo"""
     check_desktop_mode()
     
     try:
-        # readENprojectEN
+        # translatedprojecttranslated
         example_data_path = Path(__file__).parent.parent.parent.parent / "data" / "example_project.json"
         if not example_data_path.exists():
-            raise HTTPException(status_code=404, detail="ENprojectENfiledoes not exist")
+            raise HTTPException(status_code=404, detail="translatedprojecttranslatedfile not found")
         
         with open(example_data_path, 'r', encoding='utf-8') as f:
             example_data = json.load(f)
@@ -150,31 +150,31 @@ async def get_example_project_info():
         }
         
     except Exception as e:
-        logger.error(f"fetchENprojectENfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"fetchENprojectENfailed: {str(e)}")
+        logger.error(f"fetchtranslatedprojectinfofailed: {e}")
+        raise HTTPException(status_code=500, detail=f"fetchtranslatedprojectinfofailed: {str(e)}")
 
 @router.delete("/example-project")
 async def delete_example_project(
     db: Session = Depends(get_db)
 ):
-    """deleteENproject"""
+    """deletetranslatedproject"""
     check_desktop_mode()
     
     try:
         project_repo = ProjectRepository(db)
-        example_project = project_repo.get_by_name("AutoClip ENproject")
+        example_project = project_repo.get_by_name("AutoClip translatedproject")
         
         if not example_project:
             return {
                 "success": True,
-                "message": "ENprojectdoes not exist"
+                "message": "translatedproject not found"
             }
         
-        # deleteEN
+        # deletetranslated
         clip_repo = ClipRepository(db)
         collection_repo = CollectionRepository(db)
         
-        # deleteEN
+        # deletetranslated
         clips = clip_repo.get_by_project_id(example_project.id)
         for clip in clips:
             clip_repo.delete(clip.id)
@@ -187,13 +187,13 @@ async def delete_example_project(
         # deleteproject
         project_repo.delete(example_project.id)
         
-        logger.info(f"ENprojectdeletesucceeded: {example_project.id}")
+        logger.info(f"translatedprojectdeletesucceeded: {example_project.id}")
         
         return {
             "success": True,
-            "message": "ENprojectdeletesucceeded"
+            "message": "translatedprojectdeletesucceeded"
         }
         
     except Exception as e:
-        logger.error(f"deleteENprojectfailed: {e}")
-        raise HTTPException(status_code=500, detail=f"deleteENprojectfailed: {str(e)}")
+        logger.error(f"deletetranslatedprojectfailed: {e}")
+        raise HTTPException(status_code=500, detail=f"deletetranslatedprojectfailed: {str(e)}")

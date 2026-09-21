@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-CelerystartEN
-startCelery WorkerENBeatEN
+Celerystarttranslated
+startCelery WorkerAndBeattranslated
 """
 
 import os
@@ -11,7 +11,7 @@ import signal
 import time
 from pathlib import Path
 
-# ENprojectENdirectoryENPythonpath
+# addprojecttranslateddirectorytranslatedPythonpath
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
@@ -29,15 +29,15 @@ def start_celery_worker():
     
     try:
         process = subprocess.Popen(cmd, cwd=str(project_root))
-        print(f"✅ Celery WorkerENstart (PID: {process.pid})")
+        print(f"✅ Celery Workertranslatedstart (PID: {process.pid})")
         return process
     except Exception as e:
         print(f"❌ startCelery Workerfailed: {e}")
         return None
 
 def start_celery_beat():
-    """startCelery BeatEN"""
-    print("⏰ startCelery BeatEN...")
+    """startCelery Beattranslated"""
+    print("⏰ startCelery Beattranslated...")
     
     cmd = [
         "celery", "-A", "backend.core.celery_app", "beat",
@@ -48,15 +48,15 @@ def start_celery_beat():
     
     try:
         process = subprocess.Popen(cmd, cwd=str(project_root))
-        print(f"✅ Celery BeatENstart (PID: {process.pid})")
+        print(f"✅ Celery Beattranslatedstart (PID: {process.pid})")
         return process
     except Exception as e:
         print(f"❌ startCelery Beatfailed: {e}")
         return None
 
 def start_flower():
-    """startFlowerEN"""
-    print("🌸 startFlowerEN...")
+    """startFlowermonitorInterface"""
+    print("🌸 startFlowermonitorInterface...")
     
     cmd = [
         "celery", "-A", "backend.core.celery_app", "flower",
@@ -66,24 +66,24 @@ def start_flower():
     
     try:
         process = subprocess.Popen(cmd, cwd=str(project_root))
-        print(f"✅ FlowerENstart (PID: {process.pid})")
-        print("🌐 FlowerEN: http://localhost:5555")
+        print(f"✅ Flowertranslatedstart (PID: {process.pid})")
+        print("🌐 FlowermonitorInterface: http://localhost:5555")
         return process
     except Exception as e:
         print(f"❌ startFlowerfailed: {e}")
         return None
 
 def signal_handler(signum, frame):
-    """ENprocessingEN"""
-    print("\n🛑 ENstopEN，currentlyENservice...")
+    """translatedprocesstranslated"""
+    print("\n🛑 translated，translatedintranslatedservice...")
     sys.exit(0)
 
 def main():
-    """EN"""
-    print("🎯 AutoClip Celery taskqueuestartEN")
+    """translated"""
+    print("🎯 AutoClip Celery Task Queuestarttranslated")
     print("=" * 50)
     
-    # settingsENprocessing
+    # settingstranslatedprocess
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
     
@@ -92,10 +92,10 @@ def main():
         import redis
         r = redis.Redis.from_url('redis://localhost:6379/0')
         r.ping()
-        print("✅ RedisconnectEN")
+        print("✅ Redisconnecttranslated")
     except Exception as e:
         print(f"❌ Redisconnectfailed: {e}")
-        print("pleaseENRedisservicecurrentlyrun: redis-server")
+        print("translatedensureRedisservicetranslatedintranslated: redis-server")
         return
     
     # startservice
@@ -117,28 +117,28 @@ def main():
         processes.append(flower_process)
     
     if not processes:
-        print("❌ ENsucceededstartENservice")
+        print("❌ translatedsucceededstarttranslatedservice")
         return
     
-    print("\n🎉 allserviceENstart!")
+    print("\n🎉 translatedservicetranslatedstart!")
     print("📊 servicestatus:")
-    print("   - Celery Worker: processingtask")
-    print("   - Celery Beat: ENtaskEN")
-    print("   - Flower: taskEN (http://localhost:5555)")
-    print("\nEN Ctrl+C stopallservice")
+    print("   - Celery Worker: processtask")
+    print("   - Celery Beat: translatedtasktranslated")
+    print("   - Flower: taskmonitorInterface (http://localhost:5555)")
+    print("\nby Ctrl+C translatedservice")
     
     try:
-        # EN
+        # etc.translatedprocess
         while True:
             time.sleep(1)
-            # checkENrun
+            # checkprocessIstranslatedintranslated
             for process in processes:
                 if process.poll() is not None:
-                    print(f"⚠️  EN {process.pid} ENlogout")
+                    print(f"⚠️  process {process.pid} translated")
     except KeyboardInterrupt:
-        print("\n🛑 currentlystopservice...")
+        print("\n🛑 translatedintranslatedservice...")
     finally:
-        # stopallEN
+        # translatedprocess
         for process in processes:
             if process.poll() is None:
                 process.terminate()
@@ -146,7 +146,7 @@ def main():
                     process.wait(timeout=5)
                 except subprocess.TimeoutExpired:
                     process.kill()
-                print(f"🛑 EN {process.pid} ENstop")
+                print(f"🛑 process {process.pid} translated")
 
 if __name__ == "__main__":
     main() 

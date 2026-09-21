@@ -1,6 +1,6 @@
 """
-taskENservice
-EN
+tasktranslatedservice
+translatedimportissue
 """
 
 import logging
@@ -10,84 +10,84 @@ from ..core.celery_app import celery_app
 logger = logging.getLogger(__name__)
 
 class TaskSubmissionService:
-    """taskENservice"""
+    """tasktranslatedservice"""
     
     @staticmethod
     def submit_video_pipeline_task(project_id: str, input_video_path: str, input_srt_path: str) -> Dict[str, Any]:
         """
-        ENvideoENtask
+        translatedvideotranslatedtask
         
         Args:
             project_id: projectID
-            input_video_path: ENvideopath
-            input_srt_path: ENSRTpath
+            input_video_path: translatedvideopath
+            input_srt_path: translatedSRTpath
             
         Returns:
-            taskENresult
+            tasktranslated
         """
         try:
-            logger.info(f"ENvideoENtask: {project_id}")
+            logger.info(f"translatedvideotranslatedtask: {project_id}")
             
-            # ENusecelery_appENtask
+            # translatedusecelery_apptranslatedtask
             celery_task = celery_app.send_task(
                 'tasks.processing.process_video_pipeline',
                 args=[project_id, input_video_path, input_srt_path]
             )
             
-            logger.info(f"videoENtaskEN: {celery_task.id}")
+            logger.info(f"videotranslatedtasktranslated: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': celery_task.id,
-                'status': 'PENDING',
-                'message': 'videoENtaskEN'
+                'status': 'PtranslatedDING',
+                'message': 'videotranslatedtasktranslated'
             }
             
         except Exception as e:
-            logger.error(f"ENvideoENtaskfailed: {project_id}, error: {e}")
+            logger.error(f"translatedvideotranslatedtaskfailed: {project_id}, error: {e}")
             return {
                 'success': False,
                 'error': str(e),
-                'message': 'taskENfailed'
+                'message': 'tasktranslatedfailed'
             }
     
     @staticmethod
     def submit_single_step_task(project_id: str, step: str, config: Dict[str, Any]) -> Dict[str, Any]:
         """
-        ENtask
+        translated steptask
         
         Args:
             project_id: projectID
-            step: EN
-            config: processingconfig
+            step: steptranslated
+            config: processconfig
             
         Returns:
-            taskENresult
+            tasktranslated
         """
         try:
-            logger.info(f"ENtask: {project_id}, {step}")
+            logger.info(f"translated steptask: {project_id}, {step}")
             
-            # ENusecelery_appENtask
+            # translatedusecelery_apptranslatedtask
             celery_task = celery_app.send_task(
                 'tasks.processing.process_single_step',
                 args=[project_id, step, config]
             )
             
-            logger.info(f"ENtaskEN: {celery_task.id}")
+            logger.info(f"translated steptasktranslated: {celery_task.id}")
             
             return {
                 'success': True,
                 'task_id': celery_task.id,
                 'step': step,
-                'status': 'PENDING',
-                'message': f'EN {step} taskEN'
+                'status': 'PtranslatedDING',
+                'message': f'step {step} tasktranslated'
             }
             
         except Exception as e:
-            logger.error(f"ENtaskfailed: {project_id}, {step}, error: {e}")
+            logger.error(f"translated steptaskfailed: {project_id}, {step}, error: {e}")
             return {
                 'success': False,
                 'error': str(e),
-                'message': 'taskENfailed'
+                'message': 'tasktranslatedfailed'
             }
 

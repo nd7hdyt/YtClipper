@@ -1,6 +1,6 @@
 """
-processingEN
-ENprocessingEN
+processtranslated
+translatedonetranslatedprocesstranslated'stranslatedinfo
 """
 
 import logging
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ProcessingContext:
-    """processingEN，ENprocessingEN"""
+    """processtranslated，translatedonetranslatedprocesstranslated'stranslatedinfo"""
     
     project_id: str
     task_id: str
@@ -23,61 +23,61 @@ class ProcessingContext:
     debug_mode: bool = False
     created_at: datetime = field(default_factory=datetime.now)
     
-    # processingstatus
+    # processstatus
     is_initialized: bool = False
     is_completed: bool = False
     error_message: Optional[str] = None
     
-    # configEN
+    # configinfo
     config: Dict[str, Any] = field(default_factory=dict)
     
     def __post_init__(self):
-        """initializeENprocessing"""
+        """translated'sprocess"""
         self.validate_context()
     
     def validate_context(self):
-        """validateEN"""
+        """verifytranslated'stranslated"""
         if not self.project_id:
-            raise ValueError("project_idEN")
+            raise ValueError("project_idtranslated")
         if not self.task_id:
-            raise ValueError("task_idEN")
+            raise ValueError("task_idtranslated")
         
-        logger.debug(f"ProcessingContextvalidatethrough: project_id={self.project_id}, task_id={self.task_id}")
+        logger.debug(f"ProcessingContextverifytranslated: project_id={self.project_id}, task_id={self.task_id}")
     
     def set_srt_path(self, srt_path: Path):
-        """settingsSRTfilepath"""
+        """settingsSRTfile path"""
         if not srt_path.exists():
-            raise FileNotFoundError(f"SRTfiledoes not exist: {srt_path}")
+            raise FileNotFoundError(f"SRTfile not found: {srt_path}")
         self.srt_path = srt_path
         logger.debug(f"settingsSRTpath: {srt_path}")
     
     def set_debug_mode(self, debug_mode: bool):
-        """settingsEN"""
+        """settingstranslated"""
         self.debug_mode = debug_mode
-        logger.debug(f"settingsEN: {debug_mode}")
+        logger.debug(f"settingstranslated: {debug_mode}")
     
     def set_config(self, config: Dict[str, Any]):
-        """settingsconfigEN"""
+        """settingsconfiginfo"""
         self.config.update(config)
         logger.debug(f"updateconfig: {list(config.keys())}")
     
     def mark_initialized(self):
-        """ENinitialize"""
+        """translated"""
         self.is_initialized = True
-        logger.debug("ProcessingContextENinitialize")
+        logger.debug("ProcessingContexttranslated")
     
     def mark_completed(self):
-        """ENcompleted"""
+        """translatedcompleted"""
         self.is_completed = True
         logger.debug("ProcessingContextcompleted")
     
     def set_error(self, error_message: str):
-        """settingserrorEN"""
+        """settingserrorinfo"""
         self.error_message = error_message
         logger.error(f"ProcessingContexterror: {error_message}")
     
     def is_valid_for_execution(self) -> bool:
-        """checkENexecute"""
+        """checkIstranslated"""
         if not self.is_initialized:
             return False
         if self.is_completed:
@@ -87,7 +87,7 @@ class ProcessingContext:
         return True
     
     def get_context_summary(self) -> Dict[str, Any]:
-        """fetchEN"""
+        """fetchtranslated"""
         return {
             "project_id": self.project_id,
             "task_id": self.task_id,
@@ -101,7 +101,7 @@ class ProcessingContext:
         }
     
     def clone(self) -> 'ProcessingContext':
-        """EN"""
+        """translated"""
         cloned = ProcessingContext(
             project_id=self.project_id,
             task_id=self.task_id,
@@ -111,7 +111,7 @@ class ProcessingContext:
             config=self.config.copy()
         )
         
-        # ENstatusEN
+        # translatedstatustranslated
         cloned.is_initialized = self.is_initialized
         cloned.is_completed = self.is_completed
         cloned.error_message = self.error_message

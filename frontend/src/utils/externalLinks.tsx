@@ -1,53 +1,53 @@
 import React from 'react'
 
 /**
- * EN
- * ENTauriin environmentENOpen external link
+ * translatedprocesstool
+ * inTauritranslated
  */
 
-// ENTauriin environment
+// translatedIstranslatedinTauritranslated
 const isTauri = () => {
   return typeof window !== 'undefined' && Boolean((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)
 }
 
 /**
- * Open external link
- * @param url ENURL
+ * translated
+ * @param url translated'sURL
  */
 export const openExternalLink = async (url: string) => {
   try {
     if (isTauri()) {
-      // ENTauriin environmentENshell API
+      // inTauritranslateduseshell API
       const { open } = await import('@tauri-apps/plugin-shell')
       await open(url)
     } else {
-      // ENWebin environmentENNormalEN
+      // inWebtranslatedusetranslated
       window.open(url, '_blank', 'noopener,noreferrer')
     }
   } catch (error) {
-    console.error('Open external linkFailed:', error)
-    // EN:ENwindow.open
+    console.error('translatedfailed:', error)
+    // translatedprocess:translatedusewindow.open
     try {
       window.open(url, '_blank', 'noopener,noreferrer')
     } catch (fallbackError) {
-      console.error('ENFailed:', fallbackError)
-      // EN:ENtoEN
+      console.error('translatedfailed:', fallbackError)
+      // translated'stranslated:translated
       try {
         await navigator.clipboard.writeText(url)
-        alert(`ENtoEN:${url}`)
+        alert(`translated:${url}`)
       } catch (clipboardError) {
-        console.error('ENtoENFailed:', clipboardError)
-        alert(`EN:${url}`)
+        console.error('translatedfailed:', clipboardError)
+        alert(`translated:${url}`)
       }
     }
   }
 }
 
 /**
- * EN
- * @param url EN
- * @param text ENText
- * @param className CSSEN
+ * createone canclick'stranslated
+ * @param url translated
+ * @param text translated
+ * @param className CSStranslated
  */
 export const ExternalLink: React.FC<{
   url: string

@@ -17,25 +17,25 @@ import { trackLaunch } from './analytics/lifecycle'
 import { installDomTranslationGuard } from './utils/domTranslationGuard'
 import './index.css'
 
-// EN React EN：ENTextEN，EN React updateEN（#100）
+// translatedin React translated：translated，translated React updatetranslated（#100）
 installDomTranslationGuard()
 
-// EN / EN（EN key EN no-op，ENrequest）
+// translated / Analytics（translated key translated no-op，translated）
 initAnalytics()
-// ENGlobal properties + EN/install/updateEN
+// translated + translatedstart/install/updatetranslated
 void trackLaunch()
 
-// configdayjsEN
+// configdayjstranslated
 dayjs.extend(relativeTime)
 dayjs.extend(timezone)
 dayjs.extend(utc)
 
-// settingsdayjsEN
+// settingsdayjstranslatedAndtranslated
 dayjs.locale('zh-cn')
 dayjs.tz.setDefault('Asia/Shanghai')
 
 function Root() {
-  // ENErrorEN，ENErrorEN
+  // translatedoneintranslatederrortranslated，translatedRuntimetranslated
   return (
     <ErrorBoundary showDetails={import.meta.env.DEV}>
       <App />

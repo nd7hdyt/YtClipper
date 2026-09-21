@@ -1,5 +1,5 @@
-"""videoprocessingCelerytask
-ENWebSocketENPipelineEN
+"""videoprocessCelerytask
+PackageincludeWebSockettranslatedAndPipelinetranslated
 """
 
 import os
@@ -21,12 +21,12 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 def run_async_notification(coro):
-    """runEN - EN"""
+    """translated'stranslated - fixedtranslated"""
     try:
-        # ENfetchEN
+        # translatedfetchtranslated'stranslated
         loop = asyncio.get_event_loop()
         if loop.is_running():
-            # ifENcurrentlyrun，useENexecute
+            # iftranslatedintranslated，usetranslated
             import concurrent.futures
             import threading
             
@@ -40,12 +40,12 @@ def run_async_notification(coro):
             
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 future = executor.submit(run_in_thread)
-                return future.result(timeout=10)  # 10ENtimeout
+                return future.result(timeout=10)  # 10secondstranslated
         else:
-            # ifENrun，ENrun
+            # iftranslated，translated
             return loop.run_until_complete(coro)
     except RuntimeError:
-        # EN，createEN
+        # translated，createtranslated's
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
@@ -53,9 +53,9 @@ def run_async_notification(coro):
         finally:
             loop.close()
 
-# ENprojectENtimeEN。EN（/process、/retry、
-# ENstart、downloadENstart）mayENproject，ENtaskEN Redis EN
-# soEN；ENtaskENexecute，mustENexecuteENdatabase。
+# translatedoneprojecttranslatedonetranslatedonetranslatedintranslated。translatedmulti translated（/process、/retry、
+# frontendtranslatedstart、downloadtranslatedstart）cantranslatedoneproject，translatedtasktranslated Redis translated
+# Sotranslated；translatedintasktranslated'stranslatedlocaltranslated，translateddatabase。
 import threading as _threading
 _active_pipeline_projects: set = set()
 _active_pipeline_lock = _threading.Lock()
@@ -69,90 +69,90 @@ def process_video_pipeline(
     input_srt_path: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
-    processingvideoENtask - usePipelineEN
+    processvideotranslatedtask - usePipelinetranslated
     
     Args:
         project_id: projectID
-        input_video_path: ENvideopath
-        input_srt_path: ENSRTpath
+        input_video_path: translatedvideopath
+        input_srt_path: translatedSRTpath
         
     Returns:
-        processingresult
+        processtranslated
     """
     task_id = self.request.id
-    logger.info(f"startprocessingvideoEN: {project_id}, taskID: {task_id}")
+    logger.info(f"translatedprocessvideotranslated: {project_id}, taskID: {task_id}")
 
-    # EN：ENprojectEN
+    # translated：translatedoneprojecttranslatedintranslatedskiptranslated
     with _active_pipeline_lock:
         if project_id in _active_pipeline_projects:
-            logger.warning(f"project {project_id} ENrun，ENtask {task_id}")
+            logger.warning(f"project {project_id} translatedintranslated，skiptranslatedtask {task_id}")
             return {
                 "success": False,
                 "skipped": True,
                 "project_id": project_id,
                 "task_id": task_id,
-                "message": "ENrun，ENtask",
+                "message": "translatedintranslated，translatedskiptranslatedtask",
             }
         _active_pipeline_projects.add(project_id)
 
     try:
-        # createdatabaseEN
+        # createdatabasetranslated
         db = SessionLocal()
         
         try:
-            # createtaskEN
+            # createtasktranslated
             task = Task(
-                name=f"videoprocessingEN",
-                description=f"processingproject {project_id} ENvideoEN",
+                name=f"videoprocesstranslated",
+                description=f"processproject {project_id} 'stranslatedvideotranslated",
                 task_type=TaskType.VIDEO_PROCESSING,
                 project_id=project_id,
                 celery_task_id=task_id,
                 status=TaskStatus.RUNNING,
                 progress=0,
-                current_step="initialize",
+                current_step="translated",
                 total_steps=6
             )
             db.add(task)
             db.commit()
             
-            # sendstartEN
+            # translated
             run_async_notification(
                 notification_service.send_processing_start(project_id, task_id)
             )
             
-            # ENprogresssystemENneedEN
-            # ENprogresssystemENsendprogressEN
+            # translated'sprogressSystemNo needtranslated'stranslated
+            # translated'sprogressSystemtranslatedintranslatedprogresstranslated
             
-            # useENPipelineEN
+            # usetranslated'sPipelinetranslated
             from backend.services.simple_pipeline_adapter import create_simple_pipeline_adapter
             pipeline_adapter = create_simple_pipeline_adapter(str(project_id), str(task.id))
             
-            # executePipelineprocessing - useEN
+            # translatedPipelineprocess - usetranslatedPackagetranslated
             import asyncio
             result = asyncio.run(pipeline_adapter.process_project_sync(input_video_path, input_srt_path))
             
-            # checkprocessingresult
+            # checkprocesstranslated
             if result.get("status") == "failed":
-                # processingfailed。adapter returnEN error（EN message，userEN「processingfailed」EN）
-                error_msg = result.get("error") or result.get("message") or "processingfailed"
+                # processing failed。adapter return'sIs error（translatedthistranslated message，usertranslated'stranslatedIs「processing failed」translated translated）
+                error_msg = result.get("error") or result.get("message") or "processing failed"
                 task.status = TaskStatus.FAILED
                 task.error_message = error_msg
                 if result.get("stage"):
-                    task.current_step = f"failedEN {result['stage']}"
+                    task.current_step = f"failedtranslated {result['stage']}"
                 task.result_data = result
                 
-                # updateprojectstatusENfailed
+                # updateprojectstatustranslatedfailed
                 project = db.query(Project).filter(Project.id == project_id).first()
                 if project:
                     project.status = ProjectStatus.FAILED
                     project.updated_at = datetime.utcnow()
-                    logger.info(f"projectstatusupdatedENfailed: {project_id}")
+                    logger.info(f"projectstatustranslatedupdatetranslatedfailed: {project_id}")
                 
                 db.commit()
                 
-                # failedstatusENprogresssystemENprocessing
+                # failedstatustranslatedprogressSystemtranslatedprocess
                 
-                # senderrorEN（EN） - ENWebSocketEN
+                # translatederrortranslated（translatedversion） - translateduseWebSockettranslated
                 # run_async_notification(
                 #     notification_service.send_processing_error(project_id, task_id, error_msg)
                 # )
@@ -165,53 +165,53 @@ def process_video_pipeline(
                     "result": result
                 }
             else:
-                # processingsucceeded
+                # processsucceeded
                 task.status = TaskStatus.COMPLETED
                 task.progress = 100
-                task.current_step = "processingEN"
+                task.current_step = "processing completed"
                 task.result_data = result
                 
-                # updateprojectstatusENcompleted
+                # updateprojectstatustranslatedcompleted
                 project = db.query(Project).filter(Project.id == project_id).first()
                 if project:
                     project.status = ProjectStatus.COMPLETED
                     project.completed_at = datetime.utcnow()
                     project.updated_at = datetime.utcnow()
-                    logger.info(f"projectstatusupdatedENcompleted: {project_id}")
+                    logger.info(f"projectstatustranslatedupdatetranslatedcompleted: {project_id}")
                 
                 db.commit()
                 
-                # ENstatusENprogresssystemENprocessing
+                # translatedstatustranslatedprogressSystemtranslatedprocess
                 
-                # sendEN（EN） - ENWebSocketEN
+                # translated（translatedversion） - translateduseWebSockettranslated
                 # run_async_notification(
                 #     notification_service.send_processing_complete(project_id, task_id, result)
                 # )
             
-            logger.info(f"videoENprocessingEN: {project_id}")
+            logger.info(f"videotranslatedprocessing completed: {project_id}")
             return {
                 "success": True,
                 "project_id": project_id,
                 "task_id": task_id,
                 "result": result,
-                "message": "videoprocessingEN"
+                "message": "videoprocesstranslated"
             }
             
         finally:
             db.close()
-            # EN（ENsucceeded/failed/ENreturnEN）
+            # translated（translatedsucceeded/failed/translatedreturntranslatedthistranslated）
             with _active_pipeline_lock:
                 _active_pipeline_projects.discard(project_id)
 
     except Exception as e:
-        error_msg = f"videoENprocessingfailed: {str(e)}"
+        error_msg = f"videotranslatedprocessing failed: {str(e)}"
         logger.error(error_msg)
 
-        # EN（ENpathEN finally EN，ENexceptionEN）
+        # translated（translatedpathtranslatedintranslated finally translated，thistranslated）
         with _active_pipeline_lock:
             _active_pipeline_projects.discard(project_id)
 
-        # updatetaskstatusENfailed
+        # updatetaskstatustranslatedfailed
         try:
             db = SessionLocal()
             task = db.query(Task).filter(Task.celery_task_id == task_id).first()
@@ -219,19 +219,19 @@ def process_video_pipeline(
                 task.status = TaskStatus.FAILED
                 task.error_message = error_msg
                 
-                # updateprojectstatusENfailed
+                # updateprojectstatustranslatedfailed
                 project = db.query(Project).filter(Project.id == project_id).first()
                 if project:
                     project.status = ProjectStatus.FAILED
                     project.updated_at = datetime.utcnow()
-                    logger.info(f"projectstatusupdatedENfailed: {project_id}")
+                    logger.info(f"projectstatustranslatedupdatetranslatedfailed: {project_id}")
                 
                 db.commit()
             db.close()
         except Exception as db_error:
             logger.error(f"updatetaskstatusfailed: {str(db_error)}")
         
-        # senderrorEN
+        # translatederrortranslated
         run_async_notification(
             notification_service.send_processing_error(project_id, task_id, error_msg)
         )
@@ -241,49 +241,49 @@ def process_video_pipeline(
 @celery_app.task(bind=True, name='backend.tasks.processing.process_single_step')
 def process_single_step(self, project_id: str, step: str, config: Dict[str, Any]) -> Dict[str, Any]:
     """
-    processingENtask
+    processtranslated steptask
     
     Args:
         project_id: projectID
-        step: EN
-        config: processingconfig
+        step: steptranslated
+        config: processconfig
         
     Returns:
-        processingresult
+        processtranslated
     """
     task_id = self.request.id
-    logger.info(f"startprocessingEN: {project_id}, EN: {step}, taskID: {task_id}")
+    logger.info(f"translatedprocesstranslated step: {project_id}, step: {step}, taskID: {task_id}")
     
     try:
-        # sendstartEN
-        # sendprocessingstartEN（EN） - ENWebSocketEN
+        # translated
+        # translatedprocesstranslated（translatedversion） - translateduseWebSockettranslated
         # run_async_notification(
         #     notification_service.send_processing_start(project_id, task_id)
         # )
         
-        # createdatabaseEN
+        # createdatabasetranslated
         db = SessionLocal()
         
         try:
-            # createprocessingservice
+            # createprocessservice
             processing_service = ProcessingService(db)
             
-            # ENexecuteENprocessing
+            # translatedsteptranslated'sprocess
             if step == "outline":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "generateEN")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "translated")
                 )
                 result = processing_service.generate_outline(project_id, config)
                 
             elif step == "timeline":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "ENtimeEN")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "translated")
                 )
                 result = processing_service.extract_timeline(project_id, config)
                 
             elif step == "titles":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "generatetitle")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "translated")
                 )
                 result = processing_service.generate_titles(project_id, config)
                 
@@ -295,32 +295,32 @@ def process_single_step(self, project_id: str, step: str, config: Dict[str, Any]
                 
             elif step == "collections":
                 run_async_notification(
-                    notification_service.send_processing_progress(project_id, task_id, 50, "generatecollection")
+                    notification_service.send_processing_progress(project_id, task_id, 50, "translatedcollection")
                 )
                 result = processing_service.generate_collections(project_id, config)
                 
             else:
-                raise Exception(f"EN: {step}")
+                raise Exception(f"translated'ssteptranslated: {step}")
             
             if not result.get("success"):
-                raise Exception(f"EN {step} processingfailed: {result.get('error')}")
+                raise Exception(f"step {step} processing failed: {result.get('error')}")
             
-            # sendEN
+            # translated
             run_async_notification(
                 notification_service.send_processing_complete(project_id, task_id, result)
             )
             
-            logger.info(f"ENprocessingEN: {project_id}, EN: {step}")
+            logger.info(f"translated stepprocessing completed: {project_id}, step: {step}")
             return result
             
         finally:
             db.close()
             
     except Exception as e:
-        error_msg = f"ENprocessingfailed: {str(e)}"
+        error_msg = f"translated stepprocessing failed: {str(e)}"
         logger.error(error_msg)
         
-        # senderrorEN
+        # translatederrortranslated
         run_async_notification(
             notification_service.send_processing_error(project_id, task_id, error_msg)
         )
@@ -331,49 +331,49 @@ def process_single_step(self, project_id: str, step: str, config: Dict[str, Any]
 def retry_processing_step(self, project_id: str, step: str, config: Dict[str, Any], 
                          original_task_id: str) -> Dict[str, Any]:
     """
-    retryprocessingENtask
+    translatedprocesssteptask
     
     Args:
         project_id: projectID
-        step: EN
-        config: processingconfig
-        original_task_id: ENtaskID
+        step: steptranslated
+        config: processconfig
+        original_task_id: translatedtaskID
         
     Returns:
-        processingresult
+        processtranslated
     """
     task_id = self.request.id
-    logger.info(f"startretryprocessingEN: {project_id}, EN: {step}, taskID: {task_id}")
+    logger.info(f"translatedprocessstep: {project_id}, step: {step}, taskID: {task_id}")
     
     try:
-        # sendstartEN
-        # sendprocessingstartEN（EN） - ENWebSocketEN
+        # translated
+        # translatedprocesstranslated（translatedversion） - translateduseWebSockettranslated
         # run_async_notification(
         #     notification_service.send_processing_start(project_id, task_id)
         # )
         
-        # sendretryEN
+        # translated
         run_async_notification(
             notification_service.send_system_notification(
                 "retry_started",
-                "retrystart",
-                f"currentlyretryEN: {step}",
+                "translated",
+                f"translatedintranslatedstep: {step}",
                 "warning"
             )
         )
         
-        # callENprocessing
+        # calltranslated stepprocess
         result = process_single_step.apply_async(
             args=[project_id, step, config],
             task_id=task_id
         ).get()
         
-        # sendretrysucceededEN
+        # translatedsucceededtranslated
         run_async_notification(
             notification_service.send_system_notification(
                 "retry_success",
-                "retrysucceeded",
-                f"EN {step} retrysucceeded",
+                "translatedsucceeded",
+                f"step {step} translatedsucceeded",
                 "success"
             )
         )
@@ -381,14 +381,14 @@ def retry_processing_step(self, project_id: str, step: str, config: Dict[str, An
         return result
         
     except Exception as e:
-        error_msg = f"retryprocessingENfailed: {str(e)}"
+        error_msg = f"translatedprocessstepfailed: {str(e)}"
         logger.error(error_msg)
         
-        # sendretryfailedEN
+        # translatedfailedtranslated
         run_async_notification(
             notification_service.send_error_notification(
                 "retry_failed",
-                f"EN {step} retryfailed",
+                f"step {step} translatedfailed",
                 {"project_id": project_id, "step": step, "error": str(e)}
             )
         )

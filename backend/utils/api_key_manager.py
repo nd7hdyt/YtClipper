@@ -1,5 +1,5 @@
 """
-APIENsystem - EN、validateEN
+APIkeytranslatedSystem - Providestranslated'skeytranslated、verifyAndtranslatedfeature
 """
 import os
 import json
@@ -19,15 +19,15 @@ from .error_handler import ConfigurationError, APIError, ValidationError
 logger = logging.getLogger(__name__)
 
 class APIKeyManager:
-    """APIEN"""
+    """APIkeytranslated"""
     
     def __init__(self, storage_path: Optional[Path] = None, master_password: Optional[str] = None):
         """
-        initializeAPIEN
+        translatedAPIkeytranslated
         
         Args:
-            storage_path: ENpath
-            master_password: EN，EN
+            storage_path: keytranslatedpath
+            master_password: translated，usetranslated
         """
         self.storage_path = storage_path or Path.home() / ".auto_clips" / "api_keys"
         self.master_password = master_password or self._get_master_password()
@@ -35,32 +35,32 @@ class APIKeyManager:
         self.keys_file = self.storage_path / "keys.enc"
         self.metadata_file = self.storage_path / "metadata.json"
         
-        # ENsaveENdirectoryEN
+        # ensuretranslateddirectorytranslatedin
         self.storage_path.mkdir(parents=True, exist_ok=True)
         
-        # loadEN
+        # translatedkey
         self._load_keys()
     
     def _get_master_password(self) -> str:
-        """fetchEN"""
-        # ENfetch
+        """fetchtranslated"""
+        # translatedfromtranslatedfetch
         master_password = os.getenv("AUTO_CLIPS_MASTER_PASSWORD")
         if master_password:
             return master_password
         
-        # ifENsettings，useEN（EN）
+        # iftranslatedsettings，usedefaulttranslated（Onlyusetranslated）
         if os.getenv("AUTO_CLIPS_DEV_MODE"):
             return "dev_master_password"
         
-        # ENshouldsettingsEN
+        # translatedsettingstranslated
         raise ConfigurationError(
-            "ENsettingsEN。pleasesettings AUTO_CLIPS_MASTER_PASSWORD EN。"
+            "translatedsettingstranslated。translatedsettings AUTO_CLIPS_MASTER_PASSWORD translated。"
         )
     
     def _create_fernet(self) -> Fernet:
-        """createFernetEN"""
-        # useENgenerateEN
-        salt = b'auto_clips_salt'  # ENshoulduseENsalt
+        """createFernettranslated"""
+        # usetranslatedkey
+        salt = b'auto_clips_salt'  # intranslatedusetranslatedusetranslatedsalt
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
@@ -71,7 +71,7 @@ class APIKeyManager:
         return Fernet(key)
     
     def _load_keys(self):
-        """loadEN"""
+        """translated'skey"""
         self.keys: Dict[str, Dict[str, Any]] = {}
         
         if self.keys_file.exists():
@@ -80,65 +80,65 @@ class APIKeyManager:
                     encrypted_data = f.read()
                     decrypted_data = self.fernet.decrypt(encrypted_data)
                     self.keys = json.loads(decrypted_data.decode())
-                logger.info(f"succeededload {len(self.keys)} ENAPIEN")
+                logger.info(f"succeededtranslated {len(self.keys)}  APIkey")
             except Exception as e:
-                logger.warning(f"loadAPIENfailed: {e}")
+                logger.warning(f"translatedAPIkeyfailed: {e}")
                 self.keys = {}
         
-        # loadEN
+        # translated
         self.metadata: Dict[str, Any] = {}
         if self.metadata_file.exists():
             try:
                 with open(self.metadata_file, 'r', encoding='utf-8') as f:
                     self.metadata = json.load(f)
             except Exception as e:
-                logger.warning(f"loadAPIENfailed: {e}")
+                logger.warning(f"translatedAPIkeytranslatedfailed: {e}")
                 self.metadata = {}
     
     def _save_keys(self):
-        """saveENfile"""
+        """translatedkeytranslatedfile"""
         try:
-            # ENsaveEN
+            # translatedkey
             data = json.dumps(self.keys, ensure_ascii=False)
             encrypted_data = self.fernet.encrypt(data.encode())
             
             with open(self.keys_file, 'wb') as f:
                 f.write(encrypted_data)
             
-            # saveEN（EN）
+            # translated（translated）
             with open(self.metadata_file, 'w', encoding='utf-8') as f:
                 json.dump(self.metadata, f, ensure_ascii=False, indent=2)
             
-            logger.debug("APIENsave")
+            logger.debug("APIkeytranslated")
         except Exception as e:
-            logger.error(f"saveAPIENfailed: {e}")
-            raise ConfigurationError(f"saveAPIENfailed: {e}")
+            logger.error(f"translatedAPIkeyfailed: {e}")
+            raise ConfigurationError(f"translatedAPIkeyfailed: {e}")
     
     def add_api_key(self, key_name: str, api_key: str, provider: str = "dashscope", 
                    description: str = "", expires_at: Optional[datetime] = None) -> bool:
         """
-        ENAPIEN
+        addAPIkey
         
         Args:
-            key_name: EN
-            api_key: APIEN
-            provider: EN（ENdashscope）
-            description: descriptionEN
-            expires_at: ENtime
+            key_name: keytranslated
+            api_key: APIkeytranslated
+            provider: Providesprovider（ifdashscope）
+            description: translatedinfo
+            expires_at: translated
             
         Returns:
-            ENsucceeded
+            Istranslatedaddsucceeded
         """
         try:
-            # validateEN
+            # verifykeyformat
             if not self._validate_api_key_format(api_key, provider):
-                raise ValidationError(f"EN{provider} APIEN")
+                raise ValidationError(f"translated's{provider} APIkeyformat")
             
-            # checkENalready exists
+            # checkkeyIstranslatedin
             if key_name in self.keys:
-                logger.warning(f"EN '{key_name}' already exists，EN")
+                logger.warning(f"keytranslated '{key_name}' translatedin，translated")
             
-            # EN
+            # translatedkeyinfo
             self.keys[key_name] = {
                 "api_key": api_key,
                 "provider": provider,
@@ -150,48 +150,48 @@ class APIKeyManager:
                 "is_active": True
             }
             
-            # updateEN
+            # updatetranslated
             self.metadata["last_updated"] = datetime.now().isoformat()
             self.metadata["total_keys"] = len(self.keys)
             
-            # saveENfile
+            # translatedfile
             self._save_keys()
             
-            logger.info(f"succeededENAPIEN: {key_name}")
+            logger.info(f"succeededaddAPIkey: {key_name}")
             return True
             
         except Exception as e:
-            logger.error(f"ENAPIENfailed: {e}")
+            logger.error(f"addAPIkeyfailed: {e}")
             raise
     
     def get_api_key(self, key_name: str) -> Optional[str]:
         """
-        fetchAPIEN
+        fetchAPIkey
         
         Args:
-            key_name: EN
+            key_name: keytranslated
             
         Returns:
-            APIEN，ifdoes not existENthenreturnNone
+            APIkeytranslated，iftranslatednot foundortranslatedreturnNone
         """
         if key_name not in self.keys:
             return None
         
         key_info = self.keys[key_name]
         
-        # checkEN
+        # checkIstranslated
         if not key_info.get("is_active", True):
-            logger.warning(f"APIEN '{key_name}' EN")
+            logger.warning(f"APIkey '{key_name}' translateduse")
             return None
         
-        # checkEN
+        # checkIstranslated
         if key_info.get("expires_at"):
             expires_at = datetime.fromisoformat(key_info["expires_at"])
             if datetime.now() > expires_at:
-                logger.warning(f"APIEN '{key_name}' EN")
+                logger.warning(f"APIkey '{key_name}' translated")
                 return None
         
-        # updateuseEN
+        # updateusetranslated
         key_info["last_used"] = datetime.now().isoformat()
         key_info["usage_count"] = key_info.get("usage_count", 0) + 1
         self._save_keys()
@@ -200,13 +200,13 @@ class APIKeyManager:
     
     def get_active_api_key(self, provider: str = "dashscope") -> Optional[str]:
         """
-        fetchENAPIEN
+        fetchtranslated'sAPIkey
         
         Args:
-            provider: EN
+            provider: Providesprovider
             
         Returns:
-            ENAPIEN，ifENthenreturnNone
+            translated'sAPIkey，iftranslatedreturnNone
         """
         active_keys = []
         
@@ -214,7 +214,7 @@ class APIKeyManager:
             if (key_info.get("provider") == provider and 
                 key_info.get("is_active", True)):
                 
-                # checkEN
+                # checkIstranslated
                 if key_info.get("expires_at"):
                     expires_at = datetime.fromisoformat(key_info["expires_at"])
                     if datetime.now() > expires_at:
@@ -225,22 +225,22 @@ class APIKeyManager:
         if not active_keys:
             return None
         
-        # ENreturnENuseEN
+        # translatedreturntranslateduse'skey
         active_keys.sort(key=lambda x: x[1].get("last_used", ""), reverse=True)
         return active_keys[0][1]["api_key"]
     
     def remove_api_key(self, key_name: str) -> bool:
         """
-        deleteAPIEN
+        deleteAPIkey
         
         Args:
-            key_name: EN
+            key_name: keytranslated
             
         Returns:
-            ENdeletesucceeded
+            Istranslateddeletesucceeded
         """
         if key_name not in self.keys:
-            logger.warning(f"APIEN '{key_name}' does not exist")
+            logger.warning(f"APIkey '{key_name}' not found")
             return False
         
         del self.keys[key_name]
@@ -248,25 +248,25 @@ class APIKeyManager:
         self.metadata["total_keys"] = len(self.keys)
         self._save_keys()
         
-        logger.info(f"succeededdeleteAPIEN: {key_name}")
+        logger.info(f"succeededdeleteAPIkey: {key_name}")
         return True
     
     def update_api_key(self, key_name: str, **updates) -> bool:
         """
-        updateAPIEN
+        updateAPIkeyinfo
         
         Args:
-            key_name: EN
-            **updates: ENupdateEN
+            key_name: keytranslated
+            **updates: translatedupdate'stranslated
             
         Returns:
-            ENupdatesucceeded
+            Istranslatedupdatesucceeded
         """
         if key_name not in self.keys:
-            logger.warning(f"APIEN '{key_name}' does not exist")
+            logger.warning(f"APIkey '{key_name}' not found")
             return False
         
-        # ENupdateEN
+        # translatedupdate'stranslated
         allowed_fields = ["description", "expires_at", "is_active"]
         
         for field, value in updates.items():
@@ -279,20 +279,20 @@ class APIKeyManager:
         self.metadata["last_updated"] = datetime.now().isoformat()
         self._save_keys()
         
-        logger.info(f"succeededupdateAPIEN: {key_name}")
+        logger.info(f"succeededupdateAPIkey: {key_name}")
         return True
     
     def list_api_keys(self) -> List[Dict[str, Any]]:
         """
-        ENallAPIEN（EN）
+        translatedAPIkey（translatedPackageincludetranslatedkeytranslated）
         
         Returns:
-            APIEN
+            APIkeyinfolist
         """
         result = []
         
         for key_name, key_info in self.keys.items():
-            # ENreturnENAPIEN
+            # translatedreturntranslated'sAPIkeytranslated
             safe_info = {
                 "name": key_name,
                 "provider": key_info.get("provider"),
@@ -304,7 +304,7 @@ class APIKeyManager:
                 "is_active": key_info.get("is_active", True)
             }
             
-            # checkEN
+            # checkIstranslated
             if key_info.get("expires_at"):
                 expires_at = datetime.fromisoformat(key_info["expires_at"])
                 safe_info["is_expired"] = datetime.now() > expires_at
@@ -317,83 +317,83 @@ class APIKeyManager:
     
     def test_api_key(self, key_name: str) -> Dict[str, Any]:
         """
-        ENAPIEN
+        testAPIkey
         
         Args:
-            key_name: EN
+            key_name: keytranslated
             
         Returns:
-            ENresult
+            testtranslated
         """
         api_key = self.get_api_key(key_name)
         if not api_key:
             return {
                 "success": False,
-                "error": "ENdoes not existEN"
+                "error": "keynot foundortranslated"
             }
         
         try:
-            # ENcanENAPIEN
-            # ENvalidate
+            # thistranslatedcantranslatedaddtranslated'sAPItesttranslated
+            # translatedIstranslated'sformatverify
             if self._validate_api_key_format(api_key, "dashscope"):
                 return {
                     "success": True,
-                    "message": "APIEN"
+                    "message": "APIkeyformattranslated"
                 }
             else:
                 return {
                     "success": False,
-                    "error": "APIEN"
+                    "error": "APIkeyformattranslated"
                 }
         except Exception as e:
             return {
                 "success": False,
-                "error": f"ENfailed: {str(e)}"
+                "error": f"testfailed: {str(e)}"
             }
     
     def _validate_api_key_format(self, api_key: str, provider: str) -> bool:
         """
-        validateAPIEN
+        verifyAPIkeyformat
         
         Args:
-            api_key: APIEN
-            provider: EN
+            api_key: APIkey
+            provider: Providesprovider
             
         Returns:
-            EN
+            formatIstranslated
         """
         if not api_key or len(api_key.strip()) < 10:
             return False
         
         if provider == "dashscope":
-            # DashScope APIENsk-EN
+            # DashScope APIkeytranslatedIssk-translated'stranslated
             return api_key.startswith("sk-") and len(api_key) >= 20
         
-        # ENcanENvalidateEN
+        # translatedProvidesprovidercantranslatedaddtranslated'sverifytranslated
         return True
     
     def rotate_api_key(self, key_name: str, new_api_key: str) -> bool:
         """
-        ENAPIEN
+        translatedAPIkey
         
         Args:
-            key_name: EN
-            new_api_key: ENAPIEN
+            key_name: keytranslated
+            new_api_key: translated'sAPIkey
             
         Returns:
-            ENsucceeded
+            Istranslatedsucceeded
         """
         if key_name not in self.keys:
-            logger.warning(f"APIEN '{key_name}' does not exist")
+            logger.warning(f"APIkey '{key_name}' not found")
             return False
         
         old_key_info = self.keys[key_name]
         
-        # validateEN
+        # verifytranslatedkeyformat
         if not self._validate_api_key_format(new_api_key, old_key_info.get("provider", "dashscope")):
-            raise ValidationError("ENAPIEN")
+            raise ValidationError("translatedAPIkeyformattranslated")
         
-        # updateEN
+        # updatekey
         self.keys[key_name]["api_key"] = new_api_key
         self.keys[key_name]["rotated_at"] = datetime.now().isoformat()
         self.keys[key_name]["last_used"] = None
@@ -402,15 +402,15 @@ class APIKeyManager:
         self.metadata["last_updated"] = datetime.now().isoformat()
         self._save_keys()
         
-        logger.info(f"succeededENAPIEN: {key_name}")
+        logger.info(f"succeededtranslatedAPIkey: {key_name}")
         return True
     
     def get_usage_statistics(self) -> Dict[str, Any]:
         """
-        fetchuseEN
+        fetchusetranslated
         
         Returns:
-            useEN
+            usetranslatedinfo
         """
         total_keys = len(self.keys)
         active_keys = sum(1 for k in self.keys.values() if k.get("is_active", True))
@@ -435,10 +435,10 @@ class APIKeyManager:
     
     def cleanup_expired_keys(self) -> int:
         """
-        ENAPIEN
+        cleantranslated'sAPIkey
         
         Returns:
-            EN
+            clean'skeytranslated
         """
         cleaned_count = 0
         current_time = datetime.now()
@@ -456,23 +456,23 @@ class APIKeyManager:
             cleaned_count += 1
         
         if cleaned_count > 0:
-            logger.info(f"EN {cleaned_count} ENAPIEN")
+            logger.info(f"cleantranslated {cleaned_count}  translated'sAPIkey")
         
         return cleaned_count
 
-# ENAPIEN
+# translatedAPIkeytranslated
 api_key_manager = APIKeyManager()
 
 def get_api_key(key_name: Optional[str] = None, provider: str = "dashscope") -> Optional[str]:
     """
-    fetchAPIEN
+    fetchAPIkey'stranslated
     
     Args:
-        key_name: EN，ifENNonethenfetchEN
-        provider: EN
+        key_name: keytranslated，iftranslatedNonetranslatedfetchtranslatedkey
+        provider: Providesprovider
         
     Returns:
-        APIEN
+        APIkey
     """
     if key_name:
         return api_key_manager.get_api_key(key_name)
@@ -481,14 +481,14 @@ def get_api_key(key_name: Optional[str] = None, provider: str = "dashscope") -> 
 
 def set_api_key(api_key: str, key_name: str = "default", provider: str = "dashscope") -> bool:
     """
-    settingsAPIEN
+    settingsAPIkey'stranslated
     
     Args:
-        api_key: APIEN
-        key_name: EN
-        provider: EN
+        api_key: APIkey
+        key_name: keytranslated
+        provider: Providesprovider
         
     Returns:
-        ENsettingssucceeded
+        Istranslatedsettingssucceeded
     """
     return api_key_manager.add_api_key(key_name, api_key, provider) 

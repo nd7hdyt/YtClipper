@@ -1,177 +1,177 @@
 # Auto Clips Frontend
 
-EN React + TypeScript + Vite + Ant Design ENAutoEN。
+based on React + TypeScript + Vite + Ant Design clipfrontend。
 
-## EN
+## features
 
-### 🎯 EN
-- **ENUpload**: ENUploadEN
-- **ENProcessing**: AI AutoEN
-- **EN**: EN、EN、DownloadEN
-- **EN**: AI EN + ManualEN
-- **EN**: ProcessingEN
+### 🎯 
+- ****: supportfilesubtitlesfile
+- ****: AI 
+- ****: view、edit、download
+- **create**: AI recommend + create collection
+- **monitor**: progress
 
-### 🎨 EN
-- **EN**: EN Ant Design EN
-- **EN**: EN
-- **EN**: EN、ENDownload
-- **StatusEN**: ENProcessingStatusEN
+### 🎨 
+- ****: based on Ant Design 
+- ****: support
+- ****: 、download
+- **status**: statusprogress
 
-## EN
+## 
 
-- **EN**: React 18 + TypeScript
-- **ENTool**: Vite
-- **UI EN**: Ant Design
-- **StatusEN**: Zustand
-- **EN**: React Router DOM
-- **HTTP EN**: Axios
-- **EN**: React Beautiful DnD
-- **EN**: React Player
-- **ENUpload**: React Dropzone
+- **frontend**: React 18 + TypeScript
+- **buildtool**: Vite
+- **UI **: Ant Design
+- **state management**: Zustand
+- **route**: React Router DOM
+- **HTTP **: Axios
+- ****: React Beautiful DnD
+- ****: React Player
+- **file upload**: React Dropzone
 
-## EN
+## quick start
 
-### EnvironmentEN
+### 
 - Node.js >= 16
-- npm EN yarn
+- npm  yarn
 
-### InstallDependencies
+### installdependencies
 ```bash
 npm install
-# EN
+# 
 yarn install
 ```
 
-### StartENServiceEN
+### startserver
 ```bash
 npm run dev
-# EN
+# 
 yarn dev
 ```
 
-EN http://localhost:3000
+access http://localhost:3000
 
-### ENVersion
+### buildversion
 ```bash
 npm run build
-# EN
+# 
 yarn build
 ```
 
-## ProjectEN
+## project
 
 ```
 frontend/
-├── public/                 # EN
+├── public/                 # 
 ├── src/
-│   ├── components/         # EN
-│   │   ├── Header.tsx      # EN
-│   │   ├── FileUpload.tsx  # ENUploadEN
-│   │   ├── ProjectCard.tsx # ProjectEN
-│   │   ├── ClipCard.tsx    # EN
-│   │   └── CollectionCard.tsx # EN
-│   ├── pages/              # EN
-│   │   ├── HomePage.tsx    # ProjectEN
-│   │   └── ProjectDetailPage.tsx # ProjectEN
-│   ├── services/           # API Service
-│   │   └── api.ts          # API EN
-│   ├── store/              # StatusEN
-│   │   └── useProjectStore.ts # ProjectStatus
-│   ├── App.tsx             # EN
-│   ├── main.tsx            # EN
-│   └── index.css           # EN
+│   ├── components/         # 
+│   │   ├── Header.tsx      # page
+│   │   ├── FileUpload.tsx  # file upload
+│   │   ├── ProjectCard.tsx # project
+│   │   ├── ClipCard.tsx    # 
+│   │   └── CollectionCard.tsx # 
+│   ├── pages/              # page
+│   │   ├── HomePage.tsx    # project
+│   │   └── ProjectDetailPage.tsx # project
+│   ├── services/           # API service
+│   │   └── api.ts          # API API
+│   ├── store/              # state management
+│   │   └── useProjectStore.ts # project status
+│   ├── App.tsx             # 
+│   ├── main.tsx            # 
+│   └── index.css           # 
 ├── package.json
-├── vite.config.ts          # Vite Config
-├── tsconfig.json           # TypeScript Config
+├── vite.config.ts          # Vite config
+├── tsconfig.json           # TypeScript config
 └── README.md
 ```
 
-## EN
+## pagenotes
 
-### ProjectEN (`/`)
-- ProjectEN
-- EN
-- ENProject（ENUpload）
-- ProjectStatusEN
+### project (`/`)
+- project
+- 
+- new project（file upload）
+- project statusmonitor
 
-### ProjectEN (`/project/:id`)
-- ProjectENProcessingStatus
-- EN
-- AI EN
-- ManualEN
-- DownloadEN
+### project (`/project/:id`)
+- projectstatus
+- 
+- AI 
+- create collection
+- downloadexport
 
-## EN
+## notes
 
 ### FileUpload
-- ENUpload
-- ENVerify
-- UploadEN
-- AutoENProject
+- supportclick
+- fileverify
+- progress
+- createproject
 
 ### ProjectCard
-- ProjectEN
-- StatusEN
-- EN
-- EN
+- project
+- status
+- button
+- progress
 
 ### ClipCard
-- EN
-- EN
-- ENDownload
-- EN
+- 
+- 
+- editdownload
+- 
 
 ### CollectionCard
-- EN
-- EN
-- EN
-- GenerateEN
+- 
+- 
+- 
+- generate
 
-## API EN
+## API API
 
-EN `/api` EN，EN：
+frontend `/api` proxybackend，API：
 
-- `GET /api/projects` - ENProjectEN
-- `POST /api/projects` - ENProject
-- `GET /api/projects/:id` - ENProjectEN
-- `POST /api/projects/:id/upload` - UploadEN
-- `POST /api/projects/:id/process` - ENProcessing
-- `GET /api/projects/:id/status` - ENProcessingStatus
-- `PUT /api/projects/:id/clips/:clipId` - EN
-- `PUT /api/projects/:id/collections/:collectionId` - EN
-- `GET /api/projects/:id/download` - DownloadEN
+- `GET /api/projects` - fetchproject
+- `POST /api/projects` - createproject
+- `GET /api/projects/:id` - fetchproject
+- `POST /api/projects/:id/upload` - upload file
+- `POST /api/projects/:id/process` - 
+- `GET /api/projects/:id/status` - fetchstatus
+- `PUT /api/projects/:id/clips/:clipId` - update
+- `PUT /api/projects/:id/collections/:collectionId` - update
+- `GET /api/projects/:id/download` - download
 
-## EN
+## notes
 
-### StatusEN
-EN Zustand ENStatusEN，EN：
-- ProjectENCurrentProject
-- EN
-- ENStatusENErrorEN
+### state management
+use Zustand state management，：
+- projectproject
+- 
+- statuserror
 
-### EN
-- EN Ant Design EN
-- EN，EN
-- EN
-- EN
+### 
+- use Ant Design 
+- responsive design，support
+- 
+- 
 
-### EN
-AllEN TypeScript EN，EN。
+### 
+ TypeScript ，security。
 
-## EN
+## deploynotes
 
-### ENEnvironment
+### dev environment
 ```bash
 npm run dev
 ```
 
-### ENEnvironment
+### production
 ```bash
 npm run build
 npm run preview
 ```
 
-### Docker EN
+### Docker deploy
 ```dockerfile
 FROM node:16-alpine
 WORKDIR /app
@@ -183,35 +183,35 @@ EXPOSE 3000
 CMD ["npm", "run", "preview"]
 ```
 
-## EN
+## 
 
-### EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
+### 
+- [ ] edit
+- [ ] 
+- [ ] exportformat
+- [ ] 
+- [ ] cloudintegration
 
-### EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
+### performance
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] cache
 
-### EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
+### 
+- [ ] support
+- [ ] 
+- [ ] 
+- [ ] access
 
-## EN
+## contributing guide
 
-1. Fork Project
-2. EN
-3. EN
-4. EN
-5. EN Pull Request
+1. Fork project
+2. create
+3. 
+4. 
+5. create Pull Request
 
-## EN
+## 
 
 MIT License

@@ -1,30 +1,30 @@
-# ⚡ AutoClip Desktop ENReference
+# ⚡ AutoClip Desktop 
 
-## 🚀 Quick Start
+## 🚀 quick start
 
-### EN
-1. EN → EN → ENAPIEN → EN
+### use
+1. start → config → settingsAPIkey → use
 
-### EN
+### 
 ```
-UploadEN → EN → EN → EN → EN
+ →  → viewclip → create collection → export
 ```
 
-## 📋 EN
+## 📋 
 
-| EN | EN | EN |
+|  |  | notes |
 |------|--------|------|
-| EN | `Ctrl/Cmd + N` | EN |
-| EN | `Ctrl/Cmd + O` | EN |
-| EN | `Ctrl/Cmd + S` | EN |
-| EN | `F5` | EN |
-| EN | `Ctrl/Cmd + ,` | EN |
-| EN | `Ctrl/Cmd + Q` | EN |
+| new project | `Ctrl/Cmd + N` | createproject |
+| openproject | `Ctrl/Cmd + O` | openproject |
+| project | `Ctrl/Cmd + S` | project |
+| refresh page | `F5` | page |
+| opensettings | `Ctrl/Cmd + ,` | openSettings page |
+|  | `Ctrl/Cmd + Q` |  |
 
-## 📁 SupportEN
+## 📁 supportfileformat
 
-### EN
-- **MP4** ✅ (EN)
+### format
+- **MP4** ✅ (recommend)
 - **AVI** ✅
 - **MOV** ✅
 - **MKV** ✅
@@ -32,290 +32,290 @@ UploadEN → EN → EN → EN → EN
 - **FLV** ✅
 - **WMV** ✅
 
-### EN
-- **SRT** ✅ (EN)
+### subtitlesformat
+- **SRT** ✅ (recommend)
 - **VTT** ✅
 - **ASS** ✅
 - **SSA** ✅
 
-## ⚙️ EN
+## ⚙️ config
 
-### EN
+### speech recognitionconfig
 
-#### ENWhisperEN
+#### localWhispermodel
 ```yaml
-EN:
-  - base: EN (EN)
-  - small: EN
-  - medium: EN
-  - large: EN
+model selection:
+  - base:  (recommend)
+  - small: 
+  - medium: 
+  - large: 
 
-LanguageEN:
-  - auto: EN
+settings:
+  - auto: auto-detect
   - zh: Chinese
   - en: English
-  - ja: EN
+  - ja: Japanese
 ```
 
-#### ENAPIEN
+#### cloudAPIservice
 ```yaml
 OpenAI Whisper:
-  - EN: EN、EN
-  - EN: EN
+  - pros: 、
+  - cons: need
 
 Azure Speech:
-  - EN: EN
-  - EN: EN
+  - pros: service
+  - cons: config
 
 Google Cloud:
-  - EN: EN
-  - EN: ENGoogleAccount
+  - pros: free
+  - cons: needGoogleaccount
 ```
 
-### AIEN
+### AImodelconfig
 
-#### EN
+#### recommended config
 ```yaml
-EN:
-  - EN: qwen-plus
-  - EN: ChineseSupportEN
-  - EN: ChineseEN
+Alibaba Qwen:
+  - model: qwen-plus
+  - pros: Chinesesupport
+  - applicable: Chinese
 
 OpenAI GPT:
-  - EN: gpt-4
-  - EN: EN
-  - EN: ENLanguageEN
+  - model: gpt-4
+  - pros: 
+  - applicable: 
 
 Google Gemini:
-  - EN: gemini-pro
-  - EN: EN
-  - EN: EN
+  - model: gemini-pro
+  - pros: free
+  - applicable: daily use
 ```
 
-## 🎯 EN
+## 🎯 settings
 
-### EN
+### 
 
-| EN | EN | EN | EN |
+| settings |  | medium |  |
 |------|--------|----------|--------|
-| EN | 512MB | 2GB | 5GB |
-| EN | 1 | 2 | 4 |
-| EN | 2GB | 4GB | 8GB |
-| EN | EN | EN | EN |
-| EN | EN | EN | EN |
+| filelimit | 512MB | 2GB | 5GB |
+|  | 1 | 2 | 4 |
+| memoryuse | 2GB | 4GB | 8GB |
+|  |  | medium |  |
+| use cases |  | daily use |  |
 
-### EN
+### recommended config
 
-#### EN
+#### 
 ```yaml
-EN: EN
-EN: ENWhisper (baseEN)
-AIEN: EN
-EN: 2
+: medium
+speech recognition: localWhisper (basemodel)
+AImodel: Alibaba Qwen
+: 2
 ```
 
-#### EN
+#### 
 ```yaml
-EN: EN
-EN: ENAPI
-AIEN: OpenAI GPT-4
-EN: 4
+: 
+speech recognition: cloudAPI
+AImodel: OpenAI GPT-4
+: 4
 ```
 
-## 🔧 EN
+## 🔧 
 
-### Project Management
+### project management
 
-#### EN
-1. EN "EN"
-2. EN
-3. EN
-4. EN "EN"
+#### createproject
+1. click "new project"
+2. selectfile
+3. project
+4. click ""
 
-#### EN
-- 🔄 **EN**: EN
-- ✅ **EN**: EN
-- ❌ **EN**: EN
-- ⏸️ **EN**: EN
+#### project status
+- 🔄 **processing**: 
+- ✅ **completed**: canview
+- ❌ **failed**: need
+- ⏸️ ****: 
 
-### EN
+### clip
 
-#### EN
-- **90-100EN**: EN，EN
-- **80-89EN**: EN，EN
-- **70-79EN**: EN，EN
-- **60-69EN**: EN，EN
-- **60EN**: EN
+#### clip
+- **90-100**: ，recommend
+- **80-89**: ，recommended
+- **70-79**: ，canuse
+- **60-69**: ，use
+- **60**: recommended
 
-#### EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN"EN"
+#### clip
+- ****: clickclip
+- **edit**: clickeditbutton
+- ****: clickbutton
+- ****: selectclick"create collection"
 
-### EN
+### 
 
-#### EN
-- **AIEN**: EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+#### 
+- **AIrecommend**: recommend
+- **create**: select
+- ****: 
+- ****: 
 
-#### EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+#### 
+- **view**: click
+- **edit**: 
+- ****: 
+- **export**: generate
 
-## 🚨 TroubleshootingEN
+## 🚨 troubleshooting
 
 ### FAQ
 
-#### EN
+#### start
 ```bash
-EN:
-1. EN
-2. EN
-3. EN
-4. EN
+checkproject:
+1. 
+2. install
+3. checksettings
+4. viewerror
 ```
 
-#### UploadEN
+#### failed
 ```bash
-EN:
-- ENSupport
-- EN
-- EN
-- EN
+reason:
+- fileformatsupport
+- file
+- network issue
+- 
 
-EN:
-1. EN
-2. EN
-3. EN
-4. ENUpload
+solution:
+1. checkfileformat
+2. check network connection
+3. 
+4. 
 ```
 
-#### EN
+#### 
 ```bash
-EN:
-1. EN
-2. EN
-3. ENAPI
-4. EN
+:
+1. settings
+2. 
+3. usecloudAPI
+4. selectmodel
 ```
 
-#### APIEN
+#### APIconnection failed
 ```bash
-EN:
-1. ENAPIEN
-2. EN
-3. EN
-4. EN
+checkstep:
+1. verifyAPIkey
+2. check network connection
+3. confirmservicestatus
+4. check
 ```
 
-### EN
+### error
 
-| EN | EN | EN |
+|  | issue | solve |
 |------|------|------|
-| ERR_001 | ENSupport | ENMP4EN |
-| ERR_002 | EN | EN |
-| ERR_003 | APIEN | ENAPIEN |
-| ERR_004 | EN | EN |
-| ERR_005 | EN | EN |
-| ERR_006 | EN | EN |
+| ERR_001 | fileformatsupport | useMP4format |
+| ERR_002 | file | file |
+| ERR_003 | APIkey | updateAPIkey |
+| ERR_004 | connection failed | checksettings |
+| ERR_005 |  |  |
+| ERR_006 | out of memory | settings |
 
-## 📊 EN
+## 📊 best practices
 
-### EN
+### 
 ```yaml
-EN:
-  - EN: 1080p+
-  - EN: 30fps+
-  - EN: EN
+:
+  - : 1080p+
+  - : 30fps+
+  - : 
 
-EN:
-  - EN
-  - EN
-  - EN
-  - EN
+:
+  - 
+  - 
+  - 
+  - 
 ```
 
-### EN
+### clip
 ```yaml
-EN:
-  - EN
-  - EN
-  - 30EN
+:
+  - 
+  - 
+  - 30
 
-EN:
-  - EN
-  - EN
-  - EN
+:
+  - 
+  - 
+  - 
 ```
 
-### EN
+### 
 ```yaml
-EN:
-  - EN
-  - EN
-  - EN
+:
+  - 
+  - 
+  - 
 
-EN:
-  - EN
-  - EN
-  - EN
+:
+  - 
+  - 
+  - update
 ```
 
-## 🔄 EN
+## 🔄 update
 
-### EN
-- EN
-- EN"EN"EN
-- EN
+### auto-update
+- checkupdate
+- click"update"installversion
+- restart app
 
-### EN
-1. ENGitHub ReleasesEN
-2. EN
-3. EN
+### manual update
+1. accessGitHub Releasespage
+2. downloadinstall
+3. install
 
-### EN
+### 
 ```yaml
-EN:
-  - EN
-  - EN
-  - EN
+:
+  - project
+  - configfile
+  - settings
 
-EN:
+location:
   - macOS: ~/Library/Application Support/AutoClip
   - Windows: %APPDATA%/AutoClip
   - Linux: ~/.config/AutoClip
 ```
 
-## 📞 EN
+## 📞 get help
 
-### EN
-- **EN**: EN
-- **EN**: EN
-- **FAQ**: FAQEN
+### 
+- ****: usenotes
+- ****: 
+- **FAQ**: FAQsolution
 
-### ENSupport
-- **GitHub Issues**: EN
-- **EN**: EN
-- **ENSupport**: ENSupport
+### tech support
+- **GitHub Issues**: issue
+- ****: 
+- **support**: tech support
 
-### EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+### 
+- ****: 
+- **use**: 
+- **issue**: issue
 
 ---
 
-## 💡 EN
+## 💡 
 
-1. **EN**：EN
-2. **Performance**：EN
-3. **APIEN**：ENAPIEN
-4. **EN**：EN
-5. **EN**：EN
+1. **use**：
+2. **performance**：configselect
+3. **APIconfig**：configAPIservice
+4. ****：needprojectcachefile
+5. ****：project
 
-🎉 **EN！**
+🎉 **use！**

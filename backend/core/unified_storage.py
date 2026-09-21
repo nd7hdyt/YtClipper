@@ -1,6 +1,6 @@
 """
-ENservice
-ENallENuseENpathEN
+translatedonetranslatedservice
+ensuretranslatedusetranslated'spathtranslatedAndtranslated
 """
 
 import os
@@ -13,37 +13,37 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 
 class UnifiedStorageManager:
-    """EN"""
+    """translatedonetranslated"""
     
     def __init__(self, project_root: Optional[Path] = None):
         """
-        initializeEN
+        translatedonetranslated
         
         Args:
-            project_root: projectENdirectory，ifENNonethenEN
+            project_root: projecttranslateddirectory，iftranslatedNonetranslated
         """
         self.project_root = project_root or self._get_project_root()
         self.data_dir = self.project_root / "data"
         self.output_dir = self.data_dir / "output"
         
-        # ENdirectoryEN
+        # ensuretranslateddirectorytranslatedin
         self._ensure_directories()
     
     def _get_project_root(self) -> Path:
-        """fetchprojectENdirectory"""
+        """fetchprojecttranslateddirectory"""
         current_path = Path(__file__).parent  # backend/core/
         
-        # ENprojectENdirectory
+        # translatedprojecttranslateddirectory
         while current_path.parent != current_path:
             if (current_path.parent / "frontend").exists() and (current_path.parent / "backend").exists():
                 return current_path.parent
             current_path = current_path.parent
         
-        # ifEN，useENpath
+        # iftranslated，usedefaultpath
         return Path(__file__).parent.parent.parent
     
     def _ensure_directories(self):
-        """ENdirectoryEN"""
+        """ensuretranslateddirectorytranslatedin"""
         directories = [
             self.data_dir,
             self.output_dir,
@@ -59,7 +59,7 @@ class UnifiedStorageManager:
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
     
-    # projectENpath
+    # projecttranslatedpath
     def get_project_directory(self, project_id: str) -> Path:
         """fetchprojectdirectory"""
         project_dir = self.data_dir / "projects" / project_id
@@ -67,13 +67,13 @@ class UnifiedStorageManager:
         return project_dir
     
     def get_project_raw_directory(self, project_id: str) -> Path:
-        """fetchprojectENfiledirectory"""
+        """fetchprojecttranslatedfiledirectory"""
         raw_dir = self.get_project_directory(project_id) / "raw"
         raw_dir.mkdir(parents=True, exist_ok=True)
         return raw_dir
     
     def get_project_output_directory(self, project_id: str) -> Path:
-        """fetchprojectENdirectory"""
+        """fetchprojecttranslateddirectory"""
         output_dir = self.get_project_directory(project_id) / "output"
         output_dir.mkdir(parents=True, exist_ok=True)
         return output_dir
@@ -91,49 +91,49 @@ class UnifiedStorageManager:
         return collections_dir
     
     def get_project_metadata_directory(self, project_id: str) -> Path:
-        """fetchprojectENdirectory"""
+        """fetchprojecttranslateddirectory"""
         metadata_dir = self.get_project_directory(project_id) / "metadata"
         metadata_dir.mkdir(parents=True, exist_ok=True)
         return metadata_dir
     
-    # filepathEN
+    # file pathtranslated
     def get_video_file_path(self, project_id: str, filename: str) -> Path:
-        """fetchprojectvideofilepath"""
+        """fetchprojectvideofile path"""
         return self.get_project_raw_directory(project_id) / filename
     
     def get_srt_file_path(self, project_id: str, filename: str) -> Path:
-        """fetchprojectSRTfilepath"""
+        """fetchprojectSRTfile path"""
         return self.get_project_raw_directory(project_id) / filename
     
     def get_clip_file_path(self, project_id: str, clip_id: str, title: str) -> Path:
-        """fetchclipfilepath"""
-        # ENfileEN，EN
+        """fetchclipfile path"""
+        # cleanfiletranslated，translated
         safe_title = self._sanitize_filename(title)
         return self.get_project_clips_directory(project_id) / f"{clip_id}_{safe_title}.mp4"
     
     def get_collection_file_path(self, project_id: str, collection_id: str, title: str) -> Path:
-        """fetchcollectionfilepath"""
-        # ENfileEN，EN
+        """fetchcollectionfile path"""
+        # cleanfiletranslated，translated
         safe_title = self._sanitize_filename(title)
         return self.get_project_collections_directory(project_id) / f"{collection_id}_{safe_title}.mp4"
     
     def get_metadata_file_path(self, project_id: str, filename: str) -> Path:
-        """fetchprojectENfilepath"""
+        """fetchprojecttranslatedfile path"""
         return self.get_project_metadata_directory(project_id) / filename
     
-    # fileEN
+    # filetranslated
     def save_metadata(self, project_id: str, filename: str, data: Dict[str, Any]) -> Path:
-        """saveENfile"""
+        """translatedfile"""
         metadata_file = self.get_metadata_file_path(project_id, filename)
         
         with open(metadata_file, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         
-        logger.info(f"ENsave: {metadata_file}")
+        logger.info(f"translated: {metadata_file}")
         return metadata_file
     
     def load_metadata(self, project_id: str, filename: str) -> Optional[Dict[str, Any]]:
-        """loadENfile"""
+        """translatedfile"""
         metadata_file = self.get_metadata_file_path(project_id, filename)
         
         if metadata_file.exists():
@@ -141,35 +141,35 @@ class UnifiedStorageManager:
                 with open(metadata_file, 'r', encoding='utf-8') as f:
                     return json.load(f)
             except Exception as e:
-                logger.error(f"loadENfailed {metadata_file}: {e}")
+                logger.error(f"translatedfailed {metadata_file}: {e}")
         
         return None
     
     def file_exists(self, file_path: Union[str, Path]) -> bool:
-        """checkfileEN"""
+        """checkfileIstranslatedin"""
         return Path(file_path).exists()
     
     def get_file_size(self, file_path: Union[str, Path]) -> int:
-        """fetchfileEN（EN）"""
+        """fetchfiletranslated（translated）"""
         try:
             return Path(file_path).stat().st_size
         except Exception:
             return 0
     
     def get_file_modified_time(self, file_path: Union[str, Path]) -> Optional[datetime]:
-        """fetchfileENtime"""
+        """fetchfiletranslated"""
         try:
             timestamp = Path(file_path).stat().st_mtime
             return datetime.fromtimestamp(timestamp)
         except Exception:
             return None
     
-    # pathvalidateEN
+    # pathverifyAndfixed
     def validate_file_path(self, file_path: Union[str, Path]) -> bool:
-        """validatefilepathEN"""
+        """verifyfile pathIstranslated"""
         try:
             file_path = Path(file_path).resolve()
-            # checkpathENdirectoryEN
+            # checkpathIstranslatedintranslated'sdirectorytranslated
             allowed_dirs = [
                 self.data_dir,
                 self.output_dir,
@@ -182,25 +182,25 @@ class UnifiedStorageManager:
     
     def fix_file_path(self, file_path: Union[str, Path], project_id: str, file_type: str = "clip") -> Optional[Path]:
         """
-        ENfilepath，ENfileEN
+        fixedfile path，ensurefileintranslated'stranslated
         
         Args:
-            file_path: ENfilepath
+            file_path: translatedfile path
             project_id: projectID
-            file_type: fileEN ("clip", "collection", "raw")
+            file_type: filetranslated ("clip", "collection", "raw")
             
         Returns:
-            ENfilepath，iffiledoes not existthenreturnNone
+            fixedtranslated'sfile path，iftranslatedfile not foundtranslatedreturnNone
         """
         original_path = Path(file_path)
         
-        # iffileENpathEN，ENreturn
+        # iftranslatedfiletranslatedintranslatedpathtranslated，translatedreturn
         if original_path.exists() and self.validate_file_path(original_path):
             return original_path
         
-        # ENfile
+        # translatedintranslatedfile
         if file_type == "clip":
-            # ENfileENclip_idENtitle
+            # fromfiletranslatedclip_idAndtitle
             filename = original_path.name
             if '_' in filename:
                 parts = filename.split('_', 1)
@@ -212,7 +212,7 @@ class UnifiedStorageManager:
                         return standard_path
         
         elif file_type == "collection":
-            # ENfileENcollection_idENtitle
+            # fromfiletranslatedcollection_idAndtitle
             filename = original_path.name
             if '_' in filename:
                 parts = filename.split('_', 1)
@@ -223,13 +223,13 @@ class UnifiedStorageManager:
                     if standard_path.exists():
                         return standard_path
             else:
-                # ENusefileENtitle
+                # translatedusefiletranslatedtitle
                 title = filename.replace('.mp4', '')
-                # ENneedcollection_id，ENreturnNone
+                # thistranslatedcollection_id，translatedreturnNone
                 return None
         
         elif file_type == "raw":
-            # ENfileENrawdirectory
+            # translatedfiletranslatedinrawdirectory
             filename = original_path.name
             standard_path = self.get_project_raw_directory(project_id) / filename
             if standard_path.exists():
@@ -237,10 +237,10 @@ class UnifiedStorageManager:
         
         return None
     
-    # EN
+    # tooltranslated
     def _sanitize_filename(self, filename: str) -> str:
-        """ENfileEN，EN"""
-        # EN
+        """cleanfiletranslated，translated"""
+        # translatedortranslated
         safe_chars = []
         for char in filename:
             if char.isalnum() or char in (' ', '-', '_', '，', '。', '？', '！', '：', '；'):
@@ -248,18 +248,18 @@ class UnifiedStorageManager:
             else:
                 safe_chars.append('_')
         
-        # EN
+        # translatedmultitranslated'stranslatedAndtranslated
         result = ''.join(safe_chars).strip()
         result = result.replace(' ', '_')
         
-        # EN
+        # translated'stranslated
         while '__' in result:
             result = result.replace('__', '_')
         
         return result
     
     def get_storage_info(self, project_id: str) -> Dict[str, Any]:
-        """fetchprojectEN"""
+        """fetchprojecttranslatedinfo"""
         project_dir = self.get_project_directory(project_id)
         
         info = {
@@ -272,7 +272,7 @@ class UnifiedStorageManager:
             "total_size": 0
         }
         
-        # ENfile
+        # translatedfile
         raw_dir = self.get_project_raw_directory(project_id)
         for file_path in raw_dir.iterdir():
             if file_path.is_file():
@@ -283,7 +283,7 @@ class UnifiedStorageManager:
                 })
                 info["total_size"] += file_path.stat().st_size
         
-        # ENclipfile
+        # translatedclipfile
         clips_dir = self.get_project_clips_directory(project_id)
         for file_path in clips_dir.iterdir():
             if file_path.is_file() and file_path.suffix == '.mp4':
@@ -294,7 +294,7 @@ class UnifiedStorageManager:
                 })
                 info["total_size"] += file_path.stat().st_size
         
-        # ENcollectionfile
+        # translatedcollectionfile
         collections_dir = self.get_project_collections_directory(project_id)
         for file_path in collections_dir.iterdir():
             if file_path.is_file() and file_path.suffix == '.mp4':
@@ -305,7 +305,7 @@ class UnifiedStorageManager:
                 })
                 info["total_size"] += file_path.stat().st_size
         
-        # ENfile
+        # translatedfile
         metadata_dir = self.get_project_metadata_directory(project_id)
         for file_path in metadata_dir.iterdir():
             if file_path.is_file() and file_path.suffix == '.json':
@@ -318,11 +318,11 @@ class UnifiedStorageManager:
         
         return info
 
-# EN
+# translated
 _storage_manager = None
 
 def get_storage_manager() -> UnifiedStorageManager:
-    """fetchEN"""
+    """fetchtranslated"""
     global _storage_manager
     if _storage_manager is None:
         _storage_manager = UnifiedStorageManager()

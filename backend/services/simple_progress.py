@@ -1,6 +1,6 @@
 """
-ENprogressservice - EN + EN
-EN"EN"EN
+translated'sprogressservice - translated + translated
+Based ontranslated's"translated"translated
 """
 
 import time
@@ -11,25 +11,25 @@ import sqlite3
 import threading
 import os
 try:
-    import redis  # EN
+    import redis  # canSelectdependencies
 except Exception:
     redis = None
 
 logger = logging.getLogger(__name__)
 
-# EN - ENyourprojectEN
+# translated - translated'sprojecttranslated
 STAGES: List[Tuple[str, int]] = [
-    ("INGEST", 10),        # download/EN
-    ("SUBTITLE", 15),      # subtitles/EN
-    ("ANALYZE", 20),       # ENanalysis/EN
-    ("HIGHLIGHT", 25),     # EN/EN
-    ("EXPORT", 20),        # EN/EN
-    ("DONE", 10),          # EN/EN
+    ("INGEST", 10),        # download/translated
+    ("SUBTITLE", 15),      # subtitles/translated
+    ("ANALYZE", 20),       # translated/translated
+    ("HIGHLIGHT", 25),     # translated/translated
+    ("EXPORT", 20),        # export/translated
+    ("DONE", 10),          # translated/translated
 ]
 
-# EN
+# translated
 WEIGHTS = {name: w for name, w in STAGES}
-# EN
+# translated
 ORDER = [name for name, _ in STAGES]
 
 class ProgressStore:
@@ -150,7 +150,7 @@ class SqliteProgressStore(ProgressStore):
         return results
 
 
-# EN：DesktopENSQLite；ServerENRedis，failedthenENSQLite
+# Selectselecttranslated：DesktoptranslatedSQLite；ServertranslatedRedis，failedtranslatedSQLite
 store: ProgressStore
 try:
     from backend.core.desktop_config import is_desktop_mode, get_desktop_paths
@@ -158,20 +158,20 @@ try:
         paths = get_desktop_paths()
         db_file = os.path.join(str(paths.data_dir), "progress.db")
         store = SqliteProgressStore(db_file)
-        logger.info(f"ENuseSQLiteprogressEN: {db_file}")
+        logger.info(f"translateduseSQLiteprogresstranslated: {db_file}")
     else:
         if redis is None:
-            raise RuntimeError("redis EN")
-        # ENfetchRedis URL，EN
+            raise RuntimeError("redis translatedinstall")
+        # fromtranslatedfetchRedis URL，defaulttranslatedlocaltranslated
         redis_url = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/0")
         r_client = redis.Redis.from_url(redis_url, decode_responses=True)
         r_client.ping()
         store = RedisProgressStore(r_client)
-        logger.info("ServerENuseRedisprogressEN")
+        logger.info("ServertranslateduseRedisprogresstranslated")
 except Exception as e:
-    # ENSQLite
+    # translatedSQLite
     try:
-        # ENuseENdirectory；ENthenENprojectEN data directory
+        # translatedusetranslateddirectory；translatedcanusetranslatedprojecttranslated data directory
         db_file = None
         try:
             from backend.core.desktop_config import get_desktop_paths
@@ -180,48 +180,48 @@ except Exception as e:
             from pathlib import Path
             db_file = str((Path(__file__).parent.parent.parent / 'data' / 'progress.db').resolve())
         store = SqliteProgressStore(db_file)
-        logger.warning(f"RedisEN，ENSQLiteprogressEN: {db_file}，EN: {e}")
+        logger.warning(f"Redistranslatedcanuseortranslatedinstall，translatedSQLiteprogresstranslated: {db_file}，translated: {e}")
     except Exception as e2:
-        logger.error(f"initializeprogressENfailed: {e2}")
+        logger.error(f"translatedprogresstranslatedfailed: {e2}")
         store = None
 
 
 def compute_percent(stage: str, subpercent: Optional[float] = None) -> int:
     """
-    EN
+    translated'stranslated
     
     Args:
-        stage: currentEN
-        subpercent: ENprogressEN (0-100)，EN
+        stage: Current Stagetranslated
+        subpercent: translatedprogresstranslated (0-100)，canSelect
         
     Returns:
-        ENprogressEN (0-100)
+        translatedprogresstranslated (0-100)
     """
-    # ENbeforeEN
+    # translated
     done = 0
     for s in ORDER:
         if s == stage:
             break
         done += WEIGHTS[s]
     
-    # currentEN
+    # Current Stage
     cur = WEIGHTS.get(stage, 0)
     
     if subpercent is None:
-        # EN，ENcurrentENstart
+        # translated，translatedCurrent Stagetranslated
         return min(100, done + cur) if stage == "DONE" else min(99, done)
     else:
-        # ENprogress，EN
+        # translatedprogress，bytranslated
         subpercent = max(0, min(100, subpercent))
         return min(99, done + int(cur * subpercent / 100))
 
 
-# EN（CLI / MCP ENprogress；API EN）
+# processtranslated（CLI / MCP usetranslatedprogress；API processusetranslated）
 _listeners: List[Any] = []
 
 
 def add_progress_listener(fn) -> None:
-    """registerENprogressEN：fn(payload: dict)。payload EN project_id / stage / percent / message / ts。"""
+    """translatedprocesstranslatedprogresstranslated：fn(payload: dict)。payload include project_id / stage / percent / message / ts。"""
     if fn not in _listeners:
         _listeners.append(fn)
 
@@ -235,13 +235,13 @@ def remove_progress_listener(fn) -> None:
 
 def emit_progress(project_id: str, stage: str, message: str = "", subpercent: Optional[float] = None):
     """
-    sendprogressEN
+    translatedprogresstranslated
     
     Args:
         project_id: projectID
-        stage: currentEN
-        message: progressEN
-        subpercent: ENprogressEN，EN
+        stage: Current Stage
+        message: progresstranslated
+        subpercent: translatedprogresstranslated，canSelect
     """
     percent = compute_percent(stage, subpercent)
     payload = {
@@ -256,28 +256,28 @@ def emit_progress(project_id: str, stage: str, message: str = "", subpercent: Op
         try:
             fn(payload)
         except Exception as e:  # noqa: BLE001
-            logger.debug(f"progressENexception: {e}")
+            logger.debug(f"progresstranslated: {e}")
 
     if not store:
-        logger.warning("progressENinitialize，ENprogresssend")
+        logger.warning("progresstranslated，skipprogresstranslated")
         return
     
     try:
         store.save(project_id, stage, percent, message, payload["ts"])
-        logger.info(f"progressENsend: {project_id} - {stage} ({percent}%) - {message}")
+        logger.info(f"progresstranslated: {project_id} - {stage} ({percent}%) - {message}")
     except Exception as e:
-        logger.error(f"sendprogressENfailed: {e}")
+        logger.error(f"translatedprogresstranslatedfailed: {e}")
 
 
 def get_progress_snapshot(project_id: str) -> Optional[Dict[str, Any]]:
     """
-    fetchprojectprogressEN
+    fetchprojectprogresstranslated
     
     Args:
         project_id: projectID
         
     Returns:
-        progressEN，ifdoes not existreturnNone
+        progresstranslated，iftranslatednot foundreturnNone
     """
     if not store:
         return None
@@ -285,32 +285,32 @@ def get_progress_snapshot(project_id: str) -> Optional[Dict[str, Any]]:
     try:
         return store.get(project_id)
     except Exception as e:
-        logger.error(f"fetchprogressENfailed: {e}")
+        logger.error(f"fetchprogresstranslatedfailed: {e}")
         return None
 
 
 def get_multiple_progress_snapshots(project_ids: List[str]) -> List[Dict[str, Any]]:
     """
-    ENfetchENprojectENprogressEN
+    translatedfetchmulti project'sprogresstranslated
     
     Args:
-        project_ids: projectIDEN
+        project_ids: projectIDlist
         
     Returns:
-        progressEN
+        progresstranslatedlist
     """
     if not store:
         return []
     try:
         return store.get_many(project_ids)
     except Exception as e:
-        logger.error(f"ENfetchprogressENfailed: {e}")
+        logger.error(f"translatedfetchprogresstranslatedfailed: {e}")
         return []
 
 
 def clear_progress(project_id: str):
     """
-    ENprojectprogressEN
+    translatedprojectprogresstranslated
     
     Args:
         project_id: projectID
@@ -319,21 +319,21 @@ def clear_progress(project_id: str):
         return
     try:
         store.delete(project_id)
-        logger.info(f"ENprojectprogressEN: {project_id}")
+        logger.info(f"translatedprojectprogresstranslated: {project_id}")
     except Exception as e:
-        logger.error(f"ENprogressENfailed: {e}")
+        logger.error(f"translatedprogresstranslatedfailed: {e}")
 
 
-# EN（EN）
+# translated（usetranslated）
 STAGE_NAMES = {
-    "INGEST": "EN",
-    "SUBTITLE": "subtitlesprocessing", 
-    "ANALYZE": "ENanalysis",
-    "HIGHLIGHT": "EN",
-    "EXPORT": "videoEN",
-    "DONE": "processingEN"
+    "INGEST": "translated",
+    "SUBTITLE": "subtitlesprocess", 
+    "ANALYZE": "translated",
+    "HIGHLIGHT": "translated",
+    "EXPORT": "videoexport",
+    "DONE": "processing completed"
 }
 
 def get_stage_display_name(stage: str) -> str:
-    """fetchEN"""
+    """fetchtranslated'stranslated"""
     return STAGE_NAMES.get(stage, stage)

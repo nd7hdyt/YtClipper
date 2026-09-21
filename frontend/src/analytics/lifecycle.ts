@@ -1,12 +1,12 @@
 /**
- * EN + Global properties（super properties）。
+ * translatedusetranslatedAnalytics + translated（super properties）。
  *
- * - Global properties：app_version / os / arch / locale，EN，
- *   EN"version / system / arch"ClipEN（EN"ENversionENsystemFailedENHigh"EN）。
- * - EN：
- *   - app_installed：EN（= EN）
- *   - app_opened：On each startup（PostHog EN DAU / EN）
- *   - app_updated：versionENChange
+ * - translated：app_version / os / arch / locale，translatedpertranslated，
+ *   translatedby"version / System / translated"cliptranslated（Troubleshoot"translatedversionintranslatedSystemfailedtranslated"etc.）。
+ * - translated：
+ *   - app_installed：translatedstart（= translated）
+ *   - app_opened：pertranslatedstart（PostHog translated DAU / translated）
+ *   - app_updated：versiontranslated
  */
 import { getVersion } from '@tauri-apps/api/app'
 import { posthog } from './posthog'
@@ -15,7 +15,7 @@ const INSTALL_FLAG_KEY = 'autoclip.analytics.installed'
 const LAST_VERSION_KEY = 'autoclip.analytics.lastVersion'
 const SESSION_COUNT_KEY = 'autoclip.analytics.sessionCount'
 
-/** EN webview EN UA Rough parseActionssystem，EN Rust EN plugin-os EN。 */
+/** from webview 's UA translatedSystem，translated Rust translated's plugin-os dependencies。 */
 function detectOS(): string {
   const ua = navigator.userAgent
   if (/Mac/i.test(ua)) return 'macos'
@@ -24,7 +24,7 @@ function detectOS(): string {
   return 'unknown'
 }
 
-/** Rough parse CPU arch（EN Intel / Apple Silicon EN）。 */
+/** translated CPU translated（usetranslated Intel / Apple Silicon etc.）。 */
 function detectArch(): string {
   const ua = navigator.userAgent
   if (/arm64|aarch64/i.test(ua)) return 'arm64'
@@ -36,7 +36,7 @@ async function getAppVersion(): Promise<string> {
   try {
     return await getVersion()
   } catch {
-    // EN Tauri EN（EN vite dev）ENtoversion
+    // translated Tauri translated（iftranslated vite dev）translatedversion
     return 'unknown'
   }
 }
@@ -60,14 +60,14 @@ function safeSet(key: string, value: string): void {
 export interface RuntimeInfo { version: string; os: string; arch: string; locale: string }
 let runtimeInfo: RuntimeInfo = { version: 'unknown', os: detectOS(), arch: detectArch(), locale: typeof navigator !== 'undefined' ? navigator.language : '' }
 
-/** EN（version / system / arch），EN；EN。 */
+/** starttranslatedcache'stranslated（version / System / translated），translatedetc.translateduse；translateddependenciesAnalyticsIstranslated。 */
 export function getRuntimeInfo(): RuntimeInfo {
   return runtimeInfo
 }
 
 /**
- * ENGlobal propertiesEN。
- * EN initAnalytics() ENonce。posthog EN。
+ * translatedstarttranslated。
+ * in initAnalytics() translatedcallonetranslated。posthog translatedOnlycachetranslated。
  */
 export async function trackLaunch(): Promise<void> {
   const version = await getAppVersion()
@@ -78,7 +78,7 @@ export async function trackLaunch(): Promise<void> {
 
   if (typeof posthog?.register !== 'function') return
 
-  // Global properties：EN
+  // translated：translatedpertranslated
   posthog.register({
     app_version: version,
     os,
@@ -86,11 +86,11 @@ export async function trackLaunch(): Promise<void> {
     app_locale: locale,
   })
 
-  // EN
+  // translated
   const sessionCount = readInt(SESSION_COUNT_KEY) + 1
   safeSet(SESSION_COUNT_KEY, String(sessionCount))
 
-  // ENinstall
+  // translatedinstall
   let isInstalled = false
   try {
     isInstalled = localStorage.getItem(INSTALL_FLAG_KEY) === 'true'
@@ -114,6 +114,6 @@ export async function trackLaunch(): Promise<void> {
   }
   safeSet(LAST_VERSION_KEY, version)
 
-  // On each startup
+  // pertranslatedstart
   posthog.capture('app_opened', { version, session_number: sessionCount })
 }

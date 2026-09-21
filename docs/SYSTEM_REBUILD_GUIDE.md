@@ -1,171 +1,171 @@
-# AutoClip EN
+# AutoClip 
 
-## 🎯 EN
+## 🎯 target
 
-EN，EN。EN，EN、EN、EN。
+，status。nowcan，、、。
 
-## 📋 EN
+## 📋 status
 
-### **✅ EN**
-- [x] EN（EN0）
-- [x] EN
-- [x] EN
-- [x] EN
-- [x] EN
+### **✅ completed**
+- [x] database（0）
+- [x] file systemcompleted
+- [x] filecompleted
+- [x] create
+- [x] database
 
-### **🏗️ EN**
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
+### **🏗️ need**
+- [ ] databaseverify
+- [ ] configcheck
+- [ ] frontendstatus
+- [ ] projectcreatetest
 
-## 🔧 EN
+## 🔧 step
 
-### **EN：EN**
+### **：verify**
 
-1. **EN**
+1. **checkdatabase**
    ```bash
    sqlite3 data/autoclip.db ".schema"
    ```
 
-2. **EN**
+2. **check**
    ```bash
    tree data/ -L 3
    ```
 
-3. **EN**
+3. **verifyconfigfile**
    - `backend/core/config.py`
    - `backend/core/unified_paths.py`
 
-### **EN：EN**
+### **：starttest**
 
-1. **EN**
+1. **startbackendservice**
    ```bash
    cd backend
    python main.py
    ```
 
-2. **EN**
+2. **startfrontendservice**
    ```bash
    cd frontend
    npm run dev
    ```
 
-3. **EN**
-   - ENAPI: http://localhost:8000/health
-   - EN: http://localhost:3000
+3. **checkservicestatus**
+   - backendAPI: http://localhost:8000/health
+   - frontendpage: http://localhost:3000
 
-### **EN：EN**
+### **：createtestproject**
 
-1. **UploadEN**
-   - ENInterfaceUploadEN
-   - EN
+1. **test**
+   - usefrontend
+   - verifyprojectcreate
 
-2. **EN**
-   - EN
-   - EN
-   - EN
+2. **check**
+   - verifydatabase
+   - verifyfile system
+   - verifyfrontend
 
-## 📁 EN
+## 📁 
 
 ```
 data/
-├── autoclip.db                 # EN
-├── autoclip_backup_*.db        # EN
-├── projects/                   # EN
-├── output/                     # EN
-│   ├── clips/                  # EN
-│   ├── collections/            # EN
-│   └── metadata/               # EN
-├── temp/                       # EN
-├── cache/                      # EN
-├── uploads/                    # UploadEN
-└── backups/                    # EN
+├── autoclip.db                 # database
+├── autoclip_backup_*.db        # database
+├── projects/                   # project
+├── output/                     # 
+│   ├── clips/                  # clip
+│   ├── collections/            # 
+│   └── metadata/               # metadata
+├── temp/                       # file
+├── cache/                      # cachefile
+├── uploads/                    # upload file
+└── backups/                    # file
 ```
 
-## 🚀 EN
+## 🚀 best practices
 
-### **1. EN**
-- EN
-- EN
-- EN
+### **1. data management**
+- projectcompletedmetadatadatabase
+- check
+- filecache
 
-### **2. EN**
-- EN
-- EN
-- EN
+### **2. **
+- use
+- 
+- verifyconfig
 
-### **3. EN**
-- EN、EN、EN
-- ENWebSocketEN
-- ProvidesEN
+### **3. status**
+- file system、database、frontendstatus
+- useWebSocketupdatestatus
+- 
 
-## 🔍 EN
+## 🔍 monitorcheck
 
-### **1. EN**
+### **1. checkproject**
 ```bash
-# EN
+# checkdatabasestatus
 python scripts/check_database_status.py
 
-# EN
+# checkfile system
 python scripts/validate_paths.py
 
-# EN
+# checkfrontendstatus
 python scripts/check_frontend_state.py
 ```
 
-### **2. EN**
+### **2. **
 ```bash
-# EN
+# projectmetadata
 python scripts/sync_complete_metadata.py
 
-# EN
+# project
 python scripts/sync_complete_metadata.py <project_id>
 ```
 
-### **3. EN**
+### **3. verify**
 ```bash
-# EN
+# verifyconfig
 python scripts/validate_paths.py
 ```
 
-## 🚨 EN
+## 🚨 
 
-### **1. EN**
-- EN
-- EN
-- EN
+### **1. stage**
+- test
+- usefiletest
+- test
 
-### **2. EN**
-- EN
-- EN
-- EN
+### **2. production**
+- databasefile
+- monitoruse
+- settings
 
-### **3. EN**
-- EN
-- EN
-- EN
+### **3. **
+- database
+- config
+- 
 
-## 📚 EN
+## 📚 related docs
 
-- [System ArchitectureEN](SYSTEM_ARCHITECTURE.md)
-- [Quick StartEN](../QUICK_START_GUIDE.md)
+- [notes](SYSTEM_ARCHITECTURE.md)
+- [quick start](../QUICK_START_GUIDE.md)
 
-## 🎉 EN
+## 🎉 completedcheck
 
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
-- [ ] EN
+- [ ] start
+- [ ] database
+- [ ] frontend
+- [ ] projectcreate
+- [ ] check
+- [ ] configverify
+- [ ] docsupdatecompleted
 
 ---
 
-**EN，EN：**
-- EN
-- EN
-- EN
-- EN
-- EN
+**completed，：**
+- 
+- 
+- 
+- monitorchecktool
+- docs

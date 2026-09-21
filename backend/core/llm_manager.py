@@ -1,5 +1,5 @@
 """
-LLMEN - EN
+LLMtranslated - translatedonetranslatedmulti modelProvidesprovider
 """
 import json
 import logging
@@ -16,10 +16,10 @@ from ..services.config_sync_service import config_sync_service
 logger = logging.getLogger(__name__)
 
 class LLMManager:
-    """LLMEN"""
+    """LLMtranslated"""
     
     def __init__(self, settings_file: Optional[Path] = None):
-        # ENinitializeENconfig
+        # intranslatedconfig
         self._sync_config_if_needed()
         
         self.settings_file = settings_file or self._get_default_settings_file()
@@ -35,65 +35,65 @@ class LLMManager:
             return None
 
     def _reload_if_settings_changed(self) -> None:
-        """settingsENsaveEN settings.json EN；API EN Celery worker ENcallENconfig，
-        ENrestart。"""
+        """Settings pagetranslated settings.json translated；API processand Celery worker translatedintranslatedonetranslatedcalltranslatedconfig，
+        translatedIsetc.translated。"""
         mtime = self._current_settings_mtime()
         if mtime != self._settings_mtime:
-            logger.info("EN settings.json EN，ENload LLM config")
+            logger.info("translated settings.json translated，translated LLM config")
             self.settings = self._load_settings()
             self._initialize_provider()
     
     def _get_default_settings_file(self) -> Path:
-        """fetchENsettingsfilepath"""
-        # ENuseENdirectory（ENsaveEN）
+        """fetchdefaultsettingsfile path"""
+        # translatedusetranslatedusedirectory（andfrontendtranslatedonetranslated）
         app_dir = os.getenv("AUTOCLIP_APP_DIR")
         if app_dir:
             return Path(app_dir) / "settings.json"
 
-        # ENsettings API writeEN（path_utils.get_data_directory），
-        # elsesettingsENsaveEN A、EN B，EN provider EN
+        # andsettings API translated'stranslatedonetranslated（path_utils.get_data_directory），
+        # translatedSettings pagetranslated A、thistranslated B，translated provider translated
         try:
             from .path_utils import get_data_directory
             return get_data_directory() / "settings.json"
         except Exception as e:  # noqa: BLE001
-            logger.warning(f"cannotthrough path_utils EN settings.json，EN: {e}")
+            logger.warning(f"translated path_utils translated settings.json，translated: {e}")
         
-        # ENuseENuserdirectory（macOS）- ENconfigEN
+        # translatedusedefault'suserdirectory（macOS）- translatedconfigtranslated
         default_app_dir = Path.home() / "Library" / "Application Support" / "AutoClip"
         default_settings = default_app_dir / "settings.json"
         if default_settings.exists():
             return default_settings
             
-        # ENcheckprojectdatadirectoryENsettings.json（EN）
+        # translatedcheckprojectdatadirectorytranslated'ssettings.json（translated）
         project_data_dir = Path(__file__).parent.parent.parent / "data"
         project_settings = project_data_dir / "settings.json"
         if project_settings.exists():
             return project_settings
             
-        # ifENdoes not exist，returnENpath
+        # iftranslatednot found，returndefaultpath
         return default_settings
     
     def _sync_config_if_needed(self):
-        """checkENconfig"""
+        """checktranslatedconfig"""
         try:
             if config_sync_service.is_sync_needed():
-                logger.info("ENconfigupdate，startEN...")
+                logger.info("translatedconfigupdate，translated...")
                 if config_sync_service.sync_from_client():
-                    logger.info("configEN")
+                    logger.info("configtranslated")
                 else:
-                    logger.warning("configENfailed")
+                    logger.warning("configtranslatedfailed")
         except Exception as e:
-            logger.error(f"configENcheckfailed: {e}")
+            logger.error(f"configtranslatedcheckfailed: {e}")
     
     def _load_settings(self) -> Dict[str, Any]:
-        """loadsettings"""
+        """translatedsettings"""
         default_settings = {
             "llm_provider": "dashscope",
             "dashscope_api_key": "",
             "openai_api_key": "",
-            # OpenAI ENAPIEN；EN = EN。EN OPENAI_BASE_URL EN
-            "openai_base_url": os.getenv("OPENAI_BASE_URL", ""),
-            # EN（dashscope-intl）；EN = EN。Docker EN DASHSCOPE_BASE_URL
+            # OpenAI translated；translated = translated。translated OPtranslatedAI_BASE_URL translated
+            "openai_base_url": os.getenv("OPtranslatedAI_BASE_URL", ""),
+            # translatedsite（dashscope-intl）；translated = translatedsite。Docker use DASHSCOPE_BASE_URL
             "dashscope_base_url": os.getenv("DASHSCOPE_BASE_URL", ""),
             "gemini_api_key": "",
             "siliconflow_api_key": "",
@@ -109,7 +109,7 @@ class LLMManager:
                 with open(self.settings_file, 'r', encoding='utf-8') as f:
                     saved_settings = json.load(f)
                     
-                    # processingENconfigEN（ENconfig）
+                    # processtranslated'sconfigformat（translatedconfig）
                     if "api" in saved_settings and "api_keys" in saved_settings["api"]:
                         api = saved_settings["api"]
                         api_keys = api["api_keys"]
@@ -120,16 +120,16 @@ class LLMManager:
                             "siliconflow_api_key": api_keys.get("siliconflow", ""),
                             "model_name": api.get("api_model", "qwen-plus")
                         })
-                        # settingsENsaveEN；EN settings.json ENthisEN，EN dashscope
+                        # Settings pagetranslated'sProvidesprovider；translated settings.json translatedthis translated，translated dashscope
                         if api.get("api_provider"):
                             default_settings["llm_provider"] = api["api_provider"]
                         if api.get("api_base_url"):
-                            # EN：openai ENAPIEN，dashscope EN（#45）
+                            # translatedone translated：openai translatedIstranslated，dashscope Istranslatedsitetranslated（#45）
                             if default_settings["llm_provider"] == "dashscope":
                                 default_settings["dashscope_base_url"] = api["api_base_url"]
                             else:
                                 default_settings["openai_base_url"] = api["api_base_url"]
-                        # settingsEN「clipparameters」：EN API EN，EN（worker / EN）EN
+                        # Settings page「cliptranslated」：translatedin API processtranslatedonetranslated，translated（worker / localtranslated）fromtranslated
                         processing = saved_settings.get("processing") or {}
                         for src, dst in (("processing_min_score", "min_score_threshold"),
                                          ("processing_chunk_size", "chunk_size"),
@@ -137,18 +137,18 @@ class LLMManager:
                             if processing.get(src) is not None:
                                 default_settings[dst] = processing[src]
                     else:
-                        # processingENconfigEN（EN）
+                        # processtranslated'sconfigformat（translated）
                         default_settings.update(saved_settings)
                         
             except Exception as e:
-                logger.warning(f"loadsettingsfilefailed: {e}")
+                logger.warning(f"translatedsettingsfilefailed: {e}")
         
         self._apply_env_fallbacks(default_settings)
         self._apply_local_preset(default_settings)
         return default_settings
 
     def _apply_local_preset(self, settings: Dict[str, Any]) -> None:
-        """`ollama` / `lmstudio` EN → openai + EN base_url（EN core/local_presets.py）"""
+        """`ollama` / `lmstudio` thistranslatedlocaltranslated → openai + default base_url（translated core/local_presets.py）"""
         from backend.core.local_presets import resolve_provider, LOCAL_PRESETS
         provider, base_url, preset = resolve_provider(settings.get("llm_provider"), settings.get("openai_base_url"))
         settings["llm_provider"] = provider
@@ -156,22 +156,22 @@ class LLMManager:
         if preset:
             settings["openai_base_url"] = base_url
             if not settings.get("model_name") or settings.get("model_name") == "qwen-plus":
-                # EN dashscope EN，EN qwen-plus EN Ollama
+                # translateddefaultmodeltranslated dashscope 'sdefaulttranslated，translated qwen-plus translated Ollama
                 default_model = LOCAL_PRESETS[preset].default_model
                 if default_model:
                     settings["model_name"] = default_model
 
-    # Docker / ENsettingsEN，EN（env.example EN），
-    # EN settings.json，EN API_DASHSCOPE_API_KEY EN。
-    _ENV_KEY_FALLBACKS = {
+    # Docker / localtranslatedSettings pagecanuse，translated（env.example translatedIsthistranslated's），
+    # translatedthistranslated settings.json，translated API_DASHSCOPE_API_KEY etc.translated。
+    _translatedV_KEY_FALLBACKS = {
         "dashscope_api_key": ("API_DASHSCOPE_API_KEY", "DASHSCOPE_API_KEY"),
-        "openai_api_key": ("API_OPENAI_API_KEY", "OPENAI_API_KEY"),
+        "openai_api_key": ("API_OPtranslatedAI_API_KEY", "OPtranslatedAI_API_KEY"),
         "gemini_api_key": ("API_GEMINI_API_KEY", "GEMINI_API_KEY"),
         "siliconflow_api_key": ("API_SILICONFLOW_API_KEY", "SILICONFLOW_API_KEY"),
     }
 
     def _apply_env_fallbacks(self, settings: Dict[str, Any]) -> None:
-        for setting_name, env_names in self._ENV_KEY_FALLBACKS.items():
+        for setting_name, env_names in self._translatedV_KEY_FALLBACKS.items():
             if settings.get(setting_name):
                 continue
             for env_name in env_names:
@@ -180,7 +180,7 @@ class LLMManager:
                     settings[setting_name] = value
                     break
 
-        # EN settings.json EN/EN，EN
+        # translated settings.json translatedProvidesprovider/modeltranslated，translated
         file_has_provider = self._file_specifies("api_provider", "llm_provider")
         env_provider = os.getenv("LLM_PROVIDER", "").strip().lower()
         if env_provider and not file_has_provider:
@@ -190,7 +190,7 @@ class LLMManager:
             settings["model_name"] = env_model
 
     def _file_specifies(self, *field_names: str) -> bool:
-        """settings.json（EN）EN"""
+        """settings.json（translatedformatortranslatedformat）translatedIstranslated translated"""
         try:
             if not self.settings_file.exists():
                 return False
@@ -202,43 +202,43 @@ class LLMManager:
         return any(bool(api.get(name)) or bool(data.get(name)) for name in field_names)
     
     def _save_settings(self):
-        """savesettings"""
+        """translatedsettings"""
         self.settings_file.parent.mkdir(parents=True, exist_ok=True)
         try:
             with open(self.settings_file, 'w', encoding='utf-8') as f:
                 json.dump(self.settings, f, ensure_ascii=False, indent=2)
         except Exception as e:
-            logger.error(f"savesettingsfailed: {e}")
+            logger.error(f"translatedsettingsfailed: {e}")
             raise
     
     def _initialize_provider(self):
-        """initializecurrentEN"""
+        """translatedProvidesprovider"""
         try:
             provider_type = ProviderType(self.settings.get("llm_provider", "dashscope"))
             model_name = self.settings.get("model_name", "qwen-plus")
             
-            # fetchENAPIEN（ENneed key，ENuserEN OpenAI key ENservice）
+            # fetchtranslatedProvidesprovider'sAPIkey（localtranslatedNo need key，translatedDo not user's OpenAI key translatedlocalservice）
             api_key = "" if self.settings.get("llm_provider_preset") else self._get_api_key_for_provider(provider_type)
             provider_kwargs = self._get_provider_kwargs(provider_type)
 
-            # EN OpenAI ENservice（Ollama / vLLM EN）ENneed key，EN base_url EN
-            if api_key or (provider_type == ProviderType.OPENAI and provider_kwargs.get("base_url")):
+            # translated OpenAI translatedservice（Ollama / vLLM etc.）translatedNo need key，translated base_url translated
+            if api_key or (provider_type == ProviderType.OPtranslatedAI and provider_kwargs.get("base_url")):
                 self.current_provider = LLMProviderFactory.create_provider(
                     provider_type, api_key or "", model_name, **provider_kwargs
                 )
-                logger.info(f"ENinitialize{provider_type.value}EN，EN: {model_name}"
+                logger.info(f"translated{provider_type.value}Providesprovider，model: {model_name}"
                             + (f", base_url: {provider_kwargs['base_url']}" if provider_kwargs.get("base_url") else ""))
             else:
-                logger.warning(f"not found{provider_type.value}ENAPIEN")
+                logger.warning(f"translated{provider_type.value}'sAPIkey")
                 self.current_provider = None
                 
         except Exception as e:
-            logger.error(f"initializeENfailed: {e}")
+            logger.error(f"translatedProvidesproviderfailed: {e}")
             self.current_provider = None
 
     def _get_provider_kwargs(self, provider_type: ProviderType) -> Dict[str, Any]:
-        """ENparameters：OpenAI ENAPIEN base_url；EN（EN）"""
-        if provider_type == ProviderType.OPENAI:
+        """Providesprovidertranslated：OpenAI translated's base_url；translatedsitetranslatedusetranslatedone translated（translated）"""
+        if provider_type == ProviderType.OPtranslatedAI:
             base_url = (self.settings.get("openai_base_url") or "").strip()
             if base_url:
                 return {"base_url": base_url}
@@ -249,16 +249,16 @@ class LLMManager:
         return {}
 
     def get_processing_setting(self, name: str, default: Any = None) -> Any:
-        """settingsEN「clipparameters」（min_score_threshold / chunk_size / max_clips_per_collection），EN settings.json EN"""
+        """Settings page「cliptranslated」（min_score_threshold / chunk_size / max_clips_per_collection），translated settings.json translated"""
         self._reload_if_settings_changed()
         value = self.settings.get(name)
         return default if value is None else value
     
     def _get_api_key_for_provider(self, provider_type: ProviderType) -> Optional[str]:
-        """fetchENAPIEN"""
+        """fetchtranslatedProvidesprovider'sAPIkey"""
         key_mapping = {
             ProviderType.DASHSCOPE: "dashscope_api_key",
-            ProviderType.OPENAI: "openai_api_key",
+            ProviderType.OPtranslatedAI: "openai_api_key",
             ProviderType.GEMINI: "gemini_api_key",
             ProviderType.SILICONFLOW: "siliconflow_api_key",
         }
@@ -276,7 +276,7 @@ class LLMManager:
     
     def set_provider(self, provider_type: ProviderType, api_key: str, model_name: str,
                      base_url: Optional[str] = None):
-        """settingsEN"""
+        """settingsProvidesprovider"""
         try:
             # updatesettings
             provider_settings = {
@@ -284,10 +284,10 @@ class LLMManager:
                 "model_name": model_name
             }
             
-            # updateENAPIEN
+            # updatetranslatedProvidesprovider'sAPIkey
             key_mapping = {
                 ProviderType.DASHSCOPE: "dashscope_api_key",
-                ProviderType.OPENAI: "openai_api_key",
+                ProviderType.OPtranslatedAI: "openai_api_key",
                 ProviderType.GEMINI: "gemini_api_key",
                 ProviderType.SILICONFLOW: "siliconflow_api_key",
             }
@@ -295,27 +295,27 @@ class LLMManager:
             key_name = key_mapping.get(provider_type)
             if key_name:
                 provider_settings[key_name] = api_key
-            if provider_type == ProviderType.OPENAI and base_url is not None:
+            if provider_type == ProviderType.OPtranslatedAI and base_url is not None:
                 provider_settings["openai_base_url"] = base_url
 
-            # update_settings ENsaveENinitialize current_provider
+            # update_settings translated current_provider
             self.update_settings(provider_settings)
             
-            logger.info(f"EN{provider_type.value}EN，EN: {model_name}")
+            logger.info(f"translated{provider_type.value}Providesprovider，model: {model_name}")
             
         except Exception as e:
-            logger.error(f"settingsENfailed: {e}")
+            logger.error(f"settingsProvidesproviderfailed: {e}")
             raise
     
     def call(self, prompt: str, input_data: Any = None, **kwargs) -> str:
-        """callLLM。EN AUTOCLIP_LLM_CACHE_DIR EN sha1(prompt+input) EN / EN，EN。"""
+        """callLLM。translated AUTOCLIP_LLM_CACHE_DIR translatedby sha1(prompt+input) translated / translated，translateduse。"""
         self._reload_if_settings_changed()
         cache_path = _llm_cache_path(prompt, input_data)
         if cache_path is not None and cache_path.exists():
-            logger.info(f"LLM cacheEN: {cache_path.name}")
+            logger.info(f"LLM cachetranslated: {cache_path.name}")
             return cache_path.read_text(encoding="utf-8")
         if not self.current_provider:
-            raise ValueError("ENconfigLLMEN，pleaseENsettingsENconfigAPIEN")
+            raise ValueError("translatedconfigLLMProvidesprovider，translatedinSettings pagetranslatedconfigAPIkey")
         
         try:
             response = self.current_provider.call(prompt, input_data, **kwargs)
@@ -329,33 +329,33 @@ class LLMManager:
             raise
     
     def call_with_retry(self, prompt: str, input_data: Any = None, max_retries: int = 3, **kwargs) -> str:
-        """ENretryENLLMcall"""
+        """translated'sLLMcall"""
         for attempt in range(max_retries):
             try:
                 return self.call(prompt, input_data, **kwargs)
-            except ValueError:  # ifENAPI KeyENInvalid parameters，ENretry
+            except ValueError:  # iftranslatedIsAPI Keyortranslatederror，translated
                 raise
             except Exception as e:
                 if attempt == max_retries - 1:
-                    logger.error(f"LLMcallEN{max_retries}ENretryENfailed。")
+                    logger.error(f"LLMcallin{max_retries}translatedfailed。")
                     raise
-                logger.warning(f"EN{attempt + 1}ENcallfailed，ENretry: {str(e)}")
+                logger.warning(f"No.{attempt + 1}translatedcallfailed，translated: {str(e)}")
                 import time
-                time.sleep(2 ** attempt)  # EN
+                time.sleep(2 ** attempt)  # translated
         return ""
     
     def test_provider_connection(self, provider_type: ProviderType, api_key: str, model_name: str,
                                  **provider_kwargs) -> bool:
-        """ENconnect"""
+        """testProvidesproviderconnect"""
         try:
             provider = LLMProviderFactory.create_provider(provider_type, api_key, model_name, **provider_kwargs)
             return provider.test_connection()
         except Exception as e:
-            logger.error(f"EN{provider_type.value}connectfailed: {e}")
+            logger.error(f"test{provider_type.value}connectfailed: {e}")
             return False
     
     def get_current_provider_info(self) -> Dict[str, Any]:
-        """fetchcurrentEN"""
+        """fetchtranslatedProvidesproviderinfo"""
         self._reload_if_settings_changed()
         provider_value = self.settings.get("llm_provider", "dashscope")
         try:
@@ -365,7 +365,7 @@ class LLMManager:
         model_name = self.settings.get("model_name", "qwen-plus")
         preset = self.settings.get("llm_provider_preset")
         info = {
-            # settingsEN / CLI ENuserEN（ollama / lmstudio），EN openai EN
+            # Settings page / CLI translated'sIsuserSelect'stranslated（ollama / lmstudio），translatedIs openai translated
             "provider": preset or provider_type.value,
             "backend_provider": provider_type.value,
             "model": model_name,
@@ -381,17 +381,17 @@ class LLMManager:
         return info
     
     def _get_provider_display_name(self, provider_type: ProviderType) -> str:
-        """fetchEN"""
+        """fetchProvidesprovidertranslated"""
         display_names = {
-            ProviderType.DASHSCOPE: "EN",
-            ProviderType.OPENAI: "OpenAI / ENAPI",
+            ProviderType.DASHSCOPE: "translated",
+            ProviderType.OPtranslatedAI: "OpenAI / translated",
             ProviderType.GEMINI: "Google Gemini",
-            ProviderType.SILICONFLOW: "EN"
+            ProviderType.SILICONFLOW: "translated"
         }
         return display_names.get(provider_type, provider_type.value)
     
     def get_all_available_models(self) -> Dict[str, List[Dict[str, Any]]]:
-        """fetchallEN"""
+        """fetchtranslatedcanusemodel"""
         all_models = LLMProviderFactory.get_all_available_models()
         result = {}
         
@@ -410,18 +410,18 @@ class LLMManager:
         return result
     
     def parse_json_response(self, response: str) -> Any:
-        """parseJSONresponse（ENLLMClientEN）"""
+        """translatedJSONtranslated（translatedandtranslatedLLMClient'stranslated）"""
         if not self.current_provider:
-            raise ValueError("ENconfigLLMEN")
+            raise ValueError("translatedconfigLLMProvidesprovider")
         
-        # ENcanENLLMClientENJSONparseEN
-        # EN，wecreateENLLMClientEN
+        # thistranslatedcantranslatedusetranslatedLLMClient'sJSONtranslated
+        # translated，translatedcreateone translated'sLLMClienttranslated
         from ..utils.llm_client import LLMClient
         temp_client = LLMClient()
         return temp_client.parse_json_response(response)
 
 def _llm_cache_path(prompt: str, input_data: Any) -> Optional[Path]:
-    """AUTOCLIP_LLM_CACHE_DIR EN；CI / eval EN。"""
+    """AUTOCLIP_LLM_CACHE_DIR translateduse；CI / eval translateduse。"""
     root = os.getenv("AUTOCLIP_LLM_CACHE_DIR")
     if not root:
         return None
@@ -430,18 +430,18 @@ def _llm_cache_path(prompt: str, input_data: Any) -> Optional[Path]:
     return Path(root) / f"{hashlib.sha1(payload.encode('utf-8')).hexdigest()}.txt"
 
 
-# ENLLMEN
+# translatedLLMtranslated
 _llm_manager: Optional[LLMManager] = None
 
 def get_llm_manager() -> LLMManager:
-    """fetchENLLMEN"""
+    """fetchtranslatedLLMtranslated"""
     global _llm_manager
     if _llm_manager is None:
         _llm_manager = LLMManager()
     return _llm_manager
 
 def initialize_llm_manager(settings_file: Optional[Path] = None) -> LLMManager:
-    """initializeLLMEN"""
+    """translatedLLMtranslated"""
     global _llm_manager
     _llm_manager = LLMManager(settings_file)
     return _llm_manager

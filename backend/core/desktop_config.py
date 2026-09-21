@@ -75,13 +75,13 @@ class DesktopConfig:
         self.settings = settings
         self.paths = self._build_paths()
         self.speech_recognition = SpeechRecognitionSettings()
-        self._openai_api_key = os.getenv("API_OPENAI_API_KEY", "")
+        self._openai_api_key = os.getenv("API_OPtranslatedAI_API_KEY", "")
         self._gemini_api_key = os.getenv("API_GEMINI_API_KEY", "")
         self._siliconflow_api_key = os.getenv("API_SILICONFLOW_API_KEY", "")
-        self._jimeng_access_key = os.getenv("API_JIMENG_ACCESS_KEY", "")
-        self._jimeng_secret_key = os.getenv("API_JIMENG_SECRET_KEY", "")
+        self._jimeng_access_key = os.getenv("API_JIMtranslatedG_ACCESS_KEY", "")
+        self._jimeng_secret_key = os.getenv("API_JIMtranslatedG_SECRET_KEY", "")
         self._max_memory_usage = int(os.getenv("AUTOCLIP_MAX_MEMORY_USAGE", "2048"))
-        self._log_retention_days = int(os.getenv("AUTOCLIP_LOG_RETENTION_DAYS", "7"))
+        self._log_retention_days = int(os.getenv("AUTOCLIP_LOG_RETtranslatedTION_DAYS", "7"))
 
     def _build_paths(self) -> DesktopPaths:
         data_dir = path_utils.get_data_directory()
@@ -129,9 +129,9 @@ class DesktopConfig:
             try:
                 directory.mkdir(parents=True, exist_ok=True)
             except Exception as exc:
-                errors.append(f"directoryEN: {directory} ({exc})")
+                errors.append(f"directorytranslatedcanuse: {directory} ({exc})")
         if not self.settings.api_dashscope_api_key:
-            warnings.append("ENconfig DashScope API Key")
+            warnings.append("translatedconfig DashScope API Key")
         return {"valid": not errors, "errors": errors, "warnings": warnings}
 
     def dict(self):
@@ -156,7 +156,7 @@ class DesktopConfig:
 
     @property
     def app_version(self) -> str:
-        # EN（Rust）startEN CARGO_PKG_VERSION；ENcurrentEN
+        # translated（Rust）startbackendtranslated CARGO_PKG_VERSION；translatedversiontranslated
         return os.getenv("AUTOCLIP_APP_VERSION", "1.3.0")
 
     @property
@@ -193,7 +193,7 @@ class DesktopConfig:
 
     @property
     def celery_worker_concurrency(self) -> int:
-        return int(os.getenv("AUTOCLIP_CELERY_WORKER_CONCURRENCY", "1"))
+        return int(os.getenv("AUTOCLIP_CELERY_WORKER_CONCURRtranslatedCY", "1"))
 
     @property
     def max_memory_usage(self) -> int:

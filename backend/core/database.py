@@ -1,6 +1,6 @@
 """
 databaseconfig
-ENdatabaseconnect、EN
+Packageincludedatabaseconnect、translatedAnddependenciestranslated
 """
 
 import os
@@ -16,23 +16,23 @@ DATABASE_URL = os.getenv(
     "sqlite:///autoclip.db"
 )
 
-# ifENsettingsEN，useconfigENfetchdatabaseURL
+# iftranslatedsettingstranslated，useconfigtranslatedfetchdatabaseURL
 if DATABASE_URL == "sqlite:///autoclip.db":
     try:
         from .config import get_database_url
         DATABASE_URL = get_database_url()
     except ImportError:
-        # ifENfailed，EN
+        # iftranslatedimportfailed，translateddefaulttranslated
         pass
 
-# createdatabaseEN
+# createdatabasetranslated
 if "sqlite" in DATABASE_URL:
     # SQLiteconfig。
-    # StaticPool = ENconnect，EN :memory:。fileEN，EN API requestEN、
-    # ENtaskEN、EN Session ENconnectEN BEGIN / COMMIT / ROLLBACK：
-    # EN close() EN ROLLBACK EN INSERT EN COMMIT EN Task EN
-    # （EN ObjectDeletedError、taskEN、progressEN）。fileENconnectEN，each Session ENconnect，
-    # EN WAL EN。
+    # StaticPool = translated processtranslatedonetranslatedconnect，translated :memory:。filetranslatedusetranslated，translated API translated、
+    # importtasktranslated、translated's Session translatedintranslatedonetranslatedconnecttranslated BEGIN / COMMIT / ROLLBACK：
+    # one translated close() translated's ROLLBACK translated translatedone translated INSERT translated COMMIT 's Task translated
+    # （translated ObjectDeletedError、tasktranslated、progresstranslated）。filetranslatedusedefaultconnecttranslated，per  Session onetranslatedconnect，
+    # translated WAL translated。
     _is_memory_db = DATABASE_URL.rstrip("/") in ("sqlite://", "sqlite:///:memory:") or ":memory:" in DATABASE_URL
     _sqlite_kwargs = {"poolclass": StaticPool} if _is_memory_db else {}
     engine = create_engine(
@@ -42,7 +42,7 @@ if "sqlite" in DATABASE_URL:
             "timeout": 30
         },
         pool_pre_ping=True,
-        echo=False,  # settingsENTruecanENSQLEN
+        echo=False,  # settingstranslatedTruecantranslatedSQLtranslated
         **_sqlite_kwargs,
     )
     if not _is_memory_db:
@@ -65,7 +65,7 @@ else:
         echo=False
     )
 
-# createEN
+# createtranslated
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
@@ -74,8 +74,8 @@ SessionLocal = sessionmaker(
 
 def get_db() -> Generator[Session, None, None]:
     """
-    databaseEN
-    ENFastAPIENsystem
+    databasetranslateddependenciestranslated
+    usetranslatedFastAPI'sdependenciestranslatedSystem
     """
     db = SessionLocal()
     try:
@@ -84,49 +84,49 @@ def get_db() -> Generator[Session, None, None]:
         db.close()
 
 def create_tables():
-    """createalldatabaseEN"""
+    """createtranslateddatabasetranslated"""
     Base.metadata.create_all(bind=engine)
 
 def drop_tables():
-    """deletealldatabaseEN"""
+    """deletetranslateddatabasetranslated"""
     Base.metadata.drop_all(bind=engine)
 
 def reset_database():
-    """ENdatabase"""
+    """translateddatabase"""
     drop_tables()
     create_tables()
 
 from sqlalchemy import text
 
 def test_connection() -> bool:
-    """ENdatabaseconnect"""
+    """testdatabaseconnect"""
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1")).fetchone()
         return True
     except Exception as e:
-        print(f"databaseconnectENfailed: {e}")
+        print(f"databaseconnecttestfailed: {e}")
         return False
 
-# databaseinitialize
+# databasetranslated
 def init_database():
-    """initializedatabase"""
-    print("currentlyinitializedatabase...")
+    """translateddatabase"""
+    print("translatedintranslateddatabase...")
     
-    # ENconnect
+    # testconnect
     if not test_connection():
         print("❌ databaseconnectfailed")
         return False
     
-    # createEN
+    # createtranslated
     try:
         create_tables()
-        print("✅ databaseENcreatesucceeded")
+        print("✅ databasetranslatedcreatesucceeded")
         return True
     except Exception as e:
-        print(f"❌ databaseENcreatefailed: {e}")
+        print(f"❌ databasetranslatedcreatefailed: {e}")
         return False
 
 if __name__ == "__main__":
-    # ENrunENfileENinitializedatabase
+    # translatedfiletranslateddatabase
     init_database()

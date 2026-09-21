@@ -1,30 +1,30 @@
-name: 🐛 Bug EN / Bug report
-description: EN、EN、EN / Something is broken
+name: 🐛 Bug translated / Bug report
+description: translated featuretranslated、translated、translated / Something is broken
 labels: ["bug", "needs-triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        EN。EN，EN；ENVersion / EN / EN issue ENProcessing。
+        translated。translated'sinfo，translatedissue；translatedversion / translated / model's issue translatedprocess。
         Thanks for reporting. Version, platform and model are required for us to reproduce.
 
   - type: dropdown
     id: platform
     attributes:
-      label: EN / Platform
+      label: translated / Platform
       options:
-        - macOS EN (Apple Silicon)
-        - Windows EN (x64)
+        - macOS translated (Apple Silicon)
+        - Windows translated (x64)
         - Docker
-        - EN / From source
+        - translated / From source
     validations:
       required: true
 
   - type: input
     id: version
     attributes:
-      label: AutoClip Version / Version
-      description: EN「EN」EN / Shown in Settings → About
+      label: AutoClip version / Version
+      description: Settings pagetranslatedor「translated」translatedcantranslated / Shown in Settings → About
       placeholder: "v1.2.1"
     validations:
       required: true
@@ -32,39 +32,39 @@ body:
   - type: input
     id: model
     attributes:
-      label: EN / LLM provider
-      placeholder: "EN EN qwen-plus / OpenAI gpt-4o / EN / EN OpenAI EN"
+      label: use'smodelProvidesprovider / LLM provider
+      placeholder: "translatedif translated qwen-plus / OpenAI gpt-4o / translated / translated OpenAI translated"
     validations:
       required: true
 
   - type: dropdown
     id: source
     attributes:
-      label: EN / Video source
+      label: videotranslated / Video source
       options:
-        - BEN / Bilibili
+        - Bsitetranslated / Bilibili
         - YouTube
-        - EN / Local file
-        - EN / N/A
+        - localfile / Local file
+        - translated / N/A
     validations:
       required: true
 
   - type: textarea
     id: what
     attributes:
-      label: EN / What happened
-      description: EN、EN、EN / Steps, expected, actual
+      label: translated / What happened
+      description: translated、translated、translated / Steps, expected, actual
       placeholder: |
-        1. EN https://…
-        2. EN「EN」
-        3. EN「EN 63%」EN / EN xxx
+        1. translated https://…
+        2. click「translated」
+        3. progresstranslatedin「translated 63%」translated / translated xxx
     validations:
       required: true
 
   - type: textarea
     id: logs
     attributes:
-      label: EN / EN / Logs or screenshots
+      label: logs / translated / Logs or screenshots
       description: |
-        EN：macOS `~/Library/Application Support/AutoClip/logs`，Windows `%APPDATA%\AutoClip\logs`。EN 50 EN，EN API Key。
+        translatedlogstranslated：macOS `~/Library/Application Support/AutoClip/logs`，Windows `%APPDATA%\AutoClip\logs`。translated 50 translatedcan，translated API Key。
       render: text

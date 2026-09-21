@@ -1,6 +1,6 @@
 """
-ENerrorprocessingEN
-ENFastAPIENerrorprocessingEN
+translatedoneerrorprocessingtranslated
+translatedFastAPItranslateduseProvidestranslatedone'serrorprocesstranslated
 """
 
 import logging
@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class ErrorResponse:
-    """ENerrorresponseEN"""
+    """translatedoneerrortranslatedformat"""
     
     def __init__(self, 
                  error_code: str,
@@ -54,7 +54,7 @@ def create_error_response(
     details: dict = None,
     request_id: str = None
 ) -> JSONResponse:
-    """createENerrorresponse"""
+    """createtranslatedoneformat'serrortranslated"""
     response = ErrorResponse(error_code, message, details, request_id)
     response.timestamp = time.time()
     
@@ -65,12 +65,12 @@ def create_error_response(
 
 
 async def global_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-    """ENexceptionprocessingEN"""
+    """translatedprocesstranslated"""
     request_id = getattr(request.state, 'request_id', None)
     
-    # ENexceptionEN
+    # translated
     logger.error(
-        f"ENprocessingENexception: {type(exc).__name__}: {str(exc)}",
+        f"translatedprocess'stranslated: {type(exc).__name__}: {str(exc)}",
         extra={
             "request_id": request_id,
             "path": request.url.path,
@@ -79,7 +79,7 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
         }
     )
     
-    # ENexceptionENreturnENerrorresponse
+    # translatedreturntranslated'serrortranslated
     if isinstance(exc, AutoClipsException):
         return handle_autoclips_exception(exc, request_id)
     elif isinstance(exc, ServiceError):
@@ -95,7 +95,7 @@ async def global_exception_handler(request: Request, exc: Exception) -> JSONResp
 
 
 def handle_autoclips_exception(exc: AutoClipsException, request_id: str = None) -> JSONResponse:
-    """processingAutoClipsException"""
+    """processAutoClipsException"""
     status_code = get_status_code_for_category(exc.category)
     
     return create_error_response(
@@ -108,7 +108,7 @@ def handle_autoclips_exception(exc: AutoClipsException, request_id: str = None) 
 
 
 def handle_service_error(exc: ServiceError, request_id: str = None) -> JSONResponse:
-    """processingServiceError"""
+    """processServiceError"""
     status_code = get_status_code_for_service_error(exc.error_code)
     
     return create_error_response(
@@ -121,7 +121,7 @@ def handle_service_error(exc: ServiceError, request_id: str = None) -> JSONRespo
 
 
 def handle_http_exception(exc: HTTPException, request_id: str = None) -> JSONResponse:
-    """processingHTTPException"""
+    """processHTTPException"""
     return create_error_response(
         status_code=exc.status_code,
         error_code=f"HTTP_{exc.status_code}",
@@ -131,7 +131,7 @@ def handle_http_exception(exc: HTTPException, request_id: str = None) -> JSONRes
 
 
 def handle_validation_error(exc: RequestValidationError, request_id: str = None) -> JSONResponse:
-    """processingrequestvalidateerror"""
+    """processtranslatedverifyerror"""
     errors = []
     for error in exc.errors():
         errors.append({
@@ -143,14 +143,14 @@ def handle_validation_error(exc: RequestValidationError, request_id: str = None)
     return create_error_response(
         status_code=422,
         error_code="VALIDATION_ERROR",
-        message="requestparametersvalidatefailed",
+        message="translatedverifyfailed",
         details={"errors": errors},
         request_id=request_id
     )
 
 
 def handle_starlette_http_exception(exc: StarletteHTTPException, request_id: str = None) -> JSONResponse:
-    """processingStarletteHTTPException"""
+    """processStarletteHTTPException"""
     return create_error_response(
         status_code=exc.status_code,
         error_code=f"STARLETTE_{exc.status_code}",
@@ -160,18 +160,18 @@ def handle_starlette_http_exception(exc: StarletteHTTPException, request_id: str
 
 
 def handle_generic_exception(exc: Exception, request_id: str = None) -> JSONResponse:
-    """processingENexception"""
+    """processtranslatedusetranslated"""
     return create_error_response(
         status_code=500,
         error_code="INTERNAL_SERVER_ERROR",
-        message="serviceENerror",
+        message="servicetranslatederror",
         details={"exception_type": type(exc).__name__},
         request_id=request_id
     )
 
 
 def get_status_code_for_category(category: ErrorCategory) -> int:
-    """ENerrorcategoryfetchHTTPstatusEN"""
+    """translatederrortranslatedfetchHTTPstatustranslated"""
     status_mapping = {
         ErrorCategory.CONFIGURATION: 500,
         ErrorCategory.NETWORK: 503,
@@ -185,13 +185,13 @@ def get_status_code_for_category(category: ErrorCategory) -> int:
 
 
 def get_status_code_for_service_error(error_code) -> int:
-    """ENserviceerrorENfetchHTTPstatusEN"""
+    """translatedserviceerrortranslatedfetchHTTPstatustranslated"""
     status_mapping = {
         "CONFIG_NOT_FOUND": 500,
         "CONFIG_INVALID": 500,
         "CONFIG_MISSING_REQUIRED": 500,
         "FILE_NOT_FOUND": 404,
-        "FILE_PERMISSION_DENIED": 403,
+        "FILE_PERMISSION_DtranslatedIED": 403,
         "FILE_CORRUPTED": 500,
         "PROCESSING_FAILED": 500,
         "STEP_EXECUTION_FAILED": 500,
@@ -204,29 +204,29 @@ def get_status_code_for_service_error(error_code) -> int:
         "SYSTEM_ERROR": 500,
         "NETWORK_ERROR": 503,
         "TIMEOUT_ERROR": 504,
-        "CONCURRENT_ACCESS": 409,
+        "CONCURRtranslatedT_ACCESS": 409,
         "LOCK_ACQUISITION_FAILED": 423,
         "UNKNOWN_ERROR": 500
     }
     return status_mapping.get(error_code.value, 500)
 
 
-# EN：ENerrorprocessing
+# translated：translatederrorprocess
 def handle_errors(error_category: ErrorCategory = ErrorCategory.SYSTEM):
-    """errorprocessingEN"""
+    """errorprocesstranslated"""
     def decorator(func):
         @functools.wraps(func)
         async def async_wrapper(*args, **kwargs):
             try:
                 return await func(*args, **kwargs)
             except AutoClipsException:
-                # ENAutoClipsException
+                # translatedAutoClipsException
                 raise
             except ServiceError:
-                # ENServiceError
+                # translatedServiceError
                 raise
             except Exception as e:
-                # ENAutoClipsException
+                # translatedAutoClipsException
                 raise AutoClipsException(
                     message=str(e),
                     category=error_category,
@@ -238,20 +238,20 @@ def handle_errors(error_category: ErrorCategory = ErrorCategory.SYSTEM):
             try:
                 return func(*args, **kwargs)
             except AutoClipsException:
-                # ENAutoClipsException
+                # translatedAutoClipsException
                 raise
             except ServiceError:
-                # ENServiceError
+                # translatedServiceError
                 raise
             except Exception as e:
-                # ENAutoClipsException
+                # translatedAutoClipsException
                 raise AutoClipsException(
                     message=str(e),
                     category=error_category,
                     original_exception=e
                 )
         
-        # ENreturnEN
+        # translatedreturntranslated'sPackagetranslated
         if asyncio.iscoroutinefunction(func):
             return async_wrapper
         else:
@@ -260,18 +260,18 @@ def handle_errors(error_category: ErrorCategory = ErrorCategory.SYSTEM):
     return decorator
 
 
-# EN：errorEN
+# translated：errortranslated
 @contextmanager
 def error_context(category: ErrorCategory, context_info: dict = None):
-    """errorEN"""
+    """errortranslated"""
     try:
         yield
     except Exception as e:
         if isinstance(e, AutoClipsException):
-            # alreadyENexception，EN
+            # translatedIstranslated，translated
             raise
         else:
-            # ENexception
+            # translated
             details = context_info or {}
             details["original_exception_type"] = type(e).__name__
             

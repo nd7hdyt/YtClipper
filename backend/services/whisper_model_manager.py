@@ -1,9 +1,9 @@
 """
-Whisper ENservice（mlx-whisper）
+Whisper modeltranslatedservice（mlx-whisper）
 
-EN mlx-community Whisper ENdownload、statuscheck、delete。EN HuggingFace EN，
-ENcacheEN `<data_dir>/whisper-models`（EN whisper_runtime settings HF_HOME）。
-EN（huggingface_hub）ENrunENdirectory，allEN import EN。
+translated mlx-community Whisper model'sdownload、statuscheck、delete。modelfrom HuggingFace translated，
+translatedonecachetranslated `<data_dir>/whisper-models`（translated whisper_runtime settings HF_HOME）。
+dependencies（huggingface_hub）translatedRuntimeinstalldirectory，translated import translated。
 """
 import logging
 import threading
@@ -18,10 +18,10 @@ logger = logging.getLogger(__name__)
 
 
 class ModelStatus(str, Enum):
-    AVAILABLE = "available"      # runEN、ENdownload
-    DOWNLOADING = "downloading"  # downloadEN
-    DOWNLOADED = "downloaded"    # ENdownload
-    ERROR = "error"              # error（ENrunEN）
+    AVAILABLE = "available"      # Runtimetranslated、candownload
+    DOWNLOADING = "downloading"  # downloadtranslated
+    DOWNLOADED = "downloaded"    # translateddownload
+    ERROR = "error"              # error（translatedIsRuntimetranslatedinstall）
     NOT_FOUND = "not_found"
 
 
@@ -40,32 +40,32 @@ class ModelInfo:
     error_message: Optional[str] = None
 
 
-# EN -> HuggingFace EN + EN（faster-whisper / CTranslate2 EN）
+# modeltranslated -> HuggingFace translated + translatedinfo（faster-whisper / CTranslate2 model）
 _MODELS = {
     "tiny": {
         "repo_id": "Systran/faster-whisper-tiny",
         "size": "~75 MB", "size_bytes": 75 * 1024 * 1024,
-        "description": "EN，EN，EN", "accuracy": "EN", "speed": "EN",
+        "description": "translated，translated，translated", "accuracy": "translated", "speed": "translated",
     },
     "base": {
         "repo_id": "Systran/faster-whisper-base",
         "size": "~145 MB", "size_bytes": 145 * 1024 * 1024,
-        "description": "EN，ENuse", "accuracy": "EN", "speed": "EN",
+        "description": "translatedSelect，recommendtranslateduse", "accuracy": "translatedetc.", "speed": "translated",
     },
     "small": {
         "repo_id": "Systran/faster-whisper-small",
         "size": "~488 MB", "size_bytes": 488 * 1024 * 1024,
-        "description": "EN，EN", "accuracy": "EN", "speed": "EN",
+        "description": "translated，translated", "accuracy": "translated", "speed": "translatedetc.",
     },
     "medium": {
         "repo_id": "Systran/faster-whisper-medium",
         "size": "~1.5 GB", "size_bytes": 1500 * 1024 * 1024,
-        "description": "EN，EN", "accuracy": "EN", "speed": "EN",
+        "description": "translated，translatedusetranslated", "accuracy": "translated", "speed": "translated",
     },
     "large-v3": {
         "repo_id": "Systran/faster-whisper-large-v3",
         "size": "~3 GB", "size_bytes": 3000 * 1024 * 1024,
-        "description": "EN", "accuracy": "EN", "speed": "EN",
+        "description": "translated", "accuracy": "translated", "speed": "translated",
     },
 }
 
@@ -85,7 +85,7 @@ class WhisperModelManager:
     # ---- path / status ----
     def _model_cache_dir(self, model_name: str) -> Path:
         repo = self.model_configs[model_name]["repo_id"]
-        # HF cachedirectoryEN：models--<org>--<name>
+        # HF cachedirectorytranslated：models--<org>--<name>
         return whisper_runtime.get_models_dir() / "hub" / ("models--" + repo.replace("/", "--"))
 
     def _is_downloaded(self, model_name: str) -> bool:
@@ -103,7 +103,7 @@ class WhisperModelManager:
         if self._is_downloaded(model_name):
             return ModelStatus.DOWNLOADED
         if not whisper_runtime.is_installed():
-            return ModelStatus.ERROR  # runEN，EN
+            return ModelStatus.ERROR  # Runtimetranslated，modeltranslatedusetranslated
         return ModelStatus.AVAILABLE
 
     def _info(self, model_name: str) -> ModelInfo:
@@ -129,12 +129,12 @@ class WhisperModelManager:
             return None
         return self._info(model_name)
 
-    # ---- download（EN，EN）----
+    # ---- download（translated，translated）----
     async def download_model(self, model_name: str) -> bool:
         if model_name not in self.model_configs:
-            raise ValueError(f"EN: {model_name}")
+            raise ValueError(f"translatedsupport'smodel: {model_name}")
         if not whisper_runtime.is_installed():
-            raise RuntimeError("pleaseEN Whisper runEN")
+            raise RuntimeError("translatedinstall Whisper Runtime")
         if self._is_downloaded(model_name):
             return True
         with self._lock:
@@ -153,16 +153,16 @@ class WhisperModelManager:
         try:
             whisper_runtime.ensure_on_path()
             from huggingface_hub import snapshot_download
-            logger.info(f"startdownload Whisper EN {model_name} ({repo_id})")
+            logger.info(f"translateddownload Whisper model {model_name} ({repo_id})")
             snapshot_download(
                 repo_id=repo_id,
                 cache_dir=str(whisper_runtime.get_models_dir() / "hub"),
             )
             with self._lock:
                 self._download_state[model_name] = {"status": "downloaded", "progress": 100, "error": None}
-            logger.info(f"Whisper EN {model_name} downloadEN")
+            logger.info(f"Whisper model {model_name} downloadtranslated")
         except Exception as e:  # noqa: BLE001
-            logger.error(f"download Whisper EN {model_name} failed: {e}", exc_info=True)
+            logger.error(f"download Whisper model {model_name} failed: {e}", exc_info=True)
             with self._lock:
                 self._download_state[model_name] = {"status": "error", "progress": 0, "error": str(e)}
 
@@ -174,7 +174,7 @@ class WhisperModelManager:
         return st.get("progress")
 
     def cancel_download(self, model_name: str) -> bool:
-        # snapshot_download EN；ENstatus，ENdownloadEN
+        # snapshot_download translated；thistranslatedstatus，translateddownloadtranslatedcantranslated
         with self._lock:
             if model_name in self._download_state and self._download_state[model_name].get("status") == "downloading":
                 self._download_state[model_name] = {"status": "available", "progress": 0, "error": None}
@@ -191,10 +191,10 @@ class WhisperModelManager:
                 shutil.rmtree(d, ignore_errors=True)
             with self._lock:
                 self._download_state.pop(model_name, None)
-            logger.info(f"Whisper EN {model_name} deleted")
+            logger.info(f"Whisper model {model_name} translateddelete")
             return True
         except Exception as e:  # noqa: BLE001
-            logger.error(f"delete Whisper EN {model_name} failed: {e}")
+            logger.error(f"delete Whisper model {model_name} failed: {e}")
             return False
 
 

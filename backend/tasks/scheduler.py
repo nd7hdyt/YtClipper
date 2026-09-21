@@ -1,6 +1,6 @@
 """
-ENtaskEN
-configENexecuteENtask
+translatedtasktranslated
+configAndtranslated'stranslatedtask
 """
 
 import logging
@@ -12,85 +12,85 @@ from ..core.celery_app import celery_app
 logger = logging.getLogger(__name__)
 
 
-# configENtask
+# configtranslatedtask
 @celery_app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    """configENtask"""
+    """configtranslatedtask"""
     
-    # EN2ENexecuteEN
+    # pertranslated2translatedclean
     sender.add_periodic_task(
         crontab(hour=2, minute=0),
         cleanup_expired_data.s(days=30),
         name='daily_data_cleanup'
     )
     
-    # ENexecuteENcheck
+    # pertranslatedonetranslatedcheck
     sender.add_periodic_task(
         crontab(minute=0),
         check_data_consistency.s(),
         name='hourly_consistency_check'
     )
     
-    # EN3ENexecuteEN
+    # pertranslated3translatedclean
     sender.add_periodic_task(
         crontab(hour=3, minute=0, day_of_week=0),
         cleanup_orphaned_data.s(),
         name='weekly_orphaned_cleanup'
     )
     
-    # EN1ENexecutesystemENcheck
+    # pertranslated1translatedSystemHealth Check
     sender.add_periodic_task(
         crontab(hour=1, minute=0),
         health_check.s(),
         name='daily_health_check'
     )
     
-    logger.info("ENtaskconfigEN")
+    logger.info("translatedtaskconfigtranslated")
 
 
 def get_scheduled_tasks() -> dict:
-    """fetchallENconfigENtask"""
+    """fetchtranslatedconfig'stranslatedtask"""
     return {
         'daily_data_cleanup': {
-            'schedule': 'EN2EN',
+            'schedule': 'pertranslated2translated',
             'task': 'cleanup_expired_data',
-            'description': 'EN（EN30EN）'
+            'description': 'cleantranslated（translated30translated）'
         },
         'hourly_consistency_check': {
-            'schedule': 'EN',
+            'schedule': 'pertranslated',
             'task': 'check_data_consistency',
-            'description': 'checkEN'
+            'description': 'checktranslatedonetranslated'
         },
         'weekly_orphaned_cleanup': {
-            'schedule': 'EN3EN',
+            'schedule': 'pertranslated3translated',
             'task': 'cleanup_orphaned_data',
-            'description': 'EN'
+            'description': 'cleantranslated'
         },
         'daily_health_check': {
-            'schedule': 'EN1EN',
+            'schedule': 'pertranslated1translated',
             'task': 'health_check',
-            'description': 'systemENcheck'
+            'description': 'SystemHealth Check'
         }
     }
 
 
 def enable_scheduled_tasks():
-    """ENtask"""
+    """translatedusetranslatedtask"""
     try:
-        # ENcanENtaskEN
-        logger.info("ENtaskEN")
+        # thistranslatedcantranslatedaddtranslatedusetranslatedtask'stranslated
+        logger.info("translatedtasktranslateduse")
         return True
     except Exception as e:
-        logger.error(f"ENtaskfailed: {e}")
+        logger.error(f"translatedusetranslatedtaskfailed: {e}")
         return False
 
 
 def disable_scheduled_tasks():
-    """ENtask"""
+    """translatedusetranslatedtask"""
     try:
-        # ENcanENtaskEN
-        logger.info("ENtaskEN")
+        # thistranslatedcantranslatedaddtranslatedusetranslatedtask'stranslated
+        logger.info("translatedtasktranslateduse")
         return True
     except Exception as e:
-        logger.error(f"ENtaskfailed: {e}")
+        logger.error(f"translatedusetranslatedtaskfailed: {e}")
         return False

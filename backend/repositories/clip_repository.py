@@ -1,6 +1,6 @@
 """
 clipRepository
-ENclipEN
+Providescliptranslated'stranslated
 """
 
 from typing import List, Optional, Dict, Any
@@ -11,59 +11,59 @@ from .base import BaseRepository
 from ..models.clip import Clip, ClipStatus
 
 class ClipRepository(BaseRepository[Clip]):
-    """clipRepositoryEN"""
+    """clipRepositorytranslated"""
     
     def __init__(self, db: Session):
         super().__init__(Clip, db)
     
     def get_by_project(self, project_id: str) -> List[Clip]:
         """
-        fetchprojectENallclip
+        fetchproject'stranslatedclip
         
         Args:
             project_id: projectID
             
         Returns:
-            clipEN
+            cliplist
         """
         return self.find_by(project_id=project_id)
     
     def get_by_status(self, status: ClipStatus) -> List[Clip]:
         """
-        ENstatusfetchclipEN
+        translatedstatusfetchcliplist
         
         Args:
             status: clipstatus
             
         Returns:
-            clipEN
+            cliplist
         """
         return self.find_by(status=status)
     
     def get_by_project_and_status(self, project_id: str, status: ClipStatus) -> List[Clip]:
         """
-        ENprojectENstatusfetchclipEN
+        translatedprojectAndstatusfetchcliplist
         
         Args:
             project_id: projectID
             status: clipstatus
             
         Returns:
-            clipEN
+            cliplist
         """
         return self.find_by(project_id=project_id, status=status)
     
     def get_high_score_clips(self, project_id: str, min_score: float = 0.7, limit: int = 10) -> List[Clip]:
         """
-        fetchENclip
+        fetchtranslatedclip
         
         Args:
             project_id: projectID
-            min_score: ENscoring
-            limit: returnEN
+            min_score: translated
+            limit: returntranslated
             
         Returns:
-            ENclipEN
+            translatedcliplist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -72,15 +72,15 @@ class ClipRepository(BaseRepository[Clip]):
     
     def get_clips_by_duration_range(self, project_id: str, min_duration: int, max_duration: int) -> List[Clip]:
         """
-        ENdurationENfetchclip
+        translatedfetchclip
         
         Args:
             project_id: projectID
-            min_duration: ENduration（EN）
-            max_duration: ENduration（EN）
+            min_duration: translated（seconds）
+            max_duration: translated（seconds）
             
         Returns:
-            clipEN
+            cliplist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -90,15 +90,15 @@ class ClipRepository(BaseRepository[Clip]):
     
     def get_clips_by_time_range(self, project_id: str, start_time: int, end_time: int) -> List[Clip]:
         """
-        ENtimeENfetchclip
+        translatedfetchclip
         
         Args:
             project_id: projectID
-            start_time: starttime（EN）
-            end_time: endtime（EN）
+            start_time: translated（seconds）
+            end_time: translated（seconds）
             
         Returns:
-            clipEN
+            cliplist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -107,22 +107,22 @@ class ClipRepository(BaseRepository[Clip]):
         ).order_by(asc(self.model.start_time)).all()
     
     def create_clip(self, clip_data: Dict[str, Any]) -> Clip:
-        """createclipEN（EN）"""
+        """createcliptranslated（translated）"""
         from ..services.storage_service import StorageService
         import uuid
         
-        # generateclipID（ifEN）
+        # translatedclipID（iftranslatedProvides）
         if "id" not in clip_data:
             clip_data["id"] = str(uuid.uuid4())
         
-        # 1. saveclipfileENfilesystem
+        # 1. translatedclipfiletranslatedfileSystem
         storage_service = StorageService(clip_data["project_id"])
         video_path = storage_service.save_clip_file(clip_data, clip_data["id"])
         
-        # 2. saveENfilesystem
+        # 2. translatedfileSystem
         metadata_path = storage_service.save_metadata(clip_data, f"clip_{clip_data['id']}")
         
-        # 3. saveENdatabase（ENpathEN）
+        # 3. translateddatabase（translatedpathtranslateduse）
         clip = Clip(
             id=clip_data["id"],
             project_id=clip_data["project_id"],
@@ -132,9 +132,9 @@ class ClipRepository(BaseRepository[Clip]):
             end_time=clip_data["end_time"],
             duration=clip_data["duration"],
             score=clip_data.get("score"),
-            video_path=video_path,  # ENpath
+            video_path=video_path,  # translatedpath
             clip_metadata={
-                'metadata_file': metadata_path,  # ENfilepath
+                'metadata_file': metadata_path,  # translatedfile path
                 'clip_id': clip_data["id"],
                 'created_at': clip_data.get("created_at")
             }
@@ -145,19 +145,19 @@ class ClipRepository(BaseRepository[Clip]):
         return clip
     
     def get_clip_file(self, clip_id: str) -> Optional[Path]:
-        """fetchclipfilepath"""
+        """fetchclipfile path"""
         clip = self.get_by_id(clip_id)
         if clip and clip.video_path:
             return Path(clip.video_path)
         return None
     
     def get_clip_content(self, clip_id: str) -> Optional[Dict[str, Any]]:
-        """fetchclipEN"""
+        """fetchcliptranslated"""
         clip = self.get_by_id(clip_id)
         if not clip:
             return None
         
-        # ENfilesystemfetchEN
+        # fromfileSystemfetchtranslated
         if clip.clip_metadata and 'metadata_file' in clip.clip_metadata:
             from ..services.storage_service import StorageService
             storage_service = StorageService(clip.project_id)
@@ -167,14 +167,14 @@ class ClipRepository(BaseRepository[Clip]):
     
     def search_clips(self, project_id: str, keyword: str) -> List[Clip]:
         """
-        ENclip
+        translatedclip
         
         Args:
             project_id: projectID
-            keyword: EN
+            keyword: translated
             
         Returns:
-            ENclipEN
+            translated'scliplist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -185,13 +185,13 @@ class ClipRepository(BaseRepository[Clip]):
     
     def get_clips_statistics(self, project_id: str) -> dict:
         """
-        fetchclipEN
+        fetchcliptranslatedinfo
         
         Args:
             project_id: projectID
             
         Returns:
-            EN
+            translatedinfotranslated
         """
         total_clips = self.db.query(self.model).filter(
             self.model.project_id == project_id
@@ -225,36 +225,36 @@ class ClipRepository(BaseRepository[Clip]):
         
         Args:
             clip_id: clipID
-            status: ENstatus
+            status: translatedstatus
             
         Returns:
-            updateENclipENNone
+            updatetranslated'scliptranslatedorNone
         """
         return self.update(clip_id, status=status)
     
     def update_clip_score(self, clip_id: str, score: float) -> Optional[Clip]:
         """
-        updateclipscoring
+        updatecliptranslated
         
         Args:
             clip_id: clipID
-            score: ENscoring
+            score: translated
             
         Returns:
-            updateENclipENNone
+            updatetranslated'scliptranslatedorNone
         """
         return self.update(clip_id, score=score)
     
     def get_clips_for_collection(self, project_id: str, collection_size: int = 5) -> List[Clip]:
         """
-        fetchENcollectionENclip
+        fetchtranslatedcollection'sclip
         
         Args:
             project_id: projectID
-            collection_size: collectionEN
+            collection_size: collectiontranslated
             
         Returns:
-            clipEN
+            cliplist
         """
         return self.db.query(self.model).filter(
             self.model.project_id == project_id,
@@ -264,13 +264,13 @@ class ClipRepository(BaseRepository[Clip]):
     
     def get_clips_by_processing_step(self, project_id: str, step: int) -> List[Clip]:
         """
-        ENprocessingENfetchclip
+        translatedprocessstepfetchclip
         
         Args:
             project_id: projectID
-            step: processingEN
+            step: processstep
             
         Returns:
-            clipEN
+            cliplist
         """
         return self.find_by(project_id=project_id, processing_step=step)

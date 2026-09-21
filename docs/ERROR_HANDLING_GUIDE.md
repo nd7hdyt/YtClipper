@@ -1,25 +1,25 @@
-# EN
+# error handling
 
-## 📋 EN
+## 📋 overview
 
-EN，ProvidesEN。
+projecterror handling，errorformaterror handling。
 
-## 🏗️ EN
+## 🏗️ error handling
 
-### EN
+### error
 
 ```python
 class ErrorCategory(Enum):
-    CONFIGURATION = "CONFIGURATION"  # EN
-    NETWORK = "NETWORK"              # EN
-    API = "API"                      # APIEN
-    FILE_IO = "FILE_IO"              # ENIOEN
-    PROCESSING = "PROCESSING"        # EN
-    VALIDATION = "VALIDATION"        # EN
-    SYSTEM = "SYSTEM"                # EN
+    CONFIGURATION = "CONFIGURATION"  # configerror
+    NETWORK = "NETWORK"              # error
+    API = "API"                      # APIerror
+    FILE_IO = "FILE_IO"              # fileIOerror
+    PROCESSING = "PROCESSING"        # error
+    VALIDATION = "VALIDATION"        # verifyerror
+    SYSTEM = "SYSTEM"                # error
 ```
 
-### EN
+### error
 
 ```python
 class ErrorLevel(Enum):
@@ -30,29 +30,29 @@ class ErrorLevel(Enum):
     CRITICAL = "CRITICAL"
 ```
 
-## 🚀 EN
+## 🚀 usage
 
-### 1. EN
+### 1. 
 
 ```python
 from backend.utils.error_handler import AutoClipsException, ErrorCategory
 
-# EN
+# configerror
 raise AutoClipsException(
-    message="APIEN",
+    message="APIkeyconfig",
     category=ErrorCategory.CONFIGURATION,
     details={"config_key": "DASHSCOPE_API_KEY"}
 )
 
-# EN
+# fileerror
 raise AutoClipsException(
-    message="EN",
+    message="file",
     category=ErrorCategory.FILE_IO,
     details={"file_path": "/path/to/file.mp4"}
 )
 ```
 
-### 2. EN
+### 2. useerror handling
 
 ```python
 from backend.core.error_middleware import handle_errors
@@ -60,15 +60,15 @@ from backend.utils.error_handler import ErrorCategory
 
 @handle_errors(ErrorCategory.PROCESSING)
 async def process_video(video_path: str):
-    # ENAutoClipsException
+    # AutoClipsException
     if not os.path.exists(video_path):
-        raise FileNotFoundError("EN")
+        raise FileNotFoundError("file")
     
-    # EN...
+    # ...
     return result
 ```
 
-### 3. EN
+### 3. useerror
 
 ```python
 from backend.core.error_middleware import error_context
@@ -76,13 +76,13 @@ from backend.utils.error_handler import ErrorCategory
 
 def upload_file(file_path: str):
     with error_context(ErrorCategory.FILE_IO, {"file_path": file_path}):
-        # ENAutoClipsException
+        # AutoClipsException
         with open(file_path, 'r') as f:
             content = f.read()
         return content
 ```
 
-### 4. ENAPIEN
+### 4. APIrouteuse
 
 ```python
 from fastapi import APIRouter, HTTPException
@@ -93,36 +93,36 @@ router = APIRouter()
 @router.get("/projects/{project_id}")
 async def get_project(project_id: str):
     try:
-        # EN
+        # 
         project = await get_project_from_db(project_id)
         if not project:
             raise AutoClipsException(
-                message=f"EN: {project_id}",
+                message=f"project: {project_id}",
                 category=ErrorCategory.VALIDATION,
                 details={"project_id": project_id}
             )
         return project
     except AutoClipsException:
-        # EN，EN
+        # ，
         raise
     except Exception as e:
-        # ENAutoClipsException
+        # AutoClipsException
         raise AutoClipsException(
-            message="EN",
+            message="fetchprojectfailed",
             category=ErrorCategory.SYSTEM,
             original_exception=e
         )
 ```
 
-## 📊 EN
+## 📊 errorformat
 
-EN：
+errorfollowformat：
 
 ```json
 {
   "error": {
     "code": "AUTOCLIPS_VALIDATION",
-    "message": "EN: abc123",
+    "message": "project: abc123",
     "details": {
       "project_id": "abc123"
     },
@@ -132,51 +132,51 @@ EN：
 }
 ```
 
-### EN
+### notes
 
-- `code`: EN，EN `AUTOCLIPS_{CATEGORY}` EN `HTTP_{STATUS_CODE}`
-- `message`: EN，EN
-- `details`: EN，EN
-- `request_id`: ENID，EN
-- `timestamp`: EN
+- `code`: error，format `AUTOCLIPS_{CATEGORY}`  `HTTP_{STATUS_CODE}`
+- `message`: error，
+- `details`: error，
+- `request_id`: ID，
+- `timestamp`: error
 
-## 🔧 HTTPEN
+## 🔧 HTTPstatus
 
-| EN | HTTPEN | EN |
+| error | HTTPstatus | notes |
 |---------|-----------|------|
-| CONFIGURATION | 500 | EN |
-| NETWORK | 503 | EN |
-| API | 502 | APIEN |
-| FILE_IO | 500 | ENIOEN |
-| PROCESSING | 500 | EN |
-| VALIDATION | 400 | EN |
-| SYSTEM | 500 | EN |
+| CONFIGURATION | 500 | configerror |
+| NETWORK | 503 | error |
+| API | 502 | APIerror |
+| FILE_IO | 500 | fileIOerror |
+| PROCESSING | 500 | error |
+| VALIDATION | 400 | verifyerror |
+| SYSTEM | 500 | error |
 
-## 📝 EN
+## 📝 best practices
 
-### 1. EN
+### 1. error
 
 ```python
-# ✅ EN
+# ✅ error
 raise AutoClipsException(
-    message="ENSupport，ENMP4EN",
+    message="fileformatsupport，useMP4format",
     category=ErrorCategory.VALIDATION,
     details={"supported_formats": ["mp4", "avi", "mov"]}
 )
 
-# ❌ EN
+# ❌ error
 raise AutoClipsException(
     message="Error: Invalid file",
     category=ErrorCategory.VALIDATION
 )
 ```
 
-### 2. EN
+### 2. error
 
 ```python
-# ✅ EN
+# ✅ 
 raise AutoClipsException(
-    message="EN",
+    message="failed",
     category=ErrorCategory.PROCESSING,
     details={
         "project_id": project_id,
@@ -187,46 +187,46 @@ raise AutoClipsException(
 )
 ```
 
-### 3. EN
+### 3. errorselect
 
 ```python
-# ✅ EN
+# ✅ errorselect
 if not api_key:
     raise AutoClipsException(
-        message="APIEN",
-        category=ErrorCategory.CONFIGURATION  # EN
+        message="APIkeyconfig",
+        category=ErrorCategory.CONFIGURATION  # configissue
     )
 
 if response.status_code == 429:
     raise AutoClipsException(
-        message="APIEN",
-        category=ErrorCategory.API  # APIEN
+        message="APIcall",
+        category=ErrorCategory.API  # APIissue
     )
 
 if not os.path.exists(file_path):
     raise AutoClipsException(
-        message="EN",
-        category=ErrorCategory.FILE_IO  # EN
+        message="file",
+        category=ErrorCategory.FILE_IO  # fileissue
     )
 ```
 
-### 4. EN
+### 4. 
 
 ```python
-# ✅ EN
+# ✅ 
 try:
     result = some_risky_operation()
 except Exception as e:
     raise AutoClipsException(
-        message="EN",
+        message="failed",
         category=ErrorCategory.SYSTEM,
-        original_exception=e  # EN
+        original_exception=e  # 
     )
 ```
 
-## 🧪 EN
+## 🧪 testerror handling
 
-### 1. EN
+### 1. test
 
 ```python
 import pytest
@@ -235,15 +235,15 @@ from backend.utils.error_handler import AutoClipsException, ErrorCategory
 def test_custom_exception():
     with pytest.raises(AutoClipsException) as exc_info:
         raise AutoClipsException(
-            message="EN",
+            message="testerror",
             category=ErrorCategory.VALIDATION
         )
     
     assert exc_info.value.category == ErrorCategory.VALIDATION
-    assert exc_info.value.message == "EN"
+    assert exc_info.value.message == "testerror"
 ```
 
-### 2. ENAPIEN
+### 2. testAPIerror
 
 ```python
 from fastapi.testclient import TestClient
@@ -259,35 +259,35 @@ def test_api_error_response():
     assert response.json()["error"]["code"] == "AUTOCLIPS_VALIDATION"
 ```
 
-## 🔍 EN
+## 🔍 errormonitor
 
-### 1. EN
+### 1. errorformat
 
-EN，EN：
+error，format：
 
 ```
-2024-01-01 12:00:00 - ERROR - EN: AutoClipsException: EN: abc123
+2024-01-01 12:00:00 - ERROR - : AutoClipsException: project: abc123
 request_id: req_123456
 path: /api/v1/projects/abc123
 method: GET
-traceback: [EN]
+traceback: []
 ```
 
-### 2. EN
+### 2. error
 
-EN：
+cantoolerror：
 
 ```bash
-# EN
+# error
 grep "AUTOCLIPS_" backend.log | cut -d' ' -f4 | sort | uniq -c
 
-# EN
+# error
 grep "ERROR" backend.log | wc -l
 ```
 
-## 🚨 EN
+## 🚨 error handling
 
-### 1. EN
+### 1. fileerror
 
 ```python
 @handle_errors(ErrorCategory.FILE_IO)
@@ -297,19 +297,19 @@ async def save_file(file_path: str, content: bytes):
             f.write(content)
     except PermissionError:
         raise AutoClipsException(
-            message="EN",
+            message="file",
             category=ErrorCategory.FILE_IO,
             details={"file_path": file_path}
         )
     except OSError as e:
         raise AutoClipsException(
-            message="EN",
+            message="file systemerror",
             category=ErrorCategory.FILE_IO,
             details={"file_path": file_path, "os_error": str(e)}
         )
 ```
 
-### 2. APIEN
+### 2. APIcallerror
 
 ```python
 @handle_errors(ErrorCategory.API)
@@ -319,31 +319,31 @@ async def call_external_api(url: str, data: dict):
             async with session.post(url, json=data) as response:
                 if response.status == 429:
                     raise AutoClipsException(
-                        message="APIEN",
+                        message="APIcall",
                         category=ErrorCategory.API,
                         details={"url": url, "status": 429}
                     )
                 return await response.json()
     except aiohttp.ClientError as e:
         raise AutoClipsException(
-            message="EN",
+            message="failed",
             category=ErrorCategory.NETWORK,
             details={"url": url, "error": str(e)}
         )
 ```
 
-### 3. EN
+### 3. error
 
 ```python
 @handle_errors(ErrorCategory.PROCESSING)
 async def process_video_data(video_path: str):
     try:
-        # EN
+        # 
         result = await video_processor.process(video_path)
         return result
     except VideoProcessingError as e:
         raise AutoClipsException(
-            message="EN",
+            message="failed",
             category=ErrorCategory.PROCESSING,
             details={
                 "video_path": video_path,
@@ -354,8 +354,8 @@ async def process_video_data(video_path: str):
         )
 ```
 
-## 📚 EN
+## 📚 related docs
 
-- [APIEN](./API_DOCUMENTATION.md)
-- [EN](./CONFIGURATION_GUIDE.md)
-- [EN](./LOGGING_GUIDE.md)
+- [APIdocs](./API_DOCUMENTATION.md)
+- [config](./CONFIGURATION_GUIDE.md)
+- [](./LOGGING_GUIDE.md)

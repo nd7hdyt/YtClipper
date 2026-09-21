@@ -1,161 +1,161 @@
-# AutoClip EN
+# AutoClip notes
 
-## v1.1.0 - 2026EN5EN
+## v1.1.0 - 20265
 
-> EN macOS EN**EN、EN、EN**。v1.0.0 EN、
-> EN、EN，v1.1.0 EN。
+>  macOS **、available、**。v1.0.0 install、
+> open、issue，v1.1.0 verify。
 
-### 🚀 EN
+### 🚀 available
 
-- **EN**：ENBuilt-inEN Python EN ffmpeg/ffprobe，EN**EN
-  Python EN ffmpeg**，EN DMG EN。
-- **EN**：EN BEN/YouTube EN → EN → EN → AI EN/EN/EN/EN/EN →
-  ffmpeg EN → EN，EN（EN Redis）。
+- **dependenciesinstall**：install Python  ffmpeg/ffprobe，**no need
+  Python  ffmpeg**， DMG use。
+- ****： B/YouTube  → download → subtitles → AI outline//// →
+  ffmpeg  → generateclip，local（dependencies Redis）。
 
-### 🐛 EN
+### 🐛 fix
 
-- **EN**：EN（antd EN React EN）EN，EN。
-- **EN「EN」**：EN（`pytz` EN），EN。
-- **EN**：EN/EN，EN。
-- **EN 0%**：EN，EN。
-- Built-in ffmpeg/ffprobe EN，EN。
+- **fixstart**：frontenddependenciesissue（antd  React ）page，。
+- **fixproject「」**：dependencies（`pytz` ），API。
+- **fix**：import/，click。
+- **fix 0%**：local，。
+-  ffmpeg/ffprobe version，solveissue。
 
-### ✨ EN：EN（EN）
+### ✨ ：localsubtitles（）
 
-- EN**EN**，EN「EN → EN」EN**EN Whisper**（Adopts faster-whisper，
-  EN 200–400MB，EN PyTorch），EN/EN（tiny / base / small / medium / large-v3）。
-- EN、EN；EN。
+- **subtitles**，「settings → 」**install Whisper**（ faster-whisper，
+   200–400MB， PyTorch），select/downloadmodel（tiny / base / small / medium / large-v3）。
+- 、model；needinstall。
 
-### 🔧 EN
+### 🔧 
 
-- AI ProvidesEN Gemini EN `google-genai` SDK。
-- CI EN；EN（EN）。
+- AI provider Gemini  `google-genai` SDK。
+- CI buildverify；（docs）。
 
-### 📦 EN（macOS, Apple Silicon）
+### 📦 installnotes（macOS, Apple Silicon）
 
-1. EN DMG，EN `AutoClip Desktop` EN「EN」。
-2. **EN → EN「EN」**（ad-hoc EN、EN Apple EN，EN Gatekeeper）。
-3. EN「EN」EN AI ProvidesEN API Key EN。
+1.  DMG， `AutoClip Desktop` 「」。
+2. **open → 「open」**（ad-hoc 、 Apple ， Gatekeeper）。
+3. 「settings」 AI provider API Key use。
 
-> ENProvides Apple Silicon (M EN) EN；Intel / Windows / Linux ENProvides。
+>  Apple Silicon (M ) version；Intel / Windows / Linux 。
 
 ---
 
-## v1.0.0 - 2024EN12EN
+## v1.0.0 - 202412
 
-### 🎉 EN
+### 🎉 
 
-AutoClipENBased onAIENIntelligent Video ClippingEN，SupportEN。
+AutoClipbased onAIcliptool，supportgenerate。
 
-### ✨ EN
+### ✨ 
 
-#### 🎬 EN
-- **Multi-Platform Support**: YouTube、BENOne-Click Download
-- **EN**: SupportENUpload
-- **EN**: AIEN
-- **Collection Generation**: EN
+#### 🎬 
+- **support**: YouTube、Bdownload
+- **localfile**: supportlocalfile upload
+- **clip**: AI
+- **generate**: recommendcreate
 
-#### 🤖 AIEN
-- **EN**: Based onEN
-- **EN**: ENAIEN
-- **EN**: EN
-- **EN**: EN
+#### 🤖 AI
+- ****: based onQwen
+- ****: AI
+- **title generation**: generate
+- ****: 
 
-#### 🖥️ EN
-- **EN**: Based onTauriEN
-- **EN**: SupportEN
-- **EN**: EN
-- **EN**: WebSocketEN
+#### 🖥️ 
+- ****: based onTauri
+- ****: support
+- ****: settingsstart
+- **progress**: WebSocketprogress
 
-#### 🎨 ENInterface
-- **EN**: React + TypeScript + Ant Design
-- **EN**: EN
-- **EN**: SupportEN
-- **EN**: EN
+#### 🎨 
+- ****: React + TypeScript + Ant Design
+- ****: 
+- ****: support
+- **monitor**: status
 
-### 🛠️ EN
+### 🛠️ 
 
-- **EN**: FastAPI + Celery + Redis + SQLite
-- **EN**: React 18 + TypeScript + Vite
-- **EN**: Tauri 2.0 (Rust)
-- **AI**: ENLanguageEN
-- **EN**: yt-dlp + FFmpeg
+- **backend**: FastAPI + Celery + Redis + SQLite
+- **frontend**: React 18 + TypeScript + Vite
+- ****: Tauri 2.0 (Rust)
+- **AI**: Qwenmodel
+- ****: yt-dlp + FFmpeg
 
-### 📦 EN
+### 📦 
 
-#### EN
-- **EN**: Windows 10+ / macOS 10.13+ / Linux
-- **EN**: 4GB RAM
-- **EN**: 10GB EN
-- **EN**: EN
+#### config
+- ****: Windows 10+ / macOS 10.13+ / Linux
+- **memory**: 4GB RAM
+- ****: 10GB available
+- ****: 
 
-#### EN
-- **EN**: 8GB+ RAM
-- **EN**: 20GB+ EN
-- **EN**: EN
+#### recommended config
+- **memory**: 8GB+ RAM
+- ****: 20GB+ available
+- ****: 
 
-### 🚀 Quick Start
+### 🚀 quick start
 
-1. **EN**: ENGitHub ReleasesEN
-2. **EN**: EN，EN
-3. **ENAPI**: ENAPIEN
-4. **EN**: EN，ENUploadEN
+1. **downloadinstall**: GitHub Releasesdownloadinstall
+2. **start**: ，
+3. **configAPI**: settingsconfigQwenAPIkey
+4. **use**: createproject，upload file
 
-### 📋 EN
+### 📋 usestep
 
-1. **EN**: EN"EN"
-2. **EN**: ENYouTube/BENUploadEN
-3. **AIEN**: EN
-4. **EN**: EN
-5. **EN**: EN
-6. **EN**: EN
+1. **createproject**: click"new project"
+2. ****: selectYouTube/Blocalfile
+3. **AI**: 
+4. **view**: generate
+5. **create collection**: selectcreate collection
+6. **exportdownload**: download
 
-### ⚠️ EN
+### ⚠️ 
 
-- ENAPIENAIEN
-- EN，EN
-- EN，EN
-- EN
+- needconfigQwenAPIkeyuseAI
+- useneeddownloaddependencies，
+- need，
+- file
 
-### 🔧 Troubleshooting
+### 🔧 troubleshooting
 
 #### FAQ
-- **EN**: EN
-- **EN**: EN
-- **AIEN**: ENAPIEN
-- **EN**: EN
+- **startfailed**: checkdependenciesinstall
+- **downloadfailed**: check network connection
+- **AI**: checkAPIkeyconfig
+- ****: fileneedproject
 
-#### EN
-- EN [EN](docs/USER_GUIDE.md)
-- EN [FAQ](docs/FAQ.md)
-- EN [GitHub Issue](https://github.com/nd7hdyt/YtClipper/issues)
+#### get help
+- view [](docs/USER_GUIDE.md)
+-  [FAQ](docs/FAQ.md)
+-  [GitHub Issue](https://github.com/zhouxiaoka/autoclip/issues)
 
-### 🛣️ EN
+### 🛣️ 
 
-- **BENUpload**: Auto UploadENBEN
-- **Subtitle Editing**: VisualSubtitle EditingEN
-- **EN**: SupportEN
-- **EN**: EN
-- **EN**: SupportEN
+- **B**: clipB
+- **subtitlesedit**: subtitlesedit
+- ****: support
+- **cloud**: projectcloud
+- ****: support
 
-### 📄 License
+### 📄 
 
-ENAdopts [MIT License](LICENSE) ENLicense。
+project [MIT License](LICENSE) 。
 
-### 🙏 Acknowledgments
+### 🙏 
 
-ENSupport，EN：
-- [Tauri](https://tauri.app/) - EN
-- [FastAPI](https://fastapi.tiangolo.com/) - EN
-- [React](https://reactjs.org/) - EN
-- [EN](https://tongyi.aliyun.com/) - AIEN
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - EN
+projectsupport，：
+- [Tauri](https://tauri.app/) - 
+- [FastAPI](https://fastapi.tiangolo.com/) - backend
+- [React](https://reactjs.org/) - frontend
+- [Qwen](https://tongyi.aliyun.com/) - AIservice
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) - downloadtool
 
 ---
 
-**EN**: [GitHub Releases](https://github.com/nd7hdyt/YtClipper/releases)
+**download**: [GitHub Releases](https://github.com/zhouxiaoka/autoclip/releases)
 
-**EN**: [GitHub Repository](https://github.com/nd7hdyt/YtClipper)
+**project**: [GitHub Repository](https://github.com/zhouxiaoka/autoclip)
 
-**EN**: [GitHub Issues](https://github.com/nd7hdyt/YtClipper/issues)
+**issue**: [GitHub Issues](https://github.com/zhouxiaoka/autoclip/issues)
 

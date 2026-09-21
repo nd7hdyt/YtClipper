@@ -1,7 +1,7 @@
 """
-WebSocketENservice
-ENRedisprogressENWebSocketconnect
-EN、EN、EN
+WebSockettranslatedservice
+translatedRedisprogresstranslatedfrontendWebSocketconnect
+supporttranslated、translated、translatedetc.translated
 """
 
 import json
@@ -20,7 +20,7 @@ from ..shared.progress_channels import normalize_channel, project_progress_chann
 logger = logging.getLogger(__name__)
 
 class WebSocketGatewayService:
-    """WebSocketENservice"""
+    """WebSockettranslatedservice"""
     
     def __init__(self):
         self.redis_url = get_redis_url()
@@ -33,25 +33,25 @@ class WebSocketGatewayService:
         self.listen_task: Optional[asyncio.Task] = None
         self.is_running = False
         
-        # EN
+        # translated
         self.last_progress: Dict[str, Dict[str, Any]] = {}  # channel -> {progress, timestamp}
-        self.throttle_interval = 0.2  # 200msEN
+        self.throttle_interval = 0.2  # 200mstranslated
     
     @staticmethod
     def normalize_channel(raw: str) -> str:
         """
-        EN，useEN
+        translated，usetranslatedone'stranslated
         
         Args:
-            raw: EN
+            raw: translated
             
         Returns:
-            EN
+            translated'stranslated
         """
         return normalize_channel(raw)
         
     async def start(self):
-        """startENservice"""
+        """starttranslatedservice"""
         if self.is_running:
             return
         
@@ -60,20 +60,20 @@ class WebSocketGatewayService:
             self.pubsub = self.redis_client.pubsub(ignore_subscribe_messages=True)
             self.is_running = True
             
-            # startENservice
+            # starttranslatedservice
             await snapshot_service.connect()
             
-            # startEN
+            # starttranslated
             self.listen_task = asyncio.create_task(self._listen_loop())
             
-            logger.info("WebSocketENserviceENstart")
+            logger.info("WebSockettranslatedservicetranslatedstart")
             
         except Exception as e:
-            logger.error(f"startWebSocketENservicefailed: {e}")
+            logger.error(f"startWebSockettranslatedservicefailed: {e}")
             self.is_running = False
     
     async def stop(self):
-        """stopENservice"""
+        """translatedservice"""
         self.is_running = False
         
         if self.listen_task:
@@ -84,66 +84,66 @@ class WebSocketGatewayService:
                 pass
         
         if self.pubsub:
-            await self.pubsub.aclose()  # redis-py 5.x EN
+            await self.pubsub.aclose()  # redis-py 5.x translated
         
         if self.redis_client:
-            await self.redis_client.aclose()  # redis-py 5.x EN
+            await self.redis_client.aclose()  # redis-py 5.x translated
         
-        # stopENservice
+        # translatedservice
         await snapshot_service.disconnect()
         
-        logger.info("WebSocketENserviceENstop")
+        logger.info("WebSockettranslatedservicetranslated")
     
     async def sync_user_subscriptions(self, user_id: str, channels: Set[str]) -> Dict[str, int]:
         """
-        ENuserEN - EN
+        translatedusertranslated - translatedetc.translated
         
         Args:
             user_id: userID
-            channels: EN（EN，EN）
+            channels: translated'stranslated（translatedformat，translated）
             
         Returns:
-            EN: {"added": X, "removed": Y, "unchanged": Z}
+            translated: {"added": X, "removed": Y, "unchanged": Z}
         """
         async with self.lock:
-            # 1) ENallEN
+            # 1) translated
             desired = {self.normalize_channel(ch) for ch in channels}
             current = self.user_subscriptions.get(user_id, set())
             
-            # 2) EN
+            # 2) translated
             to_add = desired - current
             to_remove = current - desired
             unchanged = current & desired
             
-            # 3) EN
+            # 3) translatedinfo
             added, removed, same = len(to_add), len(to_remove), len(unchanged)
             
-            # 4) processingEN
+            # 4) processaddedtranslated
             for channel in to_add:
                 try:
                     await self._subscribe_to_channel(channel)
-                    current.add(channel)  # ENupdate
-                    # EN
+                    current.add(channel)  # localtranslatedupdate
+                    # translated
                     await self._replay_snapshot(user_id, channel)
                 except Exception as e:
-                    logger.error(f"ENfailed {channel}: {e}")
+                    logger.error(f"translatedfailed {channel}: {e}")
             
-            # 5) processingEN
+            # 5) processtranslated
             for channel in to_remove:
                 try:
                     await self._unsubscribe_from_channel(channel)
-                    current.discard(channel)  # ENdelete
+                    current.discard(channel)  # localtranslateddelete
                 except Exception as e:
-                    logger.error(f"cancelENfailed {channel}: {e}")
+                    logger.error(f"canceltranslatedfailed {channel}: {e}")
             
-            # 6) updateuserEN（useEN）
+            # 6) updateusertranslated（usetranslated'stranslated）
             self.user_subscriptions[user_id] = current
             
-            # 7) logEN：ENINFO
+            # 7) logstranslated：translatedINFO
             if added or removed:
-                logger.info(f"EN: user {user_id}, EN {added}, EN {removed}, EN {same}")
+                logger.info(f"translated: user {user_id}, added {added}, translated {removed}, translated {same}")
             else:
-                logger.debug(f"EN(EN): user {user_id}, EN {same}")
+                logger.debug(f"translated(translated): user {user_id}, translated {same}")
             
             return {
                 "added": added,
@@ -152,59 +152,59 @@ class WebSocketGatewayService:
             }
     
     async def _subscribe_to_channel(self, channel: str):
-        """EN"""
+        """translated"""
         if channel not in self.channels_ref:
             self.channels_ref[channel] = 0
             await self.pubsub.subscribe(channel)
-            logger.debug(f"EN: {channel}")
+            logger.debug(f"translated: {channel}")
         
         self.channels_ref[channel] += 1
     
     async def _unsubscribe_from_channel(self, channel: str):
-        """cancelEN"""
+        """canceltranslated"""
         if channel in self.channels_ref:
             self.channels_ref[channel] -= 1
             if self.channels_ref[channel] <= 0:
                 await self.pubsub.unsubscribe(channel)
                 del self.channels_ref[channel]
-                logger.debug(f"ENcancelEN: {channel}")
+                logger.debug(f"translatedcanceltranslated: {channel}")
     
     async def _replay_snapshot(self, user_id: str, channel: str):
-        """EN"""
+        """translated"""
         try:
             snapshot = await snapshot_service.get_snapshot(channel)
             if snapshot:
-                # EN
+                # translated
                 simple_msg = progress_adapter.to_simple(snapshot)
                 simple_msg["snapshot"] = True
                 
-                # sendENuser
+                # translateduser
                 await manager.send_personal_message(simple_msg, user_id)
-                logger.debug(f"EN: {user_id} -> {channel}")
+                logger.debug(f"translated: {user_id} -> {channel}")
         except Exception as e:
-            logger.error(f"ENfailed: {e}")
+            logger.error(f"translatedfailed: {e}")
     
     async def subscribe_user_to_task(self, user_id: str, task_id: str) -> bool:
-        """userENtaskENprogress"""
+        """usertranslatedtask'sprogress"""
         try:
-            # EN - useprojectIDENtaskID
-            # ENneedENtask_idENproject_id，orENcallEN
-            # ENusetask_id，ENshouldENproject_id
+            # translated - useprojectIDtranslatedIstaskID
+            # thistranslatedfromtask_idtranslatedproject_id，ortranslatedcalltranslated
+            # translatedusetask_id，translatedproject_id
             channel = project_progress_channel(task_id)
             
-            # ENuserEN
+            # translatedusertranslated
             if user_id not in self.user_subscriptions:
                 self.user_subscriptions[user_id] = set()
             self.user_subscriptions[user_id].add(channel)
             
-            # createsendEN - useuserIDEN
+            # createtranslated - useuserIDtranslated
             async def sender(data: str):
                 try:
-                    logger.debug(f"sendEN: {data}")
+                    logger.debug(f"translated: {data}")
                     message_data = json.loads(data)
-                    logger.debug(f"parseEN: {message_data}")
+                    logger.debug(f"translated'stranslated: {message_data}")
                     
-                    # ENWebSocketEN
+                    # translatedWebSockettranslated
                     ws_message = {
                         "type": "task_progress_update",
                         "task_id": message_data.get("task_id"),
@@ -221,26 +221,26 @@ class WebSocketGatewayService:
                     }
                     
                     await manager.send_personal_message(ws_message, user_id)
-                    logger.debug(f"ENsendENuser {user_id}")
+                    logger.debug(f"translateduser {user_id}")
                 except Exception as e:
-                    logger.error(f"sendENuser {user_id} failed: {e}")
+                    logger.error(f"translateduser {user_id} failed: {e}")
             
-            # ENsendEN，EN
+            # translatedaddtranslated，translated
             sender._user_id = user_id
             sender._task_id = task_id
             
-            # EN
+            # translated
             await self._subscribe_channel(channel, sender)
             
-            # sendEN
+            # translatedConfirm
             await manager.send_personal_message({
                 "type": "subscription_confirmed",
                 "task_id": task_id,
-                "message": f"ENtask {task_id} ENprogressupdate",
+                "message": f"translatedtask {task_id} 'sprogressupdate",
                 "timestamp": datetime.utcnow().isoformat()
             }, user_id)
             
-            # sendEN（ifEN）
+            # translated（iftranslatedin）
             try:
                 from .progress_event_service import progress_event_service
                 snapshot = await progress_event_service.get_task_snapshot(task_id)
@@ -248,137 +248,137 @@ class WebSocketGatewayService:
                     snapshot_message = {
                         "type": "task_progress_update",
                         **snapshot,
-                        "snapshot": True  # EN
+                        "snapshot": True  # translated
                     }
                     await manager.send_personal_message(snapshot_message, user_id)
-                    logger.debug(f"ENsendtask {task_id} ENuser {user_id}")
+                    logger.debug(f"translatedtask {task_id} 'stranslateduser {user_id}")
             except Exception as e:
-                logger.error(f"sendtaskENfailed: {e}")
+                logger.error(f"translatedtasktranslatedfailed: {e}")
             
-            logger.debug(f"user {user_id} ENtask {task_id}")
+            logger.debug(f"user {user_id} translatedtask {task_id}")
             return True
             
         except Exception as e:
-            logger.error(f"userENtaskfailed: {e}")
+            logger.error(f"usertranslatedtaskfailed: {e}")
             return False
     
     async def unsubscribe_user_from_task(self, user_id: str, task_id: str) -> bool:
-        """usercancelENtaskENprogress"""
+        """usercanceltranslatedtask'sprogress"""
         try:
             channel = f"progress:{task_id}"
             
-            # createsendEN（EN）
+            # createtranslated（usetranslated）
             async def sender(data: str):
                 try:
                     await manager.send_personal_message(json.loads(data), user_id)
                 except Exception as e:
-                    logger.error(f"sendENuser {user_id} failed: {e}")
+                    logger.error(f"translateduser {user_id} failed: {e}")
             
-            # cancelEN
+            # canceltranslated
             await self._unsubscribe_channel(channel, sender)
             
-            # sendcancelEN
+            # translatedcanceltranslatedConfirm
             await manager.send_personal_message({
                 "type": "unsubscription_confirmed",
                 "task_id": task_id,
-                "message": f"ENcancelENtask {task_id} ENprogressupdate",
+                "message": f"translatedcanceltranslatedtask {task_id} 'sprogressupdate",
                 "timestamp": datetime.utcnow().isoformat()
             }, user_id)
             
-            logger.debug(f"user {user_id} ENcancelENtask {task_id}")
+            logger.debug(f"user {user_id} translatedcanceltranslatedtask {task_id}")
             return True
             
         except Exception as e:
-            logger.error(f"usercancelENtaskfailed: {e}")
+            logger.error(f"usercanceltranslatedtaskfailed: {e}")
             return False
     
     async def unsubscribe_user_from_all_tasks(self, user_id: str):
-        """userdisconnectconnectEN，cancelallEN"""
+        """usertranslatedconnecttranslated，canceltranslated"""
         if user_id in self.user_subscriptions:
             task_ids = list(self.user_subscriptions[user_id])
             for task_id in task_ids:
                 await self.unsubscribe_user_from_task(user_id, task_id)
             del self.user_subscriptions[user_id]
-            logger.info(f"user {user_id} ENcancelalltaskEN")
+            logger.info(f"user {user_id} translatedcanceltranslatedtasktranslated")
 
     async def subscribe_user_to_many_tasks(self, user_id: str, task_ids: list[str]) -> dict:
-        """ENtask - EN"""
+        """translatedmulti task - translatedetc.translated"""
         results = {"added": [], "already_subscribed": []}
         
         for task_id in task_ids:
-            # checkENalreadyEN
+            # checkIstranslated
             if user_id in self.user_subscriptions and task_id in self.user_subscriptions[user_id]:
                 results["already_subscribed"].append(task_id)
-                logger.debug(f"user {user_id} ENtask {task_id}，EN")
+                logger.debug(f"user {user_id} translatedtask {task_id}，skip")
                 continue
             
-            # executeEN
+            # translated
             if await self.subscribe_user_to_task(user_id, task_id):
                 results["added"].append(task_id)
             else:
-                logger.error(f"user {user_id} ENtask {task_id} failed")
+                logger.error(f"user {user_id} translatedtask {task_id} failed")
         
-        logger.info(f"EN: user {user_id}, EN {len(results['added'])}, already exists {len(results['already_subscribed'])}")
+        logger.info(f"translated: user {user_id}, added {len(results['added'])}, translatedin {len(results['already_subscribed'])}")
         return results
 
     async def unsubscribe_user_from_many_tasks(self, user_id: str, task_ids: list[str]) -> dict:
-        """ENcancelENtask"""
+        """translatedcanceltranslatedmulti task"""
         results = {"removed": [], "not_subscribed": []}
         
         for task_id in task_ids:
-            # checkEN
+            # checkIstranslated
             if user_id not in self.user_subscriptions or task_id not in self.user_subscriptions[user_id]:
                 results["not_subscribed"].append(task_id)
-                logger.debug(f"user {user_id} ENtask {task_id}，EN")
+                logger.debug(f"user {user_id} translatedtask {task_id}，skip")
                 continue
             
-            # executecancelEN
+            # translatedcanceltranslated
             if await self.unsubscribe_user_from_task(user_id, task_id):
                 results["removed"].append(task_id)
             else:
-                logger.error(f"user {user_id} cancelENtask {task_id} failed")
+                logger.error(f"user {user_id} canceltranslatedtask {task_id} failed")
         
-        logger.info(f"ENcancelEN: user {user_id}, EN {len(results['removed'])}, EN {len(results['not_subscribed'])}")
+        logger.info(f"translatedcanceltranslated: user {user_id}, translated {len(results['removed'])}, translated {len(results['not_subscribed'])}")
         return results
 
     async def sync_user_subscriptions(self, user_id: str, desired_task_ids: list[str]) -> dict:
-        """ENuserEN - EN"""
+        """translatedusertranslated - translatedetc.translated"""
         current_task_ids = list(self.user_subscriptions.get(user_id, set()))
         desired_set = set(desired_task_ids)
         current_set = set(current_task_ids)
         
-        # EN
+        # translated
         to_add = list(desired_set - current_set)
         to_remove = list(current_set - desired_set)
         
         results = {"added": [], "removed": [], "unchanged": []}
         
-        # EN
+        # translatedadd
         if to_add:
             add_results = await self.subscribe_user_to_many_tasks(user_id, to_add)
             results["added"] = add_results["added"]
         
-        # EN
+        # translated
         if to_remove:
             remove_results = await self.unsubscribe_user_from_many_tasks(user_id, to_remove)
             results["removed"] = remove_results["removed"]
         
-        # EN
+        # translated's
         results["unchanged"] = list(desired_set & current_set)
         
-        # ENINFOlog，EN
+        # translatedintranslatedINFOlogs，translated
         if len(results['added']) > 0 or len(results['removed']) > 0:
-            logger.info(f"EN: user {user_id}, EN {len(results['added'])}, EN {len(results['removed'])}, EN {len(results['unchanged'])}")
+            logger.info(f"translated: user {user_id}, added {len(results['added'])}, translated {len(results['removed'])}, translated {len(results['unchanged'])}")
         else:
-            logger.debug(f"EN: user {user_id}, EN {len(results['added'])}, EN {len(results['removed'])}, EN {len(results['unchanged'])}")
+            logger.debug(f"translated: user {user_id}, added {len(results['added'])}, translated {len(results['removed'])}, translated {len(results['unchanged'])}")
         return results
     
     async def _subscribe_channel(self, channel: str, sender: Callable):
-        """ENRedisEN - EN"""
+        """translatedRedistranslated - translatedetc.translated"""
         async with self.lock:
-            # checkENalreadyENthisEN
+            # checkIstranslatedthis translated
             if sender in self.router.get(channel, set()):
-                logger.debug(f"sendEN {channel}，EN")
+                logger.debug(f"translated {channel}，skip")
                 return
             
             need_sub = channel not in self.channels_ref
@@ -389,10 +389,10 @@ class WebSocketGatewayService:
                 await self.pubsub.subscribe(channel)
                 logger.info(f"[Redis] SUB {channel}; total={len(self.channels_ref)}")
             else:
-                logger.debug(f"[Redis] EN {channel} EN，ENsendEN")
+                logger.debug(f"[Redis] translated {channel} translated，addedtranslated")
     
     async def _unsubscribe_channel(self, channel: str, sender: Callable):
-        """cancelENRedisEN"""
+        """canceltranslatedRedistranslated"""
         async with self.lock:
             if channel in self.router:
                 self.router[channel].discard(sender)
@@ -406,12 +406,12 @@ class WebSocketGatewayService:
                     logger.info(f"[Redis] UNSUB {channel}; total={len(self.channels_ref)}")
     
     async def _listen_loop(self):
-        """ENRedisEN - EN"""
+        """translatedRedistranslated'stranslated - translatedAndtranslated"""
         backoff = 0.05
         
         while self.is_running:
             try:
-                # checkEN
+                # checkIstranslated'stranslated
                 async with self.lock:
                     has_channels = bool(self.channels_ref)
                 
@@ -419,29 +419,29 @@ class WebSocketGatewayService:
                     await asyncio.sleep(0.2)
                     continue
                 
-                # fetchEN - useredis-py 5.xEN
+                # fetchtranslated - useredis-py 5.x'stranslated
                 msg = await self.pubsub.get_message(timeout=0.1)
                 
                 if not msg or msg["type"] != "message":
-                    await asyncio.sleep(0.05)  # EN，ENCPUEN
+                    await asyncio.sleep(0.05)  # translatedetc.translated，translatedCPUtranslatedusetranslated
                     continue
                 
                 channel = msg["channel"]
                 data = msg["data"]
                 
-                # parseEN
+                # translated
                 try:
                     message_data = json.loads(data)
                 except json.JSONDecodeError as e:
-                    logger.error(f"parseENfailed: {e}, EN: {data}")
+                    logger.error(f"translatedfailed: {e}, translated: {data}")
                     continue
                 
-                # checkENprogressEN
+                # checkIstranslatedprogresstranslated
                 if not progress_adapter.is_progress_message(message_data):
-                    logger.debug(f"ENprogressEN: {message_data.get('type', 'unknown')}")
+                    logger.debug(f"skiptranslatedprogresstranslated: {message_data.get('type', 'unknown')}")
                     continue
                 
-                # EN
+                # translated
                 current_time = datetime.utcnow().timestamp()
                 current_progress = message_data.get("progress", 0)
                 
@@ -452,30 +452,30 @@ class WebSocketGatewayService:
                         last_data["timestamp"], current_time,
                         self.throttle_interval
                     ):
-                        logger.debug(f"EN: {channel} - {current_progress}%")
+                        logger.debug(f"translated: {channel} - {current_progress}%")
                         continue
                 
-                # updateEN
+                # updatetranslated
                 self.last_progress[channel] = {
                     "progress": current_progress,
                     "timestamp": current_time
                 }
                 
-                # EN
+                # translated
                 simple_msg = progress_adapter.to_simple(message_data)
                 
-                # fetchENuser - EN
+                # fetchtranslateduser - fromtranslated
                 async with self.lock:
                     subscribed_users = set()
                     for user_id, user_channels in self.user_subscriptions.items():
                         if channel in user_channels:
                             subscribed_users.add(user_id)
                 
-                # sendENallENuser
+                # translateduser
                 if subscribed_users:
-                    logger.debug(f"EN {len(subscribed_users)} ENuser: {channel} - {simple_msg}")
+                    logger.debug(f"translated {len(subscribed_users)}  user: {channel} - {simple_msg}")
                     
-                    # ENsend
+                    # translated
                     send_tasks = []
                     for user_id in subscribed_users:
                         send_tasks.append(
@@ -485,24 +485,24 @@ class WebSocketGatewayService:
                     if send_tasks:
                         await asyncio.gather(*send_tasks, return_exceptions=True)
                 else:
-                    logger.debug(f"EN {channel} ENuser")
+                    logger.debug(f"translated {channel} translateduser")
                 
-                backoff = 0.05  # ENtime
+                backoff = 0.05  # translated
                 
             except Exception as e:
-                logger.error(f"processingRedisENfailed: {e}")
+                logger.error(f"processRedistranslatedfailed: {e}")
                 await asyncio.sleep(backoff)
-                backoff = min(backoff * 2, 1.0)  # EN，EN1EN
+                backoff = min(backoff * 2, 1.0)  # translated，translated1seconds
     
     async def get_subscription_status(self, user_id: str) -> Dict[str, Any]:
-        """fetchuserENstatus"""
+        """fetchusertranslatedstatus"""
         async with self.lock:
             return {
                 "user_id": user_id,
-                "subscribed_tasks": [],  # EN
+                "subscribed_tasks": [],  # translated
                 "total_subscriptions": 0,
                 "active_channels": len(self.channels_ref)
             }
 
-# EN
+# translated
 websocket_gateway_service = WebSocketGatewayService()

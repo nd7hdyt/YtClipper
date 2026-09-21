@@ -1,165 +1,165 @@
-# 🏗️ EN
+# 🏗️ backenddocs
 
-## 📋 EN
+## 📋 overview
 
-Auto ClippingENAdoptsEN，SupportEN，EN、EN。
+cliptoolbackend，supportproject，error handling、configsecurity。
 
-## 🏛️ EN
+## 🏛️ 
 
-### 1. EN (Configuration Layer)
+### 1. config (Configuration Layer)
 
 ```
 src/config.py
-├── ConfigManager          # EN
-├── Settings              # EN
-├── APIConfig             # APIEN
-├── ProcessingConfig      # EN
-└── PathConfig           # EN
+├── ConfigManager          # config
+├── Settings              # settings
+├── APIConfig             # APIconfig
+├── ProcessingConfig      # config
+└── PathConfig           # config
 ```
 
-**EN:**
-- ENSupport
-- EN
-- EN
-- EN
+**features:**
+- env varsupport
+- configverify
+- 
+- projectconfig
 
-### 2. EN (Error Handling Layer)
+### 2. error handling (Error Handling Layer)
 
 ```
 src/utils/error_handler.py
-├── AutoClipsException    # EN
-├── EN            # APIError, NetworkErrorEN
-├── ErrorHandler         # EN
-├── CircuitBreaker       # EN
-└── RetryConfig          # EN
+├── AutoClipsException    # 
+├──             # APIError, NetworkError
+├── ErrorHandler         # error handling
+├── CircuitBreaker       # 
+└── RetryConfig          # config
 ```
 
-**EN:**
-- EN
-- EN
-- EN
-- EN
+**features:**
+- error handling
+- 
+- 
+- error
 
-### 3. EN (Security Layer)
+### 3. security (Security Layer)
 
 ```
 src/utils/api_key_manager.py
-├── APIKeyManager        # APIEN
-├── EN             # FernetEN
-├── EN             # EN
-└── EN             # EN
+├── APIKeyManager        # APIkey
+├──              # Fernet
+├── key             # keyupdate
+└── use             # usemonitor
 ```
 
-**EN:**
-- ENAPIEN
-- EN
-- EN
-- EN
+**features:**
+- APIkey
+- keyformatverify
+- 
+- use
 
-### 4. EN (Pipeline Layer)
+### 4.  (Pipeline Layer)
 
 ```
 src/pipeline/
-├── step1_outline.py     # EN
-├── step2_timeline.py    # EN
-├── step3_scoring.py     # EN
-├── step4_title.py       # EN
-├── step5_clustering.py  # EN
-└── step6_cutting.py     # EN
+├── step1_outline.py     # outline
+├── step2_timeline.py    # 
+├── step3_scoring.py     # content scoring
+├── step4_title.py       # title generation
+├── step5_clustering.py  # 
+└── step6_cutting.py     # 
 ```
 
-**EN:**
-- EN
-- EN
-- EN
-- EN
+**features:**
+- 
+- step
+- cache
+- error
 
-### 5. EN (Utilities Layer)
+### 5. tool (Utilities Layer)
 
 ```
 src/utils/
-├── llm_client.py        # LLMEN
-├── text_processor.py    # EN
-├── video_processor.py   # EN
-└── file_manager.py      # EN
+├── llm_client.py        # LLM
+├── text_processor.py    # 
+├── video_processor.py   # 
+└── file_manager.py      # file
 ```
 
-**EN:**
-- ENLLMEN
-- EN
-- EN
-- EN
+**features:**
+- LLMcallAPI
+- 
+- 
+- file
 
-## 🔄 EN
+## 🔄 
 
-### EN
+### 
 
 ```
-EN → EN → EN → LLMEN → EN → EN → EN
+file → configverify →  → LLMcall →  → filegenerate → 
     ↓         ↓         ↓         ↓         ↓         ↓         ↓
-  EN    EN   EN   APIEN   EN   EN   EN
+  verify    config      API   error handling   file   metadata
 ```
 
-### EN
+### error handling
 
 ```
-EN → EN → EN → EN/EN → EN → EN
+ →  → error handling → / →  → 
     ↓         ↓         ↓         ↓         ↓         ↓
-  EN    EN    EN    EN    EN    EN
+                      
 ```
 
-## 🛡️ EN
+## 🛡️ security
 
-### 1. APIEN
+### 1. APIkey
 
-- **EN**: ENFernetEN
-- **EN**: SupportEN
-- **EN**: Based onEN
-- **EN**: EN
+- ****: useFernet
+- **key**: supportkeyupdate
+- **access**: based onkeyaccess
+- **usemonitor**: keyuse
 
-### 2. EN
+### 2. verify
 
-- **EN**: ENUploadEN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- **fileverify**: limitupload file
+- **limit**: file
+- **verify**: verifyfile
+- **security**: 
 
-### 3. EN
+### 3. error
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- ****: error
+- **error**: errorerror
+- ****: 
 
-## 📊 Performance
+## 📊 performance
 
-### 1. EN
+### 1. 
 
-- **EN**: ENasyncioSupportEN
-- **Task Queue**: SupportEN
-- **EN**: EN
+- ****: useasynciosupport
+- ****: support
+- ****: 
 
-### 2. EN
+### 2. cache
 
-- **EN**: ENLLMEN
-- **EN**: EN
-- **EN**: EN
+- **cache**: cacheLLMcall
+- **configcache**: cacheconfig
+- **filecache**: cacheprocessing
 
-### 3. EN
+### 3. 
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- **memory**: file
+- ****: file
+- ****: 
 
-## 🔧 EN
+## 🔧 config
 
-### EN
+### env var
 
 ```bash
-# EN
+# config
 DASHSCOPE_API_KEY=your_api_key_here
 AUTO_CLIPS_MASTER_PASSWORD=your_master_password
 
-# EN
+# optionalconfig
 MODEL_NAME=qwen-plus
 CHUNK_SIZE=5000
 MIN_SCORE_THRESHOLD=0.7
@@ -167,7 +167,7 @@ MAX_CLIPS_PER_COLLECTION=5
 LOG_LEVEL=INFO
 ```
 
-### EN
+### configfile
 
 ```json
 {
@@ -189,33 +189,33 @@ LOG_LEVEL=INFO
 }
 ```
 
-## 🧪 EN
+## 🧪 test
 
-### 1. EN
+### 1. test
 
-- **EN**: EN
-- **EN**: EN
-- **APIEN**: ENLLMEN
-- **EN**: EN
+- **configtest**: testconfigverify
+- **error handlingtest**: test
+- **APItest**: testLLM
+- **tooltest**: testtool
 
-### 2. EN
+### 2. integration test
 
-- **EN**: EN
-- **EN**: ENUploadEN
-- **APIEN**: ENAPIEN
+- **test**: test
+- **filetest**: testfile uploaddownload
+- **APIintegration test**: testAPIintegration
 
-### 3. EN
+### 3. test
 
-- **EN**: ENProcessing Capability
-- **EN**: EN
-- **EN**: EN
+- **test**: test
+- **memorytest**: testmemoryuse
+- **test**: test
 
-## 📈 EN
+## 📈 monitor
 
-### 1. EN
+### 1. 
 
 ```python
-# EN
+# config
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -226,83 +226,83 @@ logging.basicConfig(
 )
 ```
 
-### 2. EN
+### 2. perf monitor
 
-- **EN**: EN
-- **EN**: ENCPU、EN、EN
-- **EN**: EN
-- **EN**: EN
+- ****: step
+- **use**: monitorCPU、memory、use
+- **error**: error
+- **succeeded**: succeeded
 
-### 3. Health Check
+### 3. check
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- **servicestatus**: checkservice
+- **dependenciescheck**: checkdependenciesavailable
+- **check**: check
 
-## 🚀 EN
+## 🚀 deploy
 
-### EN
+### dev environment
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Streamlit     │    │   React Dev     │    │   FastAPI Dev   │
-│   (ENInterface)     │    │   (EN)     │    │   (EN)     │
+│   ()     │    │   (frontend)     │    │   (backend)     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
 
-### EN
+### production
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Nginx         │    │   React Build   │    │   FastAPI       │
-│   (EN)     │    │   (EN)     │    │   (EN)     │
+│   (proxy)     │    │   (frontend)     │    │   (backend)     │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
          │                       │                       │
          └───────────────────────┼───────────────────────┘
                                  │
                     ┌─────────────────┐
                     │   Redis Cache   │
-                    │   (EN)       │
+                    │   (cache)       │
                     └─────────────────┘
 ```
 
-## 🔄 EN
+## 🔄 version
 
-### EN
+### version
 
-- **EN**: ENAPIEN
-- **EN**: EN
-- **EN**: EN
+- **version**: API
+- **version**: added
+- ****: issue
 
-### EN
+### 
 
-- **EN**: EN
-- **EN**: SupportEN
-- **EN**: SupportEN
+- ****: versionversion
+- ****: support
+- ****: supportversion
 
-## 📚 EN
+## 📚 best practices
 
-### 1. EN
+### 1. 
 
-- **PEP 8**: ENPythonEN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- **PEP 8**: followPython
+- ****: use
+- **docs**: docs
+- **error handling**: error handling
 
-### 2. EN
+### 2. security
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- ****: use
+- **verify**: verify
+- ****: 
+- **update**: updatedependencies
 
-### 3. EN
+### 3. 
 
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
-- **EN**: EN
+- ****: use
+- **cache**: usecache
+- ****: 
+- **monitor**: settingsperf monitor
 
 ---
 
-**EN**: EN，EN。
+****: docsprojectupdate，version。

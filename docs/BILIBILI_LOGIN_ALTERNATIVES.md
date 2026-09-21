@@ -1,198 +1,198 @@
-# BEN
+# Bsign in
 
-## EN
+## issue
 
-ENBEN，ENAccountEN。EN，ENProvidesEN。
+sign inB，sign infailedaccountlimit。solveissue，sign in。
 
-## SupportEN
+## supportsign in
 
-### 1. CookieEN ⭐⭐⭐⭐⭐ (EN)
+### 1. Cookieimportsign in ⭐⭐⭐⭐⭐ (recommend)
 
-**EN：**
-- ENBEN
-- EN
-- EN
-- EN（EN）
+**pros：**
+- B
+- sign insucceeded
+- 
+- security（local）
 
-**EN：**
-- ENCookie
-- CookieEN，EN
+**cons：**
+- needfetchCookie
+- Cookie，needupdate
 
-**EN：**
-- EN
-- ENAccount Management
-- EN
+**use cases：**
+- daily use
+- account
+- 
 
-**EN：**
-1. ENBEN
-2. ENF12EN
-3. ENNetworkEN
-4. EN，EN
-5. ENCookieEN
-6. ENAutoClipENCookieEN
+**usage：**
+1. sign inB
+2. F12open devtools
+3. Networktab
+4. refresh page，
+5. Cookie
+6. AutoClipCookie
 
-### 2. AccountEN ⭐⭐⭐
+### 2. password login ⭐⭐⭐
 
-**EN：**
-- ENIntuitive
-- EN
+**pros：**
+- 
+- needtool
 
-**EN：**
-- EN
-- EN
-- EN
+**cons：**
+- needverify
+- 
+- need
 
-**EN：**
-- EN
-- ENCookieEN
+**use cases：**
+- sign in
+- fetchCookie
 
-**EN：**
-1. ENBEN/EN
-2. EN
-3. EN
-4. EN
+**usage：**
+1. B/
+2. 
+3. settings
+4. clicksign in
 
-### 3. EN ⭐⭐
+### 3. sign in ⭐⭐
 
-**EN：**
-- EN
-- EN
+**pros：**
+- 
+- need
 
-**EN：**
-- ENBEN
-- EN
-- ENBENAPP
+**cons：**
+- B
+- succeeded
+- needBAPP
 
-**EN：**
-- EN
-- EN
+**use cases：**
+- test
+- available
 
-**EN：**
-1. EN"EN"
-2. ENBENAPPEN
-3. ENAPPEN
+**usage：**
+1. click"sign in"
+2. useBAPP
+3. APPconfirmsign in
 
-### 4. EN ⭐⭐
+### 4. sign in ⭐⭐
 
-**EN：**
-- ENBENAccountEN
-- EN
+**pros：**
+- needBsite account
+- security
 
-**EN：**
-- ENAccount
-- EN
-- SupportEN
+**cons：**
+- needaccount
+- 
+- support
 
-**EN：**
-- EN/QQAccountEN
-- ENBENAccountEN
+**use cases：**
+- /QQaccount
+- useBsite account
 
-## EN
+## recommended
 
-### EN
-1. **EN：CookieEN**
-   - EN
-   - EN
-   - ENCookie
+### daily userecommend
+1. **：Cookieimport**
+   - 
+   - 
+   - updateCookie
 
-2. **EN：AccountEN**
-   - ENCookieEN
-   - EN
+2. **：password login**
+   - Cookieuse
+   - verify
 
-### ENAccount Management
-- ENCookieEN
-- ENCookieEN
-- ENAccountEN
+### account
+- useCookieimport method
+- Cookieupdate
+- checkaccountstatus
 
-### EN
-1. ProvidesENCookieEN
-2. ENVisualEN
-3. ProvidesEN
+### 
+1. Cookiefetch
+2. 
+3. 
 
-## EN
+## security
 
-### CookieEN
-- CookieEN，EN
-- Do notEN
-- ENCookie
-- EN
+### Cookiesecurity
+- Cookiesign in，
+- 
+- Cookie
+- use
 
-### AccountEN
-- Do notEN
-- ENAccountEN
-- EN
+### accountsecurity
+- sign in
+- checkaccountstatus
+- 
 
-## EN
+## technical details
 
-### ENAPI
+### backendAPI
 ```python
-# CookieEN
+# Cookieverify
 async def validate_bilibili_cookies(cookies: dict) -> dict:
-    """ENBENCookieEN"""
-    # ENCookieENAPI
-    # EN
+    """verifyBCookie"""
+    # useCookieaccessAPI
+    # returnverify
 
-# AccountEN
+# password login
 async def bilibili_password_login(username: str, password: str) -> dict:
-    """BENAccountEN"""
-    # EN
-    # EN
+    """Bpassword login"""
+    # verifysign in
+    # returnsign in
 ```
 
-### EN
+### frontend
 ```typescript
-// ENSupport
+// sign insupport
 const loginMethods = [
-  { id: 'cookie', name: 'CookieEN', recommended: true },
-  { id: 'password', name: 'AccountEN', recommended: true },
-  { id: 'qr', name: 'EN', recommended: false },
-  { id: 'wechat', name: 'EN', recommended: false },
-  { id: 'qq', name: 'QQEN', recommended: false }
+  { id: 'cookie', name: 'Cookieimport', recommended: true },
+  { id: 'password', name: 'account', recommended: true },
+  { id: 'qr', name: 'sign in', recommended: false },
+  { id: 'wechat', name: 'sign in', recommended: false },
+  { id: 'qq', name: 'QQsign in', recommended: false }
 ]
 ```
 
-## Troubleshooting
+## troubleshooting
 
 ### FAQ
 
-1. **CookieEN**
-   - ENCookieEN
-   - ENCookieEN
-   - ENCookie
+1. **Cookie**
+   - checkCookie
+   - confirmCookieformat
+   - fetchCookie
 
-2. **AccountEN**
-   - EN
-   - EN
-   - ENCookieEN
+2. **password loginfailed**
+   - check
+   - confirmneedverify
+   - useCookieimport
 
-3. **EN**
-   - EN
-   - ENBENAPPEN
-   - EN
+3. **sign in**
+   - check network connection
+   - confirmBAPPversion
+   - sign in
 
-### EN
-1. EN
-2. EN
-3. EN
-4. EN
+### method
+1. viewerror
+2. checkstatus
+3. viewbackend
+4. usetool
 
-## EN
+## changelog
 
 ### v1.0.0
-- ENCookieEN
-- ENAccountEN
-- EN
-- ENInterface
+- Cookieimportsign in
+- password login
+- sign in
+- sign inselect
 
-### EN
-- ENCookieEN
-- SupportEN
-- EN
-- EN
+### 
+- Cookieauto-update
+- supportsign in
+- 
+- security
 
-## EN
+## related docs
 
-- [CookieEN](./COOKIE_GETTING_GUIDE.md)
-- [BENAPIEN](./BILIBILI_API_DOCS.md)
-- [EN](./SECURITY_BEST_PRACTICES.md)
+- [Cookiefetch](./COOKIE_GETTING_GUIDE.md)
+- [BAPIAPIdocs](./BILIBILI_API_DOCS.md)
+- [securitybest practices](./SECURITY_BEST_PRACTICES.md)
 

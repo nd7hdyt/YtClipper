@@ -1,4 +1,4 @@
-"""EN：EN、EN、EN（EN）"""
+"""translated：translated、translated、translatedandtranslatedSelecttranslated（translatedmodel）"""
 import json
 import sys
 from pathlib import Path
@@ -22,8 +22,8 @@ def test_profile_short_video_does_not_use_podcast_minimums():
     assert p.max_clip_sec <= 180
     assert p.topics_hint[1] <= 8
     hint = p.prompt_hint()
-    assert "EN" in hint and "5 EN" in hint
-    assert "90 EN" in hint  # EN
+    assert "translatedtasktranslated" in hint and "5 translated" in hint
+    assert "90 seconds" in hint  # translated
 
 
 def test_profile_long_keeps_podcast_scale():
@@ -34,24 +34,24 @@ def test_profile_long_keeps_podcast_scale():
 
 
 def test_refine_snaps_to_cue_and_drops_too_short():
-    # 0–80s，EN cue 2 EN。EN min=20s。
+    # 0–80s，pertranslated cue 2 seconds。translatedvideotranslated min=20s。
     cues = [_cue(i, i + 2, f"c{i}") for i in range(0, 80, 2)]
     items = [
-        {"outline": "EN", "start_time": "00:00:20,200", "end_time": "00:00:28,000", "content": ["b"]},
-        {"outline": "EN", "start_time": "00:00:40,000", "end_time": "00:01:10,000", "content": ["c"]},
-        {"outline": "EN", "start_time": "00:00:50,000", "end_time": "00:01:08,000", "content": ["d"]},
-        # EN 3 EN、EN > 5s、EN cue EN → EN
-        {"outline": "EN", "start_time": "00:01:17,000", "end_time": "00:01:19,400", "content": ["a"]},
+        {"outline": "cantranslated", "start_time": "00:00:20,200", "end_time": "00:00:28,000", "content": ["b"]},
+        {"outline": "translated", "start_time": "00:00:40,000", "end_time": "00:01:10,000", "content": ["c"]},
+        {"outline": "translated", "start_time": "00:00:50,000", "end_time": "00:01:08,000", "content": ["d"]},
+        # translated 3 seconds、andtranslatedonetranslated > 5s、translated cue cantranslated → translated
+        {"outline": "translated", "start_time": "00:01:17,000", "end_time": "00:01:19,400", "content": ["a"]},
     ]
     out, report = refine_timeline(items, cues, profile_for(300))
     titles = [_t(x) for x in out]
-    assert "EN" not in titles
-    assert any(d.get("outline") == "EN" for d in report["dropped"])
-    extend = next(x for x in out if x["outline"] == "EN")
+    assert "translated" not in titles
+    assert any(d.get("outline") == "translated" for d in report["dropped"])
+    extend = next(x for x in out if x["outline"] == "cantranslated")
     assert extend["duration_sec"] >= 20
     assert "snap" in extend["refine"]["ops"]
     assert report["output"] <= 3
-    assert any(m.get("absorbed") == "EN" for m in report["merged"])
+    assert any(m.get("absorbed") == "translated" for m in report["merged"])
     for x in out:
         assert x["duration_sec"] >= 20
         assert abs(to_seconds(x["start_time"]) % 2) < 1e-6
@@ -64,22 +64,22 @@ def _t(x):
 
 def test_align_scores_falls_back_when_count_mismatch():
     clips = [
-        {"outline": "EN", "id": "1"},
-        {"outline": "EN", "id": "2"},
-        {"outline": "EN", "id": "3"},
+        {"outline": "translated", "id": "1"},
+        {"outline": "translated", "id": "2"},
+        {"outline": "translated", "id": "3"},
     ]
-    llm = [{"outline": "EN", "final_score": 0.9, "recommend_reason": "EN"}]
+    llm = [{"outline": "translated", "final_score": 0.9, "recommend_reason": "translated"}]
     scored, stats = align_scores(clips, llm)
     assert stats["matched"] == 1 and stats["fallback"] == 2
     by = {c["outline"]: c for c in scored}
-    assert by["EN"]["final_score"] == 0.9
-    assert by["EN"]["score_source"] == "fallback"
-    assert by["EN"]["final_score"] == 0.5
+    assert by["translated"]["final_score"] == 0.9
+    assert by["translated"]["score_source"] == "fallback"
+    assert by["translated"]["final_score"] == 0.5
 
 
 def test_align_scores_normalizes_0_10_scale():
-    clips = [{"outline": "EN"}]
-    scored, _ = align_scores(clips, [{"outline": "EN", "final_score": 8, "recommend_reason": "x"}])
+    clips = [{"outline": "translated"}]
+    scored, _ = align_scores(clips, [{"outline": "translated", "final_score": 8, "recommend_reason": "x"}])
     assert scored[0]["final_score"] == 0.8
 
 
@@ -98,6 +98,6 @@ def test_select_clips_keeps_top_k_when_all_below_threshold():
 
 
 def test_excerpt_between_truncates():
-    cues = [_cue(0, 2, "EN" * 20), _cue(2, 4, "EN")]
+    cues = [_cue(0, 2, "onetranslated" * 20), _cue(2, 4, "translated")]
     text = excerpt_between(cues, 0, 3, max_chars=20)
     assert len(text) == 20

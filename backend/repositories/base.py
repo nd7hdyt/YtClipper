@@ -1,6 +1,6 @@
 """
-ENRepositoryEN
-EN
+translatedRepositorytranslated
+Providestranslateduse'stranslated
 """
 
 from typing import TypeVar, Generic, Optional, List, Dict, Any, Type
@@ -8,36 +8,36 @@ from sqlalchemy.orm import Session
 from sqlalchemy import and_, or_
 from ..models.base import BaseModel
 
-# EN
+# translated
 ModelType = TypeVar("ModelType", bound=BaseModel)
 
 class BaseRepository(Generic[ModelType]):
     """
-    ENRepositoryEN，ENCRUDEN
+    translatedRepositorytranslated，Providestranslateduse'sCRUDtranslated
     
-    Generic[ModelType]: EN，ModelTypemustENBaseModelEN
+    Generic[ModelType]: translated，ModelTypetranslatedIsBaseModel'stranslated
     """
     
     def __init__(self, model: Type[ModelType], db: Session):
         """
-        initializeRepository
+        translatedRepository
         
         Args:
-            model: EN
-            db: databaseEN
+            model: modeltranslated
+            db: databasetranslated
         """
         self.model = model
         self.db = db
     
     def create(self, auto_commit: bool = True, **kwargs) -> ModelType:
         """
-        createEN
+        createtranslated
         
         Args:
-            **kwargs: EN
+            **kwargs: modeltranslatedAndtranslated
             
         Returns:
-            createEN
+            create'smodeltranslated
         """
         instance = self.model(**kwargs)
         self.db.add(instance)
@@ -50,39 +50,39 @@ class BaseRepository(Generic[ModelType]):
     
     def get_by_id(self, id: str) -> Optional[ModelType]:
         """
-        ENIDfetchEN
+        translatedIDfetchtranslated
         
         Args:
-            id: ENID
+            id: translatedID
             
         Returns:
-            ENNone
+            modeltranslatedorNone
         """
         return self.db.query(self.model).filter(self.model.id == id).first()
     
     def get_all(self, skip: int = 0, limit: int = 100) -> List[ModelType]:
         """
-        fetchallEN
+        fetchtranslated
         
         Args:
-            skip: EN
-            limit: returnEN
+            skip: skip'stranslated
+            limit: return'stranslated
             
         Returns:
-            EN
+            modeltranslatedlist
         """
         return self.db.query(self.model).offset(skip).limit(limit).all()
     
     def update(self, id: str, auto_commit: bool = True, **kwargs) -> Optional[ModelType]:
         """
-        updateEN
+        updatetranslated
         
         Args:
-            id: ENID
-            **kwargs: ENupdateEN
+            id: translatedID
+            **kwargs: translatedupdate'stranslatedAndtranslated
             
         Returns:
-            updateENNone
+            updatetranslated'smodeltranslatedorNone
         """
         instance = self.get_by_id(id)
         if instance:
@@ -98,13 +98,13 @@ class BaseRepository(Generic[ModelType]):
     
     def delete(self, id: str, auto_commit: bool = True) -> bool:
         """
-        deleteEN
+        deletetranslated
         
         Args:
-            id: ENID
+            id: translatedID
             
         Returns:
-            ENdeletesucceeded
+            Istranslateddeletesucceeded
         """
         instance = self.get_by_id(id)
         if instance:
@@ -118,34 +118,34 @@ class BaseRepository(Generic[ModelType]):
     
     def count(self) -> int:
         """
-        fetchEN
+        fetchtranslated
         
         Returns:
-            EN
+            translated
         """
         return self.db.query(self.model).count()
     
     def exists(self, id: str) -> bool:
         """
-        checkEN
+        checktranslatedIstranslatedin
         
         Args:
-            id: ENID
+            id: translatedID
             
         Returns:
-            EN
+            Istranslatedin
         """
         return self.db.query(self.model).filter(self.model.id == id).first() is not None
     
     def find_by(self, **kwargs) -> List[ModelType]:
         """
-        EN
+        translated
         
         Args:
-            **kwargs: EN
+            **kwargs: translated
             
         Returns:
-            EN
+            translated'smodeltranslatedlist
         """
         filters = []
         for field, value in kwargs.items():
@@ -158,13 +158,13 @@ class BaseRepository(Generic[ModelType]):
     
     def find_one_by(self, **kwargs) -> Optional[ModelType]:
         """
-        EN
+        translated
         
         Args:
-            **kwargs: EN
+            **kwargs: translated
             
         Returns:
-            ENNone
+            translated'smodeltranslatedorNone
         """
         filters = []
         for field, value in kwargs.items():
@@ -177,37 +177,37 @@ class BaseRepository(Generic[ModelType]):
     
     def find_by_condition(self, condition) -> List[ModelType]:
         """
-        EN
+        translated
         
         Args:
-            condition: SQLAlchemyEN
+            condition: SQLAlchemytranslated
             
         Returns:
-            EN
+            translated'smodeltranslatedlist
         """
         return self.db.query(self.model).filter(condition).all()
     
     def find_one_by_condition(self, condition) -> Optional[ModelType]:
         """
-        EN
+        translated
         
         Args:
-            condition: SQLAlchemyEN
+            condition: SQLAlchemytranslated
             
         Returns:
-            ENNone
+            translated'smodeltranslatedorNone
         """
         return self.db.query(self.model).filter(condition).first()
     
     def bulk_create(self, instances: List[Dict[str, Any]], auto_commit: bool = True) -> List[ModelType]:
         """
-        ENcreateEN
+        translatedcreatetranslated
         
         Args:
-            instances: ENcreateEN
+            instances: translatedcreate'stranslatedlist
             
         Returns:
-            createEN
+            create'smodeltranslatedlist
         """
         created_instances = []
         for instance_data in instances:
@@ -220,7 +220,7 @@ class BaseRepository(Generic[ModelType]):
         else:
             self.db.flush()
         
-        # ENallEN
+        # translated
         for instance in created_instances:
             self.db.refresh(instance)
         
@@ -228,13 +228,13 @@ class BaseRepository(Generic[ModelType]):
     
     def bulk_update(self, instances: List[ModelType], auto_commit: bool = True) -> List[ModelType]:
         """
-        ENupdateEN
+        translatedupdatetranslated
         
         Args:
-            instances: ENupdateEN
+            instances: translatedupdate'stranslatedlist
             
         Returns:
-            updateEN
+            updatetranslated'smodeltranslatedlist
         """
         for instance in instances:
             self.db.merge(instance)
@@ -247,13 +247,13 @@ class BaseRepository(Generic[ModelType]):
     
     def bulk_delete(self, ids: List[str], auto_commit: bool = True) -> int:
         """
-        ENdeleteEN
+        translateddeletetranslated
         
         Args:
-            ids: ENdeleteENIDEN
+            ids: translateddelete'stranslatedIDlist
             
         Returns:
-            deleteEN
+            delete'stranslated
         """
         deleted_count = self.db.query(self.model).filter(
             self.model.id.in_(ids)

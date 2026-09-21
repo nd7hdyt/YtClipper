@@ -1,6 +1,6 @@
 """
-processingEN
-ENexecuteENTaskstatusEN
+processtranslated
+translatedAndTaskstatustranslated
 """
 
 import logging
@@ -18,7 +18,7 @@ from backend.core.config import get_project_root
 
 logger = logging.getLogger(__name__)
 
-# EN
+# importtranslatedstep
 
 try:
     from backend.pipeline.step1_outline import run_step1_outline
@@ -27,135 +27,135 @@ try:
     from backend.pipeline.step4_title import run_step4_title
     from backend.pipeline.step5_clustering import run_step5_clustering
     from backend.pipeline.step6_video import run_step6_video
-    logger.info("ENsucceeded")
+    logger.info("translatedimportsucceeded")
 except ImportError as e:
-    logger.warning(f"cannotEN: {e}")
-    # EN
+    logger.warning(f"translatedimporttranslated: {e}")
+    # translated
     def run_step1_outline(**kwargs): 
-        logger.warning("EN，useEN")
-        # generateEN
+        logger.warning("translatedimport，usetranslated")
+        # translated
         srt_path = kwargs.get('srt_path')
         output_path = kwargs.get('output_path')
         if output_path:
             import json
             from pathlib import Path
-            # ENoutput_pathENPathEN
+            # ensureoutput_pathIsPathtranslated
             if isinstance(output_path, str):
                 output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             mock_output = {
                 "outlines": [
-                    {"topic": "EN1", "start_time": "00:00:00", "end_time": "00:00:05", "content": "EN1"},
-                    {"topic": "EN2", "start_time": "00:00:05", "end_time": "00:00:10", "content": "EN2"}
+                    {"topic": "testtranslated1", "start_time": "00:00:00", "end_time": "00:00:05", "content": "testtranslated1"},
+                    {"topic": "testtranslated2", "start_time": "00:00:05", "end_time": "00:00:10", "content": "testtranslated2"}
                 ],
                 "status": "completed",
-                "message": "ENgenerateEN"
+                "message": "translated'stranslated"
             }
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(mock_output, f, ensure_ascii=False, indent=2)
-        return {"status": "skipped", "message": "EN"}
+        return {"status": "skipped", "message": "translatedimport"}
     
     def run_step2_timeline(**kwargs): 
-        logger.warning("EN，useEN")
-        # generateEN
+        logger.warning("translatedimport，usetranslated")
+        # translated
         output_path = kwargs.get('output_path')
         if output_path:
             import json
             from pathlib import Path
-            # ENoutput_pathENPathEN
+            # ensureoutput_pathIsPathtranslated
             if isinstance(output_path, str):
                 output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             mock_output = {
                 "timeline": [
-                    {"time": "00:00:00", "event": "start"},
-                    {"time": "00:00:05", "event": "EN1"},
-                    {"time": "00:00:10", "event": "EN2"}
+                    {"time": "00:00:00", "event": "translated"},
+                    {"time": "00:00:05", "event": "translated1"},
+                    {"time": "00:00:10", "event": "translated2"}
                 ],
                 "status": "completed",
-                "message": "ENgenerateEN"
+                "message": "translated'stranslated"
             }
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(mock_output, f, ensure_ascii=False, indent=2)
-        return {"status": "skipped", "message": "EN"}
+        return {"status": "skipped", "message": "translatedimport"}
     
     def run_step3_scoring(**kwargs): 
-        logger.warning("EN，useEN")
-        # generateEN
+        logger.warning("translatedimport，usetranslated")
+        # translated
         output_path = kwargs.get('output_path')
         if output_path:
             import json
             from pathlib import Path
-            # ENoutput_pathENPathEN
+            # ensureoutput_pathIsPathtranslated
             if isinstance(output_path, str):
                 output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             mock_output = {
                 "scored_clips": [
-                    {"clip_id": "1", "score": 0.8, "content": "EN1"},
-                    {"clip_id": "2", "score": 0.7, "content": "EN2"}
+                    {"clip_id": "1", "score": 0.8, "content": "translated1"},
+                    {"clip_id": "2", "score": 0.7, "content": "translated2"}
                 ],
                 "status": "completed",
-                "message": "ENgenerateEN"
+                "message": "translated'stranslated"
             }
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(mock_output, f, ensure_ascii=False, indent=2)
-        return {"status": "skipped", "message": "EN"}
+        return {"status": "skipped", "message": "translatedimport"}
     
     def run_step4_title(**kwargs): 
-        logger.warning("EN，useEN")
-        # generateEN
+        logger.warning("translatedimport，usetranslated")
+        # translated
         output_path = kwargs.get('output_path')
         if output_path:
             import json
             from pathlib import Path
-            # ENoutput_pathENPathEN
+            # ensureoutput_pathIsPathtranslated
             if isinstance(output_path, str):
                 output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             mock_output = {
                 "titles": [
-                    {"clip_id": "1", "title": "ENtitle1"},
-                    {"clip_id": "2", "title": "ENtitle2"}
+                    {"clip_id": "1", "title": "testtranslated1"},
+                    {"clip_id": "2", "title": "testtranslated2"}
                 ],
                 "status": "completed",
-                "message": "ENgenerateEN"
+                "message": "translated'stranslated"
             }
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(mock_output, f, ensure_ascii=False, indent=2)
-        return {"status": "skipped", "message": "EN"}
+        return {"status": "skipped", "message": "translatedimport"}
     
     def run_step5_clustering(**kwargs): 
-        logger.warning("EN，useEN")
-        # generateEN
+        logger.warning("translatedimport，usetranslated")
+        # translated
         output_path = kwargs.get('output_path')
         if output_path:
             import json
             from pathlib import Path
-            # ENoutput_pathENPathEN
+            # ensureoutput_pathIsPathtranslated
             if isinstance(output_path, str):
                 output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             mock_output = {
                 "collections": [
-                    {"collection_id": "1", "title": "ENcollection1", "clips": ["1", "2"]},
-                    {"collection_id": "2", "title": "ENcollection2", "clips": ["3", "4"]}
+                    {"collection_id": "1", "title": "testcollection1", "clips": ["1", "2"]},
+                    {"collection_id": "2", "title": "testcollection2", "clips": ["3", "4"]}
                 ],
                 "status": "completed",
-                "message": "ENgenerateEN"
+                "message": "translated'stranslated"
             }
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(mock_output, f, ensure_ascii=False, indent=2)
-        return {"status": "skipped", "message": "EN"}
+        return {"status": "skipped", "message": "translatedimport"}
     
     def run_step6_video(**kwargs): 
-        logger.warning("EN，useEN")
-        # generateEN
+        logger.warning("translatedimport，usetranslated")
+        # translated
         output_path = kwargs.get('output_path')
         if output_path:
             import json
             from pathlib import Path
-            # ENoutput_pathENPathEN
+            # ensureoutput_pathIsPathtranslated
             if isinstance(output_path, str):
                 output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -165,27 +165,27 @@ except ImportError as e:
                     {"clip_id": "2", "video_path": "output/clip_2.mp4"}
                 ],
                 "status": "completed",
-                "message": "ENgenerateEN"
+                "message": "translated'stranslated"
             }
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(mock_output, f, ensure_ascii=False, indent=2)
-        return {"status": "skipped", "message": "EN"}
+        return {"status": "skipped", "message": "translatedimport"}
 
 
 class ProcessingOrchestrator:
-    """processingEN，ENexecuteENTaskstatusEN"""
+    """processtranslated，translatedAndTaskstatustranslated"""
     
     def __init__(self, project_id: str, task_id: str, db: Session):
         self.project_id = project_id
         self.task_id = task_id
         self.db = db
         
-        # initializeEN
+        # translated
         self.config_manager = ProjectConfigManager(project_id)
         self.adapter = PipelineAdapter(project_id, task_id, db)
         self.task_repo = TaskRepository(db)
         
-        # EN
+        # steptranslated
         self.step_functions = {
             ProcessingStep.STEP1_OUTLINE: run_step1_outline,
             ProcessingStep.STEP2_TIMELINE: run_step2_timeline,
@@ -195,7 +195,7 @@ class ProcessingOrchestrator:
             ProcessingStep.STEP6_VIDEO: run_step6_video
         }
         
-        # EN
+        # steptranslated
         self.step_adapters = {
             ProcessingStep.STEP1_OUTLINE: self.adapter.adapt_step1_outline,
             ProcessingStep.STEP2_TIMELINE: self.adapter.adapt_step2_timeline,
@@ -205,24 +205,24 @@ class ProcessingOrchestrator:
             ProcessingStep.STEP6_VIDEO: self.adapter.adapt_step6_video
         }
         
-        # ENstatusEN
+        # stepstatustranslated
         self.step_status = {}
         self.step_timings = {}
         self.step_results = {}
     
     def execute_step(self, step: ProcessingStep, **kwargs) -> Dict[str, Any]:
         """
-        executeEN
+        translated step
         
         Args:
-            step: processingEN
-            **kwargs: ENparameters
+            step: processstep
+            **kwargs: steptranslated
             
         Returns:
-            ENexecuteresult
+            steptranslated
         """
         step_name = step.value
-        logger.info(f"startexecuteEN: {step_name}")
+        logger.info(f"translatedstep: {step_name}")
 
         # Unit tests patch PipelineAdapter at module scope. When patched, delegate
         # directly so the mock controls the step result.
@@ -230,54 +230,54 @@ class ProcessingOrchestrator:
             adapter = PipelineAdapter(self.project_id, self.task_id, self.db)
             return adapter.execute_step(step_name, **kwargs)
         
-        # updateENstatusENrunEN
+        # updatestepstatustranslated
         self._update_step_status(step, "running")
         
         try:
-            # fetchEN
+            # fetchsteptranslated
             step_number = self._get_step_number(step)
             
-            # updatetaskstatusENrunEN
+            # updatetaskstatustranslated
             self._update_task_status(TaskStatus.RUNNING, progress=self._get_step_progress(step), current_step=step_number)
             
-            # fetchEN
+            # fetchsteptranslatedAndtranslated
             step_func = self.step_functions[step]
             step_adapter = self.step_adapters[step]
             
-            # EN
+            # translatedsteptranslated
             self.adapter.prepare_step_environment(step_name)
             
-            # executeEN（useEN）
+            # translatedstep（usetranslated）
             start_time = time.perf_counter()
             
             if step == ProcessingStep.STEP1_OUTLINE:
-                # Step1needSRTfilepath
+                # Step1translatedSRTfile path
                 srt_path = kwargs.get('srt_path')
                 if not srt_path:
-                    raise ValueError("Step1needENSRTfilepath")
+                    raise ValueError("Step1translatedProvidesSRTfile path")
                 
                 adapted_params = step_adapter(srt_path)
             else:
-                # ENuseEN
+                # translatedstepusetranslatedonetranslated'stranslated
                 adapted_params = step_adapter()
             
-            # executeEN
+            # translatedsteptranslated
             result = step_func(**adapted_params)
             
             execution_time = time.perf_counter() - start_time
-            logger.info(f"EN {step_name} executeEN，EN: {execution_time:.4f}EN")
+            logger.info(f"step {step_name} translated，translated: {execution_time:.4f}seconds")
             
-            # ENexecuteEN
+            # translatedsteptranslatedinfo
             self.step_timings[step_name] = {
                 "start_time": start_time,
                 "end_time": time.perf_counter(),
                 "execution_time": execution_time
             }
             
-            # saveresultENdatabase
+            # translateddatabase
             self._save_step_result(step, result)
             
-            # updateENstatusEN
+            # updatestepstatustranslated
             self._update_step_status(step, "completed", execution_time=execution_time)
             
             # updatetaskprogress
@@ -292,9 +292,9 @@ class ProcessingOrchestrator:
             
         except Exception as e:
             execution_time = time.perf_counter() - start_time if 'start_time' in locals() else 0
-            logger.error(f"EN {step_name} executefailed: {e}")
+            logger.error(f"step {step_name} translatedfailed: {e}")
             
-            # updateENstatusENfailed
+            # updatestepstatustranslatedfailed
             self._update_step_status(step, "failed", execution_time=execution_time, error=str(e))
             
             self._update_task_status(TaskStatus.FAILED, error_message=str(e))
@@ -302,17 +302,17 @@ class ProcessingOrchestrator:
     
     def execute_pipeline(self, srt_path: Path, steps_to_execute: Optional[List[ProcessingStep]] = None) -> Dict[str, Any]:
         """
-        executeEN（ENexecuteEN）
+        translated（supportbytranslatedstep）
         
         Args:
-            srt_path: SRTfilepath
-            steps_to_execute: ENexecuteEN，NoneENexecuteEN
+            srt_path: SRTfile path
+            steps_to_execute: translated'ssteplist，Nonetranslated
             
         Returns:
-            ENexecuteresult
+            translated
         """
         if steps_to_execute is None:
-            # executeEN
+            # translated
             steps_to_execute = [
                 ProcessingStep.STEP1_OUTLINE,
                 ProcessingStep.STEP2_TIMELINE,
@@ -321,21 +321,21 @@ class ProcessingOrchestrator:
                 ProcessingStep.STEP5_CLUSTERING,
                 ProcessingStep.STEP6_VIDEO
             ]
-            logger.info(f"startexecuteproject {self.project_id} EN")
+            logger.info(f"translatedproject {self.project_id} 'stranslated")
         else:
-            logger.info(f"startexecuteproject {self.project_id} EN: {[step.value for step in steps_to_execute]}")
+            logger.info(f"translatedproject {self.project_id} 'stranslated: {[step.value for step in steps_to_execute]}")
         
-        # validateEN
+        # verifytranslated
         errors = self.adapter.validate_pipeline_prerequisites()
         if errors:
             error_msg = "; ".join(errors)
             self._update_task_status(TaskStatus.FAILED, error_message=error_msg)
-            raise ValueError(f"ENvalidatefailed: {error_msg}")
+            raise ValueError(f"translatedverifyfailed: {error_msg}")
         
-        # validateEN
+        # verifystepdependenciestranslated
         self._validate_step_dependencies(steps_to_execute)
         
-        # updatetaskstatusENrunEN
+        # updatetaskstatustranslated
         self._update_task_status(TaskStatus.RUNNING, progress=0)
         
         results = {}
@@ -344,7 +344,7 @@ class ProcessingOrchestrator:
         try:
             for i, step in enumerate(steps_to_execute):
                 step_number = self._get_step_number(step)
-                logger.info(f"executeEN {i+1}/{total_steps}: {step.value}")
+                logger.info(f"translatedstep {i+1}/{total_steps}: {step.value}")
                 
                 if step == ProcessingStep.STEP1_OUTLINE:
                     step_result = self.execute_step(step, srt_path=srt_path)
@@ -353,17 +353,17 @@ class ProcessingOrchestrator:
                 
                 results[step.value] = step_result
                 
-                # updateENprogress
+                # updatetranslatedprogress
                 progress = ((i + 1) / total_steps) * 100
                 self._update_task_status(TaskStatus.RUNNING, progress=progress, current_step=step_number)
             
-            # ENexecuteEN，saveENdatabase
+            # translated，translateddatabase
             self._save_pipeline_results_to_database(results)
             
-            # updatetaskstatusEN
+            # updatetaskstatustranslated
             self._update_task_status(TaskStatus.COMPLETED, progress=100)
             
-            logger.info(f"project {self.project_id} ENexecuteEN")
+            logger.info(f"project {self.project_id} translated")
             return {
                 "status": "completed",
                 "project_id": self.project_id,
@@ -373,13 +373,13 @@ class ProcessingOrchestrator:
             }
             
         except Exception as e:
-            logger.error(f"ENexecutefailed: {e}")
+            logger.error(f"translatedfailed: {e}")
             self._update_task_status(TaskStatus.FAILED, error_message=str(e))
             raise
     
     def _update_step_status(self, step: ProcessingStep, status: str, execution_time: Optional[float] = None, 
                            error: Optional[str] = None):
-        """updateENstatus"""
+        """updatestepstatus"""
         step_name = step.value
         self.step_status[step_name] = {
             "status": status,
@@ -387,7 +387,7 @@ class ProcessingOrchestrator:
             "execution_time": execution_time,
             "error": error
         }
-        logger.debug(f"EN {step_name} statusupdate: {status}")
+        logger.debug(f"step {step_name} statusupdate: {status}")
     
     def _update_task_status(self, status: TaskStatus, progress: Optional[float] = None, 
                            error_message: Optional[str] = None, result: Optional[Dict] = None,
@@ -395,7 +395,7 @@ class ProcessingOrchestrator:
         """updatetaskstatus"""
         task = self.task_repo.get_by_id(self.task_id)
         if task:
-            # ENupdatetaskstatus，ENsucceededENstatusEN
+            # translatedoneinonetranslatedupdatetaskstatus，translatedsucceededtranslatedstatustranslated
             task.status = status
             if progress is not None:
                 task.progress = progress
@@ -406,15 +406,15 @@ class ProcessingOrchestrator:
             self.db.commit()
             self.db.refresh(task)
         else:
-            logger.warning("taskdoes not exist，cannotupdatestatus: %s", self.task_id)
+            logger.warning("tasknot found，translatedupdatestatus: %s", self.task_id)
         
         # updateprojectstatus
         if current_step is not None:
             self._update_project_status(current_step, progress)
         
-        logger.info(f"task {self.task_id} statusupdateEN: {status.value}, progress: {progress}%, EN: {current_step}")
+        logger.info(f"task {self.task_id} statusupdatetranslated: {status.value}, progress: {progress}%, step: {current_step}")
         
-        # sendWebSocketENprogressupdate
+        # translatedWebSockettranslatedprogressupdate
         self._send_realtime_progress_update(status, progress, error_message, current_step)
     
     def _update_project_status(self, current_step: int, progress: Optional[float] = None):
@@ -439,9 +439,9 @@ class ProcessingOrchestrator:
                     
                     project_service.update(self.project_id, **update_data)
                     db.commit()
-                    logger.info(f"project {self.project_id} statusupdated: EN {current_step}/6, progress {progress}%")
+                    logger.info(f"project {self.project_id} statustranslatedupdate: step {current_step}/6, progress {progress}%")
                 else:
-                    logger.warning(f"project {self.project_id} does not exist")
+                    logger.warning(f"project {self.project_id} not found")
             finally:
                 db.close()
         except Exception as e:
@@ -449,61 +449,61 @@ class ProcessingOrchestrator:
     
     def _send_realtime_progress_update(self, status: TaskStatus, progress: Optional[float] = None, 
                                      error_message: Optional[str] = None, current_step: Optional[int] = None):
-        """sendENprogressupdateEN - EN"""
+        """translatedprogressupdatetranslatedfrontend - translatedRelease"""
         try:
             import asyncio
             import json
             from ..services.websocket_notification_service import WebSocketNotificationService
             from ..services.progress_snapshot_service import snapshot_service
             
-            # fetchcurrentEN
+            # fetchtranslatedstepinfo
             if current_step is None:
                 current_step = 0
-                step_name = "initializeEN..."
+                step_name = "translated..."
                 
-                # ENprogressENcurrentEN
+                # translatedprogresstranslatedstep
                 if progress is not None:
                     if progress <= 10:
                         current_step = 1
-                        step_name = "EN"
+                        step_name = "translated"
                     elif progress <= 30:
                         current_step = 2
-                        step_name = "timeEN"
+                        step_name = "translated"
                     elif progress <= 50:
                         current_step = 3
-                        step_name = "ENscoring"
+                        step_name = "translated"
                     elif progress <= 70:
                         current_step = 4
-                        step_name = "titlegenerate"
+                        step_name = "translated"
                     elif progress <= 85:
                         current_step = 5
-                        step_name = "EN"
+                        step_name = "translated"
                     elif progress <= 95:
                         current_step = 6
-                        step_name = "videoEN"
+                        step_name = "videotranslated"
                     else:
                         current_step = 6
-                        step_name = "processingEN"
+                        step_name = "processing completed"
             else:
-                # ENfetchEN
+                # translatedsteptranslatedfetchsteptranslated
                 step_name_map = {
-                    1: "EN",
-                    2: "timeEN", 
-                    3: "ENscoring",
-                    4: "titlegenerate",
-                    5: "EN",
-                    6: "videoEN"
+                    1: "translated",
+                    2: "translated", 
+                    3: "translated",
+                    4: "translated",
+                    5: "translated",
+                    6: "videotranslated"
                 }
                 step_name = step_name_map.get(current_step, "processing...")
             
-            # ENprogressEN
-            progress_message = f"currentlyexecute{step_name}..."
+            # translatedprogresstranslated
+            progress_message = f"translatedintranslated{step_name}..."
             if error_message:
-                progress_message = f"processingfailed: {error_message}"
+                progress_message = f"processing failed: {error_message}"
             elif status == TaskStatus.COMPLETED:
-                progress_message = "processingEN"
+                progress_message = "processing completed"
             
-            # EN
+            # translated
             payload = {
                 "type": "task_progress_update",
                 "task_id": self.task_id,
@@ -518,41 +518,41 @@ class ProcessingOrchestrator:
                 "timestamp": time.time()
             }
             
-            # useENsendWebSocketEN
+            # usetranslatedWebSockettranslatedAndtranslated
             def send_notification():
                 try:
-                    # ENfetchEN
+                    # translatedfetchtranslated'stranslated
                     loop = asyncio.get_event_loop()
                     if loop.is_running():
-                        # ifENcurrentlyrun，useEN
+                        # iftranslatedintranslated，usetranslated
                         import concurrent.futures
                         with concurrent.futures.ThreadPoolExecutor() as executor:
                             future = executor.submit(
                                 asyncio.run,
                                 self._async_send_progress_update(payload)
                             )
-                            future.result(timeout=5)  # 5ENtimeout
+                            future.result(timeout=5)  # 5secondstranslated
                     else:
-                        # ifENrun，ENrun
+                        # iftranslated，translated
                         loop.run_until_complete(
                             self._async_send_progress_update(payload)
                         )
                 except Exception as e:
-                    logger.error(f"sendWebSocketENfailed: {e}")
+                    logger.error(f"translatedWebSockettranslatedfailed: {e}")
             
-            # ENsendEN
+            # intranslated
             import threading
             thread = threading.Thread(target=send_notification)
             thread.daemon = True
             thread.start()
             
-            logger.debug(f"ENsendENprogressupdate: {self.project_id} - {progress}% - {step_name}")
+            logger.debug(f"translatedprogressupdate: {self.project_id} - {progress}% - {step_name}")
             
         except Exception as e:
-            logger.error(f"sendENprogressupdatefailed: {e}")
+            logger.error(f"translatedprogressupdatefailed: {e}")
     
     async def _async_send_progress_update(self, payload: dict):
-        """ENsendprogressupdateEN"""
+        """translatedprogressupdateAndtranslated"""
         try:
             import redis.asyncio as redis
             import json
@@ -562,26 +562,26 @@ class ProcessingOrchestrator:
             # connectRedis
             redis_client = redis.from_url(get_redis_url(), decode_responses=True)
             
-            # EN - useEN
+            # translated - usetranslated
             from .websocket_gateway_service import WebSocketGatewayService
             channel = WebSocketGatewayService.normalize_channel(self.project_id)
             
-            # 1) saveEN
+            # 1) translated
             await snapshot_service.save_snapshot(channel, payload)
             
-            # 2) ENRedis
+            # 2) ReleasetranslatedRedis
             await redis_client.publish(channel, json.dumps(payload, ensure_ascii=False))
             
-            # 3) ENRedisconnect
+            # 3) translatedRedisconnect
             await redis_client.aclose()
             
-            logger.debug(f"progressupdateEN: {channel} - {payload}")
+            logger.debug(f"progressupdatetranslatedRelease: {channel} - {payload}")
             
         except Exception as e:
-            logger.error(f"ENsendprogressupdatefailed: {e}")
+            logger.error(f"translatedprogressupdatefailed: {e}")
     
     def _get_step_number(self, step: ProcessingStep) -> int:
-        """fetchEN"""
+        """fetchsteptranslated"""
         step_number_map = {
             ProcessingStep.STEP1_OUTLINE: 1,
             ProcessingStep.STEP2_TIMELINE: 2,
@@ -593,7 +593,7 @@ class ProcessingOrchestrator:
         return step_number_map.get(step, 0)
     
     def _get_step_progress(self, step: ProcessingStep) -> float:
-        """fetchENprogressEN"""
+        """fetchsteptranslated'sprogresstranslated"""
         step_progress_map = {
             ProcessingStep.STEP1_OUTLINE: 10,
             ProcessingStep.STEP2_TIMELINE: 30,
@@ -605,43 +605,43 @@ class ProcessingOrchestrator:
         return step_progress_map.get(step, 0)
     
     def _save_step_result(self, step: ProcessingStep, result: Any):
-        """saveENresultENdatabase"""
-        # ENcanENneedENresultsaveENdatabaseEN
-        # ENclipresultsaveENClipEN，collectionresultsaveENCollectionEN
-        logger.info(f"EN {step.value} resultENsave")
+        """translatedsteptranslateddatabase"""
+        # thistranslatedcantranslated'sdatabasetranslated
+        # translatedifcliptranslatedCliptranslated，collectiontranslatedCollectiontranslated
+        logger.info(f"step {step.value} translated")
     
     def _save_pipeline_results_to_database(self, results: Dict[str, Any]):
-        """ENexecuteresultsaveENdatabase"""
+        """translateddatabase"""
         try:
-            logger.info(f"startsaveproject {self.project_id} ENresultENdatabase")
+            logger.info(f"translatedproject {self.project_id} translateddatabase")
             
             # fetchprojectdirectory
             project_dir = self.adapter.data_dir / "projects" / self.project_id
             
-            # useDataSyncServiceENdatabase
+            # useDataSyncServicetranslateddatabase
             from ..services.data_sync_service import DataSyncService
             sync_service = DataSyncService(self.db)
             
-            # ENprojectEN
+            # translatedprojecttranslated
             sync_result = sync_service.sync_project_from_filesystem(self.project_id, project_dir)
             
             if sync_result.get("success"):
-                logger.info(f"project {self.project_id} ENsucceeded: {sync_result}")
+                logger.info(f"project {self.project_id} translatedsucceeded: {sync_result}")
             else:
-                logger.error(f"project {self.project_id} ENfailed: {sync_result}")
+                logger.error(f"project {self.project_id} translatedfailed: {sync_result}")
                 self.db.rollback()
-                raise RuntimeError(f"ENfailed: {sync_result}")
+                raise RuntimeError(f"translatedfailed: {sync_result}")
             
-            logger.info(f"project {self.project_id} ENresultENsaveENdatabase")
+            logger.info(f"project {self.project_id} translateddatabase")
             
         except Exception as e:
-            logger.error(f"saveENresultENdatabasefailed: {e}")
+            logger.error(f"translateddatabasefailed: {e}")
             self.db.rollback()
             raise
     
     def _validate_step_dependencies(self, steps_to_execute: List[ProcessingStep]):
-        """validateEN"""
-        # EN
+        """verifystepdependenciestranslated"""
+        # translatedstepdependenciestranslated
         step_dependencies = {
             ProcessingStep.STEP2_TIMELINE: [ProcessingStep.STEP1_OUTLINE],
             ProcessingStep.STEP3_SCORING: [ProcessingStep.STEP2_TIMELINE],
@@ -650,7 +650,7 @@ class ProcessingOrchestrator:
             ProcessingStep.STEP6_VIDEO: [ProcessingStep.STEP5_CLUSTERING]
         }
         
-        # ENcheckEN，becauseENexecuteENcheck
+        # translatedcheckNo.one step'sdependencies，translatedsteptranslatedintranslatedcheck
         if steps_to_execute:
             first_step = steps_to_execute[0]
             if first_step in step_dependencies:
@@ -658,20 +658,20 @@ class ProcessingOrchestrator:
                 missing_steps = []
                 
                 for req_step in required_steps:
-                    # checkENalreadyEN（throughcheckENfile）
+                    # checkdependenciesstepIstranslated（translatedchecktranslatedfile）
                     step_output = self.adapter.get_step_output_path(req_step.value)
                     if not step_output.exists():
                         missing_steps.append(req_step)
                 
                 if missing_steps:
                     missing_step_names = [step.value for step in missing_steps]
-                    raise ValueError(f"EN {first_step.value} EN: {missing_step_names}")
+                    raise ValueError(f"step {first_step.value} translateddependenciesstep: {missing_step_names}")
     
     def get_pipeline_status(self) -> Dict[str, Any]:
-        """fetchENstatus"""
+        """fetchtranslatedstatus"""
         task = self.task_repo.get_by_id(self.task_id)
         if not task:
-            return {"error": "taskdoes not exist"}
+            return {"error": "tasknot found"}
         
         return {
             "task_id": self.task_id,
@@ -687,23 +687,23 @@ class ProcessingOrchestrator:
         }
     
     def retry_step(self, step: ProcessingStep, **kwargs) -> Dict[str, Any]:
-        """retryEN"""
-        logger.info(f"retryEN: {step.value}")
+        """translatedstep"""
+        logger.info(f"translatedstep: {step.value}")
         
-        # ENfile
+        # cleanstep'stranslatedfile
         self.adapter.cleanup_intermediate_files(step.value)
         
-        # ENexecuteEN
+        # translatedstep
         return self.execute_step(step, **kwargs)
     
     def get_step_result(self, step: ProcessingStep) -> Any:
-        """fetchENresult"""
+        """fetchsteptranslated"""
         return self.adapter.get_step_result(step.value)
     
     def get_step_performance_summary(self) -> Dict[str, Any]:
-        """fetchEN"""
+        """fetchsteptranslated"""
         if not self.step_timings:
-            return {"message": "EN"}
+            return {"message": "Not yettranslated"}
         
         total_time = sum(timing["execution_time"] for timing in self.step_timings.values())
         step_performance = {}
@@ -725,10 +725,10 @@ class ProcessingOrchestrator:
         }
     
     def resume_from_step(self, start_step: ProcessingStep, srt_path: Optional[Path] = None) -> Dict[str, Any]:
-        """ENexecute"""
-        logger.info(f"EN {start_step.value} ENexecute")
+        """fromtranslatedsteptranslated"""
+        logger.info(f"fromstep {start_step.value} translated")
         
-        # fetchENstartENallEN
+        # fetchfromtranslatedsteptranslated'stranslatedstep
         all_steps = [
             ProcessingStep.STEP1_OUTLINE,
             ProcessingStep.STEP2_TIMELINE,
@@ -741,42 +741,42 @@ class ProcessingOrchestrator:
         try:
             start_index = all_steps.index(start_step)
             
-            # ENexecuteEN
+            # translated'sstep
             steps_to_execute = []
             for step in all_steps[start_index:]:
                 step_output = self.adapter.get_step_output_path(step.value)
                 if not step_output.exists():
                     steps_to_execute.append(step)
                 else:
-                    logger.info(f"EN {step.value} completed，EN")
+                    logger.info(f"step {step.value} completed，skip")
             
             if not steps_to_execute:
-                logger.info("allENcompleted，ENexecute")
-                return {"message": "allENcompleted"}
+                logger.info("translatedsteptranslatedcompleted，translated")
+                return {"message": "translatedsteptranslatedcompleted"}
             
-            logger.info(f"ENexecuteEN: {[step.value for step in steps_to_execute]}")
+            logger.info(f"translatedstep: {[step.value for step in steps_to_execute]}")
             
             if start_step == ProcessingStep.STEP1_OUTLINE:
                 if not srt_path:
-                    raise ValueError("ENStep1ENneedENSRTfilepath")
+                    raise ValueError("fromStep1translatedProvidesSRTfile path")
                 return self.execute_pipeline(srt_path, steps_to_execute)
             else:
-                # validateENcompleted
+                # verifytranslatedstepIstranslatedcompleted
                 for step in all_steps[:start_index]:
                     step_output = self.adapter.get_step_output_path(step.value)
                     if not step_output.exists():
-                        raise ValueError(f"EN {step.value} EN，cannotEN {start_step.value} EN")
+                        raise ValueError(f"translatedstep {step.value} translated，translatedfrom {start_step.value} translated")
                 
                 return self.execute_pipeline(Path("dummy.srt"), steps_to_execute)
                 
         except ValueError as e:
-            logger.error(f"ENexecutefailed: {e}")
+            logger.error(f"translatedfailed: {e}")
             raise
     
     def get_step_status_summary(self) -> Dict[str, Any]:
-        """fetchENstatusEN"""
+        """fetchstepstatustranslated"""
         if not self.step_status:
-            return {"message": "ENstatusEN"}
+            return {"message": "Not yetstepstatustranslated"}
         
         completed_steps = [step for step, status in self.step_status.items() if status["status"] == "completed"]
         failed_steps = [step for step, status in self.step_status.items() if status["status"] == "failed"]
